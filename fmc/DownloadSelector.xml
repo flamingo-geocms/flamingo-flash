@@ -1,0 +1,16 @@
+<DownloadSelector>
+      <string id="layers" en="Layers" nl="Kaartlagen"/>
+      <string id="inArea" en="Within Area" nl="Binnen gebied"/>
+      <string id="inGeometry" en="Within Geometry" nl="Binnen geometrie"/>
+      <string id="inBox" en="Within Box" nl="Binnen rechthoek"/>
+      <string id="inAll" en="Whole file" nl="Gehele bestand"/>
+      <string id="crs" en="Coord. Ref. System" nl="Coordinaatstelsel"/>
+      <string id="format" en="File Format" nl="Bestandsformaat"/>
+      <string id="emailAddress" en="Email Download To" nl="Download e-mailen naar"/>
+      <string id="warningNoLayer" en="Please select a layer" nl="Selecteer eerst een laag"/>
+      <string id="warningNoEmail" en="Please fill in a valid e-mail adress" nl="Vul een geldig e-mail adres in"/>
+      <string id="warningOutOfExtent" en="Requested extent outside the fullextent of the map" nl="Ingevulde coördinaten vallen buiten bereik van de kaart"/>
+      <string id="warningErrorInBox" en="Error in box coördinates" nl="Fouten in coördinaten van rechthoek"/>
+      <string id="extentButtonLabel" en="from map" nl="van kaart"/>
+</DownloadSelector>
+
