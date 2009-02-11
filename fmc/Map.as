@@ -33,6 +33,19 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 * @file Map.swf (compiled Map, needed for publication on internet)
 * @file Map.xml (configurationfile for Map, needed for publication on internet)
 */
+
+/*
+* Changes oct 2008
+* new methods:
+* getMovieClipHeight()
+* getMovieClipWidth()
+* getNextExtents()
+* getPrevExtents()
+* showTooltip()
+* hideTooltip()
+* Author:Linda Vels,IDgis bv
+*/
+
 dynamic class Map extends MovieClip {
 	//
 	public var version:String = "2.0.1";
@@ -82,6 +95,7 @@ dynamic class Map extends MovieClip {
 	private var maptipcalled:Boolean;
 	private var maptipcoord:Object;
 	private var saveextent:Boolean;
+	private var clearlayers:Boolean; 
 	//
 	public var hasextent:Boolean;
 	function Map() {
@@ -270,12 +284,14 @@ dynamic class Map extends MovieClip {
 		//custom
 		//custom
 		var xmls:Array = flamingo.getXMLs(this);
-		for (var i = 0; i<xmls.length; i++) {
+		for (var i = 0; i<xmls.length; i++) {		
 			this.setConfig(xmls[i]);
 		}
-		delete xmls;
+
+		//LV:Do not remove the xmls because of re-use by the map(s) in the printtemplate(s)
+		//delete xmls;
 		//remove xml from repository
-		flamingo.deleteXML(this);
+		//flamingo.deleteXML(this);
 		this._visible = this.visible;
 		flamingo.raiseEvent(this, "onInit", this);
 	}
@@ -315,10 +331,25 @@ dynamic class Map extends MovieClip {
 		if (flamingo.getType(this).toLowerCase() != xml.localName.toLowerCase()) {
 			return;
 		}
-		var clearlayers = false;
+		clearlayers = false;
 		//load default attributes, strings, styles and cursors 
 		flamingo.parseXML(this, xml);
+	
 		//parse custom attributes
+		//LV:
+		if(xml.attributes["configobject"]!=undefined){
+			var configObj:Object = flamingo.getComponent(xml.attributes["configobject"]);
+			var allXML:Array = _global.flamingo.getXMLs(configObj);
+			for(var i:Number=0;i<allXML.length;i++){
+				this.parseCustomAtrr(allXML[i]);
+			}
+		}
+		else {
+			this.parseCustomAtrr(xml);
+		}
+	}
+		
+	private function parseCustomAtrr(xml:Object){
 		for (var attr in xml.attributes) {
 			var attr:String = attr.toLowerCase();
 			var val:String = xml.attributes[attr];
@@ -659,6 +690,7 @@ dynamic class Map extends MovieClip {
 	* @param id:String Layerid.
 	*/
 	public function showLayer(id:String):Void {
+		
 		this.mLayers[id].show();
 		flamingo.raiseEvent(this, "onShowLayer", this, this.mLayers[id]);
 	}
@@ -668,6 +700,8 @@ dynamic class Map extends MovieClip {
 	*/
 	public function hide():Void {
 		this._visible = false;
+		//LV: make also the visible attribute false
+		this.visible = false;
 		flamingo.raiseEvent(this, "onHide", this);
 	}
 	/**
@@ -676,6 +710,8 @@ dynamic class Map extends MovieClip {
 	*/
 	public function show():Void {
 		this._visible = true;
+		//LV: make also the visible attribute true
+		this.visible = true;
 		flamingo.raiseEvent(this, "onShow", this);
 	}
 	/**
@@ -691,6 +727,7 @@ dynamic class Map extends MovieClip {
 	* This will raise the onIdentify event.
 	* @param identifyextent:Object Extent defining identify area.
 	*/
+	
 	public function identify(identifyextent:Object):Void {
 		if (this.holdonidentify and this.identifying) {
 			return;
@@ -699,6 +736,18 @@ dynamic class Map extends MovieClip {
 		flamingo.raiseEvent(this, "onIdentify", this, this._identifyextent);
 		this.checkIdentify();
 	}
+	
+	/**
+	* This will raise the onCorrectIdentifyIcon event.
+	* @param identifyextent:Object Extent defining identify area.
+	*/
+	
+	public function correctIdentifyIcon(identifyextent:Object):Void {
+		flamingo.raiseEvent(this, "onCorrectIdentifyIcon", this, identifyextent);
+	}
+	
+	
+	
 	/**
 	* Returns the scale based on the fullextent.
 	* @return  Number Scale.
@@ -803,6 +852,20 @@ dynamic class Map extends MovieClip {
 			extent = this._currentextent;
 		}
 		return extent.maxx-extent.minx;
+	}
+	/**
+	* Returns the height of the Movieclip.
+	* @return Number _height.
+	*/
+	public function getMovieClipHeight():Number {
+		return this._height;
+	}
+	/**
+	* Returns the width of of the Movieclip.
+	* @return Number _width.
+	*/
+	public function getMovieClipWidth():Number {
+		return this._width;
 	}
 	/**
 	* Returns the coordinate of the center of the map.
@@ -1014,6 +1077,15 @@ dynamic class Map extends MovieClip {
 		ext.maxy = ext.miny+nh;
 		this.moveToExtent(ext, updatedelay, movetime);
 	}
+	
+	/**
+	* returns the map's nextextents which is filled by 'moveToPrevExtent'
+	* The map's 'extenthistory' must be greater than 0.
+	* @return Array nextextents.
+	*/
+	public function getNextExtents():Array{
+		return this.nextextents;
+	}
 	/**
 	* Moves the map to the next extent. The array with next extents is filled by 'moveToPrevExtent'
 	* The map's 'extenthistory' must be greater than 0.
@@ -1027,6 +1099,14 @@ dynamic class Map extends MovieClip {
 		this.prevextents.push(this.copyExtent(this._updatedextent));
 		this.rememberextent = false;
 		this.moveToExtent(ext, 0, movetime);
+	}
+	/**
+	* returns the map's prevextents
+	* The map's 'extenthistory' must be greater than 0.
+	* @return Array prevtextents.
+	*/
+	public function getPrevExtents():Array{
+		return this.prevextents;
 	}
 	/**
 	* Moves the map to the previous extent. 
@@ -1884,6 +1964,22 @@ dynamic class Map extends MovieClip {
 			this.mAcetate[id].removeMovieClip();
 		}
 	}
+	
+	/**
+	* Catches the tooltip from the measuretool and sends it to the flamingo framework.
+	* @param tiptext:String Text to be shown.
+	* @param delay:Number [optional] Time between hoovering over object and showing tip.
+	*/
+	
+	public function showTooltip(tiptext:String, delay:Number):Void{
+		flamingo.showTooltip(tiptext,this,delay);
+	}
+	
+	public function hideTooltip():Void{
+		flamingo.hideTooltip(tiptext,this,delay);
+	}
+	
+	
 	/** 
 	 * Dispatched when a map is up and ready to run.
 	 * @param map:MovieClip a reference to the map.

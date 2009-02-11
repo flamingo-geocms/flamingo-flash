@@ -27,6 +27,14 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 * @file flamingo.xml (configurationfile for framework, needed for publication on internet)
 * @configstyle .tooltip Fontstyle for tooltips
 */
+
+/*
+* Changes oct 2008
+* In method raiseEvent 
+* added:
+* ExternalInterface.call("dispatchEventJS",event_to_fire, arguments);
+* Author:Linda Vels,IDgis bv
+*/
 import flash.external.ExternalInterface;
 import flash.filters.DropShadowFilter;
 class Flamingo {
@@ -2118,6 +2126,9 @@ class Flamingo {
 					prefix = this.getType(id);
 				}
 			}
+			ExternalInterface.call("dispatchEventJS",event_to_fire, arguments);
+			
+			
 			event_to_fire = prefix+"_"+event_to_fire;
 			if (this.flamingoid.length>0) {
 				event_to_fire = this.flamingoid+"_"+event_to_fire;
@@ -2749,7 +2760,7 @@ class Flamingo {
 			if (func == undefined) {
 				return;
 			}
-			var r = func.apply(eval(comp), arguments);
+			var r = func.apply(eval(comp), arguments[0]);
 			if (typeof (r) == "movieclip") {
 				r = this.getId(r);
 			}
