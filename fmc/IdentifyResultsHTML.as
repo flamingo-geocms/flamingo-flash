@@ -91,7 +91,6 @@ lMap.onIdentifyData = function(map:MovieClip, maplayer:MovieClip, data:Object, e
 		}
 	}
 	txtInfo.htmlText = textinfo;
-	//trace(txtInfo.htmlText)
 };
 function convertInfo(infostring:String, record:Object):String {
 	var t:String;
@@ -143,9 +142,8 @@ init();
 function show() {
 	//make sure that this component is visible
 	_visible = true;
-	var parent = this;
-	while (not flamingo.isVisible(this) or parent != undefined) {
-		parent = flamingo.getParent(parent);
+	var parent = flamingo.getParent(this);
+	while (not flamingo.isVisible(parent) and parent != undefined) {
 		parent.show();
 		parent._visible = true;
 	}
