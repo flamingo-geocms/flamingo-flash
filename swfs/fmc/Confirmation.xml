@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Confirmation>
+    <string id="question" en="Are you sure?" nl="Weet u het zeker?"/>
+    <string id="yes" en="Yes" nl="Ja"/>
+    <string id="no" en="No" nl="Nee"/>
+</Confirmation>
