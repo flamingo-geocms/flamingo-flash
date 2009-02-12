@@ -209,9 +209,9 @@ dynamic class Map extends MovieClip {
 					flamingo.raiseEvent(thisObj, "onMouseMove", thisObj, x, y, coord);
 					// the following is for maptips
 					if (thisObj.maptipdelay>0) {
-						if (not this.md) {
-							if (not thisObj.moving) {
-								if (Math.abs(thisObj.maptipcoord.x-x)>thisObj.maptipresolution or Math.abs(thisObj.maptipcoord.y-y)>thisObj.maptipresolution) {
+						if (!this.md) {
+							if (!thisObj.moving) {
+								if (Math.abs(thisObj.maptipcoord.x-x)>thisObj.maptipresolution || Math.abs(thisObj.maptipcoord.y-y)>thisObj.maptipresolution) {
 									if (thisObj.maptipcalled) {
 										flamingo.raiseEvent(thisObj, "onMaptipCancel", thisObj);
 										thisObj.maptipcalled = false;
@@ -252,7 +252,7 @@ dynamic class Map extends MovieClip {
 					var coord = this._parent.point2Coordinate({x:thisObj._xmouse, y:thisObj._ymouse});
 					flamingo.raiseEvent(thisObj, "onMouseUp", thisObj, thisObj._xmouse, thisObj._ymouse, coord);
 				}
-				if (not thisObj.hit) {
+				if (!thisObj.hit) {
 					delete this.onMouseMove;
 					delete this.onMouseUp;
 					delete this.onMouseDown;
@@ -729,7 +729,7 @@ dynamic class Map extends MovieClip {
 	*/
 	
 	public function identify(identifyextent:Object):Void {
-		if (this.holdonidentify and this.identifying) {
+		if (this.holdonidentify && this.identifying) {
 			return;
 		}
 		this._identifyextent = this.copyExtent(identifyextent);
@@ -1129,7 +1129,7 @@ dynamic class Map extends MovieClip {
 	* @param movetime:Number [optional] Total time of move-animation. If movetime is 0, there wil be no animation. The Extent is set immediately. If movetime is undefined, the default movetime of the map will be used.  
 	*/
 	public function moveToExtent(extent:Object, updatedelay:Number, movetime:Number):Void {
-		if (not this.isValidExtent(extent)) {
+		if (!this.isValidExtent(extent)) {
 			return;
 		}
 		this.clearDrawings();
@@ -1152,7 +1152,7 @@ dynamic class Map extends MovieClip {
 		if (movetime == undefined) {
 			movetime = this.movetime;
 		}
-		if (movetime<=0 or not this.hasextent) {
+		if (movetime<=0 || !this.hasextent) {
 			this.hasextent = true;
 			this._currentextent = this.copyExtent(this._mapextent);
 			flamingo.raiseEvent(this, "onStartMove", this);
@@ -1229,7 +1229,7 @@ dynamic class Map extends MovieClip {
 	* @param delay:Number [optional] if omitted the onUpdate event will raise immediatelly, otherwhise after the delay time (milliseconds)
 	*/
 	public function update(delay:Number, forceupdate:Boolean):Void {
-		if (this.holdonupdate and this.updating) {
+		if (this.holdonupdate&& this.updating) {
 			return;
 		}
 		clearInterval(this.updateid);
@@ -1247,12 +1247,12 @@ dynamic class Map extends MovieClip {
 			forceupdate = false;
 		}
 		if (this.isEqualExtent(this._updatedextent, this._mapextent)) {
-			if (not forceupdate) {
+			if (!forceupdate) {
 				this.rememberextent = true;
 				return false;
 			}
 		} else {
-			if (this.rememberextent and this.nrprevextents>0) {
+			if (this.rememberextent && this.nrprevextents>0) {
 				this.prevextents.push(this.copyExtent(this._updatedextent));
 				this.nextextents = new Array();
 				if (this.prevextents.length>this.nrprevextents) {
@@ -1265,7 +1265,7 @@ dynamic class Map extends MovieClip {
 		this.rememberextent = true;
 		// no delay, so fire event
 		flamingo.raiseEvent(this, "onUpdate", this);
-		if (this.saveextent and this.hasextent) {
+		if (this.saveextent && this.hasextent) {
 			flamingo.setCookie(flamingo.getId(this)+".mapextent", this._extent);
 		}
 		//check if any layer is updating, if so don't bother because the layerlistener takes care for raising               

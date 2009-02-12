@@ -163,7 +163,7 @@ class FlamingoCheckButton extends MovieClip {
 		mc.hit.onPress = function() {
 			if (thisObj.enabled) {
 				pressed = true;
-				thisObj.checked = not thisObj.checked;
+				thisObj.checked =!thisObj.checked;
 				//thisObj.checked = not thisObj.checked;
 				if (thisObj.checked) {
 					mc.attachMovie(thisObj.checkeddownlink, "skin", 1);
@@ -209,10 +209,10 @@ class FlamingoCheckButton extends MovieClip {
 		this.functions[eventname.toLowerCase()] = f;
 	}
 	function move(x:Number, y:Number) {
-		if (not isNaN(x)) {
+		if (!x==NaN) {
 			this.mc._x = x;
 		}
-		if (not isNaN(y)) {
+		if (!y==NaN) {
 			this.mc._y = y;
 		}
 	}
@@ -252,7 +252,7 @@ class FlamingoCheckButton extends MovieClip {
 		}
 	}
 	function setEnabled(b:Boolean) {
-		if (not b) {
+		if (!b) {
 			var w = this.mc._width;
 			var h = this.mc._height;
 			var d = this.mc.createEmptyMovieClip("disable", 4);

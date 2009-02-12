@@ -79,7 +79,7 @@ class FlamingoPushButton extends MovieClip {
 		var thisObj = this;
 		mc.hit.onRollOver = function() {
 			if (thisObj.enabled) {
-				if (not thisObj.pressed) {
+				if (!thisObj.pressed) {
 					mc.attachMovie(overlink, "skin", 1);
 				}
 				thisObj.fire("onRollOver");
@@ -87,7 +87,7 @@ class FlamingoPushButton extends MovieClip {
 		};
 		mc.hit.onRollOut = function() {
 			if (thisObj.enabled) {
-				if (not thisObj.pressed) {
+				if (!thisObj.pressed) {
 					mc.attachMovie(uplink, "skin", 1);
 				}
 				thisObj.fire("onRollOut");
@@ -114,10 +114,10 @@ class FlamingoPushButton extends MovieClip {
 		this.functions[eventname.toLowerCase()] = f;
 	}
 	function move(x:Number, y:Number) {
-		if (not isNaN(x)) {
+		if (!x==NaN) {
 			this.mc._x = x;
 		}
-		if (not isNaN(y)) {
+		if (!y==NaN) {
 			this.mc._y = y;
 		}
 	}
@@ -140,7 +140,7 @@ class FlamingoPushButton extends MovieClip {
 		}
 	}
 	function setEnabled(b:Boolean) {
-		if (not b) {
+		if (!b) {
 			var w = this.mc._width;
 			var h = this.mc._height;
 			var d = this.mc.createEmptyMovieClip("disable", 4);

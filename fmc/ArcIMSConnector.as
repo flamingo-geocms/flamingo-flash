@@ -154,7 +154,7 @@ class ArcIMSConnector {
 		if (_server.substr(_server.length-1, 1).toLowerCase() != "/") {
 			_server = _server+"/";
 		}
-		if (_server.substr(0, 4).toLowerCase() != "http" and _server.substr(0, 4).toLowerCase() != "file") {
+		if (_server.substr(0, 4).toLowerCase() != "http" && _server.substr(0, 4).toLowerCase() != "file") {
 			_server = "http://"+_server;
 		}
 		var extra = "";
@@ -345,14 +345,14 @@ class ArcIMSConnector {
 		str = str+"<GET_IMAGE autoresize=\"true\">\n";
 		str = str+"<PROPERTIES>\n";
 		var rgb1:Object = _getRGB(this.backgroundcolor);
-		if (not isNaN(this.transcolor)) {
+		if (!(this.transcolor)==NaN) {
 			var rgb2:Object = _getRGB(this.transcolor);
 			str = str+"<BACKGROUND  color=\""+rgb1.r+","+rgb1.g+","+rgb1.b+"\""+" transcolor=\""+rgb2.r+","+rgb2.g+","+rgb2.b+"\"  />\n";
 		} else {
 			str = str+"<BACKGROUND  color=\""+rgb1.r+","+rgb1.g+","+rgb1.b+"\"  />\n";
 		}
 		str = str+"<ENVELOPE minx=\""+String(extent.minx)+"\" miny=\""+String(extent.miny)+"\" maxx=\""+String(extent.maxx)+"\" maxy=\""+String(extent.maxy)+"\" />\n";
-		if (not this.map) {
+		if (!this.map) {
 			str = str+"<DRAW map = \"false\" />";
 		}
 		str = str+"<IMAGESIZE width=\""+size.width+"\" height=\""+size.height+"\" />\n";
@@ -364,7 +364,7 @@ class ArcIMSConnector {
 				str = str+"<LAYERLIST order=\"false\" >\n";
 				for (var id in layers) {
                     if (layers[id].visible != undefined) {
-						if (not layers[id].visible) {
+						if (!layers[id].visible) {
 							str = str+"<LAYERDEF id=\""+id+"\" visible=\""+String(layers[id].visible)+"\">\n";
 						} else {
 							str = str+"<LAYERDEF id=\""+id+"\" visible=\""+String(layers[id].visible)+"\">\n";
@@ -573,7 +573,7 @@ class ArcIMSConnector {
 		//str = str+"</ENVIRONMENT>\n";
 		str = str+"<LAYER id=\""+layerid+"\" />\n";
 		var sf:String = subfields;
-		if ((this.geometry or this.envelope) and subfields != "#ALL#") {
+		if ((this.geometry || this.envelope) && subfields != "#ALL#") {
 			sf = "#SHAPE# "+subfields;
 		}
 		if (extent == undefined) {
