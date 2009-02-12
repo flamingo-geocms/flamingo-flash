@@ -144,7 +144,7 @@ class flamingo.gui.PrintLabel extends AbstractComponent {
             }
         }
 		
-        if (text.indexOf("[scale]") <> -1)  {
+        if (text.indexOf("[scale]") != -1)  {
             var maps:Array = printTemplate.getMaps();
             if (maps.length > 0) {
                 var scale:Number = Math.round(maps[0].getCurrentScale() / (0.0254 / 72) * getParent("PrintTemplate").getDPIFactor());
@@ -152,7 +152,7 @@ class flamingo.gui.PrintLabel extends AbstractComponent {
             } else {
                 label.text = text.split("[scale]").join("1:???");
             }
-        } else if (text.indexOf("[curdate]") <> -1) {
+        } else if (text.indexOf("[curdate]") != -1) {
 			var curDate:Date = new Date(); 
 			var curDateStr:String = curDate.getDate() + "-" + String(curDate.getMonth() + 1) + "-"+ curDate.getFullYear() + " " + curDate.getHours() + ":" + curDate.getMinutes();
 			label.text = text.split("[curdate]").join(curDateStr);

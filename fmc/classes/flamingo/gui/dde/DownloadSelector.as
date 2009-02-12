@@ -535,15 +535,15 @@ class flamingo.gui.dde.DownloadSelector extends AbstractComponent implements Geo
 			setStatusText(_global.flamingo.getString(this,"warningNoLayer"),"warning");
 		}
 		else 
-		if (eMailInput.text == "" or eMailInput.text.indexOf("@")==-1){
+		if (eMailInput.text == "" || eMailInput.text.indexOf("@")==-1){
 			setStatusText(_global.flamingo.getString(this,"warningNoEmail"),"warning");
 		} else 
-		if (Number(llX.text) < map.getFullExtent().minx  or Number(urX.text) > map.getFullExtent().maxx 
-			or Number(llY.text) < map.getFullExtent().miny  or Number(urY.text) > map.getFullExtent().maxy ){
+		if (Number(llX.text) < map.getFullExtent().minx  || Number(urX.text) > map.getFullExtent().maxx 
+			|| Number(llY.text) < map.getFullExtent().miny  || Number(urY.text) > map.getFullExtent().maxy){
 			setStatusText(_global.flamingo.getString(this,"warningOutOfExtent"),"warning");	
 		}
 		else 
-		if (Number(llX.text) >= Number(urX.text) or Number(llY.text) >= Number(urY.text)){
+		if (Number(llX.text) >= Number(urX.text) || Number(llY.text) >= Number(urY.text)){
 			setStatusText(_global.flamingo.getString(this,"warningErrorInBox"),"warning");	
 		} else {
 			removeStatusText();

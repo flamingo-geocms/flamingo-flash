@@ -28,7 +28,6 @@
 import flamingo.gui.*;
 
 import flamingo.event.*;
-import flamingo.coregui.Frame;
 import flamingo.coremodel.service.ServiceLayer;
 import flamingo.gismodel.Feature;
 import flamingo.gismodel.GIS;

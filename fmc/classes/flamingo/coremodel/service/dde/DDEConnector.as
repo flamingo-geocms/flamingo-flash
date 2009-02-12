@@ -142,7 +142,7 @@ class flamingo.coremodel.service.dde.DDEConnector extends XML{
 		xmlStr +="</downloadLayers>";
 		xmlStr+= "<fmeParams>";
 		xmlStr+= "<QueryCoordsSys>"+queryCoordsSys+"</QueryCoordsSys>";
-		if (areaSelectionType == "inArea" or areaSelectionType == "inGeometry") {
+		if (areaSelectionType == "inArea" || areaSelectionType == "inGeometry") {
 			xmlStr+="<ClippingCoords>"+clippingCoords+"</ClippingCoords>";
 		} 
 		xmlStr+= "</fmeParams>";

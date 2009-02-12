@@ -126,7 +126,7 @@ class AbstractComponent extends MovieClip {
     function removeInitAdapter(initAdapter:InitAdapter):Void {
         for (var i:String in initAdapters) {
             if (initAdapters[i] == initAdapter) {
-                initAdapters.splice(int(i), 1);
+                initAdapters.splice(int(Number(i)), 1);
 				
                 _global.flamingo.removeListener(initAdapter, listento[i], this);
                 

@@ -81,7 +81,7 @@ class flamingo.gui.dde.DownloadLegend extends MovieClip implements DDEConnectorL
 	function onGroupEvent(evtObj){
 		if(evtObj.type == "press"){
 			var item = evtObj.target._parent.item
-			item.collapsed = not item.collapsed;
+			item.collapsed = !item.collapsed;
 			refresh();
 		}
 	}
@@ -274,7 +274,7 @@ class flamingo.gui.dde.DownloadLegend extends MovieClip implements DDEConnectorL
 	}
 	
 	function _refreshItem(mc:MovieClip) {
-		if (not mc._parent._visible) {
+		if (!mc._parent._visible) {
 			return;
 		}
 		//quit if _parent is invisible
@@ -355,7 +355,7 @@ class flamingo.gui.dde.DownloadLegend extends MovieClip implements DDEConnectorL
 				if (mc.mItems != undefined) {
 					mc.mItems._x = x;
 					mc.mItems._y = y;
-					 if (mc.item.itemvisible == 1 or mc.item.itemvisible ==undefined) {
+					 if (mc.item.itemvisible == 1 || mc.item.itemvisible ==undefined) {
 						mc.mItems._yscale = mc.mItems._xscale=100;
 						mc.mItems._visible = true;
 					} else {
