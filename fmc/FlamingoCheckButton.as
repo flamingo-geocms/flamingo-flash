@@ -209,10 +209,10 @@ class FlamingoCheckButton extends MovieClip {
 		this.functions[eventname.toLowerCase()] = f;
 	}
 	function move(x:Number, y:Number) {
-		if (!x==NaN) {
+		if (!(x==NaN)) {
 			this.mc._x = x;
 		}
-		if (!y==NaN) {
+		if (!(y==NaN)) {
 			this.mc._y = y;
 		}
 	}
