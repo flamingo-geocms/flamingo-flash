@@ -1,69 +1,69 @@
-../flamingo.fla	../swfs/flamingo.swf	
-../fmc/Authentication.fla	../swfs/fmc/Authentication.swf
-../fmc/BaseContainer.fla	../swfs/fmc/BaseContainer.swf
-../fmc/BitmapClone.fla	../swfs/fmc/BitmapClone.swf
-../fmc/CommitButton.fla	../swfs/fmc/CommitButton.swf
-../fmc/Confirmation.fla	../swfs/fmc/Confirmation.swf
-../fmc/Cursors.fla	../swfs/fmc/Cursors.swf
-../fmc/DownloadSelector.fla	../swfs/fmc/DownloadSelector.swf
-../fmc/DownloadSelectorButton.fla	../swfs/fmc/DownloadSelectorButton.swf
-../fmc/EditBar.fla	../swfs/fmc/EditBar.swf
-../fmc/EditLegend.fla	../swfs/fmc/EditLegend.swf
-../fmc/EditMap.fla	../swfs/fmc/EditMap.swf
-../fmc/EditLegend.fla	../swfs/fmc/EditLegend.swf
-../fmc/EditBar.fla	../swfs/fmc/EditBar.swf
-../fmc/EditLegend.fla	../swfs/fmc/EditLegend.swf
-../fmc/EditMap.fla	../swfs/fmc/EditMap.swf
-../fmc/EditProperties.fla	../swfs/fmc/EditProperties.swf
-../fmc/GIS.fla	../swfs/fmc/GIS.swf
-../fmc/LayerProxy.fla	../swfs/fmc/LayerProxy.swf
-../fmc/MapProxy.fla	../swfs/fmc/MapProxy.swf
-../fmc/Print.fla	../swfs/fmc/Print.swf
-../fmc/PrintButton.fla	../swfs/fmc/PrintButton.swf
-../fmc/PrintLabel.fla	../swfs/fmc/PrintLabel.swf
-../fmc/PrintTemplate.fla	../swfs/fmc/PrintTemplate.swf
-../fmc/RemoteEventDispatcher.fla	../swfs/fmc/RemoteEventDispatcher.swf
-../fmc/RemoveFeatureButton.fla	../swfs/fmc/RemoveFeatureButton.swf
-../fmc/ScalableContainer.fla	../swfs/fmc/ScalableContainer.swf
-../tpc/SubsidieInfoPB.fla	../swfs/tpc/SubsidieInfoPB.swf
-../fmc/Veil.fla	../swfs/fmc/Veil.swf
-../fmc/BorderNavigation.fla	../swfs/fmc/BorderNavigation.swf
-../fmc/ButtonFull.fla	../swfs/fmc/ButtonFull.swf
-../fmc/ButtonNext.fla	../swfs/fmc/ButtonNext.swf
-../fmc/ButtonPrev.fla	../swfs/fmc/ButtonPrev.swf
-../fmc/Container.fla	../swfs/fmc/Container.swf
-../fmc/Coordinates.fla	../swfs/fmc/Coordinates.swf
-../fmc/CursorsMap.fla	../swfs/fmc/CursorsMap.swf
-../fmc/CursorsWindow.fla	../swfs/fmc/CursorsWindow.swf
-../fmc/Debugger.fla	../swfs/fmc/Debugger.swf
-../fmc/IdentifyResults.fla	../swfs/fmc/IdentifyResults.swf
-../fmc/IdentifyResultsHTML.fla	../swfs/fmc/IdentifyResultsHTML.swf
-../fmc/Image.fla	../swfs/fmc/Image.swf
-../fmc/LanguagePicker.fla	../swfs/fmc/LanguagePicker.swf
-../fmc/LayerArcIMS.fla	../swfs/fmc/LayerArcIMS.swf
-../fmc/LayerGrid.fla	../swfs/fmc/LayerGrid.swf
-../fmc/LayerIdentifyIcon.fla	../swfs/fmc/LayerIdentifyIcon.swf
-../fmc/LayerImage.fla	../swfs/fmc/LayerImage.swf
-../fmc/LayerOGWMS.fla	../swfs/fmc/LayerOGWMS.swf
-../fmc/LayerOverview.fla	../swfs/fmc/LayerOverview.swf
-../fmc/Legend.fla	../swfs/fmc/Legend.swf
-../fmc/LocationFinder.fla	../swfs/fmc/LocationFinder.swf
-../fmc/Logo.fla	../swfs/fmc/Logo.swf
-../fmc/LogoRiscMap.fla	../swfs/fmc/LogoRiscMap.swf
-../fmc/Map.fla	../swfs/fmc/Map.swf
-../fmc/Maptip.fla	../swfs/fmc/Maptip.swf
-../fmc/MonitorLayer.fla	../swfs/fmc/MonitorLayer.swf
-../fmc/MonitorMap.fla	../swfs/fmc/MonitorMap.swf
-../fmc/NamedExtentViewer.fla	../swfs/fmc/NamedExtentViewer.swf
-../fmc/Scalebar.fla	../swfs/fmc/Scalebar.swf
-../fmc/Text.fla	../swfs/fmc/Text.swf
-../fmc/TextArea.fla	../swfs/fmc/TextArea.swf
-../fmc/ToolGroup.fla	../swfs/fmc/ToolGroup.swf
-../fmc/ToolIdentify.fla	../swfs/fmc/ToolIdentify.swf
-../fmc/ToolMeasure.fla	../swfs/fmc/ToolMeasure.swf
-../fmc/ToolPan.fla	../swfs/fmc/ToolPan.swf
-../fmc/ToolSuperPan.fla	../swfs/fmc/ToolSuperPan.swf
-../fmc/ToolZoomin.fla	../swfs/fmc/ToolZoomin.swf
-../fmc/ToolZoomOut.fla	../swfs/fmc/ToolZoomOut.swf
-../fmc/Window.fla	../swfs/fmc/Window.swf
-../fmc/ZoomerV.fla	../swfs/fmc/ZoomerV.swf
+flamingo.fla	file:///P|/Flamingo/Linda/flamingoSVN/client/	file:///C|/docroot/flamingo_combi/flamingo/
+fmc/Authentication.fla	file:///P|/Flamingo/Linda/flamingoSVN/client/	file:///C|/docroot/flamingo_combi/flamingo/
+fmc/BaseContainer.fla	file:///P|/Flamingo/Linda/flamingoSVN/client/	file:///C|/docroot/flamingo_combi/flamingo/
+fmc/BitmapClone.fla	file:///P|/Flamingo/Linda/flamingoSVN/client/	file:///C|/docroot/flamingo_combi/flamingo/
+fmc/CommitButton.fla	file:///P|/Flamingo/Linda/flamingoSVN/client/	file:///C|/docroot/flamingo_combi/flamingo/
+fmc/Confirmation.fla	file:///P|/Flamingo/Linda/flamingoSVN/client/	file:///C|/docroot/flamingo_combi/flamingo/
+fmc/Cursors.fla	file:///P|/Flamingo/Linda/flamingoSVN/client/	file:///C|/docroot/flamingo_combi/flamingo/
+fmc/DownloadSelector.fla	file:///P|/Flamingo/Linda/flamingoSVN/client/	file:///C|/docroot/flamingo_combi/flamingo/
+fmc/DownloadSelectorButton.fla	file:///P|/Flamingo/Linda/flamingoSVN/client/	file:///C|/docroot/flamingo_combi/flamingo/
+fmc/EditBar.fla	file:///P|/Flamingo/Linda/flamingoSVN/client/	file:///C|/docroot/flamingo_combi/flamingo/
+fmc/EditLegend.fla	file:///P|/Flamingo/Linda/flamingoSVN/client/	file:///C|/docroot/flamingo_combi/flamingo/
+fmc/EditMap.fla	file:///P|/Flamingo/Linda/flamingoSVN/client/	file:///C|/docroot/flamingo_combi/flamingo/
+fmc/EditLegend.fla	file:///P|/Flamingo/Linda/flamingoSVN/client/	file:///C|/docroot/flamingo_combi/flamingo/
+fmc/EditBar.fla	file:///P|/Flamingo/Linda/flamingoSVN/client/	file:///C|/docroot/flamingo_combi/flamingo/
+fmc/EditLegend.fla	file:///P|/Flamingo/Linda/flamingoSVN/client/	file:///C|/docroot/flamingo_combi/flamingo/
+fmc/EditMap.fla	file:///P|/Flamingo/Linda/flamingoSVN/client/	file:///C|/docroot/flamingo_combi/flamingo/
+fmc/EditProperties.fla	file:///P|/Flamingo/Linda/flamingoSVN/client/	file:///C|/docroot/flamingo_combi/flamingo/
+fmc/GIS.fla	file:///P|/Flamingo/Linda/flamingoSVN/client/	file:///C|/docroot/flamingo_combi/flamingo/
+fmc/LayerProxy.fla	file:///P|/Flamingo/Linda/flamingoSVN/client/	file:///C|/docroot/flamingo_combi/flamingo/
+fmc/MapProxy.fla	file:///P|/Flamingo/Linda/flamingoSVN/client/	file:///C|/docroot/flamingo_combi/flamingo/
+fmc/Print.fla	file:///P|/Flamingo/Linda/flamingoSVN/client/	file:///C|/docroot/flamingo_combi/flamingo/
+fmc/PrintButton.fla	file:///P|/Flamingo/Linda/flamingoSVN/client/	file:///C|/docroot/flamingo_combi/flamingo/
+fmc/PrintLabel.fla	file:///P|/Flamingo/Linda/flamingoSVN/client/	file:///C|/docroot/flamingo_combi/flamingo/
+fmc/PrintTemplate.fla	file:///P|/Flamingo/Linda/flamingoSVN/client/	file:///C|/docroot/flamingo_combi/flamingo/
+fmc/RemoteEventDispatcher.fla	file:///P|/Flamingo/Linda/flamingoSVN/client/	file:///C|/docroot/flamingo_combi/flamingo/
+fmc/RemoveFeatureButton.fla	file:///P|/Flamingo/Linda/flamingoSVN/client/	file:///C|/docroot/flamingo_combi/flamingo/
+fmc/ScalableContainer.fla	file:///P|/Flamingo/Linda/flamingoSVN/client/	file:///C|/docroot/flamingo_combi/flamingo/
+tpc/SubsidieInfoPB.fla	file:///P|/Flamingo/Linda/flamingoSVN/client/	file:///C|/docroot/flamingo_combi/flamingo/
+fmc/Veil.fla	file:///P|/Flamingo/Linda/flamingoSVN/client/	file:///C|/docroot/flamingo_combi/flamingo/
+fmc/BorderNavigation.fla	file:///P|/Flamingo/Linda/flamingoSVN/client/	file:///C|/docroot/flamingo_combi/flamingo/
+fmc/ButtonFull.fla	file:///P|/Flamingo/Linda/flamingoSVN/client/	file:///C|/docroot/flamingo_combi/flamingo/
+fmc/ButtonNext.fla	file:///P|/Flamingo/Linda/flamingoSVN/client/	file:///C|/docroot/flamingo_combi/flamingo/
+fmc/ButtonPrev.fla	file:///P|/Flamingo/Linda/flamingoSVN/client/	file:///C|/docroot/flamingo_combi/flamingo/
+fmc/Container.fla	file:///P|/Flamingo/Linda/flamingoSVN/client/	file:///C|/docroot/flamingo_combi/flamingo/
+fmc/Coordinates.fla	file:///P|/Flamingo/Linda/flamingoSVN/client/	file:///C|/docroot/flamingo_combi/flamingo/
+fmc/CursorsMap.fla	file:///P|/Flamingo/Linda/flamingoSVN/client/	file:///C|/docroot/flamingo_combi/flamingo/
+fmc/CursorsWindow.fla	file:///P|/Flamingo/Linda/flamingoSVN/client/	file:///C|/docroot/flamingo_combi/flamingo/
+fmc/Debugger.fla	file:///P|/Flamingo/Linda/flamingoSVN/client/	file:///C|/docroot/flamingo_combi/flamingo/
+fmc/IdentifyResults.fla	file:///P|/Flamingo/Linda/flamingoSVN/client/	file:///C|/docroot/flamingo_combi/flamingo/
+fmc/IdentifyResultsHTML.fla	file:///P|/Flamingo/Linda/flamingoSVN/client/	file:///C|/docroot/flamingo_combi/flamingo/
+fmc/Image.fla	file:///P|/Flamingo/Linda/flamingoSVN/client/	file:///C|/docroot/flamingo_combi/flamingo/
+fmc/LanguagePicker.fla	file:///P|/Flamingo/Linda/flamingoSVN/client/	file:///C|/docroot/flamingo_combi/flamingo/
+fmc/LayerArcIMS.fla	file:///P|/Flamingo/Linda/flamingoSVN/client/	file:///C|/docroot/flamingo_combi/flamingo/
+fmc/LayerGrid.fla	file:///P|/Flamingo/Linda/flamingoSVN/client/	file:///C|/docroot/flamingo_combi/flamingo/
+fmc/LayerIdentifyIcon.fla	file:///P|/Flamingo/Linda/flamingoSVN/client/	file:///C|/docroot/flamingo_combi/flamingo/
+fmc/LayerImage.fla	file:///P|/Flamingo/Linda/flamingoSVN/client/	file:///C|/docroot/flamingo_combi/flamingo/
+fmc/LayerOGWMS.fla	file:///P|/Flamingo/Linda/flamingoSVN/client/	file:///C|/docroot/flamingo_combi/flamingo/
+fmc/LayerOverview.fla	file:///P|/Flamingo/Linda/flamingoSVN/client/	file:///C|/docroot/flamingo_combi/flamingo/
+fmc/Legend.fla	file:///P|/Flamingo/Linda/flamingoSVN/client/	file:///C|/docroot/flamingo_combi/flamingo/
+fmc/LocationFinder.fla	file:///P|/Flamingo/Linda/flamingoSVN/client/	file:///C|/docroot/flamingo_combi/flamingo/
+fmc/Logo.fla	file:///P|/Flamingo/Linda/flamingoSVN/client/	file:///C|/docroot/flamingo_combi/flamingo/
+fmc/LogoRiscMap.fla	file:///P|/Flamingo/Linda/flamingoSVN/client/	file:///C|/docroot/flamingo_combi/flamingo/
+fmc/Map.fla	file:///P|/Flamingo/Linda/flamingoSVN/client/	file:///C|/docroot/flamingo_combi/flamingo/
+fmc/Maptip.fla	file:///P|/Flamingo/Linda/flamingoSVN/client/	file:///C|/docroot/flamingo_combi/flamingo/
+fmc/MonitorLayer.fla	file:///P|/Flamingo/Linda/flamingoSVN/client/	file:///C|/docroot/flamingo_combi/flamingo/
+fmc/MonitorMap.fla	file:///P|/Flamingo/Linda/flamingoSVN/client/	file:///C|/docroot/flamingo_combi/flamingo/
+fmc/NamedExtentViewer.fla	file:///P|/Flamingo/Linda/flamingoSVN/client/	file:///C|/docroot/flamingo_combi/flamingo/
+fmc/Scalebar.fla	file:///P|/Flamingo/Linda/flamingoSVN/client/	file:///C|/docroot/flamingo_combi/flamingo/
+fmc/Text.fla	file:///P|/Flamingo/Linda/flamingoSVN/client/	file:///C|/docroot/flamingo_combi/flamingo/
+fmc/TextArea.fla	file:///P|/Flamingo/Linda/flamingoSVN/client/	file:///C|/docroot/flamingo_combi/flamingo/
+fmc/ToolGroup.fla	file:///P|/Flamingo/Linda/flamingoSVN/client/	file:///C|/docroot/flamingo_combi/flamingo/
+fmc/ToolIdentify.fla	file:///P|/Flamingo/Linda/flamingoSVN/client/	file:///C|/docroot/flamingo_combi/flamingo/
+fmc/ToolMeasure.fla	file:///P|/Flamingo/Linda/flamingoSVN/client/	file:///C|/docroot/flamingo_combi/flamingo/
+fmc/ToolPan.fla	file:///P|/Flamingo/Linda/flamingoSVN/client/	file:///C|/docroot/flamingo_combi/flamingo/
+fmc/ToolSuperPan.fla	file:///P|/Flamingo/Linda/flamingoSVN/client/	file:///C|/docroot/flamingo_combi/flamingo/
+fmc/ToolZoomin.fla	file:///P|/Flamingo/Linda/flamingoSVN/client/	file:///C|/docroot/flamingo_combi/flamingo/
+fmc/ToolZoomOut.fla	file:///P|/Flamingo/Linda/flamingoSVN/client/	file:///C|/docroot/flamingo_combi/flamingo/
+fmc/Window.fla	file:///P|/Flamingo/Linda/flamingoSVN/client/	file:///C|/docroot/flamingo_combi/flamingo/
+fmc/ZoomerV.fla	file:///P|/Flamingo/Linda/flamingoSVN/client/	file:///C|/docroot/flamingo_combi/flamingo/
