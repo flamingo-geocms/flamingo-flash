@@ -33,6 +33,7 @@ function execute() {
 	// find our working directory:
 	dirURI = schemaURI.substr(0,schemaURI.lastIndexOf("/")+1);
 	
+	var l = schema.length;
 	startLog("Running compile on "+l+" files at: "+dirURI);
 	var mainSwf;
 	/*
@@ -45,37 +46,39 @@ function execute() {
 	}
 	*/
 	
-	var l = schema.length;
+	
 	for (var i=0;i<l;i++) {
 		var row = schema[i].split(String.fromCharCode(9));
 		var flaName = row[0];
+		var fromDir = row[1];
 		appendToLog("\n---------------------------------------------------------------------------\nCompiling "+flaName+"\n---------------------------------------------------------------------------");
 		if (flaName == undefined || flaName.length < 3) { appendToLog(">> ERROR: Empty FLA name."); error=true; continue; }
 		
-		if (!FLfile.exists(dirURI+flaName)) { appendToLog(">> ERROR: FLA not found: "+flaName); error=true; continue; }
-		compile(dirURI+flaName,row[2],flaName);
+		if (!FLfile.exists(fromDir+flaName)) { appendToLog(">> ERROR: FLA not found: "+flaName); error=true; continue; }
+		compile(fromDir+flaName,row[3],flaName);
 		
 		var swfName = flaName.substr(0,flaName.lastIndexOf(".")+1)+"swf";
 		var xmlName = flaName.substr(0,flaName.lastIndexOf(".")+1)+"xml";
-		if (!FLfile.exists(dirURI+swfName)) { appendToLog(">> ERROR: File did not compile correctly: "+flaName); error=true; continue; }
-		if (i==0) { mainSwf = dirURI+swfName; }
-		appendToLog("Compiled "+flaName+" successfully.");
-		if (row[1] != null && row[1] != "") {
-			var newSwfName = row[1];
-			var newXmlName = newSwfName.substr(0,newSwfName.lastIndexOf(".")+1)+"xml";
-			var ok = move(dirURI+swfName,dirURI+newSwfName,swfName,"swf");
+		
+		if (!FLfile.exists(fromDir+swfName)) { appendToLog(">> ERROR: File did not compile correctly: "+flaName); error=true; continue; }
+		//if (i==0) { mainSwf = fromDir+swfName; }
+		
+		if (row[2] != null && row[2] != "") {
+			//var newSwfName = row[1];
+			var toDir = row[2]; 
+			var ok = move(fromDir+swfName,toDir+swfName,swfName,"swf");
 			if (!ok) { appendToLog(">> ERROR: File was not moved correctly: "+swfName); if (i==0) { mainSwf = undefined; }; error=true; }
-			else { appendToLog("Moved "+swfName+" to "+newSwfName+" successfully."); if (i==0) { mainSwf = dirURI+newSwfName; } }
-			var ok = move(dirURI+xmlName,dirURI+newXmlName,xmlName,"xml");
+			else { appendToLog("Moved "+swfName+" successfully."); if (i==0) { mainSwf = toDir+swfName; } }
+			var ok = move(fromDir+xmlName,toDir+xmlName,xmlName,"xml");
 			if (!ok) { appendToLog(">> ERROR: File was not moved correctly: "+xmlName) }
 			else { appendToLog("Moved "+xmlName+" successfully.")}
 		}
 	}
 	
 	// open mainSwf?
-	if (mainSwf != undefined) {
+	//if (mainSwf != undefined) {
 		//fl.openScript(mainSwf);
-	}
+	//}
 	fl.trace(FLfile.read(dirURI+"compile_log.txt"));
 	if (error) { alert("Error(s) encountered. Please check the log file for details."); }
 }
