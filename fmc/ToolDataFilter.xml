@@ -1,0 +1,4 @@
+<ToolDataFilter>
+  <string id="tooltip" nl="selecteren" en="Select"/>
+  <cursor id="busy" url="fmc/CursorsMap.swf" linkageid="busy"/>
+</ToolDataFilter>
