@@ -70,66 +70,63 @@ class ArcIMSConnector {
 	//-----------------------
 	private var DEBUG:Boolean = false;
 	private var recordedValues:Object = new Object();
-	private var visualisationSelected:Object= new Object();
+	private var visualisationSelected:Object = new Object();
 	private var identifyColorLayer:String;
 	private var identifyColorLayerKey:String;
 	private var record:Boolean = false;
-		
-	function setIdentifyColorLayer(s:String){
-		this.identifyColorLayer=s;
+
+	function setIdentifyColorLayer(s:String) {
+		this.identifyColorLayer = s;
 	}
-	function setIdentifyColorLayerKey(s:String){
-		this.identifyColorLayerKey=s;
+	function setIdentifyColorLayerKey(s:String) {
+		this.identifyColorLayerKey = s;
 	}
-	function setRecord(b:Boolean){
-		this.record=b;
+	function setRecord(b:Boolean) {
+		this.record = b;
 	}
-	function setVisualisationSelected(visual:Object){
-		this.visualisationSelected=visual;
+	function setVisualisationSelected(visual:Object) {
+		this.visualisationSelected = visual;
 	}
-	function setRecorded(layerid:String, layerkey:String, values:Array){		
-		if (this.recordedValues[layerid]==undefined){
-			this.recordedValues[layerid]=new Object();
-		}		
-		this.recordedValues[layerid][layerkey]=new Array();
-		this.recordedValues[layerid][layerkey]=values;	
-		
+	function setRecorded(layerid:String, layerkey:String, values:Array) {
+		if (this.recordedValues[layerid] == undefined) {
+			this.recordedValues[layerid] = new Object();
+		}
+		this.recordedValues[layerid][layerkey] = new Array();
+		this.recordedValues[layerid][layerkey] = values;
+
 	}
-	function addRecorded(layerid:String, layerkey:String, values:Array){		
+	function addRecorded(layerid:String, layerkey:String, values:Array) {
 		log("addRecorded");
-		if (this.recordedValues[layerid]==undefined){
-			this.recordedValues[layerid]=new Object();
-		}		
-		if (recordedValues[layerid][layerkey]==undefined){
-			this.recordedValues[layerid][layerkey]=new Array();
-		}		
-		for (var v=0; v < values.length; v++){
+		if (this.recordedValues[layerid] == undefined) {
+			this.recordedValues[layerid] = new Object();
+		}
+		if (recordedValues[layerid][layerkey] == undefined) {
+			this.recordedValues[layerid][layerkey] = new Array();
+		}
+		for (var v = 0; v<values.length; v++) {
 			log("values: "+values[v]);
-			var addValue:Boolean=true;
-			for (var i=0; i < recordedValues[layerid][layerkey].length && addValue; i++){			
-				if (recordedValues[layerid][layerkey][i]==values[v]){
-					addValue=false;
+			var addValue:Boolean = true;
+			for (var i = 0; i<recordedValues[layerid][layerkey].length && addValue; i++) {
+				if (recordedValues[layerid][layerkey][i] == values[v]) {
+					addValue = false;
 				}
 			}
 			log("addvalue: "+addValue);
-			if (addValue){
+			if (addValue) {
 				log(this.recordedValues[layerid][layerkey]);
 				this.recordedValues[layerid][layerkey].push(values[v]);
 			}
 		}
-		
 	}
-	function setRecordedValues(o:Object){
-		this.recordedValues=o;
+	function setRecordedValues(o:Object) {
+		this.recordedValues = o;
 	}
-	
-	function getRecord(){
+	function getRecord() {
 		return record;
 	}
-	function getVisualisationSelected(){
+	function getVisualisationSelected() {
 		return visualisationSelected;
 	}
-	
 	function addListener(listener:Object) {
 		events.addListener(listener);
 	}
@@ -174,7 +171,7 @@ class ArcIMSConnector {
 	private function _sendrequest(sxml:String, requesttype:String, objecttag:Object):Number {
 		if (this.busy) {
 			this.error = "busy processing request...";
-			this.events.broadcastMessage("onError", this.error, objecttag, this.requestid);
+			this.events.broadcastMessage("onError",this.error,objecttag,this.requestid);
 			return;
 		}
 		this.requestid++;
@@ -189,53 +186,53 @@ class ArcIMSConnector {
 		var thisObj:Object = this;
 		this.error = "";
 		this.response = "";
-		this.events.broadcastMessage("onRequest", this);
+		this.events.broadcastMessage("onRequest",this);
 		xresponse.onLoad = function(success:Boolean):Void  {
 			thisObj.response = this.toString();
 			thisObj.responsetime = (new Date()-starttime)/1000;
 			if (success) {
 				if (this.firstChild.nodeName == "ERROR") {
 					thisObj.error = this.firstChild.childNodes[0].nodeValue;
-					thisObj.events.broadcastMessage("onResponse", thisObj);
-					thisObj.events.broadcastMessage("onError", thisObj.error, objecttag, thisObj.requestid);
+					thisObj.events.broadcastMessage("onResponse",thisObj);
+					thisObj.events.broadcastMessage("onError",thisObj.error,objecttag,thisObj.requestid);
 				} else if (this.firstChild.firstChild.nodeName == "ERROR") {
 					thisObj.error = this.firstChild.firstChild.childNodes[0].nodeValue;
-					thisObj.events.broadcastMessage("onResponse", thisObj);
-					thisObj.events.broadcastMessage("onError", thisObj.error, objecttag, thisObj.requestid);
+					thisObj.events.broadcastMessage("onResponse",thisObj);
+					thisObj.events.broadcastMessage("onError",thisObj.error,objecttag,thisObj.requestid);
 				} else if (this.firstChild.firstChild.firstChild.nodeName == "ERROR") {
 					error = this.firstChild.firstChild.firstChild.childNodes[0].nodeValue;
-					thisObj.events.broadcastMessage("onResponse", thisObj);
-					thisObj.events.broadcastMessage("onError", thisObj.error, objecttag, thisObj.requestid);
+					thisObj.events.broadcastMessage("onResponse",thisObj);
+					thisObj.events.broadcastMessage("onError",thisObj.error,objecttag,thisObj.requestid);
 				} else {
-					thisObj.events.broadcastMessage("onResponse", thisObj);
+					thisObj.events.broadcastMessage("onResponse",thisObj);
 					switch (requesttype) {
-					case "getServices" :
-						thisObj._processServices(this, objecttag, thisObj.requestid);
-						break;
-					case "getImage" :
-						thisObj._processImage(this, objecttag, thisObj.requestid);
-						break;
-					case "getRasterInfo" :
-						thisObj._processRasterInfo(this, objecttag, thisObj.requestid);
-						break;
-					case "getServiceInfo" :
-						thisObj._processServiceInfo(this, objecttag, thisObj.requestid);
-						break;
-					case "getFeatures" :
-						thisObj._processFeatures(this, objecttag, thisObj.requestid);
-						break;
+						case "getServices" :
+							thisObj._processServices(this,objecttag,thisObj.requestid);
+							break;
+						case "getImage" :
+							thisObj._processImage(this,objecttag,thisObj.requestid);
+							break;
+						case "getRasterInfo" :
+							thisObj._processRasterInfo(this,objecttag,thisObj.requestid);
+							break;
+						case "getServiceInfo" :
+							thisObj._processServiceInfo(this,objecttag,thisObj.requestid);
+							break;
+						case "getFeatures" :
+							thisObj._processFeatures(this,objecttag,thisObj.requestid);
+							break;
 					}
 				}
 			} else {
 				thisObj.error = "connection failed...";
-				thisObj.events.broadcastMessage("onResponse", thisObj);
-				thisObj.events.broadcastMessage("onError", thisObj.error, objecttag, thisObj.requestid);
+				thisObj.events.broadcastMessage("onResponse",thisObj);
+				thisObj.events.broadcastMessage("onError",thisObj.error,objecttag,thisObj.requestid);
 			}
 			thisObj.busy = false;
 			delete this;
 		};
 		var starttime:Date = new Date();
-		xrequest.sendAndLoad(url, xresponse);
+		xrequest.sendAndLoad(url,xresponse);
 		return (thisObj.requestid);
 	}
 	function getServices(objecttag:Object):Number {
@@ -257,7 +254,7 @@ class ArcIMSConnector {
 				services[s.name] = s;
 			}
 		}
-		this.events.broadcastMessage("onGetServices", services, objecttag, requestid);
+		this.events.broadcastMessage("onGetServices",services,objecttag,requestid);
 	}
 	function getServiceInfo(service:String, objecttag:Object):Number {
 		if (service != undefined) {
@@ -279,61 +276,61 @@ class ArcIMSConnector {
 		var xnSI = xml.firstChild.firstChild.firstChild.childNodes;
 		for (var i:Number = 0; i<xnSI.length; i++) {
 			switch (xnSI[i].nodeName) {
-			case "LAYERINFO" :
-				layer = new Object();
-				layer.type = xnSI[i].attributes.type;
-				if (layer.type == "featureclass") {
-					layer.fclasstype = xnSI[i].firstChild.attributes.type;
-				}
-				layer.visible = false;
-				layer.legend = false;
-				if (xnSI[i].attributes.visible == "true") {
-					layer.visible = true;
-					layer.legend = true;
-				}
-				layer.name = xnSI[i].attributes.name;
-				layer.id = xnSI[i].attributes.id;
-				layer.minscale = this._asNumber(xnSI[i].attributes.minscale);
-				layer.maxscale = this._asNumber(xnSI[i].attributes.maxscale);
-				layer.fields = new Object();
-				layer.query = "";
-				//veld informatie
-				var xnFCLASS:Array = xnSI[i].childNodes;
-				for (var j:Number = 0; j<xnFCLASS.length; j++) {
-					if (xnFCLASS[j].nodeName == "FCLASS") {
-						var xnFIELD = xnFCLASS[j].childNodes;
-						for (var k:Number = 0; k<xnFIELD.length; k++) {
-							if (xnFIELD[k].nodeName == "FIELD") {
-								field = new Object();
-								field.name = xnFIELD[k].attributes.name;
-								field.shortname = this._stripGeodatabase(field.name);
-								field.type = xnFIELD[k].attributes.type;
-								field.size = xnFIELD[k].attributes.size;
-								field.precision = xnFIELD[k].attributes.precision;
-								layer.fields[field.name] = field;
+				case "LAYERINFO" :
+					layer = new Object();
+					layer.type = xnSI[i].attributes.type;
+					if (layer.type == "featureclass") {
+						layer.fclasstype = xnSI[i].firstChild.attributes.type;
+					}
+					layer.visible = false;
+					layer.legend = false;
+					if (xnSI[i].attributes.visible == "true") {
+						layer.visible = true;
+						layer.legend = true;
+					}
+					layer.name = xnSI[i].attributes.name;
+					layer.id = xnSI[i].attributes.id;
+					layer.minscale = this._asNumber(xnSI[i].attributes.minscale);
+					layer.maxscale = this._asNumber(xnSI[i].attributes.maxscale);
+					layer.fields = new Object();
+					layer.query = "";
+					//veld informatie
+					var xnFCLASS:Array = xnSI[i].childNodes;
+					for (var j:Number = 0; j<xnFCLASS.length; j++) {
+						if (xnFCLASS[j].nodeName == "FCLASS") {
+							var xnFIELD = xnFCLASS[j].childNodes;
+							for (var k:Number = 0; k<xnFIELD.length; k++) {
+								if (xnFIELD[k].nodeName == "FIELD") {
+									field = new Object();
+									field.name = xnFIELD[k].attributes.name;
+									field.shortname = this._stripGeodatabase(field.name);
+									field.type = xnFIELD[k].attributes.type;
+									field.size = xnFIELD[k].attributes.size;
+									field.precision = xnFIELD[k].attributes.precision;
+									layer.fields[field.name] = field;
+								}
 							}
 						}
 					}
-				}
-				layers[layer.id] = layer;
-				break;
-			case "PROPERTIES" :
-				var xnPROPERTIES:Array = xnSI[i].childNodes;
-				for (var j:Number = 0; j<xnPROPERTIES.length; j++) {
-					if (xnPROPERTIES[j].nodeName == "ENVELOPE") {
-						extent.name = xnPROPERTIES[j].attributes.name;
-						extent.minx = this._asNumber(xnPROPERTIES[j].attributes.minx);
-						extent.miny = this._asNumber(xnPROPERTIES[j].attributes.miny);
-						extent.maxx = this._asNumber(xnPROPERTIES[j].attributes.maxx);
-						extent.maxy = this._asNumber(xnPROPERTIES[j].attributes.maxy);
+					layers[layer.id] = layer;
+					break;
+				case "PROPERTIES" :
+					var xnPROPERTIES:Array = xnSI[i].childNodes;
+					for (var j:Number = 0; j<xnPROPERTIES.length; j++) {
+						if (xnPROPERTIES[j].nodeName == "ENVELOPE") {
+							extent.name = xnPROPERTIES[j].attributes.name;
+							extent.minx = this._asNumber(xnPROPERTIES[j].attributes.minx);
+							extent.miny = this._asNumber(xnPROPERTIES[j].attributes.miny);
+							extent.maxx = this._asNumber(xnPROPERTIES[j].attributes.maxx);
+							extent.maxy = this._asNumber(xnPROPERTIES[j].attributes.maxy);
+						}
 					}
-				}
-				break;
-			case "ENVIRONMENT" :
-				break;
+					break;
+				case "ENVIRONMENT" :
+					break;
 			}
 		}
-		this.events.broadcastMessage("onGetServiceInfo", extent, layers, objecttag, requestid);
+		this.events.broadcastMessage("onGetServiceInfo",extent,layers,objecttag,requestid);
 	}
 	function getImage(service:String, extent:Object, size:Object, layers:Object, objecttag:Object):Number {
 		if (service != undefined) {
@@ -345,7 +342,7 @@ class ArcIMSConnector {
 		str = str+"<GET_IMAGE autoresize=\"true\">\n";
 		str = str+"<PROPERTIES>\n";
 		var rgb1:Object = _getRGB(this.backgroundcolor);
-		if (!(this.transcolor)==NaN) {
+		if (!(this.transcolor) == NaN) {
 			var rgb2:Object = _getRGB(this.transcolor);
 			str = str+"<BACKGROUND  color=\""+rgb1.r+","+rgb1.g+","+rgb1.b+"\""+" transcolor=\""+rgb2.r+","+rgb2.g+","+rgb2.b+"\"  />\n";
 		} else {
@@ -363,7 +360,7 @@ class ArcIMSConnector {
 			if (layers != undefined) {
 				str = str+"<LAYERLIST order=\"false\" >\n";
 				for (var id in layers) {
-                    if (layers[id].visible != undefined) {
+					if (layers[id].visible != undefined) {
 						if (!layers[id].visible) {
 							str = str+"<LAYERDEF id=\""+id+"\" visible=\""+String(layers[id].visible)+"\">\n";
 						} else {
@@ -375,95 +372,123 @@ class ArcIMSConnector {
 								str = str+"<SPATIALQUERY where=\""+layers[id].query+"\" />";
 							}
 						}
-						var otherPartAdded=false;
-						var keyCount:Number=0;
-						for (var key in this.recordedValues[id]){
+						var otherPartAdded = false;
+						var keyCount:Number = 0;
+						for (var key in this.recordedValues[id]) {
 							keyCount++;
 						}
-						if (keyCount > 1){
-							str+="<GROUPRENDERER>";
+						if (keyCount>1) {
+							str += "<GROUPRENDERER>";
 						}
-						for (var key in this.recordedValues[id]){				
-							if (this.recordedValues[id][key].length>0){
-								str+='<VALUEMAPRENDERER lookupfield="'+key+'">';							
-								for (var i=0; i < this.recordedValues[id][key].length; i++){
-									str+='<EXACT value="'+this.recordedValues[id][key][i]+'" label="label">';
-									str+='<SIMPLEPOLYGONSYMBOL ';
-									if (visualisationSelected[id]["antialiasing"]!=undefined)
-										str+='antialiasing="'+visualisationSelected[id]["antialiasing"] +'" ';
-									if (visualisationSelected[id]["boundary"]!=undefined)
-										str+='boundary="'+visualisationSelected[id]["boundary"] +'" ';
-									if (visualisationSelected[id]["boundarycaptype"]!=undefined)
-										str+='boundarycaptype="'+visualisationSelected[id]["boundarycaptype"] +'" ';
-									if (visualisationSelected[id]["boundarycolor"]!=undefined)
-										str+='boundarycolor="'+visualisationSelected[id]["boundarycolor"] +'" ';
-									if (visualisationSelected[id]["boundaryjointype"]!=undefined)
-										str+='boundaryjointype="'+visualisationSelected[id]["boundaryjointype"] +'" ';
-									if (visualisationSelected[id]["boundarytransparency"]!=undefined)
-										str+='boundarytransparency="'+visualisationSelected[id]["boundarytransparency"] +'" ';
-									if (visualisationSelected[id]["boundarytype"]!=undefined)
-										str+='boundarytype="'+visualisationSelected[id]["boundarytype"] +'" ';
-									if (visualisationSelected[id]["boundarywidth"]!=undefined)
-										str+='boundarywidth="'+visualisationSelected[id]["boundarywidth"] +'" ';
-									if (visualisationSelected[id]["fillcolor"]!=undefined)
-										str+='fillcolor="'+visualisationSelected[id]["fillcolor"] +'" ';
-									if (visualisationSelected[id]["fillinterval"]!=undefined)
-										str+='fillinterval="'+visualisationSelected[id]["fillinterval"] +'" ';
-									if (visualisationSelected[id]["filltransparency"]!=undefined)
-										str+='filltransparency="'+visualisationSelected[id]["filltransparency"] +'" ';
-									if (visualisationSelected[id]["filltype"]!=undefined)
-										str+='filltype="'+visualisationSelected[id]["filltype"] +'" ';
-									if (visualisationSelected[id]["overlap"]!=undefined)
-										str+='overlap="'+visualisationSelected[id]["overlap"] +'" ';
-									if (visualisationSelected[id]["transparency"]!=undefined)
-										str+='transparency="'+visualisationSelected[id]["transparency"] +'" ';									
-									str+='/>';
-									str+='</EXACT>';
-								}								
-								if(!otherPartAdded){
-									str+='<OTHER>';
-									str+='<SIMPLEPOLYGONSYMBOL ';
-									if (visualisationSelected[id]["other_antialiasing"]!=undefined)
-										str+='antialiasing="'+visualisationSelected[id]["other_antialiasing"] +'" ';
-									if (visualisationSelected[id]["other_boundary"]!=undefined)
-										str+='boundary="'+visualisationSelected[id]["other_boundary"] +'" ';
-									if (visualisationSelected[id]["other_boundarycaptype"]!=undefined)
-										str+='boundarycaptype="'+visualisationSelected[id]["other_boundarycaptype"] +'" ';
-									if (visualisationSelected[id]["other_boundarycolor"]!=undefined)
-										str+='boundarycolor="'+visualisationSelected[id]["other_boundarycolor"] +'" ';
-									if (visualisationSelected[id]["other_boundaryjointype"]!=undefined)
-										str+='boundaryjointype="'+visualisationSelected[id]["other_boundaryjointype"] +'" ';
-									if (visualisationSelected[id]["other_boundarytransparency"]!=undefined)
-										str+='boundarytransparency="'+visualisationSelected[id]["other_boundarytransparency"] +'" ';
-									if (visualisationSelected[id]["other_boundarytype"]!=undefined)
-										str+='boundarytype="'+visualisationSelected[id]["other_boundarytype"] +'" ';
-									if (visualisationSelected[id]["other_boundarywidth"]!=undefined)
-										str+='boundarywidth="'+visualisationSelected[id]["other_boundarywidth"] +'" ';
-									if (visualisationSelected[id]["other_fillcolor"]!=undefined)
-										str+='fillcolor="'+visualisationSelected[id]["other_fillcolor"] +'" ';
-									if (visualisationSelected[id]["other_fillinterval"]!=undefined)
-										str+='fillinterval="'+visualisationSelected[id]["other_fillinterval"] +'" ';
-									if (visualisationSelected[id]["other_filltransparency"]!=undefined)
-										str+='filltransparency="'+visualisationSelected[id]["other_filltransparency"] +'" ';
-									if (visualisationSelected[id]["other_filltype"]!=undefined)
-										str+='filltype="'+visualisationSelected[id]["other_filltype"] +'" ';
-									if (visualisationSelected[id]["other_overlap"]!=undefined)
-										str+='overlap="'+visualisationSelected[id]["other_overlap"] +'" ';
-									if (visualisationSelected[id]["other_transparency"]!=undefined)
-										str+='transparency="'+visualisationSelected[id]["other_transparency"] +'" ';			
-									str+='/></OTHER>';					
-									otherPartAdded=true;
-								}								
-								str+='</VALUEMAPRENDERER>';
+						for (var key in this.recordedValues[id]) {
+							if (this.recordedValues[id][key].length>0) {
+								str += '<VALUEMAPRENDERER lookupfield="'+key+'">';
+								for (var i = 0; i<this.recordedValues[id][key].length; i++) {
+									str += '<EXACT value="'+this.recordedValues[id][key][i]+'" label="label">';
+									str += '<SIMPLEPOLYGONSYMBOL ';
+									if (visualisationSelected[id]["antialiasing"] != undefined) {
+										str += 'antialiasing="'+visualisationSelected[id]["antialiasing"]+'" ';
+									}
+									if (visualisationSelected[id]["boundary"] != undefined) {
+										str += 'boundary="'+visualisationSelected[id]["boundary"]+'" ';
+									}
+									if (visualisationSelected[id]["boundarycaptype"] != undefined) {
+										str += 'boundarycaptype="'+visualisationSelected[id]["boundarycaptype"]+'" ';
+									}
+									if (visualisationSelected[id]["boundarycolor"] != undefined) {
+										str += 'boundarycolor="'+visualisationSelected[id]["boundarycolor"]+'" ';
+									}
+									if (visualisationSelected[id]["boundaryjointype"] != undefined) {
+										str += 'boundaryjointype="'+visualisationSelected[id]["boundaryjointype"]+'" ';
+									}
+									if (visualisationSelected[id]["boundarytransparency"] != undefined) {
+										str += 'boundarytransparency="'+visualisationSelected[id]["boundarytransparency"]+'" ';
+									}
+									if (visualisationSelected[id]["boundarytype"] != undefined) {
+										str += 'boundarytype="'+visualisationSelected[id]["boundarytype"]+'" ';
+									}
+									if (visualisationSelected[id]["boundarywidth"] != undefined) {
+										str += 'boundarywidth="'+visualisationSelected[id]["boundarywidth"]+'" ';
+									}
+									if (visualisationSelected[id]["fillcolor"] != undefined) {
+										str += 'fillcolor="'+visualisationSelected[id]["fillcolor"]+'" ';
+									}
+									if (visualisationSelected[id]["fillinterval"] != undefined) {
+										str += 'fillinterval="'+visualisationSelected[id]["fillinterval"]+'" ';
+									}
+									if (visualisationSelected[id]["filltransparency"] != undefined) {
+										str += 'filltransparency="'+visualisationSelected[id]["filltransparency"]+'" ';
+									}
+									if (visualisationSelected[id]["filltype"] != undefined) {
+										str += 'filltype="'+visualisationSelected[id]["filltype"]+'" ';
+									}
+									if (visualisationSelected[id]["overlap"] != undefined) {
+										str += 'overlap="'+visualisationSelected[id]["overlap"]+'" ';
+									}
+									if (visualisationSelected[id]["transparency"] != undefined) {
+										str += 'transparency="'+visualisationSelected[id]["transparency"]+'" ';
+									}
+									str += '/>';
+									str += '</EXACT>';
+								}
+								if (!otherPartAdded) {
+									str += '<OTHER>';
+									str += '<SIMPLEPOLYGONSYMBOL ';
+									if (visualisationSelected[id]["other_antialiasing"] != undefined) {
+										str += 'antialiasing="'+visualisationSelected[id]["other_antialiasing"]+'" ';
+									}
+									if (visualisationSelected[id]["other_boundary"] != undefined) {
+										str += 'boundary="'+visualisationSelected[id]["other_boundary"]+'" ';
+									}
+									if (visualisationSelected[id]["other_boundarycaptype"] != undefined) {
+										str += 'boundarycaptype="'+visualisationSelected[id]["other_boundarycaptype"]+'" ';
+									}
+									if (visualisationSelected[id]["other_boundarycolor"] != undefined) {
+										str += 'boundarycolor="'+visualisationSelected[id]["other_boundarycolor"]+'" ';
+									}
+									if (visualisationSelected[id]["other_boundaryjointype"] != undefined) {
+										str += 'boundaryjointype="'+visualisationSelected[id]["other_boundaryjointype"]+'" ';
+									}
+									if (visualisationSelected[id]["other_boundarytransparency"] != undefined) {
+										str += 'boundarytransparency="'+visualisationSelected[id]["other_boundarytransparency"]+'" ';
+									}
+									if (visualisationSelected[id]["other_boundarytype"] != undefined) {
+										str += 'boundarytype="'+visualisationSelected[id]["other_boundarytype"]+'" ';
+									}
+									if (visualisationSelected[id]["other_boundarywidth"] != undefined) {
+										str += 'boundarywidth="'+visualisationSelected[id]["other_boundarywidth"]+'" ';
+									}
+									if (visualisationSelected[id]["other_fillcolor"] != undefined) {
+										str += 'fillcolor="'+visualisationSelected[id]["other_fillcolor"]+'" ';
+									}
+									if (visualisationSelected[id]["other_fillinterval"] != undefined) {
+										str += 'fillinterval="'+visualisationSelected[id]["other_fillinterval"]+'" ';
+									}
+									if (visualisationSelected[id]["other_filltransparency"] != undefined) {
+										str += 'filltransparency="'+visualisationSelected[id]["other_filltransparency"]+'" ';
+									}
+									if (visualisationSelected[id]["other_filltype"] != undefined) {
+										str += 'filltype="'+visualisationSelected[id]["other_filltype"]+'" ';
+									}
+									if (visualisationSelected[id]["other_overlap"] != undefined) {
+										str += 'overlap="'+visualisationSelected[id]["other_overlap"]+'" ';
+									}
+									if (visualisationSelected[id]["other_transparency"] != undefined) {
+										str += 'transparency="'+visualisationSelected[id]["other_transparency"]+'" ';
+									}
+									str += '/></OTHER>';
+									otherPartAdded = true;
+								}
+								str += '</VALUEMAPRENDERER>';
 							}
-						}					
-						if (keyCount > 1){
-							str+="</GROUPRENDERER>";
-						}		
-						str = str+"\n</LAYERDEF>"; 
-                    }
-                }								
-				str = str+"</LAYERLIST>";				
+						}
+						if (keyCount>1) {
+							str += "</GROUPRENDERER>";
+						}
+						str = str+"\n</LAYERDEF>";
+					}
+				}
+				str = str+"</LAYERLIST>";
 			}
 		}
 		if (this.legend) {
@@ -480,8 +505,24 @@ class ArcIMSConnector {
 			}
 			str = str+"</LEGEND>\n";
 		}
-		
 		str = str+"</PROPERTIES>\n";
+
+		//Set Buffers
+		if (layers != undefined) {
+			for (var id in layers) {
+				if (layers[id].buffer != undefined) {
+					str = str+"<LAYER type=\"featureclass\" visible=\""+String(layers[id].visible)+"\" name=\"zone met straal "+layers[id].buffer.radius+"m\" id=\"gLayer\">\n<DATASET fromlayer=\""+id+"\"/>\n";
+					if (layers[id].query == undefined or layers[id].query == "") {
+						str = str+"<SPATIALQUERY>\n";
+					} else {
+						str = str+"<SPATIALQUERY where=\""+layers[id].query+"\">";
+					}
+					str = str+"<BUFFER distance=\""+layers[id].buffer.radius+"\" bufferunits=\"METER\" />\n</SPATIALQUERY>\n<SIMPLERENDERER>\n";
+					str = str+"<SIMPLEPOLYGONSYMBOL fillcolor=\""+layers[id].buffer.fillcolor+"\" filltransparency=\""+layers[id].buffer.filltransparency+"\" boundarycolor=\""+layers[id].buffer.boundarycolor+"\" boundarywidth=\""+layers[id].buffer.boundarywidth+"\" filltype=\"lightgray\" boundarycaptype=\"round\"  />\n</SIMPLERENDERER>\n</LAYER>";
+				}
+			}
+		}
+		
 		str = str+"</GET_IMAGE>\n";
 		str = str+"</REQUEST>\n";
 		str = str+"</ARCXML>";
@@ -494,42 +535,42 @@ class ArcIMSConnector {
 		var xnIMAGE:Array = xml.firstChild.firstChild.firstChild.childNodes;
 		for (var i:Number = 0; i<xnIMAGE.length; i++) {
 			switch (xnIMAGE[i].nodeName) {
-			case "ENVELOPE" :
-				extent.minx = this._asNumber(xnIMAGE[i].attributes.minx);
-				extent.miny = this._asNumber(xnIMAGE[i].attributes.miny);
-				extent.maxx = this._asNumber(xnIMAGE[i].attributes.maxx);
-				extent.maxy = this._asNumber(xnIMAGE[i].attributes.maxy);
-				break;
-			case "OUTPUT" :
-				imageurl = xnIMAGE[i].attributes.url;
-				break;
-			case "LEGEND" :
-				legendurl = xnIMAGE[i].attributes.url;
-				break;
+				case "ENVELOPE" :
+					extent.minx = this._asNumber(xnIMAGE[i].attributes.minx);
+					extent.miny = this._asNumber(xnIMAGE[i].attributes.miny);
+					extent.maxx = this._asNumber(xnIMAGE[i].attributes.maxx);
+					extent.maxy = this._asNumber(xnIMAGE[i].attributes.maxy);
+					break;
+				case "OUTPUT" :
+					imageurl = xnIMAGE[i].attributes.url;
+					break;
+				case "LEGEND" :
+					legendurl = xnIMAGE[i].attributes.url;
+					break;
 			}
 		}
-		this.events.broadcastMessage("onGetImage", extent, imageurl, legendurl, objecttag, requestid);
+		this.events.broadcastMessage("onGetImage",extent,imageurl,legendurl,objecttag,requestid);
 	}
 	private function _processRasterInfo(xml:XML, objecttag:Object, requestid:Number):Void {
 		var data:Array = new Array();
 		var xRASTERINFO:Array = xml.firstChild.firstChild.firstChild.childNodes;
 		for (var i:Number = 0; i<xRASTERINFO.length; i++) {
 			switch (xRASTERINFO[i].nodeName) {
-			case "BANDS" :
-				var record:Object = new Object();
-				var xBANDS = xRASTERINFO[i].childNodes;
-				for (var j:Number = xBANDS.length-1; j>=0; j--) {
-					if (xBANDS[j].nodeName == "BAND") {
-						var nr = xBANDS[j].attributes.number;
-						var val = xBANDS[j].attributes.value;
-						record["band_"+nr] = val;
+				case "BANDS" :
+					var record:Object = new Object();
+					var xBANDS = xRASTERINFO[i].childNodes;
+					for (var j:Number = xBANDS.length-1; j>=0; j--) {
+						if (xBANDS[j].nodeName == "BAND") {
+							var nr = xBANDS[j].attributes.number;
+							var val = xBANDS[j].attributes.value;
+							record["band_"+nr] = val;
+						}
 					}
-				}
-				data.push(record);
-				break;
+					data.push(record);
+					break;
 			}
 		}
-		this.events.broadcastMessage("onGetRasterInfo", this.layerid, data, objecttag, requestid);
+		this.events.broadcastMessage("onGetRasterInfo",this.layerid,data,objecttag,requestid);
 	}
 	function getRasterInfo(service:String, layerid:String, point:Object, coordsys:String, objecttag:Object):Number {
 		this.layerid = layerid;
@@ -599,108 +640,108 @@ class ArcIMSConnector {
 		var FEATURES = xml.firstChild.firstChild.firstChild.childNodes;
 		for (var i = FEATURES.length; i>=0; i--) {
 			switch (FEATURES[i].nodeName) {
-			case "FEATURECOUNT" :
-				count = Number(FEATURES[i].attributes.count);
-				if (FEATURES[i].attributes.hasmore.toLowerCase() == "true") {
-					hasmore = true;
-				}
-				break;
-			case "FEATURE" :
-				var record:Object = new Object();
-				var FEATURE = FEATURES[i].childNodes;
-				for (var j = 0; j<FEATURE.length; j++) {
-					switch (FEATURE[j].nodeName) {
-					case "FIELDS" :
-						var FIELDS = FEATURE[j].childNodes;
-						for (var k = 0; k<FIELDS.length; k++) {
-							record[FIELDS[k].attributes.name] = FIELDS[k].attributes.value;
-						}
-						break;
-					case "ENVELOPE" :
-						var ext:Object = new Object();
-						ext.minx = this._asNumber(FEATURE[j].attributes.minx);
-						ext.miny = this._asNumber(FEATURE[j].attributes.miny);
-						ext.maxx = this._asNumber(FEATURE[j].attributes.maxx);
-						ext.maxy = this._asNumber(FEATURE[j].attributes.maxy);
-						record["SHAPE.ENVELOPE"] = ext;
-						break;
-					case "MULTIPOINT" :
-						var multipoint:Array = new Array();
-						var xmultipoint = FEATURE[j].childNodes;
-						for (var k = 0; k<xmultipoint.length; k++) {
-							if (xmultipoint[k].nodeName == "COORDS") {
-								var COORDS = xmultipoint[k].childNodes;
-								for (var l = 0; l<COORDS.length; l++) {
-									var xy:Array = COORDS[l].nodeValue.split(" ");
-									multipoint.push({x:this._asNumber(xy[0]), y:this._asNumber(xy[1])});
-								}
-							}
-						}
-						//record["SHAPE.MULTIPOINT"] = FEATURE[j].childNodes;
-						record["SHAPE.MULTIPOINT"] = multipoint;
-						break;
-					case "POLYLINE" :
-						record["SHAPE.POLYLINE"] = FEATURE[j].childNodes;
-						break;
-					case "POLYGON" :
-						record["SHAPE.POLYGON"] = FEATURE[j].childNodes;
-						break;
+				case "FEATURECOUNT" :
+					count = Number(FEATURES[i].attributes.count);
+					if (FEATURES[i].attributes.hasmore.toLowerCase() == "true") {
+						hasmore = true;
 					}
-				}
-				data.push(record);
-				break;
-			}			
+					break;
+				case "FEATURE" :
+					var record:Object = new Object();
+					var FEATURE = FEATURES[i].childNodes;
+					for (var j = 0; j<FEATURE.length; j++) {
+						switch (FEATURE[j].nodeName) {
+							case "FIELDS" :
+								var FIELDS = FEATURE[j].childNodes;
+								for (var k = 0; k<FIELDS.length; k++) {
+									record[FIELDS[k].attributes.name] = FIELDS[k].attributes.value;
+								}
+								break;
+							case "ENVELOPE" :
+								var ext:Object = new Object();
+								ext.minx = this._asNumber(FEATURE[j].attributes.minx);
+								ext.miny = this._asNumber(FEATURE[j].attributes.miny);
+								ext.maxx = this._asNumber(FEATURE[j].attributes.maxx);
+								ext.maxy = this._asNumber(FEATURE[j].attributes.maxy);
+								record["SHAPE.ENVELOPE"] = ext;
+								break;
+							case "MULTIPOINT" :
+								var multipoint:Array = new Array();
+								var xmultipoint = FEATURE[j].childNodes;
+								for (var k = 0; k<xmultipoint.length; k++) {
+									if (xmultipoint[k].nodeName == "COORDS") {
+										var COORDS = xmultipoint[k].childNodes;
+										for (var l = 0; l<COORDS.length; l++) {
+											var xy:Array = COORDS[l].nodeValue.split(" ");
+											multipoint.push({x:this._asNumber(xy[0]), y:this._asNumber(xy[1])});
+										}
+									}
+								}
+								//record["SHAPE.MULTIPOINT"] = FEATURE[j].childNodes;
+								record["SHAPE.MULTIPOINT"] = multipoint;
+								break;
+							case "POLYLINE" :
+								record["SHAPE.POLYLINE"] = FEATURE[j].childNodes;
+								break;
+							case "POLYGON" :
+								record["SHAPE.POLYGON"] = FEATURE[j].childNodes;
+								break;
+						}
+					}
+					data.push(record);
+					break;
+			}
 		}
 		var identifyColorLayerLayers:Array = this.identifyColorLayer.split(",");
 		var identifyColorLayerKeyArray:Array = this.identifyColorLayerKey.split(",");
 		log("identifyColorLayer "+this.identifyColorLayer);
-		for (var i=0; i < identifyColorLayerLayers.length; i++){
+		for (var i = 0; i<identifyColorLayerLayers.length; i++) {
 			//als de layer voorkomt in de te kleuren layers.
 			log("this.layerid "+this.layerid);
-			if (this.layerid==identifyColorLayerLayers[i]){
-				
+			if (this.layerid == identifyColorLayerLayers[i]) {
+
 				//als de er nog geen array is voor deze layer
 				log("Record true/false: "+this.record);
-				if (this.record){
-					
-					if (recordedValues[identifyColorLayerLayers[i]]==undefined){
-						recordedValues[identifyColorLayerLayers[i]]=new Object();
-						
+				if (this.record) {
+
+					if (recordedValues[identifyColorLayerLayers[i]] == undefined) {
+						recordedValues[identifyColorLayerLayers[i]] = new Object();
+
 					}
-					if (recordedValues[identifyColorLayerLayers[i]][identifyColorLayerKeyArray[i]]==undefined){
-						recordedValues[identifyColorLayerLayers[i]][identifyColorLayerKeyArray[i]]= new Array();
+					if (recordedValues[identifyColorLayerLayers[i]][identifyColorLayerKeyArray[i]] == undefined) {
+						recordedValues[identifyColorLayerLayers[i]][identifyColorLayerKeyArray[i]] = new Array();
 					}
-					//doorloop alle gevonden waarden.					
-					for (var d=0; d < data.length; d++){						
-						var pvalue=data[d][identifyColorLayerKeyArray[i]];
+					//doorloop alle gevonden waarden. 
+					for (var d = 0; d<data.length; d++) {
+						var pvalue = data[d][identifyColorLayerKeyArray[i]];
 						log("Key: "+identifyColorLayerKeyArray[i]);
-						log ("Pvalues "+pvalue);
-						var addValue:Boolean=true;
-						for (var r=0; r < recordedValues[identifyColorLayerLayers[i]][identifyColorLayerKeyArray[i]].length && addValue; r++){
-							log ("Recorded Values: "+recordedValues[identifyColorLayerLayers[i]][identifyColorLayerKeyArray[i]][r]);							
-							if (recordedValues[identifyColorLayerLayers[i]][identifyColorLayerKeyArray[i]][r]==pvalue){
+						log("Pvalues "+pvalue);
+						var addValue:Boolean = true;
+						for (var r = 0; r<recordedValues[identifyColorLayerLayers[i]][identifyColorLayerKeyArray[i]].length && addValue; r++) {
+							log("Recorded Values: "+recordedValues[identifyColorLayerLayers[i]][identifyColorLayerKeyArray[i]][r]);
+							if (recordedValues[identifyColorLayerLayers[i]][identifyColorLayerKeyArray[i]][r] == pvalue) {
 
 								recordedValues[identifyColorLayerLayers[i]][identifyColorLayerKeyArray[i]].splice(r,1);
-								addValue=false;
+								addValue = false;
 							}
 						}
-						if (addValue){
+						if (addValue) {
 							recordedValues[identifyColorLayerLayers[i]][identifyColorLayerKeyArray[i]].push(pvalue);
 						}
-					}		
-				}else{
-					recordedValues[identifyColorLayerLayers[i]]=new Object();
-					recordedValues[identifyColorLayerLayers[i]][identifyColorLayerKeyArray[i]]=new Array();
-					for (var d=0; d < data.length; d++){
+					}
+				} else {
+					recordedValues[identifyColorLayerLayers[i]] = new Object();
+					recordedValues[identifyColorLayerLayers[i]][identifyColorLayerKeyArray[i]] = new Array();
+					for (var d = 0; d<data.length; d++) {
 						recordedValues[identifyColorLayerLayers[i]][identifyColorLayerKeyArray[i]].push(data[d][identifyColorLayerKeyArray[i]]);
 					}
 				}
-			}			
+			}
 		}
-		if (record && recordedValues[this.layerid]!=undefined){
-			this.events.broadcastMessage("onRecord", this.layerid, recordedValues);
+		if (record && recordedValues[this.layerid] != undefined) {
+			this.events.broadcastMessage("onRecord",this.layerid,recordedValues);
 		}
-		this.events.broadcastMessage("onGetFeatures", this.layerid, data, count, hasmore, objecttag, requestid);
+		this.events.broadcastMessage("onGetFeatures",this.layerid,data,count,hasmore,objecttag,requestid);
 	}
 	private function _asNumber(s:String):Number {
 		if (s == undefined) {
@@ -719,8 +760,8 @@ class ArcIMSConnector {
 	private function _getRGB(hex:Number):Object {
 		return ({r:hex >> 16, g:(hex & 0x00FF00) >> 8, b:hex & 0x0000FF});
 	}
-	function log(stringtolog:Object){	
-		if (this.DEBUG){
+	function log(stringtolog:Object) {
+		if (this.DEBUG) {
 			trace(new Date()+"ArcImsConnector: "+stringtolog);
 		}
 	}
