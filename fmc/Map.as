@@ -1,4 +1,4 @@
-/*-----------------------------------------------------------------------------
+﻿/*-----------------------------------------------------------------------------
 Copyright (C) 2006  Menko Kroeske
 
 This file is part of Flamingo MapComponents.
@@ -572,6 +572,9 @@ dynamic class Map extends MovieClip {
 				flamingo.raiseEvent(thisObj, "onIdentifyData", thisObj, layer, data, identifyextent, nridentified, total);
 				thisObj.checkIdentify();
 			};
+			lLayer.onSelectData = function(layer:MovieClip, data:Object, selectextent:Object, beginrecord:Number) {
+				flamingo.raiseEvent(thisObj, "onSelectData", thisObj, layer, data, selectextent, beginrecord);
+			};
 			lLayer.onIdentifyComplete = function(layer:MovieClip) {
 				thisObj.layersidentifying[layer._name].totalidentify = thisObj.layersidentifying[layer._name].nridentified;
 				thisObj.layersidentifying[layer._name].identifycomplete = true;
@@ -735,6 +738,18 @@ dynamic class Map extends MovieClip {
 		this._identifyextent = this.copyExtent(identifyextent);
 		flamingo.raiseEvent(this, "onIdentify", this, this._identifyextent);
 		this.checkIdentify();
+	}
+	
+	/** 
+	* Performs a select on a map
+	* This will raise the onSelect event
+	* @param serviceId:String LayerComponent id
+	* @param selectExtent:Object Extent defining the select area
+	* @param selectLayer:String Layerid
+	*/
+	
+	public function select(serviceId:Object, selectExtent:Object, selectLayer:Object):Void {
+		flamingo.raiseEvent(this, "onSelect", this, serviceId, selectExtent, selectLayer);
 	}
 	
 	/**

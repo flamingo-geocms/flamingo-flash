@@ -1,0 +1,5 @@
+<flamingo>
+   <string id="tooltip" nl="Waarnemingen Selecteren" en="select points"/>
+   <cursor id="cursor" url="fmc/cursor/customMouseCursor.swf"/>
+   <cursor id="busy" url="fmc/cursor/f2_CursorBusy.swf"/>
+</flamingo>

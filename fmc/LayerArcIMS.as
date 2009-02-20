@@ -81,6 +81,7 @@ var thisObj:MovieClip = this;
 var _identifylayers:Array;
 var _maptiplayers:Array;
 var identifyextent:Object;
+var selectextent:Object;
 var maptipcoordinate:Object;
 var showmaptip:Boolean;
 var canmaptip:Boolean = false;
@@ -109,6 +110,11 @@ lMap.onChangeExtent = function(map:MovieClip):Void  {
 lMap.onIdentify = function(map:MovieClip, identifyextent:Object):Void  {
 	thisObj.identify(identifyextent);
 };
+lMap.onSelect = function(map:MovieClip, serviceId:Object, selectExtent:Object, selectLayer:Object, subfields:Array) {
+	if(serviceId == thisObj.name) {
+		thisObj.select(selectExtent, selectLayer, subfields)
+	}
+}
 lMap.onIdentifyCancel = function(map:MovieClip):Void  {
 	thisObj.cancelIdentify();
 };
@@ -256,6 +262,7 @@ init();
 * @attr other_<see above> = the attributes for not selected objects
 *
 */
+
 function init():Void {
 	if (flamingo == undefined) {
 		var t:TextField = this.createTextField("readme", 0, 0, 0, 550, 400);
@@ -1361,6 +1368,88 @@ function _identifylayer(_identifyextent:Object, starttime:Date) {
 		break;
 	}
 }
+
+/**
+* Selects from a layer.
+* @param selectExtent:Object extent of the selection
+* @param selectLayer:String Layerid
+*/
+function select(_selectExtent:Object, _selectLayer:Object) {
+	this.selectextent = undefined;
+	if (not this.initialized) {
+		return;
+	}
+	if (not visible or not _visible) {
+		return;
+	}
+	if (server == undefined) {
+		return;
+	}
+	if (mapservice == undefined) {
+		return;
+	}
+
+	this.selectextent = map.copyExtent(_selectExtent);
+	flamingo.raiseEvent(thisObj, "onSelect", thisObj, _selectExtent, _selectLayer);
+	_selectlayer(_selectExtent, _selectLayer, 1);
+}
+
+function _selectlayer(_selectExtent:Object, _selectLayer:Object, _beginrecord:Number) {
+	var lConn = new Object();
+	
+	var layerid:String = String(_selectLayer);
+	var conn:ArcIMSConnector = new ArcIMSConnector(server);	
+
+	if (servlet.length>0) {
+		conn.servlet = servlet;
+	}
+	conn.addListener(lConn);
+	var _featurelimit:Number = layers[layerid].featurelimit;
+	if (_featurelimit == undefined) {
+		_featurelimit = this.featurelimit;
+	}
+	conn.envelope = true;
+	conn.featurelimit = _featurelimit;
+	conn.beginrecord = _beginrecord
+
+	lConn.onGetFeatures = function(layerid:String, data:Array, count:Number, hasmore:Boolean, objecttag:Object) {
+		if (map.isEqualExtent(thisObj.selectextent, objecttag)) {
+			var features = new Object();
+			features[layerid] = data;
+			flamingo.raiseEvent(thisObj, "onSelectData", thisObj, features, thisObj.selectextent, _beginrecord);
+			if(hasmore) {
+				_selectlayer(_selectExtent, _selectLayer, _beginrecord + _featurelimit);
+			}
+		}
+	};
+	
+	switch (layers[layerid].type) {
+	case "featureclass" :
+		//calculate the real identify extent based on the identify extent of the map
+		//if the extent is actually a point 
+		var _identifydistance = layers[layerid].identifydistance;
+		if (_identifydistance == undefined) {
+			_identifydistance = this.identifydistance;
+		}
+		var real_identifyextent = map.copyExtent(_selectExtent);
+		if ((real_identifyextent.maxx-real_identifyextent.minx) == 0) {
+			var w = map.getScale()*_identifydistance;
+			real_identifyextent.minx = real_identifyextent.minx-(w/2);
+			real_identifyextent.maxx = real_identifyextent.minx+w;
+		}
+		if ((real_identifyextent.maxy-real_identifyextent.miny) == 0) {
+			var h = map.getScale()*_identifydistance;
+			real_identifyextent.miny = real_identifyextent.miny-(h/2);
+			real_identifyextent.maxy = real_identifyextent.miny+h;
+		}
+		var subfields:String = layers[layerid].subfields.split(",").join(" ");
+		var query:String = layers[layerid].query;
+		conn.getFeatures(mapservice, layerid, _selectExtent, subfields, query, map.copyExtent(_selectExtent));
+
+		break;
+	}
+}
+
 /** 
 * Changes the layers collection.
 * @param ids:String Comma seperated string of affected layerids. If keyword "#ALL#" is used, all layers will be affected.
