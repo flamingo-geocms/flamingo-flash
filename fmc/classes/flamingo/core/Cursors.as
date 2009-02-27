@@ -1,4 +1,12 @@
-﻿/** @component Cursors
+﻿import flamingo.core.AbstractComponent;
+
+/*-----------------------------------------------------------------------------
+* This file is part of Flamingo MapComponents.
+* Author: LindaVels.
+* IDgis bv
+ -----------------------------------------------------------------------------*/
+
+/** @component Cursors
 * The Cursors component is a container for map cursors.
 * This component is used when toolcomponents (with a cursor) are in a different flamingo instance as the map component. 
 * @file Cursors.as  (sourcefile)
@@ -19,7 +27,7 @@
 */
 
 
-class Cursors extends AbstractComponent {
+class flamingo.core.Cursors extends AbstractComponent {
 	var version:String = "1.0";
 	/**
 	* Sets the cursor of an flamingo component

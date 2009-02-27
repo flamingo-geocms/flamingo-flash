@@ -1,7 +1,14 @@
-﻿// This file is part of Flamingo MapComponents.
-// Author: Michiel J. van Heek.
+﻿import flamingo.core.ParentChildComponentAdapter;
+import flamingo.core.VisibleAdapter;
+import flamingo.core.InitAdapter;
 
-class AbstractComponent extends MovieClip {
+/*-----------------------------------------------------------------------------
+* This file is part of Flamingo MapComponents.
+* Author: Michiel J. van Heek.
+* IDgis bv
+ -----------------------------------------------------------------------------*/
+
+class flamingo.core.AbstractComponent extends MovieClip {
     
     private var componentID:String = "AbstractComponent 1.0";
     

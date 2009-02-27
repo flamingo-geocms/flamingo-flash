@@ -1,9 +1,12 @@
-// This file is part of Flamingo MapComponents.
-// Author: Michiel J. van Heek.
+/*-----------------------------------------------------------------------------
+* This file is part of Flamingo MapComponents.
+* Author: Michiel J. van Heek.
+* IDgis bv
+ -----------------------------------------------------------------------------*/
 
-class AbstractComposite {
-    
-    private var name:String = null;
+class flamingo.core.AbstractComposite {
+
+	private var name:String = null;
     
     function parseConfig(xmlNode:XMLNode):Void {
         this.name = xmlNode.attributes["name"];

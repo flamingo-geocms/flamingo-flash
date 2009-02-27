@@ -1,7 +1,11 @@
-﻿// This file is part of Flamingo MapComponents.
-// Author: Michiel J. van Heek.
+﻿import flamingo.core.AbstractComponent;
 
-class AbstractContainer extends AbstractComponent {
+/*-----------------------------------------------------------------------------
+* This file is part of Flamingo MapComponents.
+* Author: Michiel J. van Heek.
+* IDgis bv
+ -----------------------------------------------------------------------------*/
+class flamingo.core.AbstractContainer extends AbstractComponent {
     
     private var componentID:String = "AbstractContainer 1.0";
     
@@ -210,7 +214,6 @@ class AbstractContainer extends AbstractComponent {
     function setBounds(x:Number, y:Number, width:Number, height:Number):Void {
         contentPane.__width = width;
         contentPane.__height = height;
-        
         super.setBounds(x, y, width, height);
     }
     
