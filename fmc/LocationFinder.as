@@ -16,7 +16,13 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
------------------------------------------------------------------------------*/
+-----------------------------------------------------------------------------
+Modified by : Abeer.Mahdi@realworld-systems.com
+		     Realworld systems 
+			 tel: 0345 614406
+			 
+Change: Extented locationfinder to work with Arcgis server connections.
+*/
 /** @component LocationFinder
 * Component for searching for and zooming to places, areas etc.
 * Supported arguments: find (comma seperated list of locationid and location)  eg. flamingo.swf?config=mymap.xml&amp;locationfinder.find=places,hometown
@@ -206,10 +212,11 @@ function loadXML(file:String) {
 </flamingo>
 * @attr id Unique identifier for each location source.
 * @attr visible (defaultvalue = true) True or False.
+* @attr type (defaultvalue = arcims) value shoule be arcims or arcserver.
 * @attr label Label that appears in the combobox of the locationfinder. Use string tag (id="label") to support multi-languages.
 * @attr hint A hint which is shown in loactionfinder. Use string tag (id="hint") to support multi-languages. 
 * @attr servlet Servletalias of ArcIMS server.
-* @attr server Servername of ArcIMS server.
+* @attr server Servername of ArcIMS server or ArcGIS Server.
 * @attr service Name of mapservice.
 * @attr layerid The layerid in the mapservice in which the locations can be queried.
 * @attr searchfield Query field (just one).
@@ -235,7 +242,10 @@ function addLocation(xml:Object) {
 		for (var i:Number = 0; i<xnode.length; i++) {
 			if (xnode[i].nodeName.toLowerCase() == "locations") {
 				var location = new Object();
+				//set default values
 				location.visible = true;
+				location.type = "arcims";
+				
 				location.language = new Object();
 				flamingo.parseString(xnode[i], location.language);
 				locationdata.push(location);
@@ -249,6 +259,9 @@ function addLocation(xml:Object) {
 						if (val.toLowerCase() == "false") {
 							location.visible = false;
 						}
+						break;
+					case "type" :
+						location.type = val;
 						break;
 					case "label" :
 						location.label = val;
@@ -396,6 +409,23 @@ function _findLocation(locationdata:Object, search:String, nr:Number, updatefeat
 		return;
 	}
 	var query = "";
+	var layerid:String ="";
+	var map = flamingo.getComponent(this.listento[0]);
+	var layerids:Array = map.getLayers();
+
+	for(var j = 0; j< layerids.length; j++)
+	{	
+		var layer = flamingo.getComponent(layerids[j]);
+		if( layer.mapservice == locationdata.service )
+		{
+			layerid = layerids[j];
+		}		
+	}
+	if(layerid != "")
+	{
+		var layerObj = flamingo.getComponent(layerid);
+		query = layerObj.getLayerProperty(locationdata.layerid, "query").toString();
+	}
 	if (locationdata.fieldtype.toLowerCase() == "n") {
 		for (var i = 0; i<astr.length; i++) {
 			if (astr[i].length>0) {
@@ -417,21 +447,99 @@ function _findLocation(locationdata:Object, search:String, nr:Number, updatefeat
 			}
 		}
 	}
-	var lConn = new Object();
-	lConn.onResponse = function(connector:ArcIMSConnector) {
+	//Events of ArcServerConnector
+	var lConnArcServer = new Object();
+	lConnArcServer.onResponse = function(connector:ArcServerConnector) {
 		mHolder.tFeatures.htmlText = "";
 		//flamingo.raiseEvent(thisObj, "onServerResponse", thisObj, responseobject);
 	};
-	lConn.onRequest = function(connector:ArcIMSConnector) {
+	lConnArcServer.onRequest = function(connector:ArcServerConnector) {
 		//flamingo.raiseEvent(thisObj, "onServerRequest", thisObj, requestobject);
 	};
-	lConn.onError = function(error:String, objecttag:Object, requestid:String) {
+	lConnArcServer.onError = function(error:String, objecttag:Object, requestid:String) {
 		flamingo.raiseEvent(thisObj, "onError", thisObj, error);
 		if (updatefeatures) {
 			mHolder.tFeatures.htmlText = "<span class='error'>"+error+"</span>";
 		}
 	};
-	lConn.onGetFeatures = function(layerid:String, data:Array, count:Number, hasmore:Boolean, objecttag:Object) {
+	lConnArcServer.onGetFeatures = function(layerid:String, data:Array, count:Number, hasmore:Boolean, objecttag:Object) {
+		foundlocations = new Array();		
+		var len:Number =nrlines;
+		var num:Number = Number(thisObj.beginrecord) + nrlines -1;
+		
+		if(data.length > num)
+		{
+			len = num;			
+		}
+		else
+		{
+			len = data.length;
+			hasmore =false;
+		}
+		for (var i = thisObj.beginrecord-1; i<len; i++) {
+			var r = new Object();
+			delete data[i]["#SHAPE#"];
+			for (var field in data[i]) {				
+				if (field == "SHAPE.ENVELOPE") {
+					r.extent = data[i][field];
+				} else {
+					var a = field.split(".");
+					r[a[a.length-1]] = data[i][field];
+				}
+			}
+			//outputstring
+			var label = getString(locationdata, "output");
+			if (label.length>0) {
+				for (var field in r) {
+					if (label.indexOf(field, 0)>=0) {
+						label = label.split("["+field+"]").join(r[field]);
+					}
+				}
+				r.label = label;
+			} else {
+				r.label = r[0];
+			}
+			// add extent label
+			var extentlabel = thisObj.getString(locationdata, "extentlabel");
+			
+			if (extentlabel.length>0) {
+				for (var field in r) {
+					if (extentlabel.indexOf(field, 0)>=0) {
+						extentlabel = extentlabel.split("["+field+"]").join(r[field]);
+					}
+				}
+				r.extent.name = extentlabel;
+			}
+			//done                             
+			foundlocations.push(r);
+		}
+
+		delete data;
+		flamingo.raiseEvent(thisObj, "onFindLocation", thisObj, foundlocations, updatefeatures);
+		if (updatefeatures) {
+			_updateFeatures(hasmore);
+		}
+		if (zoom) {
+			_zoom(0);
+		}
+	};
+	
+	//Events of ArcImsConnector
+	var lConnArcIMS = new Object();
+	lConnArcIMS.onResponse = function(connector:ArcIMSConnector) {
+		mHolder.tFeatures.htmlText = "";
+		//flamingo.raiseEvent(thisObj, "onServerResponse", thisObj, responseobject);
+	};
+	lConnArcIMS.onRequest = function(connector:ArcIMSConnector) {
+		//flamingo.raiseEvent(thisObj, "onServerRequest", thisObj, requestobject);
+	};
+	lConnArcIMS.onError = function(error:String, objecttag:Object, requestid:String) {
+		flamingo.raiseEvent(thisObj, "onError", thisObj, error);
+		if (updatefeatures) {
+			mHolder.tFeatures.htmlText = "<span class='error'>"+error+"</span>";
+		}
+	};
+	lConnArcIMS.onGetFeatures = function(layerid:String, data:Array, count:Number, hasmore:Boolean, objecttag:Object) {
 		foundlocations = new Array();
 		for (var i = 0; i<data.length; i++) {
 			var r = new Object();
@@ -484,23 +592,48 @@ function _findLocation(locationdata:Object, search:String, nr:Number, updatefeat
 	var layerid = locationdata.layerid;
 	var outputfields = locationdata.outputfields+" #ID#";
 	var searchfield = locationdata.searchfield;
-	var conn:ArcIMSConnector = new ArcIMSConnector(server);
-	if (servlet.length>0) {
-		conn.servlet = servlet;
+
+	if(locationdata.type.toLowerCase() == "arcims")
+	{
+		var connArcIMS:ArcIMSConnector = new ArcIMSConnector(server);
+		if (servlet.length>0) {
+			connArcIMS.servlet = servlet;
+		}	
+		connArcIMS.addListener(lConnArcIMS);
+		connArcIMS.featurelimit = nr;
+		connArcIMS.envelope = true;
+		if (updatefeatures) {
+			connArcIMS.beginrecord = this.beginrecord;
+		} else {
+			connArcIMS.beginrecord = 1;
+		}
+		connArcIMS.getFeatures(service, layerid, undefined, outputfields, query);
+		if (updatefeatures) {
+			mHolder.tFeatures.htmlText = "<span class='busy'>"+flamingo.getString(thisObj, "busy")+"</span>";
+		}
 	}
-	conn.addListener(lConn);
-	conn.featurelimit = nr;
-	conn.envelope = true;
-	if (updatefeatures) {
-		conn.beginrecord = this.beginrecord;
-	} else {
-		conn.beginrecord = 1;
-	}
-	conn.getFeatures(service, layerid, undefined, outputfields, query);
-	if (updatefeatures) {
-		mHolder.tFeatures.htmlText = "<span class='busy'>"+flamingo.getString(thisObj, "busy")+"</span>";
-	}
+	else if(locationdata.type.toLowerCase() == "arcserver")
+	{
+		var connArcServer:ArcServerConnector = new ArcServerConnector(server);
+
+		connArcServer.addListener(lConnArcServer);
+		connArcServer.featurelimit = nr;
+		connArcServer.envelope = true;
+		if (updatefeatures) {
+			connArcServer.beginrecord = this.beginrecord;
+		} else {
+			connArcServer.beginrecord = 1;
+		}
+		var map = flamingo.getComponent(this.listento[0]);			
+		var extent:Object = map.getFullExtent(); 
+	
+		connArcServer.getFeatures(service, layerid, extent, outputfields, query);
+		if (updatefeatures) {
+			mHolder.tFeatures.htmlText = "<span class='busy'>"+flamingo.getString(thisObj, "busy")+"</span>";
+		}
+	}	
 }
+
 function _updateFeatures(hasmore:Boolean) {
 	var str = "";
 	if (foundlocations.length>0) {
