@@ -1,4 +1,10 @@
-﻿/** @component MapProxy
+﻿/*-----------------------------------------------------------------------------
+* This file is part of Flamingo MapComponents.
+* Author: Linda vels.
+* IDgis bv
+ -----------------------------------------------------------------------------*/
+
+/** @component MapProxy
 * The MapProxy is a proxy for a Map component which is located in a different instance of the flamingo viewer.
 * All public methods of the Map component are implemented 
 * @file MapProxy.as  (sourcefile)
@@ -15,6 +21,8 @@
 
 
 import flash.external.ExternalInterface;
+
+import flamingo.core.AbstractComponent;
 
 class flamingo.proxys.MapProxy extends AbstractComponent {
 	var version:String = "1.0";

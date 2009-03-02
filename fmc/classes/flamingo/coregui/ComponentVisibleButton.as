@@ -1,5 +1,8 @@
-﻿// This file is part of Flamingo MapComponents.
-// Author: Michiel J. van Heek.
+﻿/*-----------------------------------------------------------------------------
+* This file is part of Flamingo MapComponents.
+* Author: Michiel J. van Heek.
+* IDgis bv
+ -----------------------------------------------------------------------------*/
 
 /** @component ComponentVisibleButton
 * A button intended to toggle the visibility of a certain component.

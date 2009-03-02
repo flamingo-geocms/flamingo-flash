@@ -1,4 +1,10 @@
-﻿import flamingo.gui.*;
+﻿/*-----------------------------------------------------------------------------
+* This file is part of Flamingo MapComponents.
+* Author: Linda Vels.
+* IDgis bv
+ -----------------------------------------------------------------------------*/
+ 
+import flamingo.gui.*;
 import flamingo.coremodel.service.dde.*;
 import mx.utils.Delegate;
 import mx.events.EventDispatcher;

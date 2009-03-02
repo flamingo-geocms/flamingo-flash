@@ -1,4 +1,8 @@
-﻿import flamingo.geometrymodel.dde.*;
+﻿/*-----------------------------------------------------------------------------
+* This file is part of Flamingo MapComponents.
+* Author: Michiel J. van Heek.
+* IDgis bv
+ -----------------------------------------------------------------------------*/import flamingo.geometrymodel.dde.*;
 
 
 class flamingo.geometrymodel.dde.LineString extends Geometry {

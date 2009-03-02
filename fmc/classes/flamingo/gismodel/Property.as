@@ -1,7 +1,10 @@
-// This file is part of Flamingo MapComponents.
-// Author: Michiel J. van Heek.
-
+/*-----------------------------------------------------------------------------
+* This file is part of Flamingo MapComponents.
+* Author: Michiel J. van Heek.
+* IDgis bv
+ -----------------------------------------------------------------------------*/
 import flamingo.gismodel.*;
+import flamingo.core.AbstractComposite;
 
 class flamingo.gismodel.Property extends AbstractComposite {
     

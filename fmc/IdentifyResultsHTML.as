@@ -128,6 +128,7 @@ lParent.onResize = function(mc:MovieClip) {
 	resize();
 };
 lParent.onHide = function(mc:MovieClip) {
+	txtInfo.scroll = 1;
 	hideIcon();
 };
 flamingo.addListener(lParent, flamingo.getParent(this), this);
@@ -314,7 +315,7 @@ function hideIcon() {
 		flamingo.raiseEvent(map, "onHideIdentifyIcon", map);
 	}
 }
-function refresh() {
+function refresh() {	
 	txtInfo.htmlText = str;
 	txtInfo.scroll = txtInfo.maxscroll;
 }

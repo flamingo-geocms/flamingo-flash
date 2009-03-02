@@ -181,8 +181,6 @@ function init():Void {
 	//flamingo.deleteXML(this);
 	this._visible = visible;
 	flamingo.raiseEvent(this, "onInit", this);
-	
-
 }
 /**
 * Configurates a component by setting a xml.
@@ -208,7 +206,10 @@ function parseCustomAttr(xml:Object){
 		case "configobject" :
 				configobject = val;
 				var configObj:Object = flamingo.getComponent(val);
-				parseCustomAttr(flamingo.getXML(configObj));
+				var xmls:Array= flamingo.getXMLs(configObj);
+				for (var i = 0; i < xmls.length; i++){
+					parseCustomAttr(xmls[i]);
+				}
 				break;
 		case "shadowsymbols" :
 			if (val.toLowerCase() == "true") {

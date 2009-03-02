@@ -1,5 +1,8 @@
-﻿// This file is part of Flamingo MapComponents.
-// Author: Michiel J. van Heek.
+﻿/*-----------------------------------------------------------------------------
+* This file is part of Flamingo MapComponents.
+* Author: Michiel J. van Heek.
+* IDgis bv
+ -----------------------------------------------------------------------------*/
 
 import flamingo.coremodel.service.*;
 
@@ -87,7 +90,7 @@ class flamingo.coremodel.service.ServiceConnector {
                 }
                 exceptionNode = XMLTools.getChild("ServiceException", this.firstChild);
                 if (exceptionNode != null) {
-                    exceptionMessage = "Kan de bewerkingen niet opslaan, om een of meer van de volgende redenen:\n\n-verplicht veld niet ingevuld\n-tekst in numeriek veld ingevuld\n-te lange tekst ingevuld\n\n" + url + "\n\n" + exceptionNode.firstChild.nodeValue;
+                    exceptionMessage = "Kan de bewerkingen niet opslaan, om een of meer van de volgende redenen:\n\n-verplicht veld niet ingevuld\n-tekst in numeriek veld ingevuld\n-te lange tekst ingevuld\n-geen unieke waarde in uniek veld ingevuld\n\n" + url + "\n\n" + exceptionNode.firstChild.nodeValue;
                 }
             }
                 
@@ -98,6 +101,10 @@ class flamingo.coremodel.service.ServiceConnector {
                     var actionEvent:ActionEvent = new ActionEvent(this, "ServiceConnector", ActionEvent.LOAD);
                     actionEvent["exceptionMessage"] = exceptionMessage;
                     actionEventListener.onActionEvent(actionEvent);
+                    var id:String =  _global.flamingo.getComponentID(this);
+            		if(id != null){
+                    	_global.flamingo.raiseEvent(this,"onActionEvent",id + "," + actionEvent.toString());
+            		}
                 }
             }
         }

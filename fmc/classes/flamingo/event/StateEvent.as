@@ -1,7 +1,11 @@
-// This file is part of Flamingo MapComponents.
-// Author: Michiel J. van Heek.
+/*-----------------------------------------------------------------------------
+* This file is part of Flamingo MapComponents.
+* Author: Michiel J. van Heek.
+* IDgis bv
+ -----------------------------------------------------------------------------*/
 
 import flamingo.event.*;
+import flamingo.core.AbstractComponent;
 
 class flamingo.event.StateEvent {
     
@@ -13,8 +17,9 @@ class flamingo.event.StateEvent {
     private var sourceClassName:String = null;
     private var actionType:Number = -1;
     private var propertyName:String = null;
+    private var eventComp:AbstractComponent = null;
     
-    function StateEvent(source:Object, sourceClassName:String, actionType:Number, propertyName:String) {
+    function StateEvent(source:Object, sourceClassName:String, actionType:Number, propertyName:String, eventComp:AbstractComponent) {
         if (source == null) {
             trace("Exception in flamingo.event.StateEvent.<<init>>(" + sourceClassName + ", " + propertyName + ")");
             return;
@@ -28,6 +33,7 @@ class flamingo.event.StateEvent {
         this.sourceClassName = sourceClassName;
         this.actionType = actionType;
         this.propertyName = propertyName;
+        this.eventComp = eventComp;
     }
     
     function getSource():Object {
@@ -47,7 +53,22 @@ class flamingo.event.StateEvent {
     }
     
     function toString():String {
-        return "StateEvent(" + sourceClassName + ", " + actionType + ", " + propertyName + ")";
-    }
-    
+    	var actionTypeStr:String = "";
+    	if(actionType==0){
+    		actionTypeStr = "CHANGE";
+    	} else if(actionType==1) {
+    		actionTypeStr = "ADD_REMOVE";
+    	} else if(actionType==2){
+    		actionTypeStr = "LOAD";
+    	}
+    	if(actionTypeStr == ""){
+    		actionTypeStr = actionType.toString();
+    	}		
+    		
+        return "StateEvent(" + sourceClassName + ", " + source + ", " + actionTypeStr + ", " + propertyName + ", " + _global.flamingo.getId(eventComp)+ ")";
+	}
+	
+	public function getEventComp() : AbstractComponent {
+		return eventComp;
+	}
 }

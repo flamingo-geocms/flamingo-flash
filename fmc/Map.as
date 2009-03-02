@@ -76,6 +76,7 @@ dynamic class Map extends MovieClip {
 	private var _fullextent:Object;
 	private var _cfullextent:Object;
 	private var _extent:Object;
+	private var _initialextent:Object;
 	private var _updatedextent:Object;
 	private var _identifyextent:Object;
 	private var rememberextent:Boolean;
@@ -331,7 +332,7 @@ dynamic class Map extends MovieClip {
 		if (flamingo.getType(this).toLowerCase() != xml.localName.toLowerCase()) {
 			return;
 		}
-		clearlayers = false;
+		var clearlayers = false;
 		//load default attributes, strings, styles and cursors 
 		flamingo.parseXML(this, xml);
 	
@@ -394,6 +395,7 @@ dynamic class Map extends MovieClip {
 				break;
 			case "extent" :
 				this._extent = this.string2Extent(val);
+				this._initialextent = this.string2Extent(val);
 				break;
 			case "fullextent" :
 				this._fullextent = this.string2Extent(val);
@@ -553,6 +555,7 @@ dynamic class Map extends MovieClip {
 			lLayer.onUpdate = function(layer:MovieClip, nrtry:Number) {
 				thisObj.layersupdating[layer._name] = new Object();
 				thisObj.layersupdating[layer._name].updatecomplete = false;
+				thisObj.checkUpdate();
 			};
 			lLayer.onUpdateComplete = function(layer:MovieClip) {
 				thisObj.layersupdating[layer._name].updatecomplete = true;
@@ -565,6 +568,7 @@ dynamic class Map extends MovieClip {
 				thisObj.layersidentifying[layer._name].nridentified = 0;
 				thisObj.layersidentifying[layer._name].totalidentify = 0;
 				thisObj.layersidentifying[layer._name].identifycomplete = false;
+				thisObj.checkIdentify();
 			};
 			lLayer.onIdentifyData = function(layer:MovieClip, data:Object, identifyextent:Object, nridentified:Number, total:Number) {
 				thisObj.layersidentifying[layer._name].nridentified = nridentified;
@@ -921,6 +925,15 @@ dynamic class Map extends MovieClip {
 	public function getFullExtent():Object {
 		return this.copyExtent(this._fullextent);
 	}
+	
+	/**
+	* Returns the initialextent
+	    * @return Object initialextent. An extent has 4 properties 'minx', 'miny', 'miny', 'maxy' and optional 'name'
+	*/
+	public function getInitialExtent():Object {
+		return this.copyExtent(this._initialextent);
+	}
+	
 	/**
 	* Returns the currentextent.
 	* @return Object Currentextent. An extent has 4 properties 'minx', 'miny', 'miny', 'maxy' and optional 'name'
@@ -1149,11 +1162,21 @@ dynamic class Map extends MovieClip {
 		}
 		this.clearDrawings();
 		flamingo.raiseEvent(this, "onMaptipCancel", this);
-		// remember the original uncorrected extent                                                                                                                                                                 
-		this._extent = this.copyExtent(extent);
+		// remember the original uncorrected extent
 		// correct the extent and set as mapextent  
-		this._mapextent = this.copyExtent(extent);
-		this.correctExtent(this._mapextent);
+		if (!this.isEqualExtent(this._extent, extent)) {
+			this._extent = this.copyExtent(extent);
+			this._mapextent = this.copyExtent(extent);
+			this.correctExtent(this._mapextent);
+			
+			var eventType:Number = null;
+			if ((updatedelay == null) || (updatedelay == -1)) {
+			    eventType = 1;
+			} else {
+			    eventType = 3;
+			}
+			flamingo.raiseEvent(this, "onReallyChangedExtent", this, this.copyExtent(extent), eventType);
+		}
 		//trace("----"+flamingo.getId(this));
 		//trace(this.__width+";"+this.__height);
 		//trace(this.extent2String(this._mapextent));
@@ -1189,6 +1212,7 @@ dynamic class Map extends MovieClip {
 			}
 			flamingo.raiseEvent(this, "onStartMove", this);
 			this.moving = true;
+			this.startupdatetime = new Date();
 			this._quality = this.movequality;
 			this.moveid = setInterval(this, "_move", t, obj);
 		}

@@ -62,6 +62,8 @@ var extent:Object;
 var maptipextent:Object;
 var identifyextent:Object;
 var aka:Object = new Object();
+var lastFiltersFingerprint:String = null;
+
 //-------------------------------------
 //listenerobject for map
 var lMap:Object = new Object();
@@ -154,6 +156,12 @@ function init():Void {
 	delete xmls;
 	//remove xml from repository
 	flamingo.deleteXML(this);
+	if (listento.length > 0) {
+		this.filterLayerLayerOGWMSAdapter = new FilterLayerLayerOGWMSAdapter(this);
+		flamingo.addListener(this.filterLayerLayerOGWMSAdapter, listento[0], this);
+	    //_global.flamingo.tracer("this.filterLayerLayerOGWMSAdapter = " + this.filterLayerLayerOGWMSAdapter + " listento[0] = " + listento[0]);
+	}
+	
 	this._visible = visible;
 	flamingo.raiseEvent(this, "onInit", this);
 }
@@ -352,7 +360,7 @@ function setConfig(xml:Object) {
 		flamingo.raiseEvent(thisObj, "onResponse", thisObj, "init", connector);
 	};
 	lConn.onGetCapabilities = function(service, servicelayers, obj, reqid) {
-		//flamingo.tracer("getCapap");
+		//_global.flamingo.tracer("lConn.onGetCapabilities, layer = " + _global.flamingo.getId(thisObj));
 		if (name == undefined) {
 			name = service.title;
 		}
@@ -362,18 +370,21 @@ function setConfig(xml:Object) {
 		thisObj.update();
 		//}
 	};
-	var cogwms:OGWMSConnector = new OGWMSConnector();
+	var c_url = this.getcapabilitiesurl;
+	if (c_url == undefined) {
+		this.getcapabilitiesurl = this.url;
+	}
+	var cogwms:OGWMSConnector = OGWMSConnector.getInstance(this.getcapabilitiesurl);
 	cogwms.addListener(lConn);
 	var args:Object = new Object();
 	args.VERSION = wmsversion;
 	for (var attr in this.attributes) {
-		args[attr.toUpperCase()] = this.attributes[attr];
+	  //remove sld and sld_body parameter from request
+	  if ((attr.toUpperCase()) != "SLD" && (attr.toUpperCase() != "SLD_BODY")) {
+			args[attr.toUpperCase()] = this.attributes[attr];
+		}
 	}
-	var c_url = this.getcapabilitiesurl;
-	if (c_url == undefined) {
-		c_url = this.url;
-	}
-	cogwms.getCapabilities(c_url, args);
+	cogwms.getCapabilities(this.getcapabilitiesurl, args, lConn);
 }
 /**
 * Sets the transparency of a layer.
@@ -441,6 +452,12 @@ function _update(nrtry:Number) {
 		return;
 	}
 	extent = map.getMapExtent();
+	if (this.filterLayerLayerOGWMSAdapter != undefined) {
+    	lastFiltersFingerprint = this.filterLayerLayerOGWMSAdapter.getFiltersFingerprint();
+		//_global.flamingo.tracer("lastFiltersFingerprint = |" + lastFiltersFingerprint + "|");
+	} else {
+    	lastFiltersFingerprint = "";
+	}
 	var ms:Number = map.getScaleHint(extent);
 	if (minscale != undefined) {
 		if (ms<=minscale) {
@@ -539,6 +556,15 @@ function _update(nrtry:Number) {
 			thisObj._stoptimeout();
 			var loadtime = (new Date()-starttime)/1000;
 			thisObj.updateCache(cachemovie);
+			var currentFiltersFingerprint:String = "";
+			if (thisObj.filterLayerLayerOGWMSAdapter != undefined) {
+				currentFiltersFingerprint = thisObj.filterLayerLayerOGWMSAdapter.getFiltersFingerprint();
+			}
+			//_global.flamingo.tracer("currentFiltersFingerprint = |" + currentFiltersFingerprint + "|" + currentFiltersFingerprint.length);
+			//_global.flamingo.tracer("lastFiltersFingerprint = |" + lastFiltersFingerprint + "|" + lastFiltersFingerprint.length);
+			//if (currentFiltersFingerprint != lastFiltersFingerprint) {
+			//	_global.flamingo.tracer("currentFiltersFingerprint != lastFiltersFingerprint");
+			//}
 			if (thisObj.map.fadesteps>0) {
 				var step = (100/map.fadesteps)+1;
 				thisObj.onEnterFrame = function() {
@@ -548,7 +574,9 @@ function _update(nrtry:Number) {
 						flamingo.raiseEvent(thisObj, "onUpdateComplete", thisObj, requesttime, loadtime, mc.getBytesTotal());
 						this.updating = false;
 						this._clearCache();
-						if (not map.isEqualExtent(extent) or _getVisLayers() != vislayers) {
+						if (not map.isEqualExtent(extent) or _getVisLayers() != vislayers or
+							("|" + currentFiltersFingerprint + "|") !=  ("|" + lastFiltersFingerprint + "|")) {
+							//flamingo.tracer("re-update, fadesteps>0");
 							this.update();
 						}
 					}
@@ -558,7 +586,9 @@ function _update(nrtry:Number) {
 				flamingo.raiseEvent(thisObj, "onUpdateComplete", thisObj, requesttime, loadtime, mc.getBytesTotal());
 				thisObj.updating = false;
 				thisObj._clearCache();
-				if (not map.isEqualExtent(extent) or _getVisLayers() != vislayers) {
+				if (not map.isEqualExtent(extent) or _getVisLayers() != vislayers or
+					("|" + currentFiltersFingerprint + "|") !=  ("|" + lastFiltersFingerprint + "|")) {
+					//flamingo.tracer("re-update, fadesteps<=0");
 					thisObj.update();
 				}
 			}
@@ -589,7 +619,16 @@ function _update(nrtry:Number) {
 		args.STYLES = s_styles;
 	}
 	for (var attr in this.attributes) {
-		args[attr.toUpperCase()] = this.attributes[attr];
+  		args[attr.toUpperCase()] = this.attributes[attr];
+	}
+	if ((args["SLD_BODY"] != null) && (args["SLD_BODY"] != "")) {
+		args["LAYERS"] = "";
+		args["STYLES"] = "";
+	}
+	//_global.flamingo.tracer("args[SLD] = '" + args["SLD"] + "'");
+	if ((args["SLD"] != null) && (args["SLD"] != "")) {
+		args["LAYERS"] = "";
+		args["STYLES"] = "";
 	}
 	// 
 	var starttime:Date = new Date();
@@ -680,7 +719,15 @@ function identify(extent:Object) {
 	args.Y = String(Math.round(rect.y+(rect.height/2)));
 	args.FEATURE_COUNT = String(feature_count);
 	for (var attr in this.attributes) {
-		args[attr.toUpperCase()] = this.attributes[attr];
+  	  args[attr.toUpperCase()] = this.attributes[attr];
+	}
+	if ((args["SLD_BODY"] != null) && (args["SLD_BODY"] != "")) {
+		args["LAYERS"] = "";
+		args["STYLES"] = "";
+	}
+	if ((args["SLD"] != null) && (args["SLD"] != "")) {
+		args["LAYERS"] = "";
+		args["STYLES"] = "";
 	}
 	var cogwms:OGWMSConnector = new OGWMSConnector();
 	cogwms.addListener(lConn);
@@ -1139,7 +1186,8 @@ function setVisible(vis:Boolean, id:String) {
 */
 function getVisible(id:String):Number {
 	//returns 0 : not visible or 1:  visible or 2: visible but not in scalerange
-	var ms:Number = map.getScaleHint(extent);
+	var ms:Number = map.getScaleHint(map.getMapExtent());
+	//_global.flamingo.tracer("ms = " + ms);
 	//var vis:Boolean = flamingo.getVisible(this)
 	if (id.length == 0 or id == undefined) {
 		//examine whole layer

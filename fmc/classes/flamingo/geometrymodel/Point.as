@@ -1,6 +1,8 @@
-// This file is part of Flamingo MapComponents.
-// Author: Michiel J. van Heek.
-
+/*-----------------------------------------------------------------------------
+* This file is part of Flamingo MapComponents.
+* Author: Michiel J. van Heek.
+* IDgis bv
+ -----------------------------------------------------------------------------*/
 import flamingo.geometrymodel.*;
 
 import flamingo.event.StateEvent;
@@ -52,7 +54,7 @@ class flamingo.geometrymodel.Point extends Geometry {
         x += dx;
         y += dy;
         
-        dispatchEvent(new StateEvent(this, "Geometry", StateEvent.CHANGE, null));
+        dispatchEvent(new StateEvent(this, "Geometry", StateEvent.CHANGE, null, eventComp));
     }
     
     function equals(geometry:Geometry):Boolean {
@@ -73,7 +75,7 @@ class flamingo.geometrymodel.Point extends Geometry {
         this.x = x;
         this.y = y;
         
-        dispatchEvent(new StateEvent(this, "Geometry", StateEvent.CHANGE, null));
+        dispatchEvent(new StateEvent(this, "Geometry", StateEvent.CHANGE, null, eventComp));
     }
     
     function getX():Number {

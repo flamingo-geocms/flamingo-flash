@@ -1,6 +1,9 @@
-﻿// This file is part of Flamingo MapComponents.
-// Author: Michiel J. van Heek.
-
+﻿/*-----------------------------------------------------------------------------
+* This file is part of Flamingo MapComponents.
+* Author: Michiel J. van Heek.
+* IDgis bv
+ -----------------------------------------------------------------------------*/
+ 
 /** @component PrintLabel 
 * A component that shows a text in a certain layout, within a print template.
 * A user can change the text by clicking on it. 
@@ -36,6 +39,8 @@ import flamingo.gui.*;
 import mx.controls.Label;
 import mx.controls.TextArea;
 import mx.utils.Delegate;
+
+import flamingo.core.AbstractComponent;
 
 class flamingo.gui.PrintLabel extends AbstractComponent {
     

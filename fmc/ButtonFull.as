@@ -18,16 +18,20 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 -----------------------------------------------------------------------------*/
 /** @component ButtonFull
-* A button to zoom the map to the fullextent.
+* A button to zoom the map to the intial or full extent.
 * @file ButtonFull.fla (sourcefile)
 * @file ButtonFull.swf (compiled component, needed for publication on internet)
 * @file ButtonFull.xml (configurationfile, needed for publication on internet)
 * @configstring tooltip tooltiptext of the button
 */
-var version:String = "2.0";
+/**
+* IDgis/HHA: Added option for zooming to initial or full extent
+*/
+var version:String = "2.0.1";
 
 //-------------------------------
 var skin:String = "";
+var extent:String = "full";
 var button:FlamingoButton;
 //---------------------------------
 var lParent:Object = new Object();
@@ -90,6 +94,9 @@ function setConfig(xml:Object) {
 		case "skin" :
 			skin = val;
 			break;
+		case "extent" :
+			extent = val;
+			break;
 		}
 	}
 	
@@ -118,7 +125,11 @@ function _execute() {
 	}
 	for (var i = 0; i<listento.length; i++) {
 		var map = flamingo.getComponent(listento[i]);
-		map.moveToExtent(map.getFullExtent(),0);
+		if (extent == "initial") {
+		    map.moveToExtent(map.getInitialExtent(),0);
+		} else {
+		    map.moveToExtent(map.getFullExtent(),0);
+		}
 	}
 }
 /** 

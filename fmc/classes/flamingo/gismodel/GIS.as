@@ -1,7 +1,8 @@
-﻿// This file is part of Flamingo MapComponents.
-// Author: Michiel J. van Heek.
-
-
+﻿/*-----------------------------------------------------------------------------
+* This file is part of Flamingo MapComponents.
+* Author: Michiel J. van Heek.
+* IDgis bv
+ -----------------------------------------------------------------------------*/
 /** @component GIS 
 * A component without a graphical user interface, that serves as a model for the editing components, such as the edit map and the edit legend. 
 * The feature model keeps the layer and feature data for all editing components that listen to this model.
@@ -41,11 +42,13 @@
 * @hierarchy childnode of Flamingo or a container component. 
 * @example
 	<Flamingo>
-		<tpc:GIS  id="gis" updateaftercommit="false" authentication="authentication" listento="authentication">
+		<tpc:GIS  id="gis" authentication="authentication" listento="authentication" updatemaps="map,printMap0">
 		...
 		</tpc:GIS>
 	</Flamingo>	
 * @attr authentication Reference to the authentication component. This value must be equal to the “listento”.
+* @attr updateMaps Comma seperate list of maps that should be updated after a commit to the server. Set this attribute when
+* the Layers in your map(s) (LayerOGWMS, LayerArcIMS) are based on the same data as the (WFS)Layers in the GIS (EditMap)    
 */
 
 /** @tag <tpc:Layer>
@@ -53,12 +56,12 @@
 * @class flamingo.gismodel.Layer extends AbstractComposite
 * @hierarchy childnode of GIS.
 * @example
-	<tpc:GIS  id="gis" updateaftercommit="false" authentication="authentication" listento="authentication">
+	<tpc:GIS  id="gis" authentication="authentication" listento="authentication" >
 		<tpc:Layer title="Redlining" visible="true" labelpropertyname="app:label" roles="XDF56YZ">
 		...
 		</tpc:Layer>
 		<tpc:Layer title="Luchthavens" visible="true" wfsurl="wfs::http://localhost:8080/flamingo-edit-server/services" 
-			featuretypename="app:Airport" geometrytypes="Point" labelpropertyname="app:numFlights" ownerpropertyname="" roles="XDF56YT">
+			featuretypename="app:Airport" geometrytypes="Point" labelpropertyname="app:numFlights" roles="XDF56YT">
 		...
 		</tpc:Layer>
 	</tpc:GIS>
@@ -121,14 +124,13 @@ import flamingo.gismodel.*;
 
 import flamingo.event.*;
 import flamingo.geometrymodel.Envelope;
-
+import flamingo.core.AbstractComponent;
 
 class flamingo.gismodel.GIS extends AbstractComponent {
     
-    private var map:MovieClip = null;
     private var authentication:MovieClip = null;
     private var layers:Array = null;
-    //private var updateAfterCommit:Boolean = false;
+    private var updateMaps:Array = null;
     private var activeFeature:Feature = null;
     private var createGeometry:CreateGeometry = null;
     private var serversBusy:Number = 0;
@@ -139,17 +141,19 @@ class flamingo.gismodel.GIS extends AbstractComponent {
 	function onLoad(){
 		layers = new Array();
 		super.onLoad();
+		
 	}
 	
 	function init():Void{
 		stateEventDispatcher = new StateEventDispatcher();
+		
         
     }
     
     function setAttribute(name:String, value:String):Void {
-		//if (name == "updateaftercommit") {
-            //updateAfterCommit = (value == "true"? true: false);
-        //}
+		if (name == "updatemaps") {
+			updateMaps = value.split(",");
+        }
 		if (name == "authentication") {
 			authentication = _global.flamingo.getComponent(value);
         }
@@ -189,7 +193,7 @@ class flamingo.gismodel.GIS extends AbstractComponent {
             return;
         }
         layers.push(layer);
-        stateEventDispatcher.dispatchEvent(new AddRemoveEvent(this, "GIS", "layers", new Array(layer), null));
+        stateEventDispatcher.dispatchEvent(new AddRemoveEvent(this, "GIS", "layers", new Array(layer), null, this));
     }
     
     function getLayers():Array {
@@ -224,7 +228,7 @@ class flamingo.gismodel.GIS extends AbstractComponent {
         var previousActiveFeature:Feature = this.activeFeature;
         this.activeFeature = activeFeature;
         
-        stateEventDispatcher.dispatchEvent(new ChangeEvent(this, "GIS", "activeFeature", previousActiveFeature));
+        stateEventDispatcher.dispatchEvent(new ChangeEvent(this, "GIS", "activeFeature", previousActiveFeature, this));
     }
     
     function getActiveFeature():Feature {
@@ -234,12 +238,13 @@ class flamingo.gismodel.GIS extends AbstractComponent {
     function setCreateGeometry(createGeometry:CreateGeometry):Void {
         this.createGeometry = createGeometry;
             
-        stateEventDispatcher.dispatchEvent(new StateEvent(this, "GIS", StateEvent.CHANGE, "createGeometry"));
+        stateEventDispatcher.dispatchEvent(new StateEvent(this, "GIS", StateEvent.CHANGE, "createGeometry", this));
     }
     
     function getCreateGeometry():CreateGeometry {
         return createGeometry;
     }
+    
     
     function commit():Void {
         for (var i:String in layers) {
@@ -257,9 +262,13 @@ class flamingo.gismodel.GIS extends AbstractComponent {
     
     function onServerReady():Void {
         serversBusy--;
-        //if ((serversBusy == 0) && (updateAfterCommit)) {
-            //map.update(0, true);
-        //}
+        if ((serversBusy == 0) && (updateMaps!=null)) {
+        	for (var i:String in updateMaps) {
+        		var map:Object = _global.flamingo.getComponent(updateMaps[i]); 
+        		map.update(0, true);
+        	}
+            
+        }
     }
     
     function addEventListener(stateEventListener:StateEventListener, sourceClassName:String, actionType:Number, propertyName:String):Void {

@@ -38,6 +38,10 @@ var lMap:Object = new Object();
 lMap.onAddLayer = function(map:MovieClip) {
 	monitor(0, map);
 };
+//Added onRemoveLayer handler, IDgis/HHA
+lMap.onRemoveLayer = function(map:MovieClip) {
+	monitor(100, map);
+};
 lMap.onUpdate = function(map:MovieClip) {
 
 	monitor(0, map);
@@ -46,6 +50,19 @@ lMap.onUpdateProgress = function(map:MovieClip, layersupdated:Number, totalupdat
 	monitor(layersupdated/totalupdate*100, map);
 };
 lMap.onUpdateComplete = function(map:MovieClip) {
+  //_global.flamingo.tracer("onUpdateComplete");
+	monitor(100, map);
+};
+lMap.onIdentify = function(map:MovieClip, extent:Object) {
+  //_global.flamingo.tracer("onIdentify");
+	monitor(0, map);
+};
+lMap.onIdentifyProgress = function(map:MovieClip, layersidentified:Number, layerstotal:Number, sublayersidentified:Number, sublayerstotal:Number) {
+  //_global.flamingo.tracer("onIdentifyProgress, " + layersidentified + "/" + layerstotal);
+	monitor(layersidentified / layerstotal * 100, map);
+};
+lMap.onIdentifyComplete = function(map:MovieClip) {
+  //_global.flamingo.tracer("onIdentifyComplete");
 	monitor(100, map);
 };
 //---------------------------------------

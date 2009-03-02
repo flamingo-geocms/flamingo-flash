@@ -1,6 +1,8 @@
-// This file is part of Flamingo MapComponents.
-// Author: Michiel J. van Heek.
-
+/*-----------------------------------------------------------------------------
+* This file is part of Flamingo MapComponents.
+* Author: Michiel J. van Heek.
+* IDgis bv
+ -----------------------------------------------------------------------------*/
 import flamingo.gismodel.*;
 
 import flamingo.event.*;
@@ -53,11 +55,14 @@ class flamingo.gismodel.Feature {
             _global.flamingo.tracer("Exception in flamingo.gismodel.Feature.<<init>>(" + id + ", " + values.toString() + ")\nNumber of given values does not match the number of properties of the layer.");
             return;
         }
-        if (values == null) {
+        if (values == null) {	
             values = new Array();
             var defaultValue:String = null;
             for (var i:Number = 0; i < properties.length; i++) {
                 defaultValue = Property(properties[i]).getDefaultValue();
+				if (serviceFeature != null) {
+                	serviceFeature.setValue(properties[i].getName(), defaultValue);
+            	}
                 values.push(defaultValue); // Default value may be null.
             }
             var ownerPropertyName:String = layer.getOwnerPropertyName();
@@ -89,7 +94,6 @@ class flamingo.gismodel.Feature {
         this.id = id;
         this.geometry = geometry;
         this.values = values;
-        
         stateEventDispatcher = new StateEventDispatcher();
     }
     
@@ -128,14 +132,14 @@ class flamingo.gismodel.Feature {
             this.values[i] = value;
             
             if (serviceFeature != null) {
+            	//_global.flamingo.tracer("Feature setValues naar serviceFeature setValue for:" + property.getName() + " value = " + value);
                 serviceFeature.setValue(property.getName(), value);
             }
         }
         if (serviceFeature != null) {
             layer.addOperation(new Update(serviceFeature));
         }
-        
-        stateEventDispatcher.dispatchEvent(new StateEvent(this, "Feature", StateEvent.CHANGE, "values"));
+        stateEventDispatcher.dispatchEvent(new StateEvent(this, "Feature", StateEvent.CHANGE, "values", layer.getGIS()));
     }
     
     function setValue(name:String, value:String):Void {
@@ -157,7 +161,7 @@ class flamingo.gismodel.Feature {
                 layer.addOperation(new Update(serviceFeature));
             }
             
-            stateEventDispatcher.dispatchEvent(new StateEvent(this, "Feature", StateEvent.CHANGE, "values"));
+            stateEventDispatcher.dispatchEvent(new StateEvent(this, "Feature", StateEvent.CHANGE, "values", layer.getGIS()));
         }
     }
     

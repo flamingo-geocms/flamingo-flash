@@ -342,7 +342,7 @@ class ArcIMSConnector {
 		str = str+"<GET_IMAGE autoresize=\"true\">\n";
 		str = str+"<PROPERTIES>\n";
 		var rgb1:Object = _getRGB(this.backgroundcolor);
-		if (!(this.transcolor) == NaN) {
+		if (!isNaN(this.transcolor)) {
 			var rgb2:Object = _getRGB(this.transcolor);
 			str = str+"<BACKGROUND  color=\""+rgb1.r+","+rgb1.g+","+rgb1.b+"\""+" transcolor=\""+rgb2.r+","+rgb2.g+","+rgb2.b+"\"  />\n";
 		} else {
@@ -512,7 +512,7 @@ class ArcIMSConnector {
 			for (var id in layers) {
 				if (layers[id].buffer != undefined) {
 					str = str+"<LAYER type=\"featureclass\" visible=\""+String(layers[id].visible)+"\" name=\"zone met straal "+layers[id].buffer.radius+"m\" id=\"gLayer\">\n<DATASET fromlayer=\""+id+"\"/>\n";
-					if (layers[id].query == undefined or layers[id].query == "") {
+					if (layers[id].query == undefined || layers[id].query == "") {
 						str = str+"<SPATIALQUERY>\n";
 					} else {
 						str = str+"<SPATIALQUERY where=\""+layers[id].query+"\">";

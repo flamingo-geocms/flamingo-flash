@@ -1,5 +1,8 @@
-﻿// This file is part of Flamingo MapComponents.
-// Author: Michiel J. van Heek.
+﻿/*-----------------------------------------------------------------------------
+* This file is part of Flamingo MapComponents.
+* Author: Michiel J. van Heek.
+* IDgis bv
+ -----------------------------------------------------------------------------*/
 
 import flamingo.coremodel.service.wfs.*;
 
@@ -122,6 +125,10 @@ class flamingo.coremodel.service.wfs.WFSConnector extends ServiceConnector {
         var actionEvent:ActionEvent = new ActionEvent(this, "ServiceConnector", ActionEvent.LOAD);
         actionEvent["serviceLayer"] = serviceLayer;
         actionEventListener.onActionEvent(actionEvent);
+        var id:String =  _global.flamingo.getComponentID(this);
+            if(id != null){
+        		_global.flamingo.raiseEvent(this,"onActionEvent",id + "," + actionEvent.toString());
+            }
     }
     
     function processGetFeature(responseXML:XML, serviceLayer:ServiceLayer, actionEventListener:ActionEventListener):Void {
@@ -137,6 +144,7 @@ class flamingo.coremodel.service.wfs.WFSConnector extends ServiceConnector {
         actionEvent["numFeatures"] = numFeatures;
         actionEvent["features"] = features;
         actionEventListener.onActionEvent(actionEvent);
+        _global.flamingo.raiseEvent(this,"onActionEvent",this + actionEvent.toString());
     }
     
     function processTransaction(responseXML:XML, serviceLayer:ServiceLayer, actionEventListener:ActionEventListener):Void {
@@ -145,6 +153,7 @@ class flamingo.coremodel.service.wfs.WFSConnector extends ServiceConnector {
         var actionEvent:ActionEvent = new ActionEvent(this, "ServiceConnector", ActionEvent.LOAD);
         actionEvent["transactionResponse"] = transactionResponse;
         actionEventListener.onActionEvent(actionEvent);
+        _global.flamingo.raiseEvent(this,"onActionEvent",this + actionEvent.toString());
     }
     
     function toString():String {

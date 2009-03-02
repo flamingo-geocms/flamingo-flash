@@ -1,5 +1,8 @@
-// This file is part of Flamingo MapComponents.
-// Author: Michiel J. van Heek.
+/*-----------------------------------------------------------------------------
+* This file is part of Flamingo MapComponents.
+* Author: Michiel J. van Heek.
+* IDgis bv
+ -----------------------------------------------------------------------------*/
 
 import flamingo.coremodel.service.*;
 
@@ -43,7 +46,6 @@ class flamingo.coremodel.service.Insert extends Operation {
         requestString += "      </gml:featureMember>\n";
         requestString += "    </wfs:FeatureCollection>\n";
         requestString += "  </wfs:Insert>\n";
-        
         return requestString;
     }
     

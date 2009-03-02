@@ -1,6 +1,8 @@
-﻿// This file is part of Flamingo MapComponents.
-// Author: Michiel J. van Heek.
-
+﻿/*-----------------------------------------------------------------------------
+* This file is part of Flamingo MapComponents.
+* Author: Michiel J. van Heek.
+* IDgis bv
+ -----------------------------------------------------------------------------*/
 /** @component BitmapClone
 * A component that shows a visual copy of another component, but without the functionality of that component. 
 * A bitmap clone is especially useful for showing components on a print template which are actually too complex or in need of heavy configuration, 
@@ -32,6 +34,8 @@
 import flamingo.gui.*;
 
 import flash.display.BitmapData;
+
+import flamingo.core.AbstractComponent;
 
 class flamingo.gui.BitmapClone extends AbstractComponent {
     

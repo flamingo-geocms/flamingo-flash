@@ -1,6 +1,8 @@
-﻿// This file is part of Flamingo MapComponents.
-// Author: Michiel J. van Heek.
-
+﻿/*-----------------------------------------------------------------------------
+* This file is part of Flamingo MapComponents.
+* Author: Michiel J. van Heek.
+* IDgis bv
+ -----------------------------------------------------------------------------*/
 import flamingo.gismodel.*;
 
 import flamingo.event.*;
@@ -9,6 +11,7 @@ import flamingo.coremodel.service.*;
 import flamingo.coremodel.service.wfs.*;
 import flamingo.geometrymodel.*;
 import flamingo.tools.Randomizer;
+import flamingo.core.AbstractComposite;
 
 class flamingo.gismodel.Layer extends AbstractComposite implements ActionEventListener {
     
@@ -95,7 +98,7 @@ class flamingo.gismodel.Layer extends AbstractComposite implements ActionEventLi
         
         this.visible = visible;
         
-        stateEventDispatcher.dispatchEvent(new StateEvent(this, "Layer", StateEvent.CHANGE, "visible"));
+        stateEventDispatcher.dispatchEvent(new StateEvent(this, "Layer", StateEvent.CHANGE, "visible", gis));
     }
     
     function isVisible():Boolean {
@@ -148,6 +151,10 @@ class flamingo.gismodel.Layer extends AbstractComposite implements ActionEventLi
     
     function getStyle():Style {
         return style;
+    }
+    
+    function getGIS():GIS {
+    	return gis;
     }
     
     function addWhereClause(whereClause:WhereClause):Void {
@@ -245,8 +252,8 @@ class flamingo.gismodel.Layer extends AbstractComposite implements ActionEventLi
             feature = new Feature(this, serviceFeature, id, geometry, values, null);
         }
         features.push(feature);
-        
-        stateEventDispatcher.dispatchEvent(new AddRemoveEvent(this, "Layer", "features", new Array(feature), null));
+
+        stateEventDispatcher.dispatchEvent(new AddRemoveEvent(this, "Layer", "features", new Array(feature), null, gis));
         
         if (postAction) {
             gis.setActiveFeature(feature);
@@ -267,7 +274,7 @@ class flamingo.gismodel.Layer extends AbstractComposite implements ActionEventLi
             doRemoveFeature(Feature(features[i]), addOperation);
         }
         
-        stateEventDispatcher.dispatchEvent(new AddRemoveEvent(this, "Layer", "features", null, features));
+        stateEventDispatcher.dispatchEvent(new AddRemoveEvent(this, "Layer", "features", null, features, gis));
     }
     
     function removeFeature(feature:Feature, addOperation:Boolean):Void {
@@ -278,7 +285,7 @@ class flamingo.gismodel.Layer extends AbstractComposite implements ActionEventLi
         
         doRemoveFeature(feature, addOperation);
         
-        stateEventDispatcher.dispatchEvent(new AddRemoveEvent(this, "Layer", "features", null, new Array(feature)));
+        stateEventDispatcher.dispatchEvent(new AddRemoveEvent(this, "Layer", "features", null, new Array(feature), gis));
     }
     
     private function doRemoveFeature(feature:Feature, addOperation:Boolean):Void { // Removes the given feature, without dispatching an event.

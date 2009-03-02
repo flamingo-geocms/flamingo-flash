@@ -1,5 +1,8 @@
-﻿// This file is part of Flamingo MapComponents.
-// Author: Michiel J. van Heek.
+﻿/*-----------------------------------------------------------------------------
+* This file is part of Flamingo MapComponents.
+* Author: Michiel J. van Heek.
+* IDgis bv
+ -----------------------------------------------------------------------------*/
 
 /** @component PrintTemplate 
 * A container that holds and positions a number of components, with the intension to send them to a printer. 
@@ -78,12 +81,11 @@ class flamingo.gui.PrintTemplate extends ScalableContainer {
             format = value;
         } else if (name == "orientation") {
             orientation = value;
-            
             if ((format == "A4") && (orientation == "landscape")) {
                 width = "" + Math.floor(813 * getDPIFactor());
                 height = "" + Math.floor(561 * getDPIFactor());
             } else if ((format == "A4") && (orientation == "portrait")) {
-                width = "" + Math.floor(561 * getDPIFactor());
+                width = "" + Math.floor((561) * getDPIFactor());
                 height = "" + Math.floor(813 * getDPIFactor());
             } else if ((format == "A3") && (orientation == "landscape")) {
                 width = "" + Math.floor(1122 * getDPIFactor());
@@ -106,7 +108,7 @@ class flamingo.gui.PrintTemplate extends ScalableContainer {
        	}
 	   	maps = new Array()
 		for (var i:Number = 0; i < mapStrings.length; i++) {
-                maps.push(_global.flamingo.getComponent(mapStrings[i]));
+				maps.push(_global.flamingo.getComponent(mapStrings[i]));
         }
     }
     

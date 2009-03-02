@@ -1,5 +1,8 @@
-﻿// This file is part of Flamingo MapComponents.
-// Author: Michiel J. van Heek.
+﻿/*-----------------------------------------------------------------------------
+* This file is part of Flamingo MapComponents.
+* Author: Michiel J. van Heek.
+* IDgis bv
+ -----------------------------------------------------------------------------*/
 
 import flamingo.gui.*;
 
@@ -64,6 +67,7 @@ class flamingo.gui.EditMapCreateGeometry extends MovieClip {
             var point:flamingo.geometrymodel.Point = pixel2Point(new Pixel(_xmouse, _ymouse));
             if (geometry == null) {
                 geometry = createGeometry.getGeometryFactory().createGeometry(point);
+                geometry.setEventComp(gis);
                 createGeometry.getLayer().addFeature(geometry, true);
                 if (geometry instanceof flamingo.geometrymodel.Point) {
                     gis.setCreateGeometry(null);

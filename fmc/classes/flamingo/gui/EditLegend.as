@@ -1,5 +1,8 @@
-﻿// This file is part of Flamingo MapComponents.
-// Author: Michiel J. van Heek.
+﻿/*-----------------------------------------------------------------------------
+* This file is part of Flamingo MapComponents.
+* Author: Michiel J. van Heek.
+* IDgis bv
+ -----------------------------------------------------------------------------*/
 
 
 /** @component EditLegend
@@ -30,6 +33,7 @@ import flamingo.gui.*;
 import flamingo.event.*;
 import flamingo.gismodel.GIS;
 import flamingo.gismodel.Layer;
+import flamingo.core.AbstractComponent;
 
 class flamingo.gui.EditLegend extends AbstractComponent implements StateEventListener {
     

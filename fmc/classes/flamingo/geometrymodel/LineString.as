@@ -1,6 +1,8 @@
-// This file is part of Flamingo MapComponents.
-// Author: Michiel J. van Heek.
-
+/*-----------------------------------------------------------------------------
+* This file is part of Flamingo MapComponents.
+* Author: Michiel J. van Heek.
+* IDgis bv
+ -----------------------------------------------------------------------------*/
 import flamingo.geometrymodel.*;
 
 import flamingo.event.AddRemoveEvent;
@@ -45,7 +47,7 @@ class flamingo.geometrymodel.LineString extends Geometry {
         }
         child.setParent(this);
         
-        dispatchEvent(new AddRemoveEvent(this, "Geometry", "childGeometries", new Array(child), null));
+        dispatchEvent(new AddRemoveEvent(this, "Geometry", "childGeometries", new Array(child), null, eventComp));
     }
     
     function removeChild(child:Geometry):Void {
@@ -94,7 +96,7 @@ class flamingo.geometrymodel.LineString extends Geometry {
         }
         child.setParent(null);
         
-        dispatchEvent(new AddRemoveEvent(this, "Geometry", "childGeometries", null, new Array(child)));
+        dispatchEvent(new AddRemoveEvent(this, "Geometry", "childGeometries", null, new Array(child), eventComp));
     }
     
     function getChildGeometries():Array {

@@ -1,5 +1,8 @@
-﻿// This file is part of Flamingo MapComponents.
-// Author: Michiel J. van Heek.
+﻿/*-----------------------------------------------------------------------------
+* This file is part of Flamingo MapComponents.
+* Author: Michiel J. van Heek.
+* IDgis bv
+ -----------------------------------------------------------------------------*/
 
 /** @component Authentication 
 * A component that tells other Flamingo components which authorization roles the current authenticated user has. 
@@ -56,6 +59,7 @@
 */
 
 import flamingo.gui.*;
+import flamingo.core.AbstractComponent;
 
 class flamingo.gui.Authentication extends AbstractComponent {
     

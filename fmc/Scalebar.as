@@ -38,6 +38,7 @@ var magicnumber:Number = 1;
 var skin:String = "";
 var minscale:Number;
 var maxscale:Number;
+//var tScale:TextField = null;
 
 //---------------------------------
 var lMap:Object = new Object();
@@ -166,7 +167,14 @@ function setConfig(xml:Object) {
 		t.html = true;
 		t.selectable = false;
 	}
-	
+/*
+	tScale = mHolder.createTextField("tScale", labelcount+3, 0, 0, 0, 0);
+	tScale.styleSheet = flamingo.getStyleSheet(this);
+	tScale.multiline = false;
+	tScale.wordWrap = false;
+	tScale.html = false;
+	tScale.selectable = false;
+*/	
 	flamingo.addListener(lMap, listento[0], this);
 
 	resize();
@@ -224,6 +232,13 @@ function resize() {
 	} else if (barposition == "RIGHT") {
 		mHolder.mBar._x = r.width-mHolder.mBar._width;
 	}
+/*
+	tScale.text = String(Math.round(ms*1000)/1000);
+	tScale._width = tScale.textWidth+5;
+	tScale._height = tScale.textHeight+5;
+	tScale._x = mHolder.mBar._x - tScale._width - 20;
+    tScale._y = mHolder.mBar._y;	
+*/	
 	if (labelcount == 1) {
 		var l = barlength;
 		if (unitposition == "LASTLABEL") {

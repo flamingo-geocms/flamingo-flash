@@ -1,7 +1,10 @@
-// This file is part of Flamingo MapComponents.
-// Author: Michiel J. van Heek.
-
+/*-----------------------------------------------------------------------------
+* This file is part of Flamingo MapComponents.
+* Author: Michiel J. van Heek.
+* IDgis bv
+ -----------------------------------------------------------------------------*/
 import flamingo.gismodel.*;
+import flamingo.core.AbstractComposite;
 
 class flamingo.gismodel.Style extends AbstractComposite {
     
@@ -9,7 +12,7 @@ class flamingo.gismodel.Style extends AbstractComposite {
     private var fillOpacity:Number = -1;
     private var strokeColor:Number = -1;
     private var strokeOpacity:Number = -1;
-    private var strokeWidth:Number = 3;
+    private var strokeWidth:Number = 2;
     
     function Style(xmlNode:XMLNode) {
         parseConfig(xmlNode);

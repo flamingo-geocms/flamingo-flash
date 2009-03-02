@@ -1,5 +1,8 @@
-﻿// This file is part of Flamingo MapComponents.
-// Author: Michiel J. van Heek.
+﻿/*-----------------------------------------------------------------------------
+* This file is part of Flamingo MapComponents.
+* Author: Michiel J. van Heek.
+* IDgis bv
+ -----------------------------------------------------------------------------*/
 
 /** @component EditMap
 * A component that draws feature geometries within a certain zoom extent and at a certain scale. 
@@ -44,13 +47,14 @@ import flamingo.event.*;
 import flamingo.gismodel.GIS;
 import flamingo.gismodel.Layer;
 import flamingo.gismodel.CreateGeometry;
-
+import flamingo.core.AbstractComponent;
 
 class flamingo.gui.EditMap extends AbstractComponent implements StateEventListener {
     
     private var mask:MovieClip = null;
     private var gis:GIS = null;
 	private var map:Object = null;
+    private var tools:Object = null;
 	//private var boundedby:String = null;
 	private var editble:Boolean = true;
     private var editMapLayers:Array = null;
@@ -59,9 +63,6 @@ class flamingo.gui.EditMap extends AbstractComponent implements StateEventListen
 
 	
 	function setAttribute(name:String, value:String):Void {
-		 //if (name == "boundedby") {
-           //boundedby = value;
-		 //}
 		  if (name == "editable") {
 			if(value=="false"){
             	editble = false;
@@ -74,15 +75,6 @@ class flamingo.gui.EditMap extends AbstractComponent implements StateEventListen
 	
 	
     function setBounds(x:Number, y:Number, width:Number, height:Number):Void {
-	   //if (boundedby!=null){
-		  // var boundObj:Object = _global.flamingo.getComponent(listento[1]);
-		  //var bounds:Object = _global.flamingo.getPosition(boundObj);//_global.flamingo.getComponent(boundedby));
-		  //_global.flamingo.tracer(boundObj + "x =" + bounds.x + " Y =" + bounds.y);  
-		  //x=bounds.x;
-		  //y=bounds.y;
-		  //width=bounds.width; 
-		  //height=bounds.height;
-	   //}
 	   if (mask == null) {
             mask = createEmptyMovieClip("mMask", editMapCreateGeometryDepth + 1);
         } else {
@@ -104,9 +96,10 @@ class flamingo.gui.EditMap extends AbstractComponent implements StateEventListen
         editMapLayers = new Array();
 		gis=_global.flamingo.getComponent(listento[0]);
         map=_global.flamingo.getComponent(listento[1]);
+		tools=_global.flamingo.getComponent(listento[2]);
         gis.addEventListener(this, "GIS", StateEvent.ADD_REMOVE, "layers");
         gis.addEventListener(this, "GIS", StateEvent.CHANGE, "createGeometry");
-
+		_global.flamingo.addListener(this,tools,this);
         var layers:Array = gis.getLayers();
 		
         var layer:Layer = null;
@@ -210,5 +203,13 @@ class flamingo.gui.EditMap extends AbstractComponent implements StateEventListen
             editMapCreateGeometry = null; // MovieClip.removeMovieClip does not nullify the reference.
         }
     }
+	
+	public function onSetTool(toolgroup:Object,tool:Object){
+		var feature:flamingo.gismodel.Feature = gis.getActiveFeature();
+		if (feature != null) {
+			feature.getLayer().removeFeature(feature, true);
+		}
+		removeEditMapCreateGeometry();
+	}
     
 }

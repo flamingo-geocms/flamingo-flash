@@ -1,5 +1,8 @@
-﻿// This file is part of Flamingo MapComponents.
-// Author: Michiel J. van Heek.
+﻿/*-----------------------------------------------------------------------------
+* This file is part of Flamingo MapComponents.
+* Author: Michiel J. van Heek.
+* IDgis bv
+ -----------------------------------------------------------------------------*/
 
 
 /** @component EditProperties
@@ -40,6 +43,8 @@ import mx.controls.Label;
 import mx.controls.TextArea;
 import mx.controls.UIScrollBar;
 import mx.utils.Delegate;
+
+import flamingo.core.AbstractComponent;
 
 class flamingo.gui.EditProperties extends AbstractComponent implements StateEventListener {
     
@@ -204,6 +209,8 @@ class flamingo.gui.EditProperties extends AbstractComponent implements StateEven
             
             initObject = new Object();
             initObject["enabled"] = !property.isImmutable();
+			initObject["tabIndex"] = i;
+			initObject["tabEnabled"] = true;
             if (propertyType == "SingleLine") {
                 components.push(componentsPanel.attachMovie("TextInput", "mComponent" + layerName + i, i * 2 + 1, initObject));
             } else if (propertyType == "MultiLine") {

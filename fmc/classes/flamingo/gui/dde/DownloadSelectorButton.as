@@ -1,4 +1,12 @@
-﻿/** @component DownloadSelectorButton
+﻿import flamingo.core.AbstractComponent;
+
+/*-----------------------------------------------------------------------------
+* This file is part of Flamingo MapComponents.
+* Author: Linda Vels.
+* IDgis bv
+ -----------------------------------------------------------------------------*/
+ 
+/** @component DownloadSelectorButton
 * A button to open the DownloadSelector component
 * @file DownloadSelectorButton.as  (sourcefile)
 * @file DownloadSelectorButton.fla (sourcefile)

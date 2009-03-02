@@ -1,5 +1,8 @@
-// This file is part of Flamingo MapComponents.
-// Author: Michiel J. van Heek.
+/*-----------------------------------------------------------------------------
+* This file is part of Flamingo MapComponents.
+* Author: Michiel J. van Heek.
+* IDgis bv
+ -----------------------------------------------------------------------------*/
 
 import flamingo.coremodel.service.*;
 
@@ -24,7 +27,7 @@ class flamingo.coremodel.service.ServiceFeature {
     function setValue(name:String, value:Object):Void {
         var serviceProperties:Array = serviceLayer.getServiceProperties();
         for (var i:Number = 0; i < serviceProperties.length; i++) {
-            if (ServiceProperty(serviceProperties[i]).getName() == name) {
+            if (ServiceProperty(serviceProperties[i]).getName() == name) {  
                 values[i] = value;
                 return;
             }

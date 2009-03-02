@@ -1,3 +1,8 @@
+/*-----------------------------------------------------------------------------
+* This file is part of Flamingo MapComponents.
+* IDgis bv
+ -----------------------------------------------------------------------------*/
+
 /**
 * Encodes and decodes a base64 string.
  * MontgomeryReduction

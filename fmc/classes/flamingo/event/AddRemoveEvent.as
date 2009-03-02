@@ -1,15 +1,19 @@
-// This file is part of Flamingo MapComponents.
-// Author: Michiel J. van Heek.
+/*-----------------------------------------------------------------------------
+* This file is part of Flamingo MapComponents.
+* Author: Michiel J. van Heek.
+* IDgis bv
+ -----------------------------------------------------------------------------*/
 
 import flamingo.event.*;
+import flamingo.core.AbstractComponent;
 
 class flamingo.event.AddRemoveEvent extends StateEvent {
     
     private var addedObjects:Array = null;
     private var removedObjects:Array = null;
     
-    function AddRemoveEvent(source:Object, sourceClassName:String, propertyName:String, addedObjects:Array, removedObjects:Array) {
-        super(source, sourceClassName, ADD_REMOVE, propertyName);
+    function AddRemoveEvent(source:Object, sourceClassName:String, propertyName:String, addedObjects:Array, removedObjects:Array, eventComp:AbstractComponent) {
+        super(source, sourceClassName, ADD_REMOVE, propertyName, eventComp);
         
         if (addedObjects == null) {
             this.addedObjects = new Array();
@@ -32,7 +36,7 @@ class flamingo.event.AddRemoveEvent extends StateEvent {
     }
     
     function toString():String {
-        return "AddRemoveEvent(" + sourceClassName + ", ADD_REMOVE, " + propertyName + ")";
+        return "AddRemoveEvent(" + sourceClassName + ", " + source + ", ADD_REMOVE, " + propertyName + ", " + _global.flamingo.getId(eventComp)+ ")";
     }
     
 }

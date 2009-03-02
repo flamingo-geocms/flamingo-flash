@@ -1,4 +1,11 @@
-﻿/** @component RemoteEventDispatcher
+﻿/*-----------------------------------------------------------------------------
+* This file is part of Flamingo MapComponents.
+* Author: Linda vels.
+* IDgis bv
+ -----------------------------------------------------------------------------*/
+
+
+/** @component RemoteEventDispatcher
 * The RemoteEventDispatcher component receives events via ExternalInterface and sends thes events to the flamingo raiseEvent method. instance of the flamingo viewer.
 * This component is used to enable the communicatiion between flamingo components in different Flash instances.
 * @file RemoteEventDispatcher.as  (sourcefile)
@@ -12,6 +19,8 @@
 */
 
 import flash.external.ExternalInterface;
+
+import flamingo.core.AbstractComponent;
 
 class flamingo.proxys.RemoteEventDispatcher extends AbstractComponent {
 	var version:String = "1.0";

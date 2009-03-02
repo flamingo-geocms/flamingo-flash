@@ -1,4 +1,11 @@
-﻿class flamingo.tools.XMLSchema {
+﻿/*-----------------------------------------------------------------------------
+* This file is part of Flamingo MapComponents.
+* Author: Michiel J. van Heek.
+* IDgis bv
+ -----------------------------------------------------------------------------*/
+
+
+class flamingo.tools.XMLSchema {
     
     private var targetNamespace:String = null;
     private var targetNamespacePrefix:String = null;

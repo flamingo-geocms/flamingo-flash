@@ -1,5 +1,8 @@
-﻿// This file is part of Flamingo MapComponents.
-// Author: Michiel J. van Heek.
+﻿/*-----------------------------------------------------------------------------
+* This file is part of Flamingo MapComponents.
+* Author: Michiel J. van Heek.
+* IDgis bv
+ -----------------------------------------------------------------------------*/
 
 /** @component Veil
 * A component intended to cover off certain parts or the whole of the Flamingo user interface. 
@@ -23,6 +26,7 @@
 
 
 import flamingo.coregui.*;
+import flamingo.core.AbstractContainer;
 
 class flamingo.coregui.Veil extends AbstractContainer {
     

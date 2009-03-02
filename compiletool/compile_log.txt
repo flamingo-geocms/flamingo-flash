@@ -1,555 +1,538 @@
-Running compile on undefined files at: file:///P|/Flamingo/SVN/flamingo/compileTools/
+Running compile on 77 files at: file:///P|/Flamingo/Linda/flamingoSVN/client/compiletool/
 
 ---------------------------------------------------------------------------
-Compiling ../flamingo.fla
+Compiling flamingo.fla
 ---------------------------------------------------------------------------
 
-Compiled ../flamingo.fla successfully.
-Moved ../flamingo.swf to ../swfs/flamingo.swf successfully.
-Moved ../flamingo.xml successfully.
+Moved flamingo.swf successfully.
+Moved flamingo.xml successfully.
 
 ---------------------------------------------------------------------------
-Compiling ../fmc/Authentication.fla
+Compiling fmc/Authentication.fla
 ---------------------------------------------------------------------------
 
-Compiled ../fmc/Authentication.fla successfully.
-Moved ../fmc/Authentication.swf to ../swfs/fmc/Authentication.swf successfully.
-Moved ../fmc/Authentication.xml successfully.
+Moved fmc/Authentication.swf successfully.
+Moved fmc/Authentication.xml successfully.
 
 ---------------------------------------------------------------------------
-Compiling ../fmc/BaseContainer.fla
+Compiling fmc/BaseContainer.fla
 ---------------------------------------------------------------------------
 
-Compiled ../fmc/BaseContainer.fla successfully.
-Moved ../fmc/BaseContainer.swf to ../swfs/fmc/BaseContainer.swf successfully.
-Moved ../fmc/BaseContainer.xml successfully.
+Moved fmc/BaseContainer.swf successfully.
+Moved fmc/BaseContainer.xml successfully.
 
 ---------------------------------------------------------------------------
-Compiling ../fmc/BitmapClone.fla
+Compiling fmc/BitmapClone.fla
 ---------------------------------------------------------------------------
 
-Compiled ../fmc/BitmapClone.fla successfully.
-Moved ../fmc/BitmapClone.swf to ../swfs/fmc/BitmapClone.swf successfully.
-Moved ../fmc/BitmapClone.xml successfully.
+Moved fmc/BitmapClone.swf successfully.
+Moved fmc/BitmapClone.xml successfully.
 
 ---------------------------------------------------------------------------
-Compiling ../fmc/CommitButton.fla
+Compiling fmc/CommitButton.fla
 ---------------------------------------------------------------------------
 
-Compiled ../fmc/CommitButton.fla successfully.
-Moved ../fmc/CommitButton.swf to ../swfs/fmc/CommitButton.swf successfully.
-Moved ../fmc/CommitButton.xml successfully.
+Moved fmc/CommitButton.swf successfully.
+Moved fmc/CommitButton.xml successfully.
 
 ---------------------------------------------------------------------------
-Compiling ../fmc/Confirmation.fla
+Compiling fmc/Confirmation.fla
 ---------------------------------------------------------------------------
 
-Compiled ../fmc/Confirmation.fla successfully.
-Moved ../fmc/Confirmation.swf to ../swfs/fmc/Confirmation.swf successfully.
-Moved ../fmc/Confirmation.xml successfully.
+Moved fmc/Confirmation.swf successfully.
+Moved fmc/Confirmation.xml successfully.
 
 ---------------------------------------------------------------------------
-Compiling ../fmc/Cursors.fla
+Compiling fmc/Cursors.fla
 ---------------------------------------------------------------------------
 
-Compiled ../fmc/Cursors.fla successfully.
-Moved ../fmc/Cursors.swf to ../swfs/fmc/Cursors.swf successfully.
-Moved ../fmc/Cursors.xml successfully.
+Moved fmc/Cursors.swf successfully.
+Moved fmc/Cursors.xml successfully.
 
 ---------------------------------------------------------------------------
-Compiling ../fmc/DownloadSelector.fla
+Compiling fmc/DownloadSelector.fla
 ---------------------------------------------------------------------------
 
-Compiled ../fmc/DownloadSelector.fla successfully.
-Moved ../fmc/DownloadSelector.swf to ../swfs/fmc/DownloadSelector.swf successfully.
-Moved ../fmc/DownloadSelector.xml successfully.
+Moved fmc/DownloadSelector.swf successfully.
+Moved fmc/DownloadSelector.xml successfully.
 
 ---------------------------------------------------------------------------
-Compiling ../fmc/DownloadSelectorButton.fla
+Compiling fmc/DownloadSelectorButton.fla
 ---------------------------------------------------------------------------
 
-Compiled ../fmc/DownloadSelectorButton.fla successfully.
-Moved ../fmc/DownloadSelectorButton.swf to ../swfs/fmc/DownloadSelectorButton.swf successfully.
-Moved ../fmc/DownloadSelectorButton.xml successfully.
+Moved fmc/DownloadSelectorButton.swf successfully.
+Moved fmc/DownloadSelectorButton.xml successfully.
 
 ---------------------------------------------------------------------------
-Compiling ../fmc/EditBar.fla
+Compiling fmc/EditBar.fla
 ---------------------------------------------------------------------------
 
-Compiled ../fmc/EditBar.fla successfully.
-Moved ../fmc/EditBar.swf to ../swfs/fmc/EditBar.swf successfully.
-Moved ../fmc/EditBar.xml successfully.
+Moved fmc/EditBar.swf successfully.
+Moved fmc/EditBar.xml successfully.
 
 ---------------------------------------------------------------------------
-Compiling ../fmc/EditLegend.fla
+Compiling fmc/EditLegend.fla
 ---------------------------------------------------------------------------
 
-Compiled ../fmc/EditLegend.fla successfully.
-Moved ../fmc/EditLegend.xml successfully.
+Moved fmc/EditLegend.swf successfully.
+Moved fmc/EditLegend.xml successfully.
 
 ---------------------------------------------------------------------------
-Compiling ../fmc/EditMap.fla
+Compiling fmc/EditMap.fla
 ---------------------------------------------------------------------------
 
-Compiled ../fmc/EditMap.fla successfully.
-Moved ../fmc/EditMap.swf to ../swfs/fmc/EditMap.swf successfully.
-Moved ../fmc/EditMap.xml successfully.
+Moved fmc/EditMap.swf successfully.
+Moved fmc/EditMap.xml successfully.
 
 ---------------------------------------------------------------------------
-Compiling ../fmc/EditLegend.fla
+Compiling fmc/EditLegend.fla
 ---------------------------------------------------------------------------
 
-Compiled ../fmc/EditLegend.fla successfully.
-Moved ../fmc/EditLegend.swf to ../swfs/fmc/EditLegend.swf successfully.
-Moved ../fmc/EditLegend.xml successfully.
+Moved fmc/EditLegend.swf successfully.
+Moved fmc/EditLegend.xml successfully.
 
 ---------------------------------------------------------------------------
-Compiling ../fmc/EditBar.fla
+Compiling fmc/EditBar.fla
 ---------------------------------------------------------------------------
 
-Compiled ../fmc/EditBar.fla successfully.
-Moved ../fmc/EditBar.swf to ../swfs/fmc/EditBar.swf successfully.
-Moved ../fmc/EditBar.xml successfully.
+Moved fmc/EditBar.swf successfully.
+Moved fmc/EditBar.xml successfully.
 
 ---------------------------------------------------------------------------
-Compiling ../fmc/EditLegend.fla
+Compiling fmc/EditLegend.fla
 ---------------------------------------------------------------------------
 
-Compiled ../fmc/EditLegend.fla successfully.
-Moved ../fmc/EditLegend.swf to ../swfs/fmc/EditLegend.swf successfully.
-Moved ../fmc/EditLegend.xml successfully.
+Moved fmc/EditLegend.swf successfully.
+Moved fmc/EditLegend.xml successfully.
 
 ---------------------------------------------------------------------------
-Compiling ../fmc/EditMap.fla
+Compiling fmc/EditMap.fla
 ---------------------------------------------------------------------------
 
-Compiled ../fmc/EditMap.fla successfully.
-Moved ../fmc/EditMap.swf to ../swfs/fmc/EditMap.swf successfully.
-Moved ../fmc/EditMap.xml successfully.
+Moved fmc/EditMap.swf successfully.
+Moved fmc/EditMap.xml successfully.
 
 ---------------------------------------------------------------------------
-Compiling ../fmc/EditProperties.fla
+Compiling fmc/EditProperties.fla
 ---------------------------------------------------------------------------
 
-Compiled ../fmc/EditProperties.fla successfully.
-Moved ../fmc/EditProperties.swf to ../swfs/fmc/EditProperties.swf successfully.
-Moved ../fmc/EditProperties.xml successfully.
+Moved fmc/EditProperties.swf successfully.
+Moved fmc/EditProperties.xml successfully.
 
 ---------------------------------------------------------------------------
-Compiling ../fmc/GIS.fla
+Compiling fmc/GIS.fla
 ---------------------------------------------------------------------------
 
-Compiled ../fmc/GIS.fla successfully.
-Moved ../fmc/GIS.swf to ../swfs/fmc/GIS.swf successfully.
-Moved ../fmc/GIS.xml successfully.
+Moved fmc/GIS.swf successfully.
+Moved fmc/GIS.xml successfully.
 
 ---------------------------------------------------------------------------
-Compiling ../fmc/LayerProxy.fla
+Compiling fmc/LayerProxy.fla
 ---------------------------------------------------------------------------
 
-Compiled ../fmc/LayerProxy.fla successfully.
-Moved ../fmc/LayerProxy.swf to ../swfs/fmc/LayerProxy.swf successfully.
-Moved ../fmc/LayerProxy.xml successfully.
+Moved fmc/LayerProxy.swf successfully.
+Moved fmc/LayerProxy.xml successfully.
 
 ---------------------------------------------------------------------------
-Compiling ../fmc/MapProxy.fla
+Compiling fmc/MapProxy.fla
 ---------------------------------------------------------------------------
 
-Compiled ../fmc/MapProxy.fla successfully.
-Moved ../fmc/MapProxy.swf to ../swfs/fmc/MapProxy.swf successfully.
-Moved ../fmc/MapProxy.xml successfully.
+Moved fmc/MapProxy.swf successfully.
+Moved fmc/MapProxy.xml successfully.
 
 ---------------------------------------------------------------------------
-Compiling ../fmc/Print.fla
+Compiling fmc/Print.fla
 ---------------------------------------------------------------------------
 
-Compiled ../fmc/Print.fla successfully.
-Moved ../fmc/Print.swf to ../swfs/fmc/Print.swf successfully.
-Moved ../fmc/Print.xml successfully.
+Moved fmc/Print.swf successfully.
+Moved fmc/Print.xml successfully.
 
 ---------------------------------------------------------------------------
-Compiling ../fmc/PrintButton.fla
+Compiling fmc/PrintButton.fla
 ---------------------------------------------------------------------------
 
-Compiled ../fmc/PrintButton.fla successfully.
-Moved ../fmc/PrintButton.swf to ../swfs/fmc/PrintButton.swf successfully.
-Moved ../fmc/PrintButton.xml successfully.
+Moved fmc/PrintButton.swf successfully.
+Moved fmc/PrintButton.xml successfully.
 
 ---------------------------------------------------------------------------
-Compiling ../fmc/PrintLabel.fla
+Compiling fmc/PrintLabel.fla
 ---------------------------------------------------------------------------
 
-Compiled ../fmc/PrintLabel.fla successfully.
-Moved ../fmc/PrintLabel.swf to ../swfs/fmc/PrintLabel.swf successfully.
-Moved ../fmc/PrintLabel.xml successfully.
+Moved fmc/PrintLabel.swf successfully.
+Moved fmc/PrintLabel.xml successfully.
 
 ---------------------------------------------------------------------------
-Compiling ../fmc/PrintTemplate.fla
+Compiling fmc/PrintTemplate.fla
 ---------------------------------------------------------------------------
 
-Compiled ../fmc/PrintTemplate.fla successfully.
-Moved ../fmc/PrintTemplate.swf to ../swfs/fmc/PrintTemplate.swf successfully.
-Moved ../fmc/PrintTemplate.xml successfully.
+Moved fmc/PrintTemplate.swf successfully.
+Moved fmc/PrintTemplate.xml successfully.
 
 ---------------------------------------------------------------------------
-Compiling ../fmc/RemoteEventDispatcher.fla
+Compiling fmc/RemoteEventDispatcher.fla
 ---------------------------------------------------------------------------
 
-Compiled ../fmc/RemoteEventDispatcher.fla successfully.
-Moved ../fmc/RemoteEventDispatcher.swf to ../swfs/fmc/RemoteEventDispatcher.swf successfully.
-Moved ../fmc/RemoteEventDispatcher.xml successfully.
+Moved fmc/RemoteEventDispatcher.swf successfully.
+Moved fmc/RemoteEventDispatcher.xml successfully.
 
 ---------------------------------------------------------------------------
-Compiling ../fmc/RemoveFeatureButton.fla
+Compiling fmc/RemoveFeatureButton.fla
 ---------------------------------------------------------------------------
 
-Compiled ../fmc/RemoveFeatureButton.fla successfully.
-Moved ../fmc/RemoveFeatureButton.swf to ../swfs/fmc/RemoveFeatureButton.swf successfully.
-Moved ../fmc/RemoveFeatureButton.xml successfully.
+Moved fmc/RemoveFeatureButton.swf successfully.
+Moved fmc/RemoveFeatureButton.xml successfully.
 
 ---------------------------------------------------------------------------
-Compiling ../fmc/ScalableContainer.fla
+Compiling fmc/ScalableContainer.fla
 ---------------------------------------------------------------------------
-Compiled ../fmc/ScalableContainer.fla successfully.
-Moved ../fmc/ScalableContainer.swf to ../swfs/fmc/ScalableContainer.swf successfully.
-Moved ../fmc/ScalableContainer.xml successfully.
 
+Moved fmc/ScalableContainer.swf successfully.
+Moved fmc/ScalableContainer.xml successfully.
+
+---------------------------------------------------------------------------
+Compiling fmc/Veil.fla
+---------------------------------------------------------------------------
+
+Moved fmc/Veil.swf successfully.
+Moved fmc/Veil.xml successfully.
+
+---------------------------------------------------------------------------
+Compiling fmc/BorderNavigation.fla
+---------------------------------------------------------------------------
+
+Moved fmc/BorderNavigation.swf successfully.
+Moved fmc/BorderNavigation.xml successfully.
+
+---------------------------------------------------------------------------
+Compiling fmc/ButtonFull.fla
+---------------------------------------------------------------------------
+
+Moved fmc/ButtonFull.swf successfully.
+Moved fmc/ButtonFull.xml successfully.
+
+---------------------------------------------------------------------------
+Compiling fmc/ButtonNext.fla
+---------------------------------------------------------------------------
+
+Moved fmc/ButtonNext.swf successfully.
+Moved fmc/ButtonNext.xml successfully.
+
+---------------------------------------------------------------------------
+Compiling fmc/ButtonPrev.fla
+---------------------------------------------------------------------------
+
+Moved fmc/ButtonPrev.swf successfully.
+Moved fmc/ButtonPrev.xml successfully.
+
+---------------------------------------------------------------------------
+Compiling fmc/Container.fla
 ---------------------------------------------------------------------------
-Compiling ../tpc/SubsidieInfoPB.fla
+
+Moved fmc/Container.swf successfully.
+Moved fmc/Container.xml successfully.
+
 ---------------------------------------------------------------------------
+Compiling fmc/Coordinates.fla
+---------------------------------------------------------------------------
 
-Compiled ../tpc/SubsidieInfoPB.fla successfully.
-Moved ../tpc/SubsidieInfoPB.swf to ../swfs/tpc/SubsidieInfoPB.swf successfully.
-Moved ../tpc/SubsidieInfoPB.xml successfully.
+Moved fmc/Coordinates.swf successfully.
+Moved fmc/Coordinates.xml successfully.
 
 ---------------------------------------------------------------------------
-Compiling ../fmc/Veil.fla
+Compiling fmc/CursorsMap.fla
 ---------------------------------------------------------------------------
 
-Compiled ../fmc/Veil.fla successfully.
-Moved ../fmc/Veil.swf to ../swfs/fmc/Veil.swf successfully.
-Moved ../fmc/Veil.xml successfully.
+Moved fmc/CursorsMap.swf successfully.
+Moved fmc/CursorsMap.xml successfully.
 
 ---------------------------------------------------------------------------
-Compiling ../fmc/BorderNavigation.fla
+Compiling fmc/CursorsWindow.fla
 ---------------------------------------------------------------------------
 
-Compiled ../fmc/BorderNavigation.fla successfully.
-Moved ../fmc/BorderNavigation.swf to ../swfs/fmc/BorderNavigation.swf successfully.
-Moved ../fmc/BorderNavigation.xml successfully.
+Moved fmc/CursorsWindow.swf successfully.
+Moved fmc/CursorsWindow.xml successfully.
 
 ---------------------------------------------------------------------------
-Compiling ../fmc/ButtonFull.fla
+Compiling fmc/Debugger.fla
 ---------------------------------------------------------------------------
 
-Compiled ../fmc/ButtonFull.fla successfully.
-Moved ../fmc/ButtonFull.swf to ../swfs/fmc/ButtonFull.swf successfully.
-Moved ../fmc/ButtonFull.xml successfully.
+Moved fmc/Debugger.swf successfully.
+Moved fmc/Debugger.xml successfully.
 
 ---------------------------------------------------------------------------
-Compiling ../fmc/ButtonNext.fla
+Compiling fmc/IdentifyResults.fla
 ---------------------------------------------------------------------------
 
-Compiled ../fmc/ButtonNext.fla successfully.
-Moved ../fmc/ButtonNext.swf to ../swfs/fmc/ButtonNext.swf successfully.
-Moved ../fmc/ButtonNext.xml successfully.
+Moved fmc/IdentifyResults.swf successfully.
+Moved fmc/IdentifyResults.xml successfully.
 
 ---------------------------------------------------------------------------
-Compiling ../fmc/ButtonPrev.fla
+Compiling fmc/IdentifyResultsHTML.fla
 ---------------------------------------------------------------------------
 
-Compiled ../fmc/ButtonPrev.fla successfully.
-Moved ../fmc/ButtonPrev.swf to ../swfs/fmc/ButtonPrev.swf successfully.
-Moved ../fmc/ButtonPrev.xml successfully.
+Moved fmc/IdentifyResultsHTML.swf successfully.
+Moved fmc/IdentifyResultsHTML.xml successfully.
 
 ---------------------------------------------------------------------------
-Compiling ../fmc/Container.fla
+Compiling fmc/Image.fla
 ---------------------------------------------------------------------------
 
-Compiled ../fmc/Container.fla successfully.
-Moved ../fmc/Container.swf to ../swfs/fmc/Container.swf successfully.
-Moved ../fmc/Container.xml successfully.
+Moved fmc/Image.swf successfully.
+Moved fmc/Image.xml successfully.
 
 ---------------------------------------------------------------------------
-Compiling ../fmc/Coordinates.fla
+Compiling fmc/LanguagePicker.fla
 ---------------------------------------------------------------------------
 
-Compiled ../fmc/Coordinates.fla successfully.
-Moved ../fmc/Coordinates.swf to ../swfs/fmc/Coordinates.swf successfully.
-Moved ../fmc/Coordinates.xml successfully.
+Moved fmc/LanguagePicker.swf successfully.
+Moved fmc/LanguagePicker.xml successfully.
 
 ---------------------------------------------------------------------------
-Compiling ../fmc/CursorsMap.fla
+Compiling fmc/LayerArcIMS.fla
 ---------------------------------------------------------------------------
 
-Compiled ../fmc/CursorsMap.fla successfully.
-Moved ../fmc/CursorsMap.swf to ../swfs/fmc/CursorsMap.swf successfully.
->> ERROR: File was not moved correctly: ../fmc/CursorsMap.xml
+Moved fmc/LayerArcIMS.swf successfully.
+Moved fmc/LayerArcIMS.xml successfully.
 
 ---------------------------------------------------------------------------
-Compiling ../fmc/CursorsWindow.fla
+Compiling fmc/LayerGrid.fla
 ---------------------------------------------------------------------------
 
-Compiled ../fmc/CursorsWindow.fla successfully.
-Moved ../fmc/CursorsWindow.swf to ../swfs/fmc/CursorsWindow.swf successfully.
->> ERROR: File was not moved correctly: ../fmc/CursorsWindow.xml
+Moved fmc/LayerGrid.swf successfully.
+Moved fmc/LayerGrid.xml successfully.
 
 ---------------------------------------------------------------------------
-Compiling ../fmc/Debugger.fla
+Compiling fmc/LayerIdentifyIcon.fla
 ---------------------------------------------------------------------------
 
-Compiled ../fmc/Debugger.fla successfully.
-Moved ../fmc/Debugger.swf to ../swfs/fmc/Debugger.swf successfully.
-Moved ../fmc/Debugger.xml successfully.
+Moved fmc/LayerIdentifyIcon.swf successfully.
+Moved fmc/LayerIdentifyIcon.xml successfully.
 
 ---------------------------------------------------------------------------
-Compiling ../fmc/IdentifyResults.fla
+Compiling fmc/LayerImage.fla
 ---------------------------------------------------------------------------
 
-Compiled ../fmc/IdentifyResults.fla successfully.
-Moved ../fmc/IdentifyResults.swf to ../swfs/fmc/IdentifyResults.swf successfully.
-Moved ../fmc/IdentifyResults.xml successfully.
+Moved fmc/LayerImage.swf successfully.
+Moved fmc/LayerImage.xml successfully.
 
 ---------------------------------------------------------------------------
-Compiling ../fmc/IdentifyResultsHTML.fla
+Compiling fmc/LayerOGWMS.fla
 ---------------------------------------------------------------------------
-**Error** Scene=Scene 1, layer=Layer 1, frame=1:Error opening include file IdentifyResultsHTML: File not found.
 
-Total ActionScript Errors: 1 	 Reported Errors: 1
+Moved fmc/LayerOGWMS.swf successfully.
+Moved fmc/LayerOGWMS.xml successfully.
 
+---------------------------------------------------------------------------
+Compiling fmc/LayerOverview.fla
+---------------------------------------------------------------------------
 
-Compiled ../fmc/IdentifyResultsHTML.fla successfully.
-Moved ../fmc/IdentifyResultsHTML.swf to ../swfs/fmc/IdentifyResultsHTML.swf successfully.
-Moved ../fmc/IdentifyResultsHTML.xml successfully.
+Moved fmc/LayerOverview.swf successfully.
+Moved fmc/LayerOverview.xml successfully.
 
 ---------------------------------------------------------------------------
-Compiling ../fmc/Image.fla
+Compiling fmc/Legend.fla
 ---------------------------------------------------------------------------
 
-Compiled ../fmc/Image.fla successfully.
-Moved ../fmc/Image.swf to ../swfs/fmc/Image.swf successfully.
-Moved ../fmc/Image.xml successfully.
+Moved fmc/Legend.swf successfully.
+Moved fmc/Legend.xml successfully.
 
 ---------------------------------------------------------------------------
-Compiling ../fmc/LanguagePicker.fla
+Compiling fmc/LocationFinder.fla
 ---------------------------------------------------------------------------
 
-Compiled ../fmc/LanguagePicker.fla successfully.
-Moved ../fmc/LanguagePicker.swf to ../swfs/fmc/LanguagePicker.swf successfully.
-Moved ../fmc/LanguagePicker.xml successfully.
+Moved fmc/LocationFinder.swf successfully.
+Moved fmc/LocationFinder.xml successfully.
 
 ---------------------------------------------------------------------------
-Compiling ../fmc/LayerArcIMS.fla
+Compiling fmc/Logo.fla
 ---------------------------------------------------------------------------
 
-Compiled ../fmc/LayerArcIMS.fla successfully.
-Moved ../fmc/LayerArcIMS.swf to ../swfs/fmc/LayerArcIMS.swf successfully.
-Moved ../fmc/LayerArcIMS.xml successfully.
+Moved fmc/Logo.swf successfully.
+Moved fmc/Logo.xml successfully.
 
 ---------------------------------------------------------------------------
-Compiling ../fmc/LayerGrid.fla
+Compiling fmc/LogoRiscMap.fla
 ---------------------------------------------------------------------------
 
-Compiled ../fmc/LayerGrid.fla successfully.
-Moved ../fmc/LayerGrid.swf to ../swfs/fmc/LayerGrid.swf successfully.
-Moved ../fmc/LayerGrid.xml successfully.
+Moved fmc/LogoRiscMap.swf successfully.
+>> ERROR: File was not moved correctly: fmc/LogoRiscMap.xml
 
 ---------------------------------------------------------------------------
-Compiling ../fmc/LayerIdentifyIcon.fla
+Compiling fmc/Map.fla
 ---------------------------------------------------------------------------
 
-Compiled ../fmc/LayerIdentifyIcon.fla successfully.
-Moved ../fmc/LayerIdentifyIcon.swf to ../swfs/fmc/LayerIdentifyIcon.swf successfully.
-Moved ../fmc/LayerIdentifyIcon.xml successfully.
+Moved fmc/Map.swf successfully.
+Moved fmc/Map.xml successfully.
 
 ---------------------------------------------------------------------------
-Compiling ../fmc/LayerImage.fla
+Compiling fmc/Maptip.fla
 ---------------------------------------------------------------------------
 
-Compiled ../fmc/LayerImage.fla successfully.
-Moved ../fmc/LayerImage.swf to ../swfs/fmc/LayerImage.swf successfully.
-Moved ../fmc/LayerImage.xml successfully.
+Moved fmc/Maptip.swf successfully.
+Moved fmc/Maptip.xml successfully.
 
 ---------------------------------------------------------------------------
-Compiling ../fmc/LayerOGWMS.fla
+Compiling fmc/MonitorLayer.fla
 ---------------------------------------------------------------------------
 
-Compiled ../fmc/LayerOGWMS.fla successfully.
-Moved ../fmc/LayerOGWMS.swf to ../swfs/fmc/LayerOGWMS.swf successfully.
-Moved ../fmc/LayerOGWMS.xml successfully.
+Moved fmc/MonitorLayer.swf successfully.
+Moved fmc/MonitorLayer.xml successfully.
 
 ---------------------------------------------------------------------------
-Compiling ../fmc/LayerOverview.fla
+Compiling fmc/MonitorMap.fla
 ---------------------------------------------------------------------------
 
-Compiled ../fmc/LayerOverview.fla successfully.
-Moved ../fmc/LayerOverview.swf to ../swfs/fmc/LayerOverview.swf successfully.
-Moved ../fmc/LayerOverview.xml successfully.
+Moved fmc/MonitorMap.swf successfully.
+Moved fmc/MonitorMap.xml successfully.
 
 ---------------------------------------------------------------------------
-Compiling ../fmc/Legend.fla
+Compiling fmc/NamedExtentViewer.fla
 ---------------------------------------------------------------------------
 
-Compiled ../fmc/Legend.fla successfully.
-Moved ../fmc/Legend.swf to ../swfs/fmc/Legend.swf successfully.
-Moved ../fmc/Legend.xml successfully.
+Moved fmc/NamedExtentViewer.swf successfully.
+Moved fmc/NamedExtentViewer.xml successfully.
 
 ---------------------------------------------------------------------------
-Compiling ../fmc/LocationFinder.fla
+Compiling fmc/Scalebar.fla
 ---------------------------------------------------------------------------
 
-Compiled ../fmc/LocationFinder.fla successfully.
-Moved ../fmc/LocationFinder.swf to ../swfs/fmc/LocationFinder.swf successfully.
-Moved ../fmc/LocationFinder.xml successfully.
+Moved fmc/Scalebar.swf successfully.
+Moved fmc/Scalebar.xml successfully.
 
 ---------------------------------------------------------------------------
-Compiling ../fmc/Logo.fla
+Compiling fmc/Text.fla
 ---------------------------------------------------------------------------
 
-Compiled ../fmc/Logo.fla successfully.
-Moved ../fmc/Logo.swf to ../swfs/fmc/Logo.swf successfully.
-Moved ../fmc/Logo.xml successfully.
+Moved fmc/Text.swf successfully.
+Moved fmc/Text.xml successfully.
 
 ---------------------------------------------------------------------------
-Compiling ../fmc/LogoRiscMap.fla
+Compiling fmc/TextArea.fla
 ---------------------------------------------------------------------------
 
-Compiled ../fmc/LogoRiscMap.fla successfully.
-Moved ../fmc/LogoRiscMap.swf to ../swfs/fmc/LogoRiscMap.swf successfully.
->> ERROR: File was not moved correctly: ../fmc/LogoRiscMap.xml
+Moved fmc/TextArea.swf successfully.
+Moved fmc/TextArea.xml successfully.
 
 ---------------------------------------------------------------------------
-Compiling ../fmc/Map.fla
+Compiling fmc/ToolGroup.fla
 ---------------------------------------------------------------------------
 
-Compiled ../fmc/Map.fla successfully.
-Moved ../fmc/Map.swf to ../swfs/fmc/Map.swf successfully.
-Moved ../fmc/Map.xml successfully.
+Moved fmc/ToolGroup.swf successfully.
+Moved fmc/ToolGroup.xml successfully.
 
 ---------------------------------------------------------------------------
-Compiling ../fmc/Maptip.fla
+Compiling fmc/ToolIdentify.fla
 ---------------------------------------------------------------------------
 
-Compiled ../fmc/Maptip.fla successfully.
-Moved ../fmc/Maptip.swf to ../swfs/fmc/Maptip.swf successfully.
-Moved ../fmc/Maptip.xml successfully.
+Moved fmc/ToolIdentify.swf successfully.
+Moved fmc/ToolIdentify.xml successfully.
 
 ---------------------------------------------------------------------------
-Compiling ../fmc/MonitorLayer.fla
+Compiling fmc/ToolMeasure.fla
 ---------------------------------------------------------------------------
 
-Compiled ../fmc/MonitorLayer.fla successfully.
-Moved ../fmc/MonitorLayer.swf to ../swfs/fmc/MonitorLayer.swf successfully.
-Moved ../fmc/MonitorLayer.xml successfully.
+Moved fmc/ToolMeasure.swf successfully.
+Moved fmc/ToolMeasure.xml successfully.
 
 ---------------------------------------------------------------------------
-Compiling ../fmc/MonitorMap.fla
+Compiling fmc/ToolPan.fla
 ---------------------------------------------------------------------------
 
-Compiled ../fmc/MonitorMap.fla successfully.
-Moved ../fmc/MonitorMap.swf to ../swfs/fmc/MonitorMap.swf successfully.
-Moved ../fmc/MonitorMap.xml successfully.
+Moved fmc/ToolPan.swf successfully.
+Moved fmc/ToolPan.xml successfully.
 
 ---------------------------------------------------------------------------
-Compiling ../fmc/NamedExtentViewer.fla
+Compiling fmc/ToolSuperPan.fla
 ---------------------------------------------------------------------------
 
-Compiled ../fmc/NamedExtentViewer.fla successfully.
-Moved ../fmc/NamedExtentViewer.swf to ../swfs/fmc/NamedExtentViewer.swf successfully.
-Moved ../fmc/NamedExtentViewer.xml successfully.
+Moved fmc/ToolSuperPan.swf successfully.
+Moved fmc/ToolSuperPan.xml successfully.
 
 ---------------------------------------------------------------------------
-Compiling ../fmc/Scalebar.fla
+Compiling fmc/ToolZoomin.fla
 ---------------------------------------------------------------------------
 
-Compiled ../fmc/Scalebar.fla successfully.
-Moved ../fmc/Scalebar.swf to ../swfs/fmc/Scalebar.swf successfully.
-Moved ../fmc/Scalebar.xml successfully.
+Moved fmc/ToolZoomin.swf successfully.
+Moved fmc/ToolZoomin.xml successfully.
 
 ---------------------------------------------------------------------------
-Compiling ../fmc/Text.fla
+Compiling fmc/ToolZoomOut.fla
 ---------------------------------------------------------------------------
 
-Compiled ../fmc/Text.fla successfully.
-Moved ../fmc/Text.swf to ../swfs/fmc/Text.swf successfully.
-Moved ../fmc/Text.xml successfully.
+Moved fmc/ToolZoomOut.swf successfully.
+Moved fmc/ToolZoomOut.xml successfully.
 
 ---------------------------------------------------------------------------
-Compiling ../fmc/TextArea.fla
+Compiling fmc/Window.fla
 ---------------------------------------------------------------------------
 
-Compiled ../fmc/TextArea.fla successfully.
-Moved ../fmc/TextArea.swf to ../swfs/fmc/TextArea.swf successfully.
-Moved ../fmc/TextArea.xml successfully.
+Moved fmc/Window.swf successfully.
+Moved fmc/Window.xml successfully.
 
 ---------------------------------------------------------------------------
-Compiling ../fmc/ToolGroup.fla
+Compiling fmc/ZoomerV.fla
 ---------------------------------------------------------------------------
 
-Compiled ../fmc/ToolGroup.fla successfully.
-Moved ../fmc/ToolGroup.swf to ../swfs/fmc/ToolGroup.swf successfully.
-Moved ../fmc/ToolGroup.xml successfully.
+Moved fmc/ZoomerV.swf successfully.
+Moved fmc/ZoomerV.xml successfully.
 
 ---------------------------------------------------------------------------
-Compiling ../fmc/ToolIdentify.fla
+Compiling tpc/groenloket/SubsidieInfoPB.fla
 ---------------------------------------------------------------------------
 
-Compiled ../fmc/ToolIdentify.fla successfully.
-Moved ../fmc/ToolIdentify.swf to ../swfs/fmc/ToolIdentify.swf successfully.
-Moved ../fmc/ToolIdentify.xml successfully.
+Moved tpc/groenloket/SubsidieInfoPB.swf successfully.
+Moved tpc/groenloket/SubsidieInfoPB.xml successfully.
 
 ---------------------------------------------------------------------------
-Compiling ../fmc/ToolMeasure.fla
+Compiling tpc/roo/DynamicLegend.fla
 ---------------------------------------------------------------------------
 
-Compiled ../fmc/ToolMeasure.fla successfully.
-Moved ../fmc/ToolMeasure.swf to ../swfs/fmc/ToolMeasure.swf successfully.
-Moved ../fmc/ToolMeasure.xml successfully.
+Moved tpc/roo/DynamicLegend.swf successfully.
+Moved tpc/roo/DynamicLegend.xml successfully.
 
 ---------------------------------------------------------------------------
-Compiling ../fmc/ToolPan.fla
+Compiling tpc/roo/FilterLayer.fla
 ---------------------------------------------------------------------------
 
-Compiled ../fmc/ToolPan.fla successfully.
-Moved ../fmc/ToolPan.swf to ../swfs/fmc/ToolPan.swf successfully.
-Moved ../fmc/ToolPan.xml successfully.
+Moved tpc/roo/FilterLayer.swf successfully.
+Moved tpc/roo/FilterLayer.xml successfully.
 
 ---------------------------------------------------------------------------
-Compiling ../fmc/ToolSuperPan.fla
+Compiling tpc/roo/HighlightLayer.fla
 ---------------------------------------------------------------------------
 
-Compiled ../fmc/ToolSuperPan.fla successfully.
-Moved ../fmc/ToolSuperPan.swf to ../swfs/fmc/ToolSuperPan.swf successfully.
-Moved ../fmc/ToolSuperPan.xml successfully.
+Moved tpc/roo/HighlightLayer.swf successfully.
+Moved tpc/roo/HighlightLayer.xml successfully.
 
 ---------------------------------------------------------------------------
-Compiling ../fmc/ToolZoomin.fla
+Compiling tpc/roo/LayerCheckBox.fla
 ---------------------------------------------------------------------------
 
-Compiled ../fmc/ToolZoomin.fla successfully.
-Moved ../fmc/ToolZoomin.swf to ../swfs/fmc/ToolZoomin.swf successfully.
-Moved ../fmc/ToolZoomin.xml successfully.
+Moved tpc/roo/LayerCheckBox.swf successfully.
+Moved tpc/roo/LayerCheckBox.xml successfully.
 
 ---------------------------------------------------------------------------
-Compiling ../fmc/ToolZoomOut.fla
+Compiling tpc/roo/LayerSwitch.fla
 ---------------------------------------------------------------------------
 
-Compiled ../fmc/ToolZoomOut.fla successfully.
-Moved ../fmc/ToolZoomOut.swf to ../swfs/fmc/ToolZoomOut.swf successfully.
-Moved ../fmc/ToolZoomOut.xml successfully.
+Moved tpc/roo/LayerSwitch.swf successfully.
+Moved tpc/roo/LayerSwitch.xml successfully.
 
 ---------------------------------------------------------------------------
-Compiling ../fmc/Window.fla
+Compiling tpc/roo/Locations.fla
 ---------------------------------------------------------------------------
 
-Compiled ../fmc/Window.fla successfully.
-Moved ../fmc/Window.swf to ../swfs/fmc/Window.swf successfully.
-Moved ../fmc/Window.xml successfully.
+Moved tpc/roo/Locations.swf successfully.
+Moved tpc/roo/Locations.xml successfully.
 
 ---------------------------------------------------------------------------
-Compiling ../fmc/ZoomerV.fla
+Compiling tpc/roo/WindowButton.fla
 ---------------------------------------------------------------------------
+
+Moved tpc/roo/WindowButton.swf successfully.
+Moved tpc/roo/WindowButton.xml successfully.
 
-Compiled ../fmc/ZoomerV.fla successfully.
-Moved ../fmc/ZoomerV.swf to ../swfs/fmc/ZoomerV.swf successfully.
-Moved ../fmc/ZoomerV.xml successfully.
+---------------------------------------------------------------------------
+Compiling 
+---------------------------------------------------------------------------
+>> ERROR: Empty FLA name.

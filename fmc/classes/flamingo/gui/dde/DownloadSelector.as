@@ -1,4 +1,10 @@
-﻿/** @component DownloadSelector
+﻿/*-----------------------------------------------------------------------------
+* This file is part of Flamingo MapComponents.
+* Author: Linda Vels.
+* IDgis bv
+ -----------------------------------------------------------------------------*/
+ 
+/** @component DownloadSelector
 * This component is shown in the Window component of Flamingo and offers an user 
 * interface for configuring and sending an url to download a DDE layer to the client.  
 * @file flamingo/tpc/classes/flamingo/gui/dde/DownloadSelector.as  (sourcefile)
@@ -95,8 +101,7 @@ import mx.controls.ComboBox;
 import mx.controls.TextInput;
 import mx.containers.ScrollPane;
 
-
-
+import flamingo.core.AbstractComponent;
 
 class flamingo.gui.dde.DownloadSelector extends AbstractComponent implements GeometryListener,DDEConnectorListener {
     
@@ -200,15 +205,6 @@ class flamingo.gui.dde.DownloadSelector extends AbstractComponent implements Geo
 		}
 		
     }
-	/*function onHide(window:MovieClip):Void{
-		if(map["mTraceSheet"]!=null){
-			map["mTraceSheet"].removeMovieClip();
-		}
-	}
-	
-	function onShow(window:MovieClip):Void{
-		resetControls();
-	}*/
 
     private function addControls():Void {
 		

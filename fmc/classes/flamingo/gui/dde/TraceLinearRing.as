@@ -1,4 +1,10 @@
-﻿import flamingo.geometrymodel.dde.*;
+﻿/*-----------------------------------------------------------------------------
+* This file is part of Flamingo MapComponents.
+* Author: Linda Vels.
+* IDgis bv
+ -----------------------------------------------------------------------------*/
+
+import flamingo.geometrymodel.dde.*;
 
 class flamingo.gui.dde.TraceLinearRing implements GeometryListener{
 

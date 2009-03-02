@@ -1,5 +1,8 @@
-// This file is part of Flamingo MapComponents.
-// Author: Michiel J. van Heek.
+/*-----------------------------------------------------------------------------
+* This file is part of Flamingo MapComponents.
+* Author: Michiel J. van Heek.
+* IDgis bv
+ -----------------------------------------------------------------------------*/
 
 import flamingo.coremodel.service.*;
 
@@ -40,7 +43,6 @@ class flamingo.coremodel.service.Update extends Operation {
         requestString += "      <ogc:GmlObjectId gml:id=\"" + serviceFeature.getID() + "\"/>\n";
         requestString += "    </ogc:Filter>\n";
         requestString += "  </wfs:Update>\n";
-        
         return requestString;
     }
     

@@ -1,5 +1,8 @@
-﻿// This file is part of Flamingo MapComponents.
-// Author: Michiel J. van Heek.
+﻿/*-----------------------------------------------------------------------------
+* This file is part of Flamingo MapComponents.
+* Author: Michiel J. van Heek.
+* IDgis bv
+ -----------------------------------------------------------------------------*/
 
 
 /** @component BaseButton
@@ -28,6 +31,7 @@ import flamingo.coregui.*;
 
 import flamingo.event.ActionEvent;
 import flamingo.event.ActionEventListener;
+import flamingo.core.AbstractComponent;
 
 class flamingo.coregui.BaseButton extends AbstractComponent {
     
@@ -50,7 +54,12 @@ class flamingo.coregui.BaseButton extends AbstractComponent {
         gotoAndStop(3);
         
         if (actionEventListener != null) {
-            actionEventListener.onActionEvent(new ActionEvent(this, "Button", ActionEvent.CLICK));
+        	var actionEvent:ActionEvent = new ActionEvent(this, "Button", ActionEvent.CLICK);
+            actionEventListener.onActionEvent(actionEvent);
+            var id:String =  _global.flamingo.getComponentID(this);
+            if(id != null){
+            	_global.flamingo.raiseEvent(this,"onActionEvent",id + "," + actionEvent.toString());
+            } 
         } else if (url != null) {
             getURL("javascript:openNewWindow('" + url + "', '" + windowName + "', 'width=500, height=400, top=50, left=50, toolbar=no, resizable=yes, scrollbars=yes')");
         }

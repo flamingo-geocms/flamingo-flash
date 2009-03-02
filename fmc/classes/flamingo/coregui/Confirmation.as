@@ -1,5 +1,8 @@
-﻿// This file is part of Flamingo MapComponents.
-// Author: Michiel J. van Heek.
+﻿/*-----------------------------------------------------------------------------
+* This file is part of Flamingo MapComponents.
+* Author: Michiel J. van Heek.
+* IDgis bv
+ -----------------------------------------------------------------------------*/
 
 /** @component Confirmation
 * A component that pops-up to ask the user for confirmation. It gives the user two options: confirm or deny.
@@ -26,6 +29,7 @@
         <string id="title" en="Confirm" nl="Bevestigen"/>
         <tpc:Confirmation id="confirmation" visible="false" listento="veil,editBar">
             <string id="question" en="Are you sure you want to remove the object?" nl="Weet u zeker dat u het object wilt verwijderen?"/>
+            <string id="yes" en="yes" nl="Ja"/>
             <string id="no" en="Cancel" nl="Annuleren"/>
         </tpc:Confirmation>
     </fmc:Window>
@@ -40,6 +44,8 @@ import flamingo.event.ActionEventListener;
 import mx.controls.Button;
 import mx.controls.Label;
 import mx.utils.Delegate;
+
+import flamingo.core.AbstractComponent;
 
 class flamingo.coregui.Confirmation extends AbstractComponent {
     
@@ -84,7 +90,12 @@ class flamingo.coregui.Confirmation extends AbstractComponent {
     function onClickYesButton(eventObject:Object):Void {
         setVisible(false);
         
-        actionEventListener.onActionEvent(new ActionEvent(this, "Confirmation", ActionEvent.CLICK));
+        var actionEvent:ActionEvent = new ActionEvent(this, "Confirmation", ActionEvent.CLICK);
+        actionEventListener.onActionEvent(actionEvent);
+        var id:String =  _global.flamingo.getComponentID(this);
+            if(id != null){
+        		_global.flamingo.raiseEvent(this,"onActionEvent",id + "," + actionEvent.toString());
+            }
     }
     
     function onClickNoButton(eventObject:Object):Void {

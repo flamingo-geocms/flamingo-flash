@@ -1,4 +1,10 @@
-﻿import mx.utils.Delegate;
+﻿/*-----------------------------------------------------------------------------
+* This file is part of Flamingo MapComponents.
+* Author: Linda Vels.
+* IDgis bv
+ -----------------------------------------------------------------------------*/
+ 
+import mx.utils.Delegate;
 import flamingo.geometrymodel.dde.*;
 import flamingo.gui.dde.*;
 

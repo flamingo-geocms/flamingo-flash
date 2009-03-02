@@ -1,11 +1,16 @@
-// This file is part of Flamingo MapComponents.
-// Author: Michiel J. van Heek.
+/*-----------------------------------------------------------------------------
+* This file is part of Flamingo MapComponents.
+* Author: Michiel J. van Heek.
+* IDgis bv
+ -----------------------------------------------------------------------------*/
 
 import flamingo.gui.*;
 
 import flash.geom.Rectangle;
 import mx.controls.UIScrollBar;
 import mx.utils.Delegate;
+
+import flamingo.core.AbstractContainer;
 
 class flamingo.gui.ScalableContainer extends AbstractContainer {
     
@@ -17,6 +22,7 @@ class flamingo.gui.ScalableContainer extends AbstractContainer {
     private var vertiScrollBar:UIScrollBar = null;
     
     function setScale(scale:Number):Void {
+    	
         if (this.scale == scale) {
             return;
         }

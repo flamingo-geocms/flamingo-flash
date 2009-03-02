@@ -1,4 +1,10 @@
-﻿/** @component LayerProxy
+﻿/*-----------------------------------------------------------------------------
+* This file is part of Flamingo MapComponents.
+* Author: Linda Vels.
+* IDgis bv
+ -----------------------------------------------------------------------------*/
+ 
+/** @component LayerProxy
 * The LayerProxy is a proxy for a Layer component (LayerOGCWMS or LayerArcIMS) which is located in a map in a different instance of the flamingo viewer.
 * All (common) public methods of the LayerOGCWMS or LayerArcIMS component are implemented 
 * @file LayerProxy.as  (sourcefile)
@@ -17,6 +23,8 @@
 import flamingo.proxys.*;
 
 import flash.external.ExternalInterface;
+
+import flamingo.core.AbstractComponent;
 
 class flamingo.proxys.LayerProxy extends AbstractComponent {
 	var version:String = "1.0";

@@ -10,6 +10,29 @@
 	var responsetime:Number;
 	var response:String
 	var error:String;
+
+	private var capService:Object = null;
+	private var capLayers:Object = null;
+	private var capObj:Object = null;
+	private var capReqid:Number = 0;
+	private var instanceId:Number = 0;
+	
+	static private var instances:Array = new Array();
+	
+	static function getInstance(url:String):OGWMSConnector {
+		var instance:OGWMSConnector = null;
+		//_global.flamingo.tracer("getInstance, url = " + url);
+		for (var i:String in instances) {
+		    instance = OGWMSConnector(instances[i]);
+		    //_global.flamingo.tracer("instance.getCapUrl() = " + instance.getCapUrl());
+		    if (instance.getCapUrl() == url) {
+		        return instance;
+		    }
+		}
+		instance = new OGWMSConnector(url, instances.length);
+		instances.push(instance);
+		return instance;
+	}
 	
 	//-----------------------------------
 	function addListener(listener:Object) {
@@ -18,17 +41,28 @@
 	function removeListener(listener:Object) {
 		events.removeListener(listener);
 	}
-	function OGWMSConnector(server:String) {
-		
+
+	function OGWMSConnector(capUrl:String, id:Number) {
+		this.capUrl = capUrl;
+		this.instanceId = id;
 		events = new Object();
 		AsBroadcaster.initialize(events);
 	}
-	function getCapabilities(url:String, args:Object, obj:Object):Number {
-		if (args == undefined) {
-			var args:Object = new Object();
-		}
-		args.REQUEST = "GetCapabilities";
-		return (this._request(url, args, obj));
+	
+	function getCapUrl():String {
+	  return this.capUrl;
+	}
+
+	function getCapabilities(url:String, args:Object, responseHandler:Object):Number {
+		if (this.capService == null && !this.busy) {
+    		if (args == undefined) {
+    			var args:Object = new Object();
+    		}
+    		args.REQUEST = "GetCapabilities";
+    		return (this._request(url, args, null));
+    } else if (!this.busy) {
+		    responseHandler.onGetCapabilities(this.capService, this.capLayers, this.capObj, this.capReqid);
+    }
 	}
 	function getMap(url:String, args:Object, obj:Object):Number {
 		if (args == undefined) {
@@ -249,20 +283,7 @@
 				} else {
 					//DEEGREE/GEOSERVER
 					layer = xfirstnode.localName;
-					var xfields:Array = xfirstnode.childNodes;
-					for (var j:Number = 0; j<xfields.length; j++) {
-						if ( xfields[j].nodeName.toLowerCase() == "gml:boundedby"){
-							continue
-						}
-						
-						
-						var val = xfields[j].firstChild.nodeValue;
-						
-						if (val == undefined) {
-							val = "";
-						}
-						feature[xfields[j].localName] = val;
-					}
+					feature = parseFeature(xfirstnode);
 				}
 				if (features[layer] == undefined) {
 					features[layer] = new Array();
@@ -273,6 +294,39 @@
 		}
 		this.events.broadcastMessage("onGetFeatureInfo", features, obj, reqid);
 	}
+	
+	private function parseFeature(xmlNode:XMLNode):Object {
+		if ((xmlNode.nodeName == "gml:boundedBy") || (xmlNode.nodeName == "gml:MultiSurface")
+							  || (xmlNode.nodeName == "gml:MultiLineString")
+							  || (xmlNode.nodeName == "gml:MultiPoint")
+							  || (xmlNode.nodeName == "gml:Surface")
+							  || (xmlNode.nodeName == "gml:LineString")
+							  || (xmlNode.nodeName == "gml:Point")) {
+			return null;
+		}
+		
+		var object:Object = new Object();
+		if (xmlNode.firstChild.attributes["gml:id"] != null) {
+			object["featureCollection"] = "true";
+		}
+		
+		var childNode:XMLNode = null;
+		var value:Object = null;
+		for (var i:Number = 0; i < xmlNode.childNodes.length; i++) {
+			childNode = xmlNode.childNodes[i];
+			if (childNode.firstChild.nodeType == 1) {
+				value = parseFeature(childNode);
+			} else {
+				value = childNode.firstChild.nodeValue;
+			}
+			if (value == null) {
+				value = "";
+			}
+			object[childNode.localName] = value;
+		}
+		return object;
+	}
+	
 	private function _process_msGMLOutput(xml:XML, obj, reqid) {
 		//Mapserver's output format
 		var features:Object = new Object();
@@ -341,6 +395,10 @@
 				break;
 			}
 		}
+		this.capService = service;
+		this.capLayers = layers;
+		this.capObj = obj;
+		this.capReqid = reqid;
 		this.events.broadcastMessage("onGetCapabilities", service, layers, obj, reqid);
 	}
 	private function _getLayers(xml:XML, layers:Object):Object {

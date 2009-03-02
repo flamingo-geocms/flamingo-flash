@@ -1,5 +1,8 @@
-﻿// This file is part of Flamingo MapComponents.
-// Author: Michiel J. van Heek.
+﻿/*-----------------------------------------------------------------------------
+* This file is part of Flamingo MapComponents.
+* Author: Michiel J. van Heek.
+* IDgis bv
+ -----------------------------------------------------------------------------*/
 
 
 
@@ -7,11 +10,11 @@
 * A container that holds the commit button. 
 * Flamingo has two buttons used for editing: the remove feature button, which removes the active feature from the feature model, 
 * and the commit button, which commits the changes made within the feature model to the server. Please refer to the GIS component.
+* The CommitButton is an instance of BaseButton
+* The RemoveFeatureButton is an instance of ComponentVisibleButton
 * @file flamingo/tpc/classes/flamingo/gui/EditBar.as  (sourcefile)
 * @file flamingo/tpc/EditBar.fla (sourcefile)
 * @file flamingo/tpc/EditBar.swf (compiled component, needed for publication on internet)
-* @file flamingo/tpc/CommitButton.fla (sourcefile)
-* @file flamingo/tpc/CommitButton.swf (compiled component, needed for publication on internet)
 */
 
 /** @tag <tpc:EditBar>
@@ -32,6 +35,7 @@ import flamingo.gui.*;
 import flamingo.event.ActionEvent;
 import flamingo.event.ActionEventListener;
 import flamingo.gismodel.GIS;
+import flamingo.core.AbstractContainer;
 
 class flamingo.gui.EditBar extends AbstractContainer implements ActionEventListener {
     

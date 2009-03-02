@@ -1,16 +1,21 @@
-// This file is part of Flamingo MapComponents.
-// Author: Michiel J. van Heek.
-
+/*-----------------------------------------------------------------------------
+* This file is part of Flamingo MapComponents.
+* Author: Michiel J. van Heek.
+* IDgis bv
+ -----------------------------------------------------------------------------*/
 import flamingo.geometrymodel.*;
+import flamingo.gismodel.GIS;
 
 import flamingo.event.StateEvent;
 import flamingo.event.StateEventListener;
 import flamingo.event.StateEventDispatcher;
+import flamingo.core.AbstractComponent;
 
 class flamingo.geometrymodel.Geometry {
     
     private var stateEventDispatcher:StateEventDispatcher = null;
     private var parent:Geometry = null;
+    private var eventComp:AbstractComponent = null;
     
     function Geometry() {
         stateEventDispatcher = new StateEventDispatcher();
@@ -130,6 +135,9 @@ class flamingo.geometrymodel.Geometry {
         if (parent != null) {
             parent.dispatchEvent(stateEvent);
         }
-    }
-    
+	}
+	
+	public function setEventComp(gis : GIS) : Void {
+		this.eventComp = gis;
+	}
 }

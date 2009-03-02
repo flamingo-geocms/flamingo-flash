@@ -1,5 +1,8 @@
-﻿// This file is part of Flamingo MapComponents.
-// Author: Michiel J. van Heek.
+﻿/*-----------------------------------------------------------------------------
+* This file is part of Flamingo MapComponents.
+* Author: Michiel J. van Heek.
+* IDgis bv
+ -----------------------------------------------------------------------------*/
 
 /** @component Print 
 * A user interface component intended to prepair a map and/or other components to be sent to a printer. 
@@ -74,6 +77,8 @@ import mx.controls.ComboBox;
 import mx.controls.Label;
 import mx.utils.Delegate;
 import flash.geom.Matrix;
+
+import flamingo.core.AbstractContainer;
 
 class flamingo.gui.Print extends AbstractContainer {
     
@@ -346,7 +351,6 @@ class flamingo.gui.Print extends AbstractContainer {
         var printJob:PrintJob = new PrintJob();
         if (printJob.start()) {
             var printPage:MovieClip = currentPrintTemplate.getContentPane();
-            
             if (currentPrintTemplate.getOrientation() != printJob.orientation) {
                 _global.flamingo.showError("Orientation Error", "The chosen printer orientation is " + printJob.orientation + ", whereas the template orientation is " + currentPrintTemplate.getOrientation() + ".");
                 delete printJob;
