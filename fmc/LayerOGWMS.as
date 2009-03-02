@@ -384,6 +384,10 @@ function setConfig(xml:Object) {
 			args[attr.toUpperCase()] = this.attributes[attr];
 		}
 	}
+	//set the service param if not set.
+	if (args.SERVICE==undefined){
+		args.SERVICE="WMS";
+	}
 	cogwms.getCapabilities(this.getcapabilitiesurl, args, lConn);
 }
 /**
