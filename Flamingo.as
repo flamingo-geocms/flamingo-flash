@@ -2747,6 +2747,7 @@ class Flamingo {
 			return;
 		}
 		if (id.toLowerCase() == "flamingo") {
+			
 			if (this[method] == undefined) {
 				return;
 			}
@@ -2760,7 +2761,7 @@ class Flamingo {
 			if (func == undefined) {
 				return;
 			}
-			var r = func.apply(eval(comp), arguments[0]);
+			var r = func.apply(eval(comp), arguments);
 			if (typeof (r) == "movieclip") {
 				r = this.getId(r);
 			}
