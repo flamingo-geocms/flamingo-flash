@@ -44,9 +44,12 @@ lMap.onIdentify = function(map:MovieClip, extent:Object) {
 	textinfo = "";
 };
 lMap.onIdentifyProgress = function(map:MovieClip, layersindentified:Number, layerstotal:Number, sublayersindentified:Number, sublayerstotal:Number) {
-	var p:String = String(Math.round(sublayersindentified/sublayerstotal*100));
-	if (isNaN(p)) {
-		p = "0";
+	var p:String="0";
+	if (sublayerstotal!=0){		
+		p = String(Math.round(sublayersindentified/sublayerstotal*100));
+		if (isNaN(p)) {
+			p = "0";
+		}
 	}
 	var s = flamingo.getString(thisObj, "identify", "identify progress [progress]%");
 	s = s.split("[progress]").join(p);
