@@ -1,4 +1,4 @@
-﻿/*-----------------------------------------------------------------------------
+/*-----------------------------------------------------------------------------
 Copyright (C) 2006  Menko Kroeske
 
 This file is part of Flamingo MapComponents.
@@ -93,7 +93,7 @@ lMap.onStopMove = function(map:MovieClip) {
 		update();
 	}
 };
-flamingo.addListener(lMap, flamingo.getParent(this));
+flamingo.addListener(lMap, flamingo.getParent(this),this);
 //---------------------------------
 init();
 //-------------------------

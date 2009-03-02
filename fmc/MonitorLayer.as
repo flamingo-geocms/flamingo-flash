@@ -1,4 +1,4 @@
-﻿/*-----------------------------------------------------------------------------
+/*-----------------------------------------------------------------------------
 Copyright (C) 2006  Menko Kroeske
 
 This file is part of Flamingo MapComponents.
@@ -30,6 +30,7 @@ var version:String = "2.0";
 //-------------------------------
 var monitorobjects:Object = new Object();
 var skin:String = "";
+var thisObj = this;
 //---------------------------------
 var lLayer:Object = new Object();
 lLayer.onUpdate = function(layer:MovieClip) {
@@ -64,7 +65,7 @@ lLayer.onUpdateComplete = function(layer:MovieClip) {
 //---------------------------------------
 var lMap:Object = new Object();
 lMap.onAddLayer = function(map:MovieClip, layer:MovieClip) {
-	flamingo.addListener(lLayer, layer);
+	flamingo.addListener(lLayer, layer,thisObj);
 };
 //---------------------------------------
 var lParent:Object = new Object();

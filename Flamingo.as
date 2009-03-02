@@ -2019,7 +2019,7 @@ class Flamingo {
 			switch (typeof (listento)) {
 			case "object" :
 				for (var i = 0; i<listento.length; i++) {
-					this.addListener(listener, listento[i]);
+					this.addListener(listener, listento[i],caller);
 				}
 				return;
 				break;

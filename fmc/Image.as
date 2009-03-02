@@ -1,4 +1,4 @@
-﻿/*-----------------------------------------------------------------------------
+/*-----------------------------------------------------------------------------
 Copyright (C) 2006  Menko Kroeske
 
 This file is part of Flamingo MapComponents.
@@ -42,7 +42,7 @@ var lParent = new Object();
 lParent.onResize = function(mc:MovieClip) {
 	resize();
 };
-flamingo.addListener(lParent, flamingo.getParent(this));
+flamingo.addListener(lParent, flamingo.getParent(this),this);
 var lFlamingo:Object = new Object();
 lFlamingo.onConfigComplete = function() {
 	//deal with arguments
