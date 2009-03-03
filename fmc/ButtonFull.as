@@ -46,6 +46,8 @@ init();
 * @hierarchy childnode of <flamingo> or a container component. e.g. <fmc:Window>
 * @example <fmc:ButtonFull   right="50% 200" top="71" listento="map"/>
 * @attr skin (defaultvalue = "") Skin of the button. No skins available at this moment.
+* @attr extent (no defaultvalue) If value is 'initial' the ButtonFull zooms to the (for the Map configured) 
+* (initial) extent instead of the fullextent.
 */
 function init():Void {
 	if (flamingo == undefined) {
