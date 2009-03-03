@@ -332,7 +332,7 @@ dynamic class Map extends MovieClip {
 		if (flamingo.getType(this).toLowerCase() != xml.localName.toLowerCase()) {
 			return;
 		}
-		var clearlayers = false;
+		clearlayers = false;
 		//load default attributes, strings, styles and cursors 
 		flamingo.parseXML(this, xml);
 	
