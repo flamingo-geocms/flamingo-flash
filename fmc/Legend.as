@@ -22,6 +22,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 * @file Legend.fla (sourcefile)
 * @file legend.swf (compiled component, needed for publication on internet)
 * @file legend.xml (configurationfile, needed for publication on internet)
+* @change	2009-03-04 NEW attribute stickylabel for tag <item>
 * @configstring outofscale String showed when layer is visible, but the mapextent is not in the layer's scalerange.
 * @configstyle .group Fontsyle of group.
 * @configstyle .group_mouseover Fontstyle of group when the mouse hoovers over the group.
@@ -289,7 +290,7 @@ function parseCustomAttr(xml:Object){
 /** @tag <item>  
 * This tag defines an item. An item listens to 1 or more maplayers and responds on their state. An item can contain 1 or more symbols.
 * If an item is invisible, the symbols are hidden. When an item is out of scale, the out of scale string is visible.
-* @hierarchy childnode of <fmc:Legend> or <group>
+* @hierarchy childnode of <fmc:Legend> or <group> 
 * @example
 <item label="Coastlines"  listento="OG3.Coastlines" canhide="true">
  <string id="label" en="Coastlines" nl="Kust"/>
