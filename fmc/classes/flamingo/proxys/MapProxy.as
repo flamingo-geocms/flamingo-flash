@@ -12,7 +12,7 @@
 * @file MapProxy.swf (compiled Map, needed for publication on internet)
 */
 
-/** @tag <tpc:MapProxy>  
+/** @tag <fmc:MapProxy>  
 * This tag defines a mapProxy.
 * @attr id The id should be the same as the id of the map component for which this component serves as a proxy. 
 * @attr instanceId should be the same as the name of the flamingo instance(FlashObject in html) of the map component for which this component serves as a proxy.

@@ -11,13 +11,13 @@
 * Zoom and pan events in Flamingo's “main map” reflect on the first map in the template. 
 * Identify events also reflect on the first map in the template, provided that the map is configured to handle identifies, 
 * for example with an identify icon or with an identify results component that listens to the template's map.
-* @file flamingo/tpc/classes/flamingo/gui/PrintTemplate.as  (sourcefile)
-* @file flamingo/tpc/PrintTemplate.fla (sourcefile)
-* @file flamingo/tpc/PrintTemplate.swf (compiled component, needed for publication on internet)
+* @file flamingo/fmc/classes/flamingo/gui/PrintTemplate.as  (sourcefile)
+* @file flamingo/fmc/PrintTemplate.fla (sourcefile)
+* @file flamingo/fmc/PrintTemplate.swf (compiled component, needed for publication on internet)
 */
 
 
-/** @tag <tpc:PrintTemplate> 
+/** @tag <fmc:PrintTemplate> 
 * This tag defines a print template. A print template is a container and as such can hold child components, for example a map. 
 * Configuration of the child components is as usual in Flamingo. 
 * The legend component and the map component can both be configured in two ways now: direct and indirect. 
@@ -32,17 +32,17 @@
 * @class flamingo.gui.PrintTemplate extends flamingo.gui.ScalableContainer
 * @hierarchy child node of Print. 
 * @example
-	<tpc:Print id="print" width="100%" height="100%" visible="false"  borderwidth="0" listento="map">
+	<fmc:Print id="print" width="100%" height="100%" visible="false"  borderwidth="0" listento="map">
 		...
-		<tpc:PrintTemplate id="printTemplate1" name="verticaal A4" dpi="144" format="A4" orientation="portrait"
+		<fmc:PrintTemplate id="printTemplate1" name="verticaal A4" dpi="144" format="A4" orientation="portrait"
 			listento="printMonitor1" maps="printMap1">
 			<fmc:Map id="printMap1" name="kaartbeeld" width="100%" height="100%" movequality="HIGH" configobject="map"/>
-			<tpc:EditMap id="editMap2" name="redlining"  width="100%" height="100%"  listento="gis,printMap1" editable="false"/>
-			<tpc:BitmapClone name="legenda" width="30%" height="25%" listento="legend" refreshrate="2500"/>
-			<tpc:BitmapClone name="identify resultaten" width="40%" height="30%" right="right" listento="identify" refreshrate="2500"/>
-			<tpc:PrintLabel name="identifylabel" top="0" width="40%" right="right"  text="Identify resultaten" fontfamily="arial" fontsize="18"/>
-		</tpc:PrintTemplate>
-	</tpc:Print>	
+			<fmc:EditMap id="editMap2" name="redlining"  width="100%" height="100%"  listento="gis,printMap1" editable="false"/>
+			<fmc:BitmapClone name="legenda" width="30%" height="25%" listento="legend" refreshrate="2500"/>
+			<fmc:BitmapClone name="identify resultaten" width="40%" height="30%" right="right" listento="identify" refreshrate="2500"/>
+			<fmc:PrintLabel name="identifylabel" top="0" width="40%" right="right"  text="Identify resultaten" fontfamily="arial" fontsize="18"/>
+		</fmc:PrintTemplate>
+	</fmc:Print>	
 * @attr dpi (default value = “72”, max value = "144") Resolution in which the template is intended to be sent to the printer. In dots per inch. 
 * Raising the resolution will improve the print quality but it may also show more a more detailed map than one might expect.
 * @attr format (“A3”, “A4”, no default value) Paper format to which the template is intended to be printed.

@@ -6,14 +6,14 @@
 
 /** @component ComponentVisibleButton
 * A button intended to toggle the visibility of a certain component.
-* @file flamingo/tpc/classes/flamingo/coregui/ComponentVisibleButton.as  (sourcefile)
-* @file flamingo/tpc/PrintButton.fla  (sourcefile)
-* @file flamingo/tpc/PrintButton.swf (compiled component, needed for publication on internet)
-* @file flamingo/tpc/RemoveFeatureButton.fla  (sourcefile)
-* @file flamingo/tpc/RemoveFeatureButton.swf (compiled component, needed for publication on internet)
+* @file flamingo/fmc/classes/flamingo/coregui/ComponentVisibleButton.as  (sourcefile)
+* @file flamingo/fmc/PrintButton.fla  (sourcefile)
+* @file flamingo/fmc/PrintButton.swf (compiled component, needed for publication on internet)
+* @file flamingo/fmc/RemoveFeatureButton.fla  (sourcefile)
+* @file flamingo/fmc/RemoveFeatureButton.swf (compiled component, needed for publication on internet)
 */
 
-/** @tag <tpc:PrintButton>
+/** @tag <fmc:PrintButton>
 * This tag defines a component visible button instance for the Print Component. 
 * A component visible button listens to the component of which it controls the visibility. 
 * If that component extends AbstractComponent and it is placed in a window, then the component visible button controls the window's visibility, too. 
@@ -23,14 +23,14 @@
 * @example
 	<Flamingo>
 		...
-		<tpc:PrintButton left="570" top="5" listento="print">
+		<fmc:PrintButton left="570" top="5" listento="print">
         	<string id="tooltip" en="open/ close the print window" nl="printvenster openen/ sluiten"/>
-    	</tpc:PrintButton>
+    	</fmc:PrintButton>
 		...
 	</Flamingo>	
 */
 
-/** @tag <tpc:RemoveFeatureButton>
+/** @tag <fmc:RemoveFeatureButton>
 * This tag defines a remove feature button instance (i.e. a component visible button instance for the Confirmation Component) 
 * The remove feature button must be registered as a listener to a confirmation component. 
 * As a component visible button, a click on it makes the confirmation component pop-up. 
@@ -41,9 +41,9 @@
 * @example
 	<Flamingo>
 		...
-		<tpc:RemoveFeatureButton left="493" top="4" listento="confirmation">
+		<fmc:RemoveFeatureButton left="493" top="4" listento="confirmation">
         	<string id="tooltip" en="remove object" nl="object verwijderen"/>
-    	</tpc:RemoveFeatureButton>
+    	</fmc:RemoveFeatureButton>
 		...
 	</Flamingo>	
 */

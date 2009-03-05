@@ -7,28 +7,27 @@
 
 /** @component BaseButton
 * A base class for a button with default behaviour
-* @file flamingo/tpc/classes/flamingo/coregui/BaseButton.as  (sourcefile)
-* @file flamingo/tpc/CommitButton.fla  (sourcefile)
-* @file flamingo/tpc/CommitButton.swf (compiled component, needed for publication on internet)
+* @file flamingo/fmc/classes/flamingo/coregui/BaseButton.as  (sourcefile)
+* @file flamingo/fmc/CommitButton.fla  (sourcefile)
+* @file flamingo/fmc/CommitButton.swf (compiled component, needed for publication on internet)
 */
 
 
-/** @tag <tpc:CommitButton>
+/** @tag <fmc:CommitButton>
 * This tag defines a commit button instance. A click on it makes the edit bar commit the changes on the feature model to the server.
 * @class flamingo.coregui.BaseButton extends AbstractComponent
 * @hierarchy childnode of EditBar.
 * @configstring tooltip toolti shown with button
 * @example
-	<tpc:EditBar id="editBar" left="523" top="4" listento="editMap" backgroundalpha="0" borderalpha="0">
-		<tpc:CommitButton>
+	<fmc:EditBar id="editBar" left="523" top="4" listento="editMap" backgroundalpha="0" borderalpha="0">
+		<fmc:CommitButton>
             <string id="tooltip" en="save edits" nl="bewerkingen opslaan"/>
-        </tpc:CommitButton>
-	</tpc:EditBar>
+        </fmc:CommitButton>
+	</fmc:EditBar>
 */
 
 
 import flamingo.coregui.*;
-
 import flamingo.event.ActionEvent;
 import flamingo.event.ActionEventListener;
 import flamingo.core.AbstractComponent;

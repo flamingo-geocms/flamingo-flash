@@ -9,32 +9,32 @@
 * A feature model is organized hierarchically. It consists of zero of more layers, which in turn consist of zero of more features per layer. 
 * Every level in the hierarchy broadcasts its own events. 
 * For example: the feature model about adding and removing of layers, a layer about changing its visibility, and a feature about a change in its property values.
-* @file flamingo/tpc/classes/flamingo/gismodel/GIS.as  (sourcefile)
-* @file flamingo/tpc/GIS.fla (sourcefile)
-* @file flamingo/tpc/GIS.swf (compiled component, needed for publication on internet)
-* @file flamingo/tpc/classes/flamingo/gismodel/Layer.as 
-* @file flamingo/tpc/classes/flamingo/gismodel/Property.as 
-* @file flamingo/tpc/classes/flamingo/gismodel/Feature.as
-* @file flamingo/tpc/classes/flamingo/gismodel/Style.as
-* @file flamingo/tpc/classes/flamingo/gismodel/CreateGeometry.as
-* @file flamingo/tpc/classes/flamingo/geometrymodel/GeometryTools.as
-* @file flamingo/tpc/classes/flamingo/geometrymodel/Geometry.as (hierachical classes for the geometry model -> used for digitizing polygons, boxes and circles)
-* @file flamingo/tpc/classes/flamingo/geometrymodel/GeometryFactory.as 
-* @file flamingo/tpc/classes/flamingo/geometrymodel/GeometryParser.as 
-* @file flamingo/tpc/classes/flamingo/geometrymodel/LinearRing.as
-* @file flamingo/tpc/classes/flamingo/geometrymodel/LineSegment.as
-* @file flamingo/tpc/classes/flamingo/geometrymodel/LineString.as
-* @file flamingo/tpc/classes/flamingo/geometrymodel/LineStringFactory.as
-* @file flamingo/tpc/classes/flamingo/geometrymodel/Point.as
-* @file flamingo/tpc/classes/flamingo/geometrymodel/PointFactory.as
-* @file flamingo/tpc/classes/flamingo/geometrymodel/Polygon.as
-* @file flamingo/tpc/classes/flamingo/geometrymodel/PolygonFactory.as
-* @file flamingo/tpc/classes/flamingo/geometrymodel/Envelope.as
-* @file flamingo/tpc/classes/flamingo/geometrymodel/Circle.as
-* @file flamingo/tpc/classes/flamingo/geometrymodel/CircleFactory.as
+* @file flamingo/fmc/classes/flamingo/gismodel/GIS.as  (sourcefile)
+* @file flamingo/fmc/GIS.fla (sourcefile)
+* @file flamingo/fmc/GIS.swf (compiled component, needed for publication on internet)
+* @file flamingo/fmc/classes/flamingo/gismodel/Layer.as 
+* @file flamingo/fmc/classes/flamingo/gismodel/Property.as 
+* @file flamingo/fmc/classes/flamingo/gismodel/Feature.as
+* @file flamingo/fmc/classes/flamingo/gismodel/Style.as
+* @file flamingo/fmc/classes/flamingo/gismodel/CreateGeometry.as
+* @file flamingo/fmc/classes/flamingo/geometrymodel/GeometryTools.as
+* @file flamingo/fmc/classes/flamingo/geometrymodel/Geometry.as (hierachical classes for the geometry model -> used for digitizing polygons, boxes and circles)
+* @file flamingo/fmc/classes/flamingo/geometrymodel/GeometryFactory.as 
+* @file flamingo/fmc/classes/flamingo/geometrymodel/GeometryParser.as 
+* @file flamingo/fmc/classes/flamingo/geometrymodel/LinearRing.as
+* @file flamingo/fmc/classes/flamingo/geometrymodel/LineSegment.as
+* @file flamingo/fmc/classes/flamingo/geometrymodel/LineString.as
+* @file flamingo/fmc/classes/flamingo/geometrymodel/LineStringFactory.as
+* @file flamingo/fmc/classes/flamingo/geometrymodel/Point.as
+* @file flamingo/fmc/classes/flamingo/geometrymodel/PointFactory.as
+* @file flamingo/fmc/classes/flamingo/geometrymodel/Polygon.as
+* @file flamingo/fmc/classes/flamingo/geometrymodel/PolygonFactory.as
+* @file flamingo/fmc/classes/flamingo/geometrymodel/Envelope.as
+* @file flamingo/fmc/classes/flamingo/geometrymodel/Circle.as
+* @file flamingo/fmc/classes/flamingo/geometrymodel/CircleFactory.as
 */
 
-/** @tag <tpc:GIS>  
+/** @tag <fmc:GIS>  
 * This tag defines a feature model instance. A feature model can be registered as a listener of an authentication component. 
 * If one or more layers within the feature model are protected with authorization, 
 * the feature model must listen to the authentication component, which tells the feature model the roles of the current user.
@@ -42,29 +42,29 @@
 * @hierarchy childnode of Flamingo or a container component. 
 * @example
 	<Flamingo>
-		<tpc:GIS  id="gis" authentication="authentication" listento="authentication" updatemaps="map,printMap0">
+		<fmc:GIS  id="gis" authentication="authentication" listento="authentication" updatemaps="map,printMap0">
 		...
-		</tpc:GIS>
+		</fmc:GIS>
 	</Flamingo>	
 * @attr authentication Reference to the authentication component. This value must be equal to the “listento”.
 * @attr updateMaps Comma seperate list of maps that should be updated after a commit to the server. Set this attribute when
 * the Layers in your map(s) (LayerOGWMS, LayerArcIMS) are based on the same data as the (WFS)Layers in the GIS (EditMap)    
 */
 
-/** @tag <tpc:Layer>
+/** @tag <fmc:Layer>
 * This tag defines a layer instance.
 * @class flamingo.gismodel.Layer extends AbstractComposite
 * @hierarchy childnode of GIS.
 * @example
-	<tpc:GIS  id="gis" authentication="authentication" listento="authentication" >
-		<tpc:Layer title="Redlining" visible="true" labelpropertyname="app:label" roles="XDF56YZ">
+	<fmc:GIS  id="gis" authentication="authentication" listento="authentication" >
+		<fmc:Layer title="Redlining" visible="true" labelpropertyname="app:label" roles="XDF56YZ">
 		...
-		</tpc:Layer>
-		<tpc:Layer title="Luchthavens" visible="true" wfsurl="wfs::http://localhost:8080/flamingo-edit-server/services" 
+		</fmc:Layer>
+		<fmc:Layer title="Luchthavens" visible="true" wfsurl="wfs::http://localhost:8080/flamingo-edit-server/services" 
 			featuretypename="app:Airport" geometrytypes="Point" labelpropertyname="app:numFlights" roles="XDF56YT">
 		...
-		</tpc:Layer>
-	</tpc:GIS>
+		</fmc:Layer>
+	</fmc:GIS>
 * @attr title Name by which the layer is presented to the user, for example in the edit legend.
 * @attr visible	(true, false, defaultvalue = false) Whether or not the layer's features be visible in the edit map.
 * @attr wfsurl	URL to the server that serves the layer's features. Standard url format is used, with the exception that it is preceded by “wfs::”. 
@@ -81,20 +81,20 @@
 * If no roles at all are configured for the layer, the layer is considered unprotected by authorization and will be loaded in the feature model regardless of the user's roles.
 */
 
-/** @tag <tpc:Property>
+/** @tag <fmc:Property>
 * This tag defines a layer's feature property instance.
 * @class flamingo.gismodel.Property extends AbstractComposite
 * @hierarchy childnode of Layer.
 * @example
-	<tpc:Layer name="redlining" title="Redlining" visible="true" labelpropertyname="app:label" roles="XDF56YZ">
-	 	<tpc:Property name="app:label" title="Label" type="MultiLine"/>
+	<fmc:Layer name="redlining" title="Redlining" visible="true" labelpropertyname="app:label" roles="XDF56YZ">
+	 	<fmc:Property name="app:label" title="Label" type="MultiLine"/>
 		...
-	</tpc:Layer>
-	<tpc:Layer title="Luchthavens" visible="true" wfsurl="wfs::http://localhost:8080/flamingo-edit-server/services" 
+	</fmc:Layer>
+	<fmc:Layer title="Luchthavens" visible="true" wfsurl="wfs::http://localhost:8080/flamingo-edit-server/services" 
 		featuretypename="app:Airport" geometrytypes="Point" labelpropertyname="app:numFlights" roles="XDF56YT">
-            <tpc:Property name="app:numFlights" title="Aantal vluchten" type="DropDown:50,100,120,250,450,900,2000"/>
-            <tpc:Property name="app:name" title="Naam" type="SingleLine" defaultvalue="YAYA"/>
-            <tpc:Property name="app:description" title="Omschrijving" type="MultiLine" immutable="true"/>
+            <fmc:Property name="app:numFlights" title="Aantal vluchten" type="DropDown:50,100,120,250,450,900,2000"/>
+            <fmc:Property name="app:name" title="Naam" type="SingleLine" defaultvalue="YAYA"/>
+            <fmc:Property name="app:description" title="Omschrijving" type="MultiLine" immutable="true"/>
 * @attr name (no default value) Name of the property, this should correspond with the feature type property name on the server (incl. namespace).			
 * @attr title (default value: “”) Name by which the property is presented to the user, for example on a label in the edit properties component.
 * @attr type (“SingleLine”, “MultiLine”, “DropDown”, default value = “SingleLine”) Presentation type of the property. 
@@ -104,15 +104,15 @@
 * @attr immutable (true, false, default value: false) Whether or not the property value can be changed.
 */
 
-/** @tag <tpc:Style>
+/** @tag <fmc:Style>
 * This tag defines a layer's feature style instance. All the layer's features will use this style to present themselves in the edit map.
 * @class flamingo.gismodel.Style extends AbstractComposite
 * @hierarchy childnode of Layer.
 * @example
-	<tpc:Layer name="redlining" title="Redlining" visible="true" labelpropertyname="app:label" roles="XDF56YZ">
+	<fmc:Layer name="redlining" title="Redlining" visible="true" labelpropertyname="app:label" roles="XDF56YZ">
 	 	...
-		<tpc:Style fillcolor="0xFFCC00" fillopacity="30" strokecolor="0xFFCC00" strokeopacity="100"/>
-	</tpc:Layer>
+		<fmc:Style fillcolor="0xFFCC00" fillopacity="30" strokecolor="0xFFCC00" strokeopacity="100"/>
+	</fmc:Layer>
 * @attr fillcolor (0x000000 – 0xFFFFFF, no default value) Fill color. Not applicable to point or line string geometries.
 * @attr fillopacity	(0 – 100, no default value) Fill opacity. A value of 0 means completely transparent. Not applicable to point or line string geometries. If a feature's geometry is not completely transparent, a click on its fill will make the feature the active feature. If the geometry is completely transparent the user's mouse will click right through it.
 * @attr strokecolor	(0x000000 – 0xFFFFFF, no default value) Stroke color.

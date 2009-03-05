@@ -22,7 +22,6 @@ class flamingo.coremodel.service.dde.DDEConnector extends XML{
 	private var coordsys:String;
 	private var format:String;
 	private var notificationEmailAddress:String;
-	private var returnTemplateFilePrefix:String = "tpc";
 	private var enableAutoThemeSelection:Boolean = false;
 	private var url:String;
 	private var ddeServletUrl:String;
@@ -133,7 +132,6 @@ class flamingo.coremodel.service.dde.DDEConnector extends XML{
 			"<coordsys>"+coordsys+"</coordsys>"+
 			"<format>"+format+"</format>"+
 			"<notificationEmailAdress>"+notificationEmailAddress+"</notificationEmailAdress>"+
-			"<returnTemplateFilePrefix>"+returnTemplateFilePrefix+"</returnTemplateFilePrefix>"+
 			"<enableAutoThemeSelection>"+enableAutoThemeSelection+"</enableAutoThemeSelection>";
 		if (areaSelectionType == "inBox") {
 		 	xmlStr+= "<lowerLeftX>"+lowerLeftX+"</lowerLeftX>";
@@ -161,6 +159,7 @@ class flamingo.coremodel.service.dde.DDEConnector extends XML{
 	function onLoadSucces():Void{	 
 		 for (var i:Number = 0; i < ddeConnectorListeners.length; i++) { 
             DDEConnectorListener(ddeConnectorListeners[i]).onDDELoad(xmlResponse);
+            
         }
 	}
 	

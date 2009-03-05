@@ -7,26 +7,26 @@
 * A component that shows a visual copy of another component, but without the functionality of that component. 
 * A bitmap clone is especially useful for showing components on a print template which are actually too complex or in need of heavy configuration, 
 * such as  identify results or legends.
-* @file flamingo/tpc/classes/flamingo/gui/BitmapClone.as  (sourcefile)
-* @file flamingo/tpc/BitmapClone.fla (sourcefile)
-* @file flamingo/tpc/BitmapClone.swf (compiled component, needed for publication on internet)
+* @file flamingo/fmc/classes/flamingo/gui/BitmapClone.as  (sourcefile)
+* @file flamingo/fmc/BitmapClone.fla (sourcefile)
+* @file flamingo/fmc/BitmapClone.swf (compiled component, needed for publication on internet)
 */
 
 
-/** @tag <tpc:BitmapClone> 
+/** @tag <fmc:BitmapClone> 
 * This tag defines a bitmap clone. The bitmap clone must be registered as listener to the component of which a visual copy is desired. 
 * The component to be cloned must not have any content that is loaded from another domain than the domain where Flamingo runs. 
 * If it does, the bitmap clone will remain a white box. This behavior is due to the sandbox security model of the Flash player
 * @class flamingo.gui.BitmapClone extends AbstractComponent
 * @hierarchy child node of Flamingo or a container component.
 * @example
-    <tpc:PrintTemplate id="printTemplate1" name="verticaal A4" dpi="200" format="A4" orientation="portrait"
+    <fmc:PrintTemplate id="printTemplate1" name="verticaal A4" dpi="200" format="A4" orientation="portrait"
 		listento="printMonitor1" maps="printMap1">
 		...
-		<tpc:BitmapClone name="legenda" width="30%" height="25%" listento="legend" refreshrate="2500"/>
-		<tpc:BitmapClone name="identify resultaten" width="40%" height="30%" right="right" listento="identify" refreshrate="2500"/>
+		<fmc:BitmapClone name="legenda" width="30%" height="25%" listento="legend" refreshrate="2500"/>
+		<fmc:BitmapClone name="identify resultaten" width="40%" height="30%" right="right" listento="identify" refreshrate="2500"/>
 		...
-	</tpc:PrintTemplate>
+	</fmc:PrintTemplate>
 * @attr refreshrate	((default value: 7000) Time in milliseconds at which rate the visual copy be refreshed.
 */
 

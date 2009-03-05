@@ -7,29 +7,29 @@
 /** @component DownloadSelector
 * This component is shown in the Window component of Flamingo and offers an user 
 * interface for configuring and sending an url to download a DDE layer to the client.  
-* @file flamingo/tpc/classes/flamingo/gui/dde/DownloadSelector.as  (sourcefile)
-* @file flamingo/tpc/DownloadSelector.fla (sourcefile)
-* @file flamingo/tpc/DownloadSelector.swf (compiled component, needed for publication on internet)
-* @file flamingo/tpc/DownloadSelector.xml (configurationfile, needed for publication on internet)
-* @file flamingo/tpc/classes/flamingo/gui/dde/DDEConnector.as (holds the model for the DDE download settings, compiles and sends  
+* @file flamingo/fmc/classes/flamingo/gui/dde/DownloadSelector.as  (sourcefile)
+* @file flamingo/fmc/DownloadSelector.fla (sourcefile)
+* @file flamingo/fmc/DownloadSelector.swf (compiled component, needed for publication on internet)
+* @file flamingo/fmc/DownloadSelector.xml (configurationfile, needed for publication on internet)
+* @file flamingo/fmc/classes/flamingo/gui/dde/DDEConnector.as (holds the model for the DDE download settings, compiles and sends  
 * requests to a DDE servlet, dispatches an event to listeners when the request is returned)
-* @file flamingo/tpc/classes/flamingo/gui/dde/DDEConnectorListener.as (listener interface) 
-* @file flamingo/tpc/classes/flamingo/gui/dde/DownLoadLegend.as (Draws an (simplified) legend using the legendItems from the legend component
+* @file flamingo/fmc/classes/flamingo/gui/dde/DDEConnectorListener.as (listener interface) 
+* @file flamingo/fmc/classes/flamingo/gui/dde/DownLoadLegend.as (Draws an (simplified) legend using the legendItems from the legend component
 * matches the DDELayers from the servlet with the legendtems and is an user interface to select ddeLayers 
 * for downloading)
-* @file flamingo/tpc/classes/AbstractComponent.as (super class for components)
-* @file flamingo/tpc/classes/flamingo/geometrymodel/dde/Geometry.as (hierachical classes for the geometry model -> used for digitizing polygons, boxes and circles)
-* @file flamingo/tpc/classes/flamingo/geometrymodel/dde/LinearRing.as
-* @file flamingo/tpc/classes/flamingo/geometrymodel/dde/LineSegment.as
-* @file flamingo/tpc/classes/flamingo/geometrymodel/dde/LineString.as
-* @file flamingo/tpc/classes/flamingo/geometrymodel/dde/Point.as
-* @file flamingo/tpc/classes/flamingo/geometrymodel/dde/Square.as
-* @file flamingo/tpc/classes/flamingo/geometrymodel/dde/Envelope.as
-* @file flamingo/tpc/classes/flamingo/geometrymodel/dde/Circle.as
-* @file flamingo/tpc/classes/flamingo/geometrymodel/dde/GeometryEventDispatcher.as (eventdispatcher of a geometry, dispatches events to all listener when the geometry (model) changes)
-* @file flamingo/tpc/classes/flamingo/geometrymodel/dde/GeometryListener.as (geometry listener interface class)
-* @file flamingo/tpc/classes/flamingo/gui/dde/TraceLayer.as (dummy layer for tracing geometries in the mapviewer)
-* @file flamingo/tpc/classes/flamingo/gui/dde/TraceLinearRing.as (the representation of the traced geometry in the TraceLayer)
+* @file flamingo/fmc/classes/AbstractComponent.as (super class for components)
+* @file flamingo/fmc/classes/flamingo/geometrymodel/dde/Geometry.as (hierachical classes for the geometry model -> used for digitizing polygons, boxes and circles)
+* @file flamingo/fmc/classes/flamingo/geometrymodel/dde/LinearRing.as
+* @file flamingo/fmc/classes/flamingo/geometrymodel/dde/LineSegment.as
+* @file flamingo/fmc/classes/flamingo/geometrymodel/dde/LineString.as
+* @file flamingo/fmc/classes/flamingo/geometrymodel/dde/Point.as
+* @file flamingo/fmc/classes/flamingo/geometrymodel/dde/Square.as
+* @file flamingo/fmc/classes/flamingo/geometrymodel/dde/Envelope.as
+* @file flamingo/fmc/classes/flamingo/geometrymodel/dde/Circle.as
+* @file flamingo/fmc/classes/flamingo/geometrymodel/dde/GeometryEventDispatcher.as (eventdispatcher of a geometry, dispatches events to all listener when the geometry (model) changes)
+* @file flamingo/fmc/classes/flamingo/geometrymodel/dde/GeometryListener.as (geometry listener interface class)
+* @file flamingo/fmc/classes/flamingo/gui/dde/TraceLayer.as (dummy layer for tracing geometries in the mapviewer)
+* @file flamingo/fmc/classes/flamingo/gui/dde/TraceLinearRing.as (the representation of the traced geometry in the TraceLayer)
 * @configstring layers label above the layer legend
 * @configstring inArea radiobuttonlabel for selecting predefined areas (in a combobox)
 * @configstring inBox radiobuttonlabel for lowerleft and upperright coördinate input (in textinput fields)
@@ -45,47 +45,47 @@
 * @configstring extentButtonLabel Button label for the button that copies the mapextents into textfields
 */
 
-/** @tag <tpc:DownloadSelector>   
+/** @tag <fmc:DownloadSelector>   
 * This tag defines the presence of a downloadselector. The downloadselector must be registered as a listener to the map, and to the legend. 
 * @class flamingo.gui.dde.DownloadSelector extends AbstractComponent
 * @hierarchy childnode of a container component. e.g. <fmc:Window> 
 * @example
 	<fmc:Window id="downloadSelectorWindow" skin="g" top="100" left="100" width="500" height="500" canresize="true" canclose="true" visible="false">
 		<string id="title" en="Download Selector" nl="Downloadkiezer"/>
-		<tpc:DownloadSelector id="downloadSelector" top="10" left="10" right="right -10" bottom="bottom -10" listento="map,legend" ddeservleturl="http://idgisvv.xs4all.nl/DDEDownload/flamingo" debug="false">
+		<fmc:DownloadSelector id="downloadSelector" top="10" left="10" right="right -10" bottom="bottom -10" listento="map,legend" ddeservleturl="http://idgisvv.xs4all.nl/DDEDownload/flamingo" debug="false">
 	</fmc:Window>
 * @attr ddeservleturl url of the ddeservlet
 * @attr debug sets debugging on or off (true/false). Debugging is usefull when checking the 
 * configuration of ddeLayers in the ddeservlet configuration file.
 */
 	
-/** @tag <tpc:crs> 
+/** @tag <fmc:crs> 
 * This tag defines an(output)coödinatesystem. 
-* @hierarchy childnode of <tpc:DownloadSelector> 
+* @hierarchy childnode of <fmc:DownloadSelector> 
 * @example
-	<tpc:crs label="Lat/Long" data="LL84"/>
-    <tpc:crs label="Rijksdriehoek" data="EPSG:28992"/>
-    <tpc:crs label="Belgie Lambert 72" data="EPSG:31370"/>
+	<fmc:crs label="Lat/Long" data="LL84"/>
+    <fmc:crs label="Rijksdriehoek" data="EPSG:28992"/>
+    <fmc:crs label="Belgie Lambert 72" data="EPSG:31370"/>
 * @attr label a name shown to the user
 * @attr data value used in the url 
 */
 
-/** @tag <tpc:outputFormat>
+/** @tag <fmc:outputFormat>
 * This tag defines a dde download format.
-* @hierarchy childnode of <tpc:DownloadSelector> 
+* @hierarchy childnode of <fmc:DownloadSelector> 
 * @example
-	<tpc:outputFormat label="gif" data="2gif.fme"/>
-	<tpc:outputFormat label="Shapefile" data="2shp.fme"/>
+	<fmc:outputFormat label="gif" data="2gif.fme"/>
+	<fmc:outputFormat label="Shapefile" data="2shp.fme"/>
 * @attr label a name shown to the user
 * @attr data value used in the url 	
 */
 
-/** @tag <tpc:inArea>
+/** @tag <fmc:inArea>
 * This tag defines an area for downloading from dde.
-* @hierarchy childnode of <tpc:DownloadSelector> 
+* @hierarchy childnode of <fmc:DownloadSelector> 
 * @example
-	  <tpc:inArea label="Goes" coords="38244+388821+56760+388821+56760+397307+38244+397307+38244+388821"/>
-	  <tpc:inArea label="Hulst" coords="55018+362197+74859+362197+74859+380617+55018+380617+55018+362197"/>* @attr label a name shown to the user
+	  <fmc:inArea label="Goes" coords="38244+388821+56760+388821+56760+397307+38244+397307+38244+388821"/>
+	  <fmc:inArea label="Hulst" coords="55018+362197+74859+362197+74859+380617+55018+380617+55018+362197"/>* @attr label a name shown to the user
 * @attr label a name shown to the user
 * @attr data value used in the url, an coördinate string of x and y values seperated by a + sign	
 */	

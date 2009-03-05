@@ -12,21 +12,21 @@
 * and the commit button, which commits the changes made within the feature model to the server. Please refer to the GIS component.
 * The CommitButton is an instance of BaseButton
 * The RemoveFeatureButton is an instance of ComponentVisibleButton
-* @file flamingo/tpc/classes/flamingo/gui/EditBar.as  (sourcefile)
-* @file flamingo/tpc/EditBar.fla (sourcefile)
-* @file flamingo/tpc/EditBar.swf (compiled component, needed for publication on internet)
+* @file flamingo/fmc/classes/flamingo/gui/EditBar.as  (sourcefile)
+* @file flamingo/fmc/EditBar.fla (sourcefile)
+* @file flamingo/fmc/EditBar.swf (compiled component, needed for publication on internet)
 */
 
-/** @tag <tpc:EditBar>
+/** @tag <fmc:EditBar>
 * This tag defines an edit bar instance. The edit bar must be registered as a listener to an edit map. 
 * Actually, the edit bar listens to the feature model of the edit map.
 * @class flamingo.gui.EditBar extends AbstractContainer implements ActionEventListener 
 * @hierarchy childnode of Flamingo or a container component.
 * @example
 	<Flamingo>
-		<tpc:EditBar id="editBar" left="523" top="4" listento="editMap" backgroundalpha="0" borderalpha="0">
+		<fmc:EditBar id="editBar" left="523" top="4" listento="editMap" backgroundalpha="0" borderalpha="0">
 			...
-		</tpc:EditBar>
+		</fmc:EditBar>
 	</Flamingo>	
 */
 

@@ -8,19 +8,19 @@
 * A component that draws feature geometries within a certain zoom extent and at a certain scale. 
 * The edit map is also the component where the user draws a geometry when a new feature is created. 
 * Features and their geometries exist within the feature model. Please refer to the GIS component.
-* @file flamingo/tpc/classes/flamingo/gui/EditMap.as  (sourcefile)
-* @file flamingo/tpc/EditMap.fla (sourcefile)
-* @file flamingo/tpc/EditMap.swf (compiled component, needed for publication on internet)
-* @file flamingo/tpc/classes/flamingo/gui/EditMapCircle.as (sourcefile)
-* @file flamingo/tpc/classes/flamingo/gui/EditMapCreateGeometry.as  (sourcefile)
-* @file flamingo/tpc/classes/flamingo/gui/EditMapFeature.as  (sourcefile)
-* @file flamingo/tpc/classes/flamingo/gui/EditMapGeometry.as  (sourcefile)
-* @file flamingo/tpc/classes/flamingo/gui/EditMapLayer.as  (sourcefile)
-* @file flamingo/tpc/classes/flamingo/gui/EditMapLineString.as  (sourcefile)
-* @file flamingo/tpc/classes/flamingo/gui/EditMapPolygon.as  (sourcefile)
+* @file flamingo/fmc/classes/flamingo/gui/EditMap.as  (sourcefile)
+* @file flamingo/fmc/EditMap.fla (sourcefile)
+* @file flamingo/fmc/EditMap.swf (compiled component, needed for publication on internet)
+* @file flamingo/fmc/classes/flamingo/gui/EditMapCircle.as (sourcefile)
+* @file flamingo/fmc/classes/flamingo/gui/EditMapCreateGeometry.as  (sourcefile)
+* @file flamingo/fmc/classes/flamingo/gui/EditMapFeature.as  (sourcefile)
+* @file flamingo/fmc/classes/flamingo/gui/EditMapGeometry.as  (sourcefile)
+* @file flamingo/fmc/classes/flamingo/gui/EditMapLayer.as  (sourcefile)
+* @file flamingo/fmc/classes/flamingo/gui/EditMapLineString.as  (sourcefile)
+* @file flamingo/fmc/classes/flamingo/gui/EditMapPolygon.as  (sourcefile)
 */
 
-/** @tag <tpc:EditMap>
+/** @tag <fmc:EditMap>
 * This tag defines an edit map instance. An edit map must be registered as a listener to two components. 
 * One is the feature model that keeps the feature geometries(GIS). The other is a map to inform the edit map about its current zoom extent. 
 * The Map and EditMap components should be positioned exactly the same. 
@@ -30,13 +30,13 @@
 * @example
 	<FLAMINGO>
 		...
-		<tpc:EditMap id="editMap"  left="210" top="40" bottom="bottom -30" right="right -218" listento="gis,map"/>
+		<fmc:EditMap id="editMap"  left="210" top="40" bottom="bottom -30" right="right -218" listento="gis,map"/>
 		...
-		<tpc:PrintTemplate id="printTemplate1" ...>
+		<fmc:PrintTemplate id="printTemplate1" ...>
          	...
 			<fmc:Map id="printMap1" name="kaartbeeld" width="100%" height="100%" movequality="HIGH" configobject="map"/>
-         	<tpc:EditMap id="editMap2" name="redlining"  width="100%" height="100%"  listento="gis,printMap1" editable="false"/>
-		</tpc:PrintTemplate>	
+         	<fmc:EditMap id="editMap2" name="redlining"  width="100%" height="100%"  listento="gis,printMap1" editable="false"/>
+		</fmc:PrintTemplate>	
 	</FLAMINGO>
 * @attr editable (true, false, default value: true) Whether or not map is editable, f.i. an EditMap in a PrintTemplate is mostly 
 * not editable

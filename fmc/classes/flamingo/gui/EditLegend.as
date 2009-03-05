@@ -9,19 +9,19 @@
 * A component that lists the layers in the geometry model. And shows whether its feature geometries are visible in the edit map. 
 * A user can control this visibility using a check box. Every layer in the edit legend may have one or more buttons to bring 
 * the edit map in “drawing mode” for the user to draw a geometry and create a new feature. Please refer to the GIS component.
-* @file flamingo/tpc/classes/flamingo/gui/EditLegend.as  (sourcefile)
-* @file flamingo/tpc/EditLegend.fla (sourcefile)
-* @file flamingo/tpc/EditLegend.swf (compiled component, needed for publication on internet)
+* @file flamingo/fmc/classes/flamingo/gui/EditLegend.as  (sourcefile)
+* @file flamingo/fmc/EditLegend.fla (sourcefile)
+* @file flamingo/fmc/EditLegend.swf (compiled component, needed for publication on internet)
 */
 
-/** @tag <tpc:EditLegend>
+/** @tag <fmc:EditLegend>
 * This tag defines an edit legend instance. The edit legend must be registered as a listener to an edit map. 
 * Actually, the edit legend listens to the feature model underneath the edit map.
 * @class flamingo.gui.EditLegend extends AbstractComponent implements StateEventListener
 * @hierarchy childnode of Flamingo or a container component.
 * @example
   <flamingo>
-  	 <tpc:EditLegend id="editLegend" left="right -210" right="right -5" top="40" height="180" listento="editMap"/>
+  	 <fmc:EditLegend id="editLegend" left="right -210" right="right -5" top="40" height="180" listento="editMap"/>
 	...
   </fmc:Container>	
 */

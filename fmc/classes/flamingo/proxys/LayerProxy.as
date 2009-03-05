@@ -12,7 +12,7 @@
 * @file LayerProxy.swf (compiled Map, needed for publication on internet)
 */
 
-/** @tag <tpc:LayerProxy>  
+/** @tag <fmc:LayerProxy>  
 * This tag defines a layerProxy.
 * @attr id The id should be the same as the id of the layer component for which this component serves as a proxy. 
 * @attr instanceid should be the same as the name of the flamingo instance(FlashObject in html) of the layer component for which this component serves as a proxy.

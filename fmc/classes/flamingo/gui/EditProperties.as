@@ -9,12 +9,12 @@
 * Edit properties component. A component that shows the properties of the active feature in the feature model, and their values. 
 * As a single line or multi line text inputs, or as drop down lists. The user can change the values for properties that are not immutable.
 * Changing values in the edit properties component means changing them in the feature model at the same time. Please refer to the GIS component.
-* @file flamingo/tpc/classes/flamingo/gui/EditProperties.as  (sourcefile)
-* @file flamingo/tpc/EditProperties.fla (sourcefile)
-* @file flamingo/tpc/EditProperties.swf (compiled component, needed for publication on internet)
+* @file flamingo/fmc/classes/flamingo/gui/EditProperties.as  (sourcefile)
+* @file flamingo/fmc/EditProperties.fla (sourcefile)
+* @file flamingo/fmc/EditProperties.swf (compiled component, needed for publication on internet)
 */
 
-/** @tag <tpc:EditProperties>
+/** @tag <fmc:EditProperties>
 * This tag defines an edit properties component instance. The edit properties component must be registered as a listener to an edit map. 
 * Actually, the edit properties component listens to the feature model underneath the edit map. 
 * An edit properties component should be placed in a window so that the active feature event of the feature model can make it pop-up. 
@@ -23,7 +23,7 @@
 * @hierarchy childnode of Flamingo or a container component.
 * @example
   <fmc:Window id="editPropertiesWindow">
-     <tpc:EditProperties id="editProperties" top="0" left="0" right="right" bottom="bottom" visible="false" listento="editMap"/>
+     <fmc:EditProperties id="editProperties" top="0" left="0" right="right" bottom="bottom" visible="false" listento="editMap"/>
   </fmc:Window>
 */
 

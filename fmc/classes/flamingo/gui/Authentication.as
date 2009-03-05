@@ -8,12 +8,12 @@
 * A component that tells other Flamingo components which authorization roles the current authenticated user has. 
 * One component that uses the authentication component is the feature model. It does so to decide which layers 
 * should be kept away for the current user. Please refer to the GIS component.
-* @file flamingo/tpc/classes/flamingo/gui/Authentication.as  (sourcefile)
-* @file flamingo/tpc/Authentication.fla (sourcefile)
-* @file flamingo/tpc/Authentication.swf (compiled component, needed for publication on internet)
+* @file flamingo/fmc/classes/flamingo/gui/Authentication.as  (sourcefile)
+* @file flamingo/fmc/Authentication.fla (sourcefile)
+* @file flamingo/fmc/Authentication.swf (compiled component, needed for publication on internet)
 */
 
-/** @tag <tpc:Authentication>  
+/** @tag <fmc:Authentication>  
 * This tag defines an authentication component instance. 
 * Authentication has one Resource child node, and zero or more Role child nodes. 
 * These configuration tags are not used by the authentication component itself. 
@@ -25,33 +25,33 @@
 * @hierarchy childnode of Flamingo or a container component.
 * @example
 <Flamingo>
-	<tpc:Authentication id="authentication" left="right -210" right="right" top="0" bottom="40" visible="false"/>
+	<fmc:Authentication id="authentication" left="right -210" right="right" top="0" bottom="40" visible="false"/>
 </Flamingo>
 */
 
-/** @tag <tpc:Resource> 
+/** @tag <fmc:Resource> 
 * This tag defines a protected resource. A protected resource is a service on a server, 
 * which requires http authentication before it can be accessed.
 * @hierarchy childnode of Authentication.
 * @example
-	<tpc:Authentication>
-		<tpc:Resource name="deegree" url="http://berkel:8080/deegree"/>
+	<fmc:Authentication>
+		<fmc:Resource name="deegree" url="http://berkel:8080/deegree"/>
 		...
-	</tpc:Authentication>
+	</fmc:Authentication>
 * @attr name Name that identifies the protected resource on the server. The resource name is not used within the Flamingo framework.
 * @attr url	URL to the protected resource. Navigating to this location with a web browser should result in a login screen.
 */
 
 
-/** @tag <tpc:Role>
+/** @tag <fmc:Role>
 * This tag defines an authorization role. An authorization role is a role a user may be given by the server. 
 * Configuring a Role does not guarantee the role to the current user. The server decides about that.
 * @hierarchy childnode of Authentication.
 * @example
-	<tpc:Authentication>
+	<fmc:Authentication>
 		...
-        <tpc:Role name="XDF56YZ" flux="admins"/>
-	</tpc:Authentication>
+        <fmc:Role name="XDF56YZ" flux="admins"/>
+	</fmc:Authentication>
 * @attr name Name that identifies the role within the Flamingo framework. 
 * It is advisable to obfuscate the role name, as it will appear in the web browser's navigation bar and could easily be substituted there.
 * @attr flux Name that identifies the role on the server. The form of this name depends on the authentication backend of the server. 

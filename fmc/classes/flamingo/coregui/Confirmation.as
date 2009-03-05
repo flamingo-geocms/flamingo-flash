@@ -6,16 +6,16 @@
 
 /** @component Confirmation
 * A component that pops-up to ask the user for confirmation. It gives the user two options: confirm or deny.
-* @file flamingo/tpc/classes/flamingo/coregui/Confirmation.as  (sourcefile)
-* @file flamingo/tpc/Confirmation.fla (sourcefile)
-* @file flamingo/tpc/Confirmation.swf (compiled component, needed for publication on internet)
-* @file flamingo/tpc/Confirmation.xml (configurationfile, needed for publication on internet)
+* @file flamingo/fmc/classes/flamingo/coregui/Confirmation.as  (sourcefile)
+* @file flamingo/fmc/Confirmation.fla (sourcefile)
+* @file flamingo/fmc/Confirmation.swf (compiled component, needed for publication on internet)
+* @file flamingo/fmc/Confirmation.xml (configurationfile, needed for publication on internet)
 * @configstring question Question to ask the user for confirmation. For example: “Are you sure?”
 * @configstring yes Text to appear on the “confirm” button.
 * @configstring no Text to appear on the “deny” button.
 */
 
-/** @tag <tpc:Confirmation>
+/** @tag <fmc:Confirmation>
 * This tag defines a confirmation component instance. 
 * A confirmation component listens to two other components: one is a veil and the other can be any component that is interested in a confirmation event. 
 * The veil's visibility is automatically linked to the visibility of the confirmation component. 
@@ -27,11 +27,11 @@
 * @example
 	<fmc:Window skin="g" top="300" left="500" width="290" height="180" canresize="false" canclose="true" visible="false">
         <string id="title" en="Confirm" nl="Bevestigen"/>
-        <tpc:Confirmation id="confirmation" visible="false" listento="veil,editBar">
+        <fmc:Confirmation id="confirmation" visible="false" listento="veil,editBar">
             <string id="question" en="Are you sure you want to remove the object?" nl="Weet u zeker dat u het object wilt verwijderen?"/>
             <string id="yes" en="yes" nl="Ja"/>
             <string id="no" en="Cancel" nl="Annuleren"/>
-        </tpc:Confirmation>
+        </fmc:Confirmation>
     </fmc:Window>
 */
 

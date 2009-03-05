@@ -15,11 +15,11 @@
 * @configstring tooltip tooltiptext of the button
 */
 
-/** @tag <tpc:DownloadSelectorButton>  
+/** @tag <fmc:DownloadSelectorButton>  
 * This tag defines a button for opening the DownloadSelector component. the button listens to the window of the
 * DownloadSelector ("downloadSelectorWindow")
 * @hierarchy childnode of <flamingo>
-* @example  <tpc:DownloadSelectorButton right="500" top="6" listento="downloadSelectorWindow">
+* @example  <fmc:DownloadSelectorButton right="500" top="6" listento="downloadSelectorWindow">
 */
 
 class flamingo.gui.dde.DownloadSelectorButton extends AbstractComponent {

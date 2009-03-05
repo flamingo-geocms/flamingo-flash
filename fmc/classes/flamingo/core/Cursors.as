@@ -14,14 +14,14 @@
 * @file Cursors.swf (compiled Map, needed for publication on internet)
 */
 
-/** @tag <tpc:Cursors>  
+/** @tag <fmc:Cursors>  
 * This tag defines a Cursors component. Cursors can contain different cursor tags
 * example:
-*<tpc:Cursors> 
+*<fmc:Cursors> 
 * <cursor id="zoomout"  url="fmc/CursorsMap.swf" linkageid="zoomout"/>
 * <cursor id="zoomin"  url="fmc/CursorsMap.swf" linkageid="zoomin"/>
 * <cursor id="default"  url="fmc/CursorsMap.swf" linkageid="zoomin"/>
-*</tpc:Cursors>
+*</fmc:Cursors>
 *	
 * @attr id unique identifier for the component
 */

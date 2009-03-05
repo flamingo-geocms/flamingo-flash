@@ -22,14 +22,14 @@
 *
 *
 * @file flamingo/tpc/classes/flamingo/gui/Print.as  (sourcefile)
-* @file flamingo/tpc/Print.fla (sourcefile)
-* @file flamingo/tpc/Print.swf (compiled component, needed for publication on internet)
+* @file flamingo/fmc/Print.fla (sourcefile)
+* @file flamingo/fmc/Print.swf (compiled component, needed for publication on internet)
 * @configstring previewSize Label text for the check box that makes the current template preview show original size.
 * @configstring toPrinter Text on the button that sends the current template to the printer.
 * @configstring choseTemplate Text shown in the template comboBox.
 */
 
-/** @tag <tpc:Print> 
+/** @tag <fmc:Print> 
 * This tag defines a print component instance. Print extends AbstractContainer and as such can hold child components. 
 * Every print component should hold one “legend container” and one or more print templates. 
 * The “legend container” holds the several legend components to control the maps within the templates. 
@@ -43,27 +43,27 @@
 	<fmc:Window id="printWindow" top="60" left="60" width="585" height="680" visible="false" skin="g"
         canresize="true" canclose="true">
         <string id="title" en="Print Settings and Preview" nl="Printinstellingen en printvoorbeeld"/>
-        <tpc:Print id="print" width="100%" height="100%" visible="false"  borderwidth="0" listento="map">
+        <fmc:Print id="print" width="100%" height="100%" visible="false"  borderwidth="0" listento="map">
 			<string id="previewSize" en="Preview at Original Size" nl="Printvoorbeeld op ware grootte"/>
             <string id="toPrinter" en="Send to Printer" nl="Afdrukken"/>
             <string id="choseTemplate" en="--Chose Template--" nl="-- Kies Template --"/>
-            <tpc:BaseContainer left="220" right="right" top="35" height="100">
+            <fmc:BaseContainer left="220" right="right" top="35" height="100">
                 <fmc:Legend id="printLegend0" top = " 0" width="100%" height="100%" listento="printMap0"  configobject="legend" />
-            </tpc:BaseContainer>
-            <tpc:BaseContainer left="130" top="183" borderwidth="0">
+            </fmc:BaseContainer>
+            <fmc:BaseContainer left="130" top="183" borderwidth="0">
                 <fmc:MonitorLayer id="printMonitor1" listento="printMap1">
                     <style id=".text" font-family="courier" font-size="12px" color="#666666" display="block" font-weight="normal"/>
                 </fmc:MonitorLayer>
-            </tpc:BaseContainer>
-            <tpc:PrintTemplate id="printTemplate1" name="verticaal A4" dpi="200" format="A4" orientation="portrait"
+            </fmc:BaseContainer>
+            <fmc:PrintTemplate id="printTemplate1" name="verticaal A4" dpi="200" format="A4" orientation="portrait"
                 listento="printMonitor1" maps="printMap1">
                 <fmc:Map id="printMap1" name="kaartbeeld" width="100%" height="100%" movequality="HIGH" configobject="map"/>
-                <tpc:EditMap id="editMap2" name="redlining"  width="100%" height="100%"  listento="gis,printMap1" editable="false"/>
-                <tpc:BitmapClone name="legenda" width="30%" height="25%" listento="legend" refreshrate="2500"/>
-                <tpc:BitmapClone name="identify resultaten" width="40%" height="30%" right="right" listento="identify" refreshrate="2500"/>
-                <tpc:PrintLabel name="identifylabel" top="0" width="40%" right="right"  text="Identify resultaten" fontfamily="arial" fontsize="18"/>
-            </tpc:PrintTemplate>
-		</tpc:Print>
+                <fmc:EditMap id="editMap2" name="redlining"  width="100%" height="100%"  listento="gis,printMap1" editable="false"/>
+                <fmc:BitmapClone name="legenda" width="30%" height="25%" listento="legend" refreshrate="2500"/>
+                <fmc:BitmapClone name="identify resultaten" width="40%" height="30%" right="right" listento="identify" refreshrate="2500"/>
+                <fmc:PrintLabel name="identifylabel" top="0" width="40%" right="right"  text="Identify resultaten" fontfamily="arial" fontsize="18"/>
+            </fmc:PrintTemplate>
+		</fmc:Print>
 	</fmc:Window>	
 */
 
