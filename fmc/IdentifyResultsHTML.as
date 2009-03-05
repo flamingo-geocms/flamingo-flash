@@ -21,9 +21,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 * This component shows the response of an identify in a textwindow. 
 * It will show a predefined (html) string and replaces the fieldnames (between square brackets) with their actually values.
 * This component uses a standard Flash textfield.
-* @file IdentifyResultsHTML.fla (sourcefile)
+* @file	IdentifyResultsHTML.fla (sourcefile)
 * @file IdentifyResultsHTML.swf (compiled component, needed for publication on internet)
 * @file IdentifyResultsHTML.xml (configurationfile, needed for publication on internet)
+* @change	2009-03-04 NEW attributes htmlfield and htmlwindow  
 */
 var version:String = "2.0";
 //-------------------------------
@@ -34,6 +35,9 @@ var stripdatabase:Boolean = true;
 var denystrangers:Boolean = true;
 var wordwrap:Boolean = true;
 var textinfo:String = "";
+var htmlwindow:String = null;
+var htmlfield:String = null;
+
 //---------------------------------
 var lMap:Object = new Object();
 lMap.onIdentify = function(map:MovieClip, extent:Object) {
@@ -183,10 +187,42 @@ function show() {
 *           </nl>
 *         </string>
 * </fmc:IdentifyResultsHTML>
+* @example 
+* Example of an identify configuration in which a asfunction is called getHtmlText with
+* an url to a server component (in this case a jsp page) that returns html text to the viewer.
+* The html text will be shown in a TextArea component (attr htmlfield). This component might be within 
+* a Window component (attr htmlwindow) that opens when the html text is loaded. 
+* <fmc:Window skin="g" top="60" right="right -100" width="400" height="300" bottom="-70"
+*        canresize="true" canclose="true" title="Identify results" visible="false">
+*        <fmc:IdentifyResultsHTML id="identify" width="100%" height="100%" listento="map" htmlwindow="htmlwindow" clobfield="clobfield">
+*			...
+*            <string id="cultuurhistorie.monumenten" stripdatabase="true">
+*                <en>
+*                    <![CDATA[<span class='normal'>
+*					<span class='bold'>Monumenten</span>
+*					<textformat tabstops='[150]'>
+*						Archief nummer\t[ARCHIEF_NR]
+*						Mon nummer\t[MON_NR]
+*						<a href="asfunction:getHtmlText,http://gisopenbaar.overijssel.nl/bach/BachGetCLOB.jsp?nr=[MON_NR]&clob_column=toelichting" target="_blank"><u>Klik hier voor toelichting</u></a>
+*					</textformat>
+*					</span>
+*					]]>
+*                </en>
+*            </string>
+*         </fmc:IdentifyResultsHTML>
+*</fmc:Window>
+*<fmc:Window id="htmlwindow" skin="g" top="100" right="right -50" width="400" height="300" bottom="-70"
+*        canresize="true" canclose="true" title="Toelichting" visible="false">
+*	<fmc:Textarea id="htmlfield" width="100%" height="100%"/>
+*</fmc:Window>
 * @attr stripdatabase  (defaultvalue = "true") true or false. False: the whole database fieldname will be used and have to be put between square brackets. True: the fieldname will be stripped until the last '.'
 * @attr denystrangers  (defaultvalue = "true") true or false. True: only configured layerid's will be shown. False: not configured layerid's will be shown in a default way.
 * @attr wordwrap  (defaultvalue = "true") True or false.
 * @attr skin  (defaultvalue = "") Skin. No skins available at this moment.
+* @attr htmlwindow (no defaultvalue) id of the Window component that will open when the asfunction openHtml is called.
+* This window must contain the TextArea which is reffered to in the htmlfield attribute.   
+* @attr htmlfield  (no defaultvalue) id of a TextArea component in which the html text will be shown. The TextArea can be anywhere in
+* the flamingo viewer. 
 */
 function init():Void {
 	if (flamingo == undefined) {
@@ -268,6 +304,12 @@ function setConfig(xml:Object) {
 				denystrangers = false;
 			}
 			break;
+		case "htmlwindow":
+			htmlwindow = val;
+			break;
+		case "htmlfield":
+			htmlfield = val;
+			break;	
 		}
 	}
 	//    
@@ -322,6 +364,28 @@ function refresh() {
 	txtInfo.htmlText = str;
 	txtInfo.scroll = txtInfo.maxscroll;
 }
+function getHtmlText(url:String):Void {
+
+	xmlServer = new XML();
+  	xmlResponse = new XML();
+  	xmlResponse.onLoad = onLoadHtmlText;
+  	xmlServer.sendAndLoad(url, xmlResponse);
+}  
+
+function onLoadHtmlText(success:Boolean):Void { 
+  	if (htmlfield != null) {
+  		if (htmlwindow != null) {
+			var htmlWindow:Object = flamingo.getComponent(htmlwindow);
+			htmlWindow.setVisible(true);
+		}
+		var htmlField:Object = flamingo.getComponent(htmlfield);
+		htmlField.setText(xmlResponse.toString());
+	} else {
+		flamingo.tracer("Configuration Error:No TextArea (attr htmlfield) configured to show html"); 
+	}
+  }
+
+
 /** 
  * Dispatched when a component is up and ready to run.
  * @param comp:MovieClip a reference to the component.
