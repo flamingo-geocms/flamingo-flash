@@ -22,6 +22,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 * @file ButtonFull.fla (sourcefile)
 * @file ButtonFull.swf (compiled component, needed for publication on internet)
 * @file ButtonFull.xml (configurationfile, needed for publication on internet)
+* @change	2009-03-04 NEW attribute extent
 * @configstring tooltip tooltiptext of the button
 */
 /**
