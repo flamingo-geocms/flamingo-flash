@@ -1,1 +1,0 @@
-"C:\Program Files\Macromedia\Flash 8\Flash.exe"	P:\Flamingo\Linda\flamingoSVN\client\compiletool\compileProject.jsfl
