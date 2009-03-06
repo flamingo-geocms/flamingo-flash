@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="flamingo-client" basedir=".">
+    <taskdef resource="net/sf/antcontrib/antlib.xml">
+        <classpath>
+            <pathelement location="ant-contrib-1.0b3.jar"/>
+        </classpath>
+    </taskdef>
+	<property name="version" value="3.0.0 release candidate 06-03-2009"/>
+    <property name="build" location="build"/>
+    <property name="dist" location="../dist"/>
+    <property name="flapath" location="."/>
+    <property name="flash8path" location="C:\Program Files\Macromedia\Flash 8"/>  
+    <target name="init">
+        <mkdir dir="${build}"/>
+        <mkdir dir="${build}/dist"/>
+        <mkdir dir="${build}/bin"/>
+        <mkdir dir="${dist}"/>
+        <echo file="${build}/compileProject.jsfl" append="false">var flaURI="file:///${flapath}";${line.separator}</echo>
+        <echo file="${build}/compileProject.jsfl" append="true">var swfURI="file:///${build}/dist/flamingo";${line.separator}</echo>
+        <echo file="${build}/compileProject.jsfl" append="true">execute();${line.separator}</echo>
+        <echo file="${build}/compileProject.jsfl" append="true">function execute(){${line.separator}</echo>
+        <echo file="${build}/compileProject.jsfl" append="true">var flaArray=new Array(); ${line.separator}</echo>
+          <for param="file">
+             <path>
+                 <fileset dir="${flapath}" includes="**/*.fla"/>
+             </path>     
+             <sequential>
+                 <echo file="${build}/compileProject.jsfl" append="true">flaArray.push("file:///@{file}");${line.separator}</echo>
+             </sequential>
+          </for>
+        <replace file="${build}/compileProject.jsfl">
+            <replacetoken>\</replacetoken>
+            <replacevalue>/</replacevalue>
+        </replace>
+        <echo file="${build}/compileProject.jsfl" append="true">for (var i=0;i&lt;flaArray.length;i++) { ${line.separator}</echo>
+        <echo file="${build}/compileProject.jsfl" append="true">var flaName = flaArray[i].substring(flaURI.length); ${line.separator}</echo>
+        <echo file="${build}/compileProject.jsfl" append="true">compile(flaURI+"/"+flaName); ${line.separator}</echo>
+        <echo file="${build}/compileProject.jsfl" append="true">var swfName = flaName.substr(0,flaName.lastIndexOf(".")+1)+"swf"; ${line.separator}</echo>
+        <echo file="${build}/compileProject.jsfl" append="true">var xmlName = flaName.substr(0,flaName.lastIndexOf(".")+1)+"xml"; ${line.separator}</echo>
+        <echo file="${build}/compileProject.jsfl" append="true">var swfFileName=swfName; ${line.separator}</echo>
+        <echo file="${build}/compileProject.jsfl" append="true">var ind=swfName.indexOf("/"); ${line.separator}</echo>
+        <echo file="${build}/compileProject.jsfl" append="true">var dir=""; ${line.separator}</echo>
+        <echo file="${build}/compileProject.jsfl" append="true">while(ind!=-1){ ${line.separator}</echo>
+        <echo file="${build}/compileProject.jsfl" append="true">var ind2=swfFileName.indexOf("/"); ${line.separator}</echo>
+        <echo file="${build}/compileProject.jsfl" append="true">dir+="/"+swfFileName.substring(0,ind2); ${line.separator}</echo>
+        <echo file="${build}/compileProject.jsfl" append="true">var swfPath = swfURI+dir; ${line.separator}</echo>
+        <echo file="${build}/compileProject.jsfl" append="true">if (FLfile.exists(swfPath)==false) { ${line.separator}</echo>
+        <echo file="${build}/compileProject.jsfl" append="true">FLfile.createFolder(swfPath); ${line.separator}</echo>
+        <echo file="${build}/compileProject.jsfl" append="true">}  ${line.separator}</echo>
+        <echo file="${build}/compileProject.jsfl" append="true">swfFileName = swfFileName.substring(ind2+1); ${line.separator}</echo>
+        <echo file="${build}/compileProject.jsfl" append="true">ind=swfFileName.indexOf("/"); ${line.separator}</echo>
+        <echo file="${build}/compileProject.jsfl" append="true">} ${line.separator}</echo>
+        <echo file="${build}/compileProject.jsfl" append="true">move(flaURI+"/"+swfName,swfURI+swfName,"swf"); ${line.separator}</echo>
+        <echo file="${build}/compileProject.jsfl" append="true">move(flaURI+"/"+xmlName,swfURI+xmlName,"xml"); ${line.separator}</echo>
+        <echo file="${build}/compileProject.jsfl" append="true">} ${line.separator}</echo>
+        <echo file="${build}/compileProject.jsfl" append="true">fl.quit();${line.separator}</echo>
+        <echo file="${build}/compileProject.jsfl" append="true"> } ${line.separator}</echo>         
+        <echo file="${build}/compileProject.jsfl" append="true">function compile(p_fileURI,p_fileName) { ${line.separator}</echo>
+        <echo file="${build}/compileProject.jsfl" append="true"> var doc = fl.openDocument(p_fileURI); ${line.separator}</echo>
+        <echo file="${build}/compileProject.jsfl" append="true">doc.publish(); ${line.separator}</echo>
+        <echo file="${build}/compileProject.jsfl" append="true">fl.closeDocument(fl.documents[0],false);  ${line.separator}</echo>
+        <echo file="${build}/compileProject.jsfl" append="true">} ${line.separator}</echo>
+        <echo file="${build}/compileProject.jsfl" append="true">function move(p_file,p_newName,type) { ${line.separator}</echo>
+        <echo file="${build}/compileProject.jsfl" append="true">FLfile.remove(p_newName); ${line.separator}</echo>
+        <echo file="${build}/compileProject.jsfl" append="true">FLfile.copy(p_file,p_newName); ${line.separator}</echo>
+        <echo file="${build}/compileProject.jsfl" append="true">if (FLfile.exists(p_newName) == true) { ${line.separator}</echo>
+        <echo file="${build}/compileProject.jsfl" append="true">if(type=="swf"){ ${line.separator}</echo>
+        <echo file="${build}/compileProject.jsfl" append="true">FLfile.remove(p_file); ${line.separator}</echo>
+        <echo file="${build}/compileProject.jsfl" append="true">} ${line.separator}</echo>
+        <echo file="${build}/compileProject.jsfl" append="true">} ${line.separator}</echo>
+        <echo file="${build}/compileProject.jsfl" append="true">} ${line.separator}</echo>
+    </target>
+
+    <target name="compile" depends="init" >
+        <exec executable="${flash8path}/Flash" >
+            <arg value="${build}/compileProject.jsfl"/>
+        </exec>
+    	<copy file="${flapath}/GNU-GPL_LICENSE.txt" todir="${build}/dist/flamingo"/>
+    </target>
+    
+    <target name="dist" depends="compile">
+    	<echo file="${build}/dist/flamingo/version.txt" append="false">version: ${version}</echo>
+        <zip destfile="${dist}/flamingo_client.zip" basedir="${build}/dist"/>
+    </target>
+    
+    <target name="clean">
+        <delete dir="${build}"/>
+    </target>
+</project>
