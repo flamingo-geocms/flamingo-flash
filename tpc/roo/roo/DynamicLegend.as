@@ -4,54 +4,48 @@
 * IDgis bv
  -----------------------------------------------------------------------------*/
 /** @component DynamicLegend 
-* 
-* @file flamingo/tpc/roo/DynamicLegend.as  (sourcefile)
+* This component is developed for the RO-online project. The component shows only the legend
+* items of the objects that are visible in the mapviewer. Navigating in the map results in refreshing the
+* legend. The component works only in combination with an OGC WFS. The component is not a layer control.  
+* @file flamingo/tpc/roo/roo/DynamicLegend.as  (sourcefile)
 * @file flamingo/tpc/roo/DynamicLegend.fla (sourcefile)
+* @file flamingo/tpc/roo/DynamicLegend.xml (configurationfile)
 * @file flamingo/tpc/roo/DynamicLegend.swf (compiled component, needed for publication on internet)
-
 */
 
 /** @tag <roo:DynamicLegend>  
-* This tag defines ..
+* This tag defines a dynamiclegend. The dynamiclegend (tag) itself listens to a map.
+* DynamicLegendLayer(tags)listen to LayerOGWMS layers.
 * @class flamingo.gismodel.DynamicLegend extends AbstractComponent
 * @hierarchy childnode of Flamingo or a container component. 
 * @example
-	<Flamingo>
-		
-	</Flamingo>	
-* @attr 
-* @attr 
+*	<Flamingo>
+*	  ...
+*  	  <fmc:Window id="dynamicLegendWindow" top="15" left="15" width="255" height="295" skin="F1" canresize="true" canclose="true" visible="false">
+*        <string id="title" en="Legend" nl="Legenda"/>
+*        <roo:DynamicLegend id="dynamicLegend" width="230" height="260" listento="map,filterLayer" fileurl="${assetlocation}" wmsurl="${ogcplanservice}?service=WMS" wfsurl="${ogcplanservice}">
+*          	<roo:DynamicLegendHeading listento="bgLayer,boLayer" title="Best./Inp.plan"/>
+*          	<roo:DynamicLegendLayer listento="bgLayer,boLayer,bpAgrarischLayer,bpBedrijfLayer,bpBedrijventerreinLayer,bpBosLayer,bpCentrumLayer,bpDetailhandelLayer,bpDienstverleningLayer,bpGemengdLayer,bpWonenLayer" graphicuri="file://provinciaal-plan/p-plangebied.png" title="best.plangebied" featuretype="app:Bestemmingsplangebied;app:geometrie;app=&quot;http://www.deegree.org/app&quot;" whereclause="app:typeplan;*bestemmingsplan*"/>
+*          	<roo:DynamicLegendLayer listento="bgLayer,boLayer,bpAgrarischLayer,bpBedrijfLayer,bpBedrijventerreinLayer,bpBosLayer,bpCentrumLayer,bpDetailhandelLayer,bpDienstverleningLayer,bpGemengdLayer,bpWonenLayer" graphicuri="file://provinciaal-plan/p-plangebied.png" title="inp.plangebied" featuretype="app:Bestemmingsplangebied;app:geometrie;app=&quot;http://www.deegree.org/app&quot;" whereclause="app:typeplan;*inpassingsplan*"/>
+*   		....
+*        </roo:DynamicLegend>
+*    </fmc:Window>
+*	 ...
+*	</Flamingo>	 
+* @attr fileurl
+* @attr wmsurl
+* @attr	wfsurl
+*/
+/** @tag	<roo:DynamicLegendHeading>  
+* This tag defines a title that will be shown in the Dynamic legend. 
+* @hierarchy childnode of roo:DynamicLegend 
+* @attr title (no defaultvalue) the title text to be used as title
 */
 
-/** @tag <tpc:Layer>
-* This tag defines a layer instance.
-* @class flamingo.gismodel.Layer extends AbstractComposite
-* @hierarchy childnode of GIS.
-* @example
-	<tpc:GIS  id="gis" authentication="authentication" listento="authentication" >
-		<tpc:Layer title="Redlining" visible="true" labelpropertyname="app:label" roles="XDF56YZ">
-		...
-		</tpc:Layer>
-		<tpc:Layer title="Luchthavens" visible="true" wfsurl="wfs::http://localhost:8080/flamingo-edit-server/services" 
-			featuretypename="app:Airport" geometrytypes="Point" labelpropertyname="app:numFlights" roles="XDF56YT">
-		...
-		</tpc:Layer>
-	</tpc:GIS>
-* @attr title Name by which the layer is presented to the user, for example in the edit legend.
-* @attr visible	(true, false, defaultvalue = false) Whether or not the layer's features be visible in the edit map.
-* @attr wfsurl	URL to the server that serves the layer's features. Standard url format is used, with the exception that it is preceded by “wfs::”. 
-* Currently, only the OGC web feature service protocol is supported.
-* @attr featuretypename	Name of the feature type that defines the layer's features on the server.
-* @attr geometrytypes(“Point”, “LineString”, “Polygon”, “Circle”, or a combination of these, comma-separated, no default value) 
-* Geometry types that the user be able to draw when a new feature is created. 
-* Every possible geometry type will appear as a create button in the edit legend.
-* NB the geometrytype Circle not supported when editing WFS Layers, is only applicable for red-lining 
-* @attr labelpropertyname Name of the property which value be shown on a label in the edit map, near the feature's geometry.
-* @attr roles Names of the roles that are authorized to access the layer and its features. 
-* If the current user has none of these roles, the layer will not be loaded in the feature model, 
-* which means that it will not be visible in the map legend and the layer's features will not be visible in the edit map. 
-* If no roles at all are configured for the layer, the layer is considered unprotected by authorization and will be loaded in the feature model regardless of the user's roles.
-*/
+/** @tag	<roo:DynamicLegendLayer>
+* @attr 
+* 
+ */
 
 import mx.controls.CheckBox;
 import mx.utils.Delegate;
@@ -97,9 +91,15 @@ class roo.DynamicLegend extends AbstractComponent {
     }
     
     function addComponent(name:String, value:XMLNode):Void {
-        if (name == "tpc:DynamicLegendLayer") {
+    	var names:Array = name.split(":");
+    	if(names.length==1){
+    		name = name;
+    	} else {
+    		name = names[1];
+    	}
+        if (name == "DynamicLegendLayer") {
             addDynamicLegendLayer(value.attributes["listento"].split(","), value.attributes["graphicuri"], value.attributes["title"], value.attributes["featuretype"], value.attributes["whereclause"]);
-        } else if (name == "tpc:DynamicLegendHeading") {
+        } else if (name == "DynamicLegendHeading") {
             addDynamicLegendHeading(value.attributes["listento"], value.attributes["title"]);
         }
     }
