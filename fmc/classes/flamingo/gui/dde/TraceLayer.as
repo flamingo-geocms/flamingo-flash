@@ -32,7 +32,7 @@ class flamingo.gui.dde.TraceLayer {
 	
 	private function drawLayer():Void{
 		traceSheet = map.createEmptyMovieClip("mTraceSheet",map.getNextHighestDepth());
-		traceSheet.beginFill(0xFF0000,20);
+		traceSheet.beginFill(0xAA6600,20);
 		traceSheet.moveTo(0, 0);
 		traceSheet.lineTo(map.getWidth(),0);
 		traceSheet.lineTo(map.getWidth(), map.getHeight());
@@ -55,7 +55,7 @@ class flamingo.gui.dde.TraceLayer {
 	
 	function performPress():Void {
         if (numMouseDowns == 0) {
-            intervalID = setInterval(this, "resetNumMouseDowns", 400);
+            intervalID = setInterval(this, "resetNumMouseDowns", 300);
         }
         numMouseDowns++;
         var double:Boolean = false;
