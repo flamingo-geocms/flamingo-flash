@@ -7,8 +7,8 @@ Aanpassen bestaande installatie:
     a: verwijder de prefix attribuut (xmlns:tpc="tpc") uit de flamingo tag
     b: rename alle tpc tags naar fmc (<tpc ../> -> <fmc../>)    
 
-Wanneer er in een applicatie gebruik wordt gemaakt van edit functionalteit moet het flash object worden geïnitialiseerd met behulp van de methoden uit authentication.js (addSWFObjectWithAuthentication of addSWFObject).
-Deze methodes bieden echter nog niet dezelfde mogelijkheden als de methodes uit fscripts.js ten aanzien van het doorgeven van meerdere configuratie betsanden.
+De documentatie voor het configureren van de nieuwe functionaliteit is te vinden op de Flamingo website http://www.flamingo-mc.org)
+Wanneer er in een applicatie gebruik wordt gemaakt van edit functionalteit moet het flash object worden geÃ¯nitialiseerd met behulp van de methoden uit authentication.js (addSWFObjectWithAuthentication of addSWFObject).
 
 
      
