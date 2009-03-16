@@ -35,7 +35,9 @@ class flamingo.gui.GeometryPane extends MovieClip {
         }
     }
     
-    private function addEditMapGeometry(geometry:Geometry, type:Number, labelText:String, depth:Number):Void {
+    private function addEditMapGeometry(geometry:Geometry, type:Number, labelText:String, 
+    									depth:Number, isChild:Boolean):Void {
+        
         var initObject:Object = new Object();
 		initObject["map"] = map;
         initObject["_geometry"] = geometry;
@@ -44,6 +46,7 @@ class flamingo.gui.GeometryPane extends MovieClip {
         initObject["style"] = style;
         initObject["width"] = width;
         initObject["height"] = height;
+        initObject["isChild"] = isChild;
         if (geometry instanceof Point) {
             editMapGeometries.push(attachMovie("EditMapPoint", "mEditMapPoint" + depth, depth, initObject));
         } else if (geometry instanceof LineString) {
@@ -55,11 +58,10 @@ class flamingo.gui.GeometryPane extends MovieClip {
         }
     }
     
-    private function removeEditMapGeometries():Void {
+    private function setTypeChildren(type:Number):Void {
         for (var i:String in editMapGeometries) {
-            EditMapGeometry(editMapGeometries[i]).remove();
+            EditMapGeometry(editMapGeometries[i]).setType(type);
         }
-        editMapGeometries = new Array();
     }
     
 }

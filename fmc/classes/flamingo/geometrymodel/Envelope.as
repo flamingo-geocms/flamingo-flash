@@ -29,9 +29,7 @@ class flamingo.geometrymodel.Envelope extends Geometry {
         }
         
         point0 = new Point(minX, minY);
-        point0.setParent(this);
         point1 = new Point(maxX, maxY);
-        point1.setParent(this);
     }
     
     function getChildGeometries():Array {

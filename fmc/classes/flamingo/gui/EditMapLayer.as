@@ -19,12 +19,11 @@ class flamingo.gui.EditMapLayer extends MovieClip implements StateEventListener 
     private var height:Number = -1; // Set by init object.
     
     private var editMapFeatures:Array = null;
+    private var stateEventDispatcher:StateEventDispatcher;
     
     function onLoad():Void {
-		
         editMapFeatures = new Array();
         addEditMapFeatures(layer.getFeatures());
-        
         layer.addEventListener(this, "Layer", StateEvent.ADD_REMOVE, "features");
     }
     
@@ -107,5 +106,5 @@ class flamingo.gui.EditMapLayer extends MovieClip implements StateEventListener 
             }
         }
     }
-    
+
 }

@@ -16,35 +16,14 @@ class flamingo.geometrymodel.Polygon extends Geometry {
         }
         
         this.exteriorRing = exteriorRing;
-        exteriorRing.setParent(this);
+        addGeometryListener(exteriorRing);
+        geometryEventDispatcher.addChild(this,exteriorRing);
     }
     
-    function addChild(child:Geometry):Void {
-        if (isChild(child)) {
-            // Child already exists. This is a non-exceptional precondition.
-            return;
-        }
-        if (!(child instanceof Point)) {
-            _global.flamingo.tracer("Exception in flamingo.geometrymodel.Polygon.addChild(" + child.toString() + ")");
-            return;
-        }
+    function addPoint(point:Point):Void {        
+        exteriorRing.addPoint(point);
+    }
         
-        exteriorRing.addChild(child);
-    }
-    
-    function removeChild(child:Geometry):Void {
-        if (!isChild(child)) {
-            // Child does not exist. This is a non-exceptional precondition.
-            return;
-        }
-        if (!(child instanceof Point)) {
-            _global.flamingo.tracer("Exception in flamingo.geometrymodel.Polygon.removeChild(" + child.toString() + ")");
-            return;
-        }
-        
-        exteriorRing.removeChild(child);
-    }
-    
     function getChildGeometries():Array {
         return new Array(exteriorRing);
     }
@@ -59,14 +38,6 @@ class flamingo.geometrymodel.Polygon extends Geometry {
     
     function getCenterPoint():Point {
         return exteriorRing.getCenterPoint();
-    }
-    
-    function getEnvelope():Envelope {
-        return exteriorRing.getEnvelope();
-    }
-    
-    function clone():Geometry {
-        return new Polygon(LinearRing(exteriorRing.clone()));
     }
     
     function getExteriorRing():LinearRing {

@@ -55,24 +55,18 @@ class flamingo.gui.EditMap extends AbstractComponent implements StateEventListen
     private var gis:GIS = null;
 	private var map:Object = null;
     private var tools:Object = null;
-	//private var boundedby:String = null;
 	private var editble:Boolean = true;
     private var editMapLayers:Array = null;
     private var editMapCreateGeometry:EditMapCreateGeometry = null;
     private var editMapCreateGeometryDepth:Number = 1001; // Assumes that there will never be more than 1000 layers at the same time.
 
-	
 	function setAttribute(name:String, value:String):Void {
 		  if (name == "editable") {
 			if(value=="false"){
             	editble = false;
 			}
-		 }
-		 
+		 } 
 	}
-	
-	
-	
 	
     function setBounds(x:Number, y:Number, width:Number, height:Number):Void {
 	   if (mask == null) {
@@ -100,13 +94,14 @@ class flamingo.gui.EditMap extends AbstractComponent implements StateEventListen
         gis.addEventListener(this, "GIS", StateEvent.ADD_REMOVE, "layers");
         gis.addEventListener(this, "GIS", StateEvent.CHANGE, "createGeometry");
 		_global.flamingo.addListener(this,tools,this);
+		_global.flamingo.addListener(this,map,this);
         var layers:Array = gis.getLayers();
 		
         var layer:Layer = null;
         for (var i:Number = 0; i < layers.length; i++) {
             layer = Layer(layers[i]);
             layer.addEventListener(this, "Layer", StateEvent.CHANGE, "visible");
-            if (layer.isVisible()) {
+            if (layer.isVisible() && map.visible) {
                 addEditMapLayer(layer);
             }
         }
@@ -131,14 +126,14 @@ class flamingo.gui.EditMap extends AbstractComponent implements StateEventListen
             for (var i:Number = 0; i < layers.length; i++) {
                 layer = Layer(layers[i]);
                 layer.addEventListener(this, "Layer", StateEvent.CHANGE, "visible");
-                if (layer.isVisible()) {
-					
+                if (layer.isVisible() && map.visible) {
                     addEditMapLayer(layer);
                 }
             }
         } else if (sourceClassName + "_" + actionType + "_" + propertyName == "GIS_" + StateEvent.CHANGE + "_createGeometry") {
             if(editble){
 				var createGeometry:CreateGeometry = gis.getCreateGeometry();
+				
 				if (createGeometry == null) {
 					removeEditMapCreateGeometry();
 				} else {
@@ -161,7 +156,6 @@ class flamingo.gui.EditMap extends AbstractComponent implements StateEventListen
     
     private function addEditMapLayer(layer:Layer):Void {
         removeEditMapLayer(layer);
-        
         var depth:Number = editMapCreateGeometryDepth - 1 - gis.getLayerPosition(layer);
         var initObject:Object = new Object();
         initObject["gis"] = gis;
@@ -187,7 +181,6 @@ class flamingo.gui.EditMap extends AbstractComponent implements StateEventListen
     
     private function addEditMapCreateGeometry(createGeometry:CreateGeometry):Void {
         removeEditMapCreateGeometry();
-        
         var initObject:Object = new Object();
         initObject["map"] = map;
 		initObject["gis"] = gis;
@@ -211,5 +204,27 @@ class flamingo.gui.EditMap extends AbstractComponent implements StateEventListen
 		}
 		removeEditMapCreateGeometry();
 	}
-    
+	
+	public function onShow(map:Object){
+		setVisibility(true);
+	}
+	
+	public function onHide(map:Object){
+		setVisibility(false);	
+	}
+	
+	private function setVisibility(visible:Boolean):Void{
+		var layers:Array = gis.getLayers();
+		var layer:Layer = null;
+		for (var i:Number = 0; i < layers.length; i++) {
+            layer = Layer(layers[i]);
+            if (layer.isVisible()) {
+            	if(visible){
+                	addEditMapLayer(layer);
+            	} else {
+            		removeEditMapLayer(layer);
+            	}	
+            }
+         }
+	}
 }

@@ -6,8 +6,10 @@
 import flamingo.geometrymodel.*;
 
 import flamingo.event.StateEvent;
+import flamingo.gui.Pixel;
+import flamingo.event.GeometryListener;
 
-class flamingo.geometrymodel.Point extends Geometry {
+class flamingo.geometrymodel.Point extends Geometry implements GeometryListener {
     
     private var x:Number = null;
     private var y:Number = null;
@@ -38,44 +40,14 @@ class flamingo.geometrymodel.Point extends Geometry {
         return new Point(x, y);
     }
     
-    function getEnvelope():Envelope {
-        return new Envelope(x, y, x, y);
+    function clone():Point {
+    	var newPoint = new Point(x, y);
+        return newPoint;
     }
     
-    function isWithin(envelope:Envelope):Boolean {
-        if ((x >= envelope.getMinX()) && (x <= envelope.getMaxX())
-                                      && (y >= envelope.getMinY()) && (y <= envelope.getMaxY())) {
-            return true;
-        }
-        return false;
-    }
-    
-    function move(dx:Number, dy:Number):Void {
-        x += dx;
-        y += dy;
-        
-        dispatchEvent(new StateEvent(this, "Geometry", StateEvent.CHANGE, null, eventComp));
-    }
-    
-    function equals(geometry:Geometry):Boolean {
-        if (!(geometry instanceof Point)) {
-            return false;
-        }
-        if ((x == Point(geometry).getX()) && (y == Point(geometry).getY())) {
-            return true;
-        }
-        return false;
-    }
-    
-    function clone():Geometry {
-        return new Point(x, y);
-    }
-    
-    function setXY(x:Number, y:Number):Void {
+    function setXY(x:Number, y:Number, pixel:Pixel):Void {
         this.x = x;
         this.y = y;
-        
-        dispatchEvent(new StateEvent(this, "Geometry", StateEvent.CHANGE, null, eventComp));
     }
     
     function getX():Number {
@@ -84,14 +56,6 @@ class flamingo.geometrymodel.Point extends Geometry {
     
     function getY():Number {
         return y;
-    }
-    
-    function getDistance(point:Point):Number {
-        var dx:Number = x - point.getX();
-        var dy:Number = y - point.getY();
-        var distance:Number = Math.sqrt((dx * dx) + (dy * dy));
-        
-        return distance;
     }
     
     function toGMLString():String {
@@ -108,5 +72,17 @@ class flamingo.geometrymodel.Point extends Geometry {
     function toString():String {
         return("Point (" + x + ", " + y + ")");
     }
+    
+    function onChangeGeometry(geometry:Geometry):Void{
+    	//parent changed
+    	geometryEventDispatcher.changeGeometry(this);
+    }
+    
+    function onAddChild(geometry:Geometry,child:Geometry):Void{
+    	//parent changed
+    	geometryEventDispatcher.changeGeometry(this);
+    }
+    
+    
     
 }

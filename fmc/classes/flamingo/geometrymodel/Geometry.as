@@ -10,92 +10,31 @@ import flamingo.event.StateEvent;
 import flamingo.event.StateEventListener;
 import flamingo.event.StateEventDispatcher;
 import flamingo.core.AbstractComponent;
+import flamingo.event.GeometryEventDispatcher;
+import flamingo.event.GeometryListener;
 
 class flamingo.geometrymodel.Geometry {
     
-    private var stateEventDispatcher:StateEventDispatcher = null;
-    private var parent:Geometry = null;
+    var geometryEventDispatcher:GeometryEventDispatcher = null;
     private var eventComp:AbstractComponent = null;
     
     function Geometry() {
-        stateEventDispatcher = new StateEventDispatcher();
+        geometryEventDispatcher = new GeometryEventDispatcher();
     }
-    
-    function setParent(parent:Geometry):Void {
-        if (this.parent != parent) {
-            if ((this.parent != null) && (parent == null)) {
-                var previousParent:Geometry = this.parent;
-                this.parent = null;
-                previousParent.removeChild(this);
-            } else if ((this.parent == null) && (parent != null)) {
-                this.parent = parent;
-                parent.addChild(this);
-            } else if ((this.parent != null) && (parent != null)) {
-                var previousParent:Geometry = this.parent;
-                this.parent = null;
-                previousParent.removeChild(this);
-                this.parent = parent;
-                parent.addChild(this);
-            }
-        }
-    }
-    
-    function getParent():Geometry {
-        return parent;
-    }
-    
-    function getFirstAncestor():Geometry {
-        if (parent == null) {
-            return this;
-        } else {
-            return parent.getFirstAncestor();
-        }
-    }
-    
-    function addChild(child:Geometry):Void { }
-    
-    function removeChild(child:Geometry):Void { }
-    
-    function isChild(child:Geometry):Boolean {
-        var childGeometries:Array = getChildGeometries();
-        for (var i:String in childGeometries) {
-            if (childGeometries[i] == child) {
-                return true;
-            }
-        }
-        return false;
-    }
+	   
+   	function addGeometryListener(geometryListener:GeometryListener){
+		geometryEventDispatcher.addGeometryListener(geometryListener);
+	}
+      
+    function addPoint(point:Point):Void { }
     
     function getChildGeometries():Array { return null; }
     
     function getPoints():Array { return null; }
     
-    function getEndPoint():Point { return null; }
+    private function getEndPoint():Point { return null; }
     
     function getCenterPoint():Point { return null; }
-    
-    function getEnvelope():Envelope { return null; }
-    
-    function isWithin(envelope:Envelope):Boolean {
-        var points:Array = getPoints();
-        for (var i:String in points) {
-            if (!Point(points[i]).isWithin()) {
-                return false;
-            }
-        }
-        return true;
-    }
-    
-    function move(dx:Number, dy:Number):Void {
-        var childGeometries:Array = getChildGeometries();
-        for (var i:String in childGeometries) {
-            Geometry(childGeometries[i]).move(dx, dy);
-        }
-    }
-    
-    function equals(geometry:Geometry):Boolean {
-        return false;
-    }
     
     function clone():Geometry { return null; }
     
@@ -104,40 +43,14 @@ class flamingo.geometrymodel.Geometry {
     }
     
     function toGMLString():String { return null; }
-    
-    function addEventListener(stateEventListener:StateEventListener, sourceClassName:String, actionType:Number, propertyName:String):Void {
-        if (
-                (sourceClassName + "_" + actionType + "_" + propertyName != "Geometry_" + StateEvent.CHANGE + "_null")
-             && (sourceClassName + "_" + actionType + "_" + propertyName != "Geometry_" + StateEvent.ADD_REMOVE + "_childGeometries")
-           ) {
-            _global.flamingo.tracer("Exception in flamingo.geometrymodel.Geometry.addEventListener(" + sourceClassName + ", " + propertyName + ")");
-            return;
-        }
-        
-        stateEventDispatcher.addEventListener(stateEventListener, sourceClassName, actionType, propertyName);
-    }
-    
-    function removeEventListener(stateEventListener:StateEventListener, sourceClassName:String, actionType:Number, propertyName:String):Void {
-        if (
-                (sourceClassName + "_" + actionType + "_" + propertyName != "Geometry_" + StateEvent.CHANGE + "_null")
-             && (sourceClassName + "_" + actionType + "_" + propertyName != "Geometry_" + StateEvent.ADD_REMOVE + "_childGeometries")
-           ) {
-            _global.flamingo.tracer("Exception in flamingo.geometrymodel.Geometry.removeEventListener(" + sourceClassName + ", " + propertyName + ")");
-            return;
-        }
-        
-        stateEventDispatcher.removeEventListener(stateEventListener, sourceClassName, actionType, propertyName);
-    }
-    
-    private function dispatchEvent(stateEvent:StateEvent):Void {
-        stateEventDispatcher.dispatchEvent(stateEvent);
-        
-        if (parent != null) {
-            parent.dispatchEvent(stateEvent);
-        }
-	}
 	
 	public function setEventComp(gis : GIS) : Void {
 		this.eventComp = gis;
+	}
+	
+	public function setXYEndPoint(mousePoint : Point, pixel) : Void {
+			var endPoint = this.getEndPoint();
+			endPoint.setXY(mousePoint.getX(), mousePoint.getY(), pixel);
+			geometryEventDispatcher.changeGeometry(this);
 	}
 }

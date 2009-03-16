@@ -16,6 +16,9 @@ class flamingo.geometrymodel.LinearRing extends LineString {
         }
     }
     
+     function getEndPoint():Point {
+     	return Point(points[points.length - 2]);
+     }
     function toString():String {
         return("LinearRing (" + points.toString() + ")");
     }

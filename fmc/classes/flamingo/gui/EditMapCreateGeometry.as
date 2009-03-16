@@ -7,6 +7,8 @@
 import flamingo.gui.*;
 
 import flamingo.gismodel.CreateGeometry;
+import flamingo.geometrymodel.Geometry;
+import flamingo.geometrymodel.Point;
 
 class flamingo.gui.EditMapCreateGeometry extends MovieClip {
     
@@ -18,17 +20,16 @@ class flamingo.gui.EditMapCreateGeometry extends MovieClip {
     
     private var numMouseDowns:Number = 0;
     private var intervalID:Number = null;
-    private var geometry:flamingo.geometrymodel.Geometry = null;
+    private var geometry:Geometry = null;
+    private var deltaTime:Number = 0;
+    private var pressTime:Number = 0;
+    private var previousPressTime:Number = 0;
     
     function onLoad():Void {
         draw();
     }
     
     function remove():Void {
-        if (geometry != null) {
-            geometry.removeChild(geometry.getEndPoint());
-        }
-        
         this.removeMovieClip();
     }
     
@@ -51,50 +52,49 @@ class flamingo.gui.EditMapCreateGeometry extends MovieClip {
     }
     
     function onPress():Void {
-        if (numMouseDowns == 0) {
-            intervalID = setInterval(this, "resetNumMouseDowns", 300);
-        }
-        numMouseDowns++;
-        var double:Boolean = false;
-        if (numMouseDowns == 2) {
-            double = true;
-            resetNumMouseDowns();
-        }
-        
+    	var double:Boolean = false;	
+    	if (previousPressTime==0){
+    		previousPressTime = getTimer();
+    		//first click
+    	} else { 	 
+    		pressTime = getTimer();
+    		deltaTime =  pressTime - previousPressTime;
+    		if(deltaTime<300){
+    			double = true;
+    		} else {
+    			double = false;
+    		}
+    		previousPressTime = getTimer();
+    	}        
         if (double) {
             gis.setCreateGeometry(null);
-        } else {
-            var point:flamingo.geometrymodel.Point = pixel2Point(new Pixel(_xmouse, _ymouse));
+        } else {	
+            var pixel:Pixel = new Pixel(_xmouse, _ymouse);
+            var point:flamingo.geometrymodel.Point = pixel2Point(pixel);
             if (geometry == null) {
                 geometry = createGeometry.getGeometryFactory().createGeometry(point);
                 geometry.setEventComp(gis);
-                createGeometry.getLayer().addFeature(geometry, true);
+                createGeometry.getLayer().addFeature(geometry);
                 if (geometry instanceof flamingo.geometrymodel.Point) {
                     gis.setCreateGeometry(null);
                 }
             } else {
-                geometry.addChild(point);
+                geometry.addPoint(point);
             }
         }
     }
     
     function onMouseMove():Void {
         if (geometry != null) {
-            var endPoint:flamingo.geometrymodel.Point = geometry.getEndPoint();
-            var mousePoint:flamingo.geometrymodel.Point = pixel2Point(new Pixel(_xmouse, _ymouse));
-            endPoint.setXY(mousePoint.getX(), mousePoint.getY());
+        	var pixel = new Pixel(_xmouse, _ymouse);
+        	var mousePoint:Point = pixel2Point(pixel);
+        	geometry.setXYEndPoint(mousePoint , pixel);
         }
     }
     
-    private function resetNumMouseDowns():Void {
-        if (numMouseDowns >= 1) {
-            numMouseDowns = 0;
-            clearInterval(intervalID);
-        }
-    }
     
     private function pixel2Point(pixel:Pixel):flamingo.geometrymodel.Point {
-
+    	
         var extent:Object = map.getMapExtent();
 		var minX:Number = extent.minx;
         var minY:Number = extent.miny;

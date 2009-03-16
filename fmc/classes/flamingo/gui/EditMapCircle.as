@@ -21,10 +21,11 @@ class flamingo.gui.EditMapCircle extends EditMapGeometry {
     
     function doDraw():Void {
         var circle:Circle = Circle(_geometry);
-        var pixel:Pixel = point2Pixel(circle.getCenterPoint());
+       	var centrePixel:Pixel = point2Pixel(circle.getCenterPoint());
         var circlePixel:Pixel = point2Pixel(circle.getEndPoint());
-        var x:Number = pixel.getX();
-        var y:Number = pixel.getY();
+
+        var x:Number = centrePixel.getX();
+        var y:Number = centrePixel.getY();
         var circleX:Number = circlePixel.getX();
         var circleY:Number = circlePixel.getY();
         var dx:Number = circleX - x;
@@ -36,9 +37,9 @@ class flamingo.gui.EditMapCircle extends EditMapGeometry {
         clear();
         moveTo(x, y - r);
         if (type == ACTIVE) {
-            lineStyle(style.getStrokeWidth() * 2, style.getStrokeColor(), style.getStrokeOpacity());
+            lineStyle(strokeWidth * 2, strokeColor, strokeOpacity);
         } else {
-            lineStyle(style.getStrokeWidth(), style.getStrokeColor(), style.getStrokeOpacity());
+            lineStyle(strokeWidth, strokeColor, strokeOpacity);
         }
         curveTo(x + p8r, y - r, x + p4r, y - p4r);
         curveTo(x + r, y - p8r, x + r, y);
@@ -51,11 +52,11 @@ class flamingo.gui.EditMapCircle extends EditMapGeometry {
         
         if (type == ACTIVE) {
             moveTo(x, y);
-            lineStyle(style.getStrokeWidth(), style.getStrokeColor(), style.getStrokeOpacity());
+            lineStyle(strokeWidth, strokeColor, strokeOpacity);
             lineTo(circleX, circleY);
         } else {
             moveTo(x, y - r);
-            lineStyle(style.getStrokeWidth() * 2, 0, 0);
+            lineStyle(strokeWidth * 2, 0, 0);
             curveTo(x + p8r, y - r, x + p4r, y - p4r);
             curveTo(x + r, y - p8r, x + r, y);
             curveTo(x + r, y + p8r, x + p4r, y + p4r);

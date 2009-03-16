@@ -58,17 +58,14 @@ class flamingo.event.StateEventDispatcher {
         var actionType:Number = stateEvent.getActionType();
         var propertyName:String = stateEvent.getPropertyName();
         var key:String = sourceClassName.toUpperCase() + "_" + actionType + "_" + propertyName.toUpperCase();
-
         if (eventListeners[key] == null) {
             return;
         }
-        
         var comp:AbstractComponent = stateEvent.getEventComp();
         _global.flamingo.raiseEvent(comp,"onStateEvent", stateEvent.toString()); 
-     
         for (var i:Number = 0; i < eventListeners[key].length; i++) { // Dispatches the event in the same order as which the listeners were added.
             StateEventListener(eventListeners[key][i]).onStateEvent(stateEvent);
         }
-    }
+     }
     
 }

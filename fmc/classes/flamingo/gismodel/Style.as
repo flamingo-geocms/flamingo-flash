@@ -27,6 +27,8 @@ class flamingo.gismodel.Style extends AbstractComposite {
             strokeColor = Number(value);
         } else if (name == "strokeopacity") {
             strokeOpacity = Number(value);
+        } else if (name == "strokewidth") {
+            strokeWidth = Number(value);
         }
     }
     

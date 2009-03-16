@@ -11,7 +11,7 @@ class flamingo.geometrymodel.PolygonFactory extends GeometryFactory {
         var points:Array = new Array(point, point);
         var exteriorRing:LinearRing = new LinearRing(points);
         var polygon:Polygon = new Polygon(exteriorRing);
-        polygon.addChild(point.clone());
+        polygon.addPoint(point.clone());
         return polygon;
     }
     

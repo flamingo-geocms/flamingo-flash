@@ -20,9 +20,7 @@ class flamingo.geometrymodel.Circle extends Geometry {
         }
         
         this.centerPoint = centerPoint;
-        centerPoint.setParent(this);
         this.circlePoint = circlePoint;
-        circlePoint.setParent(this);
     }
     
     function getChildGeometries():Array {

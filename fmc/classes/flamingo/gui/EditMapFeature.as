@@ -16,25 +16,21 @@ class flamingo.gui.EditMapFeature extends GeometryPane implements StateEventList
     private var feature:Feature = null; // Set by init object.
     
     function onLoad():Void {
-        super.onLoad();
-        
-      //  useHandCursor = false;
+        super.onLoad(); 
         
         gis.addEventListener(this, "GIS", StateEvent.CHANGE, "activeFeature");
         feature.addEventListener(this, "Feature", StateEvent.CHANGE, "values");
-        
         if (feature == gis.getActiveFeature()) {
-            addEditMapGeometry(feature.getGeometry(), EditMapGeometry.ACTIVE, feature.getLabelText(), 0);
+            addEditMapGeometry(feature.getGeometry(), EditMapGeometry.ACTIVE, feature.getLabelText(), 0, false);
         } else {
-            addEditMapGeometry(feature.getGeometry(), EditMapGeometry.NORMAL, feature.getLabelText(), 0);
+            addEditMapGeometry(feature.getGeometry(), EditMapGeometry.NORMAL, feature.getLabelText(), 0, false);
         }
+        editMapGeometries[0].addChildGeometries();
     }
     
     function remove():Void { // This method is an alternative to the default MovieClip.removeMovieClip. Also unsubscribes as event listener. The event method MovieClip.onUnload cannot be used, because it works buggy.
         gis.removeEventListener(this, "GIS", StateEvent.CHANGE, "activeFeature");
         feature.removeEventListener(this, "Feature", StateEvent.CHANGE, "values");
-        
-        removeEditMapGeometries();
         this.removeMovieClip(); // Keyword "this" is necessary here, because of the global function removeMovieClip.
     }
     

@@ -24,33 +24,33 @@ class flamingo.gui.EditMapPolygon extends EditMapGeometry {
         var polygon:Polygon = Polygon(_geometry);
         var exteriorRing:LinearRing = polygon.getExteriorRing();
         var points:Array = exteriorRing.getPoints();
-        var pixel:Pixel = point2Pixel(Point(points[0]));
+        var pixel:Pixel = point2Pixel(points[0]);
         var x:Number = pixel.getX();
         var y:Number = pixel.getY();
         
         clear();
         moveTo(x, y);
         if (type == ACTIVE) {
-            lineStyle(0, style.getStrokeColor(), style.getStrokeOpacity());
+            lineStyle(0, strokeColor, strokeOpacity);
         } else {
-            lineStyle(style.getStrokeWidth(), style.getStrokeColor(), style.getStrokeOpacity());
+            lineStyle(strokeWidth , strokeColor, strokeOpacity);
         }
         if (style.getFillOpacity() > 0) {
-            beginFill(style.getFillColor(), style.getFillOpacity());
+            beginFill(fillColor, fillOpacity);
         }
         for (var i:Number = 1; i < points.length; i++) {
-            pixel = point2Pixel(Point(points[i]));
+            pixel =  point2Pixel(points[i]);
             lineTo(pixel.getX(), pixel.getY());
         }
-        if (style.getFillOpacity() > 0) {
+        if (fillOpacity > 0) {
             endFill();
         }
         
         if (type != ACTIVE) {
             moveTo(x, y);
-            lineStyle(style.getStrokeWidth() * 2, 0, 0);
+            lineStyle(strokeWidth * 2, 0, 0);
             for (var i:Number = 1; i < points.length; i++) {
-                pixel = point2Pixel(Point(points[i]));
+                pixel =  point2Pixel(points[i]);
                 lineTo(pixel.getX(), pixel.getY());
             }
         }
