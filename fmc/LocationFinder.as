@@ -255,7 +255,8 @@ function addLocation(xml:Object) {
 				//set default values
 				location.visible = true;
 				location.type = "arcims";
-				
+				location.dataframe ="Layers";
+
 				location.language = new Object();
 				flamingo.parseString(xnode[i], location.language);
 				locationdata.push(location);
@@ -287,6 +288,9 @@ function addLocation(xml:Object) {
 						break;
 					case "service" :
 						location.service = val;
+						break;
+					case "dataframe" :
+						location.dataframe = val;
 						break;
 					case "layerid" :
 						location.layerid = val;
@@ -628,7 +632,15 @@ function _findLocationARC(locationdata:Object, search:String, nr:Number, updatef
 				if (query.length == 0) {
 					query = "UPPER("+locationdata.searchfield+") like '%"+astr[i]+"%'";
 				} else {
-					query = query+" "+"AND"+" UPPER("+locationdata.searchfield+") like '%"+astr[i]+"%'";
+					if(query == undefined)
+					{
+						query = "UPPER("+locationdata.searchfield+") like '%"+astr[i]+"%'";
+					}
+					else
+					{
+						query = query+" "+"AND"+" UPPER("+locationdata.searchfield+") like '%"+astr[i]+"%'";
+					}
+					
 				}
 			}
 		}
@@ -812,7 +824,9 @@ function _findLocationARC(locationdata:Object, search:String, nr:Number, updatef
 		}
 		var map = flamingo.getComponent(this.listento[0]);			
 		var extent:Object = map.getFullExtent(); 
-	
+
+		connArcServer.dataframe = locationdata.dataframe;
+
 		connArcServer.getFeatures(service, layerid, extent, outputfields, query);
 		if (updatefeatures) {
 			mHolder.tFeatures.htmlText = "<span class='busy'>"+flamingo.getString(thisObj, "busy")+"</span>";

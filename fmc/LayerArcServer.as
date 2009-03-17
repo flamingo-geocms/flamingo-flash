@@ -609,9 +609,22 @@ function _update(nrtry:Number):Void {
 	flamingo.raiseEvent(this, "onUpdate", this, nrtry);
 //	conn.getSelectedFeatureId(mapservice, extent, {width:Math.ceil(map.__width), height:Math.ceil(map.__height)}, layers);
 	
+	//add escapes
+	for(var i in layers)
+	{
+		layers[i].query = searchAndReplace(layers[i].query, "<", "&lt;");
+		layers[i].query = searchAndReplace(layers[i].query, ">", "&gt;");
+	}
 	conn.getImage(mapservice, extent, {width:Math.ceil(map.__width), height:Math.ceil(map.__height), dpi:96}, layers);
 	thisObj._starttimeout();
 }
+
+function searchAndReplace(holder, searchfor, replacement):String {
+	temparray = holder.split(searchfor);
+	holder = temparray.join(replacement);
+	return (holder);
+}
+
 function _starttimeout() {
 	clearInterval(timeoutid);
 	timeoutid = setInterval(this, "_timeout", (timeout*1000));
@@ -821,6 +834,7 @@ function _identifylayer(_identifyextent:Object, starttime:Date) {
 		_featurelimit = this.featurelimit;
 	}
 	conn.featurelimit = _featurelimit;
+	conn.dataframe = dataframe;
 	switch (layers[layerid].type) {
 	case "featureclass" :
 	case "Feature Layer" :
@@ -843,6 +857,12 @@ function _identifylayer(_identifyextent:Object, starttime:Date) {
 		}
 		var subfields:String = layers[layerid].subfields.split(",").join(" ");
 		var query:String = layers[layerid].query;
+		//add escapes
+		for(var i in layers)
+		{
+			query = searchAndReplace(query, "<", "&lt;");
+			query = searchAndReplace(query, ">", "&gt;");			
+		}
 		conn.getFeatures(mapservice, layerid, real_identifyextent, subfields, query, map.copyExtent(_identifyextent));
 		break;
 	case "image" :
@@ -1230,6 +1250,13 @@ function _maptip() {
 	conn.featurelimit = 1;
 	var query:String = layers[layerid].query;
 	
+	//add escapes
+	for(var i in layers)
+	{
+		query = searchAndReplace(query, "<", "&lt;");
+		query = searchAndReplace(query, ">", "&gt;");
+	}
+	
 	conn.getFeatures(mapservice, layerid, maptipextent, maptipfields, query, this.map.copyExtent(this.maptipextent));
 }
 //custom functions 
@@ -1239,6 +1266,12 @@ function updateLayerFID(layerId:String){
 	var query:String = getLayerProperty(layerId, "query").toString();
 	if(query == undefined){
 		query = "";
+	}
+	//add escapes
+	for(var i in layers)
+	{
+		query = searchAndReplace(query, "<", "&lt;");
+		query = searchAndReplace(query, ">", "&gt;");
 	}
 	conn.getQueryFeatureIDs(mapService.mapservice, layerId, query, layers);
 	var lConn = new Object();
@@ -1406,6 +1439,12 @@ function _maptip(x:Number, y:Number) {
 		_maptipextent.maxx = _maptipextent.minx+w;
 		_maptipextent.maxy = _maptipextent.miny+h;
 
+		//add escapes
+			for(var i in layers)
+		{
+			query = searchAndReplace(query, "<", "&lt;");
+			query = searchAndReplace(query, ">", "&gt;");
+		}
 		conn.getFeatures(mapservice, layerid, _maptipextent, flds, query, {x:x, y:y});
 		break;
 	case "image" :
