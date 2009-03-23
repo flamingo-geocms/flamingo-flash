@@ -434,7 +434,8 @@ function findLocation(locationfinderid:String, search:String, nr:Number, zoom:Bo
 }
 function _findLocation(locationdata:Object, search:String, nr:Number, updatefeatures:Boolean, zoom:Boolean) {	
 	entersDone--;
-	if (entersDone==0){
+	//when a location is entered via the url the entersDone will be smaller than zero
+	if (entersDone<=0){
 		if (locationdata.type.toUpperCase()=='WFS'){
 			_findLocationWFS(locationdata,search,nr,updatefeatures,zoom);
 		}else{
