@@ -5,7 +5,7 @@ function addSWFObjectWithAuthentication(configURL, params) {
         request.send("");
         var componentNodes = request.responseXML.documentElement.childNodes;
         for (var i = 0; i < componentNodes.length; i++) {
-            if (componentNodes[i].nodeName == "tpc:Authentication") {
+            if (componentNodes[i].nodeName == "fmc:Authentication") {
                 var nodes = componentNodes[i].childNodes;
                 var node = null;
                 var serverURL = null;
@@ -13,10 +13,10 @@ function addSWFObjectWithAuthentication(configURL, params) {
                 var roles = "";
                 for (var j = 0; j < nodes.length; j++) {
                     node = nodes[j];
-                    if (node.nodeName == "tpc:Resource") {
+                    if (node.nodeName == "fmc:Resource") {
                         serverURL = node.attributes[1].nodeValue;
                         resourceName = node.attributes[0].nodeValue;
-                    } else if (node.nodeName == "tpc:Role") {
+                    } else if (node.nodeName == "fmc:Role") {
                         if (roles != "") {
                             roles += ";";
                         }
