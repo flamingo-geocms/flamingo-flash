@@ -92,7 +92,6 @@ lMap.onIdentifyData = function(map:MovieClip, maplayer:MovieClip, data:Object, e
 						var fieldname = "["+a[a.length-1]+"]";
 						textinfo += newline+fieldname+"="+data[layerid][record][field];
 					}
-					//txtInfo.htmlText += newline;
 				}
 			}
 		}
@@ -107,10 +106,15 @@ function convertInfo(infostring:String, record:Object):String {
 	//convert \\t to \t 
 	t = t.split("\\t").join("\t");
 	for (var field in record) {
-		var value = record[field];
-		
-		
-		
+		var value:String = record[field];
+		//replace < with &lt; < causes problems in a htmlTextField
+		var valArray:Array = value.split("<");
+		if(valArray.length>1){
+			value=valArray[0];
+			for(var i:Number=1;i<valArray.length;i++){
+				value+="&lt;" + valArray[i];
+			}
+		}	
 		var fieldname = field;
 		if (stripdatabase) {
 			var a = field.split(".");
@@ -364,8 +368,8 @@ function refresh() {
 	txtInfo.htmlText = str;
 	txtInfo.scroll = txtInfo.maxscroll;
 }
-function getHtmlText(url:String):Void {
 
+function getHtmlText(url:String):Void {
 	xmlServer = new XML();
   	xmlResponse = new XML();
   	xmlResponse.onLoad = onLoadHtmlText;
