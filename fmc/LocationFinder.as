@@ -906,6 +906,10 @@ function initControls() {
 	//
 	mHolder.cbChoice.drawFocus = "";
 	mHolder.cbChoice.getDropdown().drawFocus = "";
+	
+	//mHolder.cbChoice.onKillFocus = function(newFocus:Object) {
+		//super.onKillFocus(newFocus);
+	//};
 	//mHolder.cbChoice.borderStyle = "none";
 	//mHolder.cbChoice.backgroundColor = 0x000000
 	mHolder.cbChoice.themeColor = 0x999999;
@@ -916,8 +920,10 @@ function initControls() {
 	mHolder.cbChoice.textSelectedColor = 0x000000;
 	//mHolder.cbChoice.fontFamily = "Verdana";
 	//mHolder.cbChoice.fontSize = 9;
-	//mHolder.cbChoice.onKillFocus = function() {
-	//};
+	// to prevent the list to close after scrolling
+	mHolder.cbChoice.onKillFocus = function(newFocus:Object) {
+			super.onKillFocus(newFocus);
+	};
 	var cbListener:Object = new Object();
 	// Create event handler function.
 	cbListener.change = function(evt_obj:Object) {
@@ -978,8 +984,10 @@ function initControls() {
 	//mHolder.cbFeature.fontSize = 9;
 	mHolder.cbFeature.drawFocus = "";
 	mHolder.cbFeature.getDropdown().drawFocus = "";
-	//mHolder.cbFeature.onKillFocus = function() {
-	//};
+	// to prevent the list to close after scrolling
+	mHolder.cbFeature.onKillFocus = function(newFocus:Object) {
+			super.onKillFocus(newFocus);
+	};
 	var cbListener2:Object = new Object();
 	// Create event handler function.
 	cbListener2.change = function(evt_obj:Object) {
