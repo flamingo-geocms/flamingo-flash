@@ -185,6 +185,9 @@ class flamingo.gui.dde.DownloadLegend extends MovieClip implements DDEConnectorL
 							var downloadableLayersLabel:String = "";
 							for(var l:Number=0;l<sublayers.length;l++){
 								var service = layers[sublayers[l]].mapService;
+								if(service == undefined) {
+								    _global.flamingo.tracer("service undefined for sublayer '" + sublayers[l] + "'");
+								}
 								item.vis = layers[sublayers[l]].vis;
 								item.id = layers[sublayers[l]].id;
 								for(var k:Number=0;k<ddeLayers.length;k++){
@@ -249,8 +252,8 @@ class flamingo.gui.dde.DownloadLegend extends MovieClip implements DDEConnectorL
 					}
 				}
 				if(!found){
-					_global.flamingo.tracer("Voor de ddelaag " + ddeLayers[k].dataService + ":" + ddeLayers[k].name + 
-												" is geen overeenkomend legendaitem gevonden");
+					_global.flamingo.tracer("For ddelayer " + ddeLayers[k].dataService + ":" + ddeLayers[k].name + 
+												" no corresponding legend item found");
 				}
 				
 			}
