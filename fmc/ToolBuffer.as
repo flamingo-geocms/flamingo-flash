@@ -1,31 +1,17 @@
 ﻿/*-----------------------------------------------------------------------------
-Copyright (C) 2007  Abeer Mahdi 
-Abeer.Mahdi@realworld-systems.com
-
-This file is part of Flamingo MapComponents developt by Realworld-systems.
-
-Flamingo MapComponents is free software; you can redistribute it and/or
-modify it under the terms of the GNU General Public License
-as published by the Free Software Foundation; either version 2
-of the License, or (at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
------------------------------------------------------------------------------*/
+* This file is part of Flamingo MapComponents.
+* Author: Abeer Mahdi
+* Realworld Systems BV
+ -----------------------------------------------------------------------------*/
 /** @component ToolBuffer
 * Tool for buffering objects in a map.
 * @file ToolBuffer.fla (sourcefile)
 * @file ToolBuffer.swf (compiled component, needed for publication on internet)
 * @file ToolBuffer.xml (configurationfile, needed for publication on internet)
 * @configstring tooltip Tooltip.
-* @configcursor pan Cursor shown when the tool is hoovering over a map.
-* @configcursor grab Cursor shown when the tool clicks on a map.
 * @configcursor busy Cursor shown when a map is updating and holdonidentify(attribute of Map) is set to true.
 */
-var version:String = "2.0";
+var version:String = "3.0";
 //-------------------------------------------
 var thisObj:MovieClip = this;
 var zoomscroll:Boolean = true;
@@ -77,10 +63,31 @@ init();
 /** @tag <fmc:ToolBuffer>  
 * This tag defines a tool for buffering features in a map. 
 * @hierarchy childnode of <fmc:ToolGroup> 
+* @example 
+*	 <fmc:ToolGroup>
+*		 <fmc:ToolBuffer id="buffer" mapServiceId="samenleving" legendId="legenda" >
+*			<layer id="gemeente" label="gemeente" fillcolor="0,255,255" filltransparency=".3" boundarycolor="0,0,0" boundarywidth="1" legendLabel="gemeente" />
+*			</layer>
+*		</fmc:ToolBuffer>
+*	 <fmc:ToolGroup>
+*
 * @attr zoomscroll (defaultvalue "true")  Enables (zoomscroll="true") or disables (zoomscroll="false") zooming with the scrollwheel.
 * @attr enabled (defaultvalue="true") True or false.
-* @attr skin (defaultvalue="") Available skins: "_buffer" 
+* @attr mapServiceId The id of the mapservice where the buffer is applied to
+* @attr legendid The id of the legend, this is needed for updating the legend according the buffer.
+* @attr datafilterToolid The id of the datafilter tool if existing, this is necessary for the update of the data in the legend.
 */
+/** @tag <layer>  
+* This defines the layer where the buffer is applied to
+* @attr id  layerid, same as in the mxd.
+* @attr label label of the layer that will be shown in the selection window
+* @attr fillcolor (default value="0,255,255") the fill color of the buffer
+* @attr filltransparency (default value="0.3") the transparency of the buffer
+* @attr boundarycolor (default value="0,0,0") the color of the border of the buffer
+* @attr boundarywidth (default value="1") the width of the border of the buffer
+* @attr legendLabel the label of layer that is added to the legend.
+*/
+
 function init() {
 	if (flamingo == undefined) {
 		var t:TextField = this.createTextField("readme", 0, 0, 0, 550, 400);

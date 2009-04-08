@@ -6,10 +6,9 @@ Created by : Abeer.Mahdi@realworld-systems.com
 class ArcServerConnector {
 	//meta
 	var version:String = "F2";
-	//algemeen
 	var server:String = "";
 	var service:String = "";
-	var servlet:String = "/ArcGIS/services/";
+	var servlet:String = "/arcgis/services/";
 	var dataframe = "Layers";
 	var xmlheader:String = "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>";
 	//getServiceInfo defaults
@@ -52,13 +51,6 @@ class ArcServerConnector {
 	private var layerid:String;
 	private var events:Object;
 	private var requestid:Number = 0;
-	//private var requesttype:String;
-	//private var url:String;
-	//private var xrequest:XML;
-	//private var xresponse:XML;
-	//private var error:String;
-	//private var time:Date;
-	//-----------------------
 	//-----------------------
 	function addListener(listener:Object) {
 		events.addListener(listener);
@@ -189,10 +181,10 @@ class ArcServerConnector {
 		if (service != undefined) {
 			this.service = service;
 		}
-		var sxml:String = this.xmlheader+"\n";//+"\n<GETCLIENTSERVICES/>";
+		var sxml:String = this.xmlheader+"\n";
 		sxml += "<SOAP-ENV:Envelope xmlns:SOAP-ENV=\"http://schemas.xmlsoap.org/soap/envelope/\"";
 		sxml +="xmlns:SOAP-ENC=\"http://schemas.xmlsoap.org/soap/encoding/\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"";
-		sxml +="xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\n<SOAP-ENV:Body>\n<m:GetServerInfo xmlns:m=\"http://www.esri.com/schemas/ArcGIS/9.2\">\n";
+		sxml +="xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\n<SOAP-ENV:Body>\n<m:GetServerInfo xmlns:m=\"http://www.esri.com/schemas/ArcGIS/9.3\">\n";
 		sxml +="<MapName>"+dataframe+"</MapName>\n</m:GetServerInfo>\n</SOAP-ENV:Body>\n</SOAP-ENV:Envelope>"
 		return (this._sendrequest(sxml, "getServiceInfo", objecttag));
 	}
@@ -244,26 +236,6 @@ class ArcServerConnector {
 										layer.minscale = (layerChilds[k].childNodes[0].nodeValue)/scalefactor;
 									}
 									break;
-//								case "Extent":
-//									var layerExtent = layerChilds[k].childNodes[0].childNodes;
-//									for(var g:Number = 0; g<layerExtent.length; g++)
-//									{
-//										switch(layerExtent[g].nodeName){
-//											case "XMin":
-//												layer.minx = this._asNumber(layerExtent[g].childNodes[0].nodeValue);
-//												break;
-//											case "YMin":
-//												layer.miny = this._asNumber(layerExtent[g].childNodes[0].nodeValue);
-//												break;
-//											case "XMax":
-//												layer.maxx = this._asNumber(layerExtent[g].childNodes[0].nodeValue);
-//												break;
-//											case "YMax":
-//												layer.maxy = this._asNumber(layerExtent[g].childNodes[0].nodeValue);
-//											break;
-//										}
-//									}
-//								break;
 								case "Fields" :
 									layer.fields = new Object();
 									var field_array = layerChilds[k].childNodes[0].childNodes;

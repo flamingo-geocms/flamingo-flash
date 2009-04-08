@@ -1,18 +1,6 @@
 ﻿/*-----------------------------------------------------------------------------
-Copyright (C) 2007 Abeer Mahdi
+Copyright (C) 2008 Abeer Mahdi
 Abeer.Mahdi@realworld-systems.com
-
-This file is part of Flamingo MapComponents.
-
-Flamingo MapComponents is free software; you can redistribute it and/or
-modify it under the terms of the GNU General Public License
-as published by the Free Software Foundation; either version 2
-of the License, or (at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
 
 -----------------------------------------------------------------------------*/
 /** @component ToolDataFilter
@@ -22,12 +10,8 @@ GNU General Public License for more details.
 * @file ToolDataFilter.swf (compiled component, needed for publication on internet)
 * @file ToolDataFilter.xml (configurationfile, needed for publication on internet)
 * @configstring tooltip Tooltip.
-* @configcursor pan Cursor shown when the tool is hoovering over a map.
-* @configcursor grab Cursor shown when the tool clicks on a map.
-* @configcursor busy Cursor shown when a map is updating and holdonidentify(attribute of Map) is set to true.
 */
-var version:String = "2.0";
-
+var version:String = "3.0";
 //-------------------------------------------
 var clickdelay:Number = 1000;
 var xold:Number;
@@ -45,7 +29,7 @@ var layerLabel:String;
 var prev_selectedID:String;
 var mapServiceId:String;
 var valueString:String = "";
-var addedText = "\nwaarvoor geldt\n";
+var addedText = "\n\n";
 var legendId:String;
 var bufferToolid:String;
 //hide windows
@@ -83,18 +67,39 @@ lMap.onChangeExtent = function(map:MovieClip):Void  {
 		showWindow(rect.width,rect.height);
 	}
 };
-
 //--------------------------------------------------
 init();
 //--------------------------------------------------
 /** @tag <fmc:ToolDataFilter>  
-* This tag defines a tool for filtering features in a map. 
+* This tag defines a tool that filters the data from the layer according to specific attributes. When the tool is clicked a window is shown where the attributes can be selected, after that the map is refreshed. 
 * @hierarchy childnode of <fmc:ToolGroup> 
-* @attr clickdelay  (defaultvalue "1000") Time in milliseconds (1000 = 1 second) between releasing the mouse and updating the map when the user clicks the map. In this time the user can click again and the update of the map wil be postponed.
-* @attr pandelay  (defaultvalue "1000") Time in milliseconds (1000 = 1 second) between releasing the mouse and updating the map when the user drags the map. In this time the user can pickup the map again and the update of the map wil be postponed.
+* @example 
+*	 <fmc:ToolGroup>
+*		<fmc:ToolDataFilter id="datafilter" mapServiceId="samenleving" legendId="legenda" bufferToolid="buffer">
+*			 <layer id="basisscholen" label="basisscholen" legendLabel="voorzieningen.basisscholen">
+*				 <field id="gemeente" label="gemeente" operations="=" includeValues="../config/PZH_gemeenten.xml"/>
+*			 </layer>
+*		 </fmc:ToolDataFilter>
+*	</fmc:ToolGroup>
+*
 * @attr zoomscroll (defaultvalue "true")  Enables (zoomscroll="true") or disables (zoomscroll="false") zooming with the scrollwheel.
 * @attr enabled (defaultvalue="true") True or false.
-* @attr skin (defaultvalue="") Available skins: "", "f2"
+* @attr mapServiceId The id of the mapservice where the filter is applied to
+* @attr legendid The id of the legend, this is needed for updating the legend according the filter.
+* @attr bufferToolid The id of the toolBuffer if existing.
+*
+* @tag <layer>  
+* This defines the layer where the buffer is applied to
+* @attr id  layerid, same as in the mxd.
+* @attr label label of the layer that will be shown in the selection window
+* @attr legendlabel label for the layer that will be added to the legend
+*
+* @tag <field>  
+* This defines the layer where the buffer is applied to
+* @attr id  id of the field as defined in the database.
+* @attr label label of the field that will be shown in the selection window
+* @attr operations the operations that can be applied to the field.
+* @attr includeValues the path to the field where the attribute values are defined.
 */
 function init() {
 	if (flamingo == undefined) {
@@ -109,7 +114,6 @@ function init() {
 	var xml:XML = flamingo.getDefaultXML(this);
 	this.setConfig(xml);
 	delete xml;
-	//custom
 	//custom
 	var xmls:Array = flamingo.getXMLs(this);
 	for (var i = 0; i<xmls.length; i++) {
@@ -177,8 +181,7 @@ function setConfig(xml:Object) {
 			default :
 				break;
 		}
-	}
-	
+	}	
 	var layerXml = xml.childNodes;
 	for (var i = 0; i<layerXml.length; i++) {
 		var layer = layerXml[i];
@@ -298,7 +301,6 @@ function initWindow() {
 	initControls();
 }
 
-
 function initControls() {
 	//Initialize controls
 	window.content.lbl_notValid.visible = false;
@@ -344,7 +346,6 @@ function initControls() {
 	};
 
 	window.content._lockroot = true;
-
 
 	//Set control events
 

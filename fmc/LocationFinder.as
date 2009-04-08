@@ -18,8 +18,7 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 -----------------------------------------------------------------------------
 Modified by : Abeer.Mahdi@realworld-systems.com
-		     Realworld systems 
-			 tel: 0345 614406
+		     Realworld systems BV
 			 
 Change: Extented locationfinder to work with Arcgis server connections.
 ------------------------------------------------------------------------------

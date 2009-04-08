@@ -1,9 +1,18 @@
 ﻿/*-----------------------------------------------------------------------------
-Created by : Abeer.Mahdi@realworld-systems.com
-		     Realworld systems 
-			 tel: 0345 614406
+* This file is part of Flamingo MapComponents.
+* Author: Abeer Mahdi
+* Realworld Systems BV
+ -----------------------------------------------------------------------------*/
+/** @component LayerArcServer
+* ESRI ArcGIS server layer.
+* @version 3.0
+* @file ArcServerConnector.as (sourcefile)
+* @file LayerArcServer.fla (sourcefile)
+* @file LayerArcServer.swf (compiled layer, needed for publication on internet)
+* @file LayerArcServer.xml (configurationfile for layer, needed for publication on internet)
+*/
 -----------------------------------------------------------------------------*/
-var version:String = "2.0.2";
+var version:String = "3.0";
 //---------------------------------
 //properties which can be set in ini
 var visible:Boolean;
@@ -79,16 +88,31 @@ flamingo.addListener(lMap, flamingo.getParent(this), this);
 init();
 //-----------------------------------
 /** @tag <fmc:LayerArcServer>  
-* This tag defines a ESRI ArcGIS Server layer.
+* This tag defines a ESRI ArcGIS Server (version 9.3) layer .
 * @hierarchy childnode of <fmc:Map> 
+* @example 
+* <fmc:Map id="map"  left="5" top="5" bottom="bottom -5" right="right -5"  extent="13562,306839,278026,614073,Nederland" fullextent="13562,306839,278026,614073,Nederland">
+*   <fmc:LayerArcIMS  id="layer1" identifyall="true" server="www.mymap.com"  mapservice="mymap" identifyids="1,39" maptipids="1">
+*      <layer id="1" subfields="field1,field2"  maptip="name:[field3]" >
+*         <string id="maptip" en="name:[field3]" nl="naam:[field3]"/>
+*      </layer>
+*   </fmc:LayerArcIMS>
+* </fmc:Map>
+
 * @attr server  servername of the ArcGIS Server mapservice
-* @attr mapservice  mapservicename
+* @attr mapservice  mapservice name
 * @attr identifyall (defaultvalue = "false") true or false;  true= all layerid's will be identified, false = identify stops after identify success
-* @attr visibleids Comma seperated list of layerid's (same as in axl) Id's in this list will be visible.
-* @attr hiddenids Comma seperated list of layerid's (same as in axl) Id's in this list will be hidden.
-* @attr identifyids Comma seperated list of layerid's (same as in axl) Id's in this list will be identified in the order of the list. Use keyword "#ALL#" to identify all layers.
-* @attr maptipids Comma seperated list of layerid's (same as in axl) Id's in this list will be queried during a maptip event. Use keyword "#ALL#" to query all layers.
+* @attr legend  (defaultvalue = "false") true or false;   false = no legend image wil be generated with an update
+* @attr hiddenids Comma seperated list of layerid's (the order of the layers same as in mxd) Id's in this list will be hidden.
+* @attr visibleids Comma seperated list of layerid's (the order of the layers same as in mxd) Id's in this list will be visible.
+* @attr identifyids Comma seperated list of layerid's (the order of the layers same as in mxd) Id's in this list will be identified in the order of the list. Use keyword "#ALL#" to identify all layers.
+* @attr maptipids Comma seperated list of layerid's (the order of the layers same as in mxd) Id's in this list will be queried during a maptip event. Use keyword "#ALL#" to query all layers.
 * @attr dataframe dataframename of the mapservice
+* @attr fullextent Extent of layer (comma seperated list of minx,miny,maxx,maxy). When the map is outside this extent, no update will performed.
+* @attr visible  (defaultvalue "true") true or false
+* @attr alpha (defaultvalue = "100") Transparency of the layer
+* @attr minscale  If mapscale is less then or equal minscale, the layer will not be shown.
+* @attr maxscale  If mapscale is greater then maxscale, the layer will not be shown.. 
 */
 /** @tag <layer>  
 * This defines a sublayer of an ArcGIS Server mapservice
@@ -337,8 +361,7 @@ function setConfig(xml:Object) {
 			}
 		}
 	}
-	//                                  
-	//
+
 	if (visible == undefined) {
 		visible = true;
 	}
@@ -383,7 +406,6 @@ function setConfig(xml:Object) {
 					layers[id][attr] = servicelayers[id][attr];
 				}
 			}
-//			if (layers[id].type == "featureclass") {
 			if (layers[id].type == "Feature Layer") {
 				layers[id].queryable = true;
 			} else {
@@ -530,10 +552,6 @@ function _update(nrtry:Number):Void {
 		}
 	};
 	
-	//test//
-//	lConn.onGetSelectedFeatureID = function(objecttag:Object, requestid:String){
-//		trace("event");
-//	};	
 	lConn.onGetImage = function(ext:Object, imageurl:String, legurl:String, objecttag:Object, requestid:String) {
 		if (legurl.length>0) {
 			legendurl = legurl;
@@ -554,7 +572,6 @@ function _update(nrtry:Number):Void {
 		listener.onLoadInit = function(mc:MovieClip) {
 			var loadtime = (new Date()-starttime)/1000;
 			mc.extent = ext;
-			//mc.requestedextent = objecttag;
 			updateCache(mc);
 			if (map.fadesteps>0) {
 				mc.loadtime = loadtime;
@@ -607,7 +624,6 @@ function _update(nrtry:Number):Void {
 	var starttime = new Date();
 	var vislayers = _getVisLayers();
 	flamingo.raiseEvent(this, "onUpdate", this, nrtry);
-//	conn.getSelectedFeatureId(mapservice, extent, {width:Math.ceil(map.__width), height:Math.ceil(map.__height)}, layers);
 	
 	//add escapes
 	for(var i in layers)
@@ -1405,7 +1421,7 @@ function _maptip(x:Number, y:Number) {
 			}
 		}
 	};
-	//
+	
 	var layerid:String = String(_maptiplayers.pop());
 	var conn:ArcServerConnector = new ArcServerConnector(server);
 
@@ -1459,9 +1475,6 @@ function _getValue(record:Object, field:String):String {
 			value = record[fld];
 			break;
 		}
-//		if (fld.indexOf(".", 0)>=0 and field.indexOf(".", 0)<0) {
-			//field = "."+field;
-//		}
 		if (fld.substr(fld.length-field.length).toLowerCase() == field.toLowerCase()) {
 			value = record[fld];
 			break;
@@ -1469,15 +1482,13 @@ function _getValue(record:Object, field:String):String {
 	}
 	return value;
 }
-//
-//
 function _string2Table(s:String, rdel:String, fdel:String):Array {
 	var table:Array = new Array();
 	var record:Object;
 	var records:Array;
 	var values:Array;
 	var fields:Array;
-	//
+	
 	s = flamingo.trim(s);
 	records = flamingo.asArray(s, rdel);
 	fields = flamingo.asArray(records[0], fdel);
@@ -1491,7 +1502,7 @@ function _string2Table(s:String, rdel:String, fdel:String):Array {
 	}
 	return table;
 }
-//
+
 function _getMaptipFields(layerid:String, maptip:String):String {
 	layers[layerid].maptipfields = new Object();
 	var flds:Array = new Array();
@@ -1510,7 +1521,7 @@ function _getMaptipFields(layerid:String, maptip:String):String {
 		}
 		begin = maptip.indexOf("[", begin+1);
 	}
-	//
+	
 	for (var jointo in layers[layerid].mydatajoins) {
 		for (var joinfield in layers[layerid].mydatajoins[jointo]) {
 			for (var maptipfield in temp) {
@@ -1524,7 +1535,7 @@ function _getMaptipFields(layerid:String, maptip:String):String {
 	for (var maptipfield in temp) {
 		flds.push(maptipfield);
 	}
-	//
+	
 	return flds.join(" ");
 }
 function _makeMaptip(layerid:String, maptip:String, record:Object):String {

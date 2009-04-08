@@ -1,34 +1,16 @@
 ﻿/*-----------------------------------------------------------------------------
-Copyright (C) 2009  Koen Vermeer
-
-This file is part of Flamingo MapComponents.
-
-Flamingo MapComponents is free software; you can redistribute it and/or
-modify it under the terms of the GNU General Public License
-as published by the Free Software Foundation; either version 2
-of the License, or (at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
------------------------------------------------------------------------------*/
+* This file is part of Flamingo MapComponents.
+* Author: Abeer Mahdi
+* Realworld Systems BV
+ -----------------------------------------------------------------------------*/
 /** @component ToolSelect
 * Tool for selecting features on the map by dragging a rectangle on the map
 * @file ToolSelect.as (sourcefile)
 * @file ToolSelect.fla (sourcefile)
 * @file ToolSelect.swf (compiled component, needed for publication on internet)
 * @file ToolSelect.xml (configurationfile, needed for publication on internet)
-* @configstring tooltip Tooltip.
-* @configcursor cursor Cursor shown when the tool is hoovering over a map.
-* @configcursor busy Cursor shown when a map is updating and holdonupdate(attribute of Map) is set to true.
 */
-
-var version:String = "2.0";
+var version:String = "3.0";
 //----------------------------
 var zoomscroll:Boolean = true;
 var skin = "";
@@ -107,13 +89,11 @@ lMap.onMouseDown = function(map:MovieClip, xmouse:Number, ymouse:Number, coord:O
 				
 				map.select(mapServiceId, thisObj.selectExtent, selectLayer);		
 			}
-			//puin ruimen                                
 			delete lMap.onMouseMove;
 			delete lMap.onMouseUp;
 		};
 	}
 };
-
 var selectResultArray:Array;
 var featureData:Array;
 lMap.onSelectData = function(map:MovieClip, maplayer:MovieClip, data:Object, selectextent:Object, beginrecord:Number) {
@@ -156,8 +136,13 @@ init();
 //--------------------------------------------------
 
 /** @tag <fmc:ToolSelect>  
-* This tag defines a tool for selecting features. Draga rectangle on the map, the viewer will show a window with the properties of the selected features
+* This tag defines a tool for selecting features. Drag rectangle on the map, the viewer will show a window with the properties of the selected features
+* This tool works only with an Arcgis Server mapservices.
 * @hierarchy childnode of <fmc:ToolGroup> 
+* @example 
+*	 <fmc:ToolGroup>
+*    	<fmc:ToolSelect left="210" id="select" selectlayer="0,1,2,3" mapserviceid="mymapservice" listento="map" />
+*	 </fmc:ToolGroup>
 * @attr mapserviceid Id of the mapservice layer component
 * @attr selectlayer Layer which can be selected
 */
@@ -241,8 +226,6 @@ function initControls() {
 	window.content.btn_sluit.onRelease = function() {
 		hideGrid();	
 	};
-	
-	// listeners
 	
 	// Grid listener
 	myGridListener = new Object();

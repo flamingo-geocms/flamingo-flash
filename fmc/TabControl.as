@@ -1,22 +1,8 @@
 ﻿/*-----------------------------------------------------------------------------
-Copyright (C) 2009  Koen Vermeer
-
-This file is part of Flamingo MapComponents.
-
-Flamingo MapComponents is free software; you can redistribute it and/or
-modify it under the terms of the GNU General Public License
-as published by the Free Software Foundation; either version 2
-of the License, or (at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
------------------------------------------------------------------------------*/
+* This file is part of Flamingo MapComponents.
+* Author: Abeer Mahdi
+* Realworld Systems BV
+ -----------------------------------------------------------------------------*/
 /** @component TabControl
 * This component will show a tabcontrol with two tabpages
 * @file TabControl.as (sourcefile)
@@ -26,7 +12,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 * @configstring tab2Label Title of the second tabpage
 */
 
-var version:String = "2.0";
+var version:String = "3.0";
 
 //-------------------------------
 var __width:Number;
@@ -173,8 +159,7 @@ function setConfig(xml:Object) {
 		default :
 			break;
 		}
-	}
-	//
+	}	
 	_parent.initTool(this, skin+"_up", skin+"_over", skin+"_down", skin+"_up", lMap, "pan", "tooltip");
 	this.setEnabled(enabled);
 	this.setVisible(visible);
