@@ -11,7 +11,6 @@
 * @configstring tab1Label Title of the first tabpage
 * @configstring tab2Label Title of the second tabpage
 */
-
 var version:String = "3.0";
 
 //-------------------------------
@@ -21,8 +20,6 @@ var tab1Id:String;
 var tab1Label:String;
 var tab2Id:String;
 var tab2Label:String;
-//----------------------------------
-
 //---------------------------------------
 var lParent:Object = new Object();
 lParent.onResize = function() {
@@ -40,13 +37,31 @@ flamingo.addListener(lFlamingo, "flamingo", this);
 //----------------
 init();
 /** @tag <fmc:TabControl>  
-* This tag defines a tabcontrol with two tabpages.
+* This tag defines a tabcontrol with two tabpages. The component must be defined at the same level as the two tabcontrols for example if the
+* two tabpages are set in a container then the tabControl must also be set in the same container. It is also important to define the TabControl component
+* after the two tabpages are defined.
+*
 * @hierarchy childnode of <flamingo> or a container component. e.g. <fmc:Window>
 * @example
-* <fmc:TabControl left="right -210" right="right -5" top="30" tab1Id="LayerLegend" tab2Id="SymbolLegend">
-	<string id="tab1Label"><nl>Onderwerpen</nl><en>Subjects</en></string>
-	<string id="tab2Label"><nl>Legenda</nl><en>Legend</en></string>
-* </fmc:TabControl>
+* <fmc:Container left="mapright +21" top="maptop" right="right -21">	
+*	<fmc:Legend id="legend">
+*			....................................
+*	</fmc:Legend>
+*	<fmc:Legend id="legend_s" >
+*			.......................
+*	</fmc:Legend>
+*	<fmc:TabControl top="top -31" tab1Id="legend" tab2Id="legend_s">
+*		<string id="tab1Label">
+*			<nl><![CDATA[<font color="#000000" fontFamily ="Verdana"><b>Onderwerp</b></font>]]></nl>
+*			<en><![CDATA[<font color="#6666CC" fontFamily ="Verdana"><b>Subjects</b></font>]]></en>
+*		</string>
+*		<string id="tab2Label">
+*			<nl><![CDATA[<font color="#6666CC" fontFamily ="Verdana"><b>Legenda</b></font>]]></nl>
+*			<en><![CDATA[<font color="#6666CC" fontFamily ="Verdana"><b>Legend</b></font>]]></en>
+*		</string>
+*	</fmc:TabControl>
+*	</fmc:Container>
+*
 * @attr tab1Id Id of the first tabpage's component
 * @attr tab1Label Title of the first tabpage. With a String tag you can add multilanguage support.
 * @attr tab2Id Id of the second tabpage's component
@@ -76,20 +91,21 @@ function init():Void {
 	flamingo.deleteXML(this);
 	this._visible = visible;
 	flamingo.raiseEvent(this, "onInit", this);
-	
+
 	initTabs();
 }
 
 function initTabs(){
 	//Init tabpages
-	var tab1Content:MovieClip = flamingo.getComponent(this.tab1Id);
-	var tab2Content:MovieClip = flamingo.getComponent(this.tab2Id);
+	var tab1Content = flamingo.getComponent(tab1Id);
+	var tab2Content = flamingo.getComponent(tab2Id);
 
-	setTabLabels()
+	setTabLabels();
+	
 	tab1.bottomLine._visible = false;
 	tab1Content._visible = true;
 	tab2Content._visible = false;
-	
+
 	numberOfTabs = 2;
 	for (var i:Number = 1; i<=numberOfTabs; i++) {
 		line = eval("tab"+i);
@@ -109,8 +125,8 @@ function initTabs(){
 
 function setTabLabels()
 {
-	this.tab1.lbl.text = "<font color=\"#6666CC\" fontFamily =\"Verdana\"><b>"+flamingo.getString(this, "tab1Label", tab1Label)+"</b></font>";
-	this.tab2.lbl.text = "<font color=\"#6666CC\" fontFamily =\"Verdana\"><b>"+flamingo.getString(this, "tab2Label", tab2Label)+"</b></font>";
+	tab1.lbl.text = flamingo.getString(this, "tab1Label", tab1Label);
+	tab2.lbl.text = flamingo.getString(this, "tab2Label", tab2Label);
 }
 
 /**
@@ -145,16 +161,16 @@ function setConfig(xml:Object) {
 			}
 			break;
 		case "tab1id" :
-			this.tab1Id = val;
+			tab1Id = val;
 			break;
 		case "tab1label" :
-			this.tab1Label = val;
+			tab1Label = val;
 			break;
 		case "tab2id" :
-			this.tab2Id = val;
+			tab2Id = val;
 			break;
 		case "tab2label" :
-			this.tab2Label = val;
+			tab2Label = val;
 			break;
 		default :
 			break;
