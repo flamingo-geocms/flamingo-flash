@@ -11,7 +11,6 @@
 * @file LayerArcServer.swf (compiled layer, needed for publication on internet)
 * @file LayerArcServer.xml (configurationfile for layer, needed for publication on internet)
 */
------------------------------------------------------------------------------*/
 var version:String = "3.0";
 //---------------------------------
 //properties which can be set in ini
