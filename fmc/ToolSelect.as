@@ -122,7 +122,7 @@ lMap.onSelectData = function(map:MovieClip, maplayer:MovieClip, data:Object, sel
 					var a = field.split(".");
 					var fieldname = a[a.length-1];
 						
-					if(arrayContains(fieldname, fields))
+					if(arrayContains(fieldname, fields) == true)
 					{
 						var fieldvalue = dataArray[i][field];
 						r[fieldname] = fieldvalue;
@@ -351,11 +351,11 @@ function drawCircle(mc:MovieClip, x:Number, y:Number, r1:Number, r2:Number){
    mc.endFill();
 }
 
-function arrayContains(input:String, array:Array):Boolean
+function arrayContains(input:String, arrayData:Array):Boolean
 {
 	for (i=0; i<arrayData.length; i++) 
 	{
-		if (arrayData[i] == input) 
+		if (arrayData[i].name.toString() == input) 
 		{
 			return true;
 		}
