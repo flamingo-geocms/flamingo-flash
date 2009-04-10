@@ -2,6 +2,7 @@
 * This file is part of Flamingo MapComponents.
 * Author: Abeer Mahdi
 * Realworld Systems BV
+* email: Abeer.Mahdi@realworld-systems.com
  -----------------------------------------------------------------------------*/
 /** @component TabControl
 * This component will show a tabcontrol with two tabpages

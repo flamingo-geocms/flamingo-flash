@@ -1,7 +1,8 @@
 ﻿/*-----------------------------------------------------------------------------
-Copyright (C) 2008 Abeer Mahdi
-Abeer.Mahdi@realworld-systems.com
-
+* This file is part of Flamingo MapComponents.
+* Author: Abeer Mahdi
+* Realworld Systems BV
+* email: Abeer.Mahdi@realworld-systems.com
 -----------------------------------------------------------------------------*/
 /** @component ToolDataFilter
 * Tool for filtering features in a map.
@@ -78,6 +79,7 @@ init();
 //--------------------------------------------------
 /** @tag <fmc:ToolDataFilter>  
 * This tag defines a tool that filters the data from the layer according to specific attributes. When the tool is clicked a window is shown where the attributes can be selected, after that the map is refreshed. 
+* This tool works only with an ArcIMS mapservices.
 * @hierarchy childnode of <fmc:ToolGroup> 
 * @example 
 *	 <fmc:ToolGroup>

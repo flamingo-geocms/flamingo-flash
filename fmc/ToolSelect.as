@@ -2,6 +2,7 @@
 * This file is part of Flamingo MapComponents.
 * Author: Abeer Mahdi
 * Realworld Systems BV
+* email: Abeer.Mahdi@realworld-systems.com
  -----------------------------------------------------------------------------*/
 /** @component ToolSelect
 * Tool for selecting features on the map by dragging a rectangle on the map
@@ -23,7 +24,8 @@ var rectClip:MovieClip;
 var mapServiceId:String;
 var mapService;
 var selectLayer:Object = new Object();
-
+var fields:Array = new Array();
+	
 var selectExtent:Object
 var thisObj:MovieClip = this;
 var lMap:Object = new Object();
@@ -119,8 +121,12 @@ lMap.onSelectData = function(map:MovieClip, maplayer:MovieClip, data:Object, sel
 				default :
 					var a = field.split(".");
 					var fieldname = a[a.length-1];
-					var fieldvalue = dataArray[i][field];
-					r[fieldname] = fieldvalue;
+						
+					if(arrayContains(fieldname, fields))
+					{
+						var fieldvalue = dataArray[i][field];
+						r[fieldname] = fieldvalue;
+					}
 					break;
 				}
 			}
@@ -139,17 +145,27 @@ flamingo.addListener(lFlamingo, "flamingo", this);
 //--------------------------------------------------
 init();
 //--------------------------------------------------
-
 /** @tag <fmc:ToolSelect>  
-* This tag defines a tool for selecting features. Drag rectangle on the map, the viewer will show a window with the properties of the selected features
-* This tool works only with an Arcgis Server mapservices.
+* This tag defines a tool for selecting features within a layer. By dragging a rectangle on the map, the features are selected and the results are shown in a window. 
+* This tool works only with an ArcIMS mapservices.
 * @hierarchy childnode of <fmc:ToolGroup> 
 * @example 
 *	 <fmc:ToolGroup>
-*    	<fmc:ToolSelect left="210" id="select" selectlayer="0,1,2,3" mapserviceid="mymapservice" listento="map" />
+*    	<fmc:ToolSelect left="450" id="select" selectlayer="ziekenhuizen" mapserviceid="samenleving" listento="map" >
+*			<field name="NAAM" label="naam" />
+*			<field name="STRAAT" label="straat" />
+*			<field name="HUISNR" label="huisnr" />
+*			<field name="CAPACITEITEN" label="Capaciteit" />
+* 		</fmc:ToolSelect>
 *	 </fmc:ToolGroup>
 * @attr mapserviceid Id of the mapservice layer component
 * @attr selectlayer Layer which can be selected
+*
+* @tag <field>  
+* This defines the field that will be shown in the results grid
+* @attr name name of the field as in axl.
+* @attr label label of the field that wil be shown in the grid
+
 */
 function init() {
 	if (flamingo == undefined) {
@@ -220,6 +236,32 @@ function setConfig(xml:Object) {
 			break;
 		}
 	}
+	//read field tags	
+	var xfields:Array = xml.childNodes;
+	if(xfields.length > 0)
+	{
+		for (var j:Number = 0; j < xfields.length; j++)
+		{
+			fields[j] = new Array();
+			if(xfields[j].nodeName.toLowerCase() == "field")
+			{
+				for (var fieldattr in xfields[j].attributes)
+				{
+					var fieldattr:String = fieldattr.toLowerCase();
+					var fieldval:String = xfields[j].attributes[fieldattr];
+					switch (fieldattr.toLowerCase()) 
+					{
+						case "name":
+							fields[j].name = fieldval;
+						break;
+						case "label":
+							fields[j].label = fieldval;
+						break;
+					}
+				}
+			}
+		}
+	}
 	_parent.initTool(this, skin+"_up", skin+"_over", skin+"_down", skin+"_up", lMap, "cursor", "tooltip");
 	this.setEnabled(enabled);
 	this.setVisible(visible);
@@ -248,6 +290,7 @@ function initControls() {
 function setLabels()
 {
 	window.content.btn_close.label = flamingo.getString(this, "closewindow", "sluit venster");
+	window.title = flamingo.getString(this, "windowTitle", "Informatie");
 }
 //default functions-------------------------------
 function startIdentifying() {
@@ -307,6 +350,19 @@ function drawCircle(mc:MovieClip, x:Number, y:Number, r1:Number, r2:Number){
    mc._y = y;
    mc.endFill();
 }
+
+function arrayContains(input:String, array:Array):Boolean
+{
+	for (i=0; i<arrayData.length; i++) 
+	{
+		if (arrayData[i] == input) 
+		{
+			return true;
+		}
+	}
+	return false;
+}
+
 
 function drawRect(mc:MovieClip, rect:Object){
 	var mc = mc.createEmptyMovieClip("mRect1234", 0);

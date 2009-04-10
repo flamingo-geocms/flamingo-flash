@@ -2,8 +2,8 @@
 * This file is part of Flamingo MapComponents.
 * Author: Abeer Mahdi
 * Realworld Systems BV
-* Email: Abeer.Mahdi@realworld-systems.com
- -----------------------------------------------------------------------------*/
+* email: Abeer.Mahdi@realworld-systems.com
+* -----------------------------------------------------------------------------*/
 /** @component ToolBuffer
 * Tool for buffering objects in a map.
 * @file ToolBuffer.fla (sourcefile)
@@ -68,6 +68,7 @@ init();
 //--------------------------------------------------
 /** @tag <fmc:ToolBuffer>  
 * This tag defines a tool for buffering features in a map. 
+* This tool works only with an ArcIMS mapservices.
 * @hierarchy childnode of <fmc:ToolGroup> 
 * @example 
 *	 <fmc:ToolGroup>

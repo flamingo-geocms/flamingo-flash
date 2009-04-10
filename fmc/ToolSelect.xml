@@ -2,5 +2,6 @@
    <string id="tooltip" nl="Selecteren" en="select points"/>
    <cursor id="cursor" url="fmc/cursor/customMouseCursor.swf"/>
    <cursor id="busy" url="fmc/cursor/f2_CursorBusy.swf"/>
-   <string id="closewindow" nl="Venster sluiten" en="close window"/>   
+   <string id="closewindow" nl="Venster sluiten" en="close window"/>
+   <string id="windowTitle" nl="Informatie" en="Information"/>   
 </flamingo>
