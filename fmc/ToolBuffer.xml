@@ -1,4 +1,12 @@
 <ToolBuffer>
-  <string id="tooltip" nl="Zone aangeven" en="Buffer generator"/>
-  <cursor id="busy" url="fmc/CursorsMap.swf" linkageid="busy"/>
+	<string id="tooltip" nl="Zone aangeven" en="Buffer generator"/>
+	<cursor id="busy" url="fmc/CursorsMap.swf" linkageid="busy"/>
+	<string id="maplayerLabel" nl="onderwerp" en="subject" />
+	<string id="radiusLabel" nl="straal van de zone" en="radius of the buffer" />
+	<string id="unitLabel" nl="meters" en="meters" />
+	<string id="clearLabel" nl="wissen" en="clear" />
+	<string id="cancelLabel" nl="annuleren" en="cancel" />		
+	<string id="okLabel" nl="ok" en="ok" />		
+	<string id="notvalidLabel" nl="niet juist of onvolledig ingevuld" en="parameters not correct" />
+	<string id="title" nl="Zone opgeven" en="Generate buffer" />	
 </ToolBuffer>

@@ -2,6 +2,7 @@
 * This file is part of Flamingo MapComponents.
 * Author: Abeer Mahdi
 * Realworld Systems BV
+* Email: Abeer.Mahdi@realworld-systems.com
  -----------------------------------------------------------------------------*/
 /** @component ToolBuffer
 * Tool for buffering objects in a map.
@@ -19,8 +20,6 @@ var skin = "_buffer";
 var enabled = true;
 var layers:Array = new Array();
 var mapServiceId:String;
-var legendId:String;
-var addedText:String ="\nmet zone ";
 var layerLabel:String;
 var datafiltertoolid:String;
 //hide window
@@ -57,6 +56,13 @@ lMap.onChangeExtent = function(map:MovieClip):Void  {
 		showWindow(rect.width, rect.height);
 	}
 };
+
+var lFlamingo:Object = new Object();
+lFlamingo.onSetLanguage = function( lang:String ) {
+	setWindowLabels();
+	refresh();
+};
+flamingo.addListener(lFlamingo, "flamingo", this);
 //--------------------------------------------------
 init();
 //--------------------------------------------------
@@ -65,8 +71,8 @@ init();
 * @hierarchy childnode of <fmc:ToolGroup> 
 * @example 
 *	 <fmc:ToolGroup>
-*		 <fmc:ToolBuffer id="buffer" mapServiceId="samenleving" legendId="legenda" >
-*			<layer id="gemeente" label="gemeente" fillcolor="0,255,255" filltransparency=".3" boundarycolor="0,0,0" boundarywidth="1" legendLabel="gemeente" />
+*		 <fmc:ToolBuffer id="buffer" mapServiceId="samenleving" >
+*			<layer id="gemeente" label="gemeente" fillcolor="0,255,255" filltransparency=".3" boundarycolor="0,0,0" boundarywidth="1" />
 *			</layer>
 *		</fmc:ToolBuffer>
 *	 <fmc:ToolGroup>
@@ -74,8 +80,7 @@ init();
 * @attr zoomscroll (defaultvalue "true")  Enables (zoomscroll="true") or disables (zoomscroll="false") zooming with the scrollwheel.
 * @attr enabled (defaultvalue="true") True or false.
 * @attr mapServiceId The id of the mapservice where the buffer is applied to
-* @attr legendid The id of the legend, this is needed for updating the legend according the buffer.
-* @attr datafilterToolid The id of the datafilter tool if existing, this is necessary for the update of the data in the legend.
+* @attr datafilterToolid The id of the datafilter tool if existing.
 */
 /** @tag <layer>  
 * This defines the layer where the buffer is applied to
@@ -85,7 +90,6 @@ init();
 * @attr filltransparency (default value="0.3") the transparency of the buffer
 * @attr boundarycolor (default value="0,0,0") the color of the border of the buffer
 * @attr boundarywidth (default value="1") the width of the border of the buffer
-* @attr legendLabel the label of layer that is added to the legend.
 */
 
 function init() {
@@ -173,9 +177,6 @@ function setConfig2(xml:Object) {
 			case "mapserviceid" :
 				mapServiceID = val;
 				break;
-			case "legendid" :
-				legendId = val;
-				break;
 			case "datafiltertoolid":
 				datafiltertoolid = val;
 				break;
@@ -198,9 +199,6 @@ function setConfig2(xml:Object) {
 				case "id" :
 					layers[i].layerID =val;
 					break;
-				case "legendlabel" :
-					layers[i].layerLegendLabel =val;
-					break;		
 				case "fillcolor" :
 					buffer.fillcolor = val;
 					break;
@@ -245,7 +243,7 @@ function setConfig2(xml:Object) {
 function generateBuffer(layerIndex:String, radius:Number){
 	var layerComponent:String = this._parent.listento[0]+"_"+mapServiceID;
 	var mapService = flamingo.getComponent(layerComponent);
-
+	
 	if(mapService == undefined){
 		trace("map service is undefined");
 	}	
@@ -254,59 +252,9 @@ function generateBuffer(layerIndex:String, radius:Number){
 
 	mapService.setLayerProperty(this.layers[layerIndex].layerID ,"buffer",this.layers[layerIndex].buffer);
 
-//	if(mapService.type == "LayerArcIMS"){
-//		flamingo.getComponent(this._parent.listento[0]).refresh();
-//	}
-	mapService.refresh()
-	
-
-	
-	//update Legend
-	var legenda = flamingo.getComponent(this.legendId);
-	layerLabel =  this.layers[layerIndex].layerLegendLabel;
-	var stringLength:Number = this.layers[layerIndex].layerLegendLabel.length;
-	var labelItems:Array = this.layers[layerIndex].layerLegendLabel.split(".");
-	if(labelItems.length == 1){
-		for(var i=0; i< legenda.legenditems.length; i++){
-			if(legenda.legenditems[i].label.substring(0, stringLength) == layerLabel){
-				var tmp:Array = legenda.legenditems[i].label.split(addedText);
-				if(tmp.length == 1){
-					legenda.legenditems[i].label += addedText + radius +" m"; 			
-					layerLabel += addedText + radius +" m";  			
-					this.layers[layerIndex].legendItem = legenda.legenditems[i];
-				}
-				else if(tmp.length == 2){
-					legenda.legenditems[i].label = tmp[0] + addedText + radius +" m"; 			
-					layerLabel += addedText + radius +" m";  			
-					this.layers[layerIndex].legendItem = legenda.legenditems[i];
-				}
-				
-			}
-		}
-	}
-	else{
-		for(var i=0; i< legenda.legenditems.length; i++){
-			if(legenda.legenditems[i].label.substring(0, stringLength) == labelItems[0]){	
-				for(var j=0; j < legenda.legenditems[i].items.length ; j++){
-					for(var k=0; k <legenda.legenditems[i].items[j].items.length ; k++){
-						if(legenda.legenditems[i].items[j].items[k].label.substring(0, labelItems[1].length) == labelItems[1]){
-							var tmp:Array = legenda.legenditems[i].items[j].items[k].label.split(addedText);
-							if(tmp.length == 1){
-								legenda.legenditems[i].items[j].items[k].label += addedText + radius +" m"; 			
-								layerLabel += addedText + radius +" m";   											
-								this.layers[layerIndex].legendItem = legenda.legenditems[i].items[j].items[k];
-							}else if(tmp.length == 2){
-								legenda.legenditems[i].items[j].items[k].label = tmp[0]+addedText + radius+" m"; 			 			
-								layerLabel += addedText + radius +" m";   			
-								this.layers[layerIndex].legendItem = legenda.legenditems[i].items[j].items[k];
-							}
-						}
-					}
-				}
-			}
-		}
-	}
-	legenda.refresh();
+	//refresh map
+	mapService.refresh();
+	flamingo.getComponent(this._parent.listento[0]).refresh();
 }
 
 function removeBuffer(layerIndex:String){	
@@ -317,29 +265,14 @@ function removeBuffer(layerIndex:String){
 	this.layers[layerIndex].hasBuffer = false;
 
 	mapService.setLayerProperty(this.layers[layerIndex].layerID ,"buffer");
-	flamingo.getComponent(this._parent.listento[0]).refresh();
-
-	//update Legend
-	var filter = flamingo.getComponent(datafiltertoolid);
-	var labelArray:Array = this.layers[layerIndex].legendItem.label.split(addedText);
-	var tmp:Array = labelArray[1].split(filter.addedText);
-
-	if(tmp.length ==1){
-		this.layers[layerIndex].legendItem.label = labelArray[0];
-		layerLabel =labelArray[0]; 
-	}
-	else if(tmp.length == 2){
-		var newLabel:String = labelArray[0]+filter.addedText+tmp[1];
-		this.layers[layerIndex].legendItem.label = newLabel
-		layerLabel =newLabel;	
-	}
-
-	legenda.refresh();
+	flamingo.getComponent(this._parent.listento[0]).refresh();	
 }
 function initWindow(){
 	window.content.cmb_layers.removeAll();
 	window.content.ta_radius.text =" ";
 	window.content.cmb_layers.addItem("", -1);
+	
+	setWindowLabels();
 	
 	for(var i=0; i<layers.length; i++){
 		if(isVisible(this.layers[i].layerID)){
@@ -352,7 +285,7 @@ function initWindow(){
 function initControls() {
 	//Initialize controls
 	window.content.lbl_notValid.visible = false;
-	window.content.btn_wissen.visible = false;
+	window.content.btn_clear.visible = false;
 
 	//set style cmb_layers
 	window.content.cmb_layers.themeColor = 0x999999;
@@ -364,29 +297,27 @@ function initControls() {
 	window.content.cmb_layers.onKillFocus = function() {
 	};	
 	
-	window.content._lockroot = true;
+	window.content._lockroot = true;	
 	
-	
-	//Set control events
-	
+	//Set control events	
 	var Listener_cmbLayers:Object = new Object();
 	Listener_cmbLayers.change = function(evt_obj:Object) {
 		var hasBuffer:Boolean = layers[window.content.cmb_layers.value].hasBuffer;	
 		if(hasBuffer){
-			window.content.btn_wissen.visible = true;
+			window.content.btn_clear.visible = true;
 			window.content.ta_radius.text=layers[window.content.cmb_layers.value].buffer.radius;
 		}
 		else{
-			window.content.btn_wissen.visible = false;
+			window.content.btn_clear.visible = false;
 		}
 	};
 	window.content.cmb_layers.addEventListener("change",Listener_cmbLayers);
 	
-	window.content.btn_wissen.onRelease = function() {
+	window.content.btn_clear.onRelease = function() {
 		removeBuffer(this._parent.cmb_layers.value);
 		window.visible = false;
 		window.content.ta_radius.text = "";
-		window.content.btn_wissen.visible = false;
+		window.content.btn_clear.visible = false;
 	};
 	
 	window.content.btn_cancel.onRelease = function() {
@@ -405,9 +336,9 @@ function initControls() {
 			window.content.lbl_notValid.visible = false;
 			generateBuffer(window.content.cmb_layers.value, radius);
 
-			//hide window & show btn_wissen button
+			//hide window & show btn_clear button
 			window.visible = false;
-			window.content.btn_wissen.visible = false;
+			window.content.btn_clear.visible = false;
 		}
 	};
 }
@@ -431,6 +362,17 @@ function showWindow(screenWidth:Number, screenHeight:Number){
 	window._y = (screenHeight/2 - window._height/4) ;
 
 	window.visible = true;
+}
+function setWindowLabels()
+{
+	window.content.lbl_mapLayer.text = flamingo.getString(this, "maplayerLabel", lbl_mapLayer);
+	window.content.lbl_radius.text = flamingo.getString(this, "radiusLabel", lbl_radius);
+	window.content.lbl_unit.text = flamingo.getString(this, "unitLabel", lbl_unit);
+	window.content.btn_clear.label = flamingo.getString(this, "clearLabel", btn_clear);
+	window.content.btn_cancel.label = flamingo.getString(this, "cancelLabel", btn_cancel);
+	window.content.btn_ok.label = flamingo.getString(this, "okLabel", btn_ok);
+	window.content.lbl_notValid.label = flamingo.getString(this, "notvalidLabel", lbl_notValid);	
+	window.title = flamingo.getString(this, "title", title);
 }
 //default functions-------------------------------
 function startIdentifying() {
