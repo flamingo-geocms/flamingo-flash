@@ -284,7 +284,7 @@ function initWindow(){
 
 function initControls() {
 	//Initialize controls
-	window.content.lbl_notValid.visible = false;
+	window.content.lbl_error.visible = false;
 	window.content.btn_clear.visible = false;
 
 	//set style cmb_layers
@@ -330,10 +330,10 @@ function initControls() {
 		var number:String = radius.toString();
 	
 		if(window.content.ta_radius.text == "" || window.content.cmb_layers.value ==-1 || number == "NaN" || radius < 0){
-			window.content.lbl_notValid.visible = true;
+			window.content.lbl_error.visible = true;
 		}
 		else{
-			window.content.lbl_notValid.visible = false;
+			window.content.lbl_error.visible = false;
 			generateBuffer(window.content.cmb_layers.value, radius);
 
 			//hide window & show btn_clear button
@@ -365,13 +365,13 @@ function showWindow(screenWidth:Number, screenHeight:Number){
 }
 function setWindowLabels()
 {
-	window.content.lbl_mapLayer.text = flamingo.getString(this, "maplayerLabel", lbl_mapLayer);
-	window.content.lbl_radius.text = flamingo.getString(this, "radiusLabel", lbl_radius);
-	window.content.lbl_unit.text = flamingo.getString(this, "unitLabel", lbl_unit);
-	window.content.btn_clear.label = flamingo.getString(this, "clearLabel", btn_clear);
-	window.content.btn_cancel.label = flamingo.getString(this, "cancelLabel", btn_cancel);
-	window.content.btn_ok.label = flamingo.getString(this, "okLabel", btn_ok);
-	window.content.lbl_notValid.label = flamingo.getString(this, "notvalidLabel", lbl_notValid);	
+	window.content.lbl_mapLayer.text = flamingo.getString(this, "maplayerLabel");
+	window.content.lbl_radius.text = flamingo.getString(this, "radiusLabel");
+	window.content.lbl_unit.text = flamingo.getString(this, "unitLabel");
+	window.content.btn_clear.label = flamingo.getString(this, "clearLabel");
+	window.content.btn_cancel.label = flamingo.getString(this, "cancelLabel");
+	window.content.btn_ok.label = flamingo.getString(this, "okLabel");
+	window.content.lbl_error.text = flamingo.getString(this, "notvalidLabel");	
 	window.title = flamingo.getString(this, "title", title);
 }
 //default functions-------------------------------

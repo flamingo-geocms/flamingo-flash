@@ -7,6 +7,9 @@
 	<string id="clearLabel" nl="wissen" en="clear" />
 	<string id="cancelLabel" nl="annuleren" en="cancel" />		
 	<string id="okLabel" nl="ok" en="ok" />		
-	<string id="notvalidLabel" nl="niet juist of onvolledig ingevuld" en="parameters not correct" />
+	<string id="notvalidLabel" >
+		<nl><![CDATA[<font color="#ff0000" family ="Verdana" size="9"><b>niet juist of onvolledig ingevuld</b></font>]]></nl>
+		<en><![CDATA[<font color="#ff0000" family ="Verdana" size="9"><b>parameters not correct</b></font>]]></en>
+	</string>
 	<string id="title" nl="Zone opgeven" en="Generate buffer" />	
 </ToolBuffer>

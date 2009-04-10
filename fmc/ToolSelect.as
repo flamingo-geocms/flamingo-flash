@@ -130,7 +130,12 @@ lMap.onSelectData = function(map:MovieClip, maplayer:MovieClip, data:Object, sel
 		showGrid(selectResultArray);
 	}
 }
-				
+var lFlamingo:Object = new Object();
+lFlamingo.onSetLanguage = function( lang:String ) {
+	setLabels();
+	refresh();
+};
+flamingo.addListener(lFlamingo, "flamingo", this);				
 //--------------------------------------------------
 init();
 //--------------------------------------------------
@@ -223,9 +228,10 @@ function setConfig(xml:Object) {
 }
 
 function initControls() {
-	window.content.btn_sluit.onRelease = function() {
+	window.content.btn_close.onRelease = function() {
 		hideGrid();	
 	};
+	setLabels();
 	
 	// Grid listener
 	myGridListener = new Object();
@@ -239,7 +245,10 @@ function initControls() {
 	};
 	window.content.myGrid.addEventListener("change", myGridListener);	
 }
-
+function setLabels()
+{
+	window.content.btn_close.label = flamingo.getString(this, "closewindow", "sluit venster");
+}
 //default functions-------------------------------
 function startIdentifying() {
 }

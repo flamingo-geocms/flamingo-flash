@@ -30,11 +30,10 @@ var prev_selectedID:String;
 var mapServiceId:String;
 var valueString:String = "";
 var addedText = "\n\n";
-var legendId:String;
 var bufferToolid:String;
 //hide windows
 window.visible = false;
-alter_window.visible = false;
+alert_window.visible = false;
 //---------------------
 var lMap:Object = new Object();
 lMap.onMouseWheel = function(map:MovieClip, delta:Number, xmouse:Number, ymouse:Number, coord:Object) {
@@ -67,6 +66,13 @@ lMap.onChangeExtent = function(map:MovieClip):Void  {
 		showWindow(rect.width,rect.height);
 	}
 };
+
+var lFlamingo:Object = new Object();
+lFlamingo.onSetLanguage = function( lang:String ) {
+	setWindowLabels();
+	refresh();
+};
+flamingo.addListener(lFlamingo, "flamingo", this);
 //--------------------------------------------------
 init();
 //--------------------------------------------------
@@ -75,8 +81,8 @@ init();
 * @hierarchy childnode of <fmc:ToolGroup> 
 * @example 
 *	 <fmc:ToolGroup>
-*		<fmc:ToolDataFilter id="datafilter" mapServiceId="samenleving" legendId="legenda" bufferToolid="buffer">
-*			 <layer id="basisscholen" label="basisscholen" legendLabel="voorzieningen.basisscholen">
+*		<fmc:ToolDataFilter id="datafilter" mapServiceId="samenleving" bufferToolid="buffer">
+*			 <layer id="basisscholen" label="basisscholen">
 *				 <field id="gemeente" label="gemeente" operations="=" includeValues="../config/PZH_gemeenten.xml"/>
 *			 </layer>
 *		 </fmc:ToolDataFilter>
@@ -85,14 +91,12 @@ init();
 * @attr zoomscroll (defaultvalue "true")  Enables (zoomscroll="true") or disables (zoomscroll="false") zooming with the scrollwheel.
 * @attr enabled (defaultvalue="true") True or false.
 * @attr mapServiceId The id of the mapservice where the filter is applied to
-* @attr legendid The id of the legend, this is needed for updating the legend according the filter.
 * @attr bufferToolid The id of the toolBuffer if existing.
 *
 * @tag <layer>  
 * This defines the layer where the buffer is applied to
 * @attr id  layerid, same as in the mxd.
 * @attr label label of the layer that will be shown in the selection window
-* @attr legendlabel label for the layer that will be added to the legend
 *
 * @tag <field>  
 * This defines the layer where the buffer is applied to
@@ -172,9 +176,6 @@ function setConfig(xml:Object) {
 			case "mapserviceid" :
 				mapServiceID = val;
 				break;
-			case "legendid" :
-				legendId = val;
-				break;
 			case "buffertoolid" :
 				bufferToolid = val;
 				break;
@@ -195,9 +196,6 @@ function setConfig(xml:Object) {
 					break;
 				case "id" :
 					layers[i].layerID = val;
-					break;
-				case "legendlabel" :
-					layers[i].layerLegendLabel = val;
 					break;
 				default :
 					break;
@@ -282,7 +280,7 @@ function loadXML(file:String, fieldIndex:Number, layerIndex:Number) {
 function initWindow() {
 	if (noSelection) {
 		window.content.cmb_layers.removeAll();
-		window.content.btn_wissen.visible = false;
+		window.content.btn_clear.visible = false;
 		window.content.cmb_layers.addItem("",-1);
 		for (var i = 0; i<this.layers.length; i++) {
 			//show only visible layers!
@@ -294,16 +292,16 @@ function initWindow() {
 			}
 		}
 	} else {
-		window.content.btn_wissen.visible = true;
+		window.content.btn_clear.visible = true;
 	}
-	window.content.lbl_notValid.visible = false;
-
+	window.content.lbl_error.visible = false;
+	setWindowLabels();	
 	initControls();
 }
 
 function initControls() {
 	//Initialize controls
-	window.content.lbl_notValid.visible = false;
+	window.content.lbl_error.visible = false;
 
 	//set style cmb_layers
 	window.content.cmb_layers.themeColor = 0x999999;
@@ -368,7 +366,7 @@ function initControls() {
 	window.content.cmb_operations.addEventListener("change",Listener_cmbOperations);
 
 
-	window.content.btn_wissen.onRelease = function() {
+	window.content.btn_clear.onRelease = function() {
 		removeSelectQuery(window.content.cmb_layers.value);
 		//reset values
 		window.content.cmb_layers.removeAll();
@@ -378,13 +376,13 @@ function initControls() {
 		window.visible = false;
 	};
 
-	window.content.btn_annuleren.onRelease = function() {
+	window.content.btn_cancel.onRelease = function() {
 		window.visible = false;
 	};
 
-	window.content.btn_selecteren.onRelease = function() {
+	window.content.btn_ok.onRelease = function() {
 		if (window.content.cmb_fields.text == "" || window.content.cmb_operations.value == "" || window.content.cmb_layers.value == -1 || window.content.cmb_values.text == "") {
-			window.content.lbl_notValid.visible = true;
+			window.content.lbl_error.visible = true;
 		} else {
 			var query:String;
 			query = layers[this._parent.cmb_layers.value].field[window.content.cmb_fields.value].fieldID;
@@ -400,18 +398,32 @@ function initControls() {
 		}
 	};
 
-	alter_window.content.btn_ja.onRelease = function() {
-		alter_window.visible = false;
+	alert_window.content.btn_yes.onRelease = function() {
+		alert_window.visible = false;
 		window.visible = false;
 		removeSelectQuery();
 		selectQuery();
 	};
 
-	alter_window.content.btn_nee.onRelease = function() {
-		alter_window.visible = false;
+	alert_window.content.btn_no.onRelease = function() {
+		alert_window.visible = false;
 	};
 }
+function setWindowLabels()
+{
+	alert_window.title = flamingo.getString(this, "alertWindowTitle", "Melding");
+	alert_window.content.lbl_alertMelding.text = flamingo.getString(this, "alertMessage", "De vorige selectie wordt verwijderd. Weet u zeker of u door wilt gaan?");
+	alert_window.content.btn_yes.label = flamingo.getString(this, "yes", "Ja");
+	alert_window.content.btn_no.label = flamingo.getString(this, "no", "Nee");
 
+	window.title = flamingo.getString(this, "windowTitle", "Selectie");
+	window.content.lbl_layer.text = flamingo.getString(this, "layerLabel", "Selecteer onderwerp");	
+	window.content.lbl_condition.text = flamingo.getString(this, "conditionLabel", "waarvoor geldt");
+	window.content.btn_clear.label = flamingo.getString(this, "clear", "Wissen");
+	window.content.btn_cancel.label = flamingo.getString(this, "cancel", "Annuleren");
+	window.content.btn_ok.label = flamingo.getString(this, "ok", "Selecteren");
+	window.content.lbl_error.text = flamingo.getString(this, "notvalidLabel");		
+}
 function isVisible(layerIndex:String):Boolean {
 	//get the mapserver from the layer
 	var layerComponent:String = this._parent.listento[0]+"_"+mapServiceID;
@@ -477,7 +489,7 @@ function setSelectQuery(layerIndex:String, query:String, queryLabel:String) {
 		window.visible = false;
 		selectQuery();
 	} else {
-		alter_window.visible = true;
+		alert_window.visible = true;
 	}
 	noSelection = false;
 }
@@ -494,51 +506,6 @@ function selectQuery() {
 	mapService.setLayerProperty(this.selectedID,"query",this.query);
 	flamingo.getComponent(this._parent.listento[0]).refresh();
 	noSelection = false;
-
-	//update Legenda
-	var legenda = flamingo.getComponent(this.legendId);
-	var index:Number;
-	for (var i = 0; i<this.layers.length; i++) {
-		if (this.layers[i].layerID == this.selectedID) {
-			index = i;
-		}
-	}
-	layerLabel = this.layers[index].layerLegendLabel;
-	var labelItems:Array = layerLabel.split(".");
-	var stringLength:Number = labelItems[0].length;
-
-	if (labelItems.length == 1) {
-		for (var i = 0; i<legenda.legenditems.length; i++) {
-			if (legenda.legenditems[i].label.substring(0, stringLength) == layerLabel) {
-				var tmp:Array = legenda.legenditems[i].label.split(addedText);
-				if (tmp.length == 1) {
-					legenda.legenditems[i].label += addedText+queryLabel;
-					layerLabel += addedText+query;
-					this.layers[index].legendItem = legenda.legenditems[i];
-				} else if (tmp.length == 2) {
-					legenda.legenditems[i].label = tmp[0]+addedText+queryLabel;
-					layerLabel += addedText+query;
-					this.layers[index].legendItem = legenda.legenditems[i];
-				}
-			}
-		}
-	} else {
-		for (var i = 0; i<legenda.legenditems.length; i++) {
-			if (legenda.legenditems[i].label.substring(0, stringLength) == labelItems[0]) {
-				for (var j = 0; j<legenda.legenditems[i].items.length; j++) {
-					for (var k = 0; k<legenda.legenditems[i].items[j].items.length; k++) {
-						if (legenda.legenditems[i].items[j].items[k].label.substring(0, labelItems[1].length) == labelItems[1]) {
-							legenda.legenditems[i].items[j].items[k].label += addedText+queryLabel;
-							layerLabel += addedText+queryLabel;
-							this.layers[index].legendItem = legenda.legenditems[i].items[j].items[k];
-						}
-					}
-				}
-			}
-		}
-	}
-	legenda.refresh();
-
 }
 function removeSelectQuery(layerIndex:String) {
 	if (layerIndex != undefined) {
@@ -557,34 +524,7 @@ function removeSelectQuery(layerIndex:String) {
 	noSelection = true;
 	if (layerIndex != undefined && mapService.type == "LayerArcIMS") {
 		flamingo.getComponent(this._parent.listento[0]).refresh();
-	}
-	//update Legenda       
-	var index:Number;
-	for (var i = 0; i<this.layers.length; i++) {
-		if (this.layers[i].layerID == this.prev_selectedID) {
-			index = i;
-		}
-	}
-	var buffer = flamingo.getComponent(bufferToolid);
-	var labelArray:Array = this.layers[index].legendItem.label.split(addedText);
-	var tmp:Array = labelArray[1].split(buffer.addedText);
-
-	if (tmp.length == 1) {
-		//remove old label
-		this.layers[index].legendItem.label = labelArray[0];
-
-		this.layers[layerIndex].legendItem.label = labelArray[0];
-		layerLabel = labelArray[0];
-	} else if (tmp.length == 2) {
-		//remove old label
-		this.layers[index].legendItem.label = labelArray[0];
-		//add new label
-		var newLabel:String = labelArray[0]+buffer.addedText+tmp[1];
-		this.layers[layerIndex].legendItem.label = newLabel;
-		layerLabel = newLabel;
-
-	}
-	legenda.refresh();
+	}	
 }
 //shows the window in the center of the map
 function showWindow(screenWidth:Number, screenHeight:Number) {
