@@ -74,7 +74,7 @@ function goFlamingo(p0,p1) {
 			document.write('Es scheint, da&szlig; keine Flash Player installiert ist.');
 		}
 		document.write('<p><a href="http://www.adobe.com/shockwave/download/index.cgi?P1_Prod_Version=ShockwaveFlash"><img src="http://www.adobe.com/images/shared/download_buttons/get_flashplayer_trans.gif" border="0" width="88" height="31" align="left" style="margin-right: 8px;"></a>');
-		document.write('Die geeignete Version des Flash Player können Sie auf der Webseite von Adobe herunterladen. Klicken Sie hierzu einfach auf die Abbildung links neben diesem Text.<p>Bitte wenden Sie sich an Ihren Systemadministrator, falls Sie selbst keine Administratorrechte für Ihren PC haben. In diesem Fall sind Sie vermutlich nicht berechtigt, den Flash Player selbst zu installieren.</font>');
+		document.write('Die geeignete Version des Flash Player kï¿½nnen Sie auf der Webseite von Adobe herunterladen. Klicken Sie hierzu einfach auf die Abbildung links neben diesem Text.<p>Bitte wenden Sie sich an Ihren Systemadministrator, falls Sie selbst keine Administratorrechte fï¿½r Ihren PC haben. In diesem Fall sind Sie vermutlich nicht berechtigt, den Flash Player selbst zu installieren.</font>');
 		document.write('<p><font face="Arial, Verdana, Helvetica, Sans Serif" size="-2">Adobe und Flash sind eingetragene Marken oder Marken von Adobe Systems Incorporated.</font>');
 		// *** French text:
 		document.write('<hr><font face="Arial, Verdana, Helvetica, Sans Serif" size="+1" color="#666666">La version requise d\'Adobe Flash Player n\'a pas &eacute;t&eacute; trouv&eacute;e</font>');
@@ -114,6 +114,7 @@ function flamingo_onInit() {
 	var postcode4  = getURLParam("postcode4");     // e.g. postcode4=9801 (a postcode)
 	var prv   = getURLParam("prv");    // e.g. prv=utrecht (prv is short for province)
 	var provincie     = getURLParam("provincie");    // e.g. provincie=Drenthe, but this time WITHOUT use of the xml for municipalities
+	var thema     = getURLParam("thema");    // e.g. provincie=Drenthe, but this time WITHOUT use of the xml for municipalities
 	// var title = getURLParam("title");  // e.g. title=Groundwatermap (set HTML page TITLE tag value)
 	var laag = getURLParam("laag");
 	var vis = getURLParam("vis");
@@ -168,6 +169,11 @@ function flamingo_onInit() {
 	}
 	if (regio.length > 0) {
 		app.call("flamingo","loadConfig", configDir + "/" + regio + ".xml");
+	}
+	
+	//set theme
+	if (thema.length > 0){
+	  app.call("flamingo" , "setArgument", "themeselector" , "currentTheme" , thema);
 	}
 
 	// set extent
@@ -265,7 +271,7 @@ function printMap() {
 		if (lang == "en")
 			alert("For the best result please set your printer to landscape.");
 		if (lang == "de")
-			alert("Für das beste Resultat bitte stellen Sie Ihrem\nDrucker auf Querformat ein.");
+			alert("Fï¿½r das beste Resultat bitte stellen Sie Ihrem\nDrucker auf Querformat ein.");
 		if (lang == "fr")
 			alert("Le meilleur r&eacute;sultat vous obtient en instituant votre imprimante en l'orientation paysage.");
 		window.print();
@@ -276,7 +282,7 @@ function printMap() {
 		if (lang == "en")
 			alert("Your browser does not support this function.");
 		if (lang == "de")
-			alert("Ihr Browser unterstützt diese Funktion nicht.");
+			alert("Ihr Browser unterstï¿½tzt diese Funktion nicht.");
 		if (lang == "fr")
 			alert("Votre navigateur ne soutient pas cette fonction.");
 	}
