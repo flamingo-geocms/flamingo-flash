@@ -41,7 +41,6 @@ class flamingo.gui.EditMapCircle extends EditMapGeometry {
         var p4r:Number = Math.sin(Math.PI/4) * r;
         var p8r:Number = Math.tan(Math.PI/8) * r;
         
-        
         clear();
         
         if(radiusText==null){
@@ -54,8 +53,13 @@ class flamingo.gui.EditMapCircle extends EditMapGeometry {
         moveTo(x, y - r);
         if (type == ACTIVE) {
             lineStyle(strokeWidth * 2, strokeColor, strokeOpacity);
+            radiusText.visible = true;
         } else {
             lineStyle(strokeWidth, strokeColor, strokeOpacity);
+            radiusText.visible = false;
+        }
+        if (style.getFillOpacity() > 0) {
+            beginFill(fillColor, fillOpacity);
         }
         curveTo(x + p8r, y - r, x + p4r, y - p4r);
         curveTo(x + r, y - p8r, x + r, y);
@@ -69,21 +73,11 @@ class flamingo.gui.EditMapCircle extends EditMapGeometry {
         if (type == ACTIVE) {
             moveTo(x, y);
             lineStyle(strokeWidth, strokeColor, strokeOpacity);
-            lineTo(circleX, circleY);
-            radiusText.visible = true;
-            
-        } else {
-            moveTo(x, y - r);
-            lineStyle(strokeWidth * 2, 0, 0);
-            curveTo(x + p8r, y - r, x + p4r, y - p4r);
-            curveTo(x + r, y - p8r, x + r, y);
-            curveTo(x + r, y + p8r, x + p4r, y + p4r);
-            curveTo(x + p8r, y + r, x, y + r);
-            curveTo(x - p8r, y + r, x - p4r, y + p4r);
-            curveTo(x - r, y + p8r, x - r, y);
-            curveTo(x - r, y - p8r, x - p4r,y - p4r);
-            curveTo(x - p8r, y - r, x, y - r);
-            radiusText.visible = false;
+            lineTo(circleX, circleY);            
+        } 
+
+        if (fillOpacity > 0) {
+            endFill();
         }
     }
     
