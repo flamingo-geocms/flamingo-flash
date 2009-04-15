@@ -49,8 +49,9 @@ class flamingo.gui.PrintLabel extends AbstractComponent {
     private var fontSize:Number = null;
     private var alignment:String = "left";
     
-    private var printTemplate:MovieClip = null;
+    private var printTemplate:PrintTemplate = null;
     private var mapPrintLabelAdapter:MapPrintLabelAdapter = null;
+    private var map:MovieClip = null;
     
     private var label:Label = null;
     private var textArea:TextArea = null;
@@ -69,23 +70,24 @@ class flamingo.gui.PrintLabel extends AbstractComponent {
     
     function init():Void {
         var style:Object = _global.flamingo.getStyleSheet("flamingo").getStyle(".general");
+        printTemplate = getParent("PrintTemplate");
         if (fontFamily == null) {
             fontFamily = style.fontFamily;
         }
         if (fontSize == null) {
             fontSize = style.fontSize;
         }
+        fontSize = fontSize * printTemplate.getDPIFactor();
         
-        printTemplate = getParent("PrintTemplate");
+        
     }
     
     function go():Void {
-        var maps:Array = printTemplate.getMaps();
-        if (maps.length > 0) {
+        if(listento[0]!=null){
+        	map = _global.flamingo.getComponent(listento[0]);
             mapPrintLabelAdapter = new MapPrintLabelAdapter(this);
-            _global.flamingo.addListener(mapPrintLabelAdapter, maps[0], this);
+            _global.flamingo.addListener(mapPrintLabelAdapter, map, this);
         }
-        
         addLabel();
     }
     
@@ -100,7 +102,7 @@ class flamingo.gui.PrintLabel extends AbstractComponent {
     }
     
     private function addLabel():Void {
-        label = Label(attachMovie("Label", "mLabel", 0, {autoSize: alignment}));
+        label = Label(attachMovie("Label", "mLabel", 0, {autoSize:alignment}));
         if (fontFamily.indexOf("embed") > -1) {
             label.setStyle("embedFonts", true);
         }
@@ -148,18 +150,16 @@ class flamingo.gui.PrintLabel extends AbstractComponent {
                 numLines++;
             }
         }
-		
         if (text.indexOf("[scale]") != -1)  {
-            var maps:Array = printTemplate.getMaps();
-            if (maps.length > 0) {
-                var scale:Number = Math.round(maps[0].getCurrentScale() / (0.0254 / 72) * getParent("PrintTemplate").getDPIFactor());
+            if (map != null) {
+                var scale:Number = Math.round(map.getCurrentScale() / (0.0254 / 72) * getParent("PrintTemplate").getDPIFactor());
                 label.text = text.split("[scale]").join("1:" + scale);
             } else {
                 label.text = text.split("[scale]").join("1:???");
             }
         } else if (text.indexOf("[curdate]") != -1) {
 			var curDate:Date = new Date(); 
-			var curDateStr:String = curDate.getDate() + "-" + String(curDate.getMonth() + 1) + "-"+ curDate.getFullYear() + " " + curDate.getHours() + ":" + curDate.getMinutes();
+			var curDateStr:String = format(String(curDate.getDate())) + "-" + format(String(curDate.getMonth() + 1)) + "-"+ curDate.getFullYear() + " " + format(String(curDate.getHours())) + ":" + format(String(curDate.getMinutes()));
 			label.text = text.split("[curdate]").join(curDateStr);
 		} else {
 			label.text = text
@@ -172,5 +172,13 @@ class flamingo.gui.PrintLabel extends AbstractComponent {
             textArea.setSize(label._width + 20, numLines * fontSize * 1.3 + 20);
         }
     }
+    
+    private function format(d:String):String {
+    	if(d.length == 1){
+    		return "0" + d;
+    	} else {
+    		return d;
+    	}	
+    } 
     
 }
