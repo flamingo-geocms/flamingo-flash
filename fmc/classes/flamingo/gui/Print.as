@@ -356,24 +356,25 @@ class flamingo.gui.Print extends AbstractContainer {
         
         var printJob:PrintJob = new PrintJob();
         if (printJob.start()) {
+        	var dpiFactor:Number = currentPrintTemplate.getDPIFactor();
             var printPage:MovieClip = currentPrintTemplate.getContentPane();
             if (currentPrintTemplate.getOrientation() != printJob.orientation) {
                 _global.flamingo.showError("Orientation Error", "The chosen printer orientation is " + printJob.orientation + ", whereas the template orientation is " + currentPrintTemplate.getOrientation() + ".");
                 delete printJob;
                 return;
             }
-            if (printPage._width * 2 > printJob.pageWidth + 5) { // 5 is for fault tolerance.
+            if (printPage._width * dpiFactor > printJob.pageWidth + 5) { // 5 is for fault tolerance.
                 _global.flamingo.showError("Print Size Error", "The chosen paper size is not wide enough for the template. Is " + printJob.pageWidth + ", should be " + (printPage._width * 2) + ".");
                 delete printJob;
                 return;
             }
-            if (printPage._height * 2 > printJob.pageHeight + 5) { // 5 is for fault tolerance.
+            if (printPage._height * dpiFactor > printJob.pageHeight + 5) { // 5 is for fault tolerance.
                 _global.flamingo.showError("Print Size Error", "The chosen paper size is not high enough for the template. Is " + printJob.pageHeight + ", should be " + (printPage._height * 2) + ".");
                 delete printJob;
                 return;
             }
         
-            var dpiFactor:Number = currentPrintTemplate.getDPIFactor();
+            
             currentPrintTemplate.setScale(100 / dpiFactor);
             
 			var width:Number = printPage._width;
