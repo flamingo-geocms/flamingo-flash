@@ -21,10 +21,16 @@
 * The visible parameter of EditProperties and the window should both be configured to false.
 * @class flamingo.gui.EditProperties extends AbstractComponent implements StateEventListener
 * @hierarchy childnode of Flamingo or a container component.
-* @example
+* @example 
+<[!CDATA[
   <fmc:Window id="editPropertiesWindow">
-     <fmc:EditProperties id="editProperties" top="0" left="0" right="right" bottom="bottom" visible="false" listento="editMap"/>
+     <fmc:EditProperties id="editProperties" top="0" left="0" right="right" bottom="bottom" visible="false" listento="editMap" okbutton="true">
+     	<string id="okbuttonlabel" en="OK" nl="OK"/> 
+     </fmc:EditProperties>
   </fmc:Window>
+]]>
+ * * @attr okbutton (defaultvalue = "false") boolean for showing or hiding okbutton  
+* @configstring okbuttonlabel (defaultvalue = "OK") labeltext of the okbutton
 */
 
 
@@ -43,6 +49,7 @@ import mx.controls.Label;
 import mx.controls.TextArea;
 import mx.controls.UIScrollBar;
 import mx.utils.Delegate;
+import mx.controls.Button;
 
 import flamingo.core.AbstractComponent;
 
@@ -58,14 +65,12 @@ class flamingo.gui.EditProperties extends AbstractComponent implements StateEven
     private var minTextAreaHeight:Number = 50;
     private var scrollBar:UIScrollBar = null;
     private var nullValueText:String = "";
+    private var showOKButton:Boolean = false;
     
     function init():Void {
-        gis = _global.flamingo.getComponent(listento[0]).getGIS();
-        
+        gis = _global.flamingo.getComponent(listento[0]).getGIS();   
         components = new Array();
-        
         gis.addEventListener(this, "GIS", StateEvent.CHANGE, "activeFeature");
-        
         mainLabel = Label(attachMovie("Label", "mMainLabel", 0, {autoSize: "left"}));
         labelStyle = _global.flamingo.getStyleSheet("flamingo").getStyle(".general");
         mainLabel.setStyle("fontFamily", labelStyle["fontFamily"]);
@@ -75,6 +80,14 @@ class flamingo.gui.EditProperties extends AbstractComponent implements StateEven
         componentsPanel._y = componentHeight;
         componentsPanel._lockroot = true; // Without this line comboboxes wouldn't open.
     }
+    
+    
+    function setAttribute(name:String, value:String):Void {
+    	 if(name="okbutton"){
+        	showOKButton = Boolean(value);
+        } 
+    	
+	}
     
     private function layout():Void {
         var numLabels:Number = 0;
@@ -111,6 +124,16 @@ class flamingo.gui.EditProperties extends AbstractComponent implements StateEven
                 y += componentHeight;
             }
         }
+       if(showOKButton){ 
+       		y += 30;
+	       var button:Button = Button(attachMovie("Button", "mOKButton", 101));
+	       button._y = y;
+	       button.label = _global.flamingo.getString(this, "okbuttonlabel");
+	       if(button.label==null||button.label==""){
+	       	button.label="OK";
+	       }	
+	       button.addEventListener("click", Delegate.create(this, onClickOKButton)); 
+       } 
         
         if (y > panelHeight) {
             if (scrollBar == null) {
@@ -128,9 +151,14 @@ class flamingo.gui.EditProperties extends AbstractComponent implements StateEven
                 componentsPanel.scrollRect = null;
             }
         }
-    }
     
-    function onScrollBar(eventObject:Object):Void {
+	}
+	
+	private function onClickOKButton() : Void {
+		this.setVisible(false);
+	}
+
+	function onScrollBar(eventObject:Object):Void {
         var rectangle:Rectangle = Rectangle(componentsPanel.scrollRect);
         rectangle.y = scrollBar.scrollPosition;
         componentsPanel.scrollRect = rectangle;
