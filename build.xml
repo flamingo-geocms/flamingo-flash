@@ -5,7 +5,7 @@
             <pathelement location="ant-contrib-1.0b3.jar"/>
         </classpath>
     </taskdef>
-	<property name="version" value="3.0.0 release candidate 06-03-2009"/>
+	<property name="version" value="3.0.0 release candidate3 19-03-2009"/>
     <property name="build" location="build"/>
     <property name="dist" location="../dist"/>
     <property name="flapath" location="."/>
@@ -79,6 +79,10 @@
     </target>
     
     <target name="dist" depends="compile">
+   	    <copy todir="${build}/dist/js">
+    	  <fileset dir="js" includes="*.js"/>
+    	</copy>
+    	<copy file="ReadMe.txt" todir="${build}/dist"/>
     	<echo file="${build}/dist/flamingo/version.txt" append="false">version: ${version}</echo>
         <zip destfile="${dist}/flamingo_client.zip" basedir="${build}/dist"/>
     </target>
