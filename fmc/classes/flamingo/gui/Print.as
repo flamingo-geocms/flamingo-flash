@@ -92,9 +92,11 @@ class flamingo.gui.Print extends AbstractContainer {
     private var scaleComboBox:ComboBox = null;
     private var scrollPane:ScrollPane = null;
     private var checkBox:CheckBox = null;
-	private var templateComboBox:ComboBox = null;
+	  private var templateComboBox:ComboBox = null;
     
     private var intervalID:Number = null;
+    private var availPreviewWidth:Number = 0;
+		private var availPreviewHeight:Number = 0;
     
     function init():Void {
         map = _global.flamingo.getComponent(listento[0]);
@@ -102,14 +104,18 @@ class flamingo.gui.Print extends AbstractContainer {
         var component:MovieClip = null;
         var dpiFactor:Number = null;
         printTemplates = new Array();
+        availPreviewWidth = this.__width - 10;
+        availPreviewHeight = this.__height - 230;
         for (var i:String in componentIDs) {
             component = _global.flamingo.getComponent(componentIDs[i]);
             if (component.getComponentName() != "PrintTemplate") {
                 continue;
             }
             component.hide();
-            dpiFactor = component.getDPIFactor();
-            component.setScale(50 / dpiFactor);
+
+            setPreviewScale(PrintTemplate(component));
+            component.setScrollHeight(availPreviewHeight);
+            component.setScrollWidth(availPreviewWidth);
             
             printTemplates.push(component);
         }
@@ -401,9 +407,21 @@ class flamingo.gui.Print extends AbstractContainer {
                 printJob.send();
             }
             
-            currentPrintTemplate.setScale(50 / dpiFactor);
+            setPreviewScale(PrintTemplate(currentPrintTemplate));
+            
         }
         delete printJob;
+    }
+    
+    function setPreviewScale(pt:PrintTemplate):Void {
+            var widthScale:Number = availPreviewWidth / pt.width;
+            var heightScale:Number = availPreviewHeight / pt.height;
+            if (widthScale < heightScale) {
+            		pt.setScale(widthScale * 100);
+            }
+            else {
+            		pt.setScale(heightScale * 100);
+            }
     }
     
 }

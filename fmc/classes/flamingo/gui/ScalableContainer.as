@@ -20,6 +20,8 @@ class flamingo.gui.ScalableContainer extends AbstractContainer {
     private var semiscaled:Boolean = false;
     private var horiScrollBar:UIScrollBar = null;
     private var vertiScrollBar:UIScrollBar = null;
+    private var scrollWidth:Number = 0;
+    private var scrollHeight:Number = 0;
     
     function setScale(scale:Number):Void {
     	
@@ -29,6 +31,14 @@ class flamingo.gui.ScalableContainer extends AbstractContainer {
         
         this.scale = scale;
         setScales();
+    }
+    
+    function setScrollWidth(width:Number):Void {
+        scrollWidth = width;
+    }
+    
+    function setScrollHeight(height:Number):Void {
+        scrollHeight = height;
     }
     
     function getScale():Number {
@@ -67,21 +77,21 @@ class flamingo.gui.ScalableContainer extends AbstractContainer {
         
         if ((scale < 100) && (semiscaled)) {
             var initObject:Object = new Object();
-            initObject["_y"] = Math.floor(__height * scale / 100) - 15;
+            initObject["_y"] = scrollHeight - 15;
             initObject["horizontal"] = true;
             horiScrollBar = UIScrollBar(border.attachMovie("UIScrollBar", "mHoriScrollBar", 0, initObject));
-            horiScrollBar.setSize(Math.floor(__width * scale / 100) - 15, 15);
-            horiScrollBar.setScrollProperties(50, 0, __width - Math.floor(__width * scale / 100) - 1 + 15);
+            horiScrollBar.setSize(scrollWidth - 15, 15);
+            horiScrollBar.setScrollProperties(scrollWidth - 15, 0, __width);
             horiScrollBar.addEventListener("scroll", Delegate.create(this, onScrollBar));
             
             initObject = new Object();
-            initObject["_x"] = Math.floor(__width * scale / 100) - 15;
+            initObject["_x"] = scrollWidth - 15;
             vertiScrollBar = UIScrollBar(border.attachMovie("UIScrollBar", "mVertiScrollBar", 1, initObject));
-            vertiScrollBar.setSize(15, Math.floor(__height * scale / 100) - 15);
-            vertiScrollBar.setScrollProperties(50, 0, __height - Math.floor(__height * scale / 100) - 1 + 15);
+            vertiScrollBar.setSize(15, scrollHeight - 15);
+            vertiScrollBar.setScrollProperties(scrollHeight - 15, 0, __height);
             vertiScrollBar.addEventListener("scroll", Delegate.create(this, onScrollBar));
             
-            contentPane.scrollRect = new Rectangle(0, 0, Math.floor(__width * scale / 100), Math.floor(__height * scale / 100));
+            contentPane.scrollRect = new Rectangle(0, 0, scrollWidth - 15, scrollHeight - 15);
         } else {
             horiScrollBar.removeMovieClip();
             horiScrollBar = null;
@@ -93,7 +103,7 @@ class flamingo.gui.ScalableContainer extends AbstractContainer {
     }
     
     function onScrollBar(eventObject:Object):Void {
-        contentPane.scrollRect = new Rectangle(horiScrollBar.scrollPosition, vertiScrollBar.scrollPosition, Math.floor(__width * scale / 100), Math.floor(__height * scale / 100));
+        contentPane.scrollRect = new Rectangle(horiScrollBar.scrollPosition, vertiScrollBar.scrollPosition, scrollWidth - 15, scrollHeight - 15);
     }
     
 }

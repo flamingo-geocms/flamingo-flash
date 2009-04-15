@@ -81,19 +81,7 @@ class flamingo.gui.PrintTemplate extends ScalableContainer {
             format = value;
         } else if (name == "orientation") {
             orientation = value;
-            if ((format == "A4") && (orientation == "landscape")) {
-                width = "" + Math.floor(813 * getDPIFactor());
-                height = "" + Math.floor(561 * getDPIFactor());
-            } else if ((format == "A4") && (orientation == "portrait")) {
-                width = "" + Math.floor((561) * getDPIFactor());
-                height = "" + Math.floor(813 * getDPIFactor());
-            } else if ((format == "A3") && (orientation == "landscape")) {
-                width = "" + Math.floor(1122 * getDPIFactor());
-                height = "" + Math.floor(813 * getDPIFactor());
-            } else if ((format == "A3") && (orientation == "portrait")) {
-                width = "" + Math.floor(813 * getDPIFactor());
-                height = "" + Math.floor(1122 * getDPIFactor());
-            }
+        		setWidthAndHeigth();
         } else if (name == "maps") {
            mapStrings = value.split(",");
         }
@@ -102,17 +90,18 @@ class flamingo.gui.PrintTemplate extends ScalableContainer {
     function go():Void {
        	map = getParent("Print").getMap();
        	layerIDs = map.getLayers();
-		_global.flamingo.addListener(new MapPrintTemplateAdapter(this), map, this);
+		    _global.flamingo.addListener(new MapPrintTemplateAdapter(this), map, this);
        	for (var i:String in layerIDs) {
           	_global.flamingo.addListener(new LayerPrintTemplateAdapter(this), layerIDs[i], this);
        	}
-	   	maps = new Array()
-		for (var i:Number = 0; i < mapStrings.length; i++) {
-				maps.push(_global.flamingo.getComponent(mapStrings[i]));
+	   	  maps = new Array()
+		    for (var i:Number = 0; i < mapStrings.length; i++) {
+				    maps.push(_global.flamingo.getComponent(mapStrings[i]));
         }
     }
     
     function setVisible(visible:Boolean):Void {
+
         super.setVisible(visible);
         
         var component:MovieClip = null;
@@ -122,13 +111,13 @@ class flamingo.gui.PrintTemplate extends ScalableContainer {
                 component._visible = visible;
             }
         }
-		for(var i:Number=0;i<maps.length;i++){
-			if(visible){
-				maps[i].show();
-			} else {
-				maps[i].hide();
-			}
-		}
+				for(var i:Number=0;i<maps.length;i++){
+					if(visible){
+						maps[i].show();
+					} else {
+						maps[i].hide();
+					}
+				}
 		
     }
     
@@ -142,6 +131,22 @@ class flamingo.gui.PrintTemplate extends ScalableContainer {
     
     function getMaps():Array {
         return maps.concat();
+    }
+
+		private function setWidthAndHeigth():Void {
+        if ((format == "A4") && (orientation == "landscape")) {
+            width = "" + Math.floor(813 * getDPIFactor());
+            height = "" + Math.floor(561 * getDPIFactor());
+        } else if ((format == "A4") && (orientation == "portrait")) {
+            width = "" + Math.floor((561) * getDPIFactor());
+            height = "" + Math.floor(813 * getDPIFactor());
+        } else if ((format == "A3") && (orientation == "landscape")) {
+            width = "" + Math.floor(1122 * getDPIFactor());
+            height = "" + Math.floor(813 * getDPIFactor());
+        } else if ((format == "A3") && (orientation == "portrait")) {
+            width = "" + Math.floor(813 * getDPIFactor());
+            height = "" + Math.floor(1122 * getDPIFactor());
+        }
     }
     
 }
