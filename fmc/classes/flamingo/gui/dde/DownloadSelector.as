@@ -231,6 +231,7 @@ class flamingo.gui.dde.DownloadSelector extends AbstractComponent implements Geo
 		// to get rid of sticky focusrects use these lines
 		inAreaChoser.drawFocus = "";
 		inAreaChoser.getDropdown().drawFocus = "";
+		// to prevent the list to close after scrolling
 		inAreaChoser.onKillFocus = function(newFocus:Object) {
 			super.onKillFocus();
 		};
