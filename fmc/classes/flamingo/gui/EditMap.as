@@ -199,7 +199,7 @@ class flamingo.gui.EditMap extends AbstractComponent implements StateEventListen
 	
 	public function onSetTool(toolgroup:Object,tool:Object){
 		var feature:flamingo.gismodel.Feature = gis.getActiveFeature();
-		if (feature != null) {
+		if (feature != null && editMapCreateGeometry != null) {
 			feature.getLayer().removeFeature(feature, true);
 		}
 		removeEditMapCreateGeometry();
