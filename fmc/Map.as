@@ -60,6 +60,7 @@ dynamic class Map extends MovieClip {
 	public var moving:Boolean;
 	public var maxscale:Number;
 	public var minscale:Number;
+	public var zoomScaleFactor:Number;
 	public var movetime:Number;
 	public var movesteps:Number;
 	public var movequality:String;
@@ -132,6 +133,7 @@ dynamic class Map extends MovieClip {
 		maptipdelay = undefined;
 		minscale = undefined;
 		maxscale = undefined;
+		zoomScaleFactor = undefined;
 		hasextent = false;
 		layersupdating = new Object();
 		layersidentifying = new Object();
@@ -310,6 +312,8 @@ dynamic class Map extends MovieClip {
 	* @attr conformal (defaultvalue "false") True or false. True: the map corrects the mapextent to ensure (in the center of the map) equal values for horizontal and vertical distances.
 	* @attr minscale  A map cannot zoom further in than this scale (defined in mapunits per pixel).
 	* @attr maxscale  A map cannot zoom further out than this scale (defined in mapunits per pixel).
+	* @attr zoomscalefactor  The map zooms in steps with this factor starting with the minScale (minscale is required) and ending with the initialextent (when configured);
+	* @attr minresolution  A map cannot zoom further in than this resolution (defined in mapunits).
 	* @attr holdonupdate  (defaultvalue "false") True or false. True: the map cannot update until the previous update is completed.
 	* @attr holdonidentify (defaultvalue "false") True or false. True: the map cannot perform an identify until the previous identify is completed.
 	* @attr fadesteps  (defaultvalue "3")  Number of steps of the fade-effect, which layers use to appear.
@@ -406,6 +410,9 @@ dynamic class Map extends MovieClip {
 			case "maxscale" :
 				this.maxscale = Number(val);
 				break;
+			case "zoomscalefactor" :
+				this.zoomScaleFactor = Number(val);
+				break;				
 			case "movetime" :
 				this.movetime = Number(val);
 				break;
@@ -1011,6 +1018,7 @@ dynamic class Map extends MovieClip {
 		ext.miny = y-nh/2;
 		ext.maxx = ext.minx+nw;
 		ext.maxy = ext.miny+nh;
+
 		this.moveToExtent(ext, updatedelay, movetime);
 	}
 	/**
@@ -1068,19 +1076,42 @@ dynamic class Map extends MovieClip {
 			var x = coord.x;
 			var y = coord.y;
 		}
+		
+
+		if(zoomScaleFactor!=undefined){
+			var curScale:Number = (this._currentextent.maxx-this._currentextent.minx)/this.__width;
+			var newScale:Number = curScale;
+			if(percentage>100){
+				newScale=curScale/zoomScaleFactor;	
+			} 
+			if(percentage<100){
+				newScale=curScale*zoomScaleFactor;
+			}	
+			var intExtent:Object = copyExtent(_initialextent);
+			correctExtent(intExtent);
+			var initialScale:Number = ((intExtent.maxx-intExtent.minx)/this.__width);
+			if(newScale<initialScale){
+				moveToScale(newScale,null,updateDelay,moveTime);
+				return;
+			}
+		}
+		
 		//var ratio = 1
 		//if (this.conformal) {
 		//var rx = this.getDistance({x:x-0.5, y:y}, {x:x+0.5, y:y});
 		//var ry = this.getDistance({x:x, y:y-0.5}, {x:x, y:y+0.5});
 		//var ratio = rx/ry;
 		//}
+		
 		var ext:Object = new Object();
+		
 		var nw = (this._currentextent.maxx-this._currentextent.minx)/percentage*100;
 		var nh = (this._currentextent.maxy-this._currentextent.miny)/percentage*100;
 		ext.minx = x-nw/2;
 		ext.miny = y-nh/2;
 		ext.maxx = ext.minx+nw;
 		ext.maxy = ext.miny+nh;
+
 		this.moveToExtent(ext, updatedelay, movetime);
 	}
 	/**
@@ -1103,6 +1134,7 @@ dynamic class Map extends MovieClip {
 		ext.miny = y-nh/2;
 		ext.maxx = ext.minx+nw;
 		ext.maxy = ext.miny+nh;
+
 		this.moveToExtent(ext, updatedelay, movetime);
 	}
 	
@@ -1168,6 +1200,10 @@ dynamic class Map extends MovieClip {
 			this._extent = this.copyExtent(extent);
 			this._mapextent = this.copyExtent(extent);
 			this.correctExtent(this._mapextent);
+			if(zoomScaleFactor!=undefined){
+				//Zooming in steps, get the nearest zoomstep extent
+				this._mapextent = getNearestExtent(this._mapextent);
+			}
 			
 			var eventType:Number = null;
 			if ((updatedelay == null) || (updatedelay == -1)) {
@@ -1227,6 +1263,34 @@ dynamic class Map extends MovieClip {
 		}
 		this.update(updatedelay);
 	}
+	
+	private function getNearestExtent(extent:Object):Object {	
+		if (minscale==undefined){
+			return extent;
+		}
+		var curScale:Number =(extent.maxx-extent.minx)/this.__width;
+		var calcScale:Number = minscale;
+		while (curScale > calcScale) {
+			calcScale = calcScale * zoomScaleFactor;
+		}
+		var intExtent:Object = copyExtent(_initialextent);
+		correctExtent(intExtent);
+		var initialScale:Number = (intExtent.maxx-intExtent.minx)/this.__width;//Math.max(((_initialextent.maxx-_initialextent.minx)/this.__width)/pixelSize,((_initialextent.maxy-_initialextent.miny)/this.__width)/pixelSize);
+		if(calcScale>initialScale){
+			return extent;
+		}
+		var nw = this.__width*calcScale;
+		var nh = this.__height*calcScale;
+		var x =  extent.minx + ((extent.maxx - extent.minx)/2);
+		var y =  extent.miny + ((extent.maxy - extent.miny)/2) 
+		extent.minx = x-nw/2;
+		extent.miny = y-nh/2;
+		extent.maxx = extent.minx+nw;
+		extent.maxy = extent.miny+nh;
+		
+		return extent;
+	}
+	
 	//
 	private function _move(obj:Object) {
 		if (obj.step>=obj.nrsteps) {
