@@ -164,7 +164,7 @@ class flamingo.gui.PrintLabel extends AbstractComponent {
 		} else {
 			label.text = text
 		}
-        label.setSize(label._width, numLines * fontSize * 1.3);
+        label.setSize(label._width * 1.2 ,numLines * fontSize * 1.3);
         
         if (textArea != null) {
             textArea.text = text;

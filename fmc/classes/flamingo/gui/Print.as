@@ -357,25 +357,28 @@ class flamingo.gui.Print extends AbstractContainer {
         var printJob:PrintJob = new PrintJob();
         if (printJob.start()) {
         	var dpiFactor:Number = currentPrintTemplate.getDPIFactor();
+            
+            
+            currentPrintTemplate.setScale(100 / dpiFactor);
             var printPage:MovieClip = currentPrintTemplate.getContentPane();
             if (currentPrintTemplate.getOrientation() != printJob.orientation) {
                 _global.flamingo.showError("Orientation Error", "The chosen printer orientation is " + printJob.orientation + ", whereas the template orientation is " + currentPrintTemplate.getOrientation() + ".");
                 delete printJob;
+                setPreviewScale(PrintTemplate(currentPrintTemplate));
                 return;
             }
-            if (printPage._width * dpiFactor > printJob.pageWidth + 5) { // 5 is for fault tolerance.
-                _global.flamingo.showError("Print Size Error", "The chosen paper size is not wide enough for the template. Is " + printJob.pageWidth + ", should be " + (printPage._width * 2) + ".");
+            if (printPage._width > printJob.pageWidth + 5) { // 5 is for fault tolerance.
+                _global.flamingo.showError("Print Size Error", "The chosen paper size is not wide enough for the template. Is " + printJob.pageWidth + ", should be " + (printPage._width) + ".");
                 delete printJob;
+                setPreviewScale(PrintTemplate(currentPrintTemplate));
                 return;
             }
-            if (printPage._height * dpiFactor > printJob.pageHeight + 5) { // 5 is for fault tolerance.
-                _global.flamingo.showError("Print Size Error", "The chosen paper size is not high enough for the template. Is " + printJob.pageHeight + ", should be " + (printPage._height * 2) + ".");
+            if (printPage._height > printJob.pageHeight + 5) { // 5 is for fault tolerance.
+                _global.flamingo.showError("Print Size Error", "The chosen paper size is not high enough for the template. Is " + printJob.pageHeight + ", should be " + (printPage._height) + ".");
                 delete printJob;
+                setPreviewScale(PrintTemplate(currentPrintTemplate));
                 return;
             }
-        
-            
-            currentPrintTemplate.setScale(100 / dpiFactor);
             
 			var width:Number = printPage._width;
             var height:Number = printPage._height;
@@ -387,6 +390,8 @@ class flamingo.gui.Print extends AbstractContainer {
             printArea["xMax"] = xMargin + (printJob.pageWidth * dpiFactor);
             printArea["yMax"] = yMargin + (printJob.pageHeight * dpiFactor);
 			
+			
+			//_global.flamingo.tracer("Print printPage._width = " + width + " printPage._height = " + height + " printJob.pageWidth = " + printJob.pageWidth + " printJob.pageHeight = " + printJob.pageHeight );
 			// first draw the printPage to a bitmap data (transparancy will remain)
 			// fill a new MovieClip with this bitmap and print this MovieClip to the printer
 			// with printAsBitMap = false;
