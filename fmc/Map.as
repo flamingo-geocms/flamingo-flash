@@ -313,7 +313,6 @@ dynamic class Map extends MovieClip {
 	* @attr minscale  A map cannot zoom further in than this scale (defined in mapunits per pixel).
 	* @attr maxscale  A map cannot zoom further out than this scale (defined in mapunits per pixel).
 	* @attr zoomscalefactor  The map zooms in steps with this factor starting with the minScale (minscale is required) and ending with the initialextent (when configured);
-	* @attr minresolution  A map cannot zoom further in than this resolution (defined in mapunits).
 	* @attr holdonupdate  (defaultvalue "false") True or false. True: the map cannot update until the previous update is completed.
 	* @attr holdonidentify (defaultvalue "false") True or false. True: the map cannot perform an identify until the previous identify is completed.
 	* @attr fadesteps  (defaultvalue "3")  Number of steps of the fade-effect, which layers use to appear.
