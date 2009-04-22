@@ -1090,7 +1090,7 @@ dynamic class Map extends MovieClip {
 			correctExtent(intExtent);
 			var initialScale:Number = ((intExtent.maxx-intExtent.minx)/this.__width);
 			if(newScale<initialScale){
-				moveToScale(newScale,null,updateDelay,moveTime);
+				moveToScale(newScale,null,updatedelay,movetime);
 				return;
 			}
 		}
