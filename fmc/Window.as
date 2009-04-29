@@ -38,13 +38,21 @@ var version:String = "2.0.1";
 //--------------------------------------------------------
 import flash.filters.DropShadowFilter;
 import flash.geom.Rectangle;
+
 //defaults
+var defaultXML:String = "<string id='tooltip_close'  en='close' nl='sluiten'/>" +
+						"<style id='.title' font-family='verdana' font-size='13px' color='#666666' display='block' font-weight='normal'/>" +
+						"<style id='.titlefocus' font-family='verdana' font-size='13px' color='#666666' display='block' font-weight='bold'/>" +
+						"<cursor id='sizens' url='fmc/CursorsWindow.swf' linkageid='sizens'/>" +
+						"<cursor id='sizewe' url='fmc/CursorsWindow.swf' linkageid='sizewe'/>" +
+						"<cursor id='sizenesw' url='fmc/CursorsWindow.swf' linkageid='sizenesw'/>" +
+						"<cursor id='sizenwse' url='fmc/CursorsWindow.swf' linkageid='sizenwse'/>"; 
 var minwidth:Number;
 var minheight:Number;
 var contentid:String;
 var stitle:String = "";
-var canresize:Boolean = false;
-var canclose:Boolean = false;
+var canresize:Boolean = true;
+var canclose:Boolean = true;
 var showresize:Boolean = true;
 //make this component a flamingo component
 var focus:Boolean = false;
@@ -114,7 +122,7 @@ function init() {
 	var mc:MovieClip = mcw.createEmptyMovieClip("mContent", 20);
 	//
 	//defaults
-	var xml:XML = flamingo.getDefaultXML(this);
+	var xml:XML = new XML(defaultXML);
 	this.setConfig(xml);
 	delete xml;
 	//custom

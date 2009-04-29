@@ -39,6 +39,10 @@ var version:String = "2.0";
 
 
 //-------------------------------------------
+var defaultXML:String = "<string id='tooltip' nl='kaartbeeld slepen' en='pan'/>" +
+				        "<cursor id='busy' url='fmc/CursorsMap.swf' linkageid='busy'/>" +
+				        "<cursor id='pan'  url='fmc/CursorsMap.swf' linkageid='pan'/>" +
+				        "<cursor id='grab' url='fmc/CursorsMap.swf' linkageid='grab_wrinkle'/>";
 var pandelay:Number = 1000;
 var clickdelay:Number = 1000;
 var xold:Number;
@@ -127,7 +131,7 @@ function init() {
 	this._visible = false;
 
 	//defaults
-	var xml:XML = flamingo.getDefaultXML(this);
+	var xml:XML = new XML(defaultXML);
 	this.setConfig(xml);
 	delete xml;
 	//custom

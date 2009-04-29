@@ -26,6 +26,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 var version:String = "2.0";
 //---------------------------------------
+var defaultXML:String = "";
 var url:String;
 var scale9:Array;
 var alpha:Number = 100;
@@ -76,7 +77,7 @@ function init() {
 	this._visible = false;
 	
 	//defaults
-	var xml:XML = flamingo.getDefaultXML(this);
+	var xml:XML = new XML(defaultXML);
 	this.setConfig(xml);
 	delete xml;
 	//custom

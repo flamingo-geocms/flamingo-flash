@@ -24,6 +24,7 @@
 
 class flamingo.gui.dde.DownloadSelectorButton extends AbstractComponent {
 	 private var downloadSelector:Object;   
+	 var defaultXML:String = "<string id='tooltip' en='open DDE download window' nl='open DDE download scherm'/>";
 		
 	function onLoad():Void {
 		super.onLoad();

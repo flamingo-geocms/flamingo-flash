@@ -28,6 +28,17 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 var version:String = "2.0";
 //-------------------------------
+var defaultXML:String = "<string id='startidentify'  en='start identify...' nl='informatie opvragen...'/>" +
+						"<string id='identify'  en='progress...([progress]%)' nl='voortgang...([progress]%)'/>" +
+						"<string id='finishidentify'  en='' nl=''/>" +
+						"<string id='seperator'  en=':' nl='='/>" +
+						"<style id='.status' font-family='verdana' font-size='11px' color='#333333' display='block' font-weight='normal'/>" +
+						"<style id='.maplayer' font-family='verdana' font-size='13px' color='#006600' display='block' font-weight='bold'/>" +
+						"<style id='.layer' font-family='verdana' font-size='13px' color='#006600' display='block' font-weight='normal'/>" +
+						"<style id='.field' font-family='verdana' font-size='11px' color='#333333' display='block' font-weight='normal'/>" +
+						"<style id='.value' font-family='verdana' font-size='11px' color='#333333' display='block' font-weight='normal'/>" +
+						"<style id='.seperator' font-family='verdana' font-size='11px' color='#333333' display='block' font-weight='normal'/>" +
+						"<style id='.error' font-family='verdana' font-size='11px' color='#ff6600' display='block' font-weight='normal'/>";
 //var info:Object;
 var thisObj = this;
 var skin = "";
@@ -255,7 +266,7 @@ function init():Void {
 	mSBH.horizontal = true;
 	mSBH.setScrollTarget(txtInfo);
 	//defaults
-	var xml:XML = flamingo.getDefaultXML(this);
+	var xml:XML = new XML(defaultXML);
 	this.setConfig(xml);
 	delete xml;
 	//custom

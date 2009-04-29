@@ -5,7 +5,7 @@
             <pathelement location="ant-contrib-1.0b3.jar"/>
         </classpath>
     </taskdef>
-	<property name="version" value="3.0.0 release candidate3 19-03-2009"/>
+	<property name="version" value="3.0.0 release candidate 4 16-04-2009"/>
     <property name="build" location="build"/>
     <property name="dist" location="../dist"/>
     <property name="flapath" location="."/>
@@ -51,7 +51,6 @@
         <echo file="${build}/compileProject.jsfl" append="true">ind=swfFileName.indexOf("/"); ${line.separator}</echo>
         <echo file="${build}/compileProject.jsfl" append="true">} ${line.separator}</echo>
         <echo file="${build}/compileProject.jsfl" append="true">move(flaURI+"/"+swfName,swfURI+swfName,"swf"); ${line.separator}</echo>
-        <echo file="${build}/compileProject.jsfl" append="true">move(flaURI+"/"+xmlName,swfURI+xmlName,"xml"); ${line.separator}</echo>
         <echo file="${build}/compileProject.jsfl" append="true">} ${line.separator}</echo>
         <echo file="${build}/compileProject.jsfl" append="true">fl.quit();${line.separator}</echo>
         <echo file="${build}/compileProject.jsfl" append="true"> } ${line.separator}</echo>         

@@ -37,6 +37,9 @@ var version:String = "2.0";
 // followOverview() = function in which the map follows the overview extent multiplied  by followfactor
 // extent is the extent of the overviewmap
 //---------------------------
+
+var defaultXML:String = "<cursor id='pan'  url='fmc/CursorsMap.swf' linkageid='pan'/>" +
+    					"<cursor id='grab' url='fmc/CursorsMap.swf' linkageid='grab' />";
 var followfactor:Number;
 var skin = "";
 var color:Number;
@@ -116,7 +119,7 @@ function init():Void {
 	this._visible = false;
 	
 	//defaults
-	var xml:XML = flamingo.getDefaultXML(this);
+	var xml:XML = new XML(defaultXML);
 	this.setConfig(xml);
 	delete xml;
 	//custom

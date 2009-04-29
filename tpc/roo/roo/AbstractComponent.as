@@ -21,6 +21,7 @@ class roo.AbstractComponent extends MovieClip {
     var cursors:Object = null; //associative array
     var strings:Object = null; //associative array
     
+    var defaultXML:String = "";
     var __width:Number = null;
     var __height:Number = null;
     
@@ -41,7 +42,7 @@ class roo.AbstractComponent extends MovieClip {
         _global.flamingo.correctTarget(_parent, this);
         
         //defaults
-        var xml:XML = _global.flamingo.getDefaultXML(this);
+        var xml:XML = new XML(defaultXML);
         this.setConfig(xml);
         delete xml;
         //custom

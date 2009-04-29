@@ -15,6 +15,7 @@
 var version:String = "3.0";
 
 //-------------------------------
+var defaultXML:String = "";
 var __width:Number;
 var __height:Number;
 var tab1Id:String;
@@ -78,7 +79,7 @@ function init():Void {
 	this._visible = false;
 
 	//defaults
-	var xml:XML = flamingo.getDefaultXML(this);
+	var xml:XML = new XML(defaultXML);
 	this.setConfig(xml);
 	delete xml;
 

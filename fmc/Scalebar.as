@@ -28,6 +28,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 var version:String = "2.0";
 
 //-------------------------------
+var defaultXML:String = "<style id='.label' font-family='verdana' font-size='11px' color='#333333' display='block' font-weight='normal'/>" +
+  						"<style id='.units' font-family='verdana' font-size='11px' color='#333333' display='block' font-weight='normal'/>";
 var visible:Boolean;
 var labelcount:Number = 2;
 var labelposition:String = "CENTER";
@@ -83,7 +85,7 @@ function init():Void {
 	this._visible = false;
   
 	//defaults
-	var xml:XML = flamingo.getDefaultXML(this);
+	var xml:XML = new XML(defaultXML);
 	this.setConfig(xml);
 	delete xml;
 	//custom

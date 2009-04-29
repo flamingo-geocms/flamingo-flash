@@ -39,6 +39,10 @@ var version:String = "2.0";
 
 
 //-------------------------------------------
+var defaultXML:String = "<string id='tooltip' nl='informatie opvragen' en='identify'/>" +
+				        "<cursor id='cursor' url='fmc/CursorsMap.swf' linkageid='identify'/>" +
+				        "<cursor id='click'  url='fmc/CursorsMap.swf' linkageid='identify_click'/>" +
+				        "<cursor id='busy' url='fmc/CursorsMap.swf' linkageid='busy' />";
 var thisObj = this;
 var skin = "_identify";
 var enabled = true;
@@ -112,7 +116,7 @@ function init() {
 	this._visible = false;
 
 	//defaults
-	var xml:XML = flamingo.getDefaultXML(this);
+	var xml:XML = new XML(defaultXML);
 	this.setConfig(xml);
 	delete xml;
 	//custom

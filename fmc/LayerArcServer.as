@@ -13,6 +13,7 @@
 */
 var version:String = "3.0";
 //---------------------------------
+var defaultXML:String = "";
 //properties which can be set in ini
 var visible:Boolean;
 var fullextent:Object;
@@ -134,7 +135,7 @@ function init():Void {
 	this._visible = false;
 	map = flamingo.getParent(this);
 	//defaults
-	var xml:XML = flamingo.getDefaultXML(this);
+	var xml:XML = new XML(defaultXML);
 	this.setConfig(xml);
 	delete xml;
 	//custom

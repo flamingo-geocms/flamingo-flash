@@ -39,6 +39,15 @@ var version:String = "2.0";
 
 
 //-------------------------------
+var defaultXML:String = "<string id='outofscale' nl='buiten schaalbereik&lt;br&gt;zoom naar deze laag...' en='zoom to layer'/>" +
+							"<style id='.group' font-family='verdana' font-size='12px' color='#6666cc' display='block' font-weight='bold'/>" +
+							"<style id='.group_mouseover' font-family='verdana' font-size='12px' color='#666699' display='block' font-weight='bold'/>" +
+							"<style id='.item' font-family='verdana' font-size='10px' color='#333333' display='block' font-weight='normal'/>" +
+							"<style id='.item_link' font-family='verdana' font-size='10px' color='#333333' display='block' font-weight='normal' text-decoration='underline'/>" +
+							"<style id='.symbol' font-family='verdana' font-size='10px' color='#333333' display='block' font-weight='normal' />" +
+							"<style id='.symbol_link' font-family='verdana' font-size='10px' color='#333333' display='block' font-weight='normal' text-decoration='underline'/>" +
+							"<style id='.outofscale' font-family='verdana' font-size='10px' color='#0066cc' display='block' font-style='italic'/>" +
+							"<style id='.text' font-family='verdana' font-size='10px' color='#333333' display='block' font-style='italic'/>";
 var __width:Number;
 var __height:Number;
 var shadowsymbols:Boolean = false;
@@ -168,7 +177,7 @@ function init():Void {
 	itemclips = new Array();
 	
 	//defaults
-	var xml:XML = flamingo.getDefaultXML(this);
+	var xml:XML = new XML(defaultXML);
 	this.setConfig(xml);
 	//delete xml;
 	//custom

@@ -28,6 +28,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 var version:String = "2.0";
 //-------------------------------
+var defaultXML:String = '<string id="loading"  en="loading \'[layer]\' [percentage]%..." nl="\'[layer]\' laden [percentage]%..."/>' +
+						  '<string id="waiting"  en="making layer \'[layer]\'..." nl="kaartlaag \'[layer]\' maken..."/>' +
+						  '<style  id=".text" font-family="verdana" font-size="12px" color="#666666" display="block" font-weight="normal"/>'; 
 var monitorobjects:Object = new Object();
 var skin:String = "";
 var thisObj = this;
@@ -89,7 +92,7 @@ function init():Void {
 	}
 	this._visible = false;
 	//defaults
-	var xml:XML = flamingo.getDefaultXML(this);
+	var xml:XML = new XML(defaultXML);
 	this.setConfig(xml);
 	delete xml;
 	//custom

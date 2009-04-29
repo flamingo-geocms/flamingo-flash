@@ -29,6 +29,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 //keep track of versions
 var version:String = "2.0";
 //----------------------
+var defaultXML:String = "";
 // Add listener to parent of this movie for resizing
 var lParent:Object = new Object();
 lParent.onResize = function(mc:MovieClip) {
@@ -49,7 +50,7 @@ function init() {
 	// make buttons
 	initButtons();
 	//read defaults xml
-	var xml:XML = flamingo.getDefaultXML(this);
+	var xml:XML = new XML(defaultXML);
 	this.setConfig(xml);
 	delete xml;
 	//read custom xml's

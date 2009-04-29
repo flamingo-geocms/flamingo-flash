@@ -36,6 +36,7 @@ class flamingo.core.AbstractComponent extends MovieClip {
     var __width:Number = null;
     var __height:Number = null;
     
+    var defaultXML:String = "";
     // Some properties used for components to wait for each other at init time.
     private var initAdapters:Array = null;
     private var inited:Boolean = false;
@@ -76,9 +77,7 @@ class flamingo.core.AbstractComponent extends MovieClip {
     * Sets the component's base configuration, which comprises of the 19 base properties.
     */
     function setBaseConfig():Void {
-   
-        // Retrieves the default configuration for the component, in order to set the base properties.
-        var defaultConfig:XMLNode = _global.flamingo.getDefaultXML(this);
+        var defaultConfig:XMLNode = new XML(defaultXML);
         _global.flamingo.parseXML(this, defaultConfig);
         
         // Retrieves the application configurations for the component, in order to set the base properties.
@@ -180,8 +179,7 @@ class flamingo.core.AbstractComponent extends MovieClip {
     * Sets the component's custom configuration, which comprises of the properties not in the "base" set.
     */
     function setCustomConfig():Void {
-        // Retrieves the default configuration for the component, in order to set the custom properties.
-        var defaultConfig:XMLNode = _global.flamingo.getDefaultXML(this);
+        var defaultConfig:XMLNode = new XML(defaultXML);
         setCustomProperties(defaultConfig);
         
         // Retrieves the application configurations for the component, in order to set the custom properties.

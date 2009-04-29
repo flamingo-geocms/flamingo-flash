@@ -32,6 +32,9 @@ var version:String = "2.0";
 
 
 //-------------------------------
+var defaultXML:String = "<string id='loading'  en='loading [percentage]%' nl='laden [percentage]%'/>" +
+						  "<string id='waiting'  en='making [map]...' nl='[map] in de maak...'/>" +
+						  "<style id='.text' font-family='verdana' font-size='12px' color='#666666' display='block' font-weight='normal'/>";
 var skin:String = "";
 //---------------------------------
 var lMap:Object = new Object();
@@ -88,7 +91,7 @@ function init():Void {
 	}
 	this._visible = false;
 	//defaults
-	var xml:XML = flamingo.getDefaultXML(this);
+	var xml:XML = new XML(defaultXML);
 	this.setConfig(xml);
 	delete xml;
 	//custom

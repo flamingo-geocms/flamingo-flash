@@ -25,6 +25,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 * @configstring preloadtitle  text which is shown during the loading of a configuration.
 */
 var version:String = "2.0";
+
+var defaultXML:String = "";
 var thisObj = this;
 var preloadtitle = "";
 //------------------------------------------
@@ -68,7 +70,7 @@ function init():Void {
 	this._visible = false;
 	this.swapDepths(25879)
 	//defaults
-	var xml:XML = flamingo.getDefaultXML(this);
+	var xml:XML = new XML(defaultXML);
 	this.setConfig(xml);
 	delete xml;
 	//custom

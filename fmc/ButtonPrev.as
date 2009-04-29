@@ -35,6 +35,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 var version = "2.0";
 
 //-------------------------------
+var defaultXML:String = "<string id='tooltip'  en='previous extent' nl='stap terug'/>";
 var skin:String = "";
 var button:FlamingoButton;
 //---------------------------------
@@ -69,7 +70,7 @@ function init():Void {
 	}
 	this._visible = false;
 	//defaults
-	var xml:XML = flamingo.getDefaultXML(this);
+	var xml:XML = new XML(defaultXML);
 	this.setConfig(xml);
 	delete xml;
 

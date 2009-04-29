@@ -14,6 +14,22 @@
 */
 var version:String = "3.0";
 //-------------------------------------------
+var defaultXML:String = "<string id='tooltip' nl='selecteren' en='Select'/>" +
+						  "<cursor id='busy' url='fmc/CursorsMap.swf' linkageid='busy'/>" +
+						  "<string id='alertWindowTitle' nl='Melding' en='Message'/>" +
+						  "<string id='alertMessage' nl='De vorige selectie wordt verwijderd. Weet u zeker of u door wilt gaan?' en='The previous selection will be removed, do you want to continue?'/>" +
+						  "<string id='yes' nl='Ja' en='Yes'/>" +
+						  "<string id='no' nl='Nee' en='No'/>" +
+						  "<string id='windowTitle' nl='Selectie' en='Selection'/>" +
+						  "<string id='layerLabel' nl='Selecteer onderwerp' en='Select layer'/>" +
+						  "<string id='conditionLabel' nl='waarvoor geldt' en='where'/>" +
+						  "<string id='clear' nl='wissen' en='clear'/>" +
+						  "<string id='cancel' nl='annuleren' en='cancel'/>" +
+						  "<string id='ok' nl='Ok' en='Ok'/>" +
+						  "<string id='notvalidLabel' >" +
+								"<nl><![CDATA[<font color='#ff0000' family ='Verdana' size='9'><b>niet juist of onvolledig ingevuld</b></font>]]></nl>" +
+								"<en><![CDATA[<font color='#ff0000' family ='Verdana' size='9'><b>parameters not correct</b></font>]]></en>" +
+							"</string>";
 var clickdelay:Number = 1000;
 var xold:Number;
 var yold:Number;
@@ -117,7 +133,7 @@ function init() {
 	this._visible = false;
 
 	//defaults
-	var xml:XML = flamingo.getDefaultXML(this);
+	var xml:XML = new XML(defaultXML);
 	this.setConfig(xml);
 	delete xml;
 	//custom

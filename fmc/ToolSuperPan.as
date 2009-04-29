@@ -39,6 +39,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 var version:String = "2.0";
 
 //-------------------------------------------
+var defaultXML:String = "<string id='tooltip' nl='slepen, gooien en zoomen met het wieltje' en='pan, throw, and zoom with mousewheel'/>" +
+				        "<cursor id='cursor' url='fmc/CursorsMap.swf' linkageid='pan'/>" +
+				        "<cursor id='grab' url='fmc/CursorsMap.swf' linkageid='grab'/>" +
+				        "<cursor id='busy' url='fmc/CursorsMap.swf' linkageid='busy'/>";
 var delay:Number = 800;
 var velocityid:Number;
 var autopanid:Number;
@@ -163,7 +167,7 @@ function init() {
 	this._visible = false;
 
 	//defaults
-	var xml:XML = flamingo.getDefaultXML(this);
+	var xml:XML = new XML(defaultXML);
 	this.setConfig(xml);
 	delete xml;
 	//custom

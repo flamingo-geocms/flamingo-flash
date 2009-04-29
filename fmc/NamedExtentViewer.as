@@ -26,10 +26,13 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 var version:String = "2.0";
 
+var defaultXML:String = "<style id='.extent' font-family='verdana' font-size='18px' color='#333333' display='block' font-weight='bold'/>"
 //---------------------------------
 //properties which can be set in ini
 //---------------------------------
 //listenerobject for map
+
+
 var lMap:Object = new Object();
 lMap.onUpdate = function(map:MovieClip):Void  {
 		var e = map.getMapExtent();
@@ -82,7 +85,7 @@ function init():Void {
 	this._visible = false;
 
 	//defaults
-	var xml:XML = flamingo.getDefaultXML(this);
+	var xml:XML = new XML(defaultXML);
 	this.setConfig(xml);
 	delete xml;
 	//custom

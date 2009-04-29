@@ -31,6 +31,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 var version:String = "2.0.1";
 
 //-------------------------------
+
+var defaultXML:String = "<string id='tooltip' en='full extent' nl='zoom naar volledige uitsnede'/>"
 var skin:String = "";
 var extent:String = "full";
 var button:FlamingoButton;
@@ -64,7 +66,8 @@ function init():Void {
 	//xml.load(getNocacheName(url+".xml", this.nocache))
 	
 	
-	var xml:XML = flamingo.getDefaultXML(this);
+	var xml:XML = new XML(defaultXML);
+	
 	this.setConfig(xml);
 	delete xml;
 		//custom

@@ -35,6 +35,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 var version:String = "2.0";
 //-------------------------------------------
+var defaultXML:String = "<string id='tooltip' nl='afstand meten' en='measure'/>" +
+        				"<cursor id='cursor' url='fmc/CursorsMap.swf' linkageid='measure'/>";
 var unit:String = "";
 var decimals:Number = 0;
 var magicnumber:Number = 1;
@@ -131,7 +133,7 @@ function init() {
 	this._visible = false;
 
 	//defaults
-	var xml:XML = flamingo.getDefaultXML(this);
+	var xml:XML = new XML(defaultXML);
 	this.setConfig(xml);
 	delete xml;
 	//custom

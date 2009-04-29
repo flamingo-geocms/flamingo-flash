@@ -905,7 +905,7 @@ class Flamingo {
 				}
 				parentmc = parentmc._parent;
 			}
-			this.loadComponent_defaults(url);
+			//this.loadComponent_defaults(url);
 			this.loadComponent_source(url, targetid, mc);
 			//get custom language, style and cursor definitions
 			//this.theloadlist.push({url:url, targetid:targetid, mc:mc});

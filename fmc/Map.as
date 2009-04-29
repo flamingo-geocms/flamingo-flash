@@ -49,6 +49,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 dynamic class Map extends MovieClip {
 	//
 	public var version:String = "2.0.1";
+	var defaultXML:String = "";
 	public var conformal:Boolean;
 	public var mapunits:String;
 	public var __width:Number;
@@ -281,7 +282,7 @@ dynamic class Map extends MovieClip {
 	
 		//--------------------------
 		//defaults
-		var xml:XML = flamingo.getDefaultXML(this);
+		var xml:XML = new XML(defaultXML);
 		this.setConfig(xml);
 		delete xml;
 		//custom
