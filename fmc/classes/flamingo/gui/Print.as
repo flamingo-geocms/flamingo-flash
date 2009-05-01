@@ -92,7 +92,7 @@ class flamingo.gui.Print extends AbstractContainer {
     private var scaleComboBox:ComboBox = null;
     private var scrollPane:ScrollPane = null;
     private var checkBox:CheckBox = null;
-	  private var templateComboBox:ComboBox = null;
+  	private var templateComboBox:ComboBox = null;
     
     private var intervalID:Number = null;
     private var availPreviewWidth:Number = 0;
@@ -341,13 +341,17 @@ class flamingo.gui.Print extends AbstractContainer {
             scrollPane.content.container = currentPrintTemplate;
             
             checkBox.selected = currentPrintTemplate.isSemiscaled();
+
+            
+            
         }
     }
     
+
+    
     private function sendToPrinter():Void {
         checkBox.selected = false;
-        currentPrintTemplate.setSemiscaled(false);
-        
+        currentPrintTemplate.setSemiscaled(false);        
         intervalID = setInterval(this, "toPrinter", 500);
     }
     
@@ -360,6 +364,7 @@ class flamingo.gui.Print extends AbstractContainer {
             
             
             currentPrintTemplate.setScale(100 / dpiFactor);
+            
             var printPage:MovieClip = currentPrintTemplate.getContentPane();
             if (currentPrintTemplate.getOrientation() != printJob.orientation) {
                 _global.flamingo.showError("Orientation Error", "The chosen printer orientation is " + printJob.orientation + ", whereas the template orientation is " + currentPrintTemplate.getOrientation() + ".");
@@ -367,6 +372,7 @@ class flamingo.gui.Print extends AbstractContainer {
                 setPreviewScale(PrintTemplate(currentPrintTemplate));
                 return;
             }
+            /*
             if (printPage._width > printJob.pageWidth + 5) { // 5 is for fault tolerance.
                 _global.flamingo.showError("Print Size Error", "The chosen paper size is not wide enough for the template. Is " + printJob.pageWidth + ", should be " + (printPage._width) + ".");
                 delete printJob;
@@ -378,20 +384,19 @@ class flamingo.gui.Print extends AbstractContainer {
                 delete printJob;
                 setPreviewScale(PrintTemplate(currentPrintTemplate));
                 return;
-            }
-            
+            }*/
+           
 			var width:Number = printPage._width;
             var height:Number = printPage._height;
-            var xMargin:Number = (width - (printJob.pageWidth)) / 2;
-            var yMargin:Number = (height - (printJob.pageHeight)) / 2;
+        	var componentIDs:Array = currentPrintTemplate.getComponents();
+            var xMargin:Number = ((printJob.pageWidth * dpiFactor)-(currentPrintTemplate.__width)) / 2;
+            var yMargin:Number = ((printJob.pageHeight * dpiFactor)-(currentPrintTemplate.__height)) / 2;			
             var printArea:Object = new Object();
-            printArea["xMin"] = xMargin;
-            printArea["yMin"] = yMargin;
-            printArea["xMax"] = xMargin + (printJob.pageWidth * dpiFactor);
-            printArea["yMax"] = yMargin + (printJob.pageHeight * dpiFactor);
-			
-			
-			//_global.flamingo.tracer("Print printPage._width = " + width + " printPage._height = " + height + " printJob.pageWidth = " + printJob.pageWidth + " printJob.pageHeight = " + printJob.pageHeight );
+            printArea["xMin"] = - xMargin;
+            printArea["yMin"] = - yMargin;    
+            printArea["xMax"] = xMargin + (currentPrintTemplate.__width);
+            printArea["yMax"] = yMargin + (currentPrintTemplate.__height);
+
 			// first draw the printPage to a bitmap data (transparancy will remain)
 			// fill a new MovieClip with this bitmap and print this MovieClip to the printer
 			// with printAsBitMap = false;
@@ -400,11 +405,11 @@ class flamingo.gui.Print extends AbstractContainer {
 			bitmap.draw(printPage);
 			var tmp:MovieClip = _root.createEmptyMovieClip("rasterPage", _root.getNextHighestDepth());
 			tmp.beginBitmapFill(bitmap);
-			tmp.moveTo(xMargin, yMargin);
-			tmp.lineTo(2880, yMargin);
+			tmp.moveTo(-xMargin, -yMargin);
+			tmp.lineTo(2880, -yMargin);
 			tmp.lineTo(2880, 2880);
-			tmp.lineTo(xMargin, 2880);
-			tmp.lineTo(xMargin, yMargin);
+			tmp.lineTo(-xMargin, 2880);
+			tmp.lineTo(-xMargin, -yMargin);
 			tmp._x = -tmp._width;
 			tmp._xscale =(1/dpiFactor) * 100;
 			tmp._yscale =(1/dpiFactor) * 100;
