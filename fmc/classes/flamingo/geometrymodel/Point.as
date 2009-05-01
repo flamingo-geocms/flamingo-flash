@@ -40,6 +40,10 @@ class flamingo.geometrymodel.Point extends Geometry implements GeometryListener 
         return new Point(x, y);
     }
     
+     function getEnvelope():Envelope {
+        return new Envelope(x, y, x, y);
+    }
+    
     function clone():Point {
     	var newPoint = new Point(x, y);
         return newPoint;

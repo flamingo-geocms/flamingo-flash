@@ -219,6 +219,31 @@ class flamingo.gismodel.GIS extends AbstractComponent {
         }
         return -1;
     }
+
+    function getEnvelope():Envelope {
+    	var layer:Layer = layers[0];
+    	 var minx:Number = layer.getEnvelope().getMinX();  
+    	 var maxx:Number = layer.getEnvelope().getMaxX();
+    	 var miny:Number = layer.getEnvelope().getMinY(); 
+    	 var maxy:Number = layer.getEnvelope().getMaxY();
+    	  
+    	 for (var i:Number = 1; i < layers.length; i++) {
+    	 	layer = layers[i];
+    	 	if (layer.getEnvelope().getMinX() < minx) {
+    	 		minx = layer.getEnvelope().getMinX();
+    	 	}
+    	 	if (layer.getEnvelope().getMaxX() > maxx) {
+    	 		maxx = layer.getEnvelope().getMaxX();
+    	 	}
+    	 	if (layer.getEnvelope().getMinY() < miny) {
+    	 		miny = layer.getEnvelope().getMinY();
+    	 	}
+    	 	if (layer.getEnvelope().getMaxY() > maxy) {
+    	 		maxy = layer.getEnvelope().getMaxY();
+    	 	}
+    	 }	   	 
+    	 return new Envelope(minx,miny,maxx,maxy);
+    }
     
     function setActiveFeature(activeFeature:Feature):Void {
         if (this.activeFeature == activeFeature) {

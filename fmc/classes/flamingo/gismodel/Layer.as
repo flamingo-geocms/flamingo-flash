@@ -157,6 +157,30 @@ class flamingo.gismodel.Layer extends AbstractComposite implements ActionEventLi
     	return gis;
     }
     
+    function getEnvelope():Envelope {
+    	var feature:Feature = features[0];
+    	 var minx:Number = feature.getEnvelope().getMinX();  
+    	 var maxx:Number = feature.getEnvelope().getMaxX();
+    	 var miny:Number = feature.getEnvelope().getMinY(); 
+    	 var maxy:Number = feature.getEnvelope().getMaxY();  	  
+    	 for (var i:Number = 1; i < features.length; i++) {
+    	 	feature= features[i];
+    	 	if (feature.getEnvelope().getMinX() < minx) {
+    	 		minx =  feature.getEnvelope().getMinX();
+    	 	}
+    	 	if (feature.getEnvelope().getMaxX() > maxx) {
+    	 		maxx = feature.getEnvelope().getMaxX();
+    	 	}
+    	 	if (feature.getEnvelope().getMinY() < miny) {
+    	 		miny = feature.getEnvelope().getMinY();
+    	 	}
+    	 	if (feature.getEnvelope().getMaxY() > maxy) {
+    	 		maxy =  feature.getEnvelope().getMaxY();
+    	 	}
+    	 }	   	 
+    	 return new Envelope(minx,miny,maxx,maxy);
+    }
+    
     function addWhereClause(whereClause:WhereClause):Void {
         var whereClausePosition:Number = getWhereClausePosition(whereClause.getPropertyName());
         var notWhereClause:WhereClause = null;

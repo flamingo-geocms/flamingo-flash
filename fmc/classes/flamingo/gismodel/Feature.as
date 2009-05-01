@@ -11,6 +11,8 @@ import flamingo.coremodel.service.wfs.*;
 import flamingo.geometrymodel.Geometry;
 import flamingo.geometrymodel.GeometryTools;
 
+import flamingo.geometrymodel.Envelope;
+
 class flamingo.gismodel.Feature {
     
     private var layer:Layer = null;
@@ -112,6 +114,10 @@ class flamingo.gismodel.Feature {
     function getGeometry():Geometry {
         return geometry;
     }
+    
+    function getEnvelope():Envelope {
+    	return geometry.getEnvelope();
+    }	
     
     function setValues(values:Array):Void {
         var properties:Array = layer.getProperties();

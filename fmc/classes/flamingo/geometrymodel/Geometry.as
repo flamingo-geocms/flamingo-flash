@@ -30,11 +30,13 @@ class flamingo.geometrymodel.Geometry {
     
     function getChildGeometries():Array { return null; }
     
-    function getPoints():Array { return null; }
+    function getPoints():Array { return null; }  
     
     private function getEndPoint():Point { return null; }
     
     function getCenterPoint():Point { return null; }
+    
+    function getEnvelope():Envelope { return null; }
     
     function clone():Geometry { return null; }
     

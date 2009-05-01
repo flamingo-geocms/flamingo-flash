@@ -72,6 +72,33 @@ class flamingo.geometrymodel.LineString extends Geometry implements GeometryList
                
         return new Point(sumX / numPoints, sumY / numPoints);
     }
+    
+   function getEnvelope():Envelope {
+        var points:Array = getChildGeometries();
+        var point:Point = Point(points[0]);
+        var minX:Number = point.getX();
+        var minY:Number = point.getY();
+        var maxX:Number = point.getX();
+        var maxY:Number = point.getY();
+        for (var i:String in points) {
+            point = Point(points[i]);
+            if (minX > point.getX()) {
+                minX = point.getX();
+            }
+            if (minY > point.getY()) {
+                minY = point.getY();
+            }
+            if (maxX < point.getX()) {
+                maxX = point.getX();
+            }
+            if (maxY < point.getY()) {
+                maxY = point.getY();
+            }
+        }
+        
+        return new Envelope(minX, minY, maxX, maxY);
+    }
+    
        
     private function isClosed():Boolean {
         if (points[0] == points[points.length - 1]) {

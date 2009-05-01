@@ -48,6 +48,26 @@ class flamingo.geometrymodel.LineSegment extends Geometry {
         
         return new Point(centerX, centerY);
     }
+    
+    function getEnvelope():Envelope {
+        var minX:Number = point0.getX();
+        var minY:Number = point0.getY();
+        var maxX:Number = point0.getX();
+        var maxY:Number = point0.getY();
+        if (minX > point1.getX()) {
+            minX = point1.getX();
+        } else {
+            maxX = point1.getX();
+        }
+        if (minY > point1.getY()) {
+            minY = point1.getY();
+        } else {
+            maxY = point1.getY();
+        }
+        
+        return new Envelope(minX, minY, maxX, maxY);
+    }
+    
 
     function clone():Geometry {
         var clonedPoint0:Point = Point(point0.clone());

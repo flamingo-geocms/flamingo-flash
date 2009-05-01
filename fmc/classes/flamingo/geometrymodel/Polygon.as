@@ -44,6 +44,11 @@ class flamingo.geometrymodel.Polygon extends Geometry {
         return exteriorRing;
     }
     
+    function getEnvelope():Envelope {
+        return exteriorRing.getEnvelope();
+    }
+    
+    
     function toGMLString():String {
         var points:Array = exteriorRing.getPoints();
         var point:Point = null;
