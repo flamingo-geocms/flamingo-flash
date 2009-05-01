@@ -64,6 +64,7 @@ var maptipextent:Object;
 var identifyextent:Object;
 var aka:Object = new Object();
 var lastFiltersFingerprint:String = null;
+var sldParam:String = "";
 
 //-------------------------------------
 //listenerobject for map
@@ -392,6 +393,15 @@ function setConfig(xml:Object) {
 	cogwms.getCapabilities(this.getcapabilitiesurl, args, lConn);
 }
 /**
+* Sets a url parameter to be used with sld attribute
+* @param sldParamNew: String value to be appended to the sld attribute, must be url encoded
+*/
+function setSLDparam(sldParamNew:String) {
+  this.sldParam = sldParamNew;
+  update();
+}
+
+/**
 * Sets the transparency of a layer.
 * @param alpha:Number A number between 0 and 100, 0=transparent, 100=opaque
 */
@@ -457,8 +467,8 @@ function _update(nrtry:Number) {
 		return;
 	}
 	extent = map.getMapExtent();
-	if (this.filterLayerLayerOGWMSAdapter != undefined) {
-    	lastFiltersFingerprint = this.filterLayerLayerOGWMSAdapter.getFiltersFingerprint();
+	if (this.filterLayerLayerOGWMSAdapter != undefined || sldParam != "") {
+    	lastFiltersFingerprint = this.filterLayerLayerOGWMSAdapter.getFiltersFingerprint() + sldParam;
 		//_global.flamingo.tracer("lastFiltersFingerprint = |" + lastFiltersFingerprint + "|");
 	} else {
     	lastFiltersFingerprint = "";
@@ -562,14 +572,9 @@ function _update(nrtry:Number) {
 			var loadtime = (new Date()-starttime)/1000;
 			thisObj.updateCache(cachemovie);
 			var currentFiltersFingerprint:String = "";
-			if (thisObj.filterLayerLayerOGWMSAdapter != undefined) {
-				currentFiltersFingerprint = thisObj.filterLayerLayerOGWMSAdapter.getFiltersFingerprint();
+			if (thisObj.filterLayerLayerOGWMSAdapter != undefined || sldParam != "") {
+				currentFiltersFingerprint = thisObj.filterLayerLayerOGWMSAdapter.getFiltersFingerprint() + sldParam;
 			}
-			//_global.flamingo.tracer("currentFiltersFingerprint = |" + currentFiltersFingerprint + "|" + currentFiltersFingerprint.length);
-			//_global.flamingo.tracer("lastFiltersFingerprint = |" + lastFiltersFingerprint + "|" + lastFiltersFingerprint.length);
-			//if (currentFiltersFingerprint != lastFiltersFingerprint) {
-			//	_global.flamingo.tracer("currentFiltersFingerprint != lastFiltersFingerprint");
-			//}
 			if (thisObj.map.fadesteps>0) {
 				var step = (100/map.fadesteps)+1;
 				thisObj.onEnterFrame = function() {
@@ -623,18 +628,9 @@ function _update(nrtry:Number) {
 	if (s_styles.length>=0) {
 		args.STYLES = s_styles;
 	}
-	for (var attr in this.attributes) {
-  		args[attr.toUpperCase()] = this.attributes[attr];
-	}
-	if ((args["SLD_BODY"] != null) && (args["SLD_BODY"] != "")) {
-		args["LAYERS"] = "";
-		args["STYLES"] = "";
-	}
-	//_global.flamingo.tracer("args[SLD] = '" + args["SLD"] + "'");
-	if ((args["SLD"] != null) && (args["SLD"] != "")) {
-		args["LAYERS"] = "";
-		args["STYLES"] = "";
-	}
+
+  args = handleSLDarg(args);
+  
 	// 
 	var starttime:Date = new Date();
 	//
@@ -723,17 +719,9 @@ function identify(extent:Object) {
 	args.X = String(Math.round(rect.x+(rect.width/2)));
 	args.Y = String(Math.round(rect.y+(rect.height/2)));
 	args.FEATURE_COUNT = String(feature_count);
-	for (var attr in this.attributes) {
-  	  args[attr.toUpperCase()] = this.attributes[attr];
-	}
-	if ((args["SLD_BODY"] != null) && (args["SLD_BODY"] != "")) {
-		args["LAYERS"] = "";
-		args["STYLES"] = "";
-	}
-	if ((args["SLD"] != null) && (args["SLD"] != "")) {
-		args["LAYERS"] = "";
-		args["STYLES"] = "";
-	}
+  
+  args = handleSLDarg(args);
+  
 	var cogwms:OGWMSConnector = new OGWMSConnector();
 	cogwms.addListener(lConn);
 	flamingo.raiseEvent(thisObj, "onIdentify", thisObj, thisObj.identifyextent);
@@ -744,6 +732,26 @@ function identify(extent:Object) {
 	}
 	var starttime:Date = new Date();
 }
+
+/*
+* private function to handle filter params in sld argument
+*/
+
+function handleSLDarg(argsLocal:Object):Object {
+	for (var attr in this.attributes) {
+  	  argsLocal[attr.toUpperCase()] = this.attributes[attr];
+	}
+	if ((argsLocal["SLD"] != null) && (argsLocal["SLD"] != "")) {
+		argsLocal["LAYERS"] = "";
+		argsLocal["STYLES"] = "";
+		argsLocal["SLD"] += sldParam;
+		if (this.filterLayerLayerOGWMSAdapter != undefined) {
+		     argsLocal["SLD"] += this.filterLayerLayerOGWMSAdapter.getUrlFilter();
+		}
+	}
+	return argsLocal;
+}
+
 function stopMaptip() {
 	this.showmaptip = false;
 	this.maptipextent = undefined;

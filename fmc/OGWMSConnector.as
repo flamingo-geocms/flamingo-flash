@@ -106,8 +106,8 @@
 			var thisObj:Object = this;
 			xrequest.onLoad = function(success:Boolean) {
 				//trace("----------------------------------------")
-				//flamingo.tracer(success);
-				//flamingo.tracer(this.toString());
+				//_global.flamingo.tracer(success);
+				//_global.flamingo.tracer(this.toString());
 				thisObj.responsetime = (new Date()-starttime)/1000;
 				thisObj.response = this.toString();
 				if (success) {
@@ -131,7 +131,7 @@
 						}
 					}
 				} else {
-					thisObj.error = "connection failed...";
+					thisObj.error = thisObj.url + " connection failed...";
 					thisObj.events.broadcastMessage("onResponse", thisObj);
 					thisObj.events.broadcastMessage("onError", thisObj.error, obj, reqid);
 				}
