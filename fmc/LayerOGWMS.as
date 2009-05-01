@@ -403,7 +403,9 @@ function setSLDparam(sldParamNew:String) {
 */
 function setAlpha(alpha:Number) {
 	this._alpha = alpha;
+	flamingo.raiseEvent(this, "onSetValue", "setAlpha", alpha);	
 }
+
 function _parseLayers(tlayers:Object) {
 	for (var item in tlayers) {
 		if (item == "layers") {
