@@ -75,6 +75,7 @@
             <arg value="${build}/compileProject.jsfl"/>
         </exec>
     	<copy file="${flapath}/GNU-GPL_LICENSE.txt" todir="${build}/dist/flamingo"/>
+    	<copy file="${flapath}/flamingo.xml" todir="${build}/dist/flamingo"/>
     </target>
     
     <target name="dist" depends="compile">
