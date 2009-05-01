@@ -39,10 +39,13 @@ var version:String = "2.0";
 
 
 //-------------------------------------------
-var defaultXML:String = "<string id='tooltip' nl='kaartbeeld slepen' en='pan'/>" +
+var defaultXML:String = "<?xml version='1.0' encoding='UTF-8'?>" +
+						"<ToolPan>" +
+						"<string id='tooltip' nl='kaartbeeld slepen' en='pan'/>" +
 				        "<cursor id='busy' url='fmc/CursorsMap.swf' linkageid='busy'/>" +
 				        "<cursor id='pan'  url='fmc/CursorsMap.swf' linkageid='pan'/>" +
-				        "<cursor id='grab' url='fmc/CursorsMap.swf' linkageid='grab_wrinkle'/>";
+				        "<cursor id='grab' url='fmc/CursorsMap.swf' linkageid='grab_wrinkle'/>" +
+				        "</ToolPan>";
 var pandelay:Number = 1000;
 var clickdelay:Number = 1000;
 var xold:Number;
@@ -131,10 +134,7 @@ function init() {
 	this._visible = false;
 
 	//defaults
-	var xml:XML = new XML(defaultXML);
-	this.setConfig(xml);
-	delete xml;
-	//custom
+	this.setConfig(defaultXML);
 	//custom
 	var xmls:Array= flamingo.getXMLs(this);
 	for (var i = 0; i < xmls.length; i++){

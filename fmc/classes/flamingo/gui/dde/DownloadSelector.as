@@ -104,7 +104,9 @@ import mx.containers.ScrollPane;
 import flamingo.core.AbstractComponent;
 
 class flamingo.gui.dde.DownloadSelector extends AbstractComponent implements GeometryListener,DDEConnectorListener {
-    var defaultXML:String = "<string id='layers' en='Layers' nl='Kaartlagen'/>" +
+    var defaultXML:String = "<?xml version='1.0' encoding='UTF-8'?>" +
+							"<DownloadSelector>" + 
+							"<string id='layers' en='Layers' nl='Kaartlagen'/>" +
 						      "<string id='inArea' en='Within Area' nl='Binnen gebied'/>" +
 						      "<string id='inGeometry' en='Within Geometry' nl='Binnen geometrie'/>"+
 						      "<string id='inBox' en='Within Box' nl='Binnen rechthoek'/>" +
@@ -116,7 +118,8 @@ class flamingo.gui.dde.DownloadSelector extends AbstractComponent implements Geo
 						      "<string id='warningNoEmail' en='Please fill in a valid e-mail adress' nl='Vul een geldig e-mail adres in'/>" +
 						      "<string id='warningOutOfExtent' en='Requested extent outside the fullextent of the map' nl='Ingevulde coördinaten vallen buiten bereik van de kaart'/>" +
 						      "<string id='warningErrorInBox' en='Error in box coördinates' nl='Fouten in coördinaten van rechthoek'/>" +
-						      "<string id='extentButtonLabel' en='from map' nl='van kaart'/>";
+						      "<string id='extentButtonLabel' en='from map' nl='van kaart'/>" + 
+						      "</DownloadSelector>";
     private var legend:Object = null;
     private var map:Object = null;
     private var depth:Number = 0;

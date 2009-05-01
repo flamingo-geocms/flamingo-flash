@@ -34,7 +34,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 var version:String = "2.0";
 
 //---------------------------------------
-var deafultXML:String = "";
+var defaultXML:String = "";
 var buttons:Array = new Array("W", "S", "N", "E", "NW", "NE", "SE", "SW");
 var fbN:FlamingoButton;
 var fbS:FlamingoButton;
@@ -70,13 +70,8 @@ function init() {
 	}
 	this._visible = false;
 	//defaults
-	var xml:XML = new XML(defaultXML);
-	this.setConfig(xml);
-	delete xml;
 	
-
-	
-		//custom
+	//custom
 	var xmls:Array= flamingo.getXMLs(this);
 	for (var i = 0; i < xmls.length; i++){
 		this.setConfig(xmls[i]);
@@ -96,9 +91,9 @@ function setConfig(xml:Object) {
 	if (typeof (xml) == "string") {
 		xml = new XML(String(xml)).firstChild;
 	}
-	if (flamingo.getType(this).toLowerCase() != xml.localName.toLowerCase()) {
-		return;
-	}
+	//if (flamingo.getType(this).toLowerCase() != xml.localName.toLowerCase()) {
+		//return;
+	//}
 	//load default attributes, strings, styles and cursors 
 	flamingo.parseXML(this, xml);
 	//parse custom attributes

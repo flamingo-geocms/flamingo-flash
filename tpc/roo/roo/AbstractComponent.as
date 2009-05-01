@@ -42,9 +42,7 @@ class roo.AbstractComponent extends MovieClip {
         _global.flamingo.correctTarget(_parent, this);
         
         //defaults
-        var xml:XML = new XML(defaultXML);
-        this.setConfig(xml);
-        delete xml;
+        this.setConfig(defaultXML);
         //custom
         var xmls:Array = _global.flamingo.getXMLs(this);
         for (var i = 0; i < xmls.length; i++) {

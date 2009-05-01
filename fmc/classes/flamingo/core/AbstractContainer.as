@@ -17,6 +17,7 @@ class flamingo.core.AbstractContainer extends AbstractComponent {
     var borderalpha:Number = 100;
     var borderwidth:Number = 1;
     var mask:Boolean = false;
+    var defaultXML:String = "";
     
     private var background:MovieClip = null;
     private var contentPane:MovieClip = null;
@@ -61,7 +62,7 @@ class flamingo.core.AbstractContainer extends AbstractComponent {
     function setCompoConfig():Void {
         
         // Retrieves the default configuration for the component, in order to set the "compo" properties.
-        var defaultConfig:XMLNode = _global.flamingo.getDefaultXML(this);
+        var defaultConfig:XMLNode = new XML(defaultXML);
         setCompoProperties(defaultConfig);
         
         // Retrieves the application configurations for the component, in order to set the "compo" properties.

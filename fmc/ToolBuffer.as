@@ -14,7 +14,9 @@
 */
 var version:String = "3.0";
 //-------------------------------------------
-var defaultXML:String = "<string id='tooltip' nl='Zone aangeven' en='Buffer generator'/>" +
+var defaultXML:String = "<?xml version='1.0' encoding='UTF-8'?>" +
+						"<ToolBuffer>" +
+						"<string id='tooltip' nl='Zone aangeven' en='Buffer generator'/>" +
 						"<cursor id='busy' url='fmc/CursorsMap.swf' linkageid='busy'/>" +
 						"<string id='maplayerLabel' nl='onderwerp' en='subject' />" +
 						"<string id='radiusLabel' nl='straal van de zone' en='radius of the buffer' />" +
@@ -26,7 +28,8 @@ var defaultXML:String = "<string id='tooltip' nl='Zone aangeven' en='Buffer gene
 							"<nl><![CDATA[<font color='#ff0000' family ='Verdana' size='9'><b>niet juist of onvolledig ingevuld</b></font>]]></nl>" +
 							"<en><![CDATA[<font color='#ff0000' family ='Verdana' size='9'><b>parameters not correct</b></font>]]></en>" +
 						"</string>" +
-						"<string id='title' nl='Zone opgeven' en='Generate buffer'/>";
+						"<string id='title' nl='Zone opgeven' en='Generate buffer'/>" +
+						"</ToolBuffer>";
 var thisObj:MovieClip = this;
 var zoomscroll:Boolean = true;
 var skin = "_buffer";
@@ -116,9 +119,7 @@ function init() {
 	this._visible = false;
 
 	//defaults
-	var xml:XML = new XML(defaultXML);
-	this.setConfig(xml);
-	delete xml;
+	this.setConfig(defaultXML);
 
 	//custom
 	var xmls:Array= flamingo.getXMLs(this);

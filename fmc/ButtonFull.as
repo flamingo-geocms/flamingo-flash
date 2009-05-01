@@ -32,7 +32,11 @@ var version:String = "2.0.1";
 
 //-------------------------------
 
-var defaultXML:String = "<string id='tooltip' en='full extent' nl='zoom naar volledige uitsnede'/>"
+var defaultXML:String = "<?xml version='1.0' encoding='UTF-8'?>" +
+						"<ButtonFull>" +
+						"<string id='tooltip' en='full extent' nl='zoom naar volledige uitsnede'/>" + 
+						"</ButtonFull>";
+						
 var skin:String = "";
 var extent:String = "full";
 var button:FlamingoButton;
@@ -65,11 +69,7 @@ function init():Void {
 	//xml.ignoreWhite = true;
 	//xml.load(getNocacheName(url+".xml", this.nocache))
 	
-	
-	var xml:XML = new XML(defaultXML);
-	
-	this.setConfig(xml);
-	delete xml;
+	this.setConfig(defaultXML);
 		//custom
 	var xmls:Array= flamingo.getXMLs(this);
 	for (var i = 0; i < xmls.length; i++){

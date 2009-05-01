@@ -51,9 +51,12 @@ class flamingo.coregui.Confirmation extends AbstractComponent {
     
     private var veil:MovieClip = null;
     private var actionEventListener:ActionEventListener = null;
-    var defaultXML:String = "<string id='question' en='Are you sure?' nl='Weet u het zeker?'/>" + 
+    var defaultXML:String = "<?xml version='1.0' encoding='UTF-8'?>" +
+							"<Confirmation>" +
+							"<string id='question' en='Are you sure?' nl='Weet u het zeker?'/>" + 
     						"<string id='yes' en='Yes' nl='Ja'/>" +
-    						"<string id='no' en='No' nl='Nee'/>";
+    						"<string id='no' en='No' nl='Nee'/>" +
+    						"</Confirmation>";
     function init():Void {
         veil = _global.flamingo.getComponent(listento[0]);
         actionEventListener = _global.flamingo.getComponent(listento[1]);

@@ -77,9 +77,6 @@ function init() {
 	this._visible = false;
 	
 	//defaults
-	var xml:XML = new XML(defaultXML);
-	this.setConfig(xml);
-	delete xml;
 	//custom
 		//custom
 	var xmls:Array= flamingo.getXMLs(this);

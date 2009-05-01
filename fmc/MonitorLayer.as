@@ -28,9 +28,12 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 var version:String = "2.0";
 //-------------------------------
-var defaultXML:String = '<string id="loading"  en="loading \'[layer]\' [percentage]%..." nl="\'[layer]\' laden [percentage]%..."/>' +
+var defaultXML:String = '<?xml version="1.0" encoding="UTF-8"?>' +
+						'<MonitorLayer>' +
+						'<string id="loading"  en="loading \'[layer]\' [percentage]%..." nl="\'[layer]\' laden [percentage]%..."/>' +
 						  '<string id="waiting"  en="making layer \'[layer]\'..." nl="kaartlaag \'[layer]\' maken..."/>' +
-						  '<style  id=".text" font-family="verdana" font-size="12px" color="#666666" display="block" font-weight="normal"/>'; 
+						  '<style  id=".text" font-family="verdana" font-size="12px" color="#666666" display="block" font-weight="normal"/>' +
+						  '</MonitorLayer>'; 
 var monitorobjects:Object = new Object();
 var skin:String = "";
 var thisObj = this;
@@ -92,10 +95,7 @@ function init():Void {
 	}
 	this._visible = false;
 	//defaults
-	var xml:XML = new XML(defaultXML);
-	this.setConfig(xml);
-	delete xml;
-	//custom
+	this.setConfig(defaultXML);
 	//custom
 	var xmls:Array= flamingo.getXMLs(this);
 	for (var i = 0; i < xmls.length; i++){

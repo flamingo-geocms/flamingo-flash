@@ -50,9 +50,6 @@ function init() {
 	// make buttons
 	initButtons();
 	//read defaults xml
-	var xml:XML = new XML(defaultXML);
-	this.setConfig(xml);
-	delete xml;
 	//read custom xml's
 	var xmls:Array = flamingo.getXMLs(this);
 	for (var i = 0; i<xmls.length; i++) {

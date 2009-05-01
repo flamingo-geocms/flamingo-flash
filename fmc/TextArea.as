@@ -27,9 +27,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 var version:String = "2.0";
 //------------------------------------------
 
-var defaultXML:String = "";
-var defaultXML:String= "<style id='a' font-family='verdana' font-size='13px' color='#0033cc' display='block' font-weight='normal'/>" +
-  					   "<style id='.text' font-family='verdana' font-size='13px' color='#666666' display='block' font-weight='bold'/>";
+var defaultXML:String= "<?xml version='1.0' encoding='UTF-8'?>" +
+						"<TextArea>" +
+						"<style id='a' font-family='verdana' font-size='13px' color='#0033cc' display='block' font-weight='normal'/>" +
+  					   "<style id='.text' font-family='verdana' font-size='13px' color='#666666' display='block' font-weight='bold'/>" +
+  					   "</TextArea>";
 var usetextarea:Boolean = true;
 //true
 var lParent:Object = new Object();
@@ -67,10 +69,7 @@ function init():Void {
 	this._visible = false;
 
 	//defaults
-	var xml:XML = new XML(defaultXML);
-	this.setConfig(xml);
-	delete xml;
-	//custom
+	this.setConfig(defaultXML);
 	//custom
 	var xmls:Array= flamingo.getXMLs(this);
 	for (var i = 0; i < xmls.length; i++){

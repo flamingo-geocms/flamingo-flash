@@ -38,7 +38,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 var version:String = "2.0";
 var off:Boolean = false;
 //-------------------------------
-var defaultXML:String = "<string id='on'  en='debugger on' nl='debugger aan'/>" +
+var defaultXML:String = "<?xml version='1.0' encoding='UTF-8'?>" +
+						"<Debugger>" +
+							"<string id='on'  en='debugger on' nl='debugger aan'/>" +
 							"<string id='off'  en='debugger off' nl='debugger uit'/>" +
 							"<style id='.onoff' font-family='verdana' font-size='13px' color='#3366cc' display='block' font-weight='bold'/>" +
 							"<style id='.default' font-family='verdana' font-size='11px' color='#666666' display='block' font-weight='normal'/>" +
@@ -49,7 +51,8 @@ var defaultXML:String = "<string id='on'  en='debugger on' nl='debugger aan'/>" 
 							"<style id='.url' font-family='verdana' font-size='11px' color='#666666' display='block' font-weight='normal' font-style='italic'/>" +
 							"<style id='.request' font-family='verdana' font-size='11px' color='#990099' display='block' font-weight='normal'/>" +
 							"<style id='.response' font-family='verdana' font-size='11px' color='#009900' display='block' font-weight='normal'/>" +
-							"<style id='.error' font-family='verdana' font-size='11px' color='#ff0000' display='block' font-weight='normal'/>";
+							"<style id='.error' font-family='verdana' font-size='11px' color='#ff0000' display='block' font-weight='normal'/>" +
+						"</Debugger>"							;
 var debugobjects:Object = new Object();
 //---------------------------------
 var lObject:Object = new Object();
@@ -237,9 +240,7 @@ function init():Void {
 	mSBH.setScrollTarget(mText);
 	//
 	//defaults
-	var xml:XML = new XML(defaultXML);
-	this.setConfig(xml);
-	delete xml;
+	this.setConfig(defaultXML);
 
 	//custom
 	var xmls:Array= flamingo.getXMLs(this);

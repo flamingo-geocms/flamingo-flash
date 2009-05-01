@@ -26,7 +26,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 var version:String = "2.0";
 
-var defaultXML:String = "<style id='.extent' font-family='verdana' font-size='18px' color='#333333' display='block' font-weight='bold'/>"
+var defaultXML:String = "<?xml version='1.0' encoding='UTF-8'?>" +
+						"<NamedExtentViewer>" +
+						"<style id='.extent' font-family='verdana' font-size='18px' color='#333333' display='block' font-weight='bold'/>" +
+						"</NamedExtentViewer>";
 //---------------------------------
 //properties which can be set in ini
 //---------------------------------
@@ -85,11 +88,8 @@ function init():Void {
 	this._visible = false;
 
 	//defaults
-	var xml:XML = new XML(defaultXML);
-	this.setConfig(xml);
-	delete xml;
+	this.setConfig(defaultXML);
 	//custom
-		//custom
 	var xmls:Array= flamingo.getXMLs(this);
 	for (var i = 0; i < xmls.length; i++){
 		this.setConfig(xmls[i]);

@@ -282,10 +282,6 @@ dynamic class Map extends MovieClip {
 	
 		//--------------------------
 		//defaults
-		var xml:XML = new XML(defaultXML);
-		this.setConfig(xml);
-		delete xml;
-		//custom
 		//custom
 		var xmls:Array = flamingo.getXMLs(this);
 		for (var i = 0; i<xmls.length; i++) {		
@@ -1091,7 +1087,7 @@ dynamic class Map extends MovieClip {
 			correctExtent(intExtent);
 			var initialScale:Number = ((intExtent.maxx-intExtent.minx)/this.__width);
 			if(newScale<initialScale){
-				moveToScale(newScale,null,updatedelay,movetime);
+				moveToScale(newScale,coord,updatedelay,movetime);
 				return;
 			}
 		}

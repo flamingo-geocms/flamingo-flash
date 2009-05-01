@@ -26,8 +26,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 var version:String = "2.0";
 var thisObj = this;
 //------------------------------------------
-var defaultXML:String="<string id='preloadtitle' nl='laden...[percentage]%' en='loading...[percentage]%'/>" +
-  						"<style id='.preloadtitle' font-family='Verdana' font-size='12' color='#666666' display='block' allign='center'/>";
+var defaultXML:String="<?xml version='1.0' encoding='UTF-8'?>" +
+						"<Logo>" +
+						"<string id='preloadtitle' nl='laden...[percentage]%' en='loading...[percentage]%'/>" +
+  						"<style id='.preloadtitle' font-family='Verdana' font-size='12' color='#666666' display='block' allign='center'/>" +
+  						"</Logo>";
 var lFlamingo:Object = new Object();
 lFlamingo.onResize = function() {
 	resize();
@@ -65,9 +68,7 @@ function init():Void {
 	}
 	this._visible = false;
 	//defaults
-	var xml:XML = new XML(defaultXML);
-	this.setConfig(xml);
-	delete xml;
+	this.setConfig(defaultXML);
 	//custom
 	var xmls:Array = flamingo.getXMLs(this);
 	for (var i = 0; i<xmls.length; i++) {

@@ -28,8 +28,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 var version:String = "2.0";
 //---------------------------------------
-var defaultXML:String = "<string id='tooltip_zoomin' en='zoom in' nl='inzoomen'/>" +
-  						"<string id='tooltip_zoomout' en='zoom out' nl='uitzoomen'/>";
+var defaultXML:String = "<?xml version='1.0' encoding='UTF-8'?>" +
+						"<ZoomerV>" +
+						"<string id='tooltip_zoomin' en='zoom in' nl='inzoomen'/>" +
+  						"<string id='tooltip_zoomout' en='zoom out' nl='uitzoomen'/>" +
+  						"</ZoomerV>";
 var skin = "";
 var _zoomid:Number;
 var thisObj = this;
@@ -79,11 +82,8 @@ function init() {
 	}
 	this._visible = false
 	//defaults
-	var xml:XML = new XML(defaultXML);
-	this.setConfig(xml);
-	delete xml;
+	this.setConfig(defaultXML);
 	//custom
-		//custom
 	var xmls:Array= flamingo.getXMLs(this);
 	for (var i = 0; i < xmls.length; i++){
 		this.setConfig(xmls[i]);

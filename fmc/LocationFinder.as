@@ -47,7 +47,9 @@ Change: Added WFS search.
 */
 var version:String = "2.0";
 //-------------------------------
-var defaultXML:String = "<string id='label'  en='search...' nl='zoek...'/>" +
+var defaultXML:String = "<?xml version='1.0' encoding='UTF-8'?>" +
+						"<LocationFinder>" +
+						"<string id='label'  en='search...' nl='zoek...'/>" +
 						"<string id='busy'  en='searching...' nl='zoeken...'/>" +
 						"<string id='nohit'  en='nothing found...' nl='niets gevonden...'/>" +
 						"<string id='prev'  en='previous   ' nl='vorige   '/>" +
@@ -58,7 +60,8 @@ var defaultXML:String = "<string id='label'  en='search...' nl='zoek...'/>" +
 						"<style id='.feature' font-family='verdana' font-size='12px' color='#0066cc' display='block' font-weight='normal'/>" +
 						"<style id='.prev' font-family='verdana' font-size='10px' color='#0066cc' display='block' font-weight='bold' text-align='center'/>" +
 						"<style id='.next' font-family='verdana' font-size='10px' color='#0066cc' display='block' font-weight='bold' text-align='center'/>" +
-						"<style id='.error' font-family='verdana' font-size='12px' color='#ff0000' display='block' font-weight='normal'/>";
+						"<style id='.error' font-family='verdana' font-size='12px' color='#ff0000' display='block' font-weight='normal'/>" +
+						"</LocationFinder>";
 var thisObj = this;
 var locationdata:Array = new Array();
 var foundlocations:Array;

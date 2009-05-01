@@ -29,9 +29,12 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 var version:String = "2.0";
 
 //----------------------------
-var defaultXML:String = "<string id='tooltip' nl='inzoomen' en='zoom in'/>" +
+var defaultXML:String = "<?xml version='1.0' encoding='UTF-8'?>" +
+						"<ToolZoomin>" +
+						"<string id='tooltip' nl='inzoomen' en='zoom in'/>" +
 				        "<cursor id='cursor' url='fmc/CursorsMap.swf' linkageid='zoomin'/>" +
-				        "<cursor id='busy' url='fmc/CursorsMap.swf' linkageid='busy'/>";
+				        "<cursor id='busy' url='fmc/CursorsMap.swf' linkageid='busy'/>" +
+				        "</ToolZoomin>";
 var zoomfactor:Number = 200;
 var zoomdelay:Number = 0;
 var clickdelay:Number = 1000;
@@ -123,11 +126,8 @@ function init() {
 	}
 	this._visible = false;
 	//defaults
-	var xml:XML = new XML(defaultXML);
-	this.setConfig(xml);
-	delete xml;
+	this.setConfig(defaultXML);
 	//custom
-		//custom
 	var xmls:Array= flamingo.getXMLs(this);
 	for (var i = 0; i < xmls.length; i++){
 		this.setConfig(xmls[i]);

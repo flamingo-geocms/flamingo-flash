@@ -13,11 +13,14 @@
 */
 var version:String = "3.0";
 //----------------------------
-var defaultXML:String = "<string id='tooltip' nl='Selecteren' en='select points'/>" +
+var defaultXML:String = "<?xml version='1.0' encoding='UTF-8'?>" +
+						"<ToolSelect>" +
+						"<string id='tooltip' nl='Selecteren' en='select points'/>" +
 					   "<cursor id='cursor' url='fmc/cursor/customMouseCursor.swf'/>" +
 					   "<cursor id='busy' url='fmc/cursor/f2_CursorBusy.swf'/>" +
 					   "<string id='closewindow' nl='Venster sluiten' en='close window'/>" +
-					   "<string id='windowTitle' nl='Informatie' en='Information'/>";
+					   "<string id='windowTitle' nl='Informatie' en='Information'/>" +
+					   "</ToolSelect>";
 var zoomscroll:Boolean = true;
 var skin = "";
 var enabled = true;
@@ -185,10 +188,8 @@ function init() {
 	}
 	delete readme;
 	//defaults
-	var xml:XML = new XML(defaultXML);
-	this.setConfig(xml);
-	delete xml;
-	
+	this.setConfig(defaultXML);
+	//custom	
 	var xml = flamingo.getXML(this);
     this.setConfig(xml)
 }

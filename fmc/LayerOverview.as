@@ -38,8 +38,11 @@ var version:String = "2.0";
 // extent is the extent of the overviewmap
 //---------------------------
 
-var defaultXML:String = "<cursor id='pan'  url='fmc/CursorsMap.swf' linkageid='pan'/>" +
-    					"<cursor id='grab' url='fmc/CursorsMap.swf' linkageid='grab' />";
+var defaultXML:String = "<?xml version='1.0' encoding='UTF-8'?>" +
+						"<LayerOverview>" +
+						"<cursor id='pan'  url='fmc/CursorsMap.swf' linkageid='pan'/>" +
+    					"<cursor id='grab' url='fmc/CursorsMap.swf' linkageid='grab' />" +
+    					"</LayerOverview>";
 var followfactor:Number;
 var skin = "";
 var color:Number;
@@ -119,10 +122,7 @@ function init():Void {
 	this._visible = false;
 	
 	//defaults
-	var xml:XML = new XML(defaultXML);
-	this.setConfig(xml);
-	delete xml;
-	//custom
+	this.setConfig(defaultXML);
 	//custom
 	var xmls:Array= flamingo.getXMLs(this);
 	for (var i = 0; i < xmls.length; i++){

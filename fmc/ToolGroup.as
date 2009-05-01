@@ -25,7 +25,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 var version:String = "2.0";
 //-------------------------
-var defaultXML:String = "<cursor id='busy' url='fmc/CursorsMap.swf' linkageid='busy'/>";
+var defaultXML:String = "<?xml version='1.0' encoding='UTF-8'?>" +
+						"<Toolgroup>" +
+						"<cursor id='busy' url='fmc/CursorsMap.swf' linkageid='busy'/>" +
+						"</Toolgroup>";
 var tool:String;
 var defaulttool:String;
 //------------------------
@@ -108,10 +111,7 @@ function init() {
 	this._visible = false;
 
 	//defaults
-	var xml:XML = new XML(defaultXML);
-	this.setConfig(xml);
-	delete xml;
-	//custom
+	this.setConfig(defaultXML);
 	//custom
 	var xmls:Array= flamingo.getXMLs(this);
 	for (var i = 0; i < xmls.length; i++){

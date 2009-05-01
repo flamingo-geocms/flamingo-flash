@@ -70,9 +70,6 @@ function init():Void {
 	this._visible = false;
 	this.swapDepths(25879)
 	//defaults
-	var xml:XML = new XML(defaultXML);
-	this.setConfig(xml);
-	delete xml;
 	//custom
 	var xmls:Array= flamingo.getXMLs(this);
 	for (var i = 0; i < xmls.length; i++){

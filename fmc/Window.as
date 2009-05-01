@@ -40,13 +40,16 @@ import flash.filters.DropShadowFilter;
 import flash.geom.Rectangle;
 
 //defaults
-var defaultXML:String = "<string id='tooltip_close'  en='close' nl='sluiten'/>" +
+var defaultXML:String = "<?xml version='1.0' encoding='UTF-8'?>" +
+						"<Window>" +
+						"<string id='tooltip_close'  en='close' nl='sluiten'/>" +
 						"<style id='.title' font-family='verdana' font-size='13px' color='#666666' display='block' font-weight='normal'/>" +
 						"<style id='.titlefocus' font-family='verdana' font-size='13px' color='#666666' display='block' font-weight='bold'/>" +
 						"<cursor id='sizens' url='fmc/CursorsWindow.swf' linkageid='sizens'/>" +
 						"<cursor id='sizewe' url='fmc/CursorsWindow.swf' linkageid='sizewe'/>" +
 						"<cursor id='sizenesw' url='fmc/CursorsWindow.swf' linkageid='sizenesw'/>" +
-						"<cursor id='sizenwse' url='fmc/CursorsWindow.swf' linkageid='sizenwse'/>"; 
+						"<cursor id='sizenwse' url='fmc/CursorsWindow.swf' linkageid='sizenwse'/>" +
+						"</Window>"; 
 var minwidth:Number;
 var minheight:Number;
 var contentid:String;
@@ -122,11 +125,9 @@ function init() {
 	var mc:MovieClip = mcw.createEmptyMovieClip("mContent", 20);
 	//
 	//defaults
-	var xml:XML = new XML(defaultXML);
-	this.setConfig(xml);
-	delete xml;
+	this.setConfig(defaultXML);
+
 	//custom
-		//custom
 	var xmls:Array= flamingo.getXMLs(this);
 	for (var i = 0; i < xmls.length; i++){
 		this.setConfig(xmls[i]);
@@ -222,6 +223,9 @@ function setConfig(xml:Object) {
 
 	this.addComponents(xml);
 }
+
+
+
 /**
 * Adds 1 or more components to the window.
 * @param xml:Object Xml or string representation of a xml describing the component.
@@ -349,6 +353,7 @@ function drawWindow() {
 	t.multiline = false;
 	t.wordWrap = false;
 	t.styleSheet = flamingo.getStyleSheet(this);
+
 	//
 	if (canclose) {
 		mcw.createEmptyMovieClip("mButtons", 27);
