@@ -5,7 +5,7 @@
             <pathelement location="ant-contrib-1.0b3.jar"/>
         </classpath>
     </taskdef>
-	<property name="version" value="3.0.0 release candidate 4 16-04-2009"/>
+	<property name="version" value="3.0.1 07-05-2009"/>
     <property name="build" location="build"/>
     <property name="dist" location="../dist"/>
     <property name="flapath" location="."/>
@@ -17,6 +17,7 @@
         <mkdir dir="${dist}"/>
         <echo file="${build}/compileProject.jsfl" append="false">var flaURI="file:///${flapath}";${line.separator}</echo>
         <echo file="${build}/compileProject.jsfl" append="true">var swfURI="file:///${build}/dist/flamingo";${line.separator}</echo>
+        <echo file="${build}/compileProject.jsfl" append="true">var buildURI="file:///${build}";${line.separator}</echo>
         <echo file="${build}/compileProject.jsfl" append="true">execute();${line.separator}</echo>
         <echo file="${build}/compileProject.jsfl" append="true">function execute(){${line.separator}</echo>
         <echo file="${build}/compileProject.jsfl" append="true">var flaArray=new Array(); ${line.separator}</echo>
@@ -32,6 +33,9 @@
             <replacetoken>\</replacetoken>
             <replacevalue>/</replacevalue>
         </replace>
+        <echo file="${build}/compileProject.jsfl" append="true">fl.outputPanel.clear(); ${line.separator}</echo>
+        <echo file="${build}/compileProject.jsfl" append="true">fl.outputPanel.trace("Start compile \n"); ${line.separator}</echo>
+        <echo file="${build}/compileProject.jsfl" append="true">fl.outputPanel.save(buildURI+"/compileProject.log", false); ${line.separator}</echo>
         <echo file="${build}/compileProject.jsfl" append="true">for (var i=0;i&lt;flaArray.length;i++) { ${line.separator}</echo>
         <echo file="${build}/compileProject.jsfl" append="true">var flaName = flaArray[i].substring(flaURI.length); ${line.separator}</echo>
         <echo file="${build}/compileProject.jsfl" append="true">compile(flaURI+"/"+flaName); ${line.separator}</echo>
@@ -52,11 +56,19 @@
         <echo file="${build}/compileProject.jsfl" append="true">} ${line.separator}</echo>
         <echo file="${build}/compileProject.jsfl" append="true">move(flaURI+"/"+swfName,swfURI+swfName,"swf"); ${line.separator}</echo>
         <echo file="${build}/compileProject.jsfl" append="true">} ${line.separator}</echo>
+        <echo file="${build}/compileProject.jsfl" append="true">fl.outputPanel.clear(); ${line.separator}</echo>
+        <echo file="${build}/compileProject.jsfl" append="true">fl.outputPanel.trace("\nEnd compile"); ${line.separator}</echo>
+        <echo file="${build}/compileProject.jsfl" append="true">fl.outputPanel.save(buildURI+"/compileProject.log", true); ${line.separator}</echo>
         <echo file="${build}/compileProject.jsfl" append="true">fl.quit();${line.separator}</echo>
         <echo file="${build}/compileProject.jsfl" append="true"> } ${line.separator}</echo>         
         <echo file="${build}/compileProject.jsfl" append="true">function compile(p_fileURI,p_fileName) { ${line.separator}</echo>
         <echo file="${build}/compileProject.jsfl" append="true"> var doc = fl.openDocument(p_fileURI); ${line.separator}</echo>
+        <echo file="${build}/compileProject.jsfl" append="true">fl.outputPanel.clear(); ${line.separator}</echo>
+        <echo file="${build}/compileProject.jsfl" append="true">fl.outputPanel.trace("\nCompiling: " + p_fileURI); ${line.separator}</echo>
+        <echo file="${build}/compileProject.jsfl" append="true">fl.outputPanel.save(buildURI+"/compileProject.log", true); ${line.separator}</echo>
+        <echo file="${build}/compileProject.jsfl" append="true">doc.saveAndCompact(); ${line.separator}</echo>
         <echo file="${build}/compileProject.jsfl" append="true">doc.publish(); ${line.separator}</echo>
+        <echo file="${build}/compileProject.jsfl" append="true">fl.outputPanel.save(buildURI+"/compileProject.log", true); ${line.separator}</echo>
         <echo file="${build}/compileProject.jsfl" append="true">fl.closeDocument(fl.documents[0],false);  ${line.separator}</echo>
         <echo file="${build}/compileProject.jsfl" append="true">} ${line.separator}</echo>
         <echo file="${build}/compileProject.jsfl" append="true">function move(p_file,p_newName,type) { ${line.separator}</echo>
