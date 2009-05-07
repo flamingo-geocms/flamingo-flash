@@ -24,6 +24,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 * @file LayerOGWMS.swf (compiled layer, needed for publication on internet)
 * @file LayerOGWMS.xml (configurationfile for layer, needed for publication on internet)
 */
+import roo.FilterLayerLayerOGWMSAdapter;
+
 var version:String = "2.0";
 //---------------------------------
 var defaultXML:String = "";
@@ -93,7 +95,7 @@ lMap.onHide = function(map:MovieClip):Void  {
 lMap.onShow = function(map:MovieClip):Void  {
 	thisObj.update();
 };
-flamingo.addListener(lMap, flamingo.getParent(this), this);
+_global.flamingo.addListener(lMap,_global.flamingo.getParent(this), this);
 //-------------------------------------------------
 init();
 //-------------------------------------------------
@@ -144,24 +146,24 @@ function init():Void {
 		return;
 	}
 	this._visible = false;
-	map = flamingo.getParent(this);
+	map =_global.flamingo.getParent(this);
 	//defaults
 	//custom
-	var xmls:Array = flamingo.getXMLs(this);
+	var xmls:Array =_global.flamingo.getXMLs(this);
 	for (var i = 0; i<xmls.length; i++) {
 		this.setConfig(xmls[i]);
 	}
 	delete xmls;
 	//remove xml from repository
-	flamingo.deleteXML(this);
+	_global.flamingo.deleteXML(this);
 	if (listento.length > 0) {
 		this.filterLayerLayerOGWMSAdapter = new FilterLayerLayerOGWMSAdapter(this);
-		flamingo.addListener(this.filterLayerLayerOGWMSAdapter, listento[0], this);
+		_global.flamingo.addListener(this.filterLayerLayerOGWMSAdapter, listento[0], this);
 	    //_global.flamingo.tracer("this.filterLayerLayerOGWMSAdapter = " + this.filterLayerLayerOGWMSAdapter + " listento[0] = " + listento[0]);
 	}
 	
 	this._visible = visible;
-	flamingo.raiseEvent(this, "onInit", this);
+	_global.flamingo.raiseEvent(this, "onInit", this);
 }
 /**
 * Configurates a component by setting a xml.
@@ -172,7 +174,7 @@ function setConfig(xml:Object) {
 		xml = new XML(String(xml)).firstChild;
 	}
 	//load default attributes, strings, styles and cursors                     
-	flamingo.parseXML(this, xml);
+	_global.flamingo.parseXML(this, xml);
 	//parse custom attributes
 	attributes = new Object();
 	for (var attr in xml.attributes) {
@@ -217,8 +219,8 @@ function setConfig(xml:Object) {
 		case "styles" :
 			styles = val;
 			if (styles.length>0) {
-				var a_styles = flamingo.asArray(styles);
-				var a_layers = flamingo.asArray(slayers);
+				var a_styles = _global.flamingo.asArray(styles);
+				var a_layers = _global.flamingo.asArray(slayers);
 				if (a_styles.length == a_layers.length) {
 					for (var i = 0; i<a_styles.length; i++) {
 						this.setLayerProperty(a_layers[i], "style", a_styles[i]);
@@ -319,7 +321,7 @@ function setConfig(xml:Object) {
 					if (layers[id].language == undefined) {
 						layers[id].language = new Object();
 					}
-					flamingo.parseString(xlayers[i], layers[id].language);
+					_global.flamingo.parseString(xlayers[i], layers[id].language);
 					for (var attr in xlayers[i].attributes) {
 						var val:String = xlayers[i].attributes[attr];
 						switch (attr.toLowerCase()) {
@@ -345,17 +347,17 @@ function setConfig(xml:Object) {
 	var lConn = new Object();
 	lConn.onError = function(error:String, objecttag:Object) {
 		if (thisObj.showerrors) {
-			flamingo.showError("LayerOGWMS error", error);
+			_global.flamingo.showError("LayerOGWMS error", error);
 		}
-		flamingo.raiseEvent(thisObj, "onError", thisObj, "init", error);
+		_global.flamingo.raiseEvent(thisObj, "onError", thisObj, "init", error);
 	};
 	lConn.onRequest = function(connector:OGWMSConnector) {
-		//flamingo.tracer(requestobject.url);
-		flamingo.raiseEvent(thisObj, "onRequest", thisObj, "init", connector);
+		//_global.flamingo.tracer(requestobject.url);
+		_global.flamingo.raiseEvent(thisObj, "onRequest", thisObj, "init", connector);
 	};
 	lConn.onResponse = function(connector:OGWMSConnector) {
 		//trace(responseobject.response);
-		flamingo.raiseEvent(thisObj, "onResponse", thisObj, "init", connector);
+		_global.flamingo.raiseEvent(thisObj, "onResponse", thisObj, "init", connector);
 	};
 	lConn.onGetCapabilities = function(service, servicelayers, obj, reqid) {
 		//_global.flamingo.tracer("lConn.onGetCapabilities, layer = " + _global.flamingo.getId(thisObj));
@@ -363,7 +365,7 @@ function setConfig(xml:Object) {
 			name = service.title;
 		}
 		thisObj._parseLayers(servicelayers);
-		flamingo.raiseEvent(thisObj, "onGetCapabilities", thisObj);
+		_global.flamingo.raiseEvent(thisObj, "onGetCapabilities", thisObj);
 		//if (thisObj.slayers == "#ALL#") {
 		thisObj.update();
 		//}
@@ -398,12 +400,20 @@ function setSLDparam(sldParamNew:String) {
 }
 
 /**
+* gets the sld parameter 
+* @return sldParam: String value which is appended to the sld attribute, is url encoded
+*/
+function getSLDparam():String {
+  return this.sldParam;
+}
+
+/**
 * Sets the transparency of a layer.
 * @param alpha:Number A number between 0 and 100, 0=transparent, 100=opaque
 */
 function setAlpha(alpha:Number) {
 	this._alpha = alpha;
-	flamingo.raiseEvent(this, "onSetValue", "setAlpha", alpha);	
+	_global.flamingo.raiseEvent(this, "onSetValue", "setAlpha", alpha);	
 }
 
 function _parseLayers(tlayers:Object) {
@@ -433,7 +443,7 @@ function _parseLayers(tlayers:Object) {
 					if (attr == "styles") {
 						var s_style = tlayers[item][layerid].style;
 						var s_url = tlayers[item][layerid].styles[s_style].legendurl;
-						flamingo.raiseEvent(thisObj, "onGetLegend", thisObj, s_url, layerid);
+						_global.flamingo.raiseEvent(thisObj, "onGetLegend", thisObj, s_url, layerid);
 					}
 				}
 			}
@@ -474,32 +484,32 @@ function _update(nrtry:Number) {
 	var ms:Number = map.getScaleHint(extent);
 	if (minscale != undefined) {
 		if (ms<=minscale) {
-			flamingo.raiseEvent(thisObj, "onUpdate", thisObj, nrtry);
-			flamingo.raiseEvent(thisObj, "onUpdateComplete", thisObj, 0, 0, 0);
+			_global.flamingo.raiseEvent(thisObj, "onUpdate", thisObj, nrtry);
+			_global.flamingo.raiseEvent(thisObj, "onUpdateComplete", thisObj, 0, 0, 0);
 			_visible = false;
 			return;
 		}
 	}
 	if (maxscale != undefined) {
 		if (ms>maxscale) {
-			flamingo.raiseEvent(thisObj, "onUpdate", thisObj, nrtry);
-			flamingo.raiseEvent(thisObj, "onUpdateComplete", thisObj, 0, 0, 0);
+			_global.flamingo.raiseEvent(thisObj, "onUpdate", thisObj, nrtry);
+			_global.flamingo.raiseEvent(thisObj, "onUpdateComplete", thisObj, 0, 0, 0);
 			_visible = false;
 			return;
 		}
 	}
 	var layerstring = getLayersString();
 	if (layerstring.length<=0) {
-		flamingo.raiseEvent(thisObj, "onUpdate", thisObj, nrtry);
-		flamingo.raiseEvent(thisObj, "onUpdateComplete", thisObj, 0, 0, 0);
+		_global.flamingo.raiseEvent(thisObj, "onUpdate", thisObj, nrtry);
+		_global.flamingo.raiseEvent(thisObj, "onUpdateComplete", thisObj, 0, 0, 0);
 		_visible = false;
 		return;
 	}
 	//var requestedextent = map.getMapExtent();                                                                                    
 	if (fullextent != undefined) {
 		if (not map.isHit(fullextent)) {
-			flamingo.raiseEvent(thisObj, "onUpdate", thisObj, nrtry);
-			flamingo.raiseEvent(thisObj, "onUpdateComplete", thisObj, 0, 0, 0);
+			_global.flamingo.raiseEvent(thisObj, "onUpdate", thisObj, nrtry);
+			_global.flamingo.raiseEvent(thisObj, "onUpdateComplete", thisObj, 0, 0, 0);
 			_visible = false;
 			return;
 		}
@@ -532,24 +542,24 @@ function _update(nrtry:Number) {
 	//listener for OGWMSConnector
 	var lConn:Object = new Object();
 	lConn.onRequest = function(connector:OGWMSConnector) {
-		//flamingo.tracer(requestobject.url);
-		flamingo.raiseEvent(thisObj, "onRequest", thisObj, "update", connector);
+		//_global.flamingo.tracer(requestobject.url);
+		_global.flamingo.raiseEvent(thisObj, "onRequest", thisObj, "update", connector);
 	};
 	lConn.onResponse = function(connector:OGWMSConnector) {
 		//trace(responsobject.response);
-		flamingo.raiseEvent(thisObj, "onResponse", thisObj, "update", connector);
+		_global.flamingo.raiseEvent(thisObj, "onResponse", thisObj, "update", connector);
 	};
 	lConn.onError = function(error:String, objecttag:Object) {
 		thisObj._stoptimeout();
 		if (thisObj.showerrors) {
-			flamingo.showError("LayerOGWMS error", error);
+			_global.flamingo.showError("LayerOGWMS error", error);
 		}
 		updating = false;
 		if (nrtry<retryonerror) {
 			nrtry++;
 			_update(nrtry);
 		} else {
-			flamingo.raiseEvent(thisObj, "onError", thisObj, "update", error);
+			_global.flamingo.raiseEvent(thisObj, "onError", thisObj, "update", error);
 		}
 	};
 	lConn.onGetMap = function(imageurl:String, objecttag:Object) {
@@ -559,11 +569,11 @@ function _update(nrtry:Number) {
 		listener.onLoadError = function(mc:MovieClip, error:String, httpStatus:Number) {
 			thisObj._stoptimeout();
 			updating = false;
-			flamingo.raiseEvent(thisObj, "onUpdateError", thisObj, error);
+			_global.flamingo.raiseEvent(thisObj, "onUpdateError", thisObj, error);
 		};
 		listener.onLoadProgress = function(mc:MovieClip, bytesLoaded:Number, bytesTotal:Number) {
 			thisObj._stoptimeout();
-			flamingo.raiseEvent(thisObj, "onUpdateProgress", thisObj, bytesLoaded, bytesTotal);
+			_global.flamingo.raiseEvent(thisObj, "onUpdateProgress", thisObj, bytesLoaded, bytesTotal);
 		};
 		listener.onLoadInit = function(mc:MovieClip) {
 			thisObj._stoptimeout();
@@ -579,24 +589,24 @@ function _update(nrtry:Number) {
 					cachemovie._alpha = cachemovie._alpha+step;
 					if (cachemovie._alpha>=100) {
 						delete this.onEnterFrame;
-						flamingo.raiseEvent(thisObj, "onUpdateComplete", thisObj, requesttime, loadtime, mc.getBytesTotal());
+						_global.flamingo.raiseEvent(thisObj, "onUpdateComplete", thisObj, requesttime, loadtime, mc.getBytesTotal());
 						this.updating = false;
 						this._clearCache();
 						if (not map.isEqualExtent(extent) or _getVisLayers() != vislayers or
 							("|" + currentFiltersFingerprint + "|") !=  ("|" + lastFiltersFingerprint + "|")) {
-							//flamingo.tracer("re-update, fadesteps>0");
+							//_global.flamingo.tracer("re-update, fadesteps>0");
 							this.update();
 						}
 					}
 				};
 			} else {
 				cachemovie._alpha = 100;
-				flamingo.raiseEvent(thisObj, "onUpdateComplete", thisObj, requesttime, loadtime, mc.getBytesTotal());
+				_global.flamingo.raiseEvent(thisObj, "onUpdateComplete", thisObj, requesttime, loadtime, mc.getBytesTotal());
 				thisObj.updating = false;
 				thisObj._clearCache();
 				if (not map.isEqualExtent(extent) or _getVisLayers() != vislayers or
 					("|" + currentFiltersFingerprint + "|") !=  ("|" + lastFiltersFingerprint + "|")) {
-					//flamingo.tracer("re-update, fadesteps<=0");
+					//_global.flamingo.tracer("re-update, fadesteps<=0");
 					thisObj.update();
 				}
 			}
@@ -633,7 +643,7 @@ function _update(nrtry:Number) {
 	var starttime:Date = new Date();
 	//
 	var vislayers = _getVisLayers();
-	flamingo.raiseEvent(thisObj, "onUpdate", thisObj, nrtry);
+	_global.flamingo.raiseEvent(thisObj, "onUpdate", thisObj, nrtry);
 	cogwms.getMap(url, args);
 	thisObj._starttimeout();
 }
@@ -647,7 +657,7 @@ function _stoptimeout() {
 function _timeout() {
 	clearInterval(timeoutid);
 	updating = false;
-	flamingo.raiseEvent(thisObj, "onUpdateError", thisObj, "timeout, connection failed...");
+	_global.flamingo.raiseEvent(thisObj, "onUpdateError", thisObj, "timeout, connection failed...");
 }
 function cancelIdentify() {
 	this.identifyextent = undefined;
@@ -677,16 +687,16 @@ function identify(extent:Object) {
 	this.identifyextent = extent;
 	var lConn:Object = new Object();
 	lConn.onResponse = function(connector:OGWMSConnector) {
-		flamingo.raiseEvent(thisObj, "onResponse", thisObj, "identify", connector);
+		_global.flamingo.raiseEvent(thisObj, "onResponse", thisObj, "identify", connector);
 	};
 	lConn.onRequest = function(connector:OGWMSConnector) {
-		flamingo.raiseEvent(thisObj, "onRequest", thisObj, "identify", connector);
+		_global.flamingo.raiseEvent(thisObj, "onRequest", thisObj, "identify", connector);
 	};
 	lConn.onError = function(error:String, obj:Object, requestid:String) {
 		if (thisObj.showerrors) {
-			flamingo.showError("LayerOGWMS error", error);
+			_global.flamingo.showError("LayerOGWMS error", error);
 		}
-		flamingo.raiseEvent(thisObj, "onError", thisObj, "identify", error);
+		_global.flamingo.raiseEvent(thisObj, "onError", thisObj, "identify", error);
 	};
 	lConn.onGetFeatureInfo = function(features:Object, obj:Object, requestid:String) {
 		if (thisObj.map.isEqualExtent(thisObj.identifyextent, obj)) {
@@ -698,8 +708,8 @@ function identify(extent:Object) {
 					delete features[layer];
 				}
 			}
-			flamingo.raiseEvent(thisObj, "onIdentifyData", thisObj, features, obj, nrlayersqueried, nrlayersqueried);
-			flamingo.raiseEvent(thisObj, "onIdentifyComplete", thisObj, identifytime);
+			_global.flamingo.raiseEvent(thisObj, "onIdentifyData", thisObj, features, obj, nrlayersqueried, nrlayersqueried);
+			_global.flamingo.raiseEvent(thisObj, "onIdentifyComplete", thisObj, identifytime);
 		}
 	};
 	var args:Object = new Object();
@@ -722,7 +732,7 @@ function identify(extent:Object) {
   
 	var cogwms:OGWMSConnector = new OGWMSConnector();
 	cogwms.addListener(lConn);
-	flamingo.raiseEvent(thisObj, "onIdentify", thisObj, thisObj.identifyextent);
+	_global.flamingo.raiseEvent(thisObj, "onIdentify", thisObj, thisObj.identifyextent);
 	if (getfeatureinfourl != undefined) {
 		var reqid = cogwms.getFeatureInfo(getfeatureinfourl, args, this.map.copyExtent(this.identifyextent));
 	} else {
@@ -742,7 +752,7 @@ function handleSLDarg(argsLocal:Object):Object {
 	if ((argsLocal["SLD"] != null) && (argsLocal["SLD"] != "")) {
 		argsLocal["LAYERS"] = "";
 		argsLocal["STYLES"] = "";
-		argsLocal["SLD"] += sldParam;
+		argsLocal["SLD"] += escape(sldParam.split(" ").join("+")); //replace spaces with "+" and url encode (spaces must be 'double encoded')
 		if (this.filterLayerLayerOGWMSAdapter != undefined) {
 		     argsLocal["SLD"] += this.filterLayerLayerOGWMSAdapter.getUrlFilter();
 		}
@@ -797,7 +807,7 @@ function startMaptip(x:Number, y:Number) {
 								maptip = maptip.split("["+field+"]").join(record[field]);
 							}
 						}
-						flamingo.raiseEvent(thisObj, "onMaptipData", thisObj, maptip);
+						_global.flamingo.raiseEvent(thisObj, "onMaptipData", thisObj, maptip);
 					}
 				}
 			}
@@ -835,7 +845,7 @@ function startMaptip(x:Number, y:Number) {
 function hide() {
 	visible = false;
 	update();
-	flamingo.raiseEvent(thisObj, "onHide", thisObj);
+	_global.flamingo.raiseEvent(thisObj, "onHide", thisObj);
 }
 /**
 * Shows a layer.
@@ -845,7 +855,7 @@ function show() {
 	visible = true;
 	updateCaches();
 	update();
-	flamingo.raiseEvent(thisObj, "onShow", thisObj);
+	_global.flamingo.raiseEvent(thisObj, "onShow", thisObj);
 }
 function extent2String(ext:Object):String {
 	return (ext.minx+","+ext.miny+","+ext.maxx+","+ext.maxy);
@@ -891,7 +901,7 @@ function _getLayerlist(list:String, field:String):String {
 		}
 		return s;
 	}
-	var a:Array = flamingo.asArray(list);
+	var a:Array = _global.flamingo.asArray(list);
 	for (var i = 0; i<a.length; i++) {
 		var id = a[i];
 		if (layers[id].visible == false) {
@@ -1082,7 +1092,7 @@ function setLayerProperty(ids:String, field:String, value:Object) {
 			layers[id][field] = value;
 		}
 	} else {
-		var a_ids = flamingo.asArray(ids);
+		var a_ids = _global.flamingo.asArray(ids);
 		for (var i = 0; i<a_ids.length; i++) {
 			var id = a_ids[i];
 			if (layers[id] == undefined and not initialized) {
@@ -1093,7 +1103,7 @@ function setLayerProperty(ids:String, field:String, value:Object) {
 			}
 		}
 	}
-	flamingo.raiseEvent(thisObj, "onSetLayerProperty", thisObj, ids);
+	_global.flamingo.raiseEvent(thisObj, "onSetLayerProperty", thisObj, ids);
 }
 /** 
 * Gets a property of a layer in the layers collection.
@@ -1199,7 +1209,7 @@ function getVisible(id:String):Number {
 	//returns 0 : not visible or 1:  visible or 2: visible but not in scalerange
 	var ms:Number = map.getScaleHint(map.getMapExtent());
 	//_global.flamingo.tracer("ms = " + ms);
-	//var vis:Boolean = flamingo.getVisible(this)
+	//var vis:Boolean = _global.flamingo.getVisible(this)
 	if (id.length == 0 or id == undefined) {
 		//examine whole layer
 		if (visible) {
@@ -1269,7 +1279,7 @@ function getVisible(id:String):Number {
 	}
 }
 function _getString(item:Object, stringid:String):String {
-	var lang = flamingo.getLanguage();
+	var lang = _global.flamingo.getLanguage();
 	var s = item.language[stringid][lang];
 	if (s.length>0) {
 		//option A
