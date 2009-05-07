@@ -1,4 +1,4 @@
-Flamingo 3.0.0. release candidate (client)
+Flamingo 3.0.1 (client)
 
 Aanpassen bestaande installatie:
 1. Verwijder het flamingo programmatuur mapje uit de applicatie boom (flamingo met subdirectory fmc en eventueel tpc).
