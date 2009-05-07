@@ -16,7 +16,7 @@
 /** @tag <roo:DynamicLegend>  
 * This tag defines a dynamiclegend. The dynamiclegend (tag) itself listens to a map.
 * DynamicLegendLayer(tags)listen to LayerOGWMS layers.
-* @class flamingo.gismodel.DynamicLegend extends AbstractComponent
+* @class roo.DynamicLegend extends AbstractComponent
 * @hierarchy childnode of Flamingo or a container component. 
 * @example
 *	<Flamingo>

@@ -66,7 +66,7 @@ class roo.Geometry {
                 (sourceClassName + "_" + actionType + "_" + propertyName != "Geometry_" + StateEvent.CHANGE + "_null")
              && (sourceClassName + "_" + actionType + "_" + propertyName != "Geometry_" + StateEvent.ADD_REMOVE + "_childGeometries")
            ) {
-            trace("Exception in flamingo.geometrymodel.Geometry.addEventListener(" + sourceClassName + ", " + propertyName + ")");
+            trace("Exception in geometrymodel.Geometry.addEventListener(" + sourceClassName + ", " + propertyName + ")");
             return;
         }
         
@@ -78,7 +78,7 @@ class roo.Geometry {
                 (sourceClassName + "_" + actionType + "_" + propertyName != "Geometry_" + StateEvent.CHANGE + "_null")
              && (sourceClassName + "_" + actionType + "_" + propertyName != "Geometry_" + StateEvent.ADD_REMOVE + "_childGeometries")
            ) {
-            trace("Exception in flamingo.geometrymodel.Geometry.removeEventListener(" + sourceClassName + ", " + propertyName + ")");
+            trace("Exception in geometrymodel.Geometry.removeEventListener(" + sourceClassName + ", " + propertyName + ")");
             return;
         }
         

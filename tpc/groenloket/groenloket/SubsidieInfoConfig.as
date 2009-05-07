@@ -1,5 +1,5 @@
 ﻿
-import flamingo.tools.XMLTools;
+import groenloket.XMLTools;
 import groenloket.GebisPakket;
 
 class groenloket.SubsidieInfoConfig {
