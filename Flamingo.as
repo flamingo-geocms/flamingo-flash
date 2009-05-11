@@ -38,7 +38,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 import flash.external.ExternalInterface;
 import flash.filters.DropShadowFilter;
 class Flamingo {
-	private var version:String = "3.0.1";
+	private var version:String = "3.0.0";
 	//reference to main movie from which this class is loaded
 	//at the main movie the components are loaded at 'moviedepth'--  ;moviedepth starts by 10000
 	//at the main movie a cursor movie is loaded at depth 50005
