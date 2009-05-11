@@ -3,6 +3,48 @@
 * Author: Linda Vels.
 * IDgis bv
  -----------------------------------------------------------------------------*/
+/** @component Theme
+* A Theme defines a group of layers that can be switched on without having to check the boxes in the legend.
+* A Theme can be set by selecting a theme from the ThemeSelector Component. 
+* A theme can also be set in the url (http://www.bla.nl?thema=all).  
+* When no Theme is given in the url the viewer will start with the default Theme (name="default"). 
+* This is the first Theme defined in the ThemeSelector component.
+* Other preset Theme's are the themes with the name="none" and name="all". Theme "none" switches off all
+* the layers except the ones defined by the persistentlayerids attribute of the ThemeSelector. Theme "all"
+* switches on all layers of the map.
+* @file flamingo/tpc/classes/flamingo/gui/Theme.as  (sourcefile)
+* @file flamingo/fmc/Theme.fla (sourcefile)
+* @file flamingo/fmc/Theme.swf (compiled component, needed for publication on internet)
+* @configstring label Label text for the choices in the ThemeSelector combobox.
+*/
+
+/** @tag <fmc:Theme> 
+* This tag defines a theme instance. 
+* @class gui.Theme 
+* @hierarchy child node of ThemeSelector 
+* @example
+       <fmc:ThemeSelector id="themeselector"   left="right -230"   top="top" width="230"  borderwidth="0" listlength="8"
+            listento="map" persistentlayerids="risicokaart.39,risicokaart.10,risicokaart.9,risicokaart.4,risicokaart.5,risicokaart.38,risicokaart.3,risicokaart.12,
+            risicokaart.2,risicokaart.0,risicokaart.14,risicokaart.maptipsgevstoffen,risicokaart.Bedrijven,risicokaart.Dissolve_provincies,risicokaart.Outline_nederland">
+            <fmc:Theme  name="default"  layerids="risicokaart.risico_installatie_10-6,risicokaart.risico_inrichting_10-6,risicokaart.risico_installatie_10-5,.....">
+                <string id="label" en="Choose a theme..." nl="Kies een thema...."/>
+            </fmc:Theme>
+            <fmc:Theme  name="none" > 
+                <string id="label" en="Show none" nl="Niets tonen"/>
+            </fmc:Theme>
+            <fmc:Theme name="all" > 
+                <string id="label" en="Show all" nl="Alles tonen"/>
+            </fmc:Theme>   
+            <fmc:Theme name="veiligheidsafstanden" layerids="risicokaart.risico_installatie_10-6,risicokaart.risico_inrichting_10-6,....">
+                <string id="label" nl="Veiligheidsafstanden" en="Risks and effects"
+                    de="Risiken und Auswirkungen" fr="Risques et conséquences"/> 
+            </fmc:Theme>
+`			....
+		</fmc:ThemeSelector>
+* @attr layerids Comma seperated list of layer ids that are in the Theme.
+*/
+ 
+ 
 import gismodel.*;
 
 

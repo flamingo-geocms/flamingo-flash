@@ -5,7 +5,11 @@
  -----------------------------------------------------------------------------*/
 
 /** @component ThemePicker
-* A user interface component .....
+* A combobox component that gives you the possibility to select a theme (defined by a Theme component). 
+* A Theme defines a group of layers that can be switched on without having to check the boxes in the legend. 
+* All other layers will be switched off except the ones listed in the persitentlayerids attribute. 
+* A theme can also be set in the url (http://www.bla.nl?thema=all).  
+* The ThemeSelector should listen to a map component.
 * @file flamingo/tpc/classes/flamingo/gui/ThemePicker.as  (sourcefile)
 * @file flamingo/fmc/ThemePicker.fla (sourcefile)
 * @file flamingo/fmc/ThemePicker.swf (compiled component, needed for publication on internet)
@@ -17,7 +21,27 @@
 * @class gui.ThemePicker 
 * @hierarchy child node of Flamingo 
 * @example
-
+       <fmc:ThemeSelector id="themeselector"   left="right -230"   top="top" width="230"  borderwidth="0" listlength="8"
+            listento="map" persistentlayerids="risicokaart.39,risicokaart.10,risicokaart.9,risicokaart.4,risicokaart.5,risicokaart.38,risicokaart.3,risicokaart.12,
+            risicokaart.2,risicokaart.0,risicokaart.14,risicokaart.maptipsgevstoffen,risicokaart.Bedrijven,risicokaart.Dissolve_provincies,risicokaart.Outline_nederland">
+            <fmc:Theme  name="default"  layerids="risicokaart.risico_installatie_10-6,risicokaart.risico_inrichting_10-6,risicokaart.risico_installatie_10-5,.....">
+                <string id="label" en="Choose a theme..." nl="Kies een thema...."/>
+            </fmc:Theme>
+            <fmc:Theme  name="none" > 
+                <string id="label" en="Show none" nl="Niets tonen"/>
+            </fmc:Theme>
+            <fmc:Theme name="all" > 
+                <string id="label" en="Show all" nl="Alles tonen"/>
+            </fmc:Theme>   
+            <fmc:Theme name="veiligheidsafstanden" layerids="risicokaart.risico_installatie_10-6,risicokaart.risico_inrichting_10-6,....">
+                <string id="label" nl="Veiligheidsafstanden" en="Risks and effects"
+                    de="Risiken und Auswirkungen" fr="Risques et conséquences"/> 
+            </fmc:Theme>
+`			....
+		</fmc:ThemeSelector>
+* @attr persistentlayerids A coma seperated list of layer ids that is not influenced by the selection of a theme. 
+* These are for instance topographical baselayers that should always be visible.   
+* @attr listlength The length of the combobox list.
 */
 
 
