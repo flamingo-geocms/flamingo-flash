@@ -43,10 +43,15 @@ lMap.onChangeExtent = function(map:MovieClip):Void  {
 	thisObj.update();
 };
 lMap.onHide = function(map:MovieClip):Void  {
+	
 	thisObj.update();
 };
 lMap.onShow = function(map:MovieClip):Void  {
-	thisObj.update();
+	if (not this.initialized) {
+		setImage(imageurl, extent);
+	} else {	
+		thisObj.update();
+	}	
 };
 flamingo.addListener(lMap, flamingo.getParent(this), this);
 //-------------------------
@@ -118,8 +123,9 @@ function setConfig(xml:Object) {
 			break;
 		}
 	}
-
-	setImage(imageurl, extent);
+	if(map.visible){
+		setImage(imageurl, extent);
+	}	
 }
 /**
 * Sets the transparency of a layer.
@@ -134,9 +140,7 @@ function setAlpha(alpha:Number) {
 * @param extent:Object  
 */
 function setImage(url:String, extent:Object) {
-
 	if (url != undefined and map.isValidExtent(extent)) {
-	
 		imageurl = flamingo.getNocacheName(flamingo.correctUrl(url), "hour");
 		extent = extent;
 		var listener:Object = new Object();
@@ -187,7 +191,7 @@ function setImage(url:String, extent:Object) {
 */
 function update() {
 	if (not this.initialized) {
-		return
+		return;
 	}
 	if (visible) {
 		if (not map.hasextent) {
