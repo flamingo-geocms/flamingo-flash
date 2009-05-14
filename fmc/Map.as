@@ -100,7 +100,11 @@ dynamic class Map extends MovieClip {
 	private var saveextent:Boolean;
 	private var clearlayers:Boolean; 
 	//
+	private var configObj:Object;
 	public var hasextent:Boolean;
+	
+	
+	
 	function Map() {
 		if (flamingo == undefined) {
 			var t:TextField = this.createTextField("readme", 0, 0, 0, 550, 400);
@@ -339,8 +343,8 @@ dynamic class Map extends MovieClip {
 		//parse custom attributes
 		//LV:
 		if(xml.attributes["configobject"]!=undefined){
-			var configObj:Object = flamingo.getComponent(xml.attributes["configobject"]);
-			var allXML:Array = _global.flamingo.getXMLs(configObj);
+			configObject = flamingo.getComponent(xml.attributes["configobject"]);
+			var allXML:Array = _global.flamingo.getXMLs(configObject);
 			for(var i:Number=0;i<allXML.length;i++){
 				this.parseCustomAtrr(allXML[i]);
 			}
@@ -625,7 +629,8 @@ dynamic class Map extends MovieClip {
 		var hasThemeSelector:Boolean = false;
 		for(var i:Number=0;i<comps.length;i++){
 			if(_global.flamingo.getType(comps[i])=="ThemeSelector"){
-				if(_global.flamingo.getComponent(comps[i]).getMapId() == _global.flamingo.getId(this)){
+				var mapId:String =  _global.flamingo.getComponent(comps[i]).getMapId();
+				if(mapId == _global.flamingo.getId(this) || mapId == _global.flamingo.getId(configObject)){
 					hasThemeSelector=true;
 				}
 			}	
