@@ -598,7 +598,7 @@ function setConfig(xml:Object) {
 		if (thisObj.maptipids.toUpperCase() == "#ALL#") {
 			thisObj.setLayerProperty("#ALL#", "maptipable", true);
 		}
-		thisObj.update();
+		//thisObj.update();
 		flamingo.raiseEvent(thisObj, "onGetServiceInfo", thisObj);
 		initialized = true;
 	};
@@ -1078,6 +1078,7 @@ function _update(nrtry:Number):Void {
 				flamingo.raiseEvent(thisObj, "onUpdateComplete", thisObj, requesttime, loadtime, mc.getBytesTotal());
 				updating = false;
 				_clearCache();
+				
 				if (not map.isEqualExtent(extent) or _getVisLayers() != vislayers) {
 					thisObj.update();
 				}
@@ -1697,6 +1698,7 @@ function _getVisLayers():String {
 			s += "0";
 		}
 	}
+	
 	return s;
 }
 function _getString(item:Object, stringid:String):String {

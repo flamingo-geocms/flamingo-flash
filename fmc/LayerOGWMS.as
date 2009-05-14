@@ -366,8 +366,9 @@ function setConfig(xml:Object) {
 		}
 		thisObj._parseLayers(servicelayers);
 		_global.flamingo.raiseEvent(thisObj, "onGetCapabilities", thisObj);
+		//The update is done in the Map in lLayer.onGetCapabilities 
 		//if (thisObj.slayers == "#ALL#") {
-		thisObj.update();
+		//thisObj.update();
 		//}
 	};
 	var c_url = this.getcapabilitiesurl;

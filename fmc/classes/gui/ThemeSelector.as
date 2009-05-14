@@ -9,7 +9,7 @@
 * A Theme defines a group of layers that can be switched on without having to check the boxes in the legend. 
 * All other layers will be switched off except the ones listed in the persitentlayerids attribute. 
 * A theme can also be set in the url (http://www.bla.nl?thema=all).  
-* The ThemeSelector should listen to a map component.
+* The ThemeSelector should listento a mapComponent.
 * @file flamingo/tpc/classes/flamingo/gui/ThemePicker.as  (sourcefile)
 * @file flamingo/fmc/ThemePicker.fla (sourcefile)
 * @file flamingo/fmc/ThemePicker.swf (compiled component, needed for publication on internet)
@@ -37,7 +37,7 @@
                 <string id="label" nl="Veiligheidsafstanden" en="Risks and effects"
                     de="Risiken und Auswirkungen" fr="Risques et conséquences"/> 
             </fmc:Theme>
-`			....
+			....
 		</fmc:ThemeSelector>
 * @attr persistentlayerids A coma seperated list of layer ids that is not influenced by the selection of a theme. 
 * These are for instance topographical baselayers that should always be visible.   
@@ -52,10 +52,10 @@ import core.AbstractContainer;
 
 import mx.utils.Delegate;
 import mx.controls.ComboBase;
-
 class gui.ThemeSelector extends AbstractContainer {
 	private var componentID:String = "ThemePicker";
 	private var depth:Number = 0;
+	private var mapId:String = null;
 	private var map:Object = null;
 	private var themes:Array; 
 	private var numThemes:Number = 0;
@@ -112,8 +112,8 @@ class gui.ThemeSelector extends AbstractContainer {
         if(name=="persistentlayerids"){
         	persistentLayers = new Array();
         	var mapStr:String = listento[0]; 
-        	var a:Array =value.split(",");
-			for (var j:Number = 0; j<a.length; j++) {
+        	var a:Array =_global.flamingo.asArray(value);
+        	for (var j:Number = 0; j<a.length; j++) {
 				var layername:String = null;
 				var sublayer:String = null;
 				if (a[j].indexOf(".", 0) == -1) {
@@ -134,8 +134,12 @@ class gui.ThemeSelector extends AbstractContainer {
         } 	
     }
     
-    function getMap():Object{
+    function getMap(){
     	return map;
+    }
+    
+    function getMapId():String {
+    	return _global.flamingo.getId(map);
     }
 
 	function themeReady():Void{
@@ -185,6 +189,9 @@ class gui.ThemeSelector extends AbstractContainer {
 	}
 	
 	private function setCurrentTheme(selectedTheme:Theme) : Void{
+		if(map==undefined){
+			map = _global.flamingo.getComponent(mapId);
+		}
 		var scope:String = "";
 		if(selectedTheme.name == "all"){
 			scope="all";

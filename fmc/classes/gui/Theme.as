@@ -68,14 +68,13 @@ class gui.Theme extends AbstractComponent  {
     }  
     
     function go():Void {
-		map = getParent("ThemePicker").getMap();
-		var mapStr:String = _global.flamingo.getId(map); 	
+		var mapStr:String = getParent().getMapId();	
         var sublayer:String = '';
     	themeLayers = new Array();
     	if(layerIds==undefined){
   			return;		 
     	}
-    	var a:Array = _global.flamingo.asArray(this.layerIds);//this.layerIds.split(",");
+    	var a:Array = _global.flamingo.asArray(this.layerIds);
 		for (var j:Number = 0; j<a.length; j++) {
 			var layername:String = null;
 			if (a[j].indexOf(".", 0) == -1) {

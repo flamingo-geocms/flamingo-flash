@@ -602,10 +602,37 @@ dynamic class Map extends MovieClip {
 					thisObj.checkUpdate();
 				}
 			};
+			lLayer.onGetServiceInfo = function(layer:MovieClip) {
+				if(thisObj.hasThemeSelector() || !thisObj.visible){
+					return;
+				}
+				layer.update();
+			};
+			lLayer.onGetCapabilities =  function(layer:MovieClip) {
+				if(thisObj.hasThemeSelector() || !thisObj.visible){
+					return;
+				}
+				layer.update();
+				
+			};
 			flamingo.addListener(lLayer, layerid, this);
 			return id;
 		}
 	}
+	
+	private function hasThemeSelector():Boolean {
+		var comps:Array = _global.flamingo.getComponents();
+		var hasThemeSelector:Boolean = false;
+		for(var i:Number=0;i<comps.length;i++){
+			if(_global.flamingo.getType(comps[i])=="ThemeSelector"){
+				if(_global.flamingo.getComponent(comps[i]).getMapId() == _global.flamingo.getId(this)){
+					hasThemeSelector=true;
+				}
+			}	
+		}	
+		return hasThemeSelector;	
+	}
+	
 	private function checkUpdate() {
 		var updatetotal:Number = 0;
 		var layersupdated:Number = 0;
