@@ -607,13 +607,21 @@ dynamic class Map extends MovieClip {
 				}
 			};
 			lLayer.onGetServiceInfo = function(layer:MovieClip) {
-				if(thisObj.hasThemeSelector() || !thisObj.visible){
+				var themeSelector:Object = thisObj.getThemeSelector();
+				if(themeSelector!=null  || !thisObj.visible){
+					if(themeSelector!=null){
+						themeSelector.setCurrentTheme();
+					}
 					return;
 				}
 				layer.update();
 			};
 			lLayer.onGetCapabilities =  function(layer:MovieClip) {
-				if(thisObj.hasThemeSelector() || !thisObj.visible){
+				var themeSelector:Object = thisObj.getThemeSelector();
+				if(themeSelector!=null || !thisObj.visible){
+					if(themeSelector!=null){
+						themeSelector.setCurrentTheme();
+					}
 					return;
 				}
 				layer.update();
@@ -624,18 +632,18 @@ dynamic class Map extends MovieClip {
 		}
 	}
 	
-	private function hasThemeSelector():Boolean {
+	private function getThemeSelector():Object {
 		var comps:Array = _global.flamingo.getComponents();
-		var hasThemeSelector:Boolean = false;
+		var themeSelector:Object = null;
 		for(var i:Number=0;i<comps.length;i++){
 			if(_global.flamingo.getType(comps[i])=="ThemeSelector"){
 				var mapId:String =  _global.flamingo.getComponent(comps[i]).getMapId();
 				if(mapId == _global.flamingo.getId(this) || mapId == _global.flamingo.getId(configObject)){
-					hasThemeSelector=true;
+					themeSelector=_global.flamingo.getComponent(comps[i]);
 				}
 			}	
 		}	
-		return hasThemeSelector;	
+		return themeSelector;	
 	}
 	
 	private function checkUpdate() {
