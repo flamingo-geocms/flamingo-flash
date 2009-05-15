@@ -4,7 +4,7 @@
 * IDgis bv
  -----------------------------------------------------------------------------*/
 
-/** @component ThemePicker
+/** @component ThemeSelector
 * A combobox component that gives you the possibility to select a theme (defined by a Theme component). 
 * A Theme defines a group of layers that can be switched on without having to check the boxes in the legend. 
 * All other layers will be switched off except the ones listed in the persitentlayerids attribute. 
@@ -16,9 +16,9 @@
 * @configstring label Label text for the combobox.
 */
 
-/** @tag <fmc:ThemePicker> 
-* This tag defines a themePicker instance. ...
-* @class gui.ThemePicker 
+/** @tag <fmc:ThemeSelector> 
+* This tag defines a themeSelector instance. ...
+* @class gui.ThemeSelector 
 * @hierarchy child node of Flamingo 
 * @example
        <fmc:ThemeSelector id="themeselector"   left="right -230"   top="top" width="230"  borderwidth="0" listlength="8"
