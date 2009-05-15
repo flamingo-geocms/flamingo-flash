@@ -55,7 +55,7 @@ import mx.controls.ComboBase;
 class gui.ThemeSelector extends AbstractContainer {
 	private var componentID:String = "ThemePicker";
 	private var depth:Number = 0;
-	private var mapId:String = null;
+	//private var mapId:String = null;
 	private var map:Object = null;
 	private var themes:Array; 
 	private var numThemes:Number = 0;
@@ -101,7 +101,7 @@ class gui.ThemeSelector extends AbstractContainer {
 	    	for(var i:Number=0;i<themeComboBox.dataProvider.length;i++){
 	    		if(themeComboBox.dataProvider[i].data == currentTheme){
 	    			themeComboBox.setSelectedIndex(i);
-	    			setCurrentTheme(currentTheme);
+	    			//setCurrentTheme(currentTheme);
 	    			return;
 	    		}
 	    	}	
@@ -132,6 +132,9 @@ class gui.ThemeSelector extends AbstractContainer {
         if(name=="listlength"){
         	this.listlength = Number(value);
         } 	
+        //if(name=="mapid"){
+        	//this.mapId =value;
+        //} 	
     }
     
     function getMap(){
@@ -139,7 +142,7 @@ class gui.ThemeSelector extends AbstractContainer {
     }
     
     function getMapId():String {
-    	return _global.flamingo.getId(map);
+    	return _global.flamingo.getId(map);// mapId;
     }
 
 	function themeReady():Void{
@@ -184,19 +187,20 @@ class gui.ThemeSelector extends AbstractContainer {
 	
 	private function onChangeThemeComboBox(eventObject:Object) : Void {
 		if(eventObject.target.selectedItem.data!=null){	
-			setCurrentTheme(eventObject.target.selectedItem.data);
+			currentTheme = eventObject.target.selectedItem.data;
+			setCurrentTheme();
 		}	
 	}
 	
-	private function setCurrentTheme(selectedTheme:Theme) : Void{
-		if(map==undefined){
-			map = _global.flamingo.getComponent(mapId);
-		}
+	private function setCurrentTheme() : Void{
+		//if(map==undefined){
+			//map = _global.flamingo.getComponent(mapId);
+		//}
 		var scope:String = "";
-		if(selectedTheme.name == "all"){
+		if(currentTheme.name == "all"){
 			scope="all";
 		} 
-		if(selectedTheme.name == "none"){
+		if(currentTheme.name == "none"){
 			scope="none";
 		} 
 		//loop through all layers and sublayers
@@ -204,7 +208,7 @@ class gui.ThemeSelector extends AbstractContainer {
 		for(var i:Number=0;i<mapLayers.length;i++){ 
 			var mapLayer:MovieClip = _global.flamingo.getComponent( mapLayers[i].toString());
 			var layers:Array = mapLayer.getLayers();
-			var themeLayers:Array = selectedTheme.getThemelayers();
+			var themeLayers:Array = currentTheme.getThemelayers();
 			for (var sublayer in layers) {
 				if(persistentLayers[mapLayers[i]+ "."+ sublayer] != null){
 					//do nothing
