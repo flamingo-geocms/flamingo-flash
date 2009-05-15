@@ -74,6 +74,7 @@ var outputtype:String = "png24";
 var alpha:Number = 100;
 //---------------------------------
 var layers:Object = new Object();
+var vislayers:String = null;
 var updating:Boolean = false;
 var nrcache:Number = 0;
 var map:MovieClip;
@@ -97,6 +98,10 @@ var colorIds:String;
 var colorIdsKey:String;
 var record:Boolean = false;
 var visualisationSelected:Object = new Object();
+//-------------------------------------------
+var serviceInfoRequestSent:Boolean = false
+var serviceInfoRecieved:Boolean = false
+
 
 var addRecorded:Object = new Object();
 var newRecorded:Object = new Object();
@@ -546,17 +551,19 @@ function setConfig(xml:Object) {
 	var lConn = new Object();
 	lConn.onResponse = function(connector:ArcIMSConnector) {
 		//trace(connector.response)
-		//flamingo.raiseEvent(thisObj, "onGetServiceInfoResponse", thisObj, connector);
 		flamingo.raiseEvent(thisObj, "onResponse", thisObj, "init", connector);
 	};
-	lConn.onRequest = function(connector:ArcIMSConnector) {
-		//flamingo.raiseEvent(thisObj, "onGetServiceInfoRequest", thisObj, connector);
+	lConn.onRequest = function(connector:ArcIMSConnector,requesttype:String) {
+		if(requesttype=="getServiceInfo"){
+			serviceInfoRequestSent = true;
+		}	
 		flamingo.raiseEvent(thisObj, "onRequest", thisObj, "init", connector);
 	};
 	lConn.onError = function(error:String, objecttag:Object, requestid:String) {
 		flamingo.raiseEvent(thisObj, "onError", thisObj, "init", error);
 	};
 	lConn.onGetServiceInfo = function(extent, servicelayers, objecttag, requestid) {
+		
 		for (var id in servicelayers) {
 			if (layers[id] == undefined) {
 				layers[id] = new Object();
@@ -599,6 +606,7 @@ function setConfig(xml:Object) {
 			thisObj.setLayerProperty("#ALL#", "maptipable", true);
 		}
 		//thisObj.update();
+		serviceInfoRecieved = true;
 		flamingo.raiseEvent(thisObj, "onGetServiceInfo", thisObj);
 		initialized = true;
 	};
@@ -606,8 +614,10 @@ function setConfig(xml:Object) {
 	conn.addListener(lConn);
 	if (servlet.length>0) {
 		conn.servlet = servlet;
-	}
-	conn.getServiceInfo(mapservice);
+	} 
+	if(!serviceInfoRequestSent){
+		conn.getServiceInfo(mapservice);
+	}	
 }
 /**
 * Remove custom data from a layer.
@@ -957,7 +967,9 @@ function refresh():Void {
 * Updates a layer.
 */
 function update():Void {
-	_update(1);
+	if(serviceInfoRecieved){
+		_update(1);
+	}	
 }
 function _update(nrtry:Number):Void {
 	
@@ -1068,6 +1080,8 @@ function _update(nrtry:Number):Void {
 						delete cache.totalbytes;
 						this.updating = false;
 						this._clearCache();
+						//_global.flamingo.tracer("vislayers " + vislayers);
+						//_global.flamingo.tracer("_getVisLayers() " + _getVisLayers());
 						if (not map.isEqualExtent(extent) or _getVisLayers() != vislayers) {
 							this.update();
 						}
@@ -1119,7 +1133,7 @@ function _update(nrtry:Number):Void {
 	conn.outputtype = outputtype;
 	conn.legend = legend;
 	var starttime = new Date();
-	var vislayers = _getVisLayers();
+	vislayers = _getVisLayers();
 	flamingo.raiseEvent(this, "onUpdate", this, nrtry);
 	conn.getImage(mapservice, extent, {width:Math.ceil(map.__width), height:Math.ceil(map.__height)}, layers);
 	thisObj._starttimeout();
@@ -1977,6 +1991,7 @@ function addRecordedValues(layerid:String, key:String, values:String){
 	}
 	this.addRecorded[layerid][key]=values.split(",");
 	update();
+	
 }
 function log(stringtolog:Object){	
 	if (DEBUG)
