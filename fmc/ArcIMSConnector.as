@@ -186,7 +186,7 @@ class ArcIMSConnector {
 		var thisObj:Object = this;
 		this.error = "";
 		this.response = "";
-		this.events.broadcastMessage("onRequest",this);
+		this.events.broadcastMessage("onRequest",this,requesttype);
 		xresponse.onLoad = function(success:Boolean):Void  {
 			thisObj.response = this.toString();
 			thisObj.responsetime = (new Date()-starttime)/1000;
