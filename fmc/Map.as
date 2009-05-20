@@ -406,6 +406,7 @@ dynamic class Map extends MovieClip {
 				break;
 			case "minscale" :
 				this.minscale = Number(val);
+				flamingo.tracer("setConfig minScale " + this.minscale);
 				break;
 			case "maxscale" :
 				this.maxscale = Number(val);
@@ -1304,11 +1305,14 @@ dynamic class Map extends MovieClip {
 		if (minscale==undefined){
 			return extent;
 		}
-		var curScale:Number =(extent.maxx-extent.minx)/this.__width;
-		var calcScale:Number = minscale;
-		while (curScale > calcScale) {
+		//make integers, floating points may cause rounding problems  
+		var curScale:Number = Math.round(((extent.maxx-extent.minx)/this.__width)*10000);
+		var calcScale:Number = Math.round(minscale*10000);
+		while (curScale > calcScale) {	
 			calcScale = calcScale * zoomScaleFactor;
 		}
+		calcScale = Number(calcScale/10000);
+		
 		var intExtent:Object = copyExtent(_initialextent);
 		correctExtent(intExtent);
 		var initialScale:Number = (intExtent.maxx-intExtent.minx)/this.__width;//Math.max(((_initialextent.maxx-_initialextent.minx)/this.__width)/pixelSize,((_initialextent.maxy-_initialextent.miny)/this.__width)/pixelSize);
