@@ -406,7 +406,6 @@ dynamic class Map extends MovieClip {
 				break;
 			case "minscale" :
 				this.minscale = Number(val);
-				flamingo.tracer("setConfig minScale " + this.minscale);
 				break;
 			case "maxscale" :
 				this.maxscale = Number(val);
