@@ -1,14 +1,23 @@
-﻿/*-----------------------------------------------------------------------------
+/*-----------------------------------------------------------------------------
 * This file is part of Flamingo MapComponents.
 * Author: Michiel J. van Heek.
 * IDgis bv
+* Changes by author: Maurits Kelder, B3partners bv
  -----------------------------------------------------------------------------*/
 
 import gui.*;
 
 import gismodel.CreateGeometry;
+import gismodel.Feature;
 import geometrymodel.Geometry;
+
+
+import geometrymodel.Polygon;
+import geometrymodel.LineString;
 import geometrymodel.Point;
+import geometrymodel.PointFactory;
+
+import gismodel.Layer;
 
 class gui.EditMapCreateGeometry extends MovieClip {
     
@@ -24,6 +33,7 @@ class gui.EditMapCreateGeometry extends MovieClip {
     private var deltaTime:Number = 0;
     private var pressTime:Number = 0;
     private var previousPressTime:Number = 0;
+	private var movePoint:Point = null;
     
     function onLoad():Void {
         draw();
@@ -51,7 +61,9 @@ class gui.EditMapCreateGeometry extends MovieClip {
         endFill();
     }
     
+	
     function onPress():Void {
+
     	var double:Boolean = false;	
     	if (previousPressTime==0){
     		previousPressTime = getTimer();
@@ -67,15 +79,40 @@ class gui.EditMapCreateGeometry extends MovieClip {
     		previousPressTime = getTimer();
     	}        
         if (double) {
-            gis.setCreateGeometry(null);
+			if (geometry instanceof Polygon){
+				Polygon(geometry).getExteriorRing().removePoint( Polygon(geometry).getEndPoint() );
+			} else if (geometry instanceof LineString){
+				LineString(geometry).removePoint(LineString(geometry).getEndPoint());
+			}
+			
+			_global.flamingo.raiseEvent(this._parent._parent,"onGeometryDrawFinished",this._parent._parent,gis.getActiveFeature().getGeometry().toWKT());			
+			
+			if (geometry instanceof LineString && gis.getCreatePointAtDistance()) {	
+				//remove the linestring
+				createGeometry.getLayer().removeFeature(gis.getActiveFeature(), true);
+
+				//create point geometry & add it as a feature to the layer
+				var layer:Layer = createGeometry.getLayer();
+				gis.setCreateGeometry(new CreateGeometry(layer, new PointFactory()));
+				
+				var point:geometrymodel.Point = pixel2Point(new Pixel(_xmouse, _ymouse));
+				geometry = createGeometry.getGeometryFactory().createGeometry(point);
+				createGeometry.getLayer().addFeature(geometry, true);
+				
+				gis.setCreateGeometry(null);
+			} else {
+				gis.setCreateGeometry(null);				
+			}
+		
         } else {	
-            var pixel:Pixel = new Pixel(_xmouse, _ymouse);
+			var pixel:Pixel = new Pixel(_xmouse, _ymouse);
             var point:geometrymodel.Point = pixel2Point(pixel);
             if (geometry == null) {
                 geometry = createGeometry.getGeometryFactory().createGeometry(point);
                 geometry.setEventComp(gis);
                 createGeometry.getLayer().addFeature(geometry);
                 if (geometry instanceof geometrymodel.Point) {
+					_global.flamingo.raiseEvent(this._parent._parent,"onGeometryDrawFinished",this._parent._parent,gis.getActiveFeature().getGeometry().toWKT());
                     gis.setCreateGeometry(null);
                 }
             } else {
@@ -85,17 +122,22 @@ class gui.EditMapCreateGeometry extends MovieClip {
     }
     
     function onMouseMove():Void {
-        if (geometry != null) {
-        	var pixel = new Pixel(_xmouse, _ymouse);
+ 		if (geometry != null) {
+		   	var pixel = new Pixel(_xmouse, _ymouse);
         	var mousePoint:Point = pixel2Point(pixel);
         	geometry.setXYEndPoint(mousePoint , pixel);
+			pixel = null;
+			mousePoint = null;
+			delete pixel;
+			// remove the geometrylisteneer of the mousePoint?!
+			delete mousePoint;
         }
     }
     
     
     private function pixel2Point(pixel:Pixel):geometrymodel.Point {
     	
-        var extent:Object = map.getMapExtent();
+        var extent:Object = map.getCurrentExtent();
 		var minX:Number = extent.minx;
         var minY:Number = extent.miny;
         var maxX:Number = extent.maxx;

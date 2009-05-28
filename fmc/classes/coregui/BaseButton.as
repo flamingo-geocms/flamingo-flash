@@ -1,7 +1,8 @@
-﻿/*-----------------------------------------------------------------------------
+/*-----------------------------------------------------------------------------
 * This file is part of Flamingo MapComponents.
 * Author: Michiel J. van Heek.
 * IDgis bv
+* Changes by author: Maurits Kelder, B3partners bv
  -----------------------------------------------------------------------------*/
 
 
@@ -34,23 +35,64 @@ import core.AbstractComponent;
 
 class coregui.BaseButton extends AbstractComponent {
     
-    private var tooltipText:String = "";
+	private var id:Number = -1; // Set by init object.
+    //private var tooltipText:String = "";
+	private var tooltipText:String = null; // Set by init object.
     private var actionEventListener:ActionEventListener = null;
     private var url:String = null;
     private var windowName:String = "_blank";
+	private var thisObj:Object;
+	private var selected:Boolean = false;
     
+	//*** graphical buttonstates
+	//frame 1: up
+	//frame 2: over
+	//frame 3: down
+	//Optional:
+	//frame 4: selected_up
+	//frame 5: selected_over
+	//frame 6: selected_down
+	
     function init():Void {
         useHandCursor = false;
-        
-        tooltipText = _global.flamingo.getString(this, "tooltip");
+        //tooltipText = _global.flamingo.getString(this, "tooltip");  //Do not overrule the value set by init object.
+    }
+	
+	function getID():Number {
+        return id;
     }
     
     function setActionEventListener(actionEventListener:ActionEventListener):Void {
         this.actionEventListener = actionEventListener;
     }
+	
+	function setSelectedState(selected:Boolean):Void {
+		this.selected = selected;
+		
+		//update graphic
+		if (selected) {
+			if (_totalframes > 3) {
+				gotoAndStop(4);		//selected_up
+			}
+		}
+		else {
+			gotoAndStop(1);			//up
+		}
+	}
     
+	function getSelectedState():Boolean {
+		return selected;
+	}
+	
     function onPress():Void {
-        gotoAndStop(3);
+        if (selected) {
+			if (_totalframes > 5) {
+				gotoAndStop(6);		//selected_down
+			}
+		}
+		else {
+			gotoAndStop(3);			//down
+		}
         
         if (actionEventListener != null) {
         	var actionEvent:ActionEvent = new ActionEvent(this, "Button", ActionEvent.CLICK);
@@ -65,21 +107,49 @@ class coregui.BaseButton extends AbstractComponent {
     }
     
     function onRollOver():Void {
-        gotoAndStop(2);
-        
-        _global.flamingo.showTooltip(tooltipText, this);
+        if (selected) {
+			if (_totalframes > 4) {
+				gotoAndStop(5);		//selected_over
+			}
+		}
+		else {
+			gotoAndStop(2);			//over
+		}
+	
+		_global.flamingo.showTooltip(tooltipText, this);
     }
     
     function onRollOut():Void {
-        gotoAndStop(1);
+        if (selected) {
+			if (_totalframes > 3) {
+				gotoAndStop(4);		//selected_up
+			}
+		}
+		else {
+			gotoAndStop(1);			//up
+		}
     }
     
     function onRelease():Void {
-        gotoAndStop(2);
+        if (selected) {
+			if (_totalframes > 3) {
+				gotoAndStop(4);		//selected_up
+			}
+		}
+		else {
+			gotoAndStop(1);			//up
+		}
     }
     
     function onReleaseOutside():Void {
-        gotoAndStop(1);
+        if (selected) {
+			if (_totalframes > 3) {
+				gotoAndStop(4);		//selected_up
+			}
+		}
+		else {
+			gotoAndStop(1);			//up
+		}
     }
     
 }

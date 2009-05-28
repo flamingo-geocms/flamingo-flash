@@ -1,7 +1,8 @@
-﻿/*-----------------------------------------------------------------------------
+/*-----------------------------------------------------------------------------
 * This file is part of Flamingo MapComponents.
 * Author: Michiel J. van Heek.
 * IDgis bv
+* Changes by author: Maurits Kelder, B3partners bv
  -----------------------------------------------------------------------------*/
 
 import gui.*;
@@ -62,7 +63,11 @@ class gui.EditLegendLayer extends MovieClip implements StateEventListener, Actio
         var actionType:Number = actionEvent.getActionType();
         if (sourceClassName + "_" + actionType == "Button_" + ActionEvent.CLICK) {
             var buttonName:String = actionEvent.getSource()._name;
-            if (buttonName.indexOf("Point") > -1) {
+			gis.setCreatePointAtDistance(false);
+            if (buttonName.indexOf("PointAtDistance") > -1) { // Point at distantance button.
+			    gis.setCreateGeometry(new CreateGeometry(layer, new LineStringFactory()));
+				gis.setCreatePointAtDistance(true);
+			} else if (buttonName.indexOf("Point") > -1) {
                 gis.setCreateGeometry(new CreateGeometry(layer, new PointFactory()));
             } else if (buttonName.indexOf("Curve") > -1) {
                 gis.setCreateGeometry(new CreateGeometry(layer, new LineStringFactory()));
@@ -140,7 +145,9 @@ class gui.EditLegendLayer extends MovieClip implements StateEventListener, Actio
             geometryType = String(geometryTypes[i]);
             if (geometryType == "Point") {
                 buttonConfigs.push(new ButtonConfig("AddPointButton", "punt toevoegen", this, null, null));
-            } else if (geometryType == "LineString") {
+            } else if (geometryType == "PointAtDistance") {
+                buttonConfigs.push(new ButtonConfig("AddPointAtDistanceButton", "punt op afstand toevoegen", this, null, null));
+			} else if (geometryType == "LineString") {
                 buttonConfigs.push(new ButtonConfig("AddCurveButton", "lijn toevoegen", this, null, null));
             } else if (geometryType == "Polygon") {
                 buttonConfigs.push(new ButtonConfig("AddSurfaceButton", "vlak toevoegen", this, null, null));
@@ -150,11 +157,13 @@ class gui.EditLegendLayer extends MovieClip implements StateEventListener, Actio
         }
         var initObject:Object = new Object();
         initObject["_x"] = 22;
-        initObject["_y"] = 5;
+		//position the buttonbar below the checkbox & label
+		initObject["_y"] = 25;
         initObject["buttonWidth"] = 15;
         initObject["buttonHeight"] = 15;
         initObject["spacing"] = 0;
-        initObject["expandable"] = true;
+        //do not expand the button's while rollover the first. We prefer to switch it's visibility in sync with the checkbox
+		initObject["expandable"] = false;
         initObject["buttonConfigs"] = buttonConfigs;
         attachMovie("ButtonBar", "mButtonBar", 3, initObject);
     }
@@ -162,6 +171,7 @@ class gui.EditLegendLayer extends MovieClip implements StateEventListener, Actio
     function onClickCheckBox():Void {
         var env:EditLegendLayer = EditLegendLayer(_parent); // The context of this method is not the EditLegendLayer object, but the check box.
         env.layer.setVisible(env.checkBox.selected);
+		this._parent.mButtonBar._visible = env.checkBox.selected;
     }
     
 }

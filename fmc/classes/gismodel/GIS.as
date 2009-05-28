@@ -1,7 +1,8 @@
-﻿/*-----------------------------------------------------------------------------
+/*-----------------------------------------------------------------------------
 * This file is part of Flamingo MapComponents.
 * Author: Michiel J. van Heek.
 * IDgis bv
+* Changes by author: Maurits Kelder, B3partners bv
  -----------------------------------------------------------------------------*/
 /** @component GIS 
 * A component without a graphical user interface, that serves as a model for the editing components, such as the edit map and the edit legend. 
@@ -124,6 +125,7 @@ import gismodel.*;
 
 import event.*;
 import geometrymodel.Envelope;
+import geometrymodel.Geometry;
 import core.AbstractComponent;
 
 class gismodel.GIS extends AbstractComponent {
@@ -134,8 +136,17 @@ class gismodel.GIS extends AbstractComponent {
     private var activeFeature:Feature = null;
     private var createGeometry:CreateGeometry = null;
     private var serversBusy:Number = 0;
+	private var selectedGeometries:Array=null;
+	
+	private var extent:Envelope = null;
+	private var ctrlKeyDown:Boolean = false;	//listener setting this value in editMap.as
+	private var editRemoveVertexFlag:Boolean = false;
+	private var createPointAtDistance:Boolean = false;
     
     private var stateEventDispatcher:StateEventDispatcher = null;
+	
+	private var editMapEditable:Boolean = false;
+	private var selectedEditTool:String= null;
     
 	
 	function onLoad(){
@@ -157,6 +168,14 @@ class gismodel.GIS extends AbstractComponent {
 		if (name == "authentication") {
 			authentication = _global.flamingo.getComponent(value);
         }
+		if (name == "geometryeditable") {
+			if (value.toLowerCase() == "yes" || value.toLowerCase() == "true") {
+				editMapEditable = true;
+			}
+			else {
+				editMapEditable = false;
+			}
+		}
         super.setAttribute(name, value);
     }
     
@@ -193,7 +212,7 @@ class gismodel.GIS extends AbstractComponent {
             return;
         }
         layers.push(layer);
-        stateEventDispatcher.dispatchEvent(new AddRemoveEvent(this, "GIS", "layers", new Array(layer), null, this));
+        stateEventDispatcher.dispatchEvent(new AddRemoveEvent(this, "GIS", "layers", new Array(layer), null));
     }
     
     function getLayers():Array {
@@ -212,13 +231,18 @@ class gismodel.GIS extends AbstractComponent {
     }
     
     function getLayerPosition(layer:Layer):Number {
-        for (var i:Number = 0; i < layers.length; i++) {
+		for (var i:Number = 0; i < layers.length; i++) {
             if (layers[i] == layer) {
                 return i;
             }
         }
         return -1;
     }
+	
+	function getEditMapEditable():Boolean {
+		return editMapEditable;
+	}
+	
 
     function getEnvelope():Envelope {
     	var layer:Layer = layers[0];
@@ -265,12 +289,38 @@ class gismodel.GIS extends AbstractComponent {
             
         stateEventDispatcher.dispatchEvent(new StateEvent(this, "GIS", StateEvent.CHANGE, "createGeometry", this));
     }
-    
+	    
     function getCreateGeometry():CreateGeometry {
         return createGeometry;
     }
-    
-    
+	
+	function setSelectedEditTool(editToolSelected:String):Void {
+		this.selectedEditTool=editToolSelected;
+		stateEventDispatcher.dispatchEvent(new StateEvent(this, "GIS", StateEvent.CHANGE, "editTool"));
+	}
+	
+	function getSelectedEditTool():String{
+		return this.selectedEditTool;
+	}
+	
+	function addSelectedGeometry(selectedGeometry:SelectedGeometry){
+		for (var i=0 ;i < selectedGeometries.length; i++){
+			var s:SelectedGeometry=SelectedGeometry(selectedGeometries[i]);
+			if (s.getId() == selectedGeometry.getId()){
+				return;
+			}
+		}
+		selectedGeometries.push(selectedGeometry);
+		stateEventDispatcher.dispatchEvent(new ChangeEvent(this,"GIS","selectedGeometry",new Array(selectedGeometry),null));    
+	}
+	function getSelectedGeometries():Array{
+		return selectedGeometries;
+	}
+	function clearSelectedGeometries(){
+		selectedGeometries= new Array();
+		stateEventDispatcher.dispatchEvent(new ChangeEvent(this,"GIS","selectedGeometry",selectedGeometries,null));    
+	}
+	
     function commit():Void {
         for (var i:String in layers) {
             if (Layer(layers[i]).isTransactionProblematic4Server()) {
@@ -302,6 +352,9 @@ class gismodel.GIS extends AbstractComponent {
              && (sourceClassName + "_" + actionType + "_" + propertyName != "GIS_" + StateEvent.ADD_REMOVE + "_layers")
              && (sourceClassName + "_" + actionType + "_" + propertyName != "GIS_" + StateEvent.CHANGE + "_activeFeature")
              && (sourceClassName + "_" + actionType + "_" + propertyName != "GIS_" + StateEvent.CHANGE + "_createGeometry")
+			 && (sourceClassName + "_" + actionType + "_" + propertyName != "GIS_" + StateEvent.CHANGE + "_editTool")
+			 && (sourceClassName + "_" + actionType + "_" + propertyName != "GIS_" + StateEvent.CHANGE + "_buttonUpdate")
+			 && (sourceClassName + "_" + actionType + "_" + propertyName != "GIS_" + StateEvent.CHANGE + "_updateEditInfoPanel")
            ) {
             _global.flamingo.tracer("Exception in gismodel.GIS.addEventListener(" + sourceClassName + ", " + propertyName + ")");
             return;
@@ -315,13 +368,61 @@ class gismodel.GIS extends AbstractComponent {
              && (sourceClassName + "_" + actionType + "_" + propertyName != "GIS_" + StateEvent.ADD_REMOVE + "_layers")
              && (sourceClassName + "_" + actionType + "_" + propertyName != "GIS_" + StateEvent.CHANGE + "_activeFeature")
              && (sourceClassName + "_" + actionType + "_" + propertyName != "GIS_" + StateEvent.CHANGE + "_createGeometry")
+			 && (sourceClassName + "_" + actionType + "_" + propertyName != "GIS_" + StateEvent.CHANGE + "_editTool")
+			 && (sourceClassName + "_" + actionType + "_" + propertyName != "GIS_" + StateEvent.CHANGE + "_buttonUpdate")
+			 && (sourceClassName + "_" + actionType + "_" + propertyName != "GIS_" + StateEvent.CHANGE + "_updateEditInfoPanel")			 
            ) {
             _global.flamingo.tracer("Exception in gismodel.GIS.removeEventListener(" + sourceClassName + ", " + propertyName + ")");
             return;
         }
         stateEventDispatcher.removeEventListener(stateEventListener, sourceClassName, actionType, propertyName);
     }
-    
+	
+	function getCreatePointAtDistance():Boolean {
+        return createPointAtDistance;
+    }
+	function setCreatePointAtDistance(createPointAtDistance:Boolean):Void {
+		this.createPointAtDistance = createPointAtDistance;
+	}
+    function setCtrlKeyDown(_ctrlKeyDown:Boolean):Void {
+		ctrlKeyDown = _ctrlKeyDown;
+	}
+	
+	function getCtrlKeyDown():Boolean {
+		return ctrlKeyDown;
+	}
+	
+	function setEditRemoveVertex(_editRemoveVertexFlag:Boolean):Void {
+		if (editRemoveVertexFlag != _editRemoveVertexFlag) {
+			stateEventDispatcher.dispatchEvent(new StateEvent(this, "GIS", StateEvent.CHANGE, "buttonUpdate",this));
+		}
+		editRemoveVertexFlag = _editRemoveVertexFlag;
+	}
+	
+	function getEditRemoveVertex():Boolean {
+		return editRemoveVertexFlag;
+	}
+	
+	function updateEditInfoPanel():Void {
+		stateEventDispatcher.dispatchEvent(new StateEvent(this, "GIS", StateEvent.CHANGE, "updateEditInfoPanel",this));
+	}
+	
+	function doGetFeatures(env:geometrymodel.Envelope){		
+        var layer:Layer = null;
+        for (var i:String in layers) {
+            layer = Layer(layers[i]);
+			layer.getFeatureWithGeometry(env);			
+		}		
+	}
+	
+	function removeAllFeatures(){
+		var layer:Layer = null;
+        for (var i:String in layers) {
+            layer = Layer(layers[i]);
+			layer.removeFeatures(layer.getFeatures(),false);			
+		}		 
+	}
+	
     function toString():String {
         return "GIS()";
     }

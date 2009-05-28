@@ -1,7 +1,8 @@
-﻿/*-----------------------------------------------------------------------------
+/*-----------------------------------------------------------------------------
 * This file is part of Flamingo MapComponents.
 * Author: Michiel J. van Heek.
 * IDgis bv
+* Changes by author: Maurits Kelder, B3partners bv
  -----------------------------------------------------------------------------*/
 
 import coremodel.service.wfs.*;
@@ -19,7 +20,16 @@ class coremodel.service.wfs.FeatureType extends ServiceLayer {
 		xmlSchema = new XMLSchema(rootNode);
 		namespacePrefix = xmlSchema.getTargetNamespacePrefix(); 
 		ftNamespacePrefix = xmlSchema.getSchemaNamespacePrefix();
-        var firstElementNode:XMLNode = XPathAPI.selectSingleNode(rootNode, "/" + ftNamespacePrefix + ":schema/" + ftNamespacePrefix + ":element");
+		var xpathExpression= "/";
+		if (ftNamespacePrefix!=undefined){
+			xpathExpression+=ftNamespacePrefix+":";
+		}
+		xpathExpression+="schema/";
+		if (ftNamespacePrefix!=undefined){
+			xpathExpression+=ftNamespacePrefix + ":";
+		}
+		xpathExpression+="element";
+        var firstElementNode:XMLNode = XPathAPI.selectSingleNode(rootNode, xpathExpression);
 		if (firstElementNode == null) {
             _global.flamingo.tracer("Exception in coremodel.FeatureType.<<init>>: The featuretype schema cannot be parsed.\n" + rootNode);
             return;
@@ -32,8 +42,25 @@ class coremodel.service.wfs.FeatureType extends ServiceLayer {
         name = namespacePrefix + ":" + name;
         
         var type:String = firstElementNode.attributes["type"].split(":")[1];
-        var complexTypeNode:XMLNode = XPathAPI.selectSingleNode(rootNode, "/" + ftNamespacePrefix + ":schema/" + ftNamespacePrefix + ":complexType[@name=" + type + "]");
-        var propertyNodes:Array = XPathAPI.selectNodeList(complexTypeNode, "/" + ftNamespacePrefix + ":complexType/" + ftNamespacePrefix + ":complexContent/" + ftNamespacePrefix + ":extension/" + ftNamespacePrefix + ":sequence/" + ftNamespacePrefix + ":element");
+
+		var xpathExpression2= "/";
+		if (ftNamespacePrefix!=undefined){
+			xpathExpression2+=ftNamespacePrefix + ":schema/" + ftNamespacePrefix + ":complexType[@name=" + type + "]";
+		}
+		else{
+			xpathExpression2+="schema/complexType[@name=" + type + "]";
+		}
+		var complexTypeNode:XMLNode = XPathAPI.selectSingleNode(rootNode, xpathExpression2);
+        
+		var xpathExpression3= "/";
+		if (ftNamespacePrefix!=undefined){
+			xpathExpression3+=ftNamespacePrefix + ":complexType/" + ftNamespacePrefix + ":complexContent/" + ftNamespacePrefix + ":extension/" + ftNamespacePrefix + ":sequence/" + ftNamespacePrefix + ":element";
+		}
+		else{
+			xpathExpression3+="complexType/complexContent/extension/sequence/element";
+		}
+		var propertyNodes:Array = XPathAPI.selectNodeList(complexTypeNode, xpathExpression3);
+        
         var property:WFSProperty = null;
         serviceProperties = new Array();
         geometryProperties = new Array();

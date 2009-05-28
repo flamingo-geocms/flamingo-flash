@@ -1,7 +1,8 @@
-﻿/*-----------------------------------------------------------------------------
+/*-----------------------------------------------------------------------------
 * This file is part of Flamingo MapComponents.
 * Author: Michiel J. van Heek.
 * IDgis bv
+* Changes by author: Maurits Kelder, B3partners bv
  -----------------------------------------------------------------------------*/
 
 import gui.*;
@@ -10,6 +11,11 @@ import event.StateEventListener;
 import event.StateEvent;
 
 import geometrymodel.Geometry;
+import geometrymodel.Point;
+import geometrymodel.LineString;
+import geometrymodel.LinearRing;
+import geometrymodel.Polygon;
+import geometrymodel.Circle;
 
 import mx.controls.Label;
 
@@ -32,7 +38,8 @@ class gui.EditMapGeometry extends GeometryPane implements GeometryListener {
     private var type:Number = -1; // Set by init object.
     private var labelText:String = null; // Set by init object.
     private var isChild:Boolean = false; // Set by init object.
-    private var labelDepth:Number = 1000;
+	private var editMapEditable:Boolean = false; // Set by init object.
+	private var labelDepth:Number = 1000;
     private var label:Label = null;
     
     function onLoad():Void {
@@ -45,11 +52,12 @@ class gui.EditMapGeometry extends GeometryPane implements GeometryListener {
 		fillOpacity = style.getFillOpacity();
         _global.flamingo.addListener(this,map,this);
         addChildGeometries();
-        draw();
+	
+		draw();
     }
     
    function remove():Void { 
-        this.removeMovieClip(); // Keyword "this" is necessary here, because of the global function removeMovieClip.
+		this.removeMovieClip(); // Keyword "this" is necessary here, because of the global function removeMovieClip.
     }
     
     function setSize(width:Number, height:Number):Void {
@@ -58,13 +66,40 @@ class gui.EditMapGeometry extends GeometryPane implements GeometryListener {
     }
     
     function onChangeGeometry(geometry:Geometry):Void {
-    	draw();
- 	}
- 	
- 	 function onAddChild(geometry:Geometry,child:Geometry):Void {
-        addEditMapGeometry(child, type, null, this.getNextHighestDepth(),true);
 		draw();
  	}
+ 	
+	
+ 	 function onAddChild(geometry:Geometry, child:Geometry):Void {
+		var childGeometries:Array = geometry.getChildGeometries();
+		var i:Number = childGeometries.length - 1;
+		if (childGeometries.length == undefined) {
+			i = 0;
+		}
+		var depth:Number;
+		if (child instanceof Point) {
+			depth = 10000 + i;
+		} else if (child instanceof LineString) {
+			depth = 5000 + i;
+		} else if (child instanceof LinearRing) {
+			depth = 4000 + i;
+		} else if (child instanceof Polygon) {
+			depth = 3000 + i;
+		} else if (child instanceof Circle) {
+			depth = 2000 + i;
+		}
+		else {
+			depth = 1000 + i;
+		}
+
+        addEditMapGeometry(child, type, null, depth, true);
+		draw();
+ 	}
+	
+	function onRemoveChild(geometry:Geometry,child:Geometry) : Void {
+        removeEditMapGeometry(geometry, child);
+		draw();	
+	}
 	
     function setType(type:Number):Void {
         if (this.type == type) {
@@ -96,10 +131,33 @@ class gui.EditMapGeometry extends GeometryPane implements GeometryListener {
     
     private function draw():Void {
         clear();
-         doDraw();
+        doDraw();
         setLabel();
+		
+		if (this.type == ACTIVE && _geometry.getFirstAncestor() == _geometry) { //surpress updating for child geometries. Saves cpu resources.
+			gis.updateEditInfoPanel();
+		}
+		
     }
-    
+	
+	private function reDraw():Void {
+		//remove all existing editMap children of the geometry from visible layer
+		var firstAncestor:Geometry = _geometry.getFirstAncestor();
+		
+		//brute force cleaning?
+		for (_name in this) {
+				if (this[_name] instanceof MovieClip) {
+					this[_name].removeMovieClip();
+				}
+		}
+		
+		//add child geometries
+		addChildGeometries();
+		
+		clear();
+        doDraw();
+	}
+	
     private function doDraw():Void { }
     
     private function setLabel():Void {
@@ -130,16 +188,33 @@ class gui.EditMapGeometry extends GeometryPane implements GeometryListener {
     
     private function addChildGeometries():Void {
         var childGeometries:Array = _geometry.getChildGeometries();
-        for (var i:Number = 0; i < childGeometries.length; i++) {
-            addEditMapGeometry(Geometry(childGeometries[i]), type, null, i, true);
-        }
+		
+		if (childGeometries.length >0) {
+			for (var i:Number = 0; i < childGeometries.length; i++) {
+				
+				var depth:Number;
+				var geometry:Geometry = Geometry(childGeometries[i]);
+				if (geometry instanceof Point) {
+					depth = 10000 + i;
+				} else if (geometry instanceof LineString) {
+					depth = 5000 + i;
+				} else if (geometry instanceof LinearRing) {
+					depth = 4000 + i;
+				} else if (geometry instanceof Polygon) {
+					depth = 3000 + i;
+				} else if (geometry instanceof Circle) {
+					depth = 2000 + i;
+				}
+				
+				addEditMapGeometry(Geometry(childGeometries[i]), type, null, depth, true);
+			}
+		}
     }
     
 
     private function point2Pixel(_point:geometrymodel.Point):Pixel {
-	        var extent:Object = map.getMapExtent();
-	        
-			var minX:Number = extent.minx;
+	        var extent:Object = map.getCurrentExtent();
+	        var minX:Number = extent.minx;
 	        var minY:Number = extent.miny;
 	        var maxX:Number = extent.maxx;
 	        var maxY:Number = extent.maxy;

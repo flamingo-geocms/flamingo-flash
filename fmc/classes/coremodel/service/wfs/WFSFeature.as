@@ -1,7 +1,8 @@
-﻿/*-----------------------------------------------------------------------------
+/*-----------------------------------------------------------------------------
 * This file is part of Flamingo MapComponents.
 * Author: Michiel J. van Heek.
 * IDgis bv
+* Changes by author: Maurits Kelder, B3partners bv
  -----------------------------------------------------------------------------*/
 import coremodel.service.wfs.*;
 
@@ -30,6 +31,9 @@ class coremodel.service.wfs.WFSFeature extends ServiceFeature {
         
         if (xmlNode != null) {
             this.id = xmlNode.attributes["gml:id"];
+			if (this.id==undefined || this.id==null){				
+				this.id = xmlNode.attributes["fid"];
+			}
             this.values = new Array();
             
             var properties:Array = serviceLayer.getServiceProperties();

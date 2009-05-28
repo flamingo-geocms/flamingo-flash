@@ -2,6 +2,7 @@
 * This file is part of Flamingo MapComponents.
 * Author: Michiel J. van Heek.
 * IDgis bv
+* Changes by author: Maurits Kelder, B3partners bv
  -----------------------------------------------------------------------------*/
 import geometrymodel.*;
 import gismodel.GIS;
@@ -17,6 +18,7 @@ class geometrymodel.Geometry {
     
     var geometryEventDispatcher:GeometryEventDispatcher = null;
     private var eventComp:AbstractComponent = null;
+	private var parent:Geometry = null;
     
     function Geometry() {
         geometryEventDispatcher = new GeometryEventDispatcher();
@@ -25,18 +27,40 @@ class geometrymodel.Geometry {
    	function addGeometryListener(geometryListener:GeometryListener){
 		geometryEventDispatcher.addGeometryListener(geometryListener);
 	}
-      
+	
+	function removeGeometryListener(geometryListener:GeometryListener){
+		geometryEventDispatcher.removeGeometryListener(geometryListener);
+	}
+     
+	function setParent(parent:Geometry):Void {
+        if (this.parent != parent) {
+            if (parent != null) {
+                this.parent = parent;
+            }
+        }
+    }
+    
+    function getParent():Geometry {
+        return parent;
+    }
+    
+    function getFirstAncestor():Geometry {
+        if (parent == null) {
+            return this;
+        } else {
+            return parent.getFirstAncestor();
+        }
+    }
+	
     function addPoint(point:Point):Void { }
     
     function getChildGeometries():Array { return null; }
     
-    function getPoints():Array { return null; }  
+    function getPoints():Array { return null; }
     
     private function getEndPoint():Point { return null; }
     
     function getCenterPoint():Point { return null; }
-    
-    function getEnvelope():Envelope { return null; }
     
     function clone():Geometry { return null; }
     
@@ -49,6 +73,8 @@ class geometrymodel.Geometry {
 	public function setEventComp(gis : GIS) : Void {
 		this.eventComp = gis;
 	}
+	
+	function toWKT():String{return null;}
 	
 	public function setXYEndPoint(mousePoint : Point, pixel) : Void {
 			var endPoint = this.getEndPoint();

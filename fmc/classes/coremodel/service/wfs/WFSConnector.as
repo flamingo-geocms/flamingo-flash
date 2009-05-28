@@ -1,7 +1,8 @@
-﻿/*-----------------------------------------------------------------------------
+/*-----------------------------------------------------------------------------
 * This file is part of Flamingo MapComponents.
 * Author: Michiel J. van Heek.
 * IDgis bv
+* Changes by author: Maurits Kelder, B3partners bv
  -----------------------------------------------------------------------------*/
 
 import coremodel.service.wfs.*;
@@ -12,18 +13,26 @@ import event.ActionEventListener;
 import gismodel.Property;
 import gismodel.Feature;
 import geometrymodel.Envelope;
+import geometrymodel.Geometry;
+import geometrymodel.Point;
 import tools.XMLTools;
 
 class coremodel.service.wfs.WFSConnector extends ServiceConnector {
-    
+	private var serviceVersion:String="1.1.0";
+	
     function WFSConnector(url:String) {
         super(url);
     }
+	
+	function setServiceVersion(serviceVersion){
+		this.serviceVersion=serviceVersion;
+	}
     
     function performDescribeFeatureType(featureTypeName:String, actionEventListener:ActionEventListener):Void {
         var requestString:String = "";
         
-        requestString += "<wfs:DescribeFeatureType service=\"WFS\" version=\"1.1.0\"\n";
+        //requestString += "<wfs:DescribeFeatureType service=\"WFS\" version=\"1.1.0\"\n";
+        requestString += "<wfs:DescribeFeatureType service=\"WFS\" version=\""+this.serviceVersion+"\"\n";
         requestString += "    xmlns:wfs=\"http://www.opengis.net/wfs\"\n";
         requestString += "    xmlns:ogc=\"http://www.opengis.net/ogc\"\n";
         requestString += "    xmlns:gml=\"http://www.opengis.net/gml\"\n";
@@ -38,7 +47,8 @@ class coremodel.service.wfs.WFSConnector extends ServiceConnector {
         var featureTypeName:String = serviceLayer.getName();
         var requestString:String = "";
         
-        requestString += "<wfs:GetFeature service=\"WFS\" version=\"1.1.0\"";
+		//requestString += "<wfs:GetFeature service=\"WFS\" version=\"1.1.0\"";
+		requestString += "<wfs:GetFeature service=\"WFS\" version=\""+this.serviceVersion+"\"";
         
         if (hitsOnly) {
             requestString += " resultType=\"hits\"";
@@ -55,16 +65,16 @@ class coremodel.service.wfs.WFSConnector extends ServiceConnector {
             if (numFilterElements > 1) {
                 requestString += "      <ogc:And>\n";
             }
-            if (extent != null) {
-                requestString += "        <ogc:BBOX>\n";
-                requestString += "          <ogc:PropertyName>" + serviceLayer.getDefaultGeometryProperty().getName() + "</ogc:PropertyName>\n";
-                requestString += "          <gml:Box srsName=\"urn:ogc:def:crs:EPSG::28992\">\n";
-                requestString += "              <gml:coordinates>" + extent.getMinX() + "," + extent.getMinY() + "\n";
-                requestString += "                  " + extent.getMaxX() + "," + extent.getMaxY() + "</gml:coordinates>\n";
-                requestString += "          </gml:Box>\n";
-                requestString += "        </ogc:BBOX>\n";
-            }
-            if ((whereClauses != null) && (whereClauses.length > 0)) {
+			
+			requestString += "        <ogc:BBOX>\n";
+			requestString += "          <ogc:PropertyName>" + serviceLayer.getDefaultGeometryProperty().getName() + "</ogc:PropertyName>\n";
+			requestString += "          <gml:Box srsName=\"EPSG:28992\">\n";
+			requestString += "              <gml:coordinates>" + extent.getMinX() + "," + extent.getMinY() + "\n";
+			requestString += "                  " + extent.getMaxX() + "," + extent.getMaxY() + "</gml:coordinates>\n";
+			requestString += "          </gml:Box>\n";
+			requestString += "        </ogc:BBOX>\n";            
+			
+			if ((whereClauses != null) && (whereClauses.length > 0)) {
                 var whereClause:WhereClause = null;
                 for (var i:String in whereClauses) {
                     whereClause = WhereClause(whereClauses[i]);
@@ -107,7 +117,8 @@ class coremodel.service.wfs.WFSConnector extends ServiceConnector {
         }
         
         var requestString:String = "";
-        requestString += "<wfs:Transaction service=\"WFS\" version=\"1.1.0\"\n";
+        //requestString += "<wfs:Transaction service=\"WFS\" version=\"1.1.0\"\n";
+		requestString += "<wfs:Transaction service=\"WFS\" version=\""+this.serviceVersion+"\"\n";
         requestString += "  xmlns:wfs=\"http://www.opengis.net/wfs\"\n";
         requestString += "  xmlns:ogc=\"http://www.opengis.net/ogc\"\n";
         requestString += "  xmlns:gml=\"http://www.opengis.net/gml\">\n";

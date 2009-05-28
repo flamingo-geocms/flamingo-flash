@@ -1,7 +1,8 @@
-﻿/*-----------------------------------------------------------------------------
+/*-----------------------------------------------------------------------------
 * This file is part of Flamingo MapComponents.
 * Author: Michiel J. van Heek.
 * IDgis bv
+* Changes by author: Maurits Kelder, B3partners bv
  -----------------------------------------------------------------------------*/
 import geometrymodel.*;
 import event.GeometryListener;
@@ -27,8 +28,6 @@ class event.GeometryEventDispatcher {
     }
 
     function changeGeometry(geometry:Geometry):Void {
-        //trace("GeometryEventDispatcher.changeGeometry()");
-		
         updateListeners(geometryListeners);
         for (var i:Number = 0; i < geometryListeners.length; i++) {
             GeometryListener(geometryListeners[i]).onChangeGeometry(geometry);
@@ -39,6 +38,13 @@ class event.GeometryEventDispatcher {
 		updateListeners(geometryListeners);
         for (var i:Number = 0; i < geometryListeners.length; i++) {
             GeometryListener(geometryListeners[i]).onAddChild(geometry,child);
+        }
+	}
+	
+	public function removeChild(geometry:Geometry,child:Geometry) : Void {
+		updateListeners(geometryListeners);
+        for (var i:Number = 0; i < geometryListeners.length; i++) {
+            GeometryListener(geometryListeners[i]).onRemoveChild(geometry,child);
         }
 	}
 

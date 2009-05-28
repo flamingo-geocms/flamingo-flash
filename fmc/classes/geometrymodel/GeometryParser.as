@@ -2,6 +2,7 @@
 * This file is part of Flamingo MapComponents.
 * Author: Michiel J. van Heek.
 * IDgis bv
+* Changes by author: Maurits Kelder, B3partners bv
  -----------------------------------------------------------------------------*/
 import geometrymodel.*;
 
@@ -9,14 +10,14 @@ import tools.XMLTools;
 
 class geometrymodel.GeometryParser {
     
-    static function parseGeometry(geometryNode:XMLNode):Geometry {
+    static function parseGeometry(geometryNode:XMLNode):Geometry {		
         if ((geometryNode.nodeName != "gml:Point") && (geometryNode.nodeName != "gml:LinearRing")
                                                    && (geometryNode.nodeName != "gml:LineString")
                                                    && (geometryNode.nodeName != "gml:LineStringSegment")
                                                    && (geometryNode.nodeName != "gml:Polygon")
                                                    && (geometryNode.nodeName != "gml:PolygonPatch")) {
             geometryNode = geometryNode.firstChild;
-        }
+        }		
         if ((geometryNode.nodeName != "gml:Point") && (geometryNode.nodeName != "gml:LinearRing")
                                                    && (geometryNode.nodeName != "gml:LineString")
                                                    && (geometryNode.nodeName != "gml:LineStringSegment")
@@ -31,8 +32,8 @@ class geometrymodel.GeometryParser {
                                                    && (geometryNode.nodeName != "gml:PolygonPatch")) {
             _global.flamingo.tracer("Exception in GeometryParser.parseGeometry()");
             return;
-        }
-        
+        }	
+
         var outerBoundaryNode:XMLNode = null;
         var linearRingNode:XMLNode = null;
         var coordinatePairsString:String = null;
@@ -51,6 +52,10 @@ class geometrymodel.GeometryParser {
             if (coordinatePairsString != null) {
                 coordinatesNode = XMLTools.getChild("gml:coordinates", geometryNode);
                 cs = XMLTools.getStringValue("cs", coordinatesNode);
+				if (cs==undefined)
+					cs=",";
+				if (ts==undefined)
+					ts=" ";
                 coordinates = coordinatePairsString.split(cs);
             } else {
                 coordinatePairsString = XMLTools.getStringValue("gml:pos", geometryNode);
@@ -65,6 +70,10 @@ class geometrymodel.GeometryParser {
                 coordinatesNode = XMLTools.getChild("gml:coordinates", geometryNode);
                 cs = XMLTools.getStringValue("cs", coordinatesNode);
                 ts = XMLTools.getStringValue("ts", coordinatesNode);
+				if (cs==undefined)
+					cs=",";
+				if (ts==undefined)
+					ts=" ";
                 coordinatePairs = coordinatePairsString.split(ts);
                 points = new Array();
                 for (var j:Number = 0; j < coordinatePairs.length; j++) {
@@ -97,6 +106,10 @@ class geometrymodel.GeometryParser {
             coordinatesNode = XMLTools.getChild("gml:coordinates", geometryNode);
             cs = XMLTools.getStringValue("cs", coordinatesNode);
             ts = XMLTools.getStringValue("ts", coordinatesNode);
+			if (cs==undefined)
+				cs=",";
+			if (ts==undefined)
+				ts=" ";
             coordinatePairs = coordinatePairsString.split(ts);
             points = new Array();
             for (var j:Number = 0; j < coordinatePairs.length; j++) {
@@ -118,6 +131,9 @@ class geometrymodel.GeometryParser {
             geometry = new LineString(points);
         } else if (geometryNode.nodeName == "gml:Polygon") {
             outerBoundaryNode = XMLTools.getChild("gml:outerBoundaryIs", geometryNode);
+			if (outerBoundaryNode==undefined || outerBoundaryNode==null){
+				outerBoundaryNode= XMLTools.getChild("gml:exterior", geometryNode);
+			}
             linearRingNode = XMLTools.getChild("gml:LinearRing", outerBoundaryNode);
             geometry = new Polygon(LinearRing(parseGeometry(linearRingNode)));
         } else if (geometryNode.nodeName == "gml:PolygonPatch") {
@@ -129,3 +145,4 @@ class geometrymodel.GeometryParser {
     }
     
 }
+

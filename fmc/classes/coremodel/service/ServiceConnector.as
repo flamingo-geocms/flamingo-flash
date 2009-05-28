@@ -1,7 +1,8 @@
-﻿/*-----------------------------------------------------------------------------
+/*-----------------------------------------------------------------------------
 * This file is part of Flamingo MapComponents.
 * Author: Michiel J. van Heek.
 * IDgis bv
+* Changes by author: Maurits Kelder, B3partners bv
  -----------------------------------------------------------------------------*/
 
 import coremodel.service.*;
@@ -50,7 +51,8 @@ class coremodel.service.ServiceConnector {
     function getURL():String {
         return url;
     }
-    
+    function setServiceVersion(serviceVersion):Void {}
+
     function performDescribeFeatureType(featureTypeName:String, actionEventListener:ActionEventListener):Void { }
     
     function performGetFeature(serviceLayer:ServiceLayer, extent:Envelope, whereClauses:Array, notWhereClause:WhereClause, hitsOnly:Boolean, actionEventListener:ActionEventListener):Void { }
@@ -59,6 +61,7 @@ class coremodel.service.ServiceConnector {
     
     function request(url:String, requestString:String, processMethod:Function, serviceLayer:ServiceLayer, actionEventListener:ActionEventListener):Void {
         //_global.flamingo.tracer(url + "\n" + requestString);
+		
 		var env:ServiceConnector = this;
         
         var responseXML:XML = new XML();

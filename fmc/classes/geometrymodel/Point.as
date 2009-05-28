@@ -2,6 +2,7 @@
 * This file is part of Flamingo MapComponents.
 * Author: Michiel J. van Heek.
 * IDgis bv
+* Changes by author: Maurits Kelder, B3partners bv
  -----------------------------------------------------------------------------*/
 import geometrymodel.*;
 
@@ -53,6 +54,14 @@ class geometrymodel.Point extends Geometry implements GeometryListener {
         this.x = x;
         this.y = y;
     }
+	
+	function setX(x:Number):Void {
+        this.x = x;
+    }
+	
+	function setY(y:Number):Void {
+        this.y = y;
+    }
     
     function getX():Number {
         return x;
@@ -61,6 +70,10 @@ class geometrymodel.Point extends Geometry implements GeometryListener {
     function getY():Number {
         return y;
     }
+	
+	function changeGeometry():Void {
+		geometryEventDispatcher.changeGeometry(this);
+	}
     
     function toGMLString():String {
         var gmlString:String = "";
@@ -72,12 +85,20 @@ class geometrymodel.Point extends Geometry implements GeometryListener {
         
         return gmlString;
     }
+	
+	function toWKT():String{		
+		var wktGeom:String="";
+		wktGeom+="POINT(";
+		wktGeom+=(this.getX()+" "+this.getY());
+		wktGeom+=")";		
+		return wktGeom;
+	} 
     
     function toString():String {
         return("Point (" + x + ", " + y + ")");
     }
     
-    function onChangeGeometry(geometry:Geometry):Void{
+	function onChangeGeometry(geometry:Geometry):Void{
     	//parent changed
     	geometryEventDispatcher.changeGeometry(this);
     }
@@ -86,7 +107,10 @@ class geometrymodel.Point extends Geometry implements GeometryListener {
     	//parent changed
     	geometryEventDispatcher.changeGeometry(this);
     }
-    
-    
-    
+	
+	public function onRemoveChild(geometry:Geometry,child:Geometry) : Void {
+		//parent changed
+    	geometryEventDispatcher.changeGeometry(this);
+    }
+	
 }

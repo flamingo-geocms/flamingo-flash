@@ -1,7 +1,8 @@
-﻿/*-----------------------------------------------------------------------------
+/*-----------------------------------------------------------------------------
 * This file is part of Flamingo MapComponents.
 * Author: Michiel J. van Heek.
 * IDgis bv
+* Changes by author: Maurits Kelder, B3partners bv
  -----------------------------------------------------------------------------*/
 import gismodel.*;
 
@@ -19,9 +20,10 @@ class gismodel.Layer extends AbstractComposite implements ActionEventListener {
     private var name:String = null;
     private var title:String = null;
     private var visible:Boolean = false;
+	private var loadFeaturesOnStart=true;
     private var serviceConnector:ServiceConnector = null;
     private var serviceLayer:ServiceLayer = null;
-    private var geometryTypes:Array = null;
+	private var geometryTypes:Array = null;
     private var labelPropertyName:String = null;
     private var ownerPropertyName:String = null;
     private var properties:Array = null;
@@ -59,6 +61,12 @@ class gismodel.Layer extends AbstractComposite implements ActionEventListener {
             } else {
                 visible = false;
             }
+		} else if (name== "loadfeaturesonstart"){
+			if (value.toLowerCase() == "true") {
+                loadFeaturesOnStart = true;
+            } else {
+                loadFeaturesOnStart = false;
+            }
         } else if (name == "wfsurl") {
             serviceConnector = ServiceConnector.getInstance(value);
         } else if (name == "featuretypename") {
@@ -66,9 +74,14 @@ class gismodel.Layer extends AbstractComposite implements ActionEventListener {
                 _global.flamingo.tracer("Exception in gismodel.Layer.setAttribute(featuretypename)\nLayer \"" + this.name + "\" has no service connector and therefore cannot do anything with a service layer.");
                 return;
             }
-            
             serviceConnector.performDescribeFeatureType(value, this);
-        } else if (name == "geometrytypes") {
+		} else if(name== "version"){
+			if (serviceConnector == null) {
+                _global.flamingo.tracer("Exception in gismodel.Layer.setAttribute(featuretypenameselection)\nLayer \"" + this.name + "\" has no service connector and therefore cannot set the version.");
+                return;
+            }
+			serviceConnector.setServiceVersion(value);
+		} else if (name == "geometrytypes") {
             geometryTypes = value.split(",");
         } else if (name == "labelpropertyname") {
             labelPropertyName = value;
@@ -76,7 +89,7 @@ class gismodel.Layer extends AbstractComposite implements ActionEventListener {
             ownerPropertyName = value;
         } else if (name == "roles") {
             roles = value.split(",");
-        }
+		} 
     }
     
     function addComposite(name:String, xmlNode:XMLNode):Void {
@@ -268,7 +281,22 @@ class gismodel.Layer extends AbstractComposite implements ActionEventListener {
             feature = new Feature(this, serviceFeature, id, geometry, null, null);
         } else {                                                                 // serviceFeature != null && geometry == null
             var id:String = serviceFeature.getID();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
             geometry = Geometry(serviceFeature.getValue(serviceLayer.getDefaultGeometryProperty().getName()));
+
             var values:Array = new Array();
             for (var i:Number = 0; i < properties.length; i++) {
                 values.push(serviceFeature.getValue(Property(properties[i]).getName()));
@@ -277,7 +305,7 @@ class gismodel.Layer extends AbstractComposite implements ActionEventListener {
         }
         features.push(feature);
 
-        stateEventDispatcher.dispatchEvent(new AddRemoveEvent(this, "Layer", "features", new Array(feature), null, gis));
+        stateEventDispatcher.dispatchEvent(new AddRemoveEvent(this, "Layer", "features", new Array(feature), null));
         
         if (postAction) {
             gis.setActiveFeature(feature);
@@ -286,6 +314,9 @@ class gismodel.Layer extends AbstractComposite implements ActionEventListener {
                 transaction.addOperation(new Insert(serviceFeature));
             }
         }
+		if (!loadFeaturesOnStart){
+			gis.setActiveFeature(feature);
+		}
     }
     
     function removeFeatures(features:Array, addOperation:Boolean):Void {
@@ -298,7 +329,7 @@ class gismodel.Layer extends AbstractComposite implements ActionEventListener {
             doRemoveFeature(Feature(features[i]), addOperation);
         }
         
-        stateEventDispatcher.dispatchEvent(new AddRemoveEvent(this, "Layer", "features", null, features, gis));
+        stateEventDispatcher.dispatchEvent(new AddRemoveEvent(this, "Layer", "features", null, features));
     }
     
     function removeFeature(feature:Feature, addOperation:Boolean):Void {
@@ -309,7 +340,7 @@ class gismodel.Layer extends AbstractComposite implements ActionEventListener {
         
         doRemoveFeature(feature, addOperation);
         
-        stateEventDispatcher.dispatchEvent(new AddRemoveEvent(this, "Layer", "features", null, new Array(feature), gis));
+        stateEventDispatcher.dispatchEvent(new AddRemoveEvent(this, "Layer", "features", null, new Array(feature)));
     }
     
     private function doRemoveFeature(feature:Feature, addOperation:Boolean):Void { // Removes the given feature, without dispatching an event.
@@ -332,7 +363,7 @@ class gismodel.Layer extends AbstractComposite implements ActionEventListener {
             }
         }
     }
-    
+    		
     function getFeatures():Array {
         return features.concat();
     }
@@ -356,6 +387,12 @@ class gismodel.Layer extends AbstractComposite implements ActionEventListener {
         }
         return -1;
     }
+    
+	function getFeatureWithGeometry(env:geometrymodel.Envelope):Void{
+		if (serviceConnector !=null){
+			serviceConnector.performGetFeature(serviceLayer, env, whereClauses, null, false, this);			
+		}
+	}
     
     function addOperation(operation:Operation):Void {
         transaction.addOperation(operation);
@@ -384,10 +421,11 @@ class gismodel.Layer extends AbstractComposite implements ActionEventListener {
     function onActionEvent(actionEvent:ActionEvent):Void {
         var sourceClassName:String = actionEvent.getSourceClassName();
         var actionType:Number = actionEvent.getActionType();
-        if (sourceClassName + "_" + actionType == "ServiceConnector_" + ActionEvent.LOAD) {
+		if (sourceClassName + "_" + actionType == "ServiceConnector_" + ActionEvent.LOAD) {
             var exceptionMessage:String = actionEvent["exceptionMessage"];
             var serviceLayer:ServiceLayer = ServiceLayer(actionEvent["serviceLayer"]);
-            var serviceFeatures:Array = actionEvent["features"];
+		
+			var serviceFeatures:Array = actionEvent["features"];
             var transactionResponse:TransactionResponse = TransactionResponse(actionEvent["transactionResponse"]);
             if (exceptionMessage != null) {
                 _global.flamingo.showError("Fout bij het opslaan", exceptionMessage, 0);
@@ -396,7 +434,9 @@ class gismodel.Layer extends AbstractComposite implements ActionEventListener {
             } else if (serviceLayer != null) {
                 this.serviceLayer = serviceLayer;
                 serverReady = true;
-				serviceConnector.performGetFeature(serviceLayer, null, whereClauses, null, false, this);
+				if (loadFeaturesOnStart){
+	                serviceConnector.performGetFeature(serviceLayer, null, whereClauses, null, false, this);
+				}
             } else if (serviceFeatures != null) {
                 for (var i:Number = 0; i < serviceFeatures.length; i++) {
                     addFeature(ServiceFeature(serviceFeatures[i]));

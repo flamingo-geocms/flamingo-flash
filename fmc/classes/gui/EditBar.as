@@ -1,7 +1,8 @@
-﻿/*-----------------------------------------------------------------------------
+/*-----------------------------------------------------------------------------
 * This file is part of Flamingo MapComponents.
 * Author: Michiel J. van Heek.
 * IDgis bv
+* Changes by author: Maurits Kelder, B3partners bv
  -----------------------------------------------------------------------------*/
 
 
@@ -52,10 +53,22 @@ class gui.EditBar extends AbstractContainer implements ActionEventListener {
     }
     
     function onActionEvent(actionEvent:ActionEvent):Void {
-        var sourceClassName:String = actionEvent.getSourceClassName();
+		var sourceClassName:String = actionEvent.getSourceClassName();
         var actionType:Number = actionEvent.getActionType();
         if (sourceClassName + "_" + actionType == "Button_" + ActionEvent.CLICK) {
-            gis.commit();
+            var buttonName:String = actionEvent.getSource()._name;
+			if (buttonName.indexOf("RemoveFeature") > -1) {
+				var feature:gismodel.Feature = gis.getActiveFeature();
+                if (feature != null) {
+                    feature.getLayer().removeFeature(feature, true);
+                }
+			}
+			else if (buttonName.indexOf("SelectFeature") > -1) {
+				gis.setSelectedEditTool("selectFeature");
+			}
+			else if (buttonName.indexOf("CommitButton") > -1) {
+				gis.commit();
+			}
         } else if (sourceClassName + "_" + actionType == "Confirmation_" + ActionEvent.CLICK) {
             var feature:gismodel.Feature = gis.getActiveFeature();
             if (feature != null) {
@@ -65,3 +78,4 @@ class gui.EditBar extends AbstractContainer implements ActionEventListener {
     }
     
 }
+

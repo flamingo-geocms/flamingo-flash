@@ -2,6 +2,7 @@
 * This file is part of Flamingo MapComponents.
 * Author: Michiel J. van Heek.
 * IDgis bv
+* Changes by author: Maurits Kelder, B3partners bv
  -----------------------------------------------------------------------------*/
 import gismodel.*;
 
@@ -209,6 +210,31 @@ class gismodel.Feature {
         }
         stateEventDispatcher.removeEventListener(stateEventListener, sourceClassName, actionType, propertyName);
     }
+    /**
+	returns the feature as object. 
+	object["id"]= the id
+	object["wktgeom"]= the geometry in wkt text
+	object["<propertyname without prefix and ':'>"]= the property value
+	*/
+    function toObject():Object{
+    	var returnValue:Object = new Object();
+    	returnValue["id"]=getID();
+    	if (getGeometry()!=null){    	
+		returnValue["wktgeom"]=(getGeometry().toWKT());	
+    	}
+    	var properties:Array = layer.getProperties();
+    	for (var i:Number = 0; i < properties.length; i++) {
+    		var property:Property = Property(properties[i]);
+    		//var propertyIndex:Number = layer.getPropertyIndex(property.getName());
+			var nameWithoutPrefix:String=property.getName();
+			if (nameWithoutPrefix.indexOf(":")>=0){
+				nameWithoutPrefix=nameWithoutPrefix.substr(nameWithoutPrefix.indexOf(":")+1);
+			}
+    		returnValue[nameWithoutPrefix]=getValue(property.getName());		
+    	}
+    	return returnValue;
+    }
+	
     
     function toString():String {
         return "Feature(" + id + ")";

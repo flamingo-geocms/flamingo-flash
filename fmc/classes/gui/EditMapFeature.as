@@ -2,6 +2,7 @@
 * This file is part of Flamingo MapComponents.
 * Author: Michiel J. van Heek.
 * IDgis bv
+* Changes by author: Maurits Kelder, B3partners bv
  -----------------------------------------------------------------------------*/
 
 import gui.*
@@ -44,7 +45,7 @@ class gui.EditMapFeature extends GeometryPane implements StateEventListener {
         var propertyName:String = stateEvent.getPropertyName();
         if (sourceClassName + "_" + actionType + "_" + propertyName == "GIS_" + StateEvent.CHANGE + "_activeFeature") {
             var editMapGeometry:EditMapGeometry = EditMapGeometry(editMapGeometries[0]);
-            if (feature == gis.getActiveFeature()) {
+			if (feature == gis.getActiveFeature()) {
                 editMapGeometry.setType(EditMapGeometry.ACTIVE);
             } else {
                 editMapGeometry.setType(EditMapGeometry.NORMAL);
@@ -61,7 +62,10 @@ class gui.EditMapFeature extends GeometryPane implements StateEventListener {
     
     function onPress():Void {
         if (gis.getActiveFeature() == feature) {
-            gis.setActiveFeature(null);
+			//Allow editing of the current active feature if the geometry is editable.
+			if (!gis.getEditMapEditable()){
+				gis.setActiveFeature(null);
+			}
         } else {
             gis.setActiveFeature(feature);
         }

@@ -2,6 +2,7 @@
 * This file is part of Flamingo MapComponents.
 * Author: Michiel J. van Heek.
 * IDgis bv
+* Changes by author: Maurits Kelder, B3partners bv
  -----------------------------------------------------------------------------*/
 
 import coregui.*;
@@ -56,13 +57,16 @@ class coregui.ButtonBar extends MovieClip {
     private function addButton(buttonConfig:ButtonConfig, i:Number):Void {
         var symbolID:String = buttonConfig.getGraphicURL();
         var initObject:Object = new Object();
+		initObject["_width"] = buttonWidth;
+		initObject["_height"] = buttonHeight;
         if (orientation == HORIZONTAL) {
             initObject["_x"] = i * (buttonWidth + spacing);
         } else { // VERTICAL
             initObject["_y"] = i * (buttonHeight + spacing);
         }
+		initObject["id"] = i;
         initObject["tooltipText"] = buttonConfig.getToolTipText();
-        initObject["actionEventListener"] = buttonConfig.getActionEventListener();
+		initObject["actionEventListener"] = buttonConfig.getActionEventListener();
         initObject["url"] = buttonConfig.getURL();
         initObject["windowName"] = buttonConfig.getWindowName();
         buttons.push(attachMovie(symbolID, "m" + symbolID + i, i + 1, initObject));

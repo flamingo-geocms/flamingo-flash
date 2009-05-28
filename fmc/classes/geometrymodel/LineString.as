@@ -2,6 +2,7 @@
 * This file is part of Flamingo MapComponents.
 * Author: Michiel J. van Heek.
 * IDgis bv
+* Changes by author: Maurits Kelder, B3partners bv
  -----------------------------------------------------------------------------*/
 import geometrymodel.*;
 
@@ -21,27 +22,141 @@ class geometrymodel.LineString extends Geometry implements GeometryListener {
         this.points = points;
         for (var i:String in points) {
             addGeometryListener(points[i]);
+			points[i].setParent(this);
         }
     }
     
     function addPoint(point:Point):Void {
  
-        if(!(this instanceof LinearRing)){
+        if (!isClosed()) {
+            points.push(point);
+        } else if(!(this instanceof LinearRing)){
         	if (points.length == 2 && (points[0] == points[1])) {
             	points[1] = point;
         	}    
         	else {
             	points.push(point);
         	} 	
-        } else { // ((isClosed()) && ((points.length > 2) || (this instanceof LinearRing)))
+        } else {
             points[points.length - 1] = point;
             points.push(points[0]);
         }
+		
+		point.setParent(this);
+		
         addGeometryListener(point);
         geometryEventDispatcher.addChild(Geometry(this),Geometry(point));
         
     }
-    
+	
+	function insertPoint(point:Point, insertIndex:Number):Void {
+ 
+        if(!(this instanceof LinearRing)){
+        	if (points.length == 2 && (points[0] == points[1])) {
+            	points[1] = point;
+        	}    
+        	else {
+				points.splice(insertIndex, 0, point);
+        	} 	
+        } else {
+            points.splice(insertIndex, 0, point);
+        }
+		
+		point.setParent(this);
+		
+        addGeometryListener(point);
+        geometryEventDispatcher.addChild(Geometry(this),Geometry(point));
+		geometryEventDispatcher.changeGeometry(this);
+        
+    }
+	
+	function removePoint(point:Point):Void {
+		if ((points.length == 3) && (isClosed())) {
+            // Point cannot be removed. This is a non-exceptional precondition.
+            return;
+        }
+        
+        if (points.length == 2) {
+            if (isClosed()) {
+                //Point cannot be removed. This is a non-exceptional precondition.
+                return;
+            } else {
+                var otherPoint:Point = null;
+                var pointIndex:Number = -1;
+                if (point == points[0]) {
+                    otherPoint = Point(points[1]);
+                    pointIndex = 0;
+                } else if (point == points[1]) {
+                    otherPoint = Point(points[0]);
+                    pointIndex = 1;
+                }
+                points[pointIndex] = new Point(otherPoint.getX(), otherPoint.getY());
+            }
+        } else {
+            if ((isClosed()) && (point == points[0])) {
+                points[0] = points[1];
+                points[points.length - 1] = points[1];
+                points.splice(1, 1);
+            } else {
+                for (var i:Number = 0; i < points.length; i++) {
+                    if (points[i] == point) {
+                        points.splice(i, 1);
+                        break;
+                    }
+                }
+            }
+        }
+		
+        point.setParent(null);
+        removeGeometryListener(point);
+  		point = null;
+		geometryEventDispatcher.changeGeometry(this);
+        
+    }
+	
+	function removePointNr(pointNr:Number):Void {
+		var point:Point = points[pointNr];
+		if ((points.length == 3) && (isClosed())) {
+            // Point cannot be removed. This is a non-exceptional precondition.
+            return;
+        }
+        
+        if (points.length == 2) {
+            if (isClosed()) {
+                //Point cannot be removed. This is a non-exceptional precondition.
+                return;
+            } else {
+                var otherPoint:Point = null;
+                var pointIndex:Number = -1;
+                if (point == points[0]) {
+                    otherPoint = Point(points[1]);
+                    pointIndex = 0;
+                } else if (point == points[1]) {
+                    otherPoint = Point(points[0]);
+                    pointIndex = 1;
+                }
+                points[pointIndex] = new Point(otherPoint.getX(), otherPoint.getY());
+            }
+        } else {
+            if ((isClosed()) && (point == points[0])) {
+                points[0] = points[1];
+                points[points.length - 1] = points[1];
+                points.splice(1, 1);
+            } else {
+                if (points[pointNr] instanceof Point) {
+					points.splice(pointNr, 1);
+					break;
+                }
+            }
+        }
+
+        point.setParent(null);
+        removeGeometryListener(point);
+        point = null;
+		geometryEventDispatcher.changeGeometry(this);
+        
+    }
+	    
 	function getChildGeometries():Array {
         var childGeometries:Array = points.concat();
         if (isClosed()) {
@@ -108,6 +223,25 @@ class geometrymodel.LineString extends Geometry implements GeometryListener {
         }
     }
     
+	function getLength():Number {
+        var point:Point = null;
+        var nextPoint:Point = null;
+        var dx:Number = -1;
+        var dy:Number = -1;
+        var length:Number = 0;
+        
+        for (var i:Number = 0; i < points.length - 1; i++) {
+            point = Point(points[i]);
+            nextPoint = Point(points[i + 1]);
+            dx = nextPoint.getX() - point.getX();
+            dy = nextPoint.getY() - point.getY();
+            length += Math.sqrt((dx * dx) + (dy * dy));
+        }
+        
+        return length;
+    }
+    
+	
     function toGMLString():String {
         var point:Point = null;
         
@@ -143,5 +277,10 @@ class geometrymodel.LineString extends Geometry implements GeometryListener {
 	public function onAddChild(geometry:Geometry,child:Geometry):Void {
 		//parent changed
     	geometryEventDispatcher.changeGeometry(this);
+	}
+	
+	public function onRemoveChild(geometry:Geometry,child:Geometry) : Void {
+		//parent changed
+		geometryEventDispatcher.changeGeometry(this);		
 	}
 }

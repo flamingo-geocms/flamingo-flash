@@ -1,7 +1,8 @@
-﻿/*-----------------------------------------------------------------------------
+/*-----------------------------------------------------------------------------
 * This file is part of Flamingo MapComponents.
 * Author: Michiel J. van Heek.
 * IDgis bv
+* Changes by author: Maurits Kelder, B3partners bv
  -----------------------------------------------------------------------------*/
 import gui.*
 
@@ -37,9 +38,9 @@ class gui.GeometryPane extends MovieClip {
     
     private function addEditMapGeometry(geometry:Geometry, type:Number, labelText:String, 
     									depth:Number, isChild:Boolean):Void {
-        
         var initObject:Object = new Object();
 		initObject["map"] = map;
+		initObject["gis"] = gis;
         initObject["_geometry"] = geometry;
         initObject["type"] = type;
         initObject["labelText"] = labelText;
@@ -47,6 +48,7 @@ class gui.GeometryPane extends MovieClip {
         initObject["width"] = width;
         initObject["height"] = height;
         initObject["isChild"] = isChild;
+		initObject["editMapEditable"] = gis.getEditMapEditable();
         if (geometry instanceof Point) {
             editMapGeometries.push(attachMovie("EditMapPoint", "mEditMapPoint" + depth, depth, initObject));
         } else if (geometry instanceof LineString) {
@@ -62,6 +64,16 @@ class gui.GeometryPane extends MovieClip {
         for (var i:String in editMapGeometries) {
             EditMapGeometry(editMapGeometries[i]).setType(type);
         }
+    }
+	
+	private function  removeEditMapGeometry(geometry:Geometry, child:Geometry) {
+	}
+	
+	private function removeEditMapGeometries():Void {
+        for (var i:String in editMapGeometries) {
+            EditMapGeometry(editMapGeometries[i]).remove();
+        }
+        editMapGeometries = new Array();
     }
     
 }
