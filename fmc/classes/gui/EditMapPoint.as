@@ -1,4 +1,4 @@
-/*-----------------------------------------------------------------------------
+﻿/*-----------------------------------------------------------------------------
 * This file is part of Flamingo MapComponents.
 * Author: Michiel J. van Heek.
 * IDgis bv
@@ -282,10 +282,6 @@ class gui.EditMapPoint extends EditMapGeometry {
 		}
     }
 	
-	private function addChildGeometries():Void {
-    	//do nothing for point
-	}
-			
 	private function pixel2Point(pixel:Pixel):geometrymodel.Point {
 
 		var extent:Object = map.getCurrentExtent();

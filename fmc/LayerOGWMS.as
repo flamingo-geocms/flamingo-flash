@@ -24,7 +24,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 * @file LayerOGWMS.swf (compiled layer, needed for publication on internet)
 * @file LayerOGWMS.xml (configurationfile for layer, needed for publication on internet)
 */
-import roo.FilterLayerLayerOGWMSAdapter;
+//import roo.FilterLayerLayerOGWMSAdapter;
 
 var version:String = "2.0";
 //---------------------------------

@@ -1,4 +1,4 @@
-/*-----------------------------------------------------------------------------
+﻿/*-----------------------------------------------------------------------------
 * This file is part of Flamingo MapComponents.
 * Author: Michiel J. van Heek.
 * IDgis bv
@@ -62,6 +62,8 @@ class geometrymodel.Geometry {
     
     function getCenterPoint():Point { return null; }
     
+	function getEnvelope():Envelope { return null; }
+	
     function clone():Geometry { return null; }
     
     function toGML():XML {
