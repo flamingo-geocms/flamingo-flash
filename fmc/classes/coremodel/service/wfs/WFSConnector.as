@@ -19,6 +19,7 @@ import tools.XMLTools;
 
 class coremodel.service.wfs.WFSConnector extends ServiceConnector {
 	private var serviceVersion:String="1.1.0";
+	private var srsName:String = "urn:ogc:def:crs:EPSG::28992";
 	
     function WFSConnector(url:String) {
         super(url);
@@ -26,6 +27,10 @@ class coremodel.service.wfs.WFSConnector extends ServiceConnector {
 	
 	function setServiceVersion(serviceVersion){
 		this.serviceVersion=serviceVersion;
+	}
+	
+	function setSrsName(srsName){
+		this.srsName=srsName;
 	}
     
     function performDescribeFeatureType(featureTypeName:String, actionEventListener:ActionEventListener):Void {
@@ -68,7 +73,7 @@ class coremodel.service.wfs.WFSConnector extends ServiceConnector {
 			
 			requestString += "        <ogc:BBOX>\n";
 			requestString += "          <ogc:PropertyName>" + serviceLayer.getDefaultGeometryProperty().getName() + "</ogc:PropertyName>\n";
-			requestString += "          <gml:Box srsName=\"EPSG:28992\">\n";
+			requestString += "          <gml:Box srsName=\""+this.srsName+"\">\n";
 			requestString += "              <gml:coordinates>" + extent.getMinX() + "," + extent.getMinY() + "\n";
 			requestString += "                  " + extent.getMaxX() + "," + extent.getMaxY() + "</gml:coordinates>\n";
 			requestString += "          </gml:Box>\n";

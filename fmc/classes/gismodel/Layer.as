@@ -81,6 +81,12 @@ class gismodel.Layer extends AbstractComposite implements ActionEventListener {
                 return;
             }
 			serviceConnector.setServiceVersion(value);
+		} else if(name== "srsname"){
+			if (serviceConnector == null) {
+                _global.flamingo.tracer("Exception in gismodel.Layer.setAttribute(featuretypenameselection)\nLayer \"" + this.name + "\" has no service connector and therefore cannot set the srsName.");
+                return;
+            }
+			serviceConnector.setSrsName(value);	
 		} else if (name == "geometrytypes") {
             geometryTypes = value.split(",");
         } else if (name == "labelpropertyname") {
@@ -281,20 +287,6 @@ class gismodel.Layer extends AbstractComposite implements ActionEventListener {
             feature = new Feature(this, serviceFeature, id, geometry, null, null);
         } else {                                                                 // serviceFeature != null && geometry == null
             var id:String = serviceFeature.getID();
-
-
-
-
-
-
-
-
-
-
-
-
-
-
             geometry = Geometry(serviceFeature.getValue(serviceLayer.getDefaultGeometryProperty().getName()));
 
             var values:Array = new Array();

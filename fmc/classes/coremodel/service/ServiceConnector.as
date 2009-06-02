@@ -52,6 +52,8 @@ class coremodel.service.ServiceConnector {
         return url;
     }
     function setServiceVersion(serviceVersion):Void {}
+	
+	function setSrsName(srsName):Void {}
 
     function performDescribeFeatureType(featureTypeName:String, actionEventListener:ActionEventListener):Void { }
     
