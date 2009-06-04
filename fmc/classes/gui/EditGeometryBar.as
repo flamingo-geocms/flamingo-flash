@@ -34,7 +34,6 @@ class gui.EditGeometryBar extends AbstractComponent implements StateEventListene
     private function drawButtonBar():Void {
         var buttonConfigs:Array = new Array();
         buttonConfigs.push(new ButtonConfig("EditVertexGraphic", "Verwijder punt", this, null, null));
-        buttonConfigs.push(new ButtonConfig("ColorPickerGraphic", "kleur kiezen", this, null, null));
         var initObject:Object = new Object();
         initObject["buttonWidth"] = 20;
         initObject["buttonHeight"] = 20;
