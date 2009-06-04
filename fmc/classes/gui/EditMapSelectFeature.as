@@ -58,7 +58,7 @@ class gui.EditMapSelectFeature extends MovieClip {
 		var pointMin:geometrymodel.Point = pixel2Point(new Pixel(_xmouse-5, _ymouse-5));
 		var pointMax:geometrymodel.Point = pixel2Point(new Pixel(_xmouse+5, _ymouse+5));
 		
-		var env:geometrymodel.Envelope = new geometrymodel.Envelope(pointMin.getX() - 100,pointMin.getY() - 100,pointMax.getX() + 100,pointMax.getY() + 100);
+		var env:geometrymodel.Envelope = new geometrymodel.Envelope(pointMin.getX(), pointMin.getY(), pointMax.getX(), pointMax.getY());
 		gis.doGetFeatures(env);
 		gis.setSelectedEditTool(null);
     }            
