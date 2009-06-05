@@ -25,8 +25,8 @@ class gui.EditInfoPanel extends AbstractComponent implements StateEventListener 
         this._visible = false;
 		
 		gis.addEventListener(this, "GIS", StateEvent.CHANGE, "activeFeature");
-		gis.addEventListener(this, "GIS", StateEvent.CHANGE, "updateEditInfoPanel");
-
+		gis.addEventListener(this, "GIS", StateEvent.CHANGE, "geometryUpdate");
+		gis.addEventListener(this, "GIS", StateEvent.CHANGE, "geometryDragUpdate");
 		var layers:Array = gis.getLayers();
         var layer:Layer = null;
         for (var i:Number = 0; i < layers.length; i++) {
@@ -50,7 +50,7 @@ class gui.EditInfoPanel extends AbstractComponent implements StateEventListener 
     
 	function remove():Void { // This method is an alternative to the default MovieClip.removeMovieClip. Also unsubscribes as event listener. The event method MovieClip.onUnload cannot be used, because it works buggy.
         gis.removeEventListener(this, "GIS", StateEvent.CHANGE, "activeFeature");
-		gis.removeEventListener(this, "GIS", StateEvent.CHANGE, "updateEditInfoPanel");
+		gis.removeEventListener(this, "GIS", StateEvent.CHANGE, "geometryUpdate");
         this.removeMovieClip(); // Keyword "this" is necessary here, because of the global function removeMovieClip.
     }
     
@@ -60,7 +60,8 @@ class gui.EditInfoPanel extends AbstractComponent implements StateEventListener 
         var actionType:Number = stateEvent.getActionType();
         var propertyName:String = stateEvent.getPropertyName();
 		
-		if (sourceClassName + "_" + actionType + "_" + propertyName == "GIS_" + StateEvent.CHANGE + "_updateEditInfoPanel") {
+		if (sourceClassName + "_" + actionType + "_" + propertyName == "GIS_" + StateEvent.CHANGE + "_geometryUpdate"
+			|| sourceClassName + "_" + actionType + "_" + propertyName == "GIS_" + StateEvent.CHANGE + "_geometryDragUpdate") {
             if (geometry instanceof Polygon) {
 				var area:Number = Polygon(geometry).getArea(false);
 				if (area == null) {

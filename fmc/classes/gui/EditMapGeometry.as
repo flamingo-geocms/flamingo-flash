@@ -1,4 +1,4 @@
-/*-----------------------------------------------------------------------------
+﻿/*-----------------------------------------------------------------------------
 * This file is part of Flamingo MapComponents.
 * Author: Michiel J. van Heek.
 * IDgis bv
@@ -135,7 +135,7 @@ class gui.EditMapGeometry extends GeometryPane implements GeometryListener {
         setLabel();
 		
 		if (this.type == ACTIVE && _geometry.getFirstAncestor() == _geometry) { //surpress updating for child geometries. Saves cpu resources.
-			gis.updateEditInfoPanel();
+			gis.geometryDragUpdate();
 		}
 		
     }

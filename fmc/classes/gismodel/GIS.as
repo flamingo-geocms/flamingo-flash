@@ -354,7 +354,8 @@ class gismodel.GIS extends AbstractComponent {
              && (sourceClassName + "_" + actionType + "_" + propertyName != "GIS_" + StateEvent.CHANGE + "_createGeometry")
 			 && (sourceClassName + "_" + actionType + "_" + propertyName != "GIS_" + StateEvent.CHANGE + "_editTool")
 			 && (sourceClassName + "_" + actionType + "_" + propertyName != "GIS_" + StateEvent.CHANGE + "_buttonUpdate")
-			 && (sourceClassName + "_" + actionType + "_" + propertyName != "GIS_" + StateEvent.CHANGE + "_updateEditInfoPanel")
+			 && (sourceClassName + "_" + actionType + "_" + propertyName != "GIS_" + StateEvent.CHANGE + "_geometryUpdate")
+			 && (sourceClassName + "_" + actionType + "_" + propertyName != "GIS_" + StateEvent.CHANGE + "_geometryDragUpdate")
            ) {
             _global.flamingo.tracer("Exception in gismodel.GIS.addEventListener(" + sourceClassName + ", " + propertyName + ")");
             return;
@@ -370,7 +371,8 @@ class gismodel.GIS extends AbstractComponent {
              && (sourceClassName + "_" + actionType + "_" + propertyName != "GIS_" + StateEvent.CHANGE + "_createGeometry")
 			 && (sourceClassName + "_" + actionType + "_" + propertyName != "GIS_" + StateEvent.CHANGE + "_editTool")
 			 && (sourceClassName + "_" + actionType + "_" + propertyName != "GIS_" + StateEvent.CHANGE + "_buttonUpdate")
-			 && (sourceClassName + "_" + actionType + "_" + propertyName != "GIS_" + StateEvent.CHANGE + "_updateEditInfoPanel")			 
+			 && (sourceClassName + "_" + actionType + "_" + propertyName != "GIS_" + StateEvent.CHANGE + "_geometryUpdate")
+			 && (sourceClassName + "_" + actionType + "_" + propertyName != "GIS_" + StateEvent.CHANGE + "_geometryDragUpdate")
            ) {
             _global.flamingo.tracer("Exception in gismodel.GIS.removeEventListener(" + sourceClassName + ", " + propertyName + ")");
             return;
@@ -403,8 +405,12 @@ class gismodel.GIS extends AbstractComponent {
 		return editRemoveVertexFlag;
 	}
 	
-	function updateEditInfoPanel():Void {
-		stateEventDispatcher.dispatchEvent(new StateEvent(this, "GIS", StateEvent.CHANGE, "updateEditInfoPanel",this));
+	function geometryUpdate():Void {
+		stateEventDispatcher.dispatchEvent(new StateEvent(this, "GIS", StateEvent.CHANGE, "geometryUpdate",this));
+	}
+	
+	function geometryDragUpdate():Void {
+		stateEventDispatcher.dispatchEvent(new StateEvent(this, "GIS", StateEvent.CHANGE, "geometryDragUpdate",this));
 	}
 	
 	function doGetFeatures(env:geometrymodel.Envelope){		

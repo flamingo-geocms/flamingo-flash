@@ -241,8 +241,30 @@ class geometrymodel.LineString extends Geometry implements GeometryListener {
         return length;
     }
     
+	function toWKT():String{
+		var wktGeom:String="";
+		wktGeom+="LINESTRING(";		
+		wktGeom+=toWKTPart();
+		wktGeom+=")";
+		return wktGeom;
+	}
 	
-    function toGMLString():String {
+	function toWKTPart():String{
+		var wktGeom:String="";
+        var point:Point = null;
+		wktGeom+="(";	
+		for (var i:Number = 0; i < points.length; i++) {
+			if (i!=0){
+				wktGeom+=",";
+			}
+            point = Point(points[i]);            
+            wktGeom += (point.getX() + " " + point.getY());
+		}
+		wktGeom+=")";
+		return wktGeom;
+	}
+	
+	function toGMLString():String {
         var point:Point = null;
         
         var gmlString:String = "";

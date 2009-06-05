@@ -85,9 +85,10 @@ class gui.EditMapCreateGeometry extends MovieClip {
 				LineString(geometry).removePoint(LineString(geometry).getEndPoint());
 			}
 			
-			_global.flamingo.raiseEvent(this._parent._parent,"onGeometryDrawFinished",this._parent._parent,gis.getActiveFeature().getGeometry().toWKT());			
-			
 			if (geometry instanceof LineString && gis.getCreatePointAtDistance()) {	
+				//store path length for event
+				var pathLength:Number = LineString(geometry).getLength();
+				
 				//remove the linestring
 				createGeometry.getLayer().removeFeature(gis.getActiveFeature(), true);
 
@@ -97,13 +98,14 @@ class gui.EditMapCreateGeometry extends MovieClip {
 				
 				var point:geometrymodel.Point = pixel2Point(new Pixel(_xmouse, _ymouse));
 				geometry = createGeometry.getGeometryFactory().createGeometry(point);
-				createGeometry.getLayer().addFeature(geometry, true);
+				createGeometry.getLayer().addFeature(geometry, true);				
 				
-				gis.setCreateGeometry(null);
-			} else {
-				gis.setCreateGeometry(null);				
+				//raise event onCreatePointAtDistanceFinished
+				_global.flamingo.raiseEvent(this._parent._parent,"onCreatePointAtDistanceFinished",this._parent._parent,gis.getActiveFeature().getGeometry().toWKT(),pathLength);
 			}
-		
+			
+			_global.flamingo.raiseEvent(this._parent._parent,"onGeometryDrawFinished",this._parent._parent,gis.getActiveFeature().getGeometry().toWKT());			
+			gis.setCreateGeometry(null);
         } else {	
 			var pixel:Pixel = new Pixel(_xmouse, _ymouse);
             var point:geometrymodel.Point = pixel2Point(pixel);
@@ -118,6 +120,9 @@ class gui.EditMapCreateGeometry extends MovieClip {
             } else {
                 geometry.addPoint(point);
             }
+			//raise event onGeometryDrawUpdate
+			//_global.flamingo.raiseEvent(this._parent._parent,"onGeometryDrawUpdate",this._parent._parent,gis.getActiveFeature().getGeometry().toWKT());
+			gis.geometryUpdate();
         }
     }
     

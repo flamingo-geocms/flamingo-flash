@@ -1,4 +1,4 @@
-/*-----------------------------------------------------------------------------
+﻿/*-----------------------------------------------------------------------------
 * This file is part of Flamingo MapComponents.
 * Author: Michiel J. van Heek.
 * IDgis bv
@@ -48,6 +48,9 @@ import event.*;
 import gismodel.GIS;
 import gismodel.Layer;
 import gismodel.CreateGeometry;
+import geometrymodel.*;
+import gismodel.Feature;
+
 import core.AbstractComponent;
 
 class gui.EditMap extends AbstractComponent implements StateEventListener {
@@ -98,6 +101,8 @@ class gui.EditMap extends AbstractComponent implements StateEventListener {
         gis.addEventListener(this, "GIS", StateEvent.CHANGE, "createGeometry");		
 		gis.addEventListener(this, "GIS", StateEvent.CHANGE, "activeFeature");
 		gis.addEventListener(this, "GIS", StateEvent.CHANGE, "editTool");
+		gis.addEventListener(this, "GIS", StateEvent.CHANGE, "geometryUpdate");
+		gis.addEventListener(this, "GIS", StateEvent.CHANGE, "geometryDragUpdate");
 		_global.flamingo.addListener(this,tools,this);
 		_global.flamingo.addListener(this,map,this);
         var layers:Array = gis.getLayers();
@@ -202,16 +207,147 @@ class gui.EditMap extends AbstractComponent implements StateEventListener {
             if (gis.getActiveFeature()!=null){
                 _global.flamingo.raiseEvent(this,"onActiveFeatureChange",this,gis.getActiveFeature().toObject());
             }
+		} else if (sourceClassName + "_" + actionType + "_" + propertyName == "GIS_" + StateEvent.CHANGE + "_geometryUpdate") {
+			if (gis.getActiveFeature()!=null){
+				_global.flamingo.raiseEvent(this,"onGeometryDrawUpdate",this,gis.getActiveFeature().getGeometry().toWKT());
+			}
 		}
-
-
-		
+		else if (sourceClassName + "_" + actionType + "_" + propertyName == "GIS_" + StateEvent.CHANGE + "_geometryDragUpdate") {
+			if (gis.getActiveFeature()!=null){
+				_global.flamingo.raiseEvent(this,"onGeometryDrawDragUpdate",this,gis.getActiveFeature().getGeometry().toWKT());
+			}
+		}
     }
     
     function getGIS():GIS {
         return gis;
     }
+	
+	function editMapDrawNewGeometry(layerName:String, geometryType:String):Void {
+		//Let the user draw the specified geometryType
+		
+		var editMapLayer:EditMapLayer = null;
+		var layer:Layer = null;
+        for (var i:Number = 0; i < editMapLayers.length; i++) {
+            editMapLayer = EditMapLayer(editMapLayers[i]);
+            if (editMapLayer.getLayer().getName() == layerName) {
+				layer = editMapLayer.getLayer();
+                break;
+            }
+        }
+		
+		if (layer == null) {
+			_global.flamingo.tracer("Exception in EditMap.editMapDrawNewGeometry()\nNo corresponding layer with layerName = "+layerName);
+			return;
+		}
+		
+		if (geometryType == "Point") {
+			gis.setCreateGeometry(new CreateGeometry(layer, new PointFactory()));
+		}
+		else if (geometryType == "PointAtDistance") {
+			gis.setCreateGeometry(new CreateGeometry(layer, new LineStringFactory()));
+			gis.setCreatePointAtDistance(true);
+		}
+		else if (geometryType == "LineString") {
+			gis.setCreateGeometry(new CreateGeometry(layer, new LineStringFactory()));
+		}
+		else if (geometryType == "Polygon") {
+			gis.setCreateGeometry(new CreateGeometry(layer, new PolygonFactory()));
+		}
+		else if (geometryType == "Circle") {
+			gis.setCreateGeometry(new CreateGeometry(layer, new CircleFactory()));
+		}
+		else {
+			_global.flamingo.tracer("Exception in EditMap.editMapDrawNewGeometry()\nRequested geometryType not implemented.\ngeometryType = "+geometryType);
+		}
+	
+	}
+	
+	
     
+	function editMapCreateNewGeometry(layerName:String, geometryType:String, coordinatePairs:Array):Void {
+		var editMapLayer:EditMapLayer = null;
+		var layer:Layer = null;
+        for (var i:Number = 0; i < editMapLayers.length; i++) {
+            editMapLayer = EditMapLayer(editMapLayers[i]);
+            if (editMapLayer.getLayer().getName() == layerName) {
+				layer = editMapLayer.getLayer();
+                break;
+            }
+        }
+		
+		if (layer == null) {
+			_global.flamingo.tracer("Exception in EditMap.editMapCreateNewGeometry()\nNo corresponding layer with layerName = "+layerName);
+			return;
+		}
+		
+		if (coordinatePairs == null) {
+			_global.flamingo.tracer("Exception in EditMap.editMapCreateNewGeometry()\nNo point coordinatepairs specified = "+coordinatePairs);
+			return;
+		}
+				
+        if (geometryType == "Point" || geometryType == "PointAtDistance") {
+			//create point geometry & add it as a feature to the layer
+			var geometry:Geometry = new Point(coordinatePairs[0], coordinatePairs[1]);
+			layer.addFeature(geometry, true);
+			
+			_global.flamingo.raiseEvent(this,"onGeometryDrawFinished",this,gis.getActiveFeature().getGeometry().toWKT());			
+			gis.setCreateGeometry(null);
+		} else if (geometryType == "LineString") {
+			/*
+			
+			
+			//create linestring geometry & add it as a feature to the layer
+			var points:Array = null;
+			var x:Number = 0;
+			var y:Number = 0;
+			for (var j:Number = 0; j < coordinatePairs.length; j=j+2) {
+                x = Number(coordinatePairs[j]);
+                y = Number(coordinatePairs[j+1]);
+                points.push(new geometrymodel.Point(x, y));
+				//_global.flamingo.tracer("Exception in EditMap.editMapCreateNewGeometry()\nCreate LineString with x = "+x+"  y = "+y+"   j = "+j);
+				//_global.flamingo.tracer("Exception in EditMap.editMapCreateNewGeometry()\nCreate LineString with points = "+points.toString());
+            }
+			//trace("EditMap.as: editMapCreateNewGeometry(): points = "+points);
+			//_global.flamingo.tracer("Exception in EditMap.editMapCreateNewGeometry()\nCreate LineString with coordinatePairs = "+coordinatePairs);
+			//_global.flamingo.tracer("Exception in EditMap.editMapCreateNewGeometry()\nCreate LineString with points = "+points.toString());
+			if (points!=null){
+				var geometry:Geometry = new LineString(points);
+				layer.addFeature(geometry, true);
+				
+				_global.flamingo.raiseEvent(this,"onGeometryDrawFinished",this,gis.getActiveFeature().getGeometry().toWKT());			
+				gis.setCreateGeometry(null);
+			} else{
+				_global.flamingo.tracer("Exception in EditMap.editMapCreateNewGeometry()\nNo points for the creation of LineString geometry. \npoints = "+points.toString());
+			}
+		
+			*/
+			_global.flamingo.tracer("Exception in EditMap.editMapCreateNewGeometry()\nRequested geometryType not implemented.\ngeometryType = "+geometryType);
+		} else if (geometryType == "Polygon") {
+			/*
+			//create polygon geometry & add it as a feature to the layer
+			var points:Array = null;
+			var x:Number = 0;
+			var y:Number = 0;
+			for (var j:Number = 0; j < coordinatePairs.length; j=j+2) {
+                x = Number(coordinatePairs[j]);
+                y = Number(coordinatePairs[j+1]);
+                points.push(new geometrymodel.Point(x, y));
+            }
+			var geometry:Geometry = new Polygon(new LinearRing(points));
+			layer.addFeature(geometry, true);
+			
+			_global.flamingo.raiseEvent(this,"onGeometryDrawFinished",this,gis.getActiveFeature().getGeometry().toWKT());			
+			gis.setCreateGeometry(null);
+			*/
+			_global.flamingo.tracer("Exception in EditMap.editMapCreateNewGeometry()\nRequested geometryType not implemented.\ngeometryType = "+geometryType);
+		} else if (geometryType == "Circle") {
+			_global.flamingo.tracer("Exception in EditMap.editMapCreateNewGeometry()\nRequested geometryType not implemented.\ngeometryType = "+geometryType);
+		} else {
+			_global.flamingo.tracer("Exception in EditMap.editMapCreateNewGeometry()\nRequested geometryType not implemented.\ngeometryType = "+geometryType);
+		}
+    }
+		
     private function addEditMapLayer(layer:Layer):Void {
         removeEditMapLayer(layer);
         var depth:Number = editMapCreateGeometryDepth - 1 - gis.getLayerPosition(layer);

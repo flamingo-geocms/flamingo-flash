@@ -224,6 +224,8 @@ class gui.EditMapPoint extends EditMapGeometry {
 							thisObj._parent.draw();
 						}
 						
+						//raise event onGeometryDrawUpdate via editMap through gis
+						thisObj.gis.geometryUpdate();
 					}
 				}
 			}
