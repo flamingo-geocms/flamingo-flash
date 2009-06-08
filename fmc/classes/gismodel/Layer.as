@@ -1,4 +1,4 @@
-/*-----------------------------------------------------------------------------
+﻿/*-----------------------------------------------------------------------------
 * This file is part of Flamingo MapComponents.
 * Author: Michiel J. van Heek.
 * IDgis bv
@@ -430,9 +430,13 @@ class gismodel.Layer extends AbstractComposite implements ActionEventListener {
 	                serviceConnector.performGetFeature(serviceLayer, null, whereClauses, null, false, this);
 				}
             } else if (serviceFeatures != null) {
-                for (var i:Number = 0; i < serviceFeatures.length; i++) {
-                    addFeature(ServiceFeature(serviceFeatures[i]));
-                }
+				//raise api event onFeatureFound() through a new StateEvent to reach editMap.swf from where we want to raise the api event call.
+				stateEventDispatcher.dispatchEvent(new AddRemoveEvent(this, "Layer", "featuresFound", serviceFeatures, null, null) );
+				
+				for (var i:Number = 0; i < serviceFeatures.length; i++) {
+					addFeature(ServiceFeature(serviceFeatures[i]));
+				}
+
             } else { // Transaction response.
                 var previousIDs:Array = transactionResponse.getPreviousIDs();
                 var previousID:String = null;
@@ -458,6 +462,7 @@ class gismodel.Layer extends AbstractComposite implements ActionEventListener {
         if (
                 (sourceClassName + "_" + actionType + "_" + propertyName != "Layer_" + StateEvent.CHANGE + "_visible")
              && (sourceClassName + "_" + actionType + "_" + propertyName != "Layer_" + StateEvent.ADD_REMOVE + "_features")
+			 && (sourceClassName + "_" + actionType + "_" + propertyName != "Layer_" + StateEvent.ADD_REMOVE + "_featuresFound")
            ) {
             _global.flamingo.tracer("Exception in gismodel.Layer.addEventListener(" + sourceClassName + ", " + propertyName + ")");
             return;
@@ -470,6 +475,7 @@ class gismodel.Layer extends AbstractComposite implements ActionEventListener {
         if (
                 (sourceClassName + "_" + actionType + "_" + propertyName != "Layer_" + StateEvent.CHANGE + "_visible")
              && (sourceClassName + "_" + actionType + "_" + propertyName != "Layer_" + StateEvent.ADD_REMOVE + "_features")
+			 && (sourceClassName + "_" + actionType + "_" + propertyName != "Layer_" + StateEvent.ADD_REMOVE + "_featuresFound")
            ) {
             _global.flamingo.tracer("Exception in gismodel.Layer.removeEventListener(" + sourceClassName + ", " + propertyName + ")");
             return;

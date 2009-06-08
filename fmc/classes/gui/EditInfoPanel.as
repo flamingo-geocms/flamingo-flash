@@ -324,7 +324,7 @@ class gui.EditInfoPanel extends AbstractComponent implements StateEventListener 
 		else {
 			str = String(Math.round(nrDigitsBase*n)/nrDigitsBase);
 		}
-			
+		
 		var digitAfterPointCount:Number = -1;
 		var startCounting:Boolean = false;
 		for (var i = 0; i < str.length; i++) {
@@ -336,7 +336,9 @@ class gui.EditInfoPanel extends AbstractComponent implements StateEventListener 
 			}
 		}
 		if (digitAfterPointCount == -1) {
-			str += ".";
+			if (nrDigits > 0) {
+				str += ".";
+			}
 			digitAfterPointCount =0;
 		}
 		for (var i = digitAfterPointCount; i<nrDigits; i++) { 

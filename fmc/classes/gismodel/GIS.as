@@ -49,7 +49,9 @@
 	</Flamingo>	
 * @attr authentication Reference to the authentication component. This value must be equal to the “listento”.
 * @attr updateMaps Comma seperate list of maps that should be updated after a commit to the server. Set this attribute when
-* the Layers in your map(s) (LayerOGWMS, LayerArcIMS) are based on the same data as the (WFS)Layers in the GIS (EditMap)    
+* the Layers in your map(s) (LayerOGWMS, LayerArcIMS) are based on the same data as the (WFS)Layers in the GIS (EditMap)
+* @attr geometryeditable Switch, value = "yes" or "no". If yes the editMap geometries for the layer corresponding to this gis
+* are editable, i.e. the user can drag, add and remove vertices of the geometries.
 */
 
 /** @tag <fmc:Layer>

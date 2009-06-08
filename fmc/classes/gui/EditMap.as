@@ -111,7 +111,8 @@ class gui.EditMap extends AbstractComponent implements StateEventListener {
         for (var i:Number = 0; i < layers.length; i++) {
             layer = Layer(layers[i]);
             layer.addEventListener(this, "Layer", StateEvent.CHANGE, "visible");
-            if (layer.isVisible() && map.visible) {
+			layer.addEventListener(this, "Layer", StateEvent.ADD_REMOVE, "featuresFound");
+			if (layer.isVisible() && map.visible) {
                 addEditMapLayer(layer);
             }
         }
@@ -173,6 +174,7 @@ class gui.EditMap extends AbstractComponent implements StateEventListener {
             for (var i:Number = 0; i < layers.length; i++) {
                 layer = Layer(layers[i]);
                 layer.addEventListener(this, "Layer", StateEvent.CHANGE, "visible");
+				layer.addEventListener(this, "Layer", StateEvent.ADD_REMOVE, "featuresFound");
                 if (layer.isVisible() && map.visible) {
                     addEditMapLayer(layer);
                 }
@@ -195,7 +197,6 @@ class gui.EditMap extends AbstractComponent implements StateEventListener {
             } else if (editToolSelected==null){
 				removeEditMapSelectFeature();
             }
-		
 		} else if (sourceClassName + "_" + actionType + "_" + propertyName == "Layer_" + StateEvent.CHANGE + "_visible") {
             var layer:Layer = Layer(stateEvent.getSource());
             if (layer.isVisible()) {
@@ -203,17 +204,27 @@ class gui.EditMap extends AbstractComponent implements StateEventListener {
             } else {
                 removeEditMapLayer(layer);
             }
-        } else if (sourceClassName + "_" + actionType + "_" + propertyName == "GIS_" + StateEvent.CHANGE + "_activeFeature") {
+        } else if (sourceClassName + "_" + actionType + "_" + propertyName == "Layer_" + StateEvent.ADD_REMOVE + "_featuresFound") {
+			var nrFeaturesFound:Number = null;
+			if (AddRemoveEvent(stateEvent).getAddedObjects() != null) {
+				nrFeaturesFound = Number(AddRemoveEvent(stateEvent).getAddedObjects().length);
+			}
+			//API event onFeatureFound();
+			_global.flamingo.raiseEvent(this,"onFeatureFound",this,nrFeaturesFound);
+		} else if (sourceClassName + "_" + actionType + "_" + propertyName == "GIS_" + StateEvent.CHANGE + "_activeFeature") {
             if (gis.getActiveFeature()!=null){
+				//API event onActiveFeatureChange();
                 _global.flamingo.raiseEvent(this,"onActiveFeatureChange",this,gis.getActiveFeature().toObject());
             }
 		} else if (sourceClassName + "_" + actionType + "_" + propertyName == "GIS_" + StateEvent.CHANGE + "_geometryUpdate") {
 			if (gis.getActiveFeature()!=null){
+				//API event onGeometryDrawUpdate();
 				_global.flamingo.raiseEvent(this,"onGeometryDrawUpdate",this,gis.getActiveFeature().getGeometry().toWKT());
 			}
 		}
 		else if (sourceClassName + "_" + actionType + "_" + propertyName == "GIS_" + StateEvent.CHANGE + "_geometryDragUpdate") {
 			if (gis.getActiveFeature()!=null){
+				//API event onGeometryDrawDragUpdate();
 				_global.flamingo.raiseEvent(this,"onGeometryDrawDragUpdate",this,gis.getActiveFeature().getGeometry().toWKT());
 			}
 		}
@@ -223,9 +234,12 @@ class gui.EditMap extends AbstractComponent implements StateEventListener {
         return gis;
     }
 	
+	/**
+	Let the user draw the specified geometryType on the layer with specified layerName. 
+	@param layerName The name of the layer
+	@param geometryType The geometry type: Point, PointAtDistance, LineString, Polygon. Note: geometryType must correspond with the available types set in <fmc:Layer>
+	*/
 	function editMapDrawNewGeometry(layerName:String, geometryType:String):Void {
-		//Let the user draw the specified geometryType
-		
 		var editMapLayer:EditMapLayer = null;
 		var layer:Layer = null;
         for (var i:Number = 0; i < editMapLayers.length; i++) {
@@ -263,8 +277,13 @@ class gui.EditMap extends AbstractComponent implements StateEventListener {
 	
 	}
 	
-	
-    
+	/**
+	Draws the specified geometryType on the layer with specified layerName. 
+	@param layerName The name of the layer
+	@param geometryType The geometry type: Point, PointAtDistance, LineString, Polygon. Note: geometryType must correspond with the available types set in <fmc:Layer>
+	@param coordinatePairs Array with the coordinate pairs
+	*/
+	    
 	function editMapCreateNewGeometry(layerName:String, geometryType:String, coordinatePairs:Array):Void {
 		var editMapLayer:EditMapLayer = null;
 		var layer:Layer = null;
@@ -295,7 +314,7 @@ class gui.EditMap extends AbstractComponent implements StateEventListener {
 			gis.setCreateGeometry(null);
 		} else if (geometryType == "LineString") {
 			/*
-			
+			NOTE the code below does not work yet!
 			
 			//create linestring geometry & add it as a feature to the layer
 			var points:Array = null;
@@ -325,6 +344,8 @@ class gui.EditMap extends AbstractComponent implements StateEventListener {
 			_global.flamingo.tracer("Exception in EditMap.editMapCreateNewGeometry()\nRequested geometryType not implemented.\ngeometryType = "+geometryType);
 		} else if (geometryType == "Polygon") {
 			/*
+			NOTE the code below does not work yet!
+			
 			//create polygon geometry & add it as a feature to the layer
 			var points:Array = null;
 			var x:Number = 0;
@@ -397,7 +418,8 @@ class gui.EditMap extends AbstractComponent implements StateEventListener {
             editMapSelectFeature = null; // MovieClip.removeMovieClip does not nullify the reference.
         }
     }
-    
+    /**
+	*/
 	public function removeAllFeatures():Void{
 		var layers:Array=gis.getLayers();
 		for (var i=0; i < layers.length; i++){

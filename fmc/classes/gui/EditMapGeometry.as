@@ -135,6 +135,7 @@ class gui.EditMapGeometry extends GeometryPane implements GeometryListener {
         setLabel();
 		
 		if (this.type == ACTIVE && _geometry.getFirstAncestor() == _geometry) { //surpress updating for child geometries. Saves cpu resources.
+			//raise event onGeometryDrawDragUpdate via editMap through gis
 			gis.geometryDragUpdate();
 		}
 		

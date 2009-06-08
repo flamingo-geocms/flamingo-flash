@@ -101,9 +101,11 @@ class gui.EditMapCreateGeometry extends MovieClip {
 				createGeometry.getLayer().addFeature(geometry, true);				
 				
 				//raise event onCreatePointAtDistanceFinished
+				//API event onCreatePointAtDistanceFinished();
 				_global.flamingo.raiseEvent(this._parent._parent,"onCreatePointAtDistanceFinished",this._parent._parent,gis.getActiveFeature().getGeometry().toWKT(),pathLength);
 			}
 			
+			//API event onGeometryDrawFinished();
 			_global.flamingo.raiseEvent(this._parent._parent,"onGeometryDrawFinished",this._parent._parent,gis.getActiveFeature().getGeometry().toWKT());			
 			gis.setCreateGeometry(null);
         } else {	
@@ -114,14 +116,14 @@ class gui.EditMapCreateGeometry extends MovieClip {
                 geometry.setEventComp(gis);
                 createGeometry.getLayer().addFeature(geometry);
                 if (geometry instanceof geometrymodel.Point) {
+					//API event onGeometryDrawFinished();
 					_global.flamingo.raiseEvent(this._parent._parent,"onGeometryDrawFinished",this._parent._parent,gis.getActiveFeature().getGeometry().toWKT());
                     gis.setCreateGeometry(null);
                 }
             } else {
                 geometry.addPoint(point);
             }
-			//raise event onGeometryDrawUpdate
-			//_global.flamingo.raiseEvent(this._parent._parent,"onGeometryDrawUpdate",this._parent._parent,gis.getActiveFeature().getGeometry().toWKT());
+			//raise event onGeometryDrawUpdate via editMap through gis
 			gis.geometryUpdate();
         }
     }
