@@ -102,7 +102,8 @@ dynamic class Map extends MovieClip {
 	//
 	private var configObj:Object;
 	public var hasextent:Boolean;
-	
+	//
+	private var nextDepth:Number=0
 	
 	
 	function Map() {
@@ -541,7 +542,10 @@ dynamic class Map extends MovieClip {
 			xml.attributes.id = id;
 		}
 		var layerid = mapid+"_"+id;
-		var depth = this.mLayers.getNextHighestDepth();
+		var depth = this.getNextDepth();
+		if(xml.localName == "LayerIdentifyIcon"){
+			depth=10000;
+		}
 		if (flamingo.exists(layerid)) {
 			// let flamingo deal with double ids
 			flamingo.addComponent(xml, layerid);
@@ -720,7 +724,7 @@ dynamic class Map extends MovieClip {
 	*/
 	public function swapLayer(id:String, index:Number):Void {
 		if (index == undefined) {
-			index = this.mLayers.getNextHighestDepth();
+			index = this.getNextDepth();
 		}
 		this.mLayers[id].swapDepths(index);
 		flamingo.raiseEvent(this, "onSwapLayer", this);
@@ -2120,7 +2124,17 @@ dynamic class Map extends MovieClip {
 	public function hideTooltip():Void{
 		flamingo.hideTooltip(tiptext,this,delay);
 	}
-	
+	/**
+	Get the next depth of the layers.
+	*/
+	public function getNextDepth():Number{
+		if (nextDepth==null){
+			nextDepth=this.mLayers.getNextHighestDepth();
+		}else{
+			nextDepth++
+		}
+		return nextDepth;
+	}
 	
 	/** 
 	 * Dispatched when a map is up and ready to run.
