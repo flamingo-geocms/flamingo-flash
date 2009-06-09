@@ -104,6 +104,8 @@ dynamic class Map extends MovieClip {
 	public var hasextent:Boolean;
 	//
 	private var nextDepth:Number=0
+	private var markers:Array=null;
+	private var markerIDnr:Number = 0;
 	
 	
 	function Map() {
@@ -2135,7 +2137,106 @@ dynamic class Map extends MovieClip {
 		}
 		return nextDepth;
 	}
-	
+	/**
+	* Set Marker on the map or updates an existing marker
+	* @param id marker id
+	* @param type marker type: default, url, text. 
+	*/
+	public function setMarker(id:String,type:String,x:Number,y:Number,width:Number,height:Number,htmlText:String):Void {
+		if (x==null || y==null) { //place marker in center of the map
+			var coordinate:Object = getCenter(this._currentextent);
+			x = coordinate.x;
+			y = coordinate.y;
+		}
+		
+		if (markers == null){
+			markers = new Array();
+			//create new marker
+			var mcMarker:Object = createMarker(id,type,x,y,width,height,htmlText);
+			markers.push(mcMarker);
+		}
+		else{
+			var existingMarker:Boolean = false;
+			for (var i:Number=0; i<markers.length; i++) {
+				if (markers[i].getId() == id){
+					//update the existing marker
+					markers[i].setXY(x,y);
+					markers[i].setType(type);
+					markers[i].setWidth(width);
+					markers[i].setHeight(height);
+					markers[i].setHTMLText(htmlText);
+					
+					markers[i].redraw(this._currentextent,this.__width,this.__height);
+					existingMarker = true;
+				}
+			}
+			if (!existingMarker) {
+				//create new marker
+				var mcMarker:Object = createMarker(id,type,x,y,width,height,htmlText);
+				markers.push(mcMarker);
+			}
+		}
+	}
+	/**
+	* Remove Marker from the map
+	* @param id marker id
+	*/
+	public function removeMarker(id:String):Void {
+		for (var i:Number=0; i<markers.length; i++) {
+			if (markers[i].getId() == id){
+				var lMap:Object = new Object();
+				_global.flamingo.removeListener(lMap,this, markers[i]);
+				markers[i].removeMovieClip();
+				markers.splice(i,1);
+			}
+		}
+	}
+	/**
+	* Remove All Markers from the map
+	*/
+	public function removeAllMarkers():Void {
+		for (var i:Number=0; i<markers.length; i++) {
+			var lMap:Object = new Object();
+			_global.flamingo.removeListener(lMap,this, markers[i]);
+			markers[i].removeMovieClip();
+		}
+		markers = null;
+	}
+	private function createMarker(id:String,type:String,x:Number,y:Number,width:Number,height:Number,htmlText:String):Object {
+		var coordinate:Object = new Object();
+		coordinate.x = x;
+		coordinate.y = y;
+		var p:Object = this.coordinate2Point(coordinate, this._currentextent);
+		
+		//create new marker		
+		var initObject:Object = new Object();
+		initObject["x"] = x;
+		initObject["y"] = y;
+		initObject["_x"] = p.x;
+		initObject["_y"] = p.y;
+		initObject["id"] = id;
+		initObject["markerIDnr"] = markerIDnr;
+		initObject["type"] = type;
+		initObject["width"] = width;
+		initObject["height"] = height;
+		initObject["htmlText"] = htmlText;
+				
+		var depth:Number = this.getNextDepth() + markerIDnr;	//note the default as2 method is overruled in this class to ensure the Marker is on top.
+		var mcMarker:Object = this.attachMovie("Marker", "mcMarker"+markerIDnr, depth, initObject);
+		mcMarker.init();
+		markerIDnr++;
+				
+		//addListener for redrawing
+		var thisObj:Object = this;
+		var lMap:Object = new Object();
+		lMap.onChangeExtent = function(map:MovieClip) {
+			mcMarker.redraw(thisObj._currentextent,thisObj.__width,thisObj.__height);
+		};
+		_global.flamingo.addListener(lMap,this, mcMarker);
+		
+		return mcMarker;
+	}
+		
 	/** 
 	 * Dispatched when a map is up and ready to run.
 	 * @param map:MovieClip a reference to the map.
