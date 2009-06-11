@@ -456,11 +456,18 @@ function _parseLayers(tlayers:Object) {
 * Updates a layer. Only one request will be fired at a time.
 * After the image is loaded the function checks if the mapextent is changed meanwhile.
 * If so, the function fires another request.
+* @forceupdate forces a  update. A timestamp is added in seconds.
 */
+function update(forceupdate:Boolean) {
+	_update(1,forceupdate);
+}
 function update() {
 	_update(1);
 }
 function _update(nrtry:Number) {
+	_update(nrtry,false);
+}
+function _update(nrtry:Number, forceupdate:Boolean){
 	if (not visible) {
 		_visible = false;
 		return;
@@ -630,6 +637,9 @@ function _update(nrtry:Number) {
 	args.EXCEPTIONS = this.exceptions;
 	args.VERSION = this.wmsversion;
 	args.SRS = this.srs;
+	if (forceupdate==true){
+		args.TIMESTAMP= new Date().getMilliseconds()/1000;
+	}
 	if (this.transparent != undefined) {
 		args.TRANSPARENT = this.transparent.toString().toUpperCase();
 	}
