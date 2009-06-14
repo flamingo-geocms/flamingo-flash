@@ -141,8 +141,8 @@ function init():Void {
 	}
 	this._visible = false;
 	//defaults
-	var xml:XML = new XML(defaultXML);
-	this.setConfig(xml.firstChild);
+	//var xml:XML = new XML(defaultXML);
+	this.setConfig(defaultXML);
 	delete xml;
 	//custom
 	//custom
