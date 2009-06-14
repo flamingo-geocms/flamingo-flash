@@ -344,7 +344,9 @@ function addLocation(xml:Object) {
 							namespaces[ns[b].split("=")[0]]=ns[b].split("=")[1];
 						}
 						break;
-				    }
+				    default: 
+						flamingo.tracer("unknown attribute in confige file for LocationFinder: "+attr);
+					}
 				}
 				for (var j:Number = xnode[i].childNodes.length-1; j>=0; j--) {
 					switch (xnode[i].childNodes[j].nodeName.toLowerCase()) {

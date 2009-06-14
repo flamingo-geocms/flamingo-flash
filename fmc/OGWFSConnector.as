@@ -396,11 +396,7 @@ dynamic class OGWFSConnector {
 					reqString+='<ogc:Filter>';						
 					//version 1.0.0 has no matchCase attribute
 					reqString+="<ogc:PropertyIsLike wildCard='*' singleChar='.' escape='!'";
-					if (version== '1.0.0'){	
-						
-					}else{
-						reqString+=" matchCase='false'";
-					}
+					reqString+=" matchCase='false'";					
 					reqString+=">";
 					if (multiKeys!=undefined){
 						if (i < multiKeys.length){
