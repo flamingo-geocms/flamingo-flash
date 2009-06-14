@@ -142,7 +142,7 @@ function init():Void {
 	this._visible = false;
 	//defaults
 	var xml:XML = new XML(defaultXML);
-	this.setConfig(xml);
+	this.setConfig(xml.firstChild);
 	delete xml;
 	//custom
 	//custom
