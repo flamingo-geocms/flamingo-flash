@@ -81,6 +81,7 @@ var map:MovieClip;
 var caches:Object = new Object();
 var thisObj:MovieClip = this;
 var _identifylayers:Array;
+var _hotlinklayers:Array;
 var _maptiplayers:Array;
 var identifyextent:Object;
 var selectextent:Object;
@@ -116,6 +117,9 @@ lMap.onChangeExtent = function(map:MovieClip):Void  {
 lMap.onIdentify = function(map:MovieClip, identifyextent:Object):Void  {
 	thisObj.identify(identifyextent);
 };
+lMap.onHotlink = function(map:MovieClip, identifyextent:Object):Void  {
+	thisObj.hotlink(identifyextent);
+};
 lMap.onSelect = function(map:MovieClip, serviceId:Object, selectExtent:Object, selectLayer:Object, subfields:Array) {
 	if(serviceId == thisObj.name) {
 		thisObj.select(selectExtent, selectLayer, subfields)
@@ -123,6 +127,9 @@ lMap.onSelect = function(map:MovieClip, serviceId:Object, selectExtent:Object, s
 }
 lMap.onIdentifyCancel = function(map:MovieClip):Void  {
 	thisObj.cancelIdentify();
+};
+lMap.onHotlinkCancel = function(map:MovieClip):Void  {
+	thisObj.cancelHotlink();
 };
 lMap.onMaptip = function(map:MovieClip, x:Number, y:Number, coord:Object):Void  {
 	thisObj._startMaptip(coord.x, coord.y);
@@ -1381,7 +1388,167 @@ function _identifylayer(_identifyextent:Object, starttime:Date) {
 		break;
 	}
 }
-
+function cancelHotlink() {
+	_hotlinklayers = new Array();
+	this.identifyextent = undefined;
+}
+/**
+* Hotlink a layer.
+* @param identifyextent:Object extent of the identify
+*/
+function hotlink(_identifyextent:Object) {
+	this.identifyextent = undefined;
+	if (not this.initialized) {
+		return;
+	}
+	if (identifyids.length<=0) {
+		return;
+	}
+	if (not visible or not _visible) {
+		return;
+	}
+	if (server == undefined) {
+		return;
+	}
+	if (mapservice == undefined) {
+		return;
+	}
+	if (fullextent != undefined) {
+		if (not map.isHit(_identifyextent, fullextent)) {
+			return;
+		}
+	}
+	_hotlinklayers = new Array();
+	_hotlinklayers = _getLayerlist(identifyids, "identify");
+	this.nrlayersqueried = _hotlinklayers.length;
+	if (_hotlinklayers.length == 0) {
+		return;
+	}
+	this.identifyextent = map.copyExtent(_identifyextent);
+	flamingo.raiseEvent(thisObj, "onHotlink", thisObj, identifyextent);
+	_hotlinklayer(this.identifyextent, new Date());
+}
+function _hotlinklayer(_identifyextent:Object, starttime:Date) {
+	if (_hotlinklayers.length == 0) {
+		var t = (new Date()-starttime)/1000;
+		flamingo.raiseEvent(thisObj, "onHotlinkComplete", thisObj, t);
+		return;
+	}
+	var lConn = new Object();
+	lConn.onResponse = function(connector:ArcIMSConnector) {
+		//trace(connector.response);
+		flamingo.raiseEvent(thisObj, "onResponse", thisObj, "hotlink", connector);
+	};
+	lConn.onRequest = function(connector:ArcIMSConnector) {
+		//trace(connector.request);
+		flamingo.raiseEvent(thisObj, "onRequest", thisObj, "hotlink", connector);
+	};
+	lConn.onError = function(error:String, objecttag:Object, requestid:String) {
+		flamingo.raiseEvent(thisObj, "onError", thisObj, "hotlink", error);
+		if (_hotlinklayers.length>0) {
+			_hotlinklayer(_identifyextent, starttime);
+		} else {
+			flamingo.raiseEvent(thisObj, "onHotlinkComplete", thisObj);
+		}
+	};
+	lConn.onGetRasterInfo = function(layerid:String, data:Array, objecttag:Object) {
+		if (map.isEqualExtent(thisObj.identifyextent, objecttag)) {
+			// add data from mydata
+			thisObj._completeWithMydata(layerid, data);
+			//                                               
+			var features = new Object();
+			features[layerid] = data;
+			flamingo.raiseEvent(thisObj, "onHotlinkData", thisObj, features, thisObj.identifyextent, (thisObj.nrlayersqueried-thisObj._hotlinklayers.length), thisObj.nrlayersqueried);
+			if (not identifyall) {
+				var b = false;
+				for (var i = 0; i<data.length; i++) {
+					for (var attr in data[i]) {
+						if (data[i][attr] != undefined) {
+							b = true;
+							break;
+						}
+					}
+				}
+				if (b) {
+					var t = (new Date()-starttime)/1000;
+					flamingo.raiseEvent(thisObj, "onHotlinkComplete", thisObj, t);
+				} else {
+					_hotlinklayer(_identifyextent, starttime);
+				}
+			} else {
+				_hotlinklayer(_identifyextent, starttime);
+			}
+		}
+	};
+	lConn.onGetFeatures = function(layerid:String, data:Array, count:Number, hasmore:Boolean, objecttag:Object) {
+		if (map.isEqualExtent(thisObj.identifyextent, objecttag)) {
+			// add data from mydata
+			thisObj._completeWithMydata(layerid, data);
+			//                                               
+			var features = new Object();
+			features[layerid] = data;
+			flamingo.raiseEvent(thisObj, "onHotlinkData", thisObj, features, thisObj.identifyextent, (thisObj.nrlayersqueried-thisObj._hotlinklayers.length), thisObj.nrlayersqueried);
+			if (not identifyall and count>0) {
+				var t = (new Date()-starttime)/1000;
+				flamingo.raiseEvent(thisObj, "onHotlinkComplete", thisObj, t);
+			} else {
+				_hotlinklayer(_identifyextent, starttime);
+			}
+			if (data.length > 0 && thisObj.colorIds.length> 0){
+				thisObj.update();
+			}
+		}
+	};
+	lConn.onRecord= function(layerid:String, recordedValues:Object){
+		flamingo.raiseEvent(thisObj, "onRecord", thisObj, layerid, recordedValues);			
+		
+	};
+	var layerid:String = String(_hotlinklayers.pop());
+	var conn:ArcIMSConnector = new ArcIMSConnector(server);	
+	conn.setIdentifyColorLayer(this.colorIds);
+	conn.setIdentifyColorLayerKey(this.colorIdsKey);
+	conn.setVisualisationSelected(this.visualisationSelected);
+	conn.setRecord(this.record);
+	if (servlet.length>0) {
+		conn.servlet = servlet;
+	}
+	conn.addListener(lConn);
+	var _featurelimit = layers[layerid].featurelimit;
+	if (_featurelimit == undefined) {
+		_featurelimit = this.featurelimit;
+	}
+	conn.featurelimit = _featurelimit;
+	switch (layers[layerid].type) {
+	case "featureclass" :
+		//calculate the real identify extent based on the identify extent of the map
+		//if the extent is actually a point 
+		var _identifydistance = layers[layerid].identifydistance;
+		if (_identifydistance == undefined) {
+			_identifydistance = this.identifydistance;
+		}
+		var real_identifyextent = map.copyExtent(_identifyextent);
+		if ((real_identifyextent.maxx-real_identifyextent.minx) == 0) {
+			var w = map.getScale()*_identifydistance;
+			real_identifyextent.minx = real_identifyextent.minx-(w/2);
+			real_identifyextent.maxx = real_identifyextent.minx+w;
+		}
+		if ((real_identifyextent.maxy-real_identifyextent.miny) == 0) {
+			var h = map.getScale()*_identifydistance;
+			real_identifyextent.miny = real_identifyextent.miny-(h/2);
+			real_identifyextent.maxy = real_identifyextent.miny+h;
+		}
+		var subfields:String = layers[layerid].subfields.split(",").join(" ");
+		var query:String = layers[layerid].query;
+		conn.getFeatures(mapservice, layerid, real_identifyextent, subfields, query, map.copyExtent(_identifyextent));
+		break;
+	case "image" :
+		var point = new Object();
+		point.x = (_identifyextent.maxx+_identifyextent.minx)/2;
+		point.y = (_identifyextent.maxy+_identifyextent.miny)/2;
+		conn.getRasterInfo(mapservice, layerid, point, layers[layerid].coordsys, map.copyExtent(_identifyextent));
+		break;
+	}
+}
 /**
 * Selects from a layer.
 * @param selectExtent:Object extent of the selection

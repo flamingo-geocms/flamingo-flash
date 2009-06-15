@@ -589,6 +589,12 @@ dynamic class Map extends MovieClip {
 				flamingo.raiseEvent(thisObj, "onIdentifyData", thisObj, layer, data, identifyextent, nridentified, total);
 				thisObj.checkIdentify();
 			};
+			lLayer.onHotlinkData = function(layer:MovieClip, data:Object, identifyextent:Object, nridentified:Number, total:Number) {
+				thisObj.layersidentifying[layer._name].nridentified = nridentified;
+				thisObj.layersidentifying[layer._name].totalidentify = total;
+				flamingo.raiseEvent(thisObj, "onHotlinkData", thisObj, layer, data, identifyextent, nridentified, total);
+				thisObj.checkHotlink();
+			};
 			lLayer.onSelectData = function(layer:MovieClip, data:Object, selectextent:Object, beginrecord:Number) {
 				flamingo.raiseEvent(thisObj, "onSelectData", thisObj, layer, data, selectextent, beginrecord);
 			};
@@ -686,6 +692,26 @@ dynamic class Map extends MovieClip {
 		if (identifytotal == layersidentifying) {
 			this.identifying = false;
 			flamingo.raiseEvent(this, "onIdentifyComplete", this);
+		}
+	}
+	private function checkHotlink() {
+		var identifytotal:Number = 0;
+		var totalsublayers:Number = 0;
+		var nrsublayers:Number = 0;
+		var layersidentifying:Number = 0;
+		this.identifying = true;
+		for (var attr in this.layersidentifying) {
+			identifytotal++;
+			nrsublayers += this.layersidentifying[attr].nridentified;
+			totalsublayers += this.layersidentifying[attr].totalidentify;
+			if (this.layersidentifying[attr].identifycomplete) {
+				layersidentifying++;
+			}
+		}
+		flamingo.raiseEvent(this, "onHotlinkProgress", this, layersidentifying, identifytotal, nrsublayers, totalsublayers);
+		if (identifytotal == layersidentifying) {
+			this.identifying = false;
+			flamingo.raiseEvent(this, "onHotlinkComplete", this);
 		}
 	}
 	/**
@@ -792,7 +818,19 @@ dynamic class Map extends MovieClip {
 		flamingo.raiseEvent(this, "onIdentify", this, this._identifyextent);
 		this.checkIdentify();
 	}
-	
+	/**
+	* Performs an hotlink request on a map.
+	* This will raise the onHotlink event.
+	* @param identifyextent:Object Extent defining identify area.
+	*/
+	public function hotlink(identifyextent:Object):Void {
+		if (this.holdonidentify and this.identifying) {
+			return;
+		}
+		this._identifyextent = this.copyExtent(identifyextent);
+		flamingo.raiseEvent(this, "onHotlink", this, this._identifyextent);
+		this.checkHotlink();
+	}
 	/** 
 	* Performs a select on a map
 	* This will raise the onSelect event
