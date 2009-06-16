@@ -67,7 +67,7 @@ var identifyextent:Object;
 var aka:Object = new Object();
 var lastFiltersFingerprint:String = null;
 var sldParam:String = "";
-
+var maxHttpGetUrlLength:Number=0;
 //-------------------------------------
 //listenerobject for map
 var lMap:Object = new Object();
@@ -130,6 +130,7 @@ init();
 * @attr maxscale  If mapscale is greater then maxscale, the layer will not be shown.
 * @attr fullextent  Extent of layer (comma seperated list of minx,miny,maxx,maxy). When the map is outside this extent, no update will performed.
 * @attr alpha (defaultvalue = "100") Transparency of the layer.
+* @attr maxHttpGetUrlLength default: 0 If a url is longer then the maxHttpGetUrlLength the layer tries to do a HTTP POST request. If set to 0 (default)the layer wil alwalys do a HTTP GET.
 */
 /** @tag <layer>  
 * This defines a sublayer of an OG-WMS service.
@@ -295,6 +296,9 @@ function setConfig(xml:Object) {
 			break;
 		case "url" :
 			this.url = val;
+			break;
+		case "maxhttpgeturllength" :
+			this.maxHttpGetUrlLength= Number(val);
 			break;
 		default :
 			if (attr.toLowerCase().indexOf("xmlns:", 0) == -1) {
@@ -579,11 +583,11 @@ function _update(nrtry:Number, forceupdate:Boolean){
 			updating = false;
 			_global.flamingo.raiseEvent(thisObj, "onUpdateError", thisObj, error);
 		};
-		listener.onLoadProgress = function(mc:MovieClip, bytesLoaded:Number, bytesTotal:Number) {
+		cachemovie.mHolder.onData=listener.onLoadProgress = function(mc:MovieClip, bytesLoaded:Number, bytesTotal:Number) {
 			thisObj._stoptimeout();
 			_global.flamingo.raiseEvent(thisObj, "onUpdateProgress", thisObj, bytesLoaded, bytesTotal);
 		};
-		listener.onLoadInit = function(mc:MovieClip) {
+		cachemovie.mHolder.onLoad=listener.onLoadInit = function(mc:MovieClip) {
 			thisObj._stoptimeout();
 			var loadtime = (new Date()-starttime)/1000;
 			thisObj.updateCache(cachemovie);
@@ -619,11 +623,61 @@ function _update(nrtry:Number, forceupdate:Boolean){
 				}
 			}
 		};
-		var mcl:MovieClipLoader = new MovieClipLoader();
-		mcl.addListener(listener);
-		mcl.loadClip(imageurl, cachemovie.mHolder);
-		var starttime:Date = new Date();
-		thisObj._starttimeout();
+		if (maxHttpGetUrlLength > 0 && imageurl.length >maxHttpGetUrlLength){
+			if (imageurl.split("?").length > 1){
+				var parameters:Array = imageurl.split("?")[1].split("&");
+				for (var p=0; p < parameters.length; p++){
+					if(parameters[p].split("=").length>1){
+						cachemovie.mHolder[parameters[p].split("=")[0]]=unescape(parameters[p].split("=")[1]);						
+					}
+				}						
+				cachemovie.mHolder.oldLoadMovie = cachemovie.mHolder.loadMovie;				
+				cachemovie.mHolder.loadMovie =function(url,vars){
+					if(this.onData != undefined && this.onData != null){
+						this._parent.createEmptyMovieClip("__fixEvents",7777);
+						this._parent.__fixEvents.theTarget=this;
+						this._parent.__fixEvents.onData=this.onData;
+						if(this.onLoad != undefined && this.onLoad != null){
+							this._parent.__fixEvents.onLoad=this.onLoad;
+						}
+						this._parent.__fixEvents.onEnterFrame=function(){							
+							this.oldv=this.v;
+							this.v=this.theTarget.getBytesLoaded();							
+							if(this.v!=0 && (this.v != this.oldv)){
+								this.onData.call(this.theTarget);
+							}
+							if(this.theTarget._framesLoaded>0 && this.v >0){
+								this.theTarget.onData=this.onData;
+								if(this.onLoad != undefined){
+									this.theTarget.onLoad=this.onLoad;
+								}
+								this.onLoad.call(this.theTarget);
+								this.removeMovieClip();
+							}
+						}
+					}
+					this.oldLoadMovie(url,vars)
+				};				
+				var urlWithoutParams:String;
+				//remove all params. The params are already loaded in the body.
+				if (url.indexOf("?")>-1){
+					urlWithoutParams=url.split("?")[0];
+				}else{
+					urlWithoutParams=url;
+				}
+				cachemovie.mHolder.loadMovie(urlWithoutParams,"POST");				
+				var starttime:Date = new Date();
+				thisObj._starttimeout();
+			}			
+		}else{			
+			//listener for MovieClipLoader
+			var mcl:MovieClipLoader = new MovieClipLoader();
+			mcl.addListener(listener);
+			mcl.loadClip(imageurl, cachemovie.mHolder);
+			var starttime:Date = new Date();
+			thisObj._starttimeout();			
+		
+		}
 	};
 	var cogwms:OGWMSConnector = new OGWMSConnector();
 	cogwms.addListener(lConn);
