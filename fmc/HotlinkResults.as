@@ -13,8 +13,7 @@
 */
 var version:String = "3.1";
 
-var defaultXML:String = "<?xml version='1.0' encoding='UTF-8'?>" +
-						"<HotlinkResults />";
+var defaultXML:String = "";
 //-------------------------------
 var id:String;
 var results:Object;
@@ -26,7 +25,6 @@ lMap.onHotlinkData = function(map:MovieClip, maplayer:MovieClip, data:Object, ex
 	for(var i=0; i< UrlArray.length; i++){
 		var UrlMaplayer = UrlArray[i].id.split(".")[0];
 		var UrlLayerId = UrlArray[i].id.split(".")[1];
-		
 		if(maplayer.id == UrlMaplayer)
 		{
 			var t = UrlArray[i].href;		
@@ -40,7 +38,7 @@ lMap.onHotlinkData = function(map:MovieClip, maplayer:MovieClip, data:Object, ex
 						for (var field in r)
 						{					
 							if(ContainsString(t,"["+field+"]"))
-							{
+							{								
 								var value = r[field];
 								t = t.split("["+field+"]").join(value);
 								getURL(t, "_blank", "POST");
@@ -90,9 +88,7 @@ function init():Void {
 	}
 	this._visible = false;
 	//defaults
-	var xml:XML = flamingo.getDefaultXML(this);
-	this.setConfig(xml);
-	delete xml;
+	this.setConfig(defaultXML);
 	
 	//custom
 	var xmls:Array = flamingo.getXMLs(this);

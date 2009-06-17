@@ -99,9 +99,7 @@ function init() {
 	this._visible = false;
 
 	//defaults
-	var xml:XML = flamingo.getDefaultXML(this);
-	this.setConfig(xml);
-	delete xml;
+	this.setConfig(defaultXML);
 
 	//custom
 	var xmls:Array= flamingo.getXMLs(this);
@@ -130,7 +128,7 @@ function setConfig(xml:Object) {
 		var val:String = xml.attributes[attr];
 		switch (attr) {
 		case "skin" :
-			skin = val+"_identify";
+			skin = val+"_hotlink";
 			break;
 		case "identifyall" :
 			if (val.toLowerCase() == "true") {
