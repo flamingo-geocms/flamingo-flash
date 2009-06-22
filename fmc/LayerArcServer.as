@@ -1,4 +1,4 @@
-﻿/*-----------------------------------------------------------------------------
+﻿h/*-----------------------------------------------------------------------------
 * This file is part of Flamingo MapComponents.
 * Author: Abeer Mahdi
 * Realworld Systems BV
@@ -13,7 +13,7 @@
 */
 var version:String = "3.0";
 //---------------------------------
-var defaultXML:String = "";
+var defaultXML:String = "<LayerArcServer/>";
 //properties which can be set in ini
 var visible:Boolean;
 var fullextent:Object;
@@ -43,6 +43,7 @@ var visibleids:String;
 var hiddenids:String;
 var outputtype:String = "png24";
 var alpha:Number = 100;
+var id:String;
 //---------------------------------
 var layers:Object = new Object();
 var updating:Boolean = false;
@@ -62,6 +63,8 @@ var initialized:Boolean = false;
 var extent:Object;
 var nrlayersqueried:Number;
 var layerliststring:String;
+var dataframe:String;
+var esriArcServerVersion:String;
 //-------------------------------------------
 //listenerobject for map
 var lMap:Object = new Object();
@@ -115,6 +118,7 @@ init();
 * @attr identifyids Comma seperated list of layerid's (the order of the layers same as in mxd) Id's in this list will be identified in the order of the list. Use keyword "#ALL#" to identify all layers.
 * @attr maptipids Comma seperated list of layerid's (the order of the layers same as in mxd) Id's in this list will be queried during a maptip event. Use keyword "#ALL#" to query all layers.
 * @attr dataframe dataframename of the mapservice
+* @attr esriArcServerVersion (defaultvalue ="9.2") the version of ArcGIS Server of the mapservices. This can have the values "9.3" or "9.2"
 * @attr fullextent Extent of layer (comma seperated list of minx,miny,maxx,maxy). When the map is outside this extent, no update will performed.
 * @attr visible  (defaultvalue "true") true or false
 * @attr alpha (defaultvalue = "100") Transparency of the layer
@@ -142,6 +146,7 @@ function init():Void {
 	this._visible = false;
 	map = flamingo.getParent(this);
 	//defaults
+	this.setConfig(defaultXML);
 	//custom
 	var xmls:Array = flamingo.getXMLs(this);
 	for (var i = 0; i<xmls.length; i++) {
@@ -280,8 +285,14 @@ function setConfig(xml:Object) {
 			setLayerProperty(val, "maptip", true);
 			this.maptipids = val;
 			break;
+		case "id" :
+			id = val;
+			break;
 		case "dataframe" :
 			dataframe = val;
+			break;
+		case "esriarcserverversion" :
+			esriArcServerVersion = val;
 			break;
 		}
 	}
@@ -450,6 +461,7 @@ function setConfig(xml:Object) {
 	var conn:ArcServerConnector = new ArcServerConnector(server);
 	conn.addListener(lConn);
 	conn.dataframe = dataframe;
+	conn.esriArcServerVersion = esriArcServerVersion;
 
 	if (servlet.length>0) {
 		conn.servlet = servlet;
@@ -618,6 +630,8 @@ function _update(nrtry:Number):Void {
 	var conn:ArcServerConnector = new ArcServerConnector(server);
 	conn.addListener(lConn);
 	conn.dataframe = dataframe;
+	conn.esriArcServerVersion = esriArcServerVersion;
+
 	if (servlet.length>0) {
 		conn.servlet = servlet;
 	}
@@ -856,6 +870,8 @@ function _identifylayer(_identifyextent:Object, starttime:Date) {
 	}
 	conn.featurelimit = _featurelimit;
 	conn.dataframe = dataframe;
+	conn.esriArcServerVersion = esriArcServerVersion;
+	
 	switch (layers[layerid].type) {
 	case "featureclass" :
 	case "Feature Layer" :
@@ -1016,6 +1032,8 @@ function _hotlinklayer(_identifyextent:Object, starttime:Date)
 	}
 	conn.featurelimit = _featurelimit;
 	conn.dataframe = dataframe;
+	conn.esriArcServerVersion = esriArcServerVersion;
+	
 	switch (layers[layerid].type) {
 	case "featureclass" :
 	case "Feature Layer" :
@@ -1720,6 +1738,16 @@ function _makeMaptip(layerid:String, maptip:String, record:Object):String {
 	} else {
 		return "";
 	}
+}
+//added
+function setMapservice(new_mapservice:String, new_dataframe:String):Void
+{
+	mapservice = new_mapservice;
+	dataframe = new_dataframe;
+}
+function getServer():String
+{
+	return server;
 }
 /**
 * Dispatched when the layer gets a request object from the connector.

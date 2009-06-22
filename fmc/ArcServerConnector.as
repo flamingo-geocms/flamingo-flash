@@ -16,6 +16,7 @@ class ArcServerConnector {
 	var extensions:Boolean = false;
 	var fields:Boolean = false;
 	var mapscale:Number;
+	var esriArcServerVersion:String="9.2";	
 	//getImage defaults
 	var outputtype:String = "png24";
 	var map:Boolean = true;
@@ -184,7 +185,14 @@ class ArcServerConnector {
 		var sxml:String = this.xmlheader+"\n";
 		sxml += "<SOAP-ENV:Envelope xmlns:SOAP-ENV=\"http://schemas.xmlsoap.org/soap/envelope/\"";
 		sxml +="xmlns:SOAP-ENC=\"http://schemas.xmlsoap.org/soap/encoding/\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"";
-		sxml +="xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\n<SOAP-ENV:Body>\n<m:GetServerInfo xmlns:m=\"http://www.esri.com/schemas/ArcGIS/9.3\">\n";
+		if(esriArcServerVersion == "9.2")
+		{
+			sxml +="xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\n<SOAP-ENV:Body>\n<m:GetServerInfo xmlns:m=\"http://www.esri.com/schemas/ArcGIS/9.2\">\n";
+		}
+		else if (esriArcServerVersion == "9.3")
+		{
+			sxml +="xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\n<SOAP-ENV:Body>\n<m:GetServerInfo xmlns:m=\"http://www.esri.com/schemas/ArcGIS/9.3\">\n";
+		}
 		sxml +="<MapName>"+dataframe+"</MapName>\n</m:GetServerInfo>\n</SOAP-ENV:Body>\n</SOAP-ENV:Envelope>"
 		return (this._sendrequest(sxml, "getServiceInfo", objecttag));
 	}
@@ -336,8 +344,18 @@ class ArcServerConnector {
 		
 		str += "<SOAP-ENV:Envelope xmlns:SOAP-ENV=\"http://schemas.xmlsoap.org/soap/envelope/\" ";
         str +="xmlns:SOAP-ENC=\" http://schemas.xmlsoap.org/soap/encoding/\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" ";
-        str += "xmlns:xsd=\" http://www.w3.org/2001/XMLSchema\" xmlns:m0=\"http://www.esri.com/schemas/ArcGIS/9.3\">\n<SOAP-ENV:Body>\n";
-        str += "<m:ExportMapImage xmlns:m=\"http://www.esri.com/schemas/ArcGIS/9.3\">\n<MapDescription>\n";
+        
+		if(esriArcServerVersion == "9.2")
+		{
+			str += "xmlns:xsd=\" http://www.w3.org/2001/XMLSchema\" xmlns:m0=\"http://www.esri.com/schemas/ArcGIS/9.2\">\n<SOAP-ENV:Body>\n";			
+			str += "<m:ExportMapImage xmlns:m=\"http://www.esri.com/schemas/ArcGIS/9.2\">\n<MapDescription>\n";
+		}
+		else if (esriArcServerVersion == "9.3")
+		{
+			str += "xmlns:xsd=\" http://www.w3.org/2001/XMLSchema\" xmlns:m0=\"http://www.esri.com/schemas/ArcGIS/9.3\">\n<SOAP-ENV:Body>\n";		
+			str += "<m:ExportMapImage xmlns:m=\"http://www.esri.com/schemas/ArcGIS/9.3\">\n<MapDescription>\n";
+		}
+		
         str +="<Name>"+dataframe+"</Name>\n<MapArea xsi:type=\"m0:MapExtent\">\n<Extent xsi:type=\"m0:EnvelopeN\">\n";
 		str += "<XMin>"+extent.minx+"</XMin>\n";
 		str += "<YMin>"+extent.miny+"</YMin>\n";
@@ -412,8 +430,18 @@ class ArcServerConnector {
 		str +="<SOAP-ENV:Envelope xmlns:SOAP-ENV=\"http://schemas.xmlsoap.org/soap/envelope/\" ";
 		str +="xmlns:SOAP-ENC=\"http://schemas.xmlsoap.org/soap/encoding/\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" ";
 		str +="xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\n<SOAP-ENV:Body>\n";
-		str +="<m:QueryFeatureIDs xmlns:m=\"http://www.esri.com/schemas/ArcGIS/9.3\">";
-		str +="<MapName>Layers</MapName>\n";
+		if(esriArcServerVersion == "9.2")
+		{
+			str +="<m:QueryFeatureIDs xmlns:m=\"http://www.esri.com/schemas/ArcGIS/9.2\">";
+		}
+		else if(esriArcServerVersion == "9.3")
+		{
+			str +="<m:QueryFeatureIDs xmlns:m=\"http://www.esri.com/schemas/ArcGIS/9.3\">";
+		}
+
+
+		
+		str +="<MapName>"+dataframe+"</MapName>\n";
 		str +="<LayerID>"+layerid+"</LayerID>\n";
 		str +="<QueryFilter><WhereClause>"+query+"</WhereClause>\n</QueryFilter>";
 		str +="</m:QueryFeatureIDs>\n</SOAP-ENV:Body>\n</SOAP-ENV:Envelope>";
@@ -457,7 +485,14 @@ class ArcServerConnector {
 		str +="<SOAP-ENV:Envelope xmlns:SOAP-ENV=\"http://schemas.xmlsoap.org/soap/envelope/\" ";
 		str +="xmlns:SOAP-ENC=\"http://schemas.xmlsoap.org/soap/encoding/\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" ";
 		str +="xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\n<SOAP-ENV:Body>\n";
-		str +="<m:Identify xmlns:m=\"http://www.esri.com/schemas/ArcGIS/9.3\">\n<MapDescription>\n";
+		if(esriArcServerVersion == "9.2")
+		{
+			str +="<m:Identify xmlns:m=\"http://www.esri.com/schemas/ArcGIS/9.2\">\n<MapDescription>\n";
+		}
+		else if(esriArcServerVersion == "9.3")
+		{
+			str +="<m:Identify xmlns:m=\"http://www.esri.com/schemas/ArcGIS/9.3/\">\n<MapDescription>\n";
+		}		
         str +="<Name>"+dataframe+"</Name>\n<LayerDescriptions>\n";
 
 		if(layerid != undefined)

@@ -72,6 +72,7 @@ var visibleids:String;
 var hiddenids:String;
 var outputtype:String = "png24";
 var alpha:Number = 100;
+var id:String;
 //---------------------------------
 var layers:Object = new Object();
 var vislayers:String = null;
@@ -439,6 +440,9 @@ function setConfig(xml:Object) {
 			break;
 		case "autorefreshdelay" :
 			setInterval(this, "autoRefresh", Number(val));
+			break;
+		case "id" :
+			id = val;
 			break;
 		}		
 	}
