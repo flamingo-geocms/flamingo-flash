@@ -12,7 +12,7 @@
 * Flamingo has two buttons used for editing: the remove feature button, which removes the active feature from the feature model, 
 * and the commit button, which commits the changes made within the feature model to the server. Please refer to the GIS component.
 * The CommitButton is an instance of BaseButton
-* The RemoveFeatureButton is an instance of ComponentVisibleButton
+* The RemoveFeatureButton is an instance of ComponentVisibleButton. Configure it outside the EditBar tags
 * @file flamingo/fmc/classes/flamingo/gui/EditBar.as  (sourcefile)
 * @file flamingo/fmc/EditBar.fla (sourcefile)
 * @file flamingo/fmc/EditBar.swf (compiled component, needed for publication on internet)
@@ -27,7 +27,15 @@
 	<Flamingo>
 		<fmc:EditBar id="editBar" left="523" top="4" listento="editMap" backgroundalpha="0" borderalpha="0">
 			...
+			<fmc:SelectFeatureButton left="25" top="2" listento="editMap">
+				<string id="tooltip" en="select object" nl="object selecteren"/>
+			</fmc:SelectFeatureButton>
+			...
 		</fmc:EditBar>
+		
+		<fmc:RemoveFeatureButton left="0" top="0" listento="confirmation">
+			<string id="tooltip" en="remove object" nl="Tekenobject verwijderen"/>
+		</fmc:RemoveFeatureButton>
 	</Flamingo>	
 */
 
