@@ -17,10 +17,32 @@ class coregui.ButtonBar extends MovieClip {
     private var orientation:Number = HORIZONTAL; // Set by init object.
     private var spacing:Number = 5; // Set by init object.
     private var expandable:Boolean = false; // Set by init object.
+	private var popwindow:Boolean = false; // Set by init object.
     private var buttonConfigs:Array = null; // Set by init object.
     private var buttons:Array = null;
+	
+	private var backgroundpadding:Number = 10; // Set by init object.
+	private var backgroundfillcolor:Number = 0x666666; // Set by init object.
+	private var backgroundfillopacity:Number = 50; // Set by init object.
+	private var backgroundborderwidth:Number = 2; // Set by init object.
+	private var backgroundborderspacing:Number = 2; // Set by init object.
+	private var backgroundbordercolor:Number = 0xcccccc; // Set by init object.
+	private var backgroundborderopacity:Number = 50; // Set by init object.	
+	
+	private var barbackground:MovieClip = null;
+	private var default_xpos:Number = 0;
+	private var default_ypos:Number = 0;
+	private var popUpWindowDX:Number = 15; // Set by init object.
+	private var popUpWindowDY:Number = 22; // Set by init object.
+	private var intervalId:Number;
+	private var popUpWindowHideDelay:Number = 1000; // Set by init object.
+	private var popUpWindowVisible:Boolean = false;
+	
     
     function onLoad():Void {
+		default_xpos = _x;
+		default_ypos = _y;
+	
         if ((orientation != HORIZONTAL) && (orientation != VERTICAL)) {
             _global.flamingo.tracer("Exception in coregui.ButtonBar.<<init>>(" + orientation + ")");
         }
@@ -35,10 +57,11 @@ class coregui.ButtonBar extends MovieClip {
         } else {
             addButtons();
         }
+		
     }
     
     private function addBackground():Void {
-        var background:MovieClip = createEmptyMovieClip("mBackground", 0);
+        var background:MovieClip = createEmptyMovieClip("mBackground", 1);
         background.moveTo(0, 0);
         background.lineStyle(1, 0x404040, 100);
         background.beginFill(0x000000, 0);
@@ -69,7 +92,7 @@ class coregui.ButtonBar extends MovieClip {
 		initObject["actionEventListener"] = buttonConfig.getActionEventListener();
         initObject["url"] = buttonConfig.getURL();
         initObject["windowName"] = buttonConfig.getWindowName();
-        buttons.push(attachMovie(symbolID, "m" + symbolID + i, i + 1, initObject));
+        buttons.push(attachMovie(symbolID, "m" + symbolID + i, i + 2, initObject));
     }
     
     private function removeButtons():Void {
@@ -79,24 +102,102 @@ class coregui.ButtonBar extends MovieClip {
         buttons = new Array();
     }
     
-    function onMouseMove():Void {
-        if (!expandable) {
-            return;
+	private function addBarBackground():Void {
+		var w = buttonWidth;
+		var h = buttonHeight;
+		if (orientation == HORIZONTAL) {
+            w = buttonConfigs.length * (buttonWidth + spacing) - spacing;
+        } else { // VERTICAL
+            h = buttonConfigs.length * (buttonHeight + spacing) - spacing;
         }
-        
-        if (hitTest(_root._xmouse, _root._ymouse)) {
-            if (buttons.length > 0) {
-                return;
-            }
-            
-            addButtons();
-        } else {
-            if (buttons.length == 0) {
-                return;
-            }
-            
-            removeButtons();
-        }
+		
+		
+		barbackground = createEmptyMovieClip("mBarBackground", 0);
+		
+		barbackground.moveTo(-backgroundpadding, -backgroundpadding);
+		barbackground.beginFill(backgroundfillcolor, backgroundfillopacity);
+		barbackground.lineTo(w + backgroundpadding, -backgroundpadding);
+		barbackground.lineTo(w + backgroundpadding, h + backgroundpadding);
+		barbackground.lineTo(-backgroundpadding, h + backgroundpadding);
+		barbackground.lineTo(-backgroundpadding, -backgroundpadding);
+		barbackground.endFill();
+		
+		barbackground.lineStyle(backgroundborderwidth, backgroundbordercolor, backgroundborderopacity);
+		barbackground.moveTo(-backgroundpadding + backgroundborderspacing, -backgroundpadding + backgroundborderspacing);
+		barbackground.lineTo(w + backgroundpadding - backgroundborderspacing, -backgroundpadding + backgroundborderspacing);
+		barbackground.lineTo(w + backgroundpadding - backgroundborderspacing, h + backgroundpadding - backgroundborderspacing);
+		barbackground.lineTo(-backgroundpadding + backgroundborderspacing, h + backgroundpadding - backgroundborderspacing);
+		barbackground.lineTo(-backgroundpadding + backgroundborderspacing, -backgroundpadding + backgroundborderspacing);
     }
+	private function removeBarBackground():Void {
+		barbackground.removeMovieClip();
+	}
+	
+    function onMouseMove():Void {
+		if (!expandable) {
+			return;
+        } else {
+			if (popwindow) {
+				if (hitTest(_root._xmouse, _root._ymouse)) {
+					if (buttons.length > 0) {
+						return;
+					}
+					if (!popUpWindowVisible){
+						_x = default_xpos + popUpWindowDX;
+						_y = default_ypos + popUpWindowDY;
+						addBarBackground();
+						addButtons();
+						popUpWindowVisible = true;
+						if (intervalId!=null){
+							clearInterval(intervalId);
+						}
+					}
+				} else {
+					if (buttons.length == 0) {
+						_x = default_xpos;
+						_y = default_ypos;
+						removeBarBackground();
+						popUpWindowVisible = false;
+						return;
+					}
+					if (popUpWindowVisible) {
+						if (intervalId!=null){
+							clearInterval(intervalId);
+						}
+						intervalId = setInterval(this,"removePopUpWindow", popUpWindowHideDelay);
+					}
+					
+				}
+				
+			
+			} else {
+				if (hitTest(_root._xmouse, _root._ymouse)) {
+					if (buttons.length > 0) {
+						return;
+					}
+					
+					addButtons();
+				} else {
+					if (buttons.length == 0) {
+						return;
+					}
+					
+					removeButtons();
+				}
+			}
+		}
+	
+    }
+	
+	function removePopUpWindow():Void{
+		clearInterval(intervalId);
+		if (!hitTest(_root._xmouse, _root._ymouse)) {
+			_x = default_xpos;
+			_y = default_ypos;
+			removeBarBackground();
+			removeButtons();
+			popUpWindowVisible = false;
+		}
+	}
     
 }

@@ -2,6 +2,7 @@
 * This file is part of Flamingo MapComponents.
 * Author: Michiel J. van Heek.
 * IDgis bv
+* Changes by author: Maurits Kelder, B3partners bv
  -----------------------------------------------------------------------------*/
 
 
@@ -21,12 +22,28 @@
 * @hierarchy childnode of Flamingo or a container component.
 * @example
   <flamingo>
-  	 <fmc:EditLegend id="editLegend" left="right -210" right="right -5" top="40" height="180" listento="editMap"/>
+  	 <fmc:EditLegend id="editLegend" left="right -210" right="right -5" top="40" height="180" listento="editMap" expandable="true" popwindow="true"/>
 	...
-  </fmc:Container>	
+  </fmc:Container>
+* @attr expandable (true, false, default value: true) Expans the buttonbar.
+* @attr popwindow (true, false, default value: true) Popups the expanded buttonbar as a window with a configurable background and border. 
+* @attr orientation (horizontal, vertical, default value: horizontal) Orientation of the buttonbar. 
+* @attr dx (number default value: 22) Horizontal offset of the buttonbar.
+* @attr dy (number default value: 5) Vertical offset of the buttonbar.
+* @attr popUpWindowHideDelay (number default value: 1000) Delay in ms before the expanded buttonbar window hides.
+* @attr popUpWindowDX (number default value: 15) Vertical offset of the expanded buttonbar window.
+* @attr popUpWindowDY (number default value: 22) Horizontal offset of the expanded buttonbar window.
+* @attr buttonWidth (number default value: 15) Button width in pixels.
+* @attr buttonHeight (number default value: 15) Button height in pixels.
+* @attr spacing (number default value: 5) Spacing between buttons in pixels.
+* @attr backgroundpadding (number default value: 6) Space between buttons and the edge of the expanded buttonbar window.
+* @attr backgroundfillcolor (number default value: 0xcccccc) Backgroundfillcolor of the expanded buttonbar window.
+* @attr backgroundfillopacity (number default value: 100) Backgroundfillopacity of the expanded buttonbar window.
+* @attr backgroundborderwidth (number default value: 2) Width of border inside the expanded buttonbar window.
+* @attr backgroundborderspacing (number default value: 2) Spacing between background edge and border of the expanded buttonbar window.
+* @attr backgroundbordercolor (number default value: 0xaaaaaa Color of border inside the expanded buttonbar window.
+* @attr backgroundborderopacity (number default value: 100) Opacity of border inside the expanded buttonbar window.
 */
-
-
 
 import gui.*;
 
@@ -40,11 +57,66 @@ class gui.EditLegend extends AbstractComponent implements StateEventListener {
     private var gis:GIS = null;
     private var editLegendLayers:Array = null;
     private var legendHeight:Number = 25;
-    
+    private var buttonBarProperties:Object = new Object(); //associative array
+	
+	function setAttribute(name:String, value:String):Void {
+		if(name == "expandable"){
+			buttonBarProperties["expandable"] = (value.toLowerCase() == "true" ? true : false);
+		}
+		if(name == "popwindow"){
+		  	buttonBarProperties["popwindow"] = (value.toLowerCase() == "true" ? true : false);
+        }
+		if(name == "dx"){
+		  	buttonBarProperties["_x"] = Number(value);
+        }
+		if(name == "dy"){
+		  	buttonBarProperties["_y"] = Number(value);
+        }
+		if(name == "buttonWidth"){
+		  	buttonBarProperties["buttonWidth"] = Number(value);
+        }
+		if(name == "buttonHeight"){
+		  	buttonBarProperties["buttonHeight"] = Number(value);
+        }
+		if(name == "spacing"){
+		  	buttonBarProperties["spacing"] = Number(value);
+        }
+		if(name == "orientation"){
+		  	buttonBarProperties["orientation"] = (value.toLowerCase() == "vertical" ? 1 : 0);//HORIZONTAL = 0, VERTICAL = 1
+        }
+		if(name == "popUpWindowHideDelay"){
+		  	buttonBarProperties["popUpWindowHideDelay"] = Number(value);
+        }
+		if(name == "popUpWindowDX"){
+		  	buttonBarProperties["popUpWindowDX"] = Number(value);
+        }
+		if(name == "popUpWindowDY"){
+		  	buttonBarProperties["popUpWindowDY"] = Number(value);
+        }
+		if(name == "backgroundpadding"){
+		  	buttonBarProperties["backgroundpadding"] = Number(value);
+        }
+		if(name == "backgroundfillcolor"){
+			buttonBarProperties["backgroundfillcolor"] = Number(value);
+        }
+		if(name == "backgroundfillopacity"){
+		  	buttonBarProperties["backgroundfillopacity"] = Number(value);
+        }
+		if(name == "backgroundborderwidth"){
+		  	buttonBarProperties["backgroundborderwidth"] = Number(value);
+        }
+		if(name == "backgroundbordercolor"){
+			buttonBarProperties["backgroundbordercolor"] = Number(value);
+        }
+		if(name == "backgroundborderopacity"){
+		  	buttonBarProperties["backgroundborderopacity"] = Number(value);
+        }
+	}
+	
     function init():Void {
-        gis = _global.flamingo.getComponent(listento[0]).getGIS();
-		
-        editLegendLayers = new Array();
+		gis = _global.flamingo.getComponent(listento[0]).getGIS();
+	
+		editLegendLayers = new Array();
         
         gis.addEventListener(this, "GIS", StateEvent.ADD_REMOVE, "layers");
         
@@ -82,6 +154,7 @@ class gui.EditLegend extends AbstractComponent implements StateEventListener {
         initObject["height"] = legendHeight;
         initObject["gis"] = gis;
         initObject["layer"] = layer;
+		initObject["buttonBarProperties"] = buttonBarProperties;
         editLegendLayers.push(attachMovie("EditLegendLayer", "mEditLegendLayer" + depth, depth, initObject));
     }
     

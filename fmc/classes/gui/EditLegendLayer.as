@@ -30,6 +30,7 @@ class gui.EditLegendLayer extends MovieClip implements StateEventListener, Actio
     private var height:Number = -1; // Set by init object.
     private var gis:GIS = null; // Set by init object.
     private var layer:Layer = null; // Set by init object.
+	private var buttonBarProperties:Object = null; // Set by init object.
     
     private var checkBox:CheckBox = null;
     
@@ -156,14 +157,30 @@ class gui.EditLegendLayer extends MovieClip implements StateEventListener, Actio
             }
         }
         var initObject:Object = new Object();
-        initObject["_x"] = 22;
-		//position the buttonbar below the checkbox & label
-		initObject["_y"] = 25;
+		initObject["_x"] = 22;	//dx offset
+		initObject["_y"] = 5;	//dy offset
         initObject["buttonWidth"] = 15;
         initObject["buttonHeight"] = 15;
-        initObject["spacing"] = 0;
-        //do not expand the button's while rollover the first. We prefer to switch it's visibility in sync with the checkbox
-		initObject["expandable"] = false;
+        initObject["spacing"] = 5;
+		initObject["orientation"] = 0; //HORIZONTAL = 0, VERTICAL = 1
+		initObject["expandable"] = true;
+		initObject["popwindow"] = true;
+		initObject["popUpWindowHideDelay"] = 1000;
+		initObject["popUpWindowDX"] = 15;
+		initObject["popUpWindowDY"] = 22;
+		initObject["backgroundpadding"] = 6;
+		initObject["backgroundfillcolor"] = 0xcccccc;
+		initObject["backgroundfillopacity"] = 100;
+		initObject["backgroundborderwidth"] = 2;
+		initObject["backgroundborderspacing"] = 2;
+		initObject["backgroundbordercolor"] = 0xaaaaaa;
+		initObject["backgroundborderopacity"] = 100;
+		
+		//overwrite properties
+		for(var prop in buttonBarProperties) {
+			initObject[prop] = buttonBarProperties[prop];
+		}
+		
         initObject["buttonConfigs"] = buttonConfigs;
         attachMovie("ButtonBar", "mButtonBar", 3, initObject);
     }
