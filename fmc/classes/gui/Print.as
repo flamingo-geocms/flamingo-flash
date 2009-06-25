@@ -10,7 +10,7 @@
 *
 * With the print component a user can select a template and change its make-up. 
 * Two settings of a template are set outside the print component. 
-* The user can use the “main map” for that. These settings are: the rough zoom area, and optionally an identify location. 
+* The user can use the "main map" for that. These settings are: the rough zoom area, and optionally an identify location. 
 * The first map in every template will react to these events from Flamingo's “main map”. 
 * All other settings are done using the print component. 
 * These settings are: the exact scale, which components within the template be visible (using a “container inspector” with check boxes), 

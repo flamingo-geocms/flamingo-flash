@@ -8,7 +8,7 @@
 * A container that holds and positions a number of components, with the intension to send them to a printer. 
 * As a container it can hold any type of Flamingo component.
 * With the print component a user can change the make-up of a template and preview it. Please refer to the Print component.
-* Zoom and pan events in Flamingo's “main map” reflect on the first map in the template. 
+* Zoom and pan events in Flamingo's "main map" reflect on the first map in the template. 
 * Identify events also reflect on the first map in the template, provided that the map is configured to handle identifies, 
 * for example with an identify icon or with an identify results component that listens to the template's map.
 * @file flamingo/fmc/classes/flamingo/gui/PrintTemplate.as  (sourcefile)
@@ -24,10 +24,10 @@
 * Direct is the usual way with their own Flamingo attributes. 
 * Indirect is by referring to another legend or map and using the configuration settings of that other component (attribute configobject in Map and Legend). 
 * If ids are used for the child components, make sure the ids are unique within the whole Flamingo configuration. 
-* Names do not have to be unique. The names of child components are used as labels in the “container inspector” of the print component. 
-* The “container inspector” lets the user set the visibility of components within the template. 
+* Names do not have to be unique. The names of child components are used as labels in the "container inspector" of the print component. 
+* The "container inspector" lets the user set the visibility of components within the template. 
 * A print template should be registered as a listener to the legend component  that controls its map, 
-* and that exists in the “legend container” of the print component. 
+* and that exists in the "legend container"of the print component. 
 * If registered the legend will become visible when the corresponding template is chosen and invisible when another template is chosen by the user.
 * @class gui.PrintTemplate extends gui.ScalableContainer
 * @hierarchy child node of Print. 
@@ -43,12 +43,12 @@
 			<fmc:PrintLabel name="identifylabel" top="0" width="40%" right="right"  text="Identify resultaten" fontfamily="arial" fontsize="18"/>
 		</fmc:PrintTemplate>
 	</fmc:Print>	
-* @attr dpi (default value = “72”, max value = "144") Resolution in which the template is intended to be sent to the printer. In dots per inch. 
+* @attr dpi (default value = "72", max value = "144") Resolution in which the template is intended to be sent to the printer. In dots per inch. 
 * Raising the resolution will improve the print quality but it may also show more a more detailed map than one might expect.
-* @attr format (“A3”, “A4”, no default value) Paper format to which the template is intended to be printed.
-* @attr orientation (“landscape”, “portrait”, no default value) Paper orientation to which the template is intended to be printed.
-* @attr maps (optional, default value: “”) Comma separated string with ids of a the map components within the template. 
-* The first one of these maps responds to zooms and pans and identifies in the “main map”. 
+* @attr format ("A3", "A4", no default value) Paper format to which the template is intended to be printed.
+* @attr orientation ("landscape", "portrait", no default value) Paper orientation to which the template is intended to be printed.
+* @attr maps (optional, default value: "") Comma separated string with ids of a the map components within the template. 
+* The first one of these maps responds to zooms and pans and identifies in the "main map". 
 * If a template contains a second map, for example as an overview map, make sure that the second map is not first in the list of maps.
 */
 
