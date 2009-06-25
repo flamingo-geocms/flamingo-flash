@@ -2176,9 +2176,13 @@ dynamic class Map extends MovieClip {
 		return nextDepth;
 	}
 	/**
-	* Set Marker on the map or updates an existing marker
-	* @param id marker id
-	* @param type marker type: default, url, text. 
+	* Set Marker on the map or updates an existing marker referenced by it's id.
+	* @param id marker id. Reference to the marker.
+	* @param type marker type: [default, url, or text]. Note: only the default marker type is implemented.
+	* @param x [optional] x-coordinate of marker. Default center of current extent.
+	* @param y [optional] y-coordinate of marker. Default center of current extent.
+	* @param height [optional] height of marker. Note: not implemented.
+	* @param htmlText [optional] htmlText if the marker type is text. Note: only the default marker type is implemented.
 	*/
 	public function setMarker(id:String,type:String,x:Number,y:Number,width:Number,height:Number,htmlText:String):Void {
 		if (x==null || y==null) { //place marker in center of the map
@@ -2259,7 +2263,7 @@ dynamic class Map extends MovieClip {
 		initObject["height"] = height;
 		initObject["htmlText"] = htmlText;
 				
-		var depth:Number = this.getNextDepth() + markerIDnr;	//note the default as2 method is overruled in this class to ensure the Marker is on top.
+		var depth:Number = this.getNextDepth() + markerIDnr;	//note the default as2 method getNextDepth() is overruled in this class to ensure the Marker is on top.
 		var mcMarker:Object = this.attachMovie("Marker", "mcMarker"+markerIDnr, depth, initObject);
 		mcMarker.init();
 		markerIDnr++;

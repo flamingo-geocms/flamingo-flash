@@ -25,6 +25,16 @@
   	 <fmc:EditLegend id="editLegend" left="right -210" right="right -5" top="40" height="180" listento="editMap" expandable="true" popwindow="true"/>
 	...
   </fmc:Container>
+  ...
+  Example 1: fixed button bar below edit legend checkbox and label
+  <fmc:EditLegend id="editLegend" left="75%" top="60%" listento="editMap" expandable="false" popwindow="false" dx="22" dy="25" spacing="0"/>
+  ...
+  Example 2: Pop up window style Button bar.
+  <fmc:EditLegend id="editLegend" left="75%" top="60%" listento="editMap" expandable="true" popwindow="true"/>
+  ...
+  Example 3: expandable button bar over legend checkbox and label.
+  <fmc:EditLegend id="editLegend" left="75%" top="60%" listento="editMap" expandable="true" popwindow="false" spacing="0"/>
+  ...
 * @attr expandable (true, false, default value: true) Expans the buttonbar.
 * @attr popwindow (true, false, default value: true) Popups the expanded buttonbar as a window with a configurable background and border. 
 * @attr orientation (horizontal, vertical, default value: horizontal) Orientation of the buttonbar. 
