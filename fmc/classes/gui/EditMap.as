@@ -404,6 +404,9 @@ class gui.EditMap extends AbstractComponent implements StateEventListener {
         initObject["height"] = __height;
         editMapCreateGeometry = EditMapCreateGeometry(attachMovie("EditMapCreateGeometry", "mEditMapCreateGeometry", editMapCreateGeometryDepth, initObject));
     }
+	/**
+	Add the editMapSelectFeature component to select a geometry.
+	*/
 	private function addEditMapSelectFeature():Void{
 		var initObject:Object = new Object();
         initObject["map"] = map;
@@ -412,6 +415,9 @@ class gui.EditMap extends AbstractComponent implements StateEventListener {
         initObject["height"] = __height;
         editMapSelectFeature = EditMapSelectFeature(attachMovie("EditMapSelectFeature", "mEditMapSelectFeature", 2000, initObject));
 	}
+	/**
+	remove the editMapSelectFeature component to select a geometry.
+	*/
     private function removeEditMapSelectFeature():Void {
         if (editMapSelectFeature != null) {
             editMapSelectFeature.remove();
@@ -419,6 +425,7 @@ class gui.EditMap extends AbstractComponent implements StateEventListener {
         }
     }
     /**
+	Removes all features from all the layers for this editmap
 	*/
 	public function removeAllFeatures():Void{
 		var layers:Array=gis.getLayers();
@@ -427,13 +434,38 @@ class gui.EditMap extends AbstractComponent implements StateEventListener {
 			layer.removeFeatures(layer.getFeatures(),false);
 		}
 	}
+	/**
+	Removes the editmapCreateGeometry, edit stops.
+	*/
     private function removeEditMapCreateGeometry():Void {
         if (editMapCreateGeometry != null) {
             editMapCreateGeometry.remove();
             editMapCreateGeometry = null; // MovieClip.removeMovieClip does not nullify the reference.
         }
     }
-	
+	/**
+	Get all features of all the layers in this EditMap as objects(usable objects for javascript, see Feature.toObject() for details of the object)
+	*/
+	public function getAllFeaturesAsObject():Array{
+		var returnValue:Array=new Array();
+		var layers:Array=gis.getLayers();
+		for (var i=0; i < layers.length; i++){
+			trace("********for layers");
+			var layer=Layer(layers[i]);
+			var lFeatures:Array=layer.getFeatures();
+			for (var l=0; l < lFeatures.length; l++){
+				trace("********for features in layers");
+				var oFeature:Object=Feature(lFeatures[l]).toObject();
+				if (oFeature!=undefined && oFeature!=null){					
+					trace("********for features in layers: "+oFeature);
+					oFeature["flamingoLayerName"]=layer.getName();
+					returnValue.push(oFeature);
+				}
+			}			
+		}
+		trace("***********"+returnValue.join(" "));
+		return returnValue;
+	}
 	public function onSetTool(toolgroup:Object,tool:Object){
 		var feature:gismodel.Feature = gis.getActiveFeature();
 		if (feature != null && editMapCreateGeometry != null) {
@@ -465,7 +497,7 @@ class gui.EditMap extends AbstractComponent implements StateEventListener {
          }
 	}
 	/**
-	Gets the active feature as a object (see feature.toObject() for details of the object)
+	Gets the active feature as a object (see Feature.toObject() for details of the object)
 	*/
 	public function getActiveFeature():Object{
 		var returnValue:Object = new Object();

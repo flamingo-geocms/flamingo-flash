@@ -110,6 +110,9 @@ class gismodel.Layer extends AbstractComposite implements ActionEventListener {
         return title;
     }
     
+	function getName():String{
+		return name;
+	}
     function setVisible(visible:Boolean):Void {
         if (this.visible == visible) {
             return;
