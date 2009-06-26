@@ -450,20 +450,16 @@ class gui.EditMap extends AbstractComponent implements StateEventListener {
 		var returnValue:Array=new Array();
 		var layers:Array=gis.getLayers();
 		for (var i=0; i < layers.length; i++){
-			trace("********for layers");
 			var layer=Layer(layers[i]);
 			var lFeatures:Array=layer.getFeatures();
 			for (var l=0; l < lFeatures.length; l++){
-				trace("********for features in layers");
 				var oFeature:Object=Feature(lFeatures[l]).toObject();
 				if (oFeature!=undefined && oFeature!=null){					
-					trace("********for features in layers: "+oFeature);
 					oFeature["flamingoLayerName"]=layer.getName();
 					returnValue.push(oFeature);
 				}
 			}			
 		}
-		trace("***********"+returnValue.join(" "));
 		return returnValue;
 	}
 	public function onSetTool(toolgroup:Object,tool:Object){
