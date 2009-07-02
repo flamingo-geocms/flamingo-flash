@@ -1,4 +1,4 @@
-/*-----------------------------------------------------------------------------
+﻿/*-----------------------------------------------------------------------------
 * This file is part of Flamingo MapComponents.
 * Author: Michiel J. van Heek.
 * IDgis bv
@@ -6,8 +6,10 @@
  -----------------------------------------------------------------------------*/
 
 import coregui.*;
+import event.ActionEvent;
+import event.ActionEventListener;
 
-class coregui.ButtonBar extends MovieClip {
+class coregui.ButtonBar extends MovieClip implements ActionEventListener{
     
     static var HORIZONTAL:Number = 0;
     static var VERTICAL:Number = 1;
@@ -59,6 +61,21 @@ class coregui.ButtonBar extends MovieClip {
         }
 		
     }
+	
+	function onActionEvent(actionEvent:ActionEvent):Void {
+        var sourceClassName:String = actionEvent.getSourceClassName();
+        var actionType:Number = actionEvent.getActionType();
+		if (sourceClassName + "_" + actionType == "Button_" + ActionEvent.CLICK) {
+			if (expandable) {
+				if (popwindow) {
+					removePopUpWindow(true);
+				} else {
+					removeButtons();
+				}
+			}
+        }
+    }
+    
     
     private function addBackground():Void {
         var background:MovieClip = createEmptyMovieClip("mBackground", 1);
@@ -93,11 +110,15 @@ class coregui.ButtonBar extends MovieClip {
         initObject["url"] = buttonConfig.getURL();
         initObject["windowName"] = buttonConfig.getWindowName();
         buttons.push(attachMovie(symbolID, "m" + symbolID + i, i + 2, initObject));
-    }
+		buttons[i].addActionEventListener(this);
+	}
     
     private function removeButtons():Void {
-        for (var i:String in buttons) {
-            buttons[i].removeMovieClip();
+		for (var i:Number = 0; i < buttons.length; i++) {
+            buttons[i].onPress = null;
+		}
+        for (var j:String in buttons) {
+            buttons[j].removeMovieClip();
         }
         buttons = new Array();
     }
@@ -110,7 +131,6 @@ class coregui.ButtonBar extends MovieClip {
         } else { // VERTICAL
             h = buttonConfigs.length * (buttonHeight + spacing) - spacing;
         }
-		
 		
 		barbackground = createEmptyMovieClip("mBarBackground", 0);
 		
@@ -129,6 +149,7 @@ class coregui.ButtonBar extends MovieClip {
 		barbackground.lineTo(-backgroundpadding + backgroundborderspacing, h + backgroundpadding - backgroundborderspacing);
 		barbackground.lineTo(-backgroundpadding + backgroundborderspacing, -backgroundpadding + backgroundborderspacing);
     }
+	
 	private function removeBarBackground():Void {
 		barbackground.removeMovieClip();
 	}
@@ -176,40 +197,17 @@ class coregui.ButtonBar extends MovieClip {
 					if (buttons.length > 0) {
 						return;
 					}
-					
 					addButtons();
 				} else {
 					if (buttons.length == 0) {
 						return;
 					}
-					
 					removeButtons();
 				}
 			}
 		}
 	
     }
-	
-	function onMouseDown():Void {
-		if (hitTest(_root._xmouse, _root._ymouse)) {
-			if (expandable) {
-				if (popwindow) {
-					removePopUpWindow(true);
-				}
-			}
-		}
-	}
-	function onMouseUp():Void {
-		if (hitTest(_root._xmouse, _root._ymouse)) {
-			if (expandable) {
-				if (popwindow) {
-					//removePopUpWindow(true);
-				} else {
-					removeButtons();
-				}
-			}
-		}
-	}
 	
 	function removePopUpWindow(afterMouseDown:Boolean):Void{
 		if (afterMouseDown==null) {

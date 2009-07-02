@@ -1,4 +1,4 @@
-/*-----------------------------------------------------------------------------
+﻿/*-----------------------------------------------------------------------------
 * This file is part of Flamingo MapComponents.
 * Author: Michiel J. van Heek.
 * IDgis bv
@@ -39,6 +39,7 @@ class coregui.BaseButton extends AbstractComponent {
     //private var tooltipText:String = "";
 	private var tooltipText:String = null; // Set by init object.
     private var actionEventListener:ActionEventListener = null;
+	private var actionEventListeners:Array = null;
     private var url:String = null;
     private var windowName:String = "_blank";
 	private var thisObj:Object;
@@ -53,9 +54,14 @@ class coregui.BaseButton extends AbstractComponent {
 	//frame 5: selected_over
 	//frame 6: selected_down
 	
+	function BaseButton(){
+		actionEventListeners = new Array();
+		setActionEventListener(this.actionEventListener);
+	}
+	
     function init():Void {
         useHandCursor = false;
-        //tooltipText = _global.flamingo.getString(this, "tooltip");  //Do not overrule the value set by init object.
+		//tooltipText = _global.flamingo.getString(this, "tooltip");  //Do not overrule the value set by init object.
     }
 	
 	function getID():Number {
@@ -63,7 +69,16 @@ class coregui.BaseButton extends AbstractComponent {
     }
     
     function setActionEventListener(actionEventListener:ActionEventListener):Void {
-        this.actionEventListener = actionEventListener;
+		actionEventListeners = new Array();	//delete former listeners!
+		if (actionEventListener != null) { 
+			actionEventListeners.push(actionEventListener);
+		}
+    }
+	
+	function addActionEventListener(actionEventListener:ActionEventListener):Void {
+		if (actionEventListener != null) { 
+			actionEventListeners.push(actionEventListener);
+		}
     }
 	
 	function setSelectedState(selected:Boolean):Void {
@@ -93,17 +108,18 @@ class coregui.BaseButton extends AbstractComponent {
 		else {
 			gotoAndStop(3);			//down
 		}
-        
-        if (actionEventListener != null) {
-        	var actionEvent:ActionEvent = new ActionEvent(this, "Button", ActionEvent.CLICK);
-            actionEventListener.onActionEvent(actionEvent);
-            var id:String =  _global.flamingo.getComponentID(this);
-            if(id != null){
-            	_global.flamingo.raiseEvent(this,"onActionEvent",id + "," + actionEvent.toString());
-            } 
-        } else if (url != null) {
-            getURL("javascript:openNewWindow('" + url + "', '" + windowName + "', 'width=500, height=400, top=50, left=50, toolbar=no, resizable=yes, scrollbars=yes')");
-        }
+		for (var i:Number=0; i<actionEventListeners.length; i++) {
+			if (actionEventListeners[i] != null) {
+				var actionEvent:ActionEvent = new ActionEvent(this, "Button", ActionEvent.CLICK);
+				actionEventListeners[i].onActionEvent(actionEvent);
+				var id:String =  _global.flamingo.getComponentID(this);
+				if(id != null){
+					_global.flamingo.raiseEvent(this,"onActionEvent",id + "," + actionEvent.toString());
+				} 
+			} else if (url != null) {
+				getURL("javascript:openNewWindow('" + url + "', '" + windowName + "', 'width=500, height=400, top=50, left=50, toolbar=no, resizable=yes, scrollbars=yes')");
+			}
+		}
     }
     
     function onRollOver():Void {
@@ -151,5 +167,4 @@ class coregui.BaseButton extends AbstractComponent {
 			gotoAndStop(1);			//up
 		}
     }
-    
 }
