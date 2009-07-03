@@ -1,4 +1,4 @@
-﻿/*-----------------------------------------------------------------------------
+/*-----------------------------------------------------------------------------
 Copyright (C) 2006  Menko Kroeske
 
 This file is part of Flamingo MapComponents.
@@ -46,6 +46,7 @@ var defaultXML:String = "<?xml version='1.0' encoding='UTF-8'?>" +
 var thisObj = this;
 var skin = "";
 var stripdatabase:Boolean = true;
+var showOnIdentify: Boolean = true;
 var denystrangers:Boolean = true;
 var wordwrap:Boolean = true;
 var textinfo:String = "";
@@ -55,7 +56,9 @@ var htmlfield:String = null;
 //---------------------------------
 var lMap:Object = new Object();
 lMap.onIdentify = function(map:MovieClip, extent:Object) {
-	show();
+	if(showOnIdentify) {
+		show();
+	}
 	var s = flamingo.getString(thisObj, "startidentify", "start identify...");
 	txtHeader.htmlText = "<span class='status'>"+s+"</span>";
 	txtInfo.htmlText = "";
@@ -237,6 +240,7 @@ function show() {
 * @attr denystrangers  (defaultvalue = "true") true or false. True: only configured layerid's will be shown. False: not configured layerid's will be shown in a default way.
 * @attr wordwrap  (defaultvalue = "true") True or false.
 * @attr skin  (defaultvalue = "") Skin. No skins available at this moment.
+* @attr showonidentify  (defaultvalue = "true") If the component and all parents should be made visible on the onIdentify event.
 * @attr htmlwindow (no defaultvalue) id of the Window component that will open when the asfunction openHtml is called.
 * This window must contain the TextArea which is reffered to in the htmlfield attribute.   
 * @attr htmlfield  (no defaultvalue) id of a TextArea component in which the html text will be shown. The TextArea can be anywhere in
@@ -325,7 +329,10 @@ function setConfig(xml:Object) {
 		case "htmlfield":
 			htmlfield = val;
 			break;	
-		}
+		case "showonidentify":
+			showOnIdentify = val.toLowerCase() == "true";
+			break;				
+		}	
 	}
 	//    
 	txtInfo.styleSheet = flamingo.getStyleSheet(this);
