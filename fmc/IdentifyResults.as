@@ -1,4 +1,4 @@
-﻿/*-----------------------------------------------------------------------------
+/*-----------------------------------------------------------------------------
 Copyright (C) 2006  Menko Kroeske
 
 This file is part of Flamingo MapComponents.
@@ -52,13 +52,16 @@ var defaultXML:String = "<?xml version='1.0' encoding='UTF-8'?>" +
 						"<style id='.error' font-family='verdana' font-size='11px' color='#ff6600' display='block' font-weight='normal'/>"+
 						"</IdentifyResults>";
 var stripdatabase:Boolean = true;
+var showOnIdentify: Boolean = true;
 var results:Object;
 var thisObj = this;
 var skin = "";
 //---------------------------------
 var lMap:Object = new Object();
 lMap.onIdentify = function(map:MovieClip, extent:Object) {
-	show();
+	if(showOnIdentify) {
+	  show();
+	}
 	var s = flamingo.getString(thisObj, "startidentify", "start identify...");
 	txtHeader.htmlText = "<span class='status'>"+s+"</span>";
 	results = new Object();
@@ -139,6 +142,7 @@ function show() {
 * <fmc:IdentifyResults left="10" top="10" width="30%" height="100%" listento="map"/> 
 * @attr stripdatabase  (defaultvalue = "true") true or false. False: the whole database fieldname will be shown. True: the fieldname will be stripped until the last '.'
 * @attr skin  (defaultvalue = "") Skin. No skins available at this moment.
+* @attr showonidentify  (defaultvalue = "true") If the component and all parents should be made visible on the onIdentify event.
 */
 function init():Void {
 	if (flamingo == undefined) {
@@ -202,6 +206,9 @@ function setConfig(xml:Object) {
 			} else {
 				stripdatabase = false;
 			}
+			break;
+		case "showonidentify":
+			showOnIdentify = val.toLowerCase() == "true";
 			break;
 		}
 	}
