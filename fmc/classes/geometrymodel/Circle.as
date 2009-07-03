@@ -74,11 +74,9 @@ class geometrymodel.Circle extends Geometry {
     
 	function toWKT():String{
 		var wktGeom:String="";
-		trace("circle.toWKT()");
 		wktGeom+="POLYGON(";		
 		wktGeom+=this.toWKTPart();
-		wktGeom+=")";		
-		trace(wktGeom);
+		wktGeom+=")";
 		return wktGeom;
 	}
 	
