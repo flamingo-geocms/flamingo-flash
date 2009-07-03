@@ -219,13 +219,17 @@ class gui.EditMap extends AbstractComponent implements StateEventListener {
 		} else if (sourceClassName + "_" + actionType + "_" + propertyName == "GIS_" + StateEvent.CHANGE + "_geometryUpdate") {
 			if (gis.getActiveFeature()!=null){
 				//API event onGeometryDrawUpdate();
-				_global.flamingo.raiseEvent(this,"onGeometryDrawUpdate",this,gis.getActiveFeature().getGeometry().toWKT());
+				if (!(gis.getActiveFeature().getGeometry() instanceof Circle)){
+					_global.flamingo.raiseEvent(this,"onGeometryDrawUpdate",this,gis.getActiveFeature().getGeometry().toWKT());
+				}
 			}
 		}
 		else if (sourceClassName + "_" + actionType + "_" + propertyName == "GIS_" + StateEvent.CHANGE + "_geometryDragUpdate") {
 			if (gis.getActiveFeature()!=null){
 				//API event onGeometryDrawDragUpdate();
-				_global.flamingo.raiseEvent(this,"onGeometryDrawDragUpdate",this,gis.getActiveFeature().getGeometry().toWKT());
+				if (!(gis.getActiveFeature().getGeometry() instanceof Circle)){
+					_global.flamingo.raiseEvent(this,"onGeometryDrawDragUpdate",this,gis.getActiveFeature().getGeometry().toWKT());
+				}
 			}
 		}
     }
@@ -333,7 +337,6 @@ class gui.EditMap extends AbstractComponent implements StateEventListener {
 			if (points!=null){
 				var geometry:Geometry = new LineString(points);
 				layer.addFeature(geometry, true);
-				
 				_global.flamingo.raiseEvent(this,"onGeometryDrawFinished",this,gis.getActiveFeature().getGeometry().toWKT());			
 				gis.setCreateGeometry(null);
 			} else{
@@ -357,7 +360,7 @@ class gui.EditMap extends AbstractComponent implements StateEventListener {
             }
 			var geometry:Geometry = new Polygon(new LinearRing(points));
 			layer.addFeature(geometry, true);
-			
+			trace("onGeometryDrawFinished");
 			_global.flamingo.raiseEvent(this,"onGeometryDrawFinished",this,gis.getActiveFeature().getGeometry().toWKT());			
 			gis.setCreateGeometry(null);
 			*/
@@ -523,4 +526,24 @@ class gui.EditMap extends AbstractComponent implements StateEventListener {
 	public function moveToExtent(extendedExtent:Object):Void{
 		_global.flamingo.getComponent(listento[0]).moveToExtent(extendedExtent);
 	}
+	
+	/*EVENTS*/
+	/*Event raised if a click on the map is done and wfsFeatures are found
+	@param nrOfItemsFound The nr of items that are found.
+	*/
+	public function onFeatureFound(nrOfItemsFound){}
+	/*Event raised when there is a drag done for a geometry.NOTE: Because of performance, this is not
+	done for a circle!
+	@param activeFeature the active feature with a wktGeom
+	*/
+	public function onGeometryDrawDragUpdate(activeFeature){}
+	/*Event raised when a update is done on the drawing. NOTE: Because of performance, this is not
+	done for a circle!
+	@param wktgeom the new wktgeom
+	*/
+	public function onGeometryDrawUpdate(wktgeom){}
+	/*Event raised when the activefeature is changed
+	@param activeFeature the active feature with a wktGeom
+	*/
+	public function onActiveFeatureChange(activeFeature){}
 }
