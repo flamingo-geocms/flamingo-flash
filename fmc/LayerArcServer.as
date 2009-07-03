@@ -92,6 +92,12 @@ lMap.onMaptip = function(map:MovieClip, x:Number, y:Number, coord:Object):Void  
 lMap.onMaptipCancel = function(map:MovieClip):Void  {
 	thisObj._stopMaptip();
 };
+lMap.onHide = function(map:MovieClip):Void  {
+	thisObj.update();
+};
+lMap.onShow = function(map:MovieClip):Void  {
+	thisObj.update();
+};
 flamingo.addListener(lMap, flamingo.getParent(this), this);
 //listener for maptip connector
 //-----------------------------------------------------------------
@@ -500,7 +506,7 @@ function update():Void {
 	_update(1);
 }
 function _update(nrtry:Number):Void {
-	if (not visible) {
+	if (not visible || not map.visible) {
 		_visible = false;
 		return;
 	}
