@@ -453,7 +453,7 @@ function setConfig(xml:Object) {
 		if (thisObj.maptipids.toUpperCase() == "#ALL#") {
 			thisObj.setLayerProperty("#ALL#", "maptipable", true);
 		}
-		//thisObj.update();
+		thisObj.update();
 		//The update is done in the Map in lLayer.onGetServiceInfo 
 		flamingo.raiseEvent(thisObj, "onGetServiceInfo", thisObj);
 		initialized = true;
