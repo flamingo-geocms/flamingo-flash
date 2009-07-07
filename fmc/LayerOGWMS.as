@@ -68,6 +68,7 @@ var aka:Object = new Object();
 var lastFiltersFingerprint:String = null;
 var sldParam:String = "";
 var maxHttpGetUrlLength:Number=0;
+var noCache:Boolean = false;
 //-------------------------------------
 //listenerobject for map
 var lMap:Object = new Object();
@@ -131,6 +132,7 @@ init();
 * @attr fullextent  Extent of layer (comma seperated list of minx,miny,maxx,maxy). When the map is outside this extent, no update will performed.
 * @attr alpha (defaultvalue = "100") Transparency of the layer.
 * @attr maxHttpGetUrlLength default: 0 If a url is longer then the maxHttpGetUrlLength the layer tries to do a HTTP POST request. If set to 0 (default)the layer wil alwalys do a HTTP GET.
+* @attr nocache default:false if set to true the getMap requests are done with a extra parameter to force a no cache
 */
 /** @tag <layer>  
 * This defines a sublayer of an OG-WMS service.
@@ -299,6 +301,13 @@ function setConfig(xml:Object) {
 			break;
 		case "maxhttpgeturllength" :
 			this.maxHttpGetUrlLength= Number(val);
+			break;
+		case "nocache" :
+			if (val.toLowerCase() == "true") {
+				this.noCache = true;
+			} else {
+				this.noCache = false;
+			}
 			break;
 		default :
 			if (attr.toLowerCase().indexOf("xmlns:", 0) == -1) {
@@ -702,14 +711,19 @@ function _update(nrtry:Number, forceupdate:Boolean){
 		args.STYLES = s_styles;
 	}
 
-  args = handleSLDarg(args);
+  	args = handleSLDarg(args);
   
 	// 
 	var starttime:Date = new Date();
 	//
 	var vislayers = _getVisLayers();
 	_global.flamingo.raiseEvent(thisObj, "onUpdate", thisObj, nrtry);
-	cogwms.getMap(url, args);
+	if (this.noCache==true){
+		var newurl=_global.flamingo.getNocacheName(url,'second');
+		cogwms.getMap(newurl, args);
+	}else{
+		cogwms.getMap(url, args);
+	}
 	thisObj._starttimeout();
 }
 function _starttimeout() {
