@@ -1,4 +1,4 @@
-/*-----------------------------------------------------------------------------
+﻿/*-----------------------------------------------------------------------------
 * This file is part of Flamingo MapComponents.
 * Author: Michiel J. van Heek.
 * IDgis bv
@@ -243,9 +243,8 @@ class geometrymodel.LineString extends Geometry implements GeometryListener {
     
 	function toWKT():String{
 		var wktGeom:String="";
-		wktGeom+="LINESTRING(";		
+		wktGeom+="LINESTRING";		
 		wktGeom+=toWKTPart();
-		wktGeom+=")";
 		return wktGeom;
 	}
 	
