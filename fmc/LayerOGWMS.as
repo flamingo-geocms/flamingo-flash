@@ -1196,7 +1196,7 @@ function getLayerProperty(id:String, field:String):Object {
 	}
 	return layers[id][field.toLowerCase()];
 }
-}
+
 /** 
 * Returns a reference to the layers collection.
 * Be carefull for making changes.
