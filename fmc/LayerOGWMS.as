@@ -481,7 +481,7 @@ function _update(nrtry:Number) {
 	_update(nrtry,false);
 }
 function _update(nrtry:Number, forceupdate:Boolean){
-	if (not visible) {
+	if (not visible || not map.visible) {
 		_visible = false;
 		return;
 	}
@@ -1192,8 +1192,10 @@ function setLayerProperty(ids:String, field:String, value:Object) {
 */
 function getLayerProperty(id:String, field:String):Object {
 	if (layers[id] == undefined) {
-		return layers[id][field];
+		return;
 	}
+	return layers[id][field.toLowerCase()];
+}
 }
 /** 
 * Returns a reference to the layers collection.
