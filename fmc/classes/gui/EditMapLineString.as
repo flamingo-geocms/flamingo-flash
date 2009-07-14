@@ -490,7 +490,7 @@ class gui.EditMapLineString extends EditMapGeometry implements GeometryListener 
 			//lineStyle(style.getStrokeWidth(), style.getStrokeColor(), style.getStrokeOpacity());
 			lineStyle(thisObj.strokeWidth, thisObj.strokeColor, thisObj.strokeOpacity);
 
-			if (lineStringStyle == "solid"){
+			if (lineStringStyle == "solid" || lineStringStyle == null){
 				//=== solid line ===
 				for (var i:Number = 1; i < points.length; i++) {
 					pixel = point2Pixel(Point(points[i]));			
