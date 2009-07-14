@@ -122,6 +122,67 @@
 * @attr strokeopacity (0 – 100, no default value) Stroke opacity. A value of 0 means completely transparent.
 */
 
+/** @tag <fmc:GeometryProperty>
+* This tag defines a layer's geometry feature property instance. 
+* @class gismodel.GeometryProperty extends gismodel.Property
+* @hierarchy childnode of Layer.
+* @example
+	<fmc:Layer name="redlining" title="Redlining" visible="true" labelpropertyname="app:numFlights" roles="XDF56YZ">
+	 	<fmc:GeometryProperty name="app:pointcolor" title="Puntkleur" type="ColorPalettePicker" defaultvalue="0xff0000" nrtileshor="2" nrtilesver="4" ingeometrytypes="Point">
+		...
+	</fmc:Layer>
+	<fmc:Layer title="Luchthavens" visible="true" wfsurl="wfs::http://localhost:8080/flamingo-edit-server/services" 
+		featuretypename="app:Airport" geometrytypes="Point" labelpropertyname="app:numFlights" roles="XDF56YT">
+            <fmc:Property name="app:numFlights" title="Aantal vluchten" type="DropDown:50,100,120,250,450,900,2000"/>
+            <fmc:Property name="app:name" title="Naam" type="SingleLine" defaultvalue="YAYA"/>
+            <fmc:Property name="app:description" title="Omschrijving" type="MultiLine" immutable="true"/>
+* @attr name (no default value) Name of the property, this should correspond with the feature type property name on the server (incl. namespace). examples: "app:pointcolor", "app:pointopacity", "app:pointicon", "app:pointtext", "app:strokecolor", "app:strokeopacity", "app:linestyle", "app:fillcolor", "app:fillopacity".
+* @attr title (default value: “”) Name by which the property is presented to the user, for example on a label in the edit properties component.
+* @attr type (no default value, implemented are: "ColorPalettePicker", "OpacityInput", "OpacityPicker", "IconPicker", "PointTextEditor", "LineTypePicker") Defines the user interface presentation type of input.
+* This type defines how the property will appear in the edit properties component. As a popup picker 
+* window, a line input editor, etc. 
+* @attr defaultvalue Value that the property gets when a new feature is created.
+* @attr immutable (true, false, default value: false) Whether or not the property value can be changed.
+* @attr ingeometrytypes (Point,LineString,Polygon,Circle, default value: none) Specifies for which geometry types this property will be available.
+* @attr nrtileshor The number of horizontal tiles in a pickwindow. Available in the pickers types.
+* @attr nrtilesver The number of vertical tiles in a pickwindow.  Available in the pickers types.
+* @attr minvalue (0,100) The minimum value. Available in "OpacityPicker" and "OpacityInput".
+* @attr maxvalue (0,100) The maximum value. Available in "OpacityPicker" and "OpacityInput".
+*/
+
+/** @tag <fmc:availableColor>
+* This tag defines the available colors of the geometry property "ColorPalettePicker" instance. 
+* @class gismodel.AvailableColor extends PropertyItem
+* @hierarchy childnode of GeometryProperty.
+* @example
+	<fmc:GeometryProperty name="app:pointcolor" title="Puntkleur" type="ColorPalettePicker" defaultvalue="0xff0000" nrtileshor="2" nrtilesver="4" ingeometrytypes="Point">
+		<fmc:availableColor title="kleur 1" name="color1" pickcolor="0x000000" value="#000000"/>
+		<fmc:availableColor title="kleur 2" name="color2" pickcolor="0xAE1219" value="#AE1219"/>
+		...
+	</fmc:GeometryProperty>
+
+* @attr title (default value: “”) Name by which the property is presented to the user, for example on a label in the edit properties component.
+* @attr name (no default value) Friendly name presented to the user.
+* @attr pickcolor Color value used by flamingo in 0xffffff format.
+* @attr value (String) Color value send to server.
+*/
+
+/** @tag <fmc:availableIcon>
+* This tag defines the available icons of the geometry property "IconPicker" instance. 
+* @class gismodel.AvailableIcon extends PropertyItem
+* @hierarchy childnode of GeometryProperty.
+* @example
+	<fmc:GeometryProperty name="app:pointicon" title="Puntikoon" type="IconPicker" defaultvalue="null" nrtileshor="4" nrtilesver="2" ingeometrytypes="Point">
+		<fmc:availableIcon title="ovaal" name="icon2" pickiconurl="assets/icons/icon2.png" value="assets/icons/icon2.png"/>
+		<fmc:availableIcon title="driehoek" name="icon3" pickiconurl="assets/icons/icon3.png" value="assets/icons/icon3.png"/>
+		...
+	</fmc:GeometryProperty>
+
+* @attr title (default value: “”) Name by which the property is presented to the user, for example on a label in the edit properties component.
+* @attr name (no default value) Friendly name presented to the user.
+* @attr pickiconurl Url of the icon used by flamingo to load the icon.
+* @attr value (String) Url of the icon send to server.
+*/
 
 import gismodel.*;
 
