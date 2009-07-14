@@ -1,4 +1,4 @@
-/*-----------------------------------------------------------------------------
+﻿/*-----------------------------------------------------------------------------
 * This file is part of Flamingo MapComponents.
 * Author: Michiel J. van Heek.
 * IDgis bv
@@ -532,27 +532,26 @@ class gui.EditMap extends AbstractComponent implements StateEventListener {
 	* @param editMap:MovieClip a reference to the editMap.
 	* @param nrFeaturesFound:Number number of features found.
 	*/
-	public function onFeatureFound(editMap:MovieClip, nrFeaturesFound:Number):Void {
+	public function onFeatureFound(editMap:MovieClip, nrFeaturesFound:Number):Void {}
 	//
 	/**
 	* Dispatched when the active feature is changed.
 	* @param editMap:MovieClip a reference to the editMap.
 	* @param activeFeature:Object the active feature as object.
 	*/
-	public function onActiveFeatureChange(editMap:MovieClip, activeFeature:Object):Void {
+	public function onActiveFeatureChange(editMap:MovieClip, activeFeature:Object):Void {}
 	//
 	/**
 	* Dispatched when drawing or editing of the geometry is finished.
 	* @param editMap:MovieClip a reference to the editMap.
 	* @param activeFeatureWKT:String WKT of the active feature.
 	*/
-	public function onGeometryDrawUpdate(editMap:MovieClip, activeFeatureWKT:String):Void {
+	public function onGeometryDrawUpdate(editMap:MovieClip, activeFeatureWKT:String):Void {}
 	//
 	/**
 	* Dispatched when dragging is finished during drawing or editing of the geometry.
 	* @param editMap:MovieClip a reference to the editMap.
 	* @param activeFeatureWKT:String WKT of the active feature.
 	*/
-	public function onGeometryDrawDragUpdate(editMap:MovieClip, activeFeatureWKT:String):Void {
-	
+	public function onGeometryDrawDragUpdate(editMap:MovieClip, activeFeatureWKT:String):Void {}	
 }
