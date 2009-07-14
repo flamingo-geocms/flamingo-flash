@@ -49,7 +49,8 @@ class gui.GeometryPane extends MovieClip {
         initObject["height"] = height;
         initObject["isChild"] = isChild;
 		initObject["editMapEditable"] = gis.getEditMapEditable();
-        if (geometry instanceof Point) {
+		initObject["alwaysDrawPoints"] = gis.getAlwaysDrawPoints();
+		if (geometry instanceof Point) {
             editMapGeometries.push(attachMovie("EditMapPoint", "mEditMapPoint" + depth, depth, initObject));
         } else if (geometry instanceof LineString) {
             editMapGeometries.push(attachMovie("EditMapLineString", "mEditMapLineString" + depth, depth, initObject));

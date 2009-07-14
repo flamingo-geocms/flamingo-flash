@@ -101,9 +101,12 @@ class gismodel.Layer extends AbstractComposite implements ActionEventListener {
     function addComposite(name:String, xmlNode:XMLNode):Void {
         if (name == "Property") {
             properties.push(new Property(xmlNode));
+        } else if (name == "GeometryProperty") {
+            properties.push(new GeometryProperty(xmlNode));
         } else if (name == "Style") {
             style = new Style(xmlNode);
         }
+		
     }
     
     function getTitle():String {

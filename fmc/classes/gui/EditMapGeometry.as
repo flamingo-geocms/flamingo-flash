@@ -5,6 +5,7 @@
 * Changes by author: Maurits Kelder, B3partners bv
  -----------------------------------------------------------------------------*/
 
+import gismodel.*;
 import gui.*;
 
 import event.StateEventListener;
@@ -31,14 +32,17 @@ class gui.EditMapGeometry extends GeometryPane implements GeometryListener {
     private var strokeColor:Number = -1;
     private var strokeOpacity:Number = -1;
     private var strokeWidth:Number = 2;
+	private var lineStringStyle:String = null;
     private var fillColor:Number = -1;
-    private var fillOpacity:Number = -1
+    private var fillOpacity:Number = -1;
+	private var fillPatternUrl:String = null;
     
     private var _geometry:Geometry = null; // Set by init object.
     private var type:Number = -1; // Set by init object.
     private var labelText:String = null; // Set by init object.
     private var isChild:Boolean = false; // Set by init object.
 	private var editMapEditable:Boolean = false; // Set by init object.
+	private var alwaysDrawPoints:Boolean = false; // Set by init object.
 	private var labelDepth:Number = 1000;
     private var label:Label = null;
     
@@ -50,13 +54,14 @@ class gui.EditMapGeometry extends GeometryPane implements GeometryListener {
     	strokeColor= style.getStrokeColor();
 		fillColor = style.getFillColor();
 		fillOpacity = style.getFillOpacity();
+		
         _global.flamingo.addListener(this,map,this);
         addChildGeometries();
 	
 		draw();
     }
     
-   function remove():Void { 
+    function remove():Void { 
 		this.removeMovieClip(); // Keyword "this" is necessary here, because of the global function removeMovieClip.
     }
     
@@ -128,6 +133,18 @@ class gui.EditMapGeometry extends GeometryPane implements GeometryListener {
 		}	
     	draw();
 	}
+	
+	function getFirstAncestor():EditMapGeometry {
+        if (this.isChild == null) {
+            return this;
+        } else {
+			if (this._parent.getFirstAncestor() instanceof EditMapGeometry) {
+				return this._parent.getFirstAncestor();
+			} else {
+				return this;
+			}
+        }
+    }
     
     private function draw():Void {
         clear();

@@ -9,6 +9,7 @@ class event.ActionEvent {
     
     static var CLICK:Number = 0;
     static var LOAD:Number = 1;
+	static var OPEN:Number = 2;
     
     private var source:Object = null;
     private var sourceClassName:String = null;

@@ -2,6 +2,7 @@
 * This file is part of Flamingo MapComponents.
 * Author: Michiel J. van Heek.
 * IDgis bv
+* Changes by author: Maurits Kelder, B3partners bv
  -----------------------------------------------------------------------------*/
 
 
@@ -33,7 +34,7 @@
 * @configstring okbuttonlabel (defaultvalue = "OK") labeltext of the okbutton
 */
 
-
+import geometrymodel.*;
 import gui.*;
 
 import event.*;
@@ -42,6 +43,7 @@ import gismodel.Feature;
 import gismodel.GIS;
 import gismodel.Layer;
 import gismodel.Property;
+import gismodel.GeometryProperty;
 
 import flash.geom.Rectangle;
 import mx.controls.ComboBox;
@@ -66,6 +68,9 @@ class gui.EditProperties extends AbstractComponent implements StateEventListener
     private var scrollBar:UIScrollBar = null;
     private var nullValueText:String = "";
     private var showOKButton:Boolean = false;
+	private var showApplyButton:Boolean = false;
+	private var lastFocusComponent:Object = null;
+	private var actionEventListeners:Array = null;
     
     function init():Void {
         gis = _global.flamingo.getComponent(listento[0]).getGIS();   
@@ -79,16 +84,35 @@ class gui.EditProperties extends AbstractComponent implements StateEventListener
         componentsPanel = createEmptyMovieClip("mPanel", 1);
         componentsPanel._y = componentHeight;
         componentsPanel._lockroot = true; // Without this line comboboxes wouldn't open.
+		
+		actionEventListeners = new Array();
     }
-    
-    
-    function setAttribute(name:String, value:String):Void {
-    	 if(name="okbutton"){
+
+	function setAttribute(name:String, value:String):Void {
+    	if(name="okbutton"){
         	showOKButton = Boolean(value);
+        }
+		if(name="applybutton"){
+		  	showApplyButton = Boolean(value);
         } 
-    	
 	}
     
+	function setActionEventListener(actionEventListener:ActionEventListener):Void {
+		if (actionEventListener != null) {
+			actionEventListeners.push(actionEventListener);
+		}
+    }
+	
+	function closeOtherComponentWindows(callerComponent:MovieClip):Void{
+		for (var i:Number=0; i<actionEventListeners.length; i++) {
+			if (actionEventListeners[i] != callerComponent && actionEventListeners[i] != null) {
+				var actionEvent:ActionEvent = new ActionEvent(this, "PropWindow", ActionEvent.OPEN);
+				actionEventListeners[i].onActionEvent(actionEvent);
+			}
+		}
+	}
+		
+	
     private function layout():Void {
         var numLabels:Number = 0;
         var numTextAreas:Number = 0;
@@ -106,6 +130,7 @@ class gui.EditProperties extends AbstractComponent implements StateEventListener
             textAreaHeight = minTextAreaHeight;
         }
         var y:Number = 0;
+		var x:Number = 0;
         
         var component:MovieClip = null;
         for (var i:Number = 0; i < components.length; i++) {
@@ -124,16 +149,32 @@ class gui.EditProperties extends AbstractComponent implements StateEventListener
                 y += componentHeight;
             }
         }
+		
+		if(showApplyButton){ 
+			y += 30;
+			
+	       var button2:Button = Button(attachMovie("Button", "mApplyButton", 102));
+	       button2._y = y;
+		   button2._x = x;
+	       button2.label = _global.flamingo.getString(this, "applybuttonlabel");
+	       if(button2.label==null||button2.label==""){
+	       	button2.label="Apply";
+	       }
+	       button2.addEventListener("click", Delegate.create(this, onClickApplyButton)); 
+        } 
+		
        if(showOKButton){ 
-       		y += 30;
-	       var button:Button = Button(attachMovie("Button", "mOKButton", 101));
-	       button._y = y;
-	       button.label = _global.flamingo.getString(this, "okbuttonlabel");
-	       if(button.label==null||button.label==""){
-	       	button.label="OK";
-	       }	
-	       button.addEventListener("click", Delegate.create(this, onClickOKButton)); 
-       } 
+			y += 30;
+			var button:Button = Button(attachMovie("Button", "mOKButton", 101));
+			button._y = y;
+			button._x = x;
+			button.label = _global.flamingo.getString(this, "okbuttonlabel");
+			if(button.label==null||button.label==""){
+				button.label="OK";
+			}	
+			button.addEventListener("click", Delegate.create(this, onClickOKButton)); 
+		} 
+	   
         
         if (y > panelHeight) {
             if (scrollBar == null) {
@@ -155,7 +196,17 @@ class gui.EditProperties extends AbstractComponent implements StateEventListener
 	}
 	
 	private function onClickOKButton() : Void {
+		setFeatureValues();
 		this.setVisible(false);
+	}
+	
+	private function onClickApplyButton() : Void {
+		setFeatureValues();
+		
+		//redraw the geometry
+		var feature:Feature = gis.getActiveFeature();
+		var geometry:Geometry = feature.getGeometry().getFirstAncestor();
+		geometry.geometryEventDispatcher.changeGeometry(geometry);
 	}
 
 	function onScrollBar(eventObject:Object):Void {
@@ -187,19 +238,24 @@ class gui.EditProperties extends AbstractComponent implements StateEventListener
                 
                 setVisible(true);
                 if (previousActiveFeature == null) {
-                    addComponents();
+                    removeComponents();
+					addComponents();
+					setFeatureValues();
                 } else if (previousActiveFeature.getLayer() == activeFeature.getLayer()) {
-                    setComponentValues();
+					removeComponents();
+					addComponents();
                 } else { // From a different layer; not from null.
                     removeComponents();
                     addComponents();
                 }
             } else {
                 setVisible(false);
+				setComponentValues();
                 removeComponents();
             }
         } else if (sourceClassName + "_" + actionType + "_" + propertyName == "Feature_" + StateEvent.CHANGE + "_values") {
-            setComponentValues();
+			removeComponents();
+            addComponents();
         }
     }
     
@@ -219,48 +275,135 @@ class gui.EditProperties extends AbstractComponent implements StateEventListener
         var propertyType:String = null;
         var initObject:Object = null;
         var dataProvider:Array = null;
+		var thisObj:Object = null;
+		var geometry:Geometry = feature.getGeometry().getFirstAncestor();
         
-        for (var i:Number = 0; i < properties.length; i++) {
-            property = Property(properties[i]);
+		//loop over properties with k
+		var i:Number = 0;		//component loop index i
+		for (var k:Number = 0; k < properties.length; k++) {
+            property = Property(properties[k]);
             propertyName = property.getName();
             propertyType = property.getType();
-            
-            initObject = new Object();
-            initObject["autoSize"] = "left";
-            initObject["text"] = property.getTitle();
-            components.push(componentsPanel.attachMovie("Label", "mLabel" + layerName + i, i * 2, initObject));
-            Label(components[i * 2]).setStyle("fontFamily", labelStyle["fontFamily"]);
-            Label(components[i * 2]).setStyle("fontSize", labelStyle["fontSize"]);
-            if ((serviceLayer == null) || (serviceLayer.getServiceProperty(propertyName).isOptional())) {
-                Label(components[i * 2]).setStyle("fontStyle", "italic");
-            }
-            
-            initObject = new Object();
-            initObject["enabled"] = !property.isImmutable();
-			initObject["tabIndex"] = i;
-			initObject["tabEnabled"] = true;
-            if (propertyType == "SingleLine") {
-                components.push(componentsPanel.attachMovie("TextInput", "mComponent" + layerName + i, i * 2 + 1, initObject));
-            } else if (propertyType == "MultiLine") {
-                components.push(componentsPanel.attachMovie("TextArea", "mComponent" + layerName + i, i * 2 + 1, initObject));
-            } else { // DropDown
-                dataProvider = propertyType.split(":")[1].split(",");
-                dataProvider.splice(0, 0, nullValueText);
-                initObject["dataProvider"] = dataProvider;
-                initObject["rowCount"] = dataProvider.length;
-                initObject["editable"] = false;
-                components.push(componentsPanel.attachMovie("ComboBox", "mComponent" + layerName + i, i * 2 + 1, initObject));
-                ComboBox(components[i * 2 + 1]).getDropdown().drawFocus = ""; // Without this line the green focus would remain after selecting from the combobox.
-            }
-            MovieClip(components[i * 2 + 1]).addEventListener("change", Delegate.create(this, onComponentChange));
+			var isGeometryProperty:Boolean = (property instanceof GeometryProperty);
+			
+			//verify if we should use this GeometryProperty
+			var useGeometryProperty = false;
+			if (isGeometryProperty) {
+				var inGeometryTypes:Array = GeometryProperty(properties[k]).getInGeometryTypes();
+				for (var j:Number = 0; j < inGeometryTypes.length; j++) { 
+					var geometryType:String = String(inGeometryTypes[j]);
+					if (geometryType == "Point") {
+						if (geometry instanceof Point){
+							useGeometryProperty = true;
+						}
+					} else if (geometryType == "LineString") {
+						if (geometry instanceof LineString){
+							useGeometryProperty = true;
+						}
+					} else if (geometryType == "Polygon") {
+						if (geometry instanceof Polygon){
+							useGeometryProperty = true;
+						}
+					} else if (geometryType == "Circle") {
+						if (geometry instanceof Circle){
+							useGeometryProperty = true;
+						}
+					}
+				}
+			}
+
+			if (useGeometryProperty) {
+				initObject = new Object();
+				initObject["autoSize"] = "left";
+				initObject["text"] = property.getTitle();
+				components.push(componentsPanel.attachMovie("Label", "mLabel" + layerName + i, i * 2, initObject));
+				Label(components[i * 2]).setStyle("fontFamily", labelStyle["fontFamily"]);
+				Label(components[i * 2]).setStyle("fontSize", labelStyle["fontSize"]);
+				if ((serviceLayer == null) || (serviceLayer.getServiceProperty(propertyName).isOptional())) {
+					Label(components[i * 2]).setStyle("fontStyle", "italic");
+				}
+				
+				initObject = new Object();
+				initObject["enabled"] = !property.isImmutable();
+				initObject["tabIndex"] = i;
+				initObject["tabEnabled"] = true;
+				initObject["gis"] = gis;
+				initObject["propertyName"] = propertyName;
+				if (propertyType == "SingleLine") {
+					components.push(componentsPanel.attachMovie("TextInput", "mComponent" + layerName + i, i * 2 + 1, initObject));
+					MovieClip(components[i * 2 + 1]).addEventListener("change", Delegate.create(this, onComponentChange));
+				} else if (propertyType == "MultiLine") {
+					components.push(componentsPanel.attachMovie("TextArea", "mComponent" + layerName + i, i * 2 + 1, initObject));
+					MovieClip(components[i * 2 + 1]).addEventListener("change", Delegate.create(this, onComponentChange));
+				} else if (useGeometryProperty && propertyType == "ColorPalettePicker") {
+					initObject["minvalue"] = GeometryProperty(properties[k]).getMinvalue();
+					initObject["maxvalue"] = GeometryProperty(properties[k]).getMaxvalue();
+					initObject["nrTilesHor"] = GeometryProperty(properties[k]).getNrTilesHor();
+					initObject["nrTilesVer"] = GeometryProperty(properties[k]).getNrTilesVer();
+					components.push(componentsPanel.attachMovie("ColorPalettePicker", "mComponent" + layerName + i, i * 2 + 1, initObject));
+				} else if (useGeometryProperty && propertyType == "OpacityInput") {
+					initObject["minvalue"] = GeometryProperty(properties[k]).getMinvalue();
+					initObject["maxvalue"] = GeometryProperty(properties[k]).getMaxvalue();
+					components.push(componentsPanel.attachMovie("OpacityInput", "mComponent" + layerName + i, i * 2 + 1, initObject));
+				} else if (useGeometryProperty && propertyType == "OpacityPicker") {
+					initObject["minvalue"] = GeometryProperty(properties[k]).getMinvalue();
+					initObject["maxvalue"] = GeometryProperty(properties[k]).getMaxvalue();
+					initObject["nrTilesHor"] = GeometryProperty(properties[k]).getNrTilesHor();
+					initObject["nrTilesVer"] = GeometryProperty(properties[k]).getNrTilesVer();
+					components.push(componentsPanel.attachMovie("OpacityPicker", "mComponent" + layerName + i, i * 2 + 1, initObject));
+				} else if (useGeometryProperty && propertyType == "LineTypePicker") {
+					components.push(componentsPanel.attachMovie("LineTypePicker", "mComponent" + layerName + i, i * 2 + 1, initObject));
+				} else if (useGeometryProperty && propertyType == "PatternPicker") {
+					initObject["minvalue"] = GeometryProperty(properties[k]).getMinvalue();
+					initObject["maxvalue"] = GeometryProperty(properties[k]).getMaxvalue();
+					initObject["nrTilesHor"] = GeometryProperty(properties[k]).getNrTilesHor();
+					initObject["nrTilesVer"] = GeometryProperty(properties[k]).getNrTilesVer();
+					components.push(componentsPanel.attachMovie("PatternPicker", "mComponent" + layerName + i, i * 2 + 1, initObject));
+				} else if (useGeometryProperty && propertyType == "IconPicker") {
+					initObject["minvalue"] = GeometryProperty(properties[k]).getMinvalue();
+					initObject["maxvalue"] = GeometryProperty(properties[k]).getMaxvalue();
+					initObject["nrTilesHor"] = GeometryProperty(properties[k]).getNrTilesHor();
+					initObject["nrTilesVer"] = GeometryProperty(properties[k]).getNrTilesVer();
+					components.push(componentsPanel.attachMovie("IconPicker", "mComponent" + layerName + i, i * 2 + 1, initObject));			
+				} else if (useGeometryProperty && propertyType == "PointTextEditor") {
+					components.push(componentsPanel.attachMovie("PointTextEditor", "mComponent" + layerName + i, i * 2 + 1, initObject));
+				} else if (!useGeometryProperty && !isGeometryProperty) { // DropDown
+					dataProvider = propertyType.split(":")[1].split(",");
+					nullValueText = "";
+					dataProvider.splice(0, 0, nullValueText);
+					initObject["dataProvider"] = dataProvider;
+					initObject["rowCount"] = dataProvider.length;
+					initObject["editable"] = false;
+					components.push(componentsPanel.attachMovie("ComboBox", "mComponent" + layerName + i, i * 2 + 1, initObject));
+					ComboBox(components[i * 2 + 1]).getDropdown().drawFocus = ""; // Without this line the green focus would remain after selecting from the combobox.
+					
+					MovieClip(components[i * 2 + 1]).addEventListener("change", Delegate.create(this, onComponentChange));
+				}
+				
+				//increase component loop index i				
+				i++;
+			}
         }
-        
+
         layout();
         setComponentValues();
     }
     
     function onComponentChange(eventObject:Object):Void {
         setFeatureValues();
+    }
+	
+	function onComponentSetFocus(newfocus:Object):Void {
+		//put the componentsPanel on top at a depth of 200.
+		componentsPanel.swapDepths(200);
+		//Depth of ok, apply, future cancel buttons is resp. 101, 102, 103.
+		//all components are childs of the componentsPanel
+		var newDepth:Number = componentsPanel.getNextHighestDepth();
+		if (newDepth>1000) {	//allows around 1000 clicks before redraw.
+			removeComponents();
+            addComponents();
+		}
+		newfocus.swapDepths(componentsPanel.getNextHighestDepth());
     }
     
     private function removeComponents():Void {
@@ -276,19 +419,79 @@ class gui.EditProperties extends AbstractComponent implements StateEventListener
         var values:Array = feature.getValues();
         var value:String = null;
         var component:MovieClip = null;
-        for (var i:Number = 0; i < properties.length; i++) {
-            value = values[i];
-            if (value == null) {
-                value = nullValueText;
-            }
-            component = MovieClip(components[i * 2 + 1]);
-            if (component instanceof ComboBox) {
-                setComboBoxValue(ComboBox(component), value);
-            } else {
-                component.text = value;
-            }
+
+		var geometry:Geometry = feature.getGeometry().getFirstAncestor();	
+        var property:Property = null;
+		var propertyType:String = null;
+		var propertyName:String = null;
+		
+		//loop over properties with k
+		var i:Number = 0;		//component loop index i
+		for (var k:Number = 0; k < properties.length; k++) {
+			property = Property(properties[k]);
+            propertyName = property.getName();
+            propertyType = property.getType();
+			var isGeometryProperty:Boolean = (property instanceof GeometryProperty);
+			
+			//verify if we should use this GeometryProperty
+			var useGeometryProperty = false;
+			if (isGeometryProperty) {
+				var inGeometryTypes:Array = GeometryProperty(properties[k]).getInGeometryTypes();
+				for (var j:Number = 0; j < inGeometryTypes.length; j++) { 
+					var geometryType:String = String(inGeometryTypes[j]);
+					if (geometryType == "Point") {
+						if (geometry instanceof Point){
+							useGeometryProperty = true;
+						}
+					} else if (geometryType == "LineString") {
+						if (geometry instanceof LineString){
+							useGeometryProperty = true;
+						}
+					} else if (geometryType == "Polygon") {
+						if (geometry instanceof Polygon){
+							useGeometryProperty = true;
+						}
+					} else if (geometryType == "Circle") {
+						if (geometry instanceof Circle){
+							useGeometryProperty = true;
+						}
+					}
+				}
+			} else {
+				value = values[i];
+				if (value == null) {
+					value = nullValueText;
+				}
+				if (component instanceof ComboBox) {
+					setComboBoxValue(ComboBox(component), value);
+				}
+				else {
+					component.text = value;
+				}
+			}
+
+			if (useGeometryProperty) {
+				component = MovieClip(components[i * 2 + 1]);
+				
+				//set default value
+				if (Property(property).getDefaultValue() != null) {
+					component.setDefaultvalue(Property(property).getDefaultValue());
+				}
+				
+				if (component instanceof ColorPalettePicker) {
+					//set available colors
+					component.setAvailableColors(GeometryProperty(property).getAvailableColors());
+					
+				} else if (component instanceof IconPicker) {
+					//set available icons
+					component.setAvailableIcons(GeometryProperty(property).getAvailableIcons());
+				} 
+				component.init();
+				
+				//increase component loop index i
+				i++;
+			}
         }
-        
         mainLabel.text = feature.getLayer().getTitle() + ": " + feature.getID();
     }
     
@@ -309,19 +512,31 @@ class gui.EditProperties extends AbstractComponent implements StateEventListener
         var values:Array = new Array();
         var value:String = null;
         var component:MovieClip = null;
-        for (var i:Number = 0; i < properties.length; i++) {
-            component = MovieClip(components[i * 2 + 1]);
+		
+		closeOtherComponentWindows(null);
+		
+        for (var j:Number = 1; j < components.length; j+=2) {
+            
+			component = MovieClip(components[j]);
             if (component instanceof ComboBox) {
                 value = String(ComboBox(component).selectedItem);
-            } else {
+				if (value == nullValueText) {
+					value = null;
+				}
+			} else if (component instanceof IconPicker || component instanceof OpacityInput || component instanceof OpacityPicker 
+			      || component instanceof ColorPalettePicker || component instanceof PointTextEditor || component instanceof LineTypePicker
+				  || component instanceof PatternPicker) {
+				value = component.getValue();
+			} else {
                 value = component.text;
+				if (value == nullValueText) {
+					value = null;
+				}
             }
-            if (value == nullValueText) {
-                value = null;
-            }
-            values.push(value);
+            var propertyName:String = String(component["propertyName"]);
+            feature.setValue(propertyName,value);
         }
-        feature.setValues(values);
+        
     }
     
 }

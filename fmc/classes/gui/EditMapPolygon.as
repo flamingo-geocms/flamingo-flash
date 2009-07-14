@@ -12,13 +12,16 @@ import geometrymodel.Point;
 import geometrymodel.Polygon;
 import geometrymodel.Envelope;
 import geometrymodel.LineString;
+import gismodel.Feature;
 
 class gui.EditMapPolygon extends EditMapGeometry {
 
 	private var intersectionPixel:Pixel;
+	private var drawFillPattern:Boolean;
     
     function onLoad():Void { // This method is a stub. It is necessary though, because of the "super" bug in Flash.
         super.onLoad();
+		drawFillPattern = false;
     }
     
     function setSize(width:Number, height:Number):Void { // This method is a stub. It is necessary though, because of the "super" bug in Flash.
@@ -26,6 +29,35 @@ class gui.EditMapPolygon extends EditMapGeometry {
     }
     function doDraw():Void {
 		if (editMapEditable) {
+			var feature:Feature = this.getFirstAncestor()._parent.getFeature();
+			if (feature.getValue("app:strokecolor") != null){
+				strokeColor = Number(feature.getValue("app:strokecolor"));
+			}
+			if (feature.getValue("app:strokeopacity") != null){
+				strokeOpacity = Number(feature.getValue("app:strokeopacity"));
+			}
+			if (feature.getValue("app:fillcolor") != null){
+				fillColor = Number(feature.getValue("app:fillcolor"));
+			}
+			if (feature.getValue("app:fillopacity") != null){
+				fillOpacity = Number(feature.getValue("app:fillopacity"));
+			}
+			
+			fillPatternUrl = String(feature.getValue("app:fillpattern"));
+			
+			drawFillPattern = !(fillPatternUrl == null || fillPatternUrl == "null" || fillPatternUrl == NaN || fillPatternUrl == undefined);
+			//trace("EditMapPolygon.as doDraw() drawFillPattern = "+drawFillPattern);
+			
+			
+			/*
+			trace("EditMapPolygon.as doDraw() feature = "+feature);
+			trace("EditMapPolygon.as doDraw() app:strokecolor value = "+feature.getValue("app:strokecolor"));
+			trace("EditMapPolygon.as doDraw() app:strokeopacity value = "+feature.getValue("app:strokeopacity"));
+			trace("EditMapPolygon.as doDraw() app:fillcolor value = "+feature.getValue("app:fillcolor"));
+			trace("EditMapPolygon.as doDraw() app:fillopacity value = "+feature.getValue("app:fillopacity"));
+			trace("EditMapPolygon.as doDraw() app:fillpattern value = "+fillPatternUrl);
+			*/
+			
 			doDrawEditable();
 		}
 		else {
@@ -66,7 +98,7 @@ class gui.EditMapPolygon extends EditMapGeometry {
 	}
 		
 		
-    function doDrawEditable():Void {
+    private function doDrawEditable():Void {
         var polygon:Polygon = Polygon(_geometry);
         var exteriorRing:LinearRing = polygon.getExteriorRing();
         var points:Array = exteriorRing.getPoints();
@@ -81,16 +113,22 @@ class gui.EditMapPolygon extends EditMapGeometry {
         } else {
             lineStyle(strokeWidth , strokeColor, strokeOpacity);
         }
-        if (style.getFillOpacity() > 0) {
-            beginFill(fillColor, fillOpacity);
-        }
-        for (var i:Number = 1; i < points.length; i++) {
-            pixel =  point2Pixel(points[i]);
-            lineTo(pixel.getX(), pixel.getY());
-        }
-        if (fillOpacity > 0) {
-            endFill();
-        }
+		
+		if (!drawFillPattern) {
+			if (style.getFillOpacity() > 0) {
+				beginFill(fillColor, fillOpacity);
+			}
+			for (var i:Number = 1; i < points.length; i++) {
+				pixel =  point2Pixel(points[i]);
+				lineTo(pixel.getX(), pixel.getY());
+			}
+			if (fillOpacity > 0) {
+				endFill();
+			}
+		} else {
+			//load fill pattern png
+			//fillPatternUrl
+		}
         
         if (type != ACTIVE) {
             moveTo(x, y);
@@ -115,7 +153,7 @@ class gui.EditMapPolygon extends EditMapGeometry {
 		var intersection:Boolean = false;
 		
 		//vertical line 1 at x = 0
-		if (lineSegmentIntersectionPixel(startPixelNC, endPixelNC, pOO, pOH) == "INTERSECTING") {
+		if (lineSegmentIntersectionTest_px(startPixelNC, endPixelNC, pOO, pOH) == "INTERSECTING") {
 			intersection = true;
 			if (startPixelNC.getX() < pOO.getX()) {
 				startPixel = intersectionPixel.clone();
@@ -125,7 +163,7 @@ class gui.EditMapPolygon extends EditMapGeometry {
 			}
 		}
 		//vertical line 2 at x = width
-		if (lineSegmentIntersectionPixel(startPixelNC, endPixelNC, pWO, pWH) == "INTERSECTING") {
+		if (lineSegmentIntersectionTest_px(startPixelNC, endPixelNC, pWO, pWH) == "INTERSECTING") {
 			intersection = true;
 			if (startPixelNC.getX() > pWO.getX()) {
 				startPixel = intersectionPixel.clone();
@@ -135,7 +173,7 @@ class gui.EditMapPolygon extends EditMapGeometry {
 			}
 		}
 		//horizontal line 3 at y = 0
-		if (lineSegmentIntersectionPixel(startPixelNC, endPixelNC, pOO, pWO) == "INTERSECTING") {
+		if (lineSegmentIntersectionTest_px(startPixelNC, endPixelNC, pOO, pWO) == "INTERSECTING") {
 			intersection = true;
 			if (startPixelNC.getY() < pOO.getY()) {
 				startPixel = intersectionPixel.clone();
@@ -145,7 +183,7 @@ class gui.EditMapPolygon extends EditMapGeometry {
 			}
 		}
 		//horizontal line 4 at y = height
-		if (lineSegmentIntersectionPixel(startPixelNC, endPixelNC, pOH, pWH) == "INTERSECTING") {
+		if (lineSegmentIntersectionTest_px(startPixelNC, endPixelNC, pOH, pWH) == "INTERSECTING") {
 			intersection = true;
 			if (startPixelNC.getY() > pOH.getY()) {
 				startPixel = intersectionPixel.clone();
@@ -157,7 +195,7 @@ class gui.EditMapPolygon extends EditMapGeometry {
 		return intersection;
 	}
 	
-	function lineSegmentIntersectionPixel(p1:Pixel, p2:Pixel, p3:Pixel, p4:Pixel):String {
+	private function lineSegmentIntersectionTest_px(p1:Pixel, p2:Pixel, p3:Pixel, p4:Pixel):String {
 		//Line Segment A: Pixel p1 & p2
 		//Line Segment B: Pixel p3 & p4
 		var denom:Number = 	((p4.getY() - p3.getY())*(p2.getX() - p1.getX())) - ((p4.getX() - p3.getX())*(p2.getY() - p1.getY()));

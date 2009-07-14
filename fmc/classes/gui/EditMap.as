@@ -1,4 +1,4 @@
-﻿/*-----------------------------------------------------------------------------
+/*-----------------------------------------------------------------------------
 * This file is part of Flamingo MapComponents.
 * Author: Michiel J. van Heek.
 * IDgis bv
@@ -233,7 +233,7 @@ class gui.EditMap extends AbstractComponent implements StateEventListener {
 			}
 		}
     }
-    
+    	
     function getGIS():GIS {
         return gis;
     }
@@ -527,23 +527,32 @@ class gui.EditMap extends AbstractComponent implements StateEventListener {
 		_global.flamingo.getComponent(listento[0]).moveToExtent(extendedExtent);
 	}
 	
-	/*EVENTS*/
-	/*Event raised if a click on the map is done and wfsFeatures are found
-	@param nrOfItemsFound The nr of items that are found.
+	/**
+	* Dispatched when the layer receives features from the connector.
+	* @param editMap:MovieClip a reference to the editMap.
+	* @param nrFeaturesFound:Number number of features found.
 	*/
-	public function onFeatureFound(nrOfItemsFound){}
-	/*Event raised when there is a drag done for a geometry.NOTE: Because of performance, this is not
-	done for a circle!
-	@param activeFeature the active feature with a wktGeom
+	public function onFeatureFound(editMap:MovieClip, nrFeaturesFound:Number):Void {
+	//
+	/**
+	* Dispatched when the active feature is changed.
+	* @param editMap:MovieClip a reference to the editMap.
+	* @param activeFeature:Object the active feature as object.
 	*/
-	public function onGeometryDrawDragUpdate(activeFeature){}
-	/*Event raised when a update is done on the drawing. NOTE: Because of performance, this is not
-	done for a circle!
-	@param wktgeom the new wktgeom
+	public function onActiveFeatureChange(editMap:MovieClip, activeFeature:Object):Void {
+	//
+	/**
+	* Dispatched when drawing or editing of the geometry is finished.
+	* @param editMap:MovieClip a reference to the editMap.
+	* @param activeFeatureWKT:String WKT of the active feature.
 	*/
-	public function onGeometryDrawUpdate(wktgeom){}
-	/*Event raised when the activefeature is changed
-	@param activeFeature the active feature with a wktGeom
+	public function onGeometryDrawUpdate(editMap:MovieClip, activeFeatureWKT:String):Void {
+	//
+	/**
+	* Dispatched when dragging is finished during drawing or editing of the geometry.
+	* @param editMap:MovieClip a reference to the editMap.
+	* @param activeFeatureWKT:String WKT of the active feature.
 	*/
-	public function onActiveFeatureChange(activeFeature){}
+	public function onGeometryDrawDragUpdate(editMap:MovieClip, activeFeatureWKT:String):Void {
+	
 }

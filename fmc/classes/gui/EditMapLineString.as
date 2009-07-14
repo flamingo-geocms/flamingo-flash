@@ -1,4 +1,4 @@
-/*-----------------------------------------------------------------------------
+﻿/*-----------------------------------------------------------------------------
 * This file is part of Flamingo MapComponents.
 * Author: Michiel J. van Heek.
 * IDgis bv
@@ -13,6 +13,7 @@ import geometrymodel.LineString;
 import geometrymodel.Point;
 import gismodel.CreateGeometry;
 import event.GeometryListener;
+import gismodel.Feature;
 
 class gui.EditMapLineString extends EditMapGeometry implements GeometryListener {
     
@@ -48,7 +49,7 @@ class gui.EditMapLineString extends EditMapGeometry implements GeometryListener 
 		//do nothing
     }
     
-	
+	/*
 	function polygonIsSimpleTest():Boolean {
 		var lineString:LineString = LineString(_geometry);
         var points:Array = lineString.getPoints();
@@ -87,6 +88,7 @@ class gui.EditMapLineString extends EditMapGeometry implements GeometryListener 
 		return polygonSimple;
 	}
     
+	
 	function selfIntersectionTest():Boolean {
 		var intersection:Boolean = false;
 		
@@ -114,6 +116,8 @@ class gui.EditMapLineString extends EditMapGeometry implements GeometryListener 
 		
 		return intersection;
 	}
+	*/
+	
 	
 	function selfIntersectionTestDragPoint(dragPointNr:Number, testPoint:Point):Boolean {
 		var intersection:Boolean = false;
@@ -191,64 +195,8 @@ class gui.EditMapLineString extends EditMapGeometry implements GeometryListener 
 		return intersection;
 	}
 	
-	function lineSegmentIntersectionTest(p1:Point, p2:Point, p3:Point, p4:Point):String {
-		//Line Segment A: point p1 & p2
-		//Line Segment B: point p3 & p4
-		var denom:Number = 	((p4.getY() - p3.getY())*(p2.getX() - p1.getX())) - ((p4.getX() - p3.getX())*(p2.getY() - p1.getY()));
-		var nume_a:Number = ((p4.getX() - p3.getX())*(p1.getY() - p3.getY())) - ((p4.getY() - p3.getY())*(p1.getX() - p3.getX()));
-		var nume_b:Number = ((p2.getX() - p1.getX())*(p1.getY() - p3.getY())) - ((p2.getY() - p1.getY())*(p1.getX() - p3.getX()));
-		
-		if (denom == 0) {
-            if(nume_a == 0.0 && nume_b == 0.0) {
-                return "COINCIDENT";
-            }
-            return "PARALLEL";
-        }
-
-        var ua:Number = nume_a / denom;
-        var ub:Number = nume_b / denom;
-
-        if(ua >= 0.0 && ua <= 1.0 && ub >= 0.0 && ub <= 1.0) {
-            // Get the intersection point.
-            intersectionPoint.setX(p1.getX() + ua*(p2.getX() - p1.getX()));
-            intersectionPoint.setY(p1.getY() + ua*(p2.getY() - p1.getY()));
-            return "INTERSECTING";
-        }
-
-		return "NOT_INTERSECTING";
-	
-	}
-	
-	function lineSegmentIntersectionPixel(p1:Pixel, p2:Pixel, p3:Pixel, p4:Pixel):String {
-		//Line Segment A: Pixel p1 & p2
-		//Line Segment B: Pixel p3 & p4
-		var denom:Number = 	((p4.getY() - p3.getY())*(p2.getX() - p1.getX())) - ((p4.getX() - p3.getX())*(p2.getY() - p1.getY()));
-		var nume_a:Number = ((p4.getX() - p3.getX())*(p1.getY() - p3.getY())) - ((p4.getY() - p3.getY())*(p1.getX() - p3.getX()));
-		var nume_b:Number = ((p2.getX() - p1.getX())*(p1.getY() - p3.getY())) - ((p2.getY() - p1.getY())*(p1.getX() - p3.getX()));
-		
-		if (denom == 0) {
-            if(nume_a == 0.0 && nume_b == 0.0) {
-                return "COINCIDENT";
-            }
-            return "PARALLEL";
-        }
-
-        var ua:Number = nume_a / denom;
-        var ub:Number = nume_b / denom;
-
-        if(ua >= 0.0 && ua <= 1.0 && ub >= 0.0 && ub <= 1.0) {
-            // Get the intersection Pixel.
-            intersectionPixel.setX(p1.getX() + ua*(p2.getX() - p1.getX()));
-            intersectionPixel.setY(p1.getY() + ua*(p2.getY() - p1.getY()));
-
-            return "INTERSECTING";
-        }
-
-		return "NOT_INTERSECTING";
-	
-	}
-	
 	function doDrawPointDrag(dragPointNr:Number, dragPixel:Pixel):Void {
+		//trace("EditMapLineString.as doDrawPointDrag()");
 		var lineString:LineString = LineString(_geometry);
         var points:Array = lineString.getPoints();
 		
@@ -283,101 +231,27 @@ class gui.EditMapLineString extends EditMapGeometry implements GeometryListener 
 		
 	}
 	
-	
-	private function drawLineStringGraphics(i:Number, startPixel:Pixel, endPixel:Pixel):Void {
-		var x:Number = startPixel.getX();
-		var y:Number = startPixel.getY();
-		
-		var performClipping:Boolean = false;
-		if (startPixel.getDistance(endPixel) > 5600 - width) {
-			performClipping = true;
-		}
-				
-		if (performClipping) {
-			//perform clipping operation
-			var startPixelNC:Pixel = startPixel.clone(); 	//Not Clipped
-			var endPixelNC:Pixel = endPixel.clone();	//Not Clipped
-			
-			//set helper pixels of envelope corners
-			var pOO:Pixel = new Pixel(0, 0);
-			var pOH:Pixel = new Pixel(0, height);
-			var pWO:Pixel = new Pixel(width, 0);
-			var pWH:Pixel = new Pixel(width, height);
-			
-			//vertical line 1 at x = 0
-			if (lineSegmentIntersectionPixel(startPixelNC, endPixelNC, pOO, pOH) == "INTERSECTING") {
-				if (startPixelNC.getX() < pOO.getX()) {
-					startPixel = intersectionPixel.clone();
-				}
-				else {
-					endPixel = intersectionPixel.clone();
-				}
-			}
-			//vertical line 2 at x = width
-			if (lineSegmentIntersectionPixel(startPixelNC, endPixelNC, pWO, pWH) == "INTERSECTING") {
-				if (startPixelNC.getX() > pWO.getX()) {
-					startPixel = intersectionPixel.clone();
-				}
-				else {
-					endPixel = intersectionPixel.clone();
-				}
-			}
-			//horizontal line 3 at y = 0
-			if (lineSegmentIntersectionPixel(startPixelNC, endPixelNC, pOO, pWO) == "INTERSECTING") {
-				if (startPixelNC.getY() < pOO.getY()) {
-					startPixel = intersectionPixel.clone();
-				}
-				else {
-					endPixel = intersectionPixel.clone();
-				}
-			}
-			//horizontal line 4 at y = height
-			if (lineSegmentIntersectionPixel(startPixelNC, endPixelNC, pOH, pWH) == "INTERSECTING") {
-				if (startPixelNC.getY() > pOH.getY()) {
-					startPixel = intersectionPixel.clone();
-				}
-				else {
-					endPixel = intersectionPixel.clone();
-				}
-			}
-		}
-		
-		var lineX:Number = endPixel.getX() - startPixel.getX();
-		var lineY:Number = endPixel.getY() - startPixel.getY();
-		
-		if (editMapLineStringGraphics[i] != undefined) {
-			with (editMapLineStringGraphics[i]) {
-				_x = x;
-				_y = y;
-			}
-			
-			with (editMapLineStringGraphics[i].mEditMapLineGraphicNormal) {
-				_x = 0;
-				_y = 0;
-				clear();
-				lineStyle(6, 0xffff00, 50);
-				moveTo(0, 0);
-				lineTo(lineX, lineY);
-			}
-										
-			
-			with (editMapLineStringGraphics[i].mEditMapLineGraphicRollOver) {
-				_x = 0;
-				_y = 0;
-				clear();
-				lineStyle(6, 0xff0000, 50);
-				moveTo(0, 0);
-				lineTo(lineX, lineY);
-			}
-		}
-		else {
-			//trace("EditMapLineString: doDraw: editMapLineStringGraphics undefined");
-		}
-		
-	}
-	
 	function doDraw():Void {
 		if (editMapEditable) {
+			var feature:Feature = this.getFirstAncestor()._parent.getFeature();
+			if (feature.getValue("app:strokecolor") != null){
+				strokeColor = Number(feature.getValue("app:strokecolor"));
+			}
+			if (feature.getValue("app:strokeopacity") != null){
+				strokeOpacity = Number(feature.getValue("app:strokeopacity"));
+			}
+			
+			if (feature.getValue("app:linestyle") != null){
+				lineStringStyle = String(feature.getValue("app:linestyle"));
+			}
+			
+			/*
+			//trace("EditMapLineString.as doDraw() feature = "+feature);
+			//trace("EditMapLineString.as doDraw() app:strokecolor value = "+feature.getValue("app:strokecolor"));
+			//trace("EditMapLineString.as doDraw() app:strokeopacity value = "+feature.getValue("app:strokeopacity"));
+			//trace("EditMapLineString.as doDraw() app:linestyle value = "+feature.getValue("app:linestyle"));
+			trace("EditMapLineString.as doDraw() strokeWidth = "+strokeWidth);
+			*/
 			doDrawEditable();
 		}
 		else {
@@ -408,9 +282,8 @@ class gui.EditMapLineString extends EditMapGeometry implements GeometryListener 
 			}
 		}
 	}
-		
 	
-	function doDrawEditable():Void {
+	private function doDrawEditable():Void {
         var lineString:LineString = LineString(_geometry);
         var points:Array = lineString.getPoints();
         var thisObj:Object = this;
@@ -473,7 +346,7 @@ class gui.EditMapLineString extends EditMapGeometry implements GeometryListener 
 				
 				
 				//vertical line 1 at x = 0
-				if (lineSegmentIntersectionPixel(startPixelNC, endPixelNC, pOO, pOH) == "INTERSECTING") {
+				if (lineSegmentIntersectionTest_px(startPixelNC, endPixelNC, pOO, pOH) == "INTERSECTING") {
 					if (startPixelNC.getX() < pOO.getX()) {
 						startPixel = intersectionPixel.clone();
 					}
@@ -482,7 +355,7 @@ class gui.EditMapLineString extends EditMapGeometry implements GeometryListener 
 					}
 				}
 				//vertical line 2 at x = width
-				if (lineSegmentIntersectionPixel(startPixelNC, endPixelNC, pWO, pWH) == "INTERSECTING") {
+				if (lineSegmentIntersectionTest_px(startPixelNC, endPixelNC, pWO, pWH) == "INTERSECTING") {
 					if (startPixelNC.getX() > pWO.getX()) {
 						startPixel = intersectionPixel.clone();
 					}
@@ -491,7 +364,7 @@ class gui.EditMapLineString extends EditMapGeometry implements GeometryListener 
 					}
 				}
 				//horizontal line 3 at y = 0
-				if (lineSegmentIntersectionPixel(startPixelNC, endPixelNC, pOO, pWO) == "INTERSECTING") {
+				if (lineSegmentIntersectionTest_px(startPixelNC, endPixelNC, pOO, pWO) == "INTERSECTING") {
 					if (startPixelNC.getY() < pOO.getY()) {
 						startPixel = intersectionPixel.clone();
 					}
@@ -500,7 +373,7 @@ class gui.EditMapLineString extends EditMapGeometry implements GeometryListener 
 					}
 				}
 				//horizontal line 4 at y = height
-				if (lineSegmentIntersectionPixel(startPixelNC, endPixelNC, pOH, pWH) == "INTERSECTING") {
+				if (lineSegmentIntersectionTest_px(startPixelNC, endPixelNC, pOH, pWH) == "INTERSECTING") {
 					if (startPixelNC.getY() > pOH.getY()) {
 						startPixel = intersectionPixel.clone();
 					}
@@ -521,14 +394,20 @@ class gui.EditMapLineString extends EditMapGeometry implements GeometryListener 
 						
 						createEmptyMovieClip("mEditMapLineGraphicNormal", 1 );
 						with (mEditMapLineGraphicNormal) {
-							lineStyle(6, 0xffff00, 50);
+							//lineStyle(6, 0xffff00, 50);
+							lineStyle(thisObj.strokeWidth, thisObj.strokeColor, thisObj.strokeOpacity);
 							moveTo(0, 0);
 							lineTo(lineX, lineY);
 						}
 						
 						createEmptyMovieClip("mEditMapLineGraphicRollOver", 0 );
 						with (mEditMapLineGraphicRollOver) {
-							lineStyle(6, 0xff0000, 50);
+							//lineStyle(6, 0xff0000, 50);
+							if (thisObj.strokeOpacity > 50) {
+								lineStyle(thisObj.strokeWidth, 0xff0000, thisObj.strokeOpacity);
+							} else {
+								lineStyle(thisObj.strokeWidth, 0xff0000, 50);
+							}
 							moveTo(0, 0);
 							lineTo(lineX, lineY);
 						}
@@ -588,7 +467,7 @@ class gui.EditMapLineString extends EditMapGeometry implements GeometryListener 
 				}
 			}
 		}
-		else {
+		else { //linestring not active
 			//clean from mEditMapLineGraphic members
 			for (_name in this) {
 				if (this[_name] instanceof EditMapLineGraphic) {		
@@ -608,22 +487,257 @@ class gui.EditMapLineString extends EditMapGeometry implements GeometryListener 
 		
 			clear();
 			moveTo(x, y);
-			lineStyle(style.getStrokeWidth(), style.getStrokeColor(), style.getStrokeOpacity());
-			for (var i:Number = 1; i < points.length; i++) {
-				pixel = point2Pixel(Point(points[i]));
-				lineTo(pixel.getX(), pixel.getY());
+			//lineStyle(style.getStrokeWidth(), style.getStrokeColor(), style.getStrokeOpacity());
+			lineStyle(thisObj.strokeWidth, thisObj.strokeColor, thisObj.strokeOpacity);
+
+			if (lineStringStyle == "solid"){
+				//=== solid line ===
+				for (var i:Number = 1; i < points.length; i++) {
+					pixel = point2Pixel(Point(points[i]));			
+					lineTo(pixel.getX(), pixel.getY());
+				}
+			} else if (lineStringStyle == "arrow" || lineStringStyle == "arrow_closed"){
+				//=== arrow line ===				
+				var lastPixel:Pixel = new Pixel(x,y);
+				for (var i:Number = 1; i < points.length; i++) {
+					pixel = point2Pixel(Point(points[i]));	
+					//draw linesegment
+					lineTo(pixel.getX(), pixel.getY());
+					
+					//calc arrow head end points e1 and e2						
+					var a:flash.geom.Point = new flash.geom.Point(pixel.getX() - lastPixel.getX(), pixel.getY() - lastPixel.getY());
+					//trace("EditMapLineString.as a = "+a);
+					var al:Number = a.length;
+					a.x /=al;
+					a.y /=al;
+					var b:flash.geom.Point = new flash.geom.Point(a.y, -a.x);
+					a.x *= 6;
+					a.y *= 6;
+					b.x *= 4;
+					b.y *= 4;
+					var e1:flash.geom.Point = new flash.geom.Point(pixel.getX() - a.x + b.x, pixel.getY() - a.y + b.y);
+					var e2:flash.geom.Point = new flash.geom.Point(pixel.getX() - a.x - b.x, pixel.getY() - a.y - b.y);
+					
+					//trace("EditMapLineString.as pixel = "+pixel+" lastPixel ="+lastPixel);
+					//trace("EditMapLineString.as a = "+a+" b ="+b+" e1 ="+e1+" e2 ="+e2);
+					//draw arrow head linepieces
+					if (lineStringStyle == "arrow_closed"){
+						beginFill(thisObj.strokeColor, thisObj.strokeOpacity);
+						moveTo(pixel.getX(), pixel.getY());
+						lineTo(e1.x, e1.y);
+						lineTo(e2.x, e2.y);
+						lineTo(pixel.getX(), pixel.getY());
+						endFill();
+					
+					} else {
+						moveTo(pixel.getX(), pixel.getY());
+						lineTo(e1.x, e1.y);
+						moveTo(pixel.getX(), pixel.getY());
+						lineTo(e2.x, e2.y);
+					}
+					
+					//set for next loop
+					lastPixel = pixel;
+					moveTo(pixel.getX(), pixel.getY());
+				}	
+			} else if (lineStringStyle == "dashed"){
+				//=== dashed line ===
+				var lastPixel:Pixel = new Pixel(x,y);
+				//var penOnOffLengths:Array = new Array(20,10,5,5);
+				var penOnOffLengths:Array = new Array(20,20);
+				var penOnLength:Number = 6;
+				var penOffLength:Number = 4;
+				if (penOnOffLengths.length >= 2) {
+					penOnLength = penOnOffLengths[0];
+					penOffLength = penOnOffLengths[1];
+				}
+				//trace("EditMapLineString.as penOnOffLengths = "+penOnOffLengths);
+				var dlsection:Number = penOnLength;
+				var penOn:Boolean = true;
+				var penOnOffIndex:Number = 0;
+				var dl:Number=0;
+				
+				for (var i:Number = 1; i < points.length; i++) {
+					pixel = point2Pixel(Point(points[i]));
+					//calc length linesegment and normalise it
+					var ls:flash.geom.Point = new flash.geom.Point(pixel.getX() - lastPixel.getX(), pixel.getY() - lastPixel.getY());
+					//trace("EditMapLineString.as ls = "+ls);
+					//ls.normalize();
+					var lsl:Number = ls.length;
+					//trace("EditMapLineString.as normalised ls = "+ls);
+					if (lsl == 0) {
+						//skip this point and line segment
+					} else {
+						ls.x /=lsl;
+						ls.y /=lsl;
+						
+						
+										
+						var pen:flash.geom.Point = new flash.geom.Point(lastPixel.getX(), lastPixel.getY());
+						if (dlsection > lsl) {
+							//draw first solid truncated section
+							lineTo(pixel.getX(), pixel.getY());
+						} else {
+							//draw dashed line section
+							do {
+								if (penOn) {
+									//draw: pen on
+									pen.x += ls.x * penOnLength;
+									pen.y += ls.y * penOnLength;
+									lineTo(pen.x, pen.y);
+									dlsection = penOnLength;
+								} else {
+									//move: pen off
+									pen.x += ls.x * penOffLength;
+									pen.y += ls.y * penOffLength;
+									moveTo(pen.x, pen.y);
+									dlsection = penOffLength;
+								}
+								dl += dlsection;
+								//trace("EditMapLineString.as dl = "+dl+"  penOn = "+penOn+"   pen = "+pen);
+								penOn = !penOn;
+								
+								if (penOn) {
+									//cycle pen on/off lengths
+									penOnOffIndex += 2;
+									if (penOnOffIndex > penOnOffLengths.length - 1) {
+										penOnOffIndex = 0;
+									}
+									penOnLength = penOnOffLengths[penOnOffIndex];
+									penOffLength = penOnOffLengths[penOnOffIndex + 1];
+									if (penOn) {
+										dlsection = penOnLength;
+									} else {
+										dlsection = penOffLength;
+									}
+									//trace("EditMapLineString.as penOnOffIndex = "+penOnOffIndex+"   penOnLength = "+penOnLength+"  penOffLength = "+penOffLength);
+								}
+								
+								//check if next loop round will exceed the line segment length
+								if (dl + dlsection > lsl) {
+									if (penOn) {
+										//draw end piece to corner or go around a corner
+										lineTo(pixel.getX(), pixel.getY());
+									} else {
+										moveTo(pixel.getX(), pixel.getY());
+									}
+									//trace("EditMapLineString.as last piece penOn = "+penOn);
+									break;
+								}
+							} 
+							while (dl + dlsection < lsl);
+						}
+						
+						//trace("EditMapLineString.as pixel = "+pixel+" lastPixel ="+lastPixel);
+						
+						//for the next loop
+						lastPixel = pixel;
+						moveTo(pixel.getX(), pixel.getY());
+					}	
+				}
 			}
-			
-			moveTo(x, y);
-            lineStyle(style.getStrokeWidth() * 2, 0, 0);
-            for (var i:Number = 1; i < points.length; i++) {
-                pixel = point2Pixel(Point(points[i]));
-                lineTo(pixel.getX(), pixel.getY());
-            }
 		}
 	}
+		
+	private function drawLineStringGraphics(i:Number, startPixel:Pixel, endPixel:Pixel):Void {
+		var thisObj:Object = this;
+		var x:Number = startPixel.getX();
+		var y:Number = startPixel.getY();
+		
+		var performClipping:Boolean = false;
+		if (startPixel.getDistance(endPixel) > 5600 - width) {
+			performClipping = true;
+		}
+				
+		if (performClipping) {
+			//perform clipping operation
+			var startPixelNC:Pixel = startPixel.clone(); 	//Not Clipped
+			var endPixelNC:Pixel = endPixel.clone();	//Not Clipped
+			
+			//set helper pixels of envelope corners
+			var pOO:Pixel = new Pixel(0, 0);
+			var pOH:Pixel = new Pixel(0, height);
+			var pWO:Pixel = new Pixel(width, 0);
+			var pWH:Pixel = new Pixel(width, height);
+			
+			//vertical line 1 at x = 0
+			if (lineSegmentIntersectionTest_px(startPixelNC, endPixelNC, pOO, pOH) == "INTERSECTING") {
+				if (startPixelNC.getX() < pOO.getX()) {
+					startPixel = intersectionPixel.clone();
+				}
+				else {
+					endPixel = intersectionPixel.clone();
+				}
+			}
+			//vertical line 2 at x = width
+			if (lineSegmentIntersectionTest_px(startPixelNC, endPixelNC, pWO, pWH) == "INTERSECTING") {
+				if (startPixelNC.getX() > pWO.getX()) {
+					startPixel = intersectionPixel.clone();
+				}
+				else {
+					endPixel = intersectionPixel.clone();
+				}
+			}
+			//horizontal line 3 at y = 0
+			if (lineSegmentIntersectionTest_px(startPixelNC, endPixelNC, pOO, pWO) == "INTERSECTING") {
+				if (startPixelNC.getY() < pOO.getY()) {
+					startPixel = intersectionPixel.clone();
+				}
+				else {
+					endPixel = intersectionPixel.clone();
+				}
+			}
+			//horizontal line 4 at y = height
+			if (lineSegmentIntersectionTest_px(startPixelNC, endPixelNC, pOH, pWH) == "INTERSECTING") {
+				if (startPixelNC.getY() > pOH.getY()) {
+					startPixel = intersectionPixel.clone();
+				}
+				else {
+					endPixel = intersectionPixel.clone();
+				}
+			}
+		}
+		
+		var lineX:Number = endPixel.getX() - startPixel.getX();
+		var lineY:Number = endPixel.getY() - startPixel.getY();
+		
+		if (editMapLineStringGraphics[i] != undefined) {
+			with (editMapLineStringGraphics[i]) {
+				_x = x;
+				_y = y;
+			}
+			
+			with (editMapLineStringGraphics[i].mEditMapLineGraphicNormal) {
+				_x = 0;
+				_y = 0;
+				clear();
+				lineStyle(thisObj.strokeWidth, 0x000000, 50);
+				//lineStyle(thisObj.strokeWidth, thisObj.strokeColor, thisObj.strokeOpacity);
+				moveTo(0, 0);
+				lineTo(lineX, lineY);
+			}
+			
+			with (editMapLineStringGraphics[i].mEditMapLineGraphicRollOver) {
+				_x = 0;
+				_y = 0;
+				clear();
+				lineStyle(thisObj.strokeWidth * 2, 0xff8000, 70);
+				if (thisObj.strokeOpacity > 50) {
+					//lineStyle(thisObj.strokeWidth, 0xff0000, thisObj.strokeOpacity);
+				} else {
+					//lineStyle(thisObj.strokeWidth, 0xff0000, 50);
+				}
+				moveTo(0, 0);
+				lineTo(lineX, lineY);
+			}
+		}
+		else {
+			//trace("EditMapLineString: doDraw: editMapLineStringGraphics undefined");
+		}
+		
+	}
 	
-	function cleanChildDrawing():Void {
+	private function cleanChildDrawing():Void {
 		for (var children in this) {
 			if (this[children] instanceof MovieClip) {
 				if (this[children] instanceof EditMapPoint) {
@@ -633,6 +747,63 @@ class gui.EditMapLineString extends EditMapGeometry implements GeometryListener 
 		}
 	}
 	
+	private function lineSegmentIntersectionTest(p1:Point, p2:Point, p3:Point, p4:Point):String {
+		//Line Segment A: point p1 & p2
+		//Line Segment B: point p3 & p4
+		var denom:Number = 	((p4.getY() - p3.getY())*(p2.getX() - p1.getX())) - ((p4.getX() - p3.getX())*(p2.getY() - p1.getY()));
+		var nume_a:Number = ((p4.getX() - p3.getX())*(p1.getY() - p3.getY())) - ((p4.getY() - p3.getY())*(p1.getX() - p3.getX()));
+		var nume_b:Number = ((p2.getX() - p1.getX())*(p1.getY() - p3.getY())) - ((p2.getY() - p1.getY())*(p1.getX() - p3.getX()));
+		
+		if (denom == 0) {
+            if(nume_a == 0.0 && nume_b == 0.0) {
+                return "COINCIDENT";
+            }
+            return "PARALLEL";
+        }
+
+        var ua:Number = nume_a / denom;
+        var ub:Number = nume_b / denom;
+
+        if(ua >= 0.0 && ua <= 1.0 && ub >= 0.0 && ub <= 1.0) {
+            // Get the intersection point.
+            intersectionPoint.setX(p1.getX() + ua*(p2.getX() - p1.getX()));
+            intersectionPoint.setY(p1.getY() + ua*(p2.getY() - p1.getY()));
+            return "INTERSECTING";
+        }
+
+		return "NOT_INTERSECTING";
+	
+	}
+		
+	private function lineSegmentIntersectionTest_px(p1:Pixel, p2:Pixel, p3:Pixel, p4:Pixel):String {
+		//Line Segment A: Pixel p1 & p2
+		//Line Segment B: Pixel p3 & p4
+		var denom:Number = 	((p4.getY() - p3.getY())*(p2.getX() - p1.getX())) - ((p4.getX() - p3.getX())*(p2.getY() - p1.getY()));
+		var nume_a:Number = ((p4.getX() - p3.getX())*(p1.getY() - p3.getY())) - ((p4.getY() - p3.getY())*(p1.getX() - p3.getX()));
+		var nume_b:Number = ((p2.getX() - p1.getX())*(p1.getY() - p3.getY())) - ((p2.getY() - p1.getY())*(p1.getX() - p3.getX()));
+		
+		if (denom == 0) {
+            if(nume_a == 0.0 && nume_b == 0.0) {
+                return "COINCIDENT";
+            }
+            return "PARALLEL";
+        }
+
+        var ua:Number = nume_a / denom;
+        var ub:Number = nume_b / denom;
+
+        if(ua >= 0.0 && ua <= 1.0 && ub >= 0.0 && ub <= 1.0) {
+            // Get the intersection Pixel.
+            intersectionPixel.setX(p1.getX() + ua*(p2.getX() - p1.getX()));
+            intersectionPixel.setY(p1.getY() + ua*(p2.getY() - p1.getY()));
+
+            return "INTERSECTING";
+        }
+
+		return "NOT_INTERSECTING";
+	
+	}
+		
 	private function pixel2Point(pixel:Pixel):geometrymodel.Point {
 		var extent:Object = map.getCurrentExtent();
         var minX:Number = extent.minx;
@@ -646,7 +817,7 @@ class gui.EditMapLineString extends EditMapGeometry implements GeometryListener 
         return new geometrymodel.Point(pointX, pointY);
     }
 
-	function enablePseudoButtonEvents(target){
+	private function enablePseudoButtonEvents(target){
 		target.isPressed = false; // flag
 		target.isMouseOver = false; // flag
 		
@@ -701,12 +872,9 @@ class gui.EditMapLineString extends EditMapGeometry implements GeometryListener 
 		}
 	}
 	
-	function disablePseudoButtonEvents(target){
+	private function disablePseudoButtonEvents(target){
 		delete target.onMouseDown; 
 		delete target.onMouseUp;
 		delete target.onMouseMove;
 	}
-	
-	
-    
 }

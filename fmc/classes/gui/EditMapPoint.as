@@ -12,13 +12,24 @@ import geometrymodel.Point;
 import geometrymodel.Polygon;
 import geometrymodel.LineString;
 
+import gismodel.Feature;
+
 class gui.EditMapPoint extends EditMapGeometry {
     private var m_pixel:Pixel = null;
 	private var mPointGraphic:MovieClip = null;
+	private var mIconTilePic:MovieClip = null;
+	private var mPointText:TextField = null;
+	private var drawPointTextCross:Boolean = false;
+	private var mPointTextCross:MovieClip = null;
 	private var pointNr:Number = -1;
-    
+	
+	private var pointColor:Number = -1;
+	private var pointOpacity:Number = -1;
+	private var pointIconUrl:String = null;
+	private var pointText:String = null;
+	    
     function onLoad():Void { // This method is a stub. It is necessary though, because of the "super" bug in Flash.
-      	super.onLoad();        
+      	super.onLoad();    
     }
     
    function setSize(width:Number, height:Number):Void { // This method is a stub. It is necessary though, because of the "super" bug in Flash.
@@ -48,6 +59,49 @@ class gui.EditMapPoint extends EditMapGeometry {
 	
 	function doDraw():Void {
 		if (editMapEditable) {
+			//*** strokeColor, strokeOpacity and fillColor are set by:
+			// 1. the initial value in the code in gui.EditMapGeometry.as These are values like -1, 2, etc.
+			// 2. (overwritten by) the corresponding <style attribute=".." in the xml config
+			// 3. (overwritten by) the corresponding GeometryProperty attribute <fmc:GeometryProperty name="app:fillopacity" etc.
+			// 
+			// pointColor and pointOpacity refer to the disc shape graphical presentation of a point. The are set by the strokeColor and strokeOpacity.
+			// strokeColor and strokeOpacity are used as rendering colors for the point text and for other geometries like lines in linestrings, circle, polygons, etc.
+			
+			
+			var feature:Feature = this.getFirstAncestor()._parent.getFeature();
+			if (feature.getValue("app:strokecolor") != null){
+				strokeColor = Number(feature.getValue("app:strokecolor"));
+			}
+			if (feature.getValue("app:strokeopacity") != null){
+				strokeOpacity = Number(feature.getValue("app:strokeopacity"));
+			}
+			if (feature.getValue("app:fillcolor") != null){
+				fillColor = Number(feature.getValue("app:fillcolor"));
+			}
+			
+			pointColor = strokeColor;
+			pointOpacity = strokeOpacity;
+			if (feature.getValue("app:pointcolor") != null){
+				pointColor = Number(feature.getValue("app:pointcolor"));
+			}
+			if (feature.getValue("app:pointopacity") != null){
+				pointOpacity = Number(feature.getValue("app:pointopacity"));
+			}
+			
+			pointIconUrl = String(feature.getValue("app:pointicon"));	//allow null value
+			pointText = String(feature.getValue("app:pointtext"));		//allow null value
+			
+			/* //debug traces
+			trace("EditMapPoint.as doDraw() feature = "+feature);
+			trace("EditMapPoint.as doDraw() app:pointcolor value = "+feature.getValue("app:pointcolor"));
+			trace("EditMapPoint.as doDraw() app:pointopacity value = "+feature.getValue("app:pointopacity"));
+			trace("EditMapPoint.as doDraw() app:strokecolor value = "+feature.getValue("app:strokecolor"));
+			trace("EditMapPoint.as doDraw() app:strokeopacity value = "+feature.getValue("app:strokeopacity"));
+			trace("EditMapPoint.as doDraw() app:fillcolor value = "+feature.getValue("app:fillcolor"));
+			trace("EditMapPoint.as doDraw() app:pointicon value = "+feature.getValue("app:pointicon"));
+			trace("EditMapPoint.as doDraw() app:pointtext value = "+feature.getValue("app:pointtext"));
+			*/
+			
 			doDrawEditable();
 		}
 		else {
@@ -67,7 +121,7 @@ class gui.EditMapPoint extends EditMapGeometry {
 			} else {
 				if(isChild){
 					lineStyle(0,0,0);
-				} else {	
+				} else {
 					lineStyle(strokeWidth * 3, strokeColor, strokeOpacity);
 				}
 			}
@@ -80,7 +134,12 @@ class gui.EditMapPoint extends EditMapGeometry {
         var pixel:Pixel = point2Pixel(point);
         var x:Number = pixel.getX();
         var y:Number = pixel.getY();
+		
 		var thisObj:Object = this;
+		var drawIconGraph:Boolean = !(pointIconUrl == null || pointIconUrl == "null" || pointIconUrl == "" || pointIconUrl == undefined);
+		var drawPointText:Boolean = !(pointText == null || pointText == "" || pointText == "null" || pointText == undefined);
+		//trace("EditMapPoint.as: drawIconGraph = "+drawIconGraph); 
+		//trace("EditMapPoint.as: drawPointText = "+drawPointText); 
 		
 		_x = x;
 		_y = y;
@@ -95,12 +154,18 @@ class gui.EditMapPoint extends EditMapGeometry {
 		//will not suffice. The depth swapping is done at the linestring (and higher) level.
 		
 		if (mPointGraphic == null) {
-			//trace("EditMapPoint.as: mPointGraphic == null, new mPointGraphic will be created");
-			//mPointGraphic = createEmptyMovieClip("mPointGraphic", this.getNextHighestDepth() );
-			mPointGraphic = createEmptyMovieClip("mPointGraphic", 1);
-
+			mPointGraphic = createEmptyMovieClip("mPointGraphic", 20);	 //the icon is at depth 10, text at depth 30.
 		}
-		
+		if (mIconTilePic != null) {
+			mIconTilePic.removeMovieClip();
+		}
+		if (mPointText != null) {
+			mPointText.removeTextField();
+		}
+		if (mPointTextCross != null) {
+			mPointTextCross.removeMovieClip();
+		}
+				
 		if (type == ACTIVE) {	
 			with (mPointGraphic) {
 				_x = 0;
@@ -109,7 +174,19 @@ class gui.EditMapPoint extends EditMapGeometry {
 				clear();
 				moveTo(0, 0);
 				//lineStyle(thisObj.style.getStrokeWidth() * 4, thisObj.style.getStrokeColor(), thisObj.style.getStrokeOpacity());
-				lineStyle(thisObj.style.getStrokeWidth() * 6, thisObj.style.getStrokeColor(), thisObj.style.getStrokeOpacity());
+				//lineStyle(thisObj.style.getStrokeWidth() * 6, thisObj.style.getStrokeColor(), thisObj.style.getStrokeOpacity());
+				if (drawIconGraph || drawPointText) {
+					lineStyle(thisObj.style.getStrokeWidth() * 6, 0xFF8000, 100); //orange
+				} else {
+					if (isChild) {
+						//lineStyle(thisObj.style.getStrokeWidth() * 6, thisObj.strokeColor, thisObj.strokeOpacity);
+						lineStyle(thisObj.style.getStrokeWidth() * 6, 0xff0000, thisObj.strokeOpacity);
+					} else {
+						//lineStyle(thisObj.style.getStrokeWidth() * 6, thisObj.pointColor, thisObj.pointOpacity);
+						lineStyle(thisObj.style.getStrokeWidth() * 6, 0xff0000, thisObj.pointOpacity);
+					}
+				}
+				
 				lineTo(0.15, 0.45);
 				
 				moveTo(0, 0);
@@ -239,7 +316,14 @@ class gui.EditMapPoint extends EditMapGeometry {
 				this.clear();
 				this.moveTo(0,0);
 				//this.lineStyle(thisObj.style.getStrokeWidth() * 4, 0xFF0000, thisObj.style.getStrokeOpacity());
-				this.lineStyle(thisObj.style.getStrokeWidth() * 6, 0xFF0000, thisObj.style.getStrokeOpacity());
+				//this.lineStyle(thisObj.style.getStrokeWidth() * 6, 0xFF0000, 100);
+				if (thisObj.isChild) {
+					//lineStyle(thisObj.style.getStrokeWidth() * 6, thisObj.strokeColor, thisObj.strokeOpacity);
+					lineStyle(thisObj.style.getStrokeWidth() * 6, 0xFF0000, 100);
+				} else {
+					//lineStyle(thisObj.style.getStrokeWidth() * 6, thisObj.pointColor, thisObj.pointOpacity);
+					lineStyle(thisObj.style.getStrokeWidth() * 6, 0xFF0000, 100);
+				}
 				this.lineTo(0.45, 0.45);
 				
 			}
@@ -248,7 +332,20 @@ class gui.EditMapPoint extends EditMapGeometry {
 				this.clear();
 				this.moveTo(0,0);
 				//this.lineStyle(thisObj.style.getStrokeWidth() * 4, thisObj.style.getStrokeColor(), thisObj.style.getStrokeOpacity());
-				this.lineStyle(thisObj.style.getStrokeWidth() * 6, thisObj.style.getStrokeColor(), thisObj.style.getStrokeOpacity());
+				//this.lineStyle(thisObj.style.getStrokeWidth() * 6, thisObj.style.getStrokeColor(), thisObj.style.getStrokeOpacity());
+				//this.lineStyle(thisObj.style.getStrokeWidth() * 6, thisObj.strokeColor, thisObj.strokeOpacity);
+				if (thisObj.drawIconGraph || thisObj.drawPointText) {
+					lineStyle(thisObj.style.getStrokeWidth() * 6, 0xFF8000, 100); //orange
+				} else {
+					//lineStyle(thisObj.style.getStrokeWidth() * 6, thisObj.strokeColor, thisObj.strokeOpacity);
+					if (isChild) {
+						//lineStyle(thisObj.style.getStrokeWidth() * 6, thisObj.strokeColor, thisObj.strokeOpacity);
+						lineStyle(thisObj.style.getStrokeWidth() * 6, 0xff0000, thisObj.strokeOpacity);
+					} else {
+						//lineStyle(thisObj.style.getStrokeWidth() * 6, thisObj.pointColor, thisObj.pointOpacity);
+						lineStyle(thisObj.style.getStrokeWidth() * 6, 0xff0000, thisObj.pointOpacity);
+					}
+				}
 				this.lineTo(0.45, 0.45);
 			}
 			
@@ -271,16 +368,85 @@ class gui.EditMapPoint extends EditMapGeometry {
 			
 		}
 		else { //point is not active
-			with (this.mPointGraphic) {
-				_x = 0;
-				_y = 0;
-
-				clear();
-				lineStyle(6, 0x0000ff, 50);
-				moveTo(0, 0);
-				lineTo(0+0.45,0+0.45);
+		
+			if (drawIconGraph || drawPointText) {
+				this.mPointGraphic.clear();
+			} else {
+				with (this.mPointGraphic) {
+					_x = 0;
+					_y = 0;
+					clear();
+					if(thisObj.alwaysDrawPoints){
+						//lineStyle(thisObj.strokeWidth * 4, thisObj.strokeColor, thisObj.strokeOpacity);
+						lineStyle(thisObj.strokeWidth * 4, thisObj.pointColor, thisObj.pointOpacity);
+					}
+					else{
+						if(thisObj.isChild){
+							lineStyle(0, 0, 0);
+						} else {
+							//lineStyle(thisObj.strokeWidth * 5, thisObj.strokeColor, thisObj.strokeOpacity);
+							lineStyle(thisObj.strokeWidth * 5, thisObj.pointColor, thisObj.pointOpacity);
+						}
+					}
+					moveTo(0, 0);
+					lineTo(0+0.45,0+0.45);
+				}
 			}
+			
 			disablePseudoButtonEvents(mPointGraphic);
+		}
+		if (drawPointText) {
+			mPointText = createTextField("mPointText", 15, 0, 0, 100, 100); //limited to one line
+			mPointText.multiline = false;
+			mPointText.autoSize = "left";
+			mPointText.wordWrap = false;
+			var tfmt:TextFormat = new TextFormat();
+			tfmt.color = thisObj.pointColor;
+			tfmt.align = "left";
+			mPointText.text = pointText;
+			mPointText.setTextFormat(tfmt);
+			mPointText._x = 0;
+			mPointText._y = 0; //-mPointText._height;
+			
+			if (!drawIconGraph && drawPointTextCross) {
+				mPointTextCross = createEmptyMovieClip("mPointTextCross", 14);
+				with (mPointTextCross) {
+					_x=0;
+					_y=0;
+					clear();
+					lineStyle(0,thisObj.pointColor,thisObj.pointOpacity);
+					moveTo(-5,0);
+					lineTo(5,0);
+					moveTo(0,-5);
+					lineTo(0,5);
+				}
+			}
+		}
+		if (drawIconGraph) {
+			//trace("EditMapPoint.as: try to load a icon and draw it on the map.  thisObj.pointIconUrl = "+thisObj.pointIconUrl);
+			//try to load an icon and draw it on the map
+							
+			//create and load icon pic on tile
+			mIconTilePic = createEmptyMovieClip("mIconTilePic", 10);
+			
+			var thisObj3:Object = this;
+			var loadListener:Object = new Object();
+			loadListener.onLoadInit = function(mc:MovieClip) {
+				//size the loaded tile according to the tile size
+				mc._x = -mc._width/2;
+				mc._y = -mc._height/2;
+				
+				//reposition the point text right from the icon (width 0 px spacing)
+				thisObj3.mPointText._x = mc._width/2 + 0;
+			}
+			loadListener.onLoadError  = function(target_mc:MovieClip, errorCode:String, httpStatus:Number) {
+				thisObj3._global.flamingo.showError("Exception in gui.EditMapPoint.as", "Can not load icon with url = "+target_mc._parent.tileIconUrl+" \nErrorCode = "+errorCode+"\nhttpStatus = "+httpStatus,3000);
+				//trace("EditMapPoint.as load error. can not load icon: with url = "+target_mc._parent.tileIconUrl+"  errorCode = "+errorCode+"\nhttpStatus = "+httpStatus);
+			}
+
+			var mcLoader:MovieClipLoader = new MovieClipLoader();
+			mcLoader.addListener(loadListener);
+			mcLoader.loadClip(thisObj.pointIconUrl, mIconTilePic);
 		}
     }
 	
@@ -298,7 +464,7 @@ class gui.EditMapPoint extends EditMapGeometry {
         return new geometrymodel.Point(pointX, pointY);
     }
 	
-	function enablePseudoButtonEvents(target){
+	private function enablePseudoButtonEvents(target){
 		target.isPressed = false; // flag
 		target.isMouseOver = false; // flag
 		
@@ -353,25 +519,11 @@ class gui.EditMapPoint extends EditMapGeometry {
 				}
 			}
 		}
-	
 	}
 	
-	function disablePseudoButtonEvents(target){
-				
-		target.onMouseDown = function(){
-			
-		}
-		
-		target.onMouseUp = function(){
-			
-		}
-		
-		target.onMouseMove = function(){
-			
-		}
-	
+	private function disablePseudoButtonEvents(target){
+		delete target.onMouseDown; 
+		delete target.onMouseUp;
+		delete target.onMouseMove;
 	}
-	
-	
-    
 }

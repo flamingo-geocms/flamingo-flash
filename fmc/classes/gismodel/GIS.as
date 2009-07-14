@@ -148,6 +148,7 @@ class gismodel.GIS extends AbstractComponent {
     private var stateEventDispatcher:StateEventDispatcher = null;
 	
 	private var editMapEditable:Boolean = false;
+	private var alwaysDrawPoints:Boolean = true;
 	private var selectedEditTool:String= null;
     
 	
@@ -176,6 +177,14 @@ class gismodel.GIS extends AbstractComponent {
 			}
 			else {
 				editMapEditable = false;
+			}
+		}
+		if (name == "alwaysdrawpoints") {
+			if (value.toLowerCase() == "no" || value.toLowerCase() == "false") {
+				alwaysDrawPoints = false;
+			}
+			else {
+				alwaysDrawPoints = true;
 			}
 		}
         super.setAttribute(name, value);
@@ -245,7 +254,10 @@ class gismodel.GIS extends AbstractComponent {
 		return editMapEditable;
 	}
 	
-
+	function getAlwaysDrawPoints():Boolean {
+		return alwaysDrawPoints;
+	}
+	
     function getEnvelope():Envelope {
     	var layer:Layer = layers[0];
     	 var minx:Number = layer.getEnvelope().getMinX();  
