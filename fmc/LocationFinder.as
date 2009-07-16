@@ -603,7 +603,7 @@ function _findLocationWFS(locationdata:Object, search:String, nr:Number, updatef
 	}
 	var conditions:Object = new Object();
 	conditions.key=searchfield;
-	conditions.value='*'+search+'*';
+	conditions.value = locationdata.fieldtype.toLowerCase() == "n" ? search : '*'+search+'*';
 	conn.getFeature(server,undefined,conditions);
 	if (updatefeatures) {
 		mHolder.tFeatures.htmlText = "<span class='busy'>"+flamingo.getString(thisObj, "busy")+"</span>";
