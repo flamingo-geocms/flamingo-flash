@@ -226,6 +226,8 @@ class gui.EditInfoPanel extends AbstractComponent implements StateEventListener 
 								theActivePoint.setXY(p.getX(), p.getY());
 								//redraw corresponding editMapPoint
 								theActivePoint.changeGeometry(this);
+								//raise event onGeometryDrawUpdate via editMap through gis
+								thisObj2.gis.geometryUpdate();
 							}
 							else {
 								//trace("EditInfoPanel.as: user input for point coordinates did not pass test (out of range or no numbers)");
