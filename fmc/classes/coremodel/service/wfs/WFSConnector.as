@@ -1,4 +1,4 @@
-/*-----------------------------------------------------------------------------
+﻿/*-----------------------------------------------------------------------------
 * This file is part of Flamingo MapComponents.
 * Author: Michiel J. van Heek.
 * IDgis bv
@@ -12,9 +12,9 @@ import event.ActionEvent;
 import event.ActionEventListener;
 import gismodel.Property;
 import gismodel.Feature;
-import geometrymodel.Envelope;
-import geometrymodel.Geometry;
-import geometrymodel.Point;
+import geometrymodel.*;
+//import geometrymodel.Geometry;
+//import geometrymodel.Point;
 import tools.XMLTools;
 
 class coremodel.service.wfs.WFSConnector extends ServiceConnector {
@@ -47,7 +47,7 @@ class coremodel.service.wfs.WFSConnector extends ServiceConnector {
         request(url, requestString, processDescribeFeatureType, null, actionEventListener, 0);
     }
     
-    function performGetFeature(serviceLayer:ServiceLayer, extent:Envelope, whereClauses:Array, notWhereClause:WhereClause, hitsOnly:Boolean, actionEventListener:ActionEventListener):Void {
+    function performGetFeature(serviceLayer:ServiceLayer, extent:Geometry, whereClauses:Array, notWhereClause:WhereClause, hitsOnly:Boolean, actionEventListener:ActionEventListener):Void {
 		var numFilterElements:Number = ((extent == null)? 0: 1) + ((whereClauses == null)? 0: whereClauses.length) + ((notWhereClause == null)? 0: 1);
         var featureTypeName:String = serviceLayer.getName();
         var requestString:String = "";
@@ -70,15 +70,23 @@ class coremodel.service.wfs.WFSConnector extends ServiceConnector {
             if (numFilterElements > 1) {
                 requestString += "      <ogc:And>\n";
             }
-			
-			requestString += "        <ogc:BBOX>\n";
-			requestString += "          <ogc:PropertyName>" + serviceLayer.getDefaultGeometryProperty().getName() + "</ogc:PropertyName>\n";
-			requestString += "          <gml:Box srsName=\""+this.srsName+"\">\n";
-			requestString += "              <gml:coordinates>" + extent.getMinX() + "," + extent.getMinY() + "\n";
-			requestString += "                  " + extent.getMaxX() + "," + extent.getMaxY() + "</gml:coordinates>\n";
-			requestString += "          </gml:Box>\n";
-			requestString += "        </ogc:BBOX>\n";            
-			
+			if (extent instanceof Envelope) {
+				requestString += "        <ogc:BBOX>\n";
+				requestString += "          <ogc:PropertyName>" + serviceLayer.getDefaultGeometryProperty().getName() + "</ogc:PropertyName>\n";
+				requestString += "          <gml:Box srsName=\""+this.srsName+"\">\n";
+				requestString += "              <gml:coordinates>" + Envelope(extent).getMinX() + "," + Envelope(extent).getMinY() + "\n";
+				requestString += "                  " + Envelope(extent).getMaxX() + "," + Envelope(extent).getMaxY() + "</gml:coordinates>\n";
+				requestString += "          </gml:Box>\n";
+				requestString += "        </ogc:BBOX>\n";            
+			} else if (extent instanceof Geometry) {
+				requestString += "        <ogc:Intersect>\n";
+				requestString += "        	<ogc:PropertyName>\n";
+				requestString += "        		Geometry\n";
+				requestString += "        	</ogc:PropertyName>\n";
+				requestString += "        	" + extent.toGMLString(this.srsName);
+				requestString += "        </ogc:Intersect>\n";
+			}
+				
 			if ((whereClauses != null) && (whereClauses.length > 0)) {
                 var whereClause:WhereClause = null;
                 for (var i:String in whereClauses) {

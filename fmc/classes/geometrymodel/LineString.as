@@ -263,11 +263,16 @@ class geometrymodel.LineString extends Geometry implements GeometryListener {
 		return wktGeom;
 	}
 	
-	function toGMLString():String {
+	function toGMLString(srsName:String):String {
         var point:Point = null;
         
         var gmlString:String = "";
         gmlString += "<gml:LineString srsName=\"urn:ogc:def:crs:EPSG::28992\">\n";
+		if (srsName == undefined) {
+			gmlString += "<gml:LineString srsName=\"urn:ogc:def:crs:EPSG::28992\">\n";
+        } else {
+		    gmlString += "<gml:LineString srsName=\""+srsName+"\">\n";
+		}
         gmlString += "  <gml:coordinates cs=\",\" decimal=\".\" ts=\" \">";
         
         for (var i:Number = 0; i < points.length; i++) {

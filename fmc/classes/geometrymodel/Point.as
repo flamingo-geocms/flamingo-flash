@@ -75,10 +75,15 @@ class geometrymodel.Point extends Geometry implements GeometryListener {
 		geometryEventDispatcher.changeGeometry(this);
 	}
     
-    function toGMLString():String {
+    function toGMLString(srsName:String):String {
         var gmlString:String = "";
-        gmlString += "<gml:Point srsName=\"urn:ogc:def:crs:EPSG::28992\">\n";
-        gmlString += "  <gml:coordinates cs=\",\" decimal=\".\" ts=\" \">";
+        
+        if (srsName == undefined) {
+			gmlString += "<gml:Point srsName=\"urn:ogc:def:crs:EPSG::28992\">\n";
+        } else {
+		    gmlString += "<gml:Point srsName=\""+srsName+"\">\n";
+		}
+		gmlString += "  <gml:coordinates cs=\",\" decimal=\".\" ts=\" \">";
         gmlString += (x + "," + y);
         gmlString += "</gml:coordinates>\n";
         gmlString += "</gml:Point>\n";

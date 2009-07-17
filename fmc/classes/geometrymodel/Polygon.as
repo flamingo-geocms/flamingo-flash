@@ -1,4 +1,4 @@
-/*-----------------------------------------------------------------------------
+﻿/*-----------------------------------------------------------------------------
 * This file is part of Flamingo MapComponents.
 * Author: Michiel J. van Heek.
 * IDgis bv
@@ -180,13 +180,17 @@ class geometrymodel.Polygon extends Geometry {
 	}
 	
 	
-	function toGMLString():String {
+	function toGMLString(srsName:String):String {
         var points:Array = exteriorRing.getPoints();
         var point:Point = null;
         
         var gmlString:String = "";
-        gmlString += "<gml:Polygon srsName=\"urn:ogc:def:crs:EPSG::28992\">\n";
-        gmlString += "  <gml:outerBoundaryIs>\n";
+		if (srsName == undefined) {
+			gmlString += "<gml:Polygon srsName=\"urn:ogc:def:crs:EPSG::28992\">\n";
+        } else {
+		    gmlString += "<gml:Polygon srsName=\""+srsName+"\">\n";
+		}
+		gmlString += "  <gml:outerBoundaryIs>\n";
         gmlString += "    <gml:LinearRing>\n";
         gmlString += "      <gml:coordinates cs=\",\" decimal=\".\" ts=\" \">";
         

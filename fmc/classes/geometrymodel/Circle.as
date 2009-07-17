@@ -63,7 +63,7 @@ class geometrymodel.Circle extends Geometry {
         return Math.sqrt((dx * dx) + (dy * dy));
     }
     
-    function toGMLString():String {
+    function toGMLString(srsName:String):String {
         var gmlString:String = "";
         gmlString += "<gml:Circle>\n";
         gmlString += "  <gml:coordinates>9000,5000 9500,5500 8500,5000</gml:coordinates>\n";

@@ -386,9 +386,9 @@ class gismodel.Layer extends AbstractComposite implements ActionEventListener {
         return -1;
     }
     
-	function getFeatureWithGeometry(env:geometrymodel.Envelope):Void{
+	function getFeatureWithGeometry(extent:geometrymodel.Geometry):Void{
 		if (serviceConnector !=null){
-			serviceConnector.performGetFeature(serviceLayer, env, whereClauses, null, false, this);			
+			serviceConnector.performGetFeature(serviceLayer, extent, whereClauses, null, false, this);			
 		}
 	}
     

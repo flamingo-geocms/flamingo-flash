@@ -10,7 +10,7 @@ import coremodel.service.*;
 import coremodel.service.wfs.WFSConnector;
 import event.ActionEvent;
 import event.ActionEventListener;
-import geometrymodel.Envelope;
+import geometrymodel.Geometry;
 import tools.XMLTools;
 
 class coremodel.service.ServiceConnector {
@@ -57,7 +57,7 @@ class coremodel.service.ServiceConnector {
 
     function performDescribeFeatureType(featureTypeName:String, actionEventListener:ActionEventListener):Void { }
     
-    function performGetFeature(serviceLayer:ServiceLayer, extent:Envelope, whereClauses:Array, notWhereClause:WhereClause, hitsOnly:Boolean, actionEventListener:ActionEventListener):Void { }
+    function performGetFeature(serviceLayer:ServiceLayer, extent:Geometry, whereClauses:Array, notWhereClause:WhereClause, hitsOnly:Boolean, actionEventListener:ActionEventListener):Void { }
     
     function performTransaction(transaction:Transaction, actionEventListener:ActionEventListener):Void { }
     

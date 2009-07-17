@@ -488,11 +488,11 @@ class gismodel.GIS extends AbstractComponent {
 		stateEventDispatcher.dispatchEvent(new StateEvent(this, "GIS", StateEvent.CHANGE, "geometryDragUpdate",this));
 	}
 	
-	function doGetFeatures(env:geometrymodel.Envelope){		
+	function doGetFeatures(extent:geometrymodel.Geometry){		
         var layer:Layer = null;
         for (var i:String in layers) {
             layer = Layer(layers[i]);
-			layer.getFeatureWithGeometry(env);			
+			layer.getFeatureWithGeometry(extent);			
 		}		
 	}
 	
