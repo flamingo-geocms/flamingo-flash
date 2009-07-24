@@ -57,8 +57,13 @@ class coregui.ButtonBar extends MovieClip implements ActionEventListener{
         if (expandable) {
             addBackground();
         } else {
-            addButtons();
+			if (popwindow){
+				showPopUpWindowBar();
+			}else{
+	            addButtons();
+			}
         }
+
 		
     }
 	
@@ -164,15 +169,7 @@ class coregui.ButtonBar extends MovieClip implements ActionEventListener{
 						return;
 					}
 					if (!popUpWindowVisible){
-						_x = default_xpos + popUpWindowDX;
-						_y = default_ypos + popUpWindowDY;
-						addBackground();
-						addBarBackground();
-						addButtons();
-						popUpWindowVisible = true;
-						if (intervalId!=null){
-							clearInterval(intervalId);
-						}
+						showPopUpWindowBar();
 					}
 				} else {
 					if (buttons.length == 0) {
@@ -208,6 +205,17 @@ class coregui.ButtonBar extends MovieClip implements ActionEventListener{
 		}
 	
     }
+	function showPopUpWindowBar():Void{
+		_x = default_xpos + popUpWindowDX;
+		_y = default_ypos + popUpWindowDY;
+		addBackground();
+		addBarBackground();
+		addButtons();
+		popUpWindowVisible = true;
+		if (intervalId!=null){
+			clearInterval(intervalId);
+		}
+	}
 	
 	function removePopUpWindow(afterMouseDown:Boolean):Void{
 		if (afterMouseDown==null) {

@@ -36,8 +36,8 @@
   <fmc:EditLegend id="editLegend" left="75%" top="60%" listento="editMap" expandable="true" popwindow="false" spacing="0"/>
   ...
 * @attr listento the id of the EditMap element
-* @attr expandable (true, false, default value: true) Expans the buttonbar.
-* @attr popwindow (true, false, default value: true) Popups the expanded buttonbar as a window with a configurable background and border. 
+* @attr expandable (true, false, default value: true) Expands the buttonbar. If set to true it wil expand. If set to false the buttonbar is fixed
+* @attr popwindow (true, false, default value: true) The buttonbar as a window with a configurable background and border. 
 * @attr orientation (horizontal, vertical, default value: horizontal) Orientation of the buttonbar. 
 * @attr dx (number default value: 22) Horizontal offset of the buttonbar.
 * @attr dy (number default value: 5) Vertical offset of the buttonbar.

@@ -1,4 +1,4 @@
-/*-----------------------------------------------------------------------------
+﻿/*-----------------------------------------------------------------------------
 * This file is part of Flamingo MapComponents.
 * Author: Michiel J. van Heek.
 * IDgis bv
@@ -156,6 +156,7 @@ class gui.EditLegendLayer extends MovieClip implements StateEventListener, Actio
                 buttonConfigs.push(new ButtonConfig("AddCircleButton", "cirkel toevoegen", this, null, null));
             }
         }
+		//default settings:
         var initObject:Object = new Object();
 		initObject["_x"] = 22;	//dx offset
 		initObject["_y"] = 5;	//dy offset
