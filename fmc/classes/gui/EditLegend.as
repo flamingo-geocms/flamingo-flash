@@ -35,6 +35,7 @@
   Example 3: expandable button bar over legend checkbox and label.
   <fmc:EditLegend id="editLegend" left="75%" top="60%" listento="editMap" expandable="true" popwindow="false" spacing="0"/>
   ...
+* @attr listento the id of the EditMap element
 * @attr expandable (true, false, default value: true) Expans the buttonbar.
 * @attr popwindow (true, false, default value: true) Popups the expanded buttonbar as a window with a configurable background and border. 
 * @attr orientation (horizontal, vertical, default value: horizontal) Orientation of the buttonbar. 
