@@ -197,16 +197,21 @@ class gui.EditProperties extends AbstractComponent implements StateEventListener
 	
 	private function onClickOKButton() : Void {
 		setFeatureValues();
+		raiseApplyEvent();
 		this.setVisible(false);
 	}
 	
 	private function onClickApplyButton() : Void {
 		setFeatureValues();
-		
+		raiseApplyEvent();
 		//redraw the geometry
 		var feature:Feature = gis.getActiveFeature();
 		var geometry:Geometry = feature.getGeometry().getFirstAncestor();
 		geometry.geometryEventDispatcher.changeGeometry(geometry);
+	}
+	
+	private function raiseApplyEvent(){
+		_global.flamingo.raiseEvent(this,"onApply",this,gis.getActiveFeature().toObject());
 	}
 
 	function onScrollBar(eventObject:Object):Void {
@@ -538,5 +543,10 @@ class gui.EditProperties extends AbstractComponent implements StateEventListener
         }
         
     }
-    
+    /**
+	* Dispatched when in the editproperties a ok or apply is clicked
+	* @param editProperties: a reference to the editProperties movieclip.
+	* @param featureAsObject:Object representation of the feature that is active.
+	*/
+	public function onApply(editProperties:MovieClip, featureAsObject:Object):Void {}
 }
