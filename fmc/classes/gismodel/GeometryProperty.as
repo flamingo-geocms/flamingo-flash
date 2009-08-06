@@ -18,6 +18,7 @@ class gismodel.GeometryProperty extends Property {
 	private var nrTilesHor:Number = null;
 	private var nrTilesVer:Number = null;
 	private var curColorName:String = null;
+	private var propertyType:String = null;
 	
     function GeometryProperty(xmlNode:XMLNode) {
 		super(xmlNode);
@@ -38,6 +39,8 @@ class gismodel.GeometryProperty extends Property {
             nrTilesHor = Number(value);
         } else if (name == "nrtilesver") {
             nrTilesVer = Number(value);
+        } else if (name == "propertytype") {
+            propertyType = String(value);
         }
     }
 	
@@ -57,6 +60,10 @@ class gismodel.GeometryProperty extends Property {
 	function getInGeometryTypes():Array {
         return inGeometryTypes.concat();
     }
+	
+	function getPropertyType():String {
+		return propertyType;
+	}
 	
 	
 	function addComposite(name:String, xmlNode:XMLNode):Void {

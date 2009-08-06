@@ -13,6 +13,7 @@ import geometrymodel.Polygon;
 import geometrymodel.Envelope;
 import geometrymodel.LineString;
 import gismodel.Feature;
+import gismodel.Layer;
 
 class gui.EditMapPolygon extends EditMapGeometry {
 
@@ -30,20 +31,21 @@ class gui.EditMapPolygon extends EditMapGeometry {
     function doDraw():Void {
 		if (editMapEditable) {
 			var feature:Feature = this.getFirstAncestor()._parent.getFeature();
-			if (feature.getValue("app:strokecolor") != null){
-				strokeColor = Number(feature.getValue("app:strokecolor"));
+			var layer:Layer = feature.getLayer();
+			if (layer.getPropertyWithType("strokecolor") != null){
+				strokeColor = Number(layer.getPropertyWithType("strokecolor"));
 			}
-			if (feature.getValue("app:strokeopacity") != null){
-				strokeOpacity = Number(feature.getValue("app:strokeopacity"));
+			if (layer.getPropertyWithType("strokeopacity") != null){
+				strokeOpacity = Number(layer.getPropertyWithType("strokeopacity"));
 			}
-			if (feature.getValue("app:fillcolor") != null){
-				fillColor = Number(feature.getValue("app:fillcolor"));
+			if (layer.getPropertyWithType("fillcolor") != null){
+				fillColor = Number(layer.getPropertyWithType("fillcolor"));
 			}
-			if (feature.getValue("app:fillopacity") != null){
-				fillOpacity = Number(feature.getValue("app:fillopacity"));
+			if (layer.getPropertyWithType("fillopacity") != null){
+				fillOpacity = Number(layer.getPropertyWithType("fillopacity"));
 			}
 			
-			fillPatternUrl = String(feature.getValue("app:fillpattern"));
+			fillPatternUrl = String(layer.getPropertyWithType("fillpattern"));
 			
 			drawFillPattern = !(fillPatternUrl == null || fillPatternUrl == "null" || fillPatternUrl == NaN || fillPatternUrl == undefined);
 			//trace("EditMapPolygon.as doDraw() drawFillPattern = "+drawFillPattern);
@@ -51,11 +53,11 @@ class gui.EditMapPolygon extends EditMapGeometry {
 			
 			/*
 			trace("EditMapPolygon.as doDraw() feature = "+feature);
-			trace("EditMapPolygon.as doDraw() app:strokecolor value = "+feature.getValue("app:strokecolor"));
-			trace("EditMapPolygon.as doDraw() app:strokeopacity value = "+feature.getValue("app:strokeopacity"));
-			trace("EditMapPolygon.as doDraw() app:fillcolor value = "+feature.getValue("app:fillcolor"));
-			trace("EditMapPolygon.as doDraw() app:fillopacity value = "+feature.getValue("app:fillopacity"));
-			trace("EditMapPolygon.as doDraw() app:fillpattern value = "+fillPatternUrl);
+			trace("EditMapPolygon.as doDraw() strokecolor value = "+layer.getPropertyWithType("strokecolor"));
+			trace("EditMapPolygon.as doDraw() strokeopacity value = "+layer.getPropertyWithType("strokeopacity"));
+			trace("EditMapPolygon.as doDraw() fillcolor value = "+layer.getPropertyWithType("fillcolor"));
+			trace("EditMapPolygon.as doDraw() fillopacity value = "+layer.getPropertyWithType("fillopacity"));
+			trace("EditMapPolygon.as doDraw() fillpattern value = "+fillPatternUrl);
 			*/
 			
 			doDrawEditable();

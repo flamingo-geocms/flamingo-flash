@@ -169,6 +169,17 @@ class gismodel.Layer extends AbstractComposite implements ActionEventListener {
         }
         return -1;
     }
+	
+	function getPropertyWithType(propType:String):GeometryProperty {
+        for (var i:Number = 0; i < properties.length; i++) {
+			if (properties[i] instanceof GeometryProperty) {
+				if (GeometryProperty(properties[i]).getPropertyType() == propType) {
+					return GeometryProperty(properties[i]);
+				}
+			}
+        }
+        return null;
+    }
     
     function getRoles():Array {
         return roles.concat();

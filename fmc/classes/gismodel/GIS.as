@@ -128,7 +128,7 @@
 * @hierarchy childnode of Layer.
 * @example
 	<fmc:Layer name="redlining" title="Redlining" visible="true" labelpropertyname="app:numFlights" roles="XDF56YZ">
-	 	<fmc:GeometryProperty name="app:pointcolor" title="Puntkleur" type="ColorPalettePicker" defaultvalue="0xff0000" nrtileshor="2" nrtilesver="4" ingeometrytypes="Point">
+	 	<fmc:GeometryProperty name="pointcolor" title="Puntkleur" type="ColorPalettePicker" defaultvalue="0xff0000" nrtileshor="2" nrtilesver="4" ingeometrytypes="Point">
 		...
 	</fmc:Layer>
 	<fmc:Layer title="Luchthavens" visible="true" wfsurl="wfs::http://localhost:8080/flamingo-edit-server/services" 
@@ -136,7 +136,7 @@
             <fmc:Property name="app:numFlights" title="Aantal vluchten" type="DropDown:50,100,120,250,450,900,2000"/>
             <fmc:Property name="app:name" title="Naam" type="SingleLine" defaultvalue="YAYA"/>
             <fmc:Property name="app:description" title="Omschrijving" type="MultiLine" immutable="true"/>
-* @attr name (no default value) Name of the property, this should correspond with the feature type property name on the server (incl. namespace). examples: "app:pointcolor", "app:pointopacity", "app:pointicon", "app:pointtext", "app:strokecolor", "app:strokeopacity", "app:linestyle", "app:fillcolor", "app:fillopacity".
+* @attr name (no default value) Name of the property, this should correspond with the feature type property name on the server (incl. namespace). examples: "pointcolor", "pointopacity", "pointicon", "pointtext", "strokecolor", "strokeopacity", "linestyle", "fillcolor", "fillopacity".
 * @attr title (default value: “”) Name by which the property is presented to the user, for example on a label in the edit properties component.
 * @attr type (no default value, implemented are: "ColorPalettePicker", "OpacityInput", "OpacityPicker", "IconPicker", "PointTextEditor", "LineTypePicker") Defines the user interface presentation type of input.
 * This type defines how the property will appear in the edit properties component. As a popup picker 
@@ -155,7 +155,7 @@
 * @class gismodel.AvailableColor extends PropertyItem
 * @hierarchy childnode of GeometryProperty.
 * @example
-	<fmc:GeometryProperty name="app:pointcolor" title="Puntkleur" type="ColorPalettePicker" defaultvalue="0xff0000" nrtileshor="2" nrtilesver="4" ingeometrytypes="Point">
+	<fmc:GeometryProperty name="pointcolor" title="Puntkleur" type="ColorPalettePicker" defaultvalue="0xff0000" nrtileshor="2" nrtilesver="4" ingeometrytypes="Point">
 		<fmc:availableColor title="kleur 1" name="color1" pickcolor="0x000000" value="#000000"/>
 		<fmc:availableColor title="kleur 2" name="color2" pickcolor="0xAE1219" value="#AE1219"/>
 		...
@@ -172,7 +172,7 @@
 * @class gismodel.AvailableIcon extends PropertyItem
 * @hierarchy childnode of GeometryProperty.
 * @example
-	<fmc:GeometryProperty name="app:pointicon" title="Puntikoon" type="IconPicker" defaultvalue="null" nrtileshor="4" nrtilesver="2" ingeometrytypes="Point">
+	<fmc:GeometryProperty name="pointicon" title="Puntikoon" type="IconPicker" defaultvalue="null" nrtileshor="4" nrtilesver="2" ingeometrytypes="Point">
 		<fmc:availableIcon title="ovaal" name="icon2" pickiconurl="assets/icons/icon2.png" value="assets/icons/icon2.png"/>
 		<fmc:availableIcon title="driehoek" name="icon3" pickiconurl="assets/icons/icon3.png" value="assets/icons/icon3.png"/>
 		...

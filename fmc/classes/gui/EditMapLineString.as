@@ -14,6 +14,7 @@ import geometrymodel.Point;
 import gismodel.CreateGeometry;
 import event.GeometryListener;
 import gismodel.Feature;
+import gismodel.Layer;
 
 class gui.EditMapLineString extends EditMapGeometry implements GeometryListener {
     
@@ -234,22 +235,23 @@ class gui.EditMapLineString extends EditMapGeometry implements GeometryListener 
 	function doDraw():Void {
 		if (editMapEditable) {
 			var feature:Feature = this.getFirstAncestor()._parent.getFeature();
-			if (feature.getValue("app:strokecolor") != null){
-				strokeColor = Number(feature.getValue("app:strokecolor"));
+			var layer:Layer = feature.getLayer();
+			if (layer.getPropertyWithType("strokecolor") != null){
+				strokeColor = Number(layer.getPropertyWithType("strokecolor"));
 			}
-			if (feature.getValue("app:strokeopacity") != null){
-				strokeOpacity = Number(feature.getValue("app:strokeopacity"));
+			if (layer.getPropertyWithType("strokeopacity") != null){
+				strokeOpacity = Number(layer.getPropertyWithType("strokeopacity"));
 			}
 			
-			if (feature.getValue("app:linestyle") != null){
-				lineStringStyle = String(feature.getValue("app:linestyle"));
+			if (layer.getPropertyWithType("linestyle") != null){
+				lineStringStyle = String(layer.getPropertyWithType("linestyle"));
 			}
 			
 			/*
 			//trace("EditMapLineString.as doDraw() feature = "+feature);
-			//trace("EditMapLineString.as doDraw() app:strokecolor value = "+feature.getValue("app:strokecolor"));
-			//trace("EditMapLineString.as doDraw() app:strokeopacity value = "+feature.getValue("app:strokeopacity"));
-			//trace("EditMapLineString.as doDraw() app:linestyle value = "+feature.getValue("app:linestyle"));
+			//trace("EditMapLineString.as doDraw() strokecolor value = "+layer.getPropertyWithType("strokecolor"));
+			//trace("EditMapLineString.as doDraw() strokeopacity value = "+layer.getPropertyWithType("strokeopacity"));
+			//trace("EditMapLineString.as doDraw() linestyle value = "+layer.getPropertyWithType("linestyle"));
 			trace("EditMapLineString.as doDraw() strokeWidth = "+strokeWidth);
 			*/
 			doDrawEditable();

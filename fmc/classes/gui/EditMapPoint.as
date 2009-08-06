@@ -13,6 +13,7 @@ import geometrymodel.Polygon;
 import geometrymodel.LineString;
 
 import gismodel.Feature;
+import gismodel.Layer;
 
 class gui.EditMapPoint extends EditMapGeometry {
     private var m_pixel:Pixel = null;
@@ -62,44 +63,46 @@ class gui.EditMapPoint extends EditMapGeometry {
 			//*** strokeColor, strokeOpacity and fillColor are set by:
 			// 1. the initial value in the code in gui.EditMapGeometry.as These are values like -1, 2, etc.
 			// 2. (overwritten by) the corresponding <style attribute=".." in the xml config
-			// 3. (overwritten by) the corresponding GeometryProperty attribute <fmc:GeometryProperty name="app:fillopacity" etc.
+			// 3. (overwritten by) the corresponding GeometryProperty attribute <fmc:GeometryProperty name="fillopacity" etc.
 			// 
 			// pointColor and pointOpacity refer to the disc shape graphical presentation of a point. The are set by the strokeColor and strokeOpacity.
 			// strokeColor and strokeOpacity are used as rendering colors for the point text and for other geometries like lines in linestrings, circle, polygons, etc.
 			
 			
 			var feature:Feature = this.getFirstAncestor()._parent.getFeature();
-			if (feature.getValue("app:strokecolor") != null){
-				strokeColor = Number(feature.getValue("app:strokecolor"));
+			var layer:Layer = feature.getLayer();
+			
+			if (layer.getPropertyWithType("strokecolor") != null){
+				strokeColor = Number(layer.getPropertyWithType("strokecolor"));
 			}
-			if (feature.getValue("app:strokeopacity") != null){
-				strokeOpacity = Number(feature.getValue("app:strokeopacity"));
+			if (layer.getPropertyWithType("strokeopacity") != null){
+				strokeOpacity = Number(layer.getPropertyWithType("strokeopacity"));
 			}
-			if (feature.getValue("app:fillcolor") != null){
-				fillColor = Number(feature.getValue("app:fillcolor"));
+			if (layer.getPropertyWithType("fillcolor") != null){
+				fillColor = Number(layer.getPropertyWithType("fillcolor"));
 			}
 			
 			pointColor = strokeColor;
 			pointOpacity = strokeOpacity;
-			if (feature.getValue("app:pointcolor") != null){
-				pointColor = Number(feature.getValue("app:pointcolor"));
+			if (layer.getPropertyWithType("pointcolor") != null){
+				pointColor = Number(layer.getPropertyWithType("pointcolor"));
 			}
-			if (feature.getValue("app:pointopacity") != null){
-				pointOpacity = Number(feature.getValue("app:pointopacity"));
+			if (layer.getPropertyWithType("pointopacity") != null){
+				pointOpacity = Number(layer.getPropertyWithType("pointopacity"));
 			}
 			
-			pointIconUrl = String(feature.getValue("app:pointicon"));	//allow null value
-			pointText = String(feature.getValue("app:pointtext"));		//allow null value
+			pointIconUrl = String(layer.getPropertyWithType("pointicon"));	//allow null value
+			pointText = String(layer.getPropertyWithType("pointtext"));		//allow null value
 			
 			/* //debug traces
 			trace("EditMapPoint.as doDraw() feature = "+feature);
-			trace("EditMapPoint.as doDraw() app:pointcolor value = "+feature.getValue("app:pointcolor"));
-			trace("EditMapPoint.as doDraw() app:pointopacity value = "+feature.getValue("app:pointopacity"));
-			trace("EditMapPoint.as doDraw() app:strokecolor value = "+feature.getValue("app:strokecolor"));
-			trace("EditMapPoint.as doDraw() app:strokeopacity value = "+feature.getValue("app:strokeopacity"));
-			trace("EditMapPoint.as doDraw() app:fillcolor value = "+feature.getValue("app:fillcolor"));
-			trace("EditMapPoint.as doDraw() app:pointicon value = "+feature.getValue("app:pointicon"));
-			trace("EditMapPoint.as doDraw() app:pointtext value = "+feature.getValue("app:pointtext"));
+			trace("EditMapPoint.as doDraw() pointcolor value = "+layer.getPropertyWithType("pointcolor"));
+			trace("EditMapPoint.as doDraw() pointopacity value = "+layer.getPropertyWithType("pointopacity"));
+			trace("EditMapPoint.as doDraw() strokecolor value = "+layer.getPropertyWithType("strokecolor"));
+			trace("EditMapPoint.as doDraw() strokeopacity value = "+layer.getPropertyWithType("strokeopacity"));
+			trace("EditMapPoint.as doDraw() fillcolor value = "+layer.getPropertyWithType("fillcolor"));
+			trace("EditMapPoint.as doDraw() pointicon value = "+layer.getPropertyWithType("pointicon"));
+			trace("EditMapPoint.as doDraw() pointtext value = "+layer.getPropertyWithType("pointtext"));
 			*/
 			
 			doDrawEditable();
