@@ -278,6 +278,7 @@ class gui.EditProperties extends AbstractComponent implements StateEventListener
         var property:Property = null;
         var propertyName:String = null;
         var propertyType:String = null;
+		var propertyPropertyType:String = null;
         var initObject:Object = null;
         var dataProvider:Array = null;
 		var thisObj:Object = null;
@@ -294,6 +295,7 @@ class gui.EditProperties extends AbstractComponent implements StateEventListener
 			//verify if we should use this GeometryProperty
 			var useGeometryProperty = false;
 			if (isGeometryProperty) {
+				propertyPropertyType = GeometryProperty(property).getPropertyType();
 				var inGeometryTypes:Array = GeometryProperty(properties[k]).getInGeometryTypes();
 				for (var j:Number = 0; j < inGeometryTypes.length; j++) { 
 					var geometryType:String = String(inGeometryTypes[j]);
@@ -334,6 +336,7 @@ class gui.EditProperties extends AbstractComponent implements StateEventListener
 				initObject["tabEnabled"] = true;
 				initObject["gis"] = gis;
 				initObject["propertyName"] = propertyName;
+				initObject["propertyPropertyType"] = propertyPropertyType;
 				if (propertyType == "SingleLine") {
 					components.push(componentsPanel.attachMovie("TextInput", "mComponent" + layerName + i, i * 2 + 1, initObject));
 					MovieClip(components[i * 2 + 1]).addEventListener("change", Delegate.create(this, onComponentChange));
