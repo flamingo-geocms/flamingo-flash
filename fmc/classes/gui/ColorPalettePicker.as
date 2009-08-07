@@ -94,7 +94,7 @@ class gui.ColorPalettePicker extends MovieClip implements ActionEventListener {
 		//alert in case the defaultpickColor can not be found in the list.
 		_global.flamingo.tracer("Exception in gui.ColorPalettePicker.setDefaultvalue() \npropertyPropertyType = "+propertyPropertyType+"\nThe defaultvalue = "+defaultvalue+" can not find a matching value in the availableColors. \navailableColors.length = "+availableColors.length);
         
-		trace("Exception in gui.ColorPalettePicker.setDefaultvalue() \npropertyPropertyType = "+propertyPropertyType+"\nThe defaultvalue = "+defaultvalue+" can not find a matching value in the availableColors. \navailableColors.length = "+availableColors.length);
+		//trace("Exception in gui.ColorPalettePicker.setDefaultvalue() \npropertyPropertyType = "+propertyPropertyType+"\nThe defaultvalue = "+defaultvalue+" can not find a matching value in the availableColors. \navailableColors.length = "+availableColors.length);
 		
 		//defaultpickColor = Number(defaultvalue);
 	}

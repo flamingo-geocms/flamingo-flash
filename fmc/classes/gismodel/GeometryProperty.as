@@ -91,14 +91,14 @@ class gismodel.GeometryProperty extends Property {
 					return availableColors[i].getPickColor();
 				}
 			}
-			trace("GeometryProperty.as getFlashValue() No matching availableColors");
+			//trace("GeometryProperty.as getFlashValue() No matching availableColors");
 		} else if (type == "IconPicker") {
 			for (var i:Number = 0; i<availableIcons.length; i++) { 
 				if (availableIcons[i].getValue() == val) {
 					return availableIcons[i].getPickIconUrl();
 				}
 			}
-			trace("GeometryProperty.as getFlashValue() No matching availableIcons");
+			//trace("GeometryProperty.as getFlashValue() No matching availableIcons");
 		} else if (type == "PatternPicker") {
 			for (var i:Number = 0; i<availablePatterns.length; i++) { 
 				if (availablePatterns[i].getValue() == val) {

@@ -95,7 +95,7 @@ class gui.IconPicker extends MovieClip implements ActionEventListener {
 		_global.flamingo.tracer("Exception in gui.IconPicker.setDefaultvalue() \npropertyPropertyType = "+propertyPropertyType+"\nThe defaultvalue = "+defaultvalue+" can not find a matching value in the availableIcons. \navailableIcons.length = "+availableIcons.length);
 		
 		
-		trace("Exception in gui.IconPicker.setDefaultvalue() \npropertyPropertyType = "+propertyPropertyType+"\nThe defaultvalue = "+defaultvalue+" can not find a matching value in the availableIcons. \navailableIcons.length = "+availableIcons.length);
+		//trace("Exception in gui.IconPicker.setDefaultvalue() \npropertyPropertyType = "+propertyPropertyType+"\nThe defaultvalue = "+defaultvalue+" can not find a matching value in the availableIcons. \navailableIcons.length = "+availableIcons.length);
 		
 		//defaultIconUrl = String(defaultvalue);		
 	}
