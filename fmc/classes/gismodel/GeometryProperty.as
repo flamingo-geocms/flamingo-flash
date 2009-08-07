@@ -44,6 +44,25 @@ class gismodel.GeometryProperty extends Property {
         }
     }
 	
+	function addComposite(name:String, xmlNode:XMLNode):Void {
+		if (name == "availableColor") {
+			if (availableColors == null){
+				availableColors = new Array();
+			}
+            availableColors.push(new AvailableColor(xmlNode));
+        } else if (name == "availableIcon") {
+			if (availableIcons == null){
+				availableIcons = new Array();
+			}
+            availableIcons.push(new AvailableIcon(xmlNode));
+		} else if (name == "availablePattern") {
+			if (availablePatterns == null){
+				availablePatterns = new Array();
+			}
+            availablePatterns.push(new AvailablePattern(xmlNode));
+        }
+    }
+	
 	function getMinvalue():Number {
         return minvalue;
     }
@@ -65,26 +84,32 @@ class gismodel.GeometryProperty extends Property {
 		return propertyType;
 	}
 	
-	
-	function addComposite(name:String, xmlNode:XMLNode):Void {
-		if (name == "availableColor") {
-			if (availableColors == null){
-				availableColors = new Array();
+	function getFlashValue(val:String):String{
+		if (type == "ColorPalettePicker") {
+			for (var i:Number = 0; i<availableColors.length; i++) { 
+				if (availableColors[i].getValue() == val) {
+					return availableColors[i].getPickColor();
+				}
 			}
-            availableColors.push(new AvailableColor(xmlNode));
-        } else if (name == "availableIcon") {
-			if (availableIcons == null){
-				availableIcons = new Array();
+			trace("GeometryProperty.as getFlashValue() No matching availableColors");
+		} else if (type == "IconPicker") {
+			for (var i:Number = 0; i<availableIcons.length; i++) { 
+				if (availableIcons[i].getValue() == val) {
+					return availableIcons[i].getPickIconUrl();
+				}
 			}
-            availableIcons.push(new AvailableIcon(xmlNode));
-		} else if (name == "availablePattern") {
-			if (availablePatterns == null){
-				availablePatterns = new Array();
-			}
-            availablePatterns.push(new AvailablePattern(xmlNode));
-        }
-    }
-          
+			trace("GeometryProperty.as getFlashValue() No matching availableIcons");
+		} else if (type == "PatternPicker") {
+			for (var i:Number = 0; i<availablePatterns.length; i++) { 
+				if (availablePatterns[i].getValue() == val) {
+					return availablePatterns[i].getPickPatternUrl();
+				}
+			}		
+		}
+		
+		return val;
+	}
+	          
 	function getAvailableColors():Array {
         return availableColors.concat();
     }

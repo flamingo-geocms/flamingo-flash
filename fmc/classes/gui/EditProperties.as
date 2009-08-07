@@ -481,10 +481,7 @@ class gui.EditProperties extends AbstractComponent implements StateEventListener
 			if (useGeometryProperty) {
 				component = MovieClip(components[i * 2 + 1]);
 				
-				//set default value
-				if (Property(property).getDefaultValue() != null) {
-					component.setDefaultvalue(Property(property).getDefaultValue());
-				}
+				
 				
 				if (component instanceof ColorPalettePicker) {
 					//set available colors
@@ -494,6 +491,12 @@ class gui.EditProperties extends AbstractComponent implements StateEventListener
 					//set available icons
 					component.setAvailableIcons(GeometryProperty(property).getAvailableIcons());
 				} 
+				//set default value
+				if (Property(property).getDefaultValue() != null) {
+					component.setDefaultvalue(Property(property).getDefaultValue());
+				}
+				
+				
 				component.init();
 				
 				//increase component loop index i

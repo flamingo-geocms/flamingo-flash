@@ -185,7 +185,17 @@ class gismodel.Feature {
         
         return values[propertyIndex];
     }
-    
+
+    function getValueWithPropType(propType:String):String {
+        var propertyIndex:Number = layer.getPropertyWithTypeIndex(propType);
+        if (propertyIndex == -1) {
+            // _global.flamingo.tracer("Exception in gismodel.Feature.getValueWithPropType(" + propertyName + ")");
+            return null;
+        }
+        
+        return values[propertyIndex];
+    }
+	
     function getLabelText():String {
         var labelPropertyName:String = layer.getLabelPropertyName();
         if (labelPropertyName == null) {

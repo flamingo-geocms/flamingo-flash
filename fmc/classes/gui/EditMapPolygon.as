@@ -14,6 +14,7 @@ import geometrymodel.Envelope;
 import geometrymodel.LineString;
 import gismodel.Feature;
 import gismodel.Layer;
+import gismodel.GeometryProperty;
 
 class gui.EditMapPolygon extends EditMapGeometry {
 
@@ -28,24 +29,37 @@ class gui.EditMapPolygon extends EditMapGeometry {
     function setSize(width:Number, height:Number):Void { // This method is a stub. It is necessary though, because of the "super" bug in Flash.
         super.setSize(width, height);
     }
+	
+	private function getFlashValue(feature:Feature, layer:Layer, propType:String):String {
+		var geometryProperty:GeometryProperty = layer.getPropertyWithType(propType);
+		var val:String = feature.getValueWithPropType(propType);
+		return geometryProperty.getFlashValue(val);
+	}
+	
     function doDraw():Void {
 		if (editMapEditable) {
 			var feature:Feature = this.getFirstAncestor()._parent.getFeature();
 			var layer:Layer = feature.getLayer();
-			if (layer.getPropertyWithType("strokecolor") != null){
-				strokeColor = Number(layer.getPropertyWithType("strokecolor"));
+			var flashValue:String;
+			
+			flashValue = getFlashValue(feature, layer, "strokecolor");
+			if (flashValue != null){
+				strokeColor = Number(flashValue);
 			}
-			if (layer.getPropertyWithType("strokeopacity") != null){
-				strokeOpacity = Number(layer.getPropertyWithType("strokeopacity"));
+			flashValue = getFlashValue(feature, layer, "strokeopacity");
+			if (flashValue != null){
+				strokeOpacity = Number(flashValue);
 			}
-			if (layer.getPropertyWithType("fillcolor") != null){
-				fillColor = Number(layer.getPropertyWithType("fillcolor"));
+			flashValue = getFlashValue(feature, layer, "fillcolor");
+			if (flashValue != null){
+				fillColor = Number(flashValue);
 			}
-			if (layer.getPropertyWithType("fillopacity") != null){
-				fillOpacity = Number(layer.getPropertyWithType("fillopacity"));
+			flashValue = getFlashValue(feature, layer, "fillopacity");
+			if (flashValue != null){
+				fillOpacity = Number(flashValue);
 			}
 			
-			fillPatternUrl = String(layer.getPropertyWithType("fillpattern"));
+			fillPatternUrl = getFlashValue(feature, layer, "fillpattern");
 			
 			drawFillPattern = !(fillPatternUrl == null || fillPatternUrl == "null" || fillPatternUrl == NaN || fillPatternUrl == undefined);
 			//trace("EditMapPolygon.as doDraw() drawFillPattern = "+drawFillPattern);
@@ -53,10 +67,10 @@ class gui.EditMapPolygon extends EditMapGeometry {
 			
 			/*
 			trace("EditMapPolygon.as doDraw() feature = "+feature);
-			trace("EditMapPolygon.as doDraw() strokecolor value = "+layer.getPropertyWithType("strokecolor"));
-			trace("EditMapPolygon.as doDraw() strokeopacity value = "+layer.getPropertyWithType("strokeopacity"));
-			trace("EditMapPolygon.as doDraw() fillcolor value = "+layer.getPropertyWithType("fillcolor"));
-			trace("EditMapPolygon.as doDraw() fillopacity value = "+layer.getPropertyWithType("fillopacity"));
+			trace("EditMapPolygon.as doDraw() strokecolor value = "+feature.getValueWithPropType("strokecolor"));
+			trace("EditMapPolygon.as doDraw() strokeopacity value = "+feature.getValueWithPropType("strokeopacity"));
+			trace("EditMapPolygon.as doDraw() fillcolor value = "+feature.getValueWithPropType("fillcolor"));
+			trace("EditMapPolygon.as doDraw() fillopacity value = "+feature.getValueWithPropType("fillopacity"));
 			trace("EditMapPolygon.as doDraw() fillpattern value = "+fillPatternUrl);
 			*/
 			

@@ -180,7 +180,18 @@ class gismodel.Layer extends AbstractComposite implements ActionEventListener {
         }
         return null;
     }
-    
+	
+	function getPropertyWithTypeIndex(propType:String):Number {
+        for (var i:Number = 0; i < properties.length; i++) {
+            if (properties[i] instanceof GeometryProperty) {
+				if (GeometryProperty(properties[i]).getPropertyType() == propType) {
+					return i;
+				}
+			}	
+        }
+        return -1;
+    }
+	    
     function getRoles():Array {
         return roles.concat();
     }

@@ -18,7 +18,7 @@ class gui.IconPicker extends MovieClip implements ActionEventListener {
 	private var tabIndex:Number= 1;
 	private var tabEnabled:Boolean = false;
 	private var propertyName:String = null;
-	
+	private var propertyPropertyType:String = null;
 	
 	private var availableIcons:Array = null;
 	private var defaultvalue:String = null;
@@ -43,13 +43,20 @@ class gui.IconPicker extends MovieClip implements ActionEventListener {
 	
     function init():Void {
 		if (availableIcons.length <= 0 || availableIcons == undefined) {
-			_global.flamingo.tracer("Exception in gui.IconPicker.init() \npropertyName = "+propertyName+"\navailableIcons is undefined or length = 0.\navailableIcons.length = "+availableIcons.length);
+			_global.flamingo.tracer("Exception in gui.IconPicker.init() \npropertyPropertyType = "+propertyPropertyType+"\navailableIcons is undefined or length = 0.\navailableIcons.length = "+availableIcons.length);
             return;
         }
 		tabEnabled = false;
 		
 		var feature:Feature = gis.getActiveFeature();
-		pickIconUrl = String(feature.getValue(propertyName));
+		var val:String = feature.getValueWithPropType(propertyPropertyType);
+		//look the pickIconUrl up in the availableIcons list and return the value
+		for (var i:Number = 0; i<availableIcons.length; i++) {
+			if (availableIcons[i].getValue() == val) {
+				pickIconUrl = availableIcons[i].getPickIconUrl();
+			}
+		}
+		//pickIconUrl = String(feature.getValue(propertyName));
 		
 		if (pickIconUrl == null || pickIconUrl == NaN || pickIconUrl == undefined){
 			pickIconUrl = defaultIconUrl;
@@ -76,8 +83,21 @@ class gui.IconPicker extends MovieClip implements ActionEventListener {
 	
 	function setDefaultvalue(defaultvalue:String):Void{
 		this.defaultvalue = defaultvalue;
-		var defaultColorFound:Boolean = false;
-		defaultIconUrl = String(defaultvalue);
+		
+		for (var i:Number = 0; i<availableIcons.length; i++) {
+			if (availableIcons[i].getValue() == this.defaultvalue) {
+				defaultIconUrl = availableIcons[i].getPickIconUrl();
+				return;
+			}
+		}
+		
+		//alert in case the defaultpickColor can not be found in the list.
+		_global.flamingo.tracer("Exception in gui.IconPicker.setDefaultvalue() \npropertyPropertyType = "+propertyPropertyType+"\nThe defaultvalue = "+defaultvalue+" can not find a matching value in the availableIcons. \navailableIcons.length = "+availableIcons.length);
+		
+		
+		trace("Exception in gui.IconPicker.setDefaultvalue() \npropertyPropertyType = "+propertyPropertyType+"\nThe defaultvalue = "+defaultvalue+" can not find a matching value in the availableIcons. \navailableIcons.length = "+availableIcons.length);
+		
+		//defaultIconUrl = String(defaultvalue);		
 	}
 	
 	function getDefaultvalue():String{
@@ -85,6 +105,13 @@ class gui.IconPicker extends MovieClip implements ActionEventListener {
 	}
 	
 	function getValue():String {
+		//look the pickIconUrl up in the availableIcons list and return the value
+		for (var i:Number = 0; i<availableIcons.length; i++) {
+			if (availableIcons[i].getPickIconUrl() == pickIconUrl) {
+				return availableIcons[i].getValue();
+			}
+		}
+
 		return String(pickIconUrl); 
     }
 	

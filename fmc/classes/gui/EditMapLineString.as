@@ -15,6 +15,7 @@ import gismodel.CreateGeometry;
 import event.GeometryListener;
 import gismodel.Feature;
 import gismodel.Layer;
+import gismodel.GeometryProperty;
 
 class gui.EditMapLineString extends EditMapGeometry implements GeometryListener {
     
@@ -232,26 +233,44 @@ class gui.EditMapLineString extends EditMapGeometry implements GeometryListener 
 		
 	}
 	
+	private function getFlashValue(feature:Feature, layer:Layer, propType:String):String {
+		var geometryProperty:GeometryProperty = layer.getPropertyWithType(propType);
+		var val:String = feature.getValueWithPropType(propType);
+		
+		var flashValue:String = geometryProperty.getFlashValue(val);
+		
+		//trace("EditMapLineString.as getFlashValue() propType = "+propType+"  geometryProperty = "+geometryProperty+"  val = "+val+"   flashValue = "+flashValue);
+		
+		return flashValue;
+		//return geometryProperty.getFlashValue(val);
+	}
+	
 	function doDraw():Void {
 		if (editMapEditable) {
 			var feature:Feature = this.getFirstAncestor()._parent.getFeature();
 			var layer:Layer = feature.getLayer();
-			if (layer.getPropertyWithType("strokecolor") != null){
-				strokeColor = Number(layer.getPropertyWithType("strokecolor"));
+			
+			var flashValue:String;
+			
+			flashValue = getFlashValue(feature, layer, "strokecolor");
+			if (flashValue != null){
+				strokeColor = Number(flashValue);
 			}
-			if (layer.getPropertyWithType("strokeopacity") != null){
-				strokeOpacity = Number(layer.getPropertyWithType("strokeopacity"));
+			flashValue = getFlashValue(feature, layer, "strokeopacity");
+			if (flashValue != null){
+				strokeOpacity = Number(flashValue);
 			}
 			
-			if (layer.getPropertyWithType("linestyle") != null){
-				lineStringStyle = String(layer.getPropertyWithType("linestyle"));
+			flashValue = getFlashValue(feature, layer, "linestyle");
+			if (flashValue != null){
+				lineStringStyle = flashValue;
 			}
 			
 			/*
 			//trace("EditMapLineString.as doDraw() feature = "+feature);
-			//trace("EditMapLineString.as doDraw() strokecolor value = "+layer.getPropertyWithType("strokecolor"));
-			//trace("EditMapLineString.as doDraw() strokeopacity value = "+layer.getPropertyWithType("strokeopacity"));
-			//trace("EditMapLineString.as doDraw() linestyle value = "+layer.getPropertyWithType("linestyle"));
+			//trace("EditMapLineString.as doDraw() strokecolor value = "+feature.getValueWithPropType("strokecolor"));
+			//trace("EditMapLineString.as doDraw() strokeopacity value = "+feature.getValueWithPropType("strokeopacity"));
+			//trace("EditMapLineString.as doDraw() linestyle value = "+feature.getValueWithPropType("linestyle"));
 			trace("EditMapLineString.as doDraw() strokeWidth = "+strokeWidth);
 			*/
 			doDrawEditable();

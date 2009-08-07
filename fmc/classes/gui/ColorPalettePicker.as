@@ -20,7 +20,8 @@ class gui.ColorPalettePicker extends MovieClip implements ActionEventListener {
 	private var tabIndex:Number= 1;
 	private var tabEnabled:Boolean = false;
 	private var propertyName:String = null;
-	
+	private var propertyPropertyType:String = null;
+		
 	private var availableColors:Array = null;
 	private var colorTiles:Array = null;
 	private var pickColor:Number = null;
@@ -42,13 +43,21 @@ class gui.ColorPalettePicker extends MovieClip implements ActionEventListener {
     
     function init():Void {
 		if (availableColors.length <= 0 || availableColors == undefined) {
-			_global.flamingo.tracer("Exception in gui.ColorPalettePicker.init() \npropertyName = "+propertyName+"\navailableColors is undefined or length = 0.\navailableColors.length = "+availableColors.length);
+			_global.flamingo.tracer("Exception in gui.ColorPalettePicker.init() \propertyPropertyType = "+propertyPropertyType+"\navailableColors is undefined or length = 0.\navailableColors.length = "+availableColors.length);
             return;
         }
 		
 		tabEnabled = false;
 		var feature:Feature = gis.getActiveFeature();
-		pickColor = Number(feature.getValue(propertyName));
+		
+		var val:String = feature.getValueWithPropType(propertyPropertyType);
+		//look the pickColor up in the availableColors list and return the value
+		for (var i:Number = 0; i<availableColors.length; i++) {
+			if (availableColors[i].getValue() == val) {
+				pickColor = availableColors[i].getPickColor()
+			}
+		}	
+		//pickColor = Number(feature.getValue(propertyName));
 		
 		if (pickColor == null || pickColor == NaN || pickColor == undefined){
 			pickColor = Number(defaultvalue);
@@ -75,11 +84,29 @@ class gui.ColorPalettePicker extends MovieClip implements ActionEventListener {
 	
 	function setDefaultvalue(defaultvalue:String):Void{
 		this.defaultvalue = defaultvalue;
-		defaultpickColor = Number(defaultvalue);
+		for (var i:Number = 0; i<availableColors.length; i++) {
+			if (availableColors[i].getValue() == this.defaultvalue) {
+				this.defaultpickColor = availableColors[i].getPickColor();
+				return;
+			}
+		}
+		
+		//alert in case the defaultpickColor can not be found in the list.
+		_global.flamingo.tracer("Exception in gui.ColorPalettePicker.setDefaultvalue() \npropertyPropertyType = "+propertyPropertyType+"\nThe defaultvalue = "+defaultvalue+" can not find a matching value in the availableColors. \navailableColors.length = "+availableColors.length);
+        
+		trace("Exception in gui.ColorPalettePicker.setDefaultvalue() \npropertyPropertyType = "+propertyPropertyType+"\nThe defaultvalue = "+defaultvalue+" can not find a matching value in the availableColors. \navailableColors.length = "+availableColors.length);
+		
+		//defaultpickColor = Number(defaultvalue);
 	}
 	
 	function getValue():String {
-		return String(pickColor); 
+		//look the pickColor up in the availableColors list and return the value
+		for (var i:Number = 0; i<availableColors.length; i++) {
+			if (availableColors[i].getPickColor() == pickColor) {
+				return availableColors[i].getValue();
+			}
+		}
+		return null; 
     }
 	
 		
