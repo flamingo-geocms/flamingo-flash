@@ -1,4 +1,4 @@
-/*-----------------------------------------------------------------------------
+﻿/*-----------------------------------------------------------------------------
 * This file is part of Flamingo MapComponents.
 * Author: Michiel J. van Heek.
 * IDgis bv
@@ -30,7 +30,8 @@ class gui.EditMapFeature extends GeometryPane implements StateEventListener {
     }
     
     function remove():Void { // This method is an alternative to the default MovieClip.removeMovieClip. Also unsubscribes as event listener. The event method MovieClip.onUnload cannot be used, because it works buggy.
-        gis.removeEventListener(this, "GIS", StateEvent.CHANGE, "activeFeature");
+        gis.raiseFeatureRemoved(feature);
+		gis.removeEventListener(this, "GIS", StateEvent.CHANGE, "activeFeature");
         feature.removeEventListener(this, "Feature", StateEvent.CHANGE, "values");
         this.removeMovieClip(); // Keyword "this" is necessary here, because of the global function removeMovieClip.
     }

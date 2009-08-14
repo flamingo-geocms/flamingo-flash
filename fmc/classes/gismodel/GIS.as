@@ -1,4 +1,4 @@
-/*-----------------------------------------------------------------------------
+﻿/*-----------------------------------------------------------------------------
 * This file is part of Flamingo MapComponents.
 * Author: Michiel J. van Heek.
 * IDgis bv
@@ -506,8 +506,18 @@ class gismodel.GIS extends AbstractComponent {
 		}		 
 	}
 	
+	function raiseFeatureRemoved(removedFeature:Feature){
+		_global.flamingo.raiseEvent(this,"onFeatureRemoved",removedFeature.toObject());
+	}
+	
     function toString():String {
         return "GIS()";
     }
     
+	/*Events*/
+    /**
+	*onFeatureRemoved is raised when a feature is removed
+    *removedFeature: the removed feature as a object so it can be accessed in js
+	*/
+	function onFeatureRemoved(removedFeature:Feature){}
 }
