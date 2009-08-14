@@ -316,6 +316,10 @@ class gui.EditProperties extends AbstractComponent implements StateEventListener
 							useGeometryProperty = true;
 						}
 					}
+					//overwrite for the iconpicker. In order to exclude other geometryTypes than Point.
+					if ( (propertyType == "IconPicker" || propertyType == "PointTextEditor") &&  ( not(geometry instanceof Point) || geometryType != "Point") ) {
+						useGeometryProperty = false;
+					}
 				}
 			}
 
@@ -463,6 +467,10 @@ class gui.EditProperties extends AbstractComponent implements StateEventListener
 						if (geometry instanceof Circle){
 							useGeometryProperty = true;
 						}
+					}
+					//overwrite for the iconpicker. In order to exclude other geometryTypes than Point.
+					if ( (propertyType == "IconPicker" || propertyType == "PointTextEditor") &&  ( not(geometry instanceof Point) || geometryType != "Point") ) {
+						useGeometryProperty = false;
 					}
 				}
 			} else {

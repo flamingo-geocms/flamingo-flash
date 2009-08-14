@@ -92,19 +92,28 @@ class gismodel.GeometryProperty extends Property {
 				}
 			}
 			//trace("GeometryProperty.as getFlashValue() No matching availableColors");
+			return null;
 		} else if (type == "IconPicker") {
+			if (val == "" || val == "null") {
+				return "";
+			}
 			for (var i:Number = 0; i<availableIcons.length; i++) { 
 				if (availableIcons[i].getValue() == val) {
 					return availableIcons[i].getPickIconUrl();
 				}
 			}
 			//trace("GeometryProperty.as getFlashValue() No matching availableIcons");
+			return "";
 		} else if (type == "PatternPicker") {
+			if (val == "" || val == "null") {
+				return "";
+			}
 			for (var i:Number = 0; i<availablePatterns.length; i++) { 
 				if (availablePatterns[i].getValue() == val) {
 					return availablePatterns[i].getPickPatternUrl();
 				}
-			}		
+			}
+			return "";			
 		}
 		
 		return val;

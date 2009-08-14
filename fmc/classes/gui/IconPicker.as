@@ -50,17 +50,11 @@ class gui.IconPicker extends MovieClip implements ActionEventListener {
 		
 		var feature:Feature = gis.getActiveFeature();
 		var val:String = feature.getValueWithPropType(propertyPropertyType);
-		//look the pickIconUrl up in the availableIcons list and return the value
-		for (var i:Number = 0; i<availableIcons.length; i++) {
-			if (availableIcons[i].getValue() == val) {
-				pickIconUrl = availableIcons[i].getPickIconUrl();
-			}
-		}
-		//pickIconUrl = String(feature.getValue(propertyName));
 		
-		if (pickIconUrl == null || pickIconUrl == NaN || pickIconUrl == undefined){
-			pickIconUrl = defaultIconUrl;
-			pickIconTitle = "default";
+		//look the pickIconUrl up in the availableIcons list and return the value
+		pickIconUrl = getFlashValue(val);
+		if (pickIconUrl == defaultIconUrl) {
+			pickIconTitle = "";
 		}
 		
 		//set listener
@@ -83,7 +77,10 @@ class gui.IconPicker extends MovieClip implements ActionEventListener {
 	
 	function setDefaultvalue(defaultvalue:String):Void{
 		this.defaultvalue = defaultvalue;
-		
+		if (this.defaultvalue == "" || this.defaultvalue =="null" || this.defaultvalue == undefined) {
+			defaultIconUrl = "";
+			return;
+		}
 		for (var i:Number = 0; i<availableIcons.length; i++) {
 			if (availableIcons[i].getValue() == this.defaultvalue) {
 				defaultIconUrl = availableIcons[i].getPickIconUrl();
@@ -196,6 +193,18 @@ class gui.IconPicker extends MovieClip implements ActionEventListener {
 		mTF.setTextFormat(tfmt);
 		mTF._x = tileWidthPr + 10;
 		mTF._y = 0;
+	}
+	
+	private function getFlashValue(val:String):String {
+		if (val == "" || val == "null" || val == undefined) {
+			return "";
+		}
+		for (var i:Number = 0; i<availableIcons.length; i++) { 
+			if (availableIcons[i].getValue() == val) {
+				return availableIcons[i].getPickIconUrl();
+			}
+		}
+		return defaultIconUrl;
 	}
 	
 	private function popUpPickWindow():Void {
