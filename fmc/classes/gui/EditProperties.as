@@ -197,21 +197,21 @@ class gui.EditProperties extends AbstractComponent implements StateEventListener
 	
 	private function onClickOKButton() : Void {
 		setFeatureValues();
-		raiseActiveFeatureEvent("onOk");
+		raiseActiveFeatureEvent("onOk",gis.getActiveFeature().getLayer().getName());
 		this.setVisible(false);
 	}
 	
 	private function onClickApplyButton() : Void {
 		setFeatureValues();
-		raiseActiveFeatureEvent("onApply");
-		//redraw the geometry
 		var feature:Feature = gis.getActiveFeature();
+		raiseActiveFeatureEvent("onApply",feature.getLayer().getName());
+		//redraw the geometry		
 		var geometry:Geometry = feature.getGeometry().getFirstAncestor();
 		geometry.geometryEventDispatcher.changeGeometry(geometry);
 	}
 	
-	private function raiseActiveFeatureEvent(ev){
-		_global.flamingo.raiseEvent(this,ev,this,gis.getActiveFeature().toObject());
+	private function raiseActiveFeatureEvent(ev,layerId){
+		_global.flamingo.raiseEvent(this,ev,layerId,gis.getActiveFeature().toObject());
 	}
 
 	function onScrollBar(eventObject:Object):Void {
@@ -565,8 +565,8 @@ class gui.EditProperties extends AbstractComponent implements StateEventListener
 	public function onApply(editProperties:MovieClip, featureAsObject:Object):Void {}
 	/**
 	* Dispatched when in the editproperties a ok is clicked
-	* @param editProperties: a reference to the editProperties movieclip.
+	* @param layerId: The id of the layer where this feature is stored in.
 	* @param featureAsObject:Object representation of the feature that is active.
 	*/
-	public function onOk(editProperties:MovieClip, featureAsObject:Object):Void {}
+	public function onOk(layerId:String, featureAsObject:Object):Void {}
 }
