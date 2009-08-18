@@ -108,8 +108,13 @@ class gui.EditMapPoint extends EditMapGeometry {
 				pointOpacity = Number(flashValue);
 			}
 			
-			pointIconUrl = getFlashValue(feature, layer, "pointicon");	//allow null value
-			pointText = getFlashValue(feature, layer, "pointtext");	//allow null value
+			if(!isChild) {
+				pointIconUrl = getFlashValue(feature, layer, "pointicon");	//allow null value
+				pointText = getFlashValue(feature, layer, "pointtext");	//allow null value
+			} else {		//ensure that for linestring, polygon, circle no icon or text is drawn.
+				pointIconUrl = "";
+				pointText = "";
+			}
 			
 			/* //debug traces
 			trace("EditMapPoint.as doDraw() feature = "+feature);
