@@ -370,7 +370,7 @@ class gismodel.Layer extends AbstractComposite implements ActionEventListener {
             _global.flamingo.tracer("Exception in gismodel.Layer.doRemoveFeature()");
             return;
         }
-        
+        gis.raiseFeatureRemoved(feature);
         if (gis.getActiveFeature() == feature) {
             gis.setActiveFeature(null);
         }
