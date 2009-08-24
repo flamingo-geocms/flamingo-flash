@@ -74,6 +74,8 @@ var namespaces:Object;
 var entersDone:Number=0;
 var currentExtentSelector:Object;
 
+var tFeaturesDelta:Number = 0;
+
 //---------------------------------------
 import mx.controls.ComboBox;
 import mx.controls.TextInput;
@@ -878,10 +880,20 @@ function _updateFeatures(hasmore:Boolean) {
 	if (foundlocations.length>0) {
 		foundlocations.sortOn("label");
 		for (var i = 0; i<foundlocations.length; i++) {
+			var value:String = foundlocations[i].label;
+			//replace < with &lt; < causes problems in a htmlTextField
+			var valArray:Array = value.split("<");
+			if(valArray.length>1){
+				value=valArray[0];
+				for(var j:Number=1;j<valArray.length;j++){
+					value+="&lt;" + valArray[j];
+				}
+			}	
+			
 			if (str.length == 0) {
-				str = "<span class='feature'><a href='asfunction:_parent._zoom,"+i+"'>"+foundlocations[i].label+"</a></span>";
+				str = "<span class='feature'><a href='asfunction:_parent._zoom,"+i+"'>"+value+"</a></span>";
 			} else {
-				str = str+"<br><span class='feature'><a href='asfunction:_parent._zoom,"+i+"'>"+foundlocations[i].label+"</a></span>";
+				str = str+"<br><span class='feature'><a href='asfunction:_parent._zoom,"+i+"'>"+value+"</a></span>";
 			}
 		}
 		if (hasmore) {
@@ -978,12 +990,12 @@ function initControls() {
 		var label = getString(locationdata[locationindex], "label");
 		if(currentExtentSelector!=null){
 			currentExtentSelector.setVisible(false);
-			resize();
+			tFeaturesDelta = 0;
 		}
 		currentExtentSelector = locationdata[locationindex].extentSelector;
 		if(currentExtentSelector!=null){
 			currentExtentSelector.setVisible(true);
-			resize(15 + currentExtentSelector.getExtents().length * 20);
+			tFeaturesDelta = 10 + currentExtentSelector.getExtents().length * 20;
 		}
 		if (locationdata[locationindex].features == undefined) {
 			locationdata[locationindex].searchstring = "";
@@ -1015,6 +1027,7 @@ function initControls() {
 			_global['setTimeout'](mHolder.cbFeature, 'setFocus', 10);
 			//mHolder.cbFeature.open();
 		}
+		resize();
 	};
 	mHolder.cbChoice.addEventListener("change", cbListener);
 	//
@@ -1092,7 +1105,7 @@ function initControls() {
 	mHolder.cbFeature._visible = false;
 	resize();
 }
-function resize(delta:Number) {
+function resize() {
 	if (not controls) {
 		return;
 	}
@@ -1115,10 +1128,10 @@ function resize(delta:Number) {
 	mHolder.tSearch._y = y+24;
 	mHolder.tSearch.setSize(w, 22);
 	//
-	if(delta!=null){
-		y += delta;
-		h -= delta;
-	}
+	//if(tFeaturesDelta!=null){
+		y += tFeaturesDelta;
+		h -= tFeaturesDelta;
+	//}
 	mHolder.tFeatures._x = x;
 	mHolder.tFeatures._y = y+48;
 	mHolder.tFeatures._width = w;
