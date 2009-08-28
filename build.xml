@@ -9,7 +9,7 @@
 	  <format property="date" pattern="dd/MM/yyyy hh:mm aa"/>
 	</tstamp>
 
-	<property name="version" value="3.0.0"/>
+	<property name="version" value="3.1.0"/>
     <property name="build" location="build"/>
     <property name="dist" location="../dist"/>
     <property name="flapath" location="."/>
