@@ -1,0 +1,20 @@
+Change log 3.0.0 > 3.1.0
+- Improved : Some improvements and bug fixes on the ThemeSelector.
+- Improved : Some minor Improvements on the ArcIMSConnector
+- Bug fix:  in Map component (floating point)
+- Added: Edit of points in geometry
+- Added: It's now possible to load only a part of the wfs features with the EditMapSelectFeature component.
+- Improved: the edit/redlining components with some functions that can be called by Javascript and added some broadcasts
+- Bug fix: Identify icon is now always on top of all the layers.
+- Added: new Marker functionality. setMarker and removeMarker can be called on Map
+- Improved: LayerOgWms by adding a noCache param.
+- Bug fix: Default configuration of locationfinder fixed
+- Improved: Some minor improvements in the LocationFinder
+- Added: Hotlink
+- Improved: LayerOGWMS: New parameter: maxHttpGetUrlLength. If the url is longer then a HTTP-POST request is done.
+- Added: LayerArcServer now supports 9.2/9.3
+- Improved: Added a list of configurable possibilities for the button bar of the edit/redline tool.
+- Added: Edit style functionality
+- Added: EditInfoPanel. This shows some extra info when drawing a geometry.
+- some minor bugfixes and improvements
+
