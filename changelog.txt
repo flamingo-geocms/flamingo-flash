@@ -3,6 +3,7 @@ Change log 3.0.0 > 3.1.0
 - Improved : Some minor Improvements on the ArcIMSConnector
 - Bug fix:  in Map component (floating point)
 - Added: Edit of points in geometry
+- Added: Draw point at distance
 - Added: It's now possible to load only a part of the wfs features with the EditMapSelectFeature component.
 - Improved: the edit/redlining components with some functions that can be called by Javascript and added some broadcasts
 - Bug fix: Identify icon is now always on top of all the layers.
