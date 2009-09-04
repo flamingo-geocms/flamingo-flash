@@ -152,7 +152,7 @@ class gismodel.GeometryProperty extends Property {
     }
     
     function toString():String {
-        return "Property(" + name + ", " + title + ", " + type + ")";
+        return "GeometryProperty(" + name + ", " + title + ", " + type + ")";
     }
     
 }

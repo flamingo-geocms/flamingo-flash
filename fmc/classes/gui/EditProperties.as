@@ -116,12 +116,15 @@ class gui.EditProperties extends AbstractComponent implements StateEventListener
     private function layout():Void {
         var numLabels:Number = 0;
         var numTextAreas:Number = 0;
+		var numGeometryAreas:Number= 0;
         for (var i:String in components) {
             if (components[i] instanceof Label) {
                 numLabels++;
             } else if (components[i] instanceof TextArea) {
                 numTextAreas++;
-            }
+            } else{
+				numGeometryAreas++;
+			}
         }
         var panelWidth:Number = __width - 15 - 1;
         var panelHeight:Number = __height - componentHeight;
@@ -228,7 +231,7 @@ class gui.EditProperties extends AbstractComponent implements StateEventListener
         }
     }
     
-    function onStateEvent(stateEvent:StateEvent):Void {
+    function onStateEvent(stateEvent:StateEvent):Void {		
         var sourceClassName:String = stateEvent.getSourceClassName();
         var actionType:Number = stateEvent.getActionType();
         var propertyName:String = stateEvent.getPropertyName();
@@ -258,14 +261,15 @@ class gui.EditProperties extends AbstractComponent implements StateEventListener
 				setComponentValues();
                 removeComponents();
             }
-        } else if (sourceClassName + "_" + actionType + "_" + propertyName == "Feature_" + StateEvent.CHANGE + "_values") {
-			removeComponents();
-            addComponents();
+        } else if (sourceClassName + "_" + actionType + "_" + propertyName == "Feature_" + StateEvent.CHANGE + "_values") {			
+			/*removeComponents();
+            addComponents();*/
+			setComponentValues();			
         }
     }
     
     private function addComponents():Void {
-        if (components.length > 0) {
+		if (components.length > 0) {
             _global.flamingo.tracer("Exception in gui.EditProperties.addComponents()");
             return;
         }
@@ -291,112 +295,94 @@ class gui.EditProperties extends AbstractComponent implements StateEventListener
             propertyName = property.getName();
             propertyType = property.getType();
 			var isGeometryProperty:Boolean = (property instanceof GeometryProperty);
-			
+						
 			//verify if we should use this GeometryProperty
 			var useGeometryProperty = false;
-			if (isGeometryProperty) {
-				propertyPropertyType = GeometryProperty(property).getPropertyType();
-				var inGeometryTypes:Array = GeometryProperty(properties[k]).getInGeometryTypes();
-				for (var j:Number = 0; j < inGeometryTypes.length; j++) { 
-					var geometryType:String = String(inGeometryTypes[j]);
-					if (geometryType == "Point") {
-						if (geometry instanceof Point){
-							useGeometryProperty = true;
-						}
-					} else if (geometryType == "LineString") {
-						if (geometry instanceof LineString){
-							useGeometryProperty = true;
-						}
-					} else if (geometryType == "Polygon") {
-						if (geometry instanceof Polygon){
-							useGeometryProperty = true;
-						}
-					} else if (geometryType == "Circle") {
-						if (geometry instanceof Circle){
-							useGeometryProperty = true;
-						}
-					}
-					//overwrite for the iconpicker. In order to exclude other geometryTypes than Point.
-					if ( (propertyType == "IconPicker" || propertyType == "PointTextEditor") &&  ( not(geometry instanceof Point) || geometryType != "Point") ) {
-						useGeometryProperty = false;
-					}
-				}
+			if (isGeometryProperty){
+				useGeometryProperty=useGeomProperty(GeometryProperty(properties[k]),geometry);
 			}
-
-			if (useGeometryProperty) {
-				initObject = new Object();
-				initObject["autoSize"] = "left";
-				initObject["text"] = property.getTitle();
+			initObject = new Object();
+			initObject["autoSize"] = "left";
+			initObject["text"] = property.getTitle();
+			if (!isGeometryProperty || useGeometryProperty){
 				components.push(componentsPanel.attachMovie("Label", "mLabel" + layerName + i, i * 2, initObject));
 				Label(components[i * 2]).setStyle("fontFamily", labelStyle["fontFamily"]);
 				Label(components[i * 2]).setStyle("fontSize", labelStyle["fontSize"]);
 				if ((serviceLayer == null) || (serviceLayer.getServiceProperty(propertyName).isOptional())) {
 					Label(components[i * 2]).setStyle("fontStyle", "italic");
 				}
-				
-				initObject = new Object();
-				initObject["enabled"] = !property.isImmutable();
-				initObject["tabIndex"] = i;
-				initObject["tabEnabled"] = true;
-				initObject["gis"] = gis;
-				initObject["propertyName"] = propertyName;
-				initObject["propertyPropertyType"] = propertyPropertyType;
+			}
+			initObject = new Object();
+			initObject["enabled"] = !property.isImmutable();
+			initObject["tabIndex"] = i;
+			initObject["tabEnabled"] = true;						
+			initObject["gis"] = gis;
+			initObject["propertyName"] = propertyName;
+			//if not a geometryproperty
+			if(!isGeometryProperty){
 				if (propertyType == "SingleLine") {
 					components.push(componentsPanel.attachMovie("TextInput", "mComponent" + layerName + i, i * 2 + 1, initObject));
-					MovieClip(components[i * 2 + 1]).addEventListener("change", Delegate.create(this, onComponentChange));
+					//MovieClip(components[i * 2 + 1]).addEventListener("change", Delegate.create(this, onComponentChange));
 				} else if (propertyType == "MultiLine") {
 					components.push(componentsPanel.attachMovie("TextArea", "mComponent" + layerName + i, i * 2 + 1, initObject));
-					MovieClip(components[i * 2 + 1]).addEventListener("change", Delegate.create(this, onComponentChange));
-				} else if (useGeometryProperty && propertyType == "ColorPalettePicker") {
-					initObject["minvalue"] = GeometryProperty(properties[k]).getMinvalue();
-					initObject["maxvalue"] = GeometryProperty(properties[k]).getMaxvalue();
-					initObject["nrTilesHor"] = GeometryProperty(properties[k]).getNrTilesHor();
-					initObject["nrTilesVer"] = GeometryProperty(properties[k]).getNrTilesVer();
-					components.push(componentsPanel.attachMovie("ColorPalettePicker", "mComponent" + layerName + i, i * 2 + 1, initObject));
-				} else if (useGeometryProperty && propertyType == "OpacityInput") {
-					initObject["minvalue"] = GeometryProperty(properties[k]).getMinvalue();
-					initObject["maxvalue"] = GeometryProperty(properties[k]).getMaxvalue();
-					components.push(componentsPanel.attachMovie("OpacityInput", "mComponent" + layerName + i, i * 2 + 1, initObject));
-				} else if (useGeometryProperty && propertyType == "OpacityPicker") {
-					initObject["minvalue"] = GeometryProperty(properties[k]).getMinvalue();
-					initObject["maxvalue"] = GeometryProperty(properties[k]).getMaxvalue();
-					initObject["nrTilesHor"] = GeometryProperty(properties[k]).getNrTilesHor();
-					initObject["nrTilesVer"] = GeometryProperty(properties[k]).getNrTilesVer();
-					components.push(componentsPanel.attachMovie("OpacityPicker", "mComponent" + layerName + i, i * 2 + 1, initObject));
-				} else if (useGeometryProperty && propertyType == "LineTypePicker") {
-					components.push(componentsPanel.attachMovie("LineTypePicker", "mComponent" + layerName + i, i * 2 + 1, initObject));
-				} else if (useGeometryProperty && propertyType == "PatternPicker") {
-					initObject["minvalue"] = GeometryProperty(properties[k]).getMinvalue();
-					initObject["maxvalue"] = GeometryProperty(properties[k]).getMaxvalue();
-					initObject["nrTilesHor"] = GeometryProperty(properties[k]).getNrTilesHor();
-					initObject["nrTilesVer"] = GeometryProperty(properties[k]).getNrTilesVer();
-					components.push(componentsPanel.attachMovie("PatternPicker", "mComponent" + layerName + i, i * 2 + 1, initObject));
-				} else if (useGeometryProperty && propertyType == "IconPicker") {
-					initObject["minvalue"] = GeometryProperty(properties[k]).getMinvalue();
-					initObject["maxvalue"] = GeometryProperty(properties[k]).getMaxvalue();
-					initObject["nrTilesHor"] = GeometryProperty(properties[k]).getNrTilesHor();
-					initObject["nrTilesVer"] = GeometryProperty(properties[k]).getNrTilesVer();
-					components.push(componentsPanel.attachMovie("IconPicker", "mComponent" + layerName + i, i * 2 + 1, initObject));			
-				} else if (useGeometryProperty && propertyType == "PointTextEditor") {
-					components.push(componentsPanel.attachMovie("PointTextEditor", "mComponent" + layerName + i, i * 2 + 1, initObject));
-				} else if (!useGeometryProperty && !isGeometryProperty) { // DropDown
+					//MovieClip(components[i * 2 + 1]).addEventListener("change", Delegate.create(this, onComponentChange));
+				} else { // DropDown
 					dataProvider = propertyType.split(":")[1].split(",");
-					nullValueText = "";
 					dataProvider.splice(0, 0, nullValueText);
 					initObject["dataProvider"] = dataProvider;
 					initObject["rowCount"] = dataProvider.length;
 					initObject["editable"] = false;
 					components.push(componentsPanel.attachMovie("ComboBox", "mComponent" + layerName + i, i * 2 + 1, initObject));
 					ComboBox(components[i * 2 + 1]).getDropdown().drawFocus = ""; // Without this line the green focus would remain after selecting from the combobox.
-					
-					MovieClip(components[i * 2 + 1]).addEventListener("change", Delegate.create(this, onComponentChange));
 				}
-				
+				MovieClip(components[i * 2 + 1]).addEventListener("change", Delegate.create(this, onComponentChange));
+				//increase component loop index i				
+				i++;
+			//if geometry property and useGeometryProperty	
+			}else if (useGeometryProperty){				
+				initObject["propertyPropertyType"] = GeometryProperty(property).getPropertyType();
+
+				if (propertyType == "ColorPalettePicker") {
+					initObject["minvalue"] = GeometryProperty(properties[k]).getMinvalue();
+					initObject["maxvalue"] = GeometryProperty(properties[k]).getMaxvalue();
+					initObject["nrTilesHor"] = GeometryProperty(properties[k]).getNrTilesHor();
+					initObject["nrTilesVer"] = GeometryProperty(properties[k]).getNrTilesVer();
+					components.push(componentsPanel.attachMovie("ColorPalettePicker", "mComponent" + layerName + i, i * 2 + 1, initObject));
+				} else if (propertyType == "OpacityInput") {
+					initObject["minvalue"] = GeometryProperty(properties[k]).getMinvalue();
+					initObject["maxvalue"] = GeometryProperty(properties[k]).getMaxvalue();
+					components.push(componentsPanel.attachMovie("OpacityInput", "mComponent" + layerName + i, i * 2 + 1, initObject));
+				} else if (propertyType == "OpacityPicker") {
+					initObject["minvalue"] = GeometryProperty(properties[k]).getMinvalue();
+					initObject["maxvalue"] = GeometryProperty(properties[k]).getMaxvalue();
+					initObject["nrTilesHor"] = GeometryProperty(properties[k]).getNrTilesHor();
+					initObject["nrTilesVer"] = GeometryProperty(properties[k]).getNrTilesVer();
+					components.push(componentsPanel.attachMovie("OpacityPicker", "mComponent" + layerName + i, i * 2 + 1, initObject));
+				} else if (propertyType == "LineTypePicker") {
+					components.push(componentsPanel.attachMovie("LineTypePicker", "mComponent" + layerName + i, i * 2 + 1, initObject));
+				} else if (propertyType == "PatternPicker") {
+					initObject["minvalue"] = GeometryProperty(properties[k]).getMinvalue();
+					initObject["maxvalue"] = GeometryProperty(properties[k]).getMaxvalue();
+					initObject["nrTilesHor"] = GeometryProperty(properties[k]).getNrTilesHor();
+					initObject["nrTilesVer"] = GeometryProperty(properties[k]).getNrTilesVer();
+					components.push(componentsPanel.attachMovie("PatternPicker", "mComponent" + layerName + i, i * 2 + 1, initObject));
+				} else if (propertyType == "IconPicker") {
+					initObject["minvalue"] = GeometryProperty(properties[k]).getMinvalue();
+					initObject["maxvalue"] = GeometryProperty(properties[k]).getMaxvalue();
+					initObject["nrTilesHor"] = GeometryProperty(properties[k]).getNrTilesHor();
+					initObject["nrTilesVer"] = GeometryProperty(properties[k]).getNrTilesVer();
+					components.push(componentsPanel.attachMovie("IconPicker", "mComponent" + layerName + i, i * 2 + 1, initObject));			
+				} else if (propertyType == "PointTextEditor") {
+					components.push(componentsPanel.attachMovie("PointTextEditor", "mComponent" + layerName + i, i * 2 + 1, initObject));
+				} else{
+					_global.flamingo.tracer("Exception in gui.EditProperties.addComponents()\nThe geometry PropertyType: "+propertyType+" is unknown");
+					//error so component is not added: decrease the components (because later a increase will be done)					
+					i++;
+				}
 				//increase component loop index i				
 				i++;
 			}
         }
-
         layout();
         setComponentValues();
     }
@@ -447,54 +433,27 @@ class gui.EditProperties extends AbstractComponent implements StateEventListener
 			
 			//verify if we should use this GeometryProperty
 			var useGeometryProperty = false;
-			if (isGeometryProperty) {
-				var inGeometryTypes:Array = GeometryProperty(properties[k]).getInGeometryTypes();
-				for (var j:Number = 0; j < inGeometryTypes.length; j++) { 
-					var geometryType:String = String(inGeometryTypes[j]);
-					if (geometryType == "Point") {
-						if (geometry instanceof Point){
-							useGeometryProperty = true;
-						}
-					} else if (geometryType == "LineString") {
-						if (geometry instanceof LineString){
-							useGeometryProperty = true;
-						}
-					} else if (geometryType == "Polygon") {
-						if (geometry instanceof Polygon){
-							useGeometryProperty = true;
-						}
-					} else if (geometryType == "Circle") {
-						if (geometry instanceof Circle){
-							useGeometryProperty = true;
-						}
-					}
-					//overwrite for the iconpicker. In order to exclude other geometryTypes than Point.
-					if ( (propertyType == "IconPicker" || propertyType == "PointTextEditor") &&  ( not(geometry instanceof Point) || geometryType != "Point") ) {
-						useGeometryProperty = false;
-					}
-				}
-			} else {
-				value = values[i];
+			if (isGeometryProperty){
+				useGeometryProperty=useGeomProperty(GeometryProperty(properties[k]),geometry);
+			}
+			value = values[i];
+			if(!isGeometryProperty) {				
 				if (value == null) {
 					value = nullValueText;
 				}
+				component = MovieClip(components[i * 2 + 1]);
 				if (component instanceof ComboBox) {
 					setComboBoxValue(ComboBox(component), value);
 				}
 				else {
 					component.text = value;
 				}
-			}
-
-			if (useGeometryProperty) {
-				component = MovieClip(components[i * 2 + 1]);
-				
-				
-				
+				i++;
+			}else if(useGeometryProperty) {
+				component = MovieClip(components[i * 2 + 1]);								
 				if (component instanceof ColorPalettePicker) {
 					//set available colors
 					component.setAvailableColors(GeometryProperty(property).getAvailableColors());
-					
 				} else if (component instanceof IconPicker) {
 					//set available icons
 					component.setAvailableIcons(GeometryProperty(property).getAvailableIcons());
@@ -503,10 +462,7 @@ class gui.EditProperties extends AbstractComponent implements StateEventListener
 				if (Property(property).getDefaultValue() != null) {
 					component.setDefaultvalue(Property(property).getDefaultValue());
 				}
-				
-				
-				component.init();
-				
+				component.init();				
 				//increase component loop index i
 				i++;
 			}
@@ -554,9 +510,43 @@ class gui.EditProperties extends AbstractComponent implements StateEventListener
             }
             var propertyName:String = String(component["propertyName"]);
             feature.setValue(propertyName,value);
-        }
-        
+        }        
     }
+	//verify if we should use this GeometryProperty for this geometry
+	public function useGeomProperty(geometryProperty:GeometryProperty,geometry:Geometry):Boolean{
+		if (geometryProperty==undefined || geometry==undefined){
+			_global.flamingo.tracer("Exception in gui.EditProperties.useGeomProperty(). Not all parameters are set");
+		}
+		var propertyType = geometryProperty.getType();
+		var useGeometryProperty = false;
+		var inGeometryTypes:Array = geometryProperty.getInGeometryTypes();
+		for (var j:Number = 0; j < inGeometryTypes.length; j++) { 
+			var geometryType:String = String(inGeometryTypes[j]);
+			if (geometryType == "Point") {
+				if (geometry instanceof Point){
+					useGeometryProperty = true;
+				}
+			} else if (geometryType == "LineString") {
+				if (geometry instanceof LineString){
+					useGeometryProperty = true;
+				}
+			} else if (geometryType == "Polygon") {
+				if (geometry instanceof Polygon){
+					useGeometryProperty = true;
+				}
+			} else if (geometryType == "Circle") {
+				if (geometry instanceof Circle){
+					useGeometryProperty = true;
+				}
+			}
+			//overwrite for the iconpicker. In order to exclude other geometryTypes than Point.
+			if ( (propertyType == "IconPicker" || propertyType == "PointTextEditor") &&  ( not(geometry instanceof Point) || geometryType != "Point") ) {
+				useGeometryProperty = false;
+			}
+		}
+		return useGeometryProperty;
+	}
+	
     /**
 	* Dispatched when in the editproperties a apply is clicked
 	* @param editProperties: a reference to the editProperties movieclip.
