@@ -67,12 +67,14 @@ class gui.EditProperties extends AbstractComponent implements StateEventListener
     private var minTextAreaHeight:Number = 50;
     private var scrollBar:UIScrollBar = null;
     private var nullValueText:String = "";
-    private var showOKButton:Boolean = false;
+    private var showOKButton:Boolean = true;
 	private var showApplyButton:Boolean = false;
 	private var lastFocusComponent:Object = null;
 	private var actionEventListeners:Array = null;
     
     function init():Void {
+		showOKButton=true;
+		showApplyButton=false;
         gis = _global.flamingo.getComponent(listento[0]).getGIS();   
         components = new Array();
         gis.addEventListener(this, "GIS", StateEvent.CHANGE, "activeFeature");
@@ -88,7 +90,7 @@ class gui.EditProperties extends AbstractComponent implements StateEventListener
 		actionEventListeners = new Array();
     }
 
-	function setAttribute(name:String, value:String):Void {
+	function setAttribute(name:String, value:String):Void {		
     	if(name="okbutton"){
         	showOKButton = Boolean(value);
         }
@@ -152,8 +154,7 @@ class gui.EditProperties extends AbstractComponent implements StateEventListener
                 y += componentHeight;
             }
         }
-		
-		if(showApplyButton){ 
+		if(showApplyButton==true){ 
 			y += 30;
 			
 	       var button2:Button = Button(attachMovie("Button", "mApplyButton", 102));
@@ -166,7 +167,7 @@ class gui.EditProperties extends AbstractComponent implements StateEventListener
 	       button2.addEventListener("click", Delegate.create(this, onClickApplyButton)); 
         } 
 		
-       if(showOKButton){ 
+       if(showOKButton==true){ 
 			y += 30;
 			var button:Button = Button(attachMovie("Button", "mOKButton", 101));
 			button._y = y;
