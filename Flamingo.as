@@ -1,4 +1,4 @@
-/*-----------------------------------------------------------------------------
+﻿/*-----------------------------------------------------------------------------
 Copyright (C) 2006  Menko Kroeske
 
 This file is part of Flamingo MapComponents.
@@ -223,7 +223,7 @@ class Flamingo {
 	* Opens the internet page of flamingo-mc.
 	*/
 	public function about():Void {
-		getURL("http://www.flamingo-mc.org", "_blank");
+		getURL("http://flamingo.gbo-provincies.nl", "_blank");
 	}
 	/**
 	* Resizes the application and fires the 'onResize' event.
