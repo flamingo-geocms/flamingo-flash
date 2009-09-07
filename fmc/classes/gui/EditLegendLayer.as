@@ -162,7 +162,7 @@ class gui.EditLegendLayer extends MovieClip implements StateEventListener, Actio
 		initObject["_y"] = 5;	//dy offset
         initObject["buttonWidth"] = 15;
         initObject["buttonHeight"] = 15;
-        initObject["spacing"] = 5;
+        initObject["spacing"] = 0;
 		initObject["orientation"] = 0; //HORIZONTAL = 0, VERTICAL = 1
 		initObject["expandable"] = true;
 		initObject["popwindow"] = false;
