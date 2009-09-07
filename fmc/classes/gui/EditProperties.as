@@ -73,8 +73,6 @@ class gui.EditProperties extends AbstractComponent implements StateEventListener
 	private var actionEventListeners:Array = null;
     
     function init():Void {
-		showOKButton=true;
-		showApplyButton=false;
         gis = _global.flamingo.getComponent(listento[0]).getGIS();   
         components = new Array();
         gis.addEventListener(this, "GIS", StateEvent.CHANGE, "activeFeature");
@@ -91,12 +89,23 @@ class gui.EditProperties extends AbstractComponent implements StateEventListener
     }
 
 	function setAttribute(name:String, value:String):Void {		
-    	if(name="okbutton"){
-        	showOKButton = Boolean(value);
+    	if(name.toLowerCase()=="okbutton"){
+			if (value.toLowerCase()=="true"){
+				showOKButton = true;
+			}else{
+				showOKButton = false;
+			}
+        	
         }
-		if(name="applybutton"){
-		  	showApplyButton = Boolean(value);
+		if(name.toLowerCase()=="applybutton"){
+			if (value.toLowerCase()=="true"){
+				showApplyButton = true;
+			}else{
+				showApplyButton = false;				
+			}
+		  	
         } 
+		
 	}
     
 	function setActionEventListener(actionEventListener:ActionEventListener):Void {
