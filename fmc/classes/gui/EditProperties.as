@@ -274,7 +274,8 @@ class gui.EditProperties extends AbstractComponent implements StateEventListener
         } else if (sourceClassName + "_" + actionType + "_" + propertyName == "Feature_" + StateEvent.CHANGE + "_values") {			
 			/*removeComponents();
             addComponents();*/
-			setComponentValues();			
+			
+			//setComponentValues();			
         }
     }
     
