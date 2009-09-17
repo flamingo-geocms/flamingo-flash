@@ -61,7 +61,11 @@ class coregui.BaseButton extends AbstractComponent {
 	
     function init():Void {
         useHandCursor = false;
-		//tooltipText = _global.flamingo.getString(this, "tooltip");  //Do not overrule the value set by init object.
+		
+		//if value not set by init object overrule it
+		if (tooltipText == null) {
+			tooltipText = _global.flamingo.getString(this, "tooltip");
+		}
     }
 	
 	function getID():Number {

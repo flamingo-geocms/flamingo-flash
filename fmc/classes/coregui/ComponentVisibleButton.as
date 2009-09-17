@@ -56,6 +56,13 @@ class coregui.ComponentVisibleButton extends BaseButton {
     
     private var component:MovieClip = null;
     
+	function onLoad():Void { // This method is a stub. It is necessary though, because of the "super" bug in Flash.
+        super.onLoad();
+	
+		//For what ever reason the super.init() call in the init() function below does not do it's job therefore this workaround.
+		super.init();
+	}	
+	
     function init():Void {
 		
         super.init();
