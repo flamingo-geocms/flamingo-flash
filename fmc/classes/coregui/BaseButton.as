@@ -1,4 +1,4 @@
-﻿/*-----------------------------------------------------------------------------
+/*-----------------------------------------------------------------------------
 * This file is part of Flamingo MapComponents.
 * Author: Michiel J. van Heek.
 * IDgis bv
@@ -112,7 +112,7 @@ class coregui.BaseButton extends AbstractComponent {
 			if (actionEventListeners[i] != null) {
 				var actionEvent:ActionEvent = new ActionEvent(this, "Button", ActionEvent.CLICK);
 				actionEventListeners[i].onActionEvent(actionEvent);
-				var id:String =  _global.flamingo.getComponentID(this);
+				var id:String =  _global.flamingo.getId(this);
 				if(id != null){
 					_global.flamingo.raiseEvent(this,"onActionEvent",id + "," + actionEvent.toString());
 				} 

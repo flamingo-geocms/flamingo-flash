@@ -106,7 +106,7 @@ class coremodel.service.ServiceConnector {
                     var actionEvent:ActionEvent = new ActionEvent(this, "ServiceConnector", ActionEvent.LOAD);
                     actionEvent["exceptionMessage"] = exceptionMessage;
                     actionEventListener.onActionEvent(actionEvent);
-                    var id:String =  _global.flamingo.getComponentID(this);
+                    var id:String =  _global.flamingo.getId(this);
             		if(id != null){
                     	_global.flamingo.raiseEvent(this,"onActionEvent",id + "," + actionEvent.toString());
             		}
