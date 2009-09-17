@@ -510,6 +510,10 @@ class gismodel.GIS extends AbstractComponent {
 		_global.flamingo.raiseEvent(this,"onFeatureRemoved",removedFeature.toObject());
 	}
 	
+	function raiseLayerVisibility(layername,visibility){
+		_global.flamingo.raiseEvent(this,"onLayerSetVisibility",layername,visibility);
+	}
+	
     function toString():String {
         return "GIS()";
     }
@@ -520,4 +524,11 @@ class gismodel.GIS extends AbstractComponent {
     *removedFeature: the removed feature as a object so it can be accessed in js
 	*/
 	function onFeatureRemoved(removedFeature:Feature){}
+	
+	/**
+	*onLayerSetVisibility is raised when one of the layers visibility is changed.
+	*layername: the layername of the layer that is changed
+	*visibility: true or false
+	*/
+	function onLayerSetVisibility(layername,visibility){}
 }

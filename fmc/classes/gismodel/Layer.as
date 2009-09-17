@@ -122,7 +122,7 @@ class gismodel.Layer extends AbstractComposite implements ActionEventListener {
         }
         
         this.visible = visible;
-        
+        gis.raiseLayerVisibility(this.getName(),this.visible);
         stateEventDispatcher.dispatchEvent(new StateEvent(this, "Layer", StateEvent.CHANGE, "visible", gis));
     }
     
