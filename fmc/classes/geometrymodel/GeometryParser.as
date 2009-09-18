@@ -1,4 +1,4 @@
-/*-----------------------------------------------------------------------------
+﻿/*-----------------------------------------------------------------------------
 * This file is part of Flamingo MapComponents.
 * Author: Michiel J. van Heek.
 * IDgis bv
@@ -143,6 +143,78 @@ class geometrymodel.GeometryParser {
         }
         return geometry;
     }
+	
+	static function parseGeometryFromWkt(wktGeom:String):Geometry {
+		
+		trace("GeometryParser.as parseGeometryFromWkt() wktGeom = "+wktGeom);
+		
+		var geometry:Geometry = null;
+		
+		//parse wktGeom
+		var points:Array = null;
+		var x:Number = 0;
+		var y:Number = 0;
+		var coordinatePairs:Array;
+		
+		
+		if (wktGeom.indexOf("MULTI") != -1) {
+			//intercept Multi Polygon
+			_global.flamingo.tracer("Exception in GeometryParser.parseGeometryFromWkt()\nUnable to parse MULTI POLYGON geometry. \nwktGeom = "+wktGeom);
+			return null;
+		}
+		
+		//create geometry according to geometryType 
+		if (wktGeom.indexOf("POINT") != -1) {
+			var wktPoints:String = wktGeom.slice(wktGeom.indexOf("(") + 1,wktGeom.indexOf(")"));
+			//if existing remove first " " (space character).
+			if (wktPoints.charAt(0) == " ") {
+				wktPoints = wktPoints.substr(1);
+			}
+			
+			coordinatePairs = wktPoints.split(" ");
+			x = Number(coordinatePairs[0]);
+            y = Number(coordinatePairs[1]);
+			geometry = new Point(x, y);
+		
+		} else if ( (wktGeom.indexOf("LINESTRING") != -1) || (wktGeom.indexOf("POLYGON") != -1) ) {
+			var wktPoints:String = wktGeom.slice(wktGeom.lastIndexOf("(") + 1,wktGeom.indexOf(")"));
+			coordinatePairs = wktPoints.split(",");
+					
+			//_global.flamingo.tracer("TRACE in GeometryParser.parseGeometryFromWkt() coordinatePairs = "+coordinatePairs);
+			
+			points = new Array();
+			for (var j:Number = 0; j < coordinatePairs.length; j++) {
+				//if existing remove first " " (space character).
+				if (coordinatePairs[j].charAt(0) == " ") {
+					coordinatePairs[j] = coordinatePairs[j].substr(1);
+				}
+                var coordinatePair:Array = coordinatePairs[j].split(" ");
+				x = Number(coordinatePair[0]);
+                y = Number(coordinatePair[1]);
+				points.push(new geometrymodel.Point(x, y));
+				
+			}
+			if (points!=null){
+				if (wktGeom.indexOf("LINESTRING") != -1) {
+					geometry = new LineString(points);
+				} else if (wktGeom.indexOf("POLYGON") != -1) {
+					//We assume a correct wkt geometry. 
+					//Because the LinearRing class only tests if objects are equal,
+					//we ensure that the last point equals the first point to close the ring and avoid an error message. 
+					 
+					points[points.length - 1] = points[0];
+					
+					var polygon:Polygon = new Polygon(new LinearRing(points));
+					geometry = polygon;
+				}
+			}
+		} else {
+			//unidentified geometry type
+			_global.flamingo.tracer("Exception in GeometryParser.parseGeometryFromWkt() \nUnidentified geometry type.\nwktGeom = "+wktGeom);
+		}
+		
+		return geometry;
+	}
     
 }
 

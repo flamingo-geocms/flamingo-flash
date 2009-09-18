@@ -34,7 +34,7 @@ class gismodel.Feature {
             return;
         }
         if (geometry == null) {
-            _global.flamingo.tracer("Exception in gismodel.Feature.<<init>>(" + id + ")\No geometry given.");
+            _global.flamingo.tracer("Exception in gismodel.Feature.<<init>>(" + id + ")\nNo geometry given.");
             return;
         }
         var geometryTypes:Array = layer.getGeometryTypes();

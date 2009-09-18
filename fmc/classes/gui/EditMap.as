@@ -50,6 +50,7 @@ import gismodel.Layer;
 import gismodel.CreateGeometry;
 import geometrymodel.*;
 import gismodel.Feature;
+import coremodel.service.js.JsFeature;
 
 import core.AbstractComponent;
 
@@ -279,6 +280,53 @@ class gui.EditMap extends AbstractComponent implements StateEventListener {
 			_global.flamingo.tracer("Exception in EditMap.editMapDrawNewGeometry()\nRequested geometryType not implemented.\ngeometryType = "+geometryType);
 		}
 	
+	}
+	
+	/**
+	Adds the specified featureObject to the layer with specified layerName and makes it the active feature. 
+	@param layerName The name of the layer
+	@param featureObject Wkt object describing the feature.
+	*/
+	
+	function addFeature(layerName:String, featureObject:Object):Void {
+		//haal layer op met layerName
+		var editMapLayer:EditMapLayer = null;
+		var layer:Layer = null;
+        for (var i:Number = 0; i < editMapLayers.length; i++) {
+            editMapLayer = EditMapLayer(editMapLayers[i]);
+            if (editMapLayer.getLayer().getName() == layerName) {
+				layer = editMapLayer.getLayer();
+                break;
+            }
+        }
+		
+		if (layer == null) {
+			_global.flamingo.tracer("Exception in EditMap.addFeature()\nNo corresponding layer with layerName = "+layerName);
+			return;
+		}
+		
+		//check if serviceFeature exists
+		var idInObj:String;
+		for (var i in featureObject){
+			if (i=="id"){
+				idInObj=featureObject[i];
+				break;
+			}
+		}
+		var featureFound:Feature = layer.getFeature(idInObj);
+		if (featureFound != null){
+			//update existing feature
+			//_global.flamingo.tracer("TRACE in EditMap.addFeature()\nFeature with id = "+idInObj+" exist and will be updated.");
+			layer.removeFeature(featureFound, false);
+		} 
+		
+		//create new JsFeature with featureObject and add it to the layer
+		var jsFeature:JsFeature= new JsFeature(featureObject);
+		if (jsFeature != null) {
+			layer.addFeature(jsFeature);	//the feature is made active by the postAction in Layer.as addFeature().
+		} else {
+			_global.flamingo.tracer("Exception in EditMap.addFeature()\n JsFeature is <<null>>. Can not add it to layer with layerName = "+layerName);
+		}
 	}
 	
 	/**
