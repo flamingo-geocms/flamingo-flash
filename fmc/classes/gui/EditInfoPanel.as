@@ -1,4 +1,4 @@
-// This file is part of Flamingo MapComponents.
+﻿// This file is part of Flamingo MapComponents.
 // Author: Maurits Kelder.
 
 import gui.*;
@@ -263,9 +263,16 @@ class gui.EditInfoPanel extends AbstractComponent implements StateEventListener 
 	
 		var fullExtent:Object = _global.flamingo.getComponent(listento[0]).getMap().getCFullExtent();
 		var currentExtent:Object = _global.flamingo.getComponent(listento[0]).getMap().getCurrentExtent();
+		
+		var fullExtentValuesUnDefined:Boolean = false;
+		if (fullExtent.minx != null || fullExtent.maxx != null || fullExtent.miny != null || fullExtent.maxy != null ||
+			fullExtent.minx != NaN || fullExtent.maxx != NaN || fullExtent.miny != NaN || fullExtent.maxy != NaN) {
+			fullExtentValuesUnDefined = true;
+		}
 				
-		//check if input values are within the FullExtent
-		if (x!=undefined && x > fullExtent.minx && x < fullExtent.maxx && y!=undefined && y > fullExtent.miny && y < fullExtent.maxy) {
+		//check if input values are within the FullExtent or omit test if fullextent is not known
+		if (x!=undefined && y!=undefined && 
+			( fullExtentValuesUnDefined || (x > fullExtent.minx && x < fullExtent.maxx && y > fullExtent.miny && y < fullExtent.maxy) ) ) {
 			p = new Point(x, y);
 
 			//check if point p is within the current extent, if not resize extent so that it is shown to the user
@@ -303,18 +310,11 @@ class gui.EditInfoPanel extends AbstractComponent implements StateEventListener 
 				_global.flamingo.getComponent(listento[0]).getMap().update();
 				
 			}
-
-			
 			return p;
-		
 		}
 		else {
-		
 			return null;
 		}
-		
-		
-		
 	}
 	
 	private function decimalFormatting(n:Number):String {
