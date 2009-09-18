@@ -10,6 +10,7 @@ import event.*;
 import coremodel.*;
 import coremodel.service.*;
 import coremodel.service.wfs.*;
+import coremodel.service.js.JsFeature;
 import geometrymodel.*;
 import tools.Randomizer;
 import core.AbstractComposite;
@@ -315,9 +316,15 @@ class gismodel.Layer extends AbstractComposite implements ActionEventListener {
             feature = new Feature(this, serviceFeature, id, geometry, null, null);
         } else {                                                                 // serviceFeature != null && geometry == null
             var id:String = serviceFeature.getID();
-            geometry = Geometry(serviceFeature.getValue(serviceLayer.getDefaultGeometryProperty().getName()));
-
-            var values:Array = new Array();
+            			
+			if (_object instanceof JsFeature) {		
+				geometry= Geometry(JsFeature(serviceFeature).getGeometry());
+				postAction = true;
+			} else {
+				geometry = Geometry(serviceFeature.getValue(serviceLayer.getDefaultGeometryProperty().getName()));
+			}	
+			
+			var values:Array = new Array();
             for (var i:Number = 0; i < properties.length; i++) {
                 values.push(serviceFeature.getValue(Property(properties[i]).getName()));
             }
