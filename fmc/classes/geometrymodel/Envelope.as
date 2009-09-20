@@ -1,4 +1,4 @@
-/*-----------------------------------------------------------------------------
+﻿/*-----------------------------------------------------------------------------
 * This file is part of Flamingo MapComponents.
 * Author: Michiel J. van Heek.
 * IDgis bv
@@ -101,6 +101,14 @@ class geometrymodel.Envelope extends Geometry {
             return point1.getY();
         }
     }
+	function toObject():Object{
+		var o = new Object();
+		o["minx"]=getMinX();
+		o["miny"]=getMinY();
+		o["maxx"]=getMaxX();
+		o["maxy"]=getMaxY();
+		return o;
+	}
     
     function toString():String {
         return "Envelope(" + getMinX() + ", " + getMinY() + ", " + getMaxX() + ", " + getMaxY() + ")"; 

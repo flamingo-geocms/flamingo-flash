@@ -491,6 +491,11 @@ class gismodel.GIS extends AbstractComponent {
 	}
 	
 	function doGetFeatures(extent:geometrymodel.Geometry){		
+		var geomObject=extent;
+		if (extent instanceof geometrymodel.Envelope){
+			geomObject=Envelope(extent).toObject();
+		}
+		_global.flamingo.raiseEvent(this,"onGetFeatures",geomObject);
         var layer:Layer = null;
         for (var i:String in layers) {
             layer = Layer(layers[i]);
