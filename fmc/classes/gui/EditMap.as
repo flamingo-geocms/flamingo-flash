@@ -285,7 +285,7 @@ class gui.EditMap extends AbstractComponent implements StateEventListener {
 	/**
 	Adds the specified featureObject to the layer with specified layerName and makes it the active feature. 
 	@param layerName The name of the layer
-	@param featureObject Wkt object describing the feature.
+	@param featureObject Javascript object with wkt describing the feature.
 	*/
 	
 	function addFeature(layerName:String, featureObject:Object):Void {
@@ -321,7 +321,7 @@ class gui.EditMap extends AbstractComponent implements StateEventListener {
 		} 
 		
 		//create new JsFeature with featureObject and add it to the layer
-		var jsFeature:JsFeature= new JsFeature(featureObject);
+		var jsFeature:JsFeature= new JsFeature(featureObject,layer.getServiceLayer());
 		if (jsFeature != null) {
 			layer.addFeature(jsFeature);	//the feature is made active by the postAction in Layer.as addFeature().
 		} else {

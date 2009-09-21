@@ -1,4 +1,4 @@
-/*-----------------------------------------------------------------------------
+﻿/*-----------------------------------------------------------------------------
 * This file is part of Flamingo MapComponents.
 * Author: Michiel J. van Heek.
 * IDgis bv
@@ -224,14 +224,18 @@ class gismodel.Feature {
 	returns the feature as object. 
 	object["id"]= the id
 	object["wktgeom"]= the geometry in wkt text
+	object["fmc_layername"]= the layername from which the feature is given
 	object["<propertyname without prefix and ':'>"]= the property value
 	*/
     function toObject():Object{
     	var returnValue:Object = new Object();
-    	returnValue["id"]=getID();
+    		returnValue["id"]=getID();
     	if (getGeometry()!=null){    	
-		returnValue["wktgeom"]=(getGeometry().toWKT());	
+			returnValue["wktgeom"]=(getGeometry().toWKT());	
     	}
+		if (layer!=null){
+			returnValue["fmc_layername"]=layer.getName();
+		}
     	var properties:Array = layer.getProperties();
     	for (var i:Number = 0; i < properties.length; i++) {
     		var property:Property = Property(properties[i]);
