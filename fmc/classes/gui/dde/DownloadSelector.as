@@ -43,6 +43,8 @@
 * @configstring warningOutOfExtent Warning text show when inBox coordinates are outside the full extent of the map
 * @configstring warningErrorInBox Warning text show when there is an error in the inBox coordinates (f.e. llX > urX)
 * @configstring extentButtonLabel Button label for the button that copies the mapextents into textfields
+* @configstring requestButtonLabel Button label for the button that sends the request
+* @configstring closeButtonLabel Button label for the button that closes the DownloadSelector
 */
 
 /** @tag <fmc:DownloadSelector>   
@@ -143,6 +145,7 @@ class gui.dde.DownloadSelector extends AbstractComponent implements GeometryList
     private var statusDelayIntervalID:Number = 0;
 		
 	private var sendRequestButton:Button;
+	private var closeButton:Button;
 
 	private var ddeConnector:DDEConnector;
 	
@@ -393,9 +396,23 @@ class gui.dde.DownloadSelector extends AbstractComponent implements GeometryList
 
 		sendRequestButton = Button(attachMovie("Button", "mSendRequestButton", depth++));
 	    this["mSendRequestButton"].onRelease = function(){_parent.onClickRequestButton();};
-		this["mSendRequestButton"].move(370,390);
-		this["mSendRequestButton"].setSize(60,20);
-		this["mSendRequestButton"].label = "OK"
+		this["mSendRequestButton"].move(250,365);
+		this["mSendRequestButton"].setSize(180,20);
+		var label:String = _global.flamingo.getString(this,"requestButtonLabel");
+		if(label == undefined){
+			label = "OK";
+		}	
+		this["mSendRequestButton"].label = label;
+		closeButton = Button(attachMovie("Button", "mCloseButton", depth++));
+	  	this["mCloseButton"].onRelease = function(){_parent.onClickCloseButton();};
+		this["mCloseButton"].move(250,390);
+		this["mCloseButton"].setSize(180,20);
+		label = _global.flamingo.getString(this,"closeButtonLabel");
+		if(label == undefined){
+			label = "Close";
+		}
+		this["mCloseButton"].label = label;
+		
 		
 		statusLine = createTextField("mCommandLine",depth++,10,420,this._width - 20,60);
 		statusLine.multiline = true;
@@ -561,6 +578,11 @@ class gui.dde.DownloadSelector extends AbstractComponent implements GeometryList
 			removeStatusText();
 			ddeConnector.sendRequest("startDownload");
 		}
+	}
+	
+	
+	private function onClickCloseButton():Void{
+		this.setVisible(false);
 	}
 	
 	private function onChangeInArea(evtObj:Object):Void{
