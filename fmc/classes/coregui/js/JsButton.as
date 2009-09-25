@@ -344,5 +344,5 @@ class coregui.js.JsButton extends AbstractComponent {
 	* @param id:String the id of the jsButton.
 	* @param jsButtonEvent:Object the jsButtonEvent as object with properties: id:String, down:Boolean, rollover:Boolean, enabled:Boolean, toggle:Boolean, selected:Boolean.
 	*/
-	public function onJsButtonChange(id:String, jsButtonEvent:Object):Void {}
+	public function onEvent(id:String, jsButtonEvent:Object):Void {}
 }
