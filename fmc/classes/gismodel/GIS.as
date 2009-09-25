@@ -536,4 +536,9 @@ class gismodel.GIS extends AbstractComponent {
 	*visibility: true or false
 	*/
 	function onLayerSetVisibility(layername,visibility){}
+	/**
+	*onGetFeatures is raised when a getFeatures click is done with the getFeature button.
+	*envelopeObject: the extent of the click.
+	*/
+	function onGetFeatures(envelopeObject){}
 }
