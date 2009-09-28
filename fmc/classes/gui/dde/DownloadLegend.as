@@ -11,6 +11,7 @@ import mx.events.EventDispatcher;
 import mx.containers.ScrollPane;
 import mx.controls.CheckBox;
 
+import gui.dde.DownloadSelector;
 
 class gui.dde.DownloadLegend extends MovieClip implements DDEConnectorListener{
 	private var legend:Object = null;
@@ -27,6 +28,7 @@ class gui.dde.DownloadLegend extends MovieClip implements DDEConnectorListener{
 	private var __width:Number;
 	private var __height:Number;
 	private var debug:Boolean = false;
+	private var downloadSelector:DownloadSelector = null;
 	
 	function setMap(map:Object):Void{
 		this.map = map;
@@ -65,6 +67,10 @@ class gui.dde.DownloadLegend extends MovieClip implements DDEConnectorListener{
 		ddeConnector.addListener(this);
 		ddeConnector.sendRequest("getDDELayers");
 	}
+	
+	function setDownloadSelector(downloadSelector:DownloadSelector){
+		this.downloadSelector = downloadSelector;
+	}
 		
 	function onDDELoad(result:XML):Void{
 		var resultType:String = result.firstChild.nodeName;
@@ -75,13 +81,14 @@ class gui.dde.DownloadLegend extends MovieClip implements DDEConnectorListener{
 				if(list[i].nodeName == "DDELayer"){
 					ddeLayers.push({label:list[i].attributes["label"],name:list[i].attributes["name"],dataLayerId:list[i].attributes["dataLayerId"],dataService:list[i].attributes["dataService"]});
 				}
-			}			
+			}	
+			if(itemclips==undefined || itemclips.length == 0){
+				itemclips = new Array();
+				drawLegend(legend.legenditems, this, 0);
+				refresh();
+			}		
 		} 
-		if(itemclips==undefined || itemclips.length == 0){
-			itemclips = new Array();
-			drawLegend(legend.legenditems, this, 0);
-			refresh();
-		}
+		
 	}
 	
 	function onGroupEvent(evtObj){
@@ -93,13 +100,42 @@ class gui.dde.DownloadLegend extends MovieClip implements DDEConnectorListener{
 	}
 	
 	function onClickCheck(evtObj){
-		for (var i = 0; i<itemclips.length; i++) {
-			if(itemclips[i]["mCheck"] != undefined){
+		downloadSelector.removeStatusText();
+		if(evtObj.target.selected == false){
+		  for (var i = 0; i<itemclips.length; i++) {
+		 	if(itemclips[i]["mCheck"] != undefined){
 				CheckBox(itemclips[i]["mCheck"]).selected = false;
 			}
+		  }
+			ddeConnector.setuserSelectedThemes(null);
+		} else {
+			var currentDownloadableLayers:Array = evtObj.target._parent.item.downloadableLayers
+			for (var i = 0; i<itemclips.length; i++) {
+				if(itemclips[i]["mCheck"] != undefined){
+					var clipItem:Object = itemclips[i].item;
+					var clipDownloadableLayers:Array = clipItem.downloadableLayers;
+					var found:Boolean = false;
+					for (var j = 0; j<clipDownloadableLayers.length; j++) {
+						
+						for (var k = 0; k<currentDownloadableLayers.length; k++) {
+							if(clipDownloadableLayers[j]!=currentDownloadableLayers[k]&&
+								clipDownloadableLayers[j].service == currentDownloadableLayers[k].service &&
+								clipDownloadableLayers[j].name == currentDownloadableLayers[k].name){
+								found = true; 
+							}
+						}
+					}
+					if(found){
+						CheckBox(itemclips[i]["mCheck"]).selected = true;
+						downloadSelector.setStatusText(	_global.flamingo.getString(downloadSelector,"warningMoreLegendItems"),"info",true);
+					} else {
+						CheckBox(itemclips[i]["mCheck"]).selected = false;
+					}
+				}
+			}	
+			evtObj.target.selected = true;
+			ddeConnector.setuserSelectedThemes(evtObj.target._parent.item.downloadableLayers);
 		}
-		evtObj.target.selected = true;
-		ddeConnector.setuserSelectedThemes(evtObj.target._parent.item.downloadableLayers);
 	}
 	
 	private function drawGroupLabel(mc:MovieClip, mouseover:Boolean) {
@@ -192,7 +228,7 @@ class gui.dde.DownloadLegend extends MovieClip implements DDEConnectorListener{
 								item.id = layers[sublayers[l]].id;
 								for(var k:Number=0;k<ddeLayers.length;k++){
 									if(sublayers[l] == ddeLayers[k].dataLayerId && service == ddeLayers[k].dataService){
-										downloadableLayers.push({name:ddeLayers[k].name, service:service, label:ddeLayers[k].label, id:ddeLayers[k].dataLayerId});
+										downloadableLayers.push({name:ddeLayers[k].name, service:service, label:ddeLayers[k].label, dataLayerId:ddeLayers[k].dataLayerId});
 										downloadableLayersLabel += "<br><font size='10' color='#0000FF'>" + ddeLayers[k].label + "</font></br>"
 									}
 								}

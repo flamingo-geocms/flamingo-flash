@@ -10,6 +10,7 @@ import geometrymodel.dde.Point;
 
 class coremodel.service.dde.DDEConnector extends XML{
 	private var areaSelectionType:String; //inArea,inBox,inGeometry
+	private var inArea:String = null;
 	private var userSelectedThemes:String;
 	private var selectedLayers:Array;
 	private var lowerLeftX:Number;
@@ -53,7 +54,15 @@ class coremodel.service.dde.DDEConnector extends XML{
 	
 	function setAreaSelectionType(areaSelectionType:String){
 		this.areaSelectionType = areaSelectionType;
+		if(areaSelectionType!="inArea"){
+			setInArea(null);
+		}
 	}
+	
+	function setInArea(inArea:String){
+		this.inArea = inArea;
+	}
+	
 	
 	function setuserSelectedThemes(layers:Array):Void{
 		selectedLayers = layers;
@@ -81,7 +90,6 @@ class coremodel.service.dde.DDEConnector extends XML{
 				 clippingCoords += "+" + Point(clippingPoints[j]).getX() + "+" + Point(clippingPoints[j]).getY();
 				}
 			}
-		//_global.flamingo.tracer("coords zijn " + clippingCoords);	
 	}
 	
 	function setClippingCoords(clCoords:String):Void{
@@ -98,7 +106,6 @@ class coremodel.service.dde.DDEConnector extends XML{
 	
 	function setCoordsys(crs:String){
 		this.coordsys = crs;
-		//_global.flamingo.tracer("coordsys " + coordsys);
 	}
 		
 	function setFormat(format:String):Void{
@@ -121,6 +128,11 @@ class coremodel.service.dde.DDEConnector extends XML{
 			postXml = new XML();
 			postXml.sendAndLoad(url,xmlResponse);
 		}
+		if(requestType=="getDownloadAreas"){
+			var url:String = ddeServletUrl + "?request=getDownloadAreas";
+			postXml = new XML();
+			postXml.sendAndLoad(url,xmlResponse);
+		}
 			
 	}
 	
@@ -139,11 +151,15 @@ class coremodel.service.dde.DDEConnector extends XML{
 			xmlStr+= "<upperRightX>"+upperRightX+"</upperRightX>";
 			xmlStr+= "<upperRightY>"+upperRightY+"</upperRightY>";
 		 }
+		 if(inArea!=null){
+			xmlStr+= "<inArea>"+inArea+"</inArea>";
+		}
 		 xmlStr +="<downloadLayers>" ;
-	    for (var j:Number = 0; j < selectedLayers.length; j++) {	
-			xmlStr += 	"<downloadLayer name='" + selectedLayers[j].name + "' label='" + selectedLayers[j].label + "' id='" + selectedLayers[j].id+ "'/>";
+	    for (var j:Number = 0; j < selectedLayers.length; j++) {
+			xmlStr += 	"<downloadLayer name='" + selectedLayers[j].name + "' label='" + selectedLayers[j].label + "' id='" + selectedLayers[j].dataLayerId + "'/>";
 		}
 		xmlStr +="</downloadLayers>";
+
 		xmlStr+= "<fmeParams>";
 		xmlStr+= "<QueryCoordsSys>"+queryCoordsSys+"</QueryCoordsSys>";
 		if (areaSelectionType == "inArea" || areaSelectionType == "inGeometry") {
@@ -151,15 +167,15 @@ class coremodel.service.dde.DDEConnector extends XML{
 		} 
 		xmlStr+= "</fmeParams>";
 		xmlStr+="</DDErequest>";
-		postXml = new XML(xmlStr); 
+		postXml = new XML(xmlStr);
+		postXml.contentType 
 	}
-	
 
+	
 	
 	function onLoadSucces():Void{	 
 		 for (var i:Number = 0; i < ddeConnectorListeners.length; i++) { 
             DDEConnectorListener(ddeConnectorListeners[i]).onDDELoad(xmlResponse);
-            
         }
 	}
 	

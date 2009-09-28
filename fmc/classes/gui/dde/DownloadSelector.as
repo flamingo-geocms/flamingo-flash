@@ -128,6 +128,8 @@ class gui.dde.DownloadSelector extends AbstractComponent implements GeometryList
 	
 	private var inAreas:Array;
 	
+	private var downloadAreas:DownloadAreas;
+	
 	private var crss:Array;
 	
 	private var formats:Array;
@@ -191,7 +193,8 @@ class gui.dde.DownloadSelector extends AbstractComponent implements GeometryList
 		textFormatInfo = new TextFormat();
 		textFormatInfo.underline = false;
 		textFormatInfo.font = "_sans";
-		textFormatInfo.color = 0x00ff00;
+		textFormatInfo.color = 0x0000ff;
+		loadAreas();
 		addControls();
 		resetControls();
 	}
@@ -224,8 +227,12 @@ class gui.dde.DownloadSelector extends AbstractComponent implements GeometryList
 		
     }
 
-    private function addControls():Void {
+	private function loadAreas(){
 		
+	
+	}
+	
+    private function addControls():Void {
 		this.createEmptyMovieClip("mHolder",100);
 		this["mHolder"]._lockroot = true;         
         var layersLabel = attachMovie("Label", "mLayersLabel", depth++);		
@@ -243,22 +250,12 @@ class gui.dde.DownloadSelector extends AbstractComponent implements GeometryList
 		inArea.label =_global.flamingo.getString(this,"inArea");
 		inArea.selected = true;
 		inArea.setSize(200,20);
-		
-		inAreaChoser = this["mHolder"].createClassObject(mx.controls.ComboBox, "cmbInAreaChoser", 1);
+		 inAreaChoser = DownloadAreas(this["mHolder"].attachMovie("DownloadAreas", "cmbInAreaChoser", 1));
+		// = this["mHolder"].createClassObject(mx.controls.ComboBox, "cmbInAreaChoser", 1);
 		inAreaChoser.dataProvider = inAreas;
-		// to get rid of sticky focusrects use these lines
-		inAreaChoser.drawFocus = "";
-		inAreaChoser.getDropdown().drawFocus = "";
-		// to prevent the list to close after scrolling
-		inAreaChoser.onKillFocus = function(newFocus:Object) {
-			super.onKillFocus();
-		};
 		inAreaChoser.move(265, 20);
 		inAreaChoser.setSize(170,25);
-		//open/close to make sure that the ddeConnector value is set with the first in the list
-		inAreaChoser.addEventListener("close", Delegate.create(this, onChangeInArea));
-		inAreaChoser.open();
-		inAreaChoser.close();
+		inAreaChoser.setDDEConnector(ddeConnector);
 
         var inBox:RadioButton = RadioButton(attachMovie("RadioButton", "mInBoxRadioButton", depth++));
 		inBox.move(240,60);
@@ -427,9 +424,7 @@ class gui.dde.DownloadSelector extends AbstractComponent implements GeometryList
 			ddeConnector.setAreaSelectionType("inArea");
 			RadioButton(this["mInAreaRadioButton"]).selected = true;
 			RadioButton(this["mInAreaRadioButton"]).setFocus();
-			inAreaChoser.enabled = true;
-			inAreaChoser.open();
-			inAreaChoser.close();
+			
 			llX.enabled = false;
 			llY.enabled = false;
 			urX.enabled = false;
@@ -443,10 +438,11 @@ class gui.dde.DownloadSelector extends AbstractComponent implements GeometryList
 			DownloadLegend(layerPane.content).setMap(map);
 			DownloadLegend(layerPane.content).setLegend(legend, debug);
 			DownloadLegend(layerPane.content).setDDEConnector(ddeConnector);
+			DownloadLegend(layerPane.content).setDownloadSelector(this);
 		}
 	}
 	
-	private function setStatusText(statusText:String, type:String):Void{
+	function setStatusText(statusText:String, type:String, permanent:Boolean):Void{
 		if(type=="url"){
 			statusLine.html = true;
 			statusLine.setNewTextFormat(textFormatUrl);
@@ -464,10 +460,13 @@ class gui.dde.DownloadSelector extends AbstractComponent implements GeometryList
 			statusLine.html = false;	
 			statusLine.text = statusText;
 		}
-		statusDelayIntervalID = setInterval(this, "removeStatusText", 5000);
+		if(permanent != true && statusText != ""){
+			statusDelayIntervalID = setInterval(this, "removeStatusText", 5000);
+		}
+		
     }
 	
-	private function removeStatusText():Void{
+	function removeStatusText():Void{
 		clearInterval(statusDelayIntervalID);
       	statusDelayIntervalID = 0;
 		setStatusText("");
@@ -491,6 +490,7 @@ class gui.dde.DownloadSelector extends AbstractComponent implements GeometryList
          		inAreaChoser.enabled = true;
 				ddeConnector.setAreaSelectionType("inArea");
 				ddeConnector.setClippingCoords(inAreaChoser.selectedItem.data);
+				ddeConnector.setInArea(inAreaChoser.selectedItem.label);
 				break;
 			case "inBox" :
 				llX.enabled = true;
@@ -583,10 +583,6 @@ class gui.dde.DownloadSelector extends AbstractComponent implements GeometryList
 	
 	private function onClickCloseButton():Void{
 		this.setVisible(false);
-	}
-	
-	private function onChangeInArea(evtObj:Object):Void{
-		ddeConnector.setClippingCoords(evtObj.target.selectedItem.data);
 	}
 	
 	private function onChangeBox(evtObj:Object):Void{

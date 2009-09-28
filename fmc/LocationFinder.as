@@ -116,6 +116,10 @@ lFlamingo.onSetLanguage = function(lang:String) {
 	//_findLocation(locationdata[index], mHolder.tSearch.text, nrlines, true);
 };
 flamingo.addListener(lFlamingo, "flamingo", this);
+
+
+
+
 //---------------------------------------
 init();
 /** @tag <fmc:LocationFinder>  
@@ -351,6 +355,8 @@ function addLocation(xml:Object) {
 						break;
 					case "extentselector":
 						location.extentSelector=_global.flamingo.getComponent(val);
+
+						flamingo.addListener(this, location.extentSelector, this);
 						break;
 				    default: 
 						flamingo.tracer("unknown attribute in confige file for LocationFinder: "+attr);
@@ -407,6 +413,12 @@ function refresh() {
   mHolder.cbChoice.setRowCount(nr);
 	
 }
+
+
+function onChangeSearchExtent(){
+	_findLocation(locationdata[locationindex], locationdata[locationindex].searchstring, nrlines, true);
+}
+
 /**
 * Search 1 location and moves to it's extent
 * @param locationfinderid:String Id of locations source.
