@@ -70,6 +70,20 @@ class coremodel.service.js.JsFeature extends ServiceFeature {
         _global.flamingo.tracer("Exception in coremodel.service.js.JsFeature.getValue(" + name + ")");
         return null;
     }
+	function setValue(name:String, value:Object):Void {
+        if (serviceLayer==null){
+			for (var i:Number = 0; i < propArray.length; i++){
+				if (propArray[i]== name){
+					values[i] = value;
+                	return;
+				}
+			}
+		}else{
+			super.getValue(name,value);
+			return;
+		}
+		_global.flamingo.tracer("Exception in coremodel.service.js.JsFeature.setValue(" + name + ")");		
+    }
         
     function toString():String {
         return "JsFeature(" + id + ")";
