@@ -213,35 +213,39 @@ class gui.dde.DownloadLegend extends MovieClip implements DDEConnectorListener{
 				break;
 			 case "item" :
 				if (item.listento != undefined) {
+					var sublayers:Array = new Array();
+					var downloadableLayers:Array = new Array();
+					var downloadableLayersLabel:String = "";
 					
-					for (var maplayer in item.listento) {			
+					for (var maplayer in item.listento) {		
 						if(item.listento[maplayer]!= undefined && item.listento[maplayer]!= ""){
-							var sublayers:Array = item.listento[maplayer].split(",");
-							var downloadableLayers:Array = new Array();
-							var downloadableLayersLabel:String = "";
-							for(var l:Number=0;l<sublayers.length;l++){
-								var service = layers[sublayers[l]].mapService;
-								if(service == undefined) {
-								    _global.flamingo.tracer("service undefined for sublayer '" + sublayers[l] + "'");
-								}
-								item.vis = layers[sublayers[l]].vis;
-								item.id = layers[sublayers[l]].id;
-								for(var k:Number=0;k<ddeLayers.length;k++){
-									if(sublayers[l] == ddeLayers[k].dataLayerId && service == ddeLayers[k].dataService){
-										downloadableLayers.push({name:ddeLayers[k].name, service:service, label:ddeLayers[k].label, dataLayerId:ddeLayers[k].dataLayerId});
-										downloadableLayersLabel += "<br><font size='10' color='#0000FF'>" + ddeLayers[k].label + "</font></br>"
-									}
-								}
+							var sublyrs:Array = item.listento[maplayer].split(",");
+							sublayers = sublayers.concat(sublyrs);
+						}
+					}	
+					for(var l:Number=0;l<sublayers.length;l++){
+						var service = layers[sublayers[l]].mapService;
+						
+						if(service == undefined) {
+						    _global.flamingo.tracer("service undefined for sublayer '" + sublayers[l] + "'");
+						}
+						item.vis = layers[sublayers[l]].vis;
+						item.id = layers[sublayers[l]].id;
+						for(var k:Number=0;k<ddeLayers.length;k++){
+							if(sublayers[l] == ddeLayers[k].dataLayerId && service == ddeLayers[k].dataService) {
+								downloadableLayers.push({name:ddeLayers[k].name, service:service, label:ddeLayers[k].label, dataLayerId:ddeLayers[k].dataLayerId});
+								downloadableLayersLabel += "<br><font size='10' color='#0000FF'>" + ddeLayers[k].label + "</font></br>"
 							}
-							if(downloadableLayers.length > 0){
-								item.downloadableLayers = downloadableLayers;
-								item.downloadableLayersLabel = downloadableLayersLabel;
-								var check:CheckBox = CheckBox(mc.attachMovie("CheckBox","mCheck",1, 0,0,10,10));
-								check.addEventListener("click",Delegate.create(this, onClickCheck));	
-							}
-							item.sublayers = sublayers;
 						}
 					}
+					if(downloadableLayers.length > 0){
+						item.downloadableLayers = downloadableLayers;
+						item.downloadableLayersLabel = downloadableLayersLabel;
+						
+						var check:CheckBox = CheckBox(mc.attachMovie("CheckBox","mCheck",1, 0,0,10,10));
+						check.addEventListener("click",Delegate.create(this, onClickCheck));	
+					}
+					item.sublayers = sublayers;
 				}
 				mc.createTextField("mLabel", 2, 0, 0, 150, 20);
 				mc.mLabel.styleSheet = _global.flamingo.getStyleSheet(legend);

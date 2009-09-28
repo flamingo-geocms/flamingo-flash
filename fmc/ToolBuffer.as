@@ -319,8 +319,9 @@ function initControls() {
 	window.content.cmb_layers.textSelectedColor = 0x000000;
 	window.content.cmb_layers.drawFocus = "";
 	window.content.cmb_layers.getDropdown().drawFocus = "";
-	window.content.cmb_layers.onKillFocus = function() {
-	};	
+	window.content.cmb_layers.onKillFocus = function(newFocus:Object) {
+			super.onKillFocus();
+	};
 	
 	window.content._lockroot = true;	
 	
