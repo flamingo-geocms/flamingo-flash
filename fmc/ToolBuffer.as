@@ -101,7 +101,8 @@ init();
 */
 /** @tag <layer>  
 * This defines the layer where the buffer is applied to
-* @attr id  layerid, same as in the mxd.
+* @attr id  layerid, same as in the mxd. layerid can also be configered as [mapServiceId].[layerId] than the mapServiceId is ommited. 
+* In this way layerids from different services can be combined in one toolbuffer. 
 * @attr label label of the layer that will be shown in the selection window
 * @attr fillcolor (default value="0,255,255") the fill color of the buffer
 * @attr filltransparency (default value="0.3") the transparency of the buffer
@@ -212,7 +213,13 @@ function setConfig2(xml:Object) {
 					layers[i].layerName = val;
 					break;
 				case "id" :
-					layers[i].layerID =val;
+					if(val.indexOf(".")!=-1){
+						layers[i].mapServiceID = val.substring(0,val.indexOf("."));
+						layers[i].layerID =val.substring(val.indexOf(".") + 1);
+					} else {
+						layers[i].mapServiceID = mapServiceID;	
+						layers[i].layerID =val;
+					}	
 					break;
 				case "fillcolor" :
 					buffer.fillcolor = val;
@@ -247,7 +254,9 @@ function setConfig2(xml:Object) {
 
 			layers[i].buffer = buffer;
 			layers[i].hasBuffer = false;
+			this.layers[layers[i].layerID] = layers[i];
 		}
+		
 	}
 	//
 	_parent.initTool(this,skin+"_up",skin+"_over",skin+"_down",skin+"_up",lMap,"pan","tooltip");
@@ -256,10 +265,11 @@ function setConfig2(xml:Object) {
 	flamingo.position(this);
 }
 function generateBuffer(layerIndex:String, radius:Number){
-	var layerComponent:String = this._parent.listento[0]+"_"+mapServiceID;
+	var layerComponent:String = this._parent.listento[0]+"_"+this.layers[layerIndex].mapServiceID;
 	var mapService = flamingo.getComponent(layerComponent);
 	
 	if(mapService == undefined){
+		
 		trace("map service is undefined");
 	}	
 	this.layers[layerIndex].buffer.radius = radius
@@ -274,7 +284,7 @@ function generateBuffer(layerIndex:String, radius:Number){
 
 function removeBuffer(layerIndex:String){	
 	
-	var layerComponent:String = this._parent.listento[0]+"_"+mapServiceID;
+	var layerComponent:String = this._parent.listento[0]+"_"+this.layers[layerIndex].mapServiceID;//this._parent.listento[0]+"_"+mapServiceID;
 	var mapService = flamingo.getComponent(layerComponent);
 
 	this.layers[layerIndex].hasBuffer = false;
@@ -288,8 +298,8 @@ function initWindow(){
 	window.content.cmb_layers.addItem("", -1);
 	
 	setWindowLabels();
-	
 	for(var i=0; i<layers.length; i++){
+		
 		if(isVisible(this.layers[i].layerID)){
 			window.content.cmb_layers.addItem(layers[i].layerName, i);
 		}
@@ -360,9 +370,8 @@ function initControls() {
 
 //check if the layer is visible
 function isVisible(layerIndex:String):Boolean{
-	var layerComponent:String = this._parent.listento[0]+"_"+mapServiceID;
+	var layerComponent:String = this._parent.listento[0]+"_"+this.layers[layerIndex].mapServiceID;
 	var layer = flamingo.getComponent(layerComponent);
-	
 	if(layer.getVisible(layerIndex) < 0)
 		return false;
 	else if(layer.getVisible(layerIndex) > 0)
