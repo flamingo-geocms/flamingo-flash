@@ -41,7 +41,9 @@ class coremodel.service.js.JsFeature extends ServiceFeature {
 				}else{
 					this.values.push(featureObject[i]);
 				}
-				propArray.push(i);
+				if (serviceLayer==null){
+					propArray.push(i);
+				}
 			}
 		}
 		
