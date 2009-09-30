@@ -1,4 +1,4 @@
-import roo.AbstractComponent;
+import core.AbstractComponent;
 
 /*-----------------------------------------------------------------------------
 * This file is part of Flamingo MapComponents.

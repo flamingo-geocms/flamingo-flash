@@ -7,7 +7,7 @@
 import mx.controls.CheckBox;
 import mx.utils.Delegate;
 
-import roo.AbstractComponent;
+import core.AbstractComponent;
 
 class roo.LayerCheckBox extends AbstractComponent {
     

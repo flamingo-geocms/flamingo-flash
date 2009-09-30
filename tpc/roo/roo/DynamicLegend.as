@@ -50,7 +50,7 @@
 import mx.controls.CheckBox;
 import mx.utils.Delegate;
 
-import roo.AbstractComponent;
+import core.AbstractComponent;
 import roo.FeatureType;
 import roo.WhereClause;
 import roo.DynamicLegendItem;

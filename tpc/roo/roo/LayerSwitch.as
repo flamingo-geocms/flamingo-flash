@@ -7,7 +7,7 @@
 import mx.controls.RadioButton;
 import mx.utils.Delegate;
 
-import roo.AbstractComponent;
+import core.AbstractComponent;
 import roo.LayerOGWMSLayerSwitchAdapter;
 
 class roo.LayerSwitch extends AbstractComponent {

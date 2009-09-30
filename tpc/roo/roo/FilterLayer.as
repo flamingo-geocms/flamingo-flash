@@ -1,4 +1,4 @@
-import roo.AbstractComponent;
+import core.AbstractComponent;
 import roo.XMLTools;
 
 /*-----------------------------------------------------------------------------
