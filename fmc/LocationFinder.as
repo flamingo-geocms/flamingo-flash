@@ -1088,14 +1088,15 @@ function initControls() {
 			}
 			break;
 		case "change" :
+			var index = mHolder.cbChoice.selectedItem.data;
 			if (tSearch.text.charCodeAt(tSearch.text.length-1) == 27) {
-				var index = mHolder.cbChoice.selectedItem.data;
 				if (locationdata[index].searchstring.length>0) {
 					mHolder.tSearch.text = locationdata[index].searchstring;
 				} else {
 					mHolder.tSearch.text = "";
 				}
 			}
+			locationdata[index].searchstring = mHolder.tSearch.text;
 			break;
 		}
 	};
