@@ -1,10 +1,11 @@
 ﻿/*-----------------------------------------------------------------------------
 * This file is part of Flamingo MapComponents.
 * Author: Abeer Mahdi
-* Realworld Systems BV - Abeer.Mahdi@Realworld-systems.com
+* Realworld Systems B.V. - Abeer.Mahdi@Realworld-systems.com
+* Documentation and comments updated at 7-10-2009 - Eric Richters, Realworld Systems B.V.
  -----------------------------------------------------------------------------*/
 /** @component HotlinkResults
-* This component shows the response of an hotlink. It just shows the url data the application get's from the server in a new webbrouwser.
+* This component shows the response of an hotlink. It just shows the url data the application get's from the server in a new webbrowser window.
 * Simple and quick. 
 * @file HotLinkResults.as (sourcefile)
 * @file HotLinkResults.fla (sourcefile)
@@ -21,6 +22,8 @@ var thisObj = this;
 var UrlArray:Array = new Array();
 //---------------------------------
 var lMap:Object = new Object();
+
+//obtain the URL and show the content in a new browser window when hotlinkdata becomes available
 lMap.onHotlinkData = function(map:MovieClip, maplayer:MovieClip, data:Object, extent:Object) {
 	for(var i=0; i< UrlArray.length; i++){
 		var UrlMaplayer = UrlArray[i].id.split(".")[0];
@@ -50,6 +53,8 @@ lMap.onHotlinkData = function(map:MovieClip, maplayer:MovieClip, data:Object, ex
 		}
 	}
 };
+
+//error handler for hotlink errors in map
 lMap.onError = function(map:MovieClip, maplayer:MovieClip, type:String, error:String) {
 	if (type == "hotlink") {
 		var id = flamingo.getId(maplayer);
@@ -66,10 +71,10 @@ init();
 * This tag defines an url showing hotlink results. This components listens to maps.
 * @hierarchy childnode of <flamingo> or a container component. e.g. <fmc:Window>
 * @example 
-* <tpc:HotlinkResults id="hotlink" left="10" top="10" width="30%" height="100%" listento="map"/> 
+* <fmc:HotlinkResults id="hotlink" left="10" top="10" width="30%" height="100%" listento="map"/> 
 *   <url name="Historie weg" id="verkeersintensiteiten.3" href="[HIS_WEG]" />
 *	<url name="Historie weg" id="verkeersintensiteiten.3" href="[DET_WEG]" />
-* </tpc:HotlinkResults>
+* </fmc:HotlinkResults>
 * @attr id  layerid, same as in the mxd.
 */
 /** @tag <url>  
@@ -157,7 +162,7 @@ function setConfig(xml:Object) {
 	txtHeader.styleSheet = flamingo.getStyleSheet(this);
 }
 /*
- * This function returns true if a certin string is found in the given string otherwise false
+ * This function returns true if a certain string is found in the given string otherwise false
  */
 function ContainsString(myString:String, otherString:String):Boolean
 {
