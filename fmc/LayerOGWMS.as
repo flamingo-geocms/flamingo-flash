@@ -53,6 +53,7 @@ var limitedtofullextent:Boolean = false;
 var showerrors:Boolean = false;
 var showmaptip:Boolean;
 var canmaptip:Boolean = false;
+var maptipFeatureCount:Number=1;
 //-------------------------------------
 var updating:Boolean = false;
 var layers:Object = new Object();
@@ -123,6 +124,7 @@ init();
 * @attr query_layers  A comma seperated list of layers that will be identified. Use keyword "#ALL#" for querying all available layers.
 * @attr maptip_layers  A comma seperated list of layers that will be queried during a maptip event. Use keyword "#ALL#" for querying all available layers.
 * @attr feature_count (defaultvalue = "10")  Number of features that will be returned after an identify.
+* @attr maptip_feature_count (defaultvalue= "1") Number of features that wil be shown when a maptip is done on this flamingo layer.
 * @attr limitedtofullextent  (defaultvalue = "false") True or false.
 * @attr timeout  (defaultvalue = "10") Time in seconds when the layer will dispatch an onErrorUpdate event.
 * @attr retryonerror (defaultvalue = "0") Number of retrys when encountering an error.
@@ -289,6 +291,9 @@ function setConfig(xml:Object) {
 			break;
 		case "feature_count" :
 			feature_count = Number(val);
+			break;
+		case "maptip_feature_count" :
+			maptipFeatureCount= Number(val);
 			break;
 		case "getcapabilitiesurl" :
 			this.getcapabilitiesurl = val;
@@ -873,6 +878,7 @@ function startMaptip(x:Number, y:Number) {
 	lConn.onGetFeatureInfo = function(features:Object, obj:Object, requestid:String) {
 		if (thisObj.showmaptip) {
 			if (thisObj.map.isEqualExtent(thisObj.maptipextent, obj)) {
+				var combinedMaptip="";
 				for (var layer in features) {
 					var id = thisObj.aka[layer];
 					if (id == undefined) {
@@ -886,9 +892,13 @@ function startMaptip(x:Number, y:Number) {
 								maptip = maptip.split("["+field+"]").join(record[field]);
 							}
 						}
-						_global.flamingo.raiseEvent(thisObj, "onMaptipData", thisObj, maptip);
+						if (combinedMaptip.length >0){
+							combinedMaptip+="\n";
+						}
+						combinedMaptip+=maptip;
 					}
 				}
+				_global.flamingo.raiseEvent(thisObj, "onMaptipData", thisObj, combinedMaptip);				
 			}
 		}
 	};
@@ -905,7 +915,7 @@ function startMaptip(x:Number, y:Number) {
 	args.SRS = this.srs;
 	args.X = x;
 	args.Y = y;
-	args.FEATURE_COUNT = 1;
+	args.FEATURE_COUNT = maptipFeatureCount;
 	for (var attr in this.attributes) {
 		args[attr.toUpperCase()] = this.attributes[attr];
 	}
