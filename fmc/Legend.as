@@ -372,7 +372,13 @@ function parseCustomAttr(xml:Object){
 * @attr dx (defaultvalue = "0") Extra x-offset for this group.
 * @attr dy (defaultvalue = "0") Extra y-offset for this group.
 */
-function addItem(xml:Object, items:Array):Void {
+
+
+function addItem(xml:Object, items:Array, insertIndex:Number):Void {
+	if (insertIndex != undefined && (insertIndex == null || insertIndex < 0 || insertIndex >= items.length)) {
+		_global.flamingo.showError("ERROR in Legend.as addItem()","<<insertIndex out of range.>>\ninsertIndex = "+insertIndex, 3000);
+		return;
+	}
 	if (items == undefined) {
 		items = this.legenditems;
 	}
@@ -391,7 +397,11 @@ function addItem(xml:Object, items:Array):Void {
 				group.language = new Object();
 				flamingo.parseString(xnode[i], group.language);
 				group.items = new Array();
-				items.push(group);
+				if (insertIndex == undefined) {
+					items.push(group);
+				} else {
+					items.splice(insertIndex, 0, group);
+				}	
 				//add next branch of items in 
 				addItem(xnode[i], group.items);
 				for (var attr in xnode[i].attributes) {
@@ -403,6 +413,9 @@ function addItem(xml:Object, items:Array):Void {
 					case "dy" :
 						group.dy = Number(val);
 						break;
+					case "id" :
+						group.id = val;	
+						break;	
 					case "open" :
 						group.cancollapse = true;
 						if (val.toLowerCase() == "true") {
@@ -445,7 +458,11 @@ function addItem(xml:Object, items:Array):Void {
 				flamingo.parseString(xnode[i], item.language);
 				//
 				item.items = new Array();
-				items.push(item);
+				if (insertIndex == undefined) {
+					items.push(item);
+				} else {
+					items.splice(insertIndex, 0, item);
+				}
 				addItem(xnode[i], item.items);
 				// parse the attributes
 				for (var attr in xnode[i].attributes) {
@@ -464,6 +481,9 @@ function addItem(xml:Object, items:Array):Void {
 						item.id = val;
 					case "listento" :
 						item.listento = new Object();
+						if (item.listentoLayers == null) {
+							item.listentoLayers = new Array();
+						}	
 						var a:Array = flamingo.asArray(val);
 						for (var j = 0; j<a.length; j++) {
 							if (a[j].indexOf(".", 0) == -1) {
@@ -478,6 +498,8 @@ function addItem(xml:Object, items:Array):Void {
 							} else {
 								item.listento[layer] += ","+sublayer;
 							}
+							//remember listener's listento object. 
+							item.listentoLayers.push(layer);
 							flamingo.addListener(lLayer, layer, thisObj);
 						}
 						break;
@@ -520,7 +542,11 @@ function addItem(xml:Object, items:Array):Void {
 			case "hr" :
 				var hr:Object = new Object();
 				hr.type = "hr";
-				items.push(hr);
+				if (insertIndex == undefined) {
+					items.push(hr);
+				} else {
+					items.splice(insertIndex, 0, hr);
+				}
 				break;
 			case "text" :
 				var text:Object = new Object();
@@ -528,7 +554,11 @@ function addItem(xml:Object, items:Array):Void {
 				//get language strings by using default flamingo functions
 				text.language = new Object();
 				flamingo.parseString(xnode[i], text.language);
-				items.push(text);
+				if (insertIndex == undefined) {
+					items.push(text);
+				} else {
+					items.splice(insertIndex, 0, text);
+				}
 				for (var attr in xnode[i].attributes) {
 					var val:String = xnode[i].attributes[attr];
 					switch (attr.toLowerCase()) {
@@ -538,6 +568,9 @@ function addItem(xml:Object, items:Array):Void {
 					case "dy" :
 						text.dy = Number(val);
 						break;
+					case "id" :
+						text.id = val;	
+						break;	
 					case "styleid" :
 						text.styleid = val;
 						break;
@@ -553,7 +586,11 @@ function addItem(xml:Object, items:Array):Void {
 				//get language strings by using default flamingo functions
 				sym.language = new Object();
 				flamingo.parseString(xnode[i], sym.language);
-				items.push(sym);
+				if (insertIndex == undefined) {
+					items.push(sym);
+				} else {
+					items.splice(insertIndex, 0, sym);
+				}
 				for (var attr in xnode[i].attributes) {
 					var val:String = xnode[i].attributes[attr];
 					switch (attr.toLowerCase()) {
@@ -573,6 +610,9 @@ function addItem(xml:Object, items:Array):Void {
 					case "dy" :
 						sym.dy = Number(val);
 						break;
+					case "id" :
+						sym.id = val;	
+						break;	
 					case "symbol_styleid" :
 						sym.symbol_styleid = val;
 						break;
@@ -592,6 +632,169 @@ function addItem(xml:Object, items:Array):Void {
 		}
 	}
 }
+
+/**
+* Adds a node object described by xml to the legend. The object can be a single legend item
+* or a tree of legend items.
+* @param xml Object XML description of the node.
+* @param idNextSib id of next sibling
+* @param idParent id of parent
+* @return Boolean True or false. Indicates succes or failure. 
+*/					
+function addNodeObject(xml:Object, idNextSib:String, idParent:String):Boolean {
+	//add a dummy first node to xml because the addItem method removes it.
+	xml = "<dummy>"+xml+"</dummy>";
+	var items:Array;
+	items = this.legenditems;	//root
+	
+	if (idParent == null || idParent == "") {
+		if (idNextSib == null || idNextSib == "") {
+			//Append the object as a child at the end of the child items of the root.
+			addItem(xml, items.items);
+		} else {
+			//search for idNextSib item
+			var nextSibItem:Object = itemById(idNextSib, items, null);
+			if (nextSibItem == null) {
+				return false;	//indicates failure
+			} else {
+				//Insert the object as a child before the idNextSib child item.
+				addItem(xml, nextSibItem.parentObject.items, nextSibItem.arrIndex);
+			}
+		}
+	} else {
+		//search for idParent item
+		var parentItem:Object = itemById(idParent, items, null);
+		if (parentItem == null) {
+			return false;	//indicates failure
+		} else {
+			//parent found. Now insert the object as a child at the correct position
+			if (idNextSib == null || idNextSib == "") {
+				//No idNextSib provided. Append the object as a child at the end of the child items of the parent.
+				addItem(xml, parentItem.items);
+			} else {
+				//search for idNextSib item in the parent found
+				var nextSibItem:Object = itemById(idNextSib, parentItem.items, parentItem);
+				if (nextSibItem == null) {
+					return false;	//indicates failure
+				} else {
+					//Insert the object as a child before the idNextSib child item.
+					addItem(xml, nextSibItem.parentObject.items, nextSibItem.arrIndex);
+				}
+			}
+		}
+	}
+	redrawLegend();
+	return true;	//indicates success
+}
+
+/**
+* Removes a node object and it's tree. The object is designated by it's id.
+* @param id String id of the node object.
+* @return Boolean True or false. Indicates succes or failure.
+*/
+function removeNodeObject(id:String):Boolean {
+	var items:Array;
+	items = this.legenditems;
+	var itemToRemove:Object = itemById(id, items, null);
+	if (itemToRemove == null) {
+		return false;	//indicates failure
+	} else {
+		var arrIndexOfItemToRemove:Number = itemToRemove.arrIndex;
+		if (arrIndexOfItemToRemove != null || arrIndexOfItemToRemove != undefined) {
+			//remove item tree and it's potential listeners
+			if (itemToRemove.parentObject != undefined || itemToRemove.parentObject != null) {
+				removeListenersOfNodeObjectTree(itemToRemove);
+				itemToRemove.parentObject.items.splice(arrIndexOfItemToRemove,1);
+			} else {
+				removeListenersOfNodeObjectTreeItems(this.legenditems);
+				this.legenditems.splice(arrIndexOfItemToRemove,1);
+			}
+			redrawLegend();
+			return true;	//indicates success
+		} else {
+			return false;	//indicates failure
+		}
+	}
+}
+
+/**
+* Removes all node objects of the legend
+* @return Boolean True or false. Indicates succes or failure.
+*/					
+function removeAllNodeObjects():Boolean {
+	removeListenersOfNodeObjectTreeItems(this.legenditems);
+	this.legenditems = new Array();
+	redrawLegend();
+	return true;
+}
+
+function itemById(id2m:String, items:Array, parentItem:Object):Object {
+	for (var i:Number = 0; i<items.length; i++) {
+		if (items[i].id == id2m) {
+			items[i].arrIndex = i;
+			items[i].parentObject = parentItem;
+			return items[i];
+		} else {
+			//make recursive if needed
+			if (items[i].items != null && items[i].items != undefined && items[i].items.length > 0) {
+				var itemObj:Object = itemById(id2m, items[i].items, items[i]);
+				if (itemObj != null) {
+					return itemObj;
+				}
+			}	
+		}
+	}
+	return null;
+}
+
+function removeListenersOfNodeObjectTree(item:Object):Void {
+	//delete listener of item if existing
+	if (item.type == "item") {
+		for (var j:Number = 0; j<item.listentoLayers.length; j++) { 
+			flamingo.removeListener(lLayer, item.listentoLayers[j], thisObj);
+		}
+	}
+	
+	//delete if existing all listeners from the tree of the item
+	if (item.items != undefined || item.items != null) {
+		removeListenersOfNodeObjectTreeItems(item.items);
+	}
+}
+
+function removeListenersOfNodeObjectTreeItems(items:Array):Object {
+	for (var i:Number = 0; i<items.length; i++) {
+		if (items[i].type == "item") {
+			for (var j:Number = 0; j<items[i].listentoLayers.length; j++) { 
+				flamingo.removeListener(lLayer, items[i].listentoLayers[j], thisObj);
+			}
+		}
+		//make recursive if needed
+		if (items[i].items != null && items[i].items != undefined && items[i].items.length > 0) {
+			var itemObj:Object = removeListenersOfNodeObjectTreeItems(items[i].items);
+			if (itemObj != null) {
+				return itemObj;
+			}
+		}
+	}
+	return null;
+}
+
+function redrawLegend():Void {
+	refresh();
+	deleteLegendMcs(this.mScrollPane.content);
+	drawLegend(this.legenditems, this.mScrollPane.content, 0);
+	refresh();
+}
+
+function deleteLegendMcs(mcParent:MovieClip):Void{
+	for (var prop in mcParent) {
+		if (typeof mcParent[prop] == "movieclip") {
+			mcParent[prop].removeMovieClip();
+		}
+	}
+}
+
+
 function _refreshItems(mc:MovieClip, animate:Boolean) {
 	_refreshItem(mc, animate);
 	var nextitem = mc._parent[Number(mc._name)+1];
