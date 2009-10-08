@@ -342,6 +342,40 @@ function setConfig(xml:Object) {
 	//
 	resize();
 }
+/**
+* Adds a string object described by xml.
+* @param xml Object XML description of the string object.
+* @return Boolean True or false. Indicates succes or failure. 
+*/	
+function addStringObject(xml:Object):Boolean {
+	flamingo.setString(xml, this.strings);
+	return true;
+}
+/**
+* Removes a string object described by it's id.
+* @param id String id of the string object.
+* @return Boolean True or false. Indicates succes or failure. 
+*/	
+function removeStringObject(stringid:String):Boolean {
+	if (this.strings[stringid] != null) {
+		delete this.strings[stringid];
+		return true;
+	} else {
+		return false;
+	}
+}
+/**
+* Removes all string objects.
+* @return Boolean True or false. Indicates succes or failure. 
+*/	
+function removeAllStringObjects():Boolean {
+	if (this.strings != null) {
+		delete this.strings;
+		return true;
+	} else {
+		return false;
+	}
+}
 function resize() {
 	txtHeader.htmlText = "  ";
 	var r = flamingo.getPosition(this);
