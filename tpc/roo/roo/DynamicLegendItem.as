@@ -2,18 +2,14 @@ import roo.DynamicLegend;
 import roo.MapDynamicLegendItemAdapter;
 import roo.LayerOGWMSDynamicLegendItemAdapter;
 
-/*-----------------------------------------------------------------------------
-* This file is part of Flamingo MapComponents.
-* Author: Herman Assink.
-* IDgis bv
- -----------------------------------------------------------------------------*/
-
 class roo.DynamicLegendItem extends MovieClip {
     
     private var dynamicLegend:DynamicLegend = null; // Set by init object.
     private var mapDynamicLegendItemAdapter:MapDynamicLegendItemAdapter = null;
     private var layerOGWMSDynamicLegendItemAdapter:LayerOGWMSDynamicLegendItemAdapter = null;
     private var title:String = null; // Set by init object;
+    private var id:String = null; // Set by init object;
+    private var layers:Array = null; // Set by init object.
     
     function onLoad():Void {
         var map:String = dynamicLegend.getMap();
@@ -31,4 +27,26 @@ class roo.DynamicLegendItem extends MovieClip {
       return title;
     }
     
+    function getId():String {
+      return id;
+    }
+    
+    function getLayers():Array {
+    	return layers;
+    }
+
+	function isOneLayerVisible():Boolean {
+        var atLeast1LayerVisible:Boolean = false;
+        var map:String = dynamicLegend.getMap();
+        var layer:MovieClip = null;
+        for (var i:String in layers) {
+            layer = _global.flamingo.getComponent(map + "_" + layers[i]);
+            //_global.flamingo.tracer("DynamicLegendLayer.setVisible(), layers[" + i + "] = " + layer + " visible = " + layer.getVisible());
+            if (layer.getVisible() == 1) {
+                atLeast1LayerVisible = true;
+            }
+        }
+        return atLeast1LayerVisible;
+    }
+		    
 }

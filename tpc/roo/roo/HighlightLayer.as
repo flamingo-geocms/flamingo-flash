@@ -1,11 +1,5 @@
 import core.AbstractComponent;
 
-/*-----------------------------------------------------------------------------
-* This file is part of Flamingo MapComponents.
-* Author: Herman Assink.
-* IDgis bv
- -----------------------------------------------------------------------------*/
-
 class roo.HighlightLayer extends AbstractComponent {
     
     private var map:Object = null;
@@ -28,7 +22,7 @@ class roo.HighlightLayer extends AbstractComponent {
         }
     }
     
-    function highlightFeature(wmsUrl:String, sldServletUrl:String, featureTypeName:String, propertyName:String, value:String, name:String):Void {
+    function highlightFeature(wmsUrl:String, sldServletUrl:String, featureTypeName:String, propertyName:String, value:String, objectAlpha:Number, name:String):Void {
         map = _global.flamingo.getComponent(listento[0]);
 
         //_global.flamingo.tracer("map = " + map + " wmsUrl = " + wmsUrl + " sldServletUrl = " + sldServletUrl + " featureTypeName = " + featureTypeName + " propertyName = " + propertyName + " value = " + value + " name = " + name);
@@ -48,7 +42,12 @@ class roo.HighlightLayer extends AbstractComponent {
         layerXML += "url=\"" + wmsUrl + "\" ";
         layerXML += "srs=\"" + srs + "\" ";
         layerXML += "layers=\"dummy\" showerrors=\"true\" ";
-        layerXML += "alpha=\"" + alpha + "\" ";
+        if (objectAlpha == undefined || objectAlpha == 0) {
+        	layerXML += "alpha=\"" + alpha + "\" ";
+        }
+        else {
+        	layerXML += "alpha=\"" + objectAlpha.toString() + "\" ";
+        }
         layerXML += "sld=\"" + sldServletUrl + "/highlight.jsp%3FfeatureTypeName%3D" + featureTypeName + "%26propertyName%3D" + propertyName + "%26value%3D" + value + "\"/>";
         //_global.flamingo.tracer("layerXML = " + layerXML);
         map.addLayer(layerXML);

@@ -1,59 +1,10 @@
-/*-----------------------------------------------------------------------------
-* This file is part of Flamingo MapComponents.
-* Author: Herman Assink.
-* IDgis bv
- -----------------------------------------------------------------------------*/
-/** @component DynamicLegend 
-* This component is developed for the RO-online project. The component shows only the legend
-* items of the objects that are visible in the mapviewer. Navigating in the map results in refreshing the
-* legend. The component works only in combination with an OGC WFS. The component is not a layer control.  
-* @file flamingo/tpc/roo/roo/DynamicLegend.as  (sourcefile)
-* @file flamingo/tpc/roo/DynamicLegend.fla (sourcefile)
-* @file flamingo/tpc/roo/DynamicLegend.xml (configurationfile)
-* @file flamingo/tpc/roo/DynamicLegend.swf (compiled component, needed for publication on internet)
-*/
-
-/** @tag <roo:DynamicLegend>  
-* This tag defines a dynamiclegend. The dynamiclegend (tag) itself listens to a map.
-* DynamicLegendLayer(tags)listen to LayerOGWMS layers.
-* @class roo.DynamicLegend extends AbstractComponent
-* @hierarchy childnode of Flamingo or a container component. 
-* @example
-*	<Flamingo>
-*	  ...
-*  	  <fmc:Window id="dynamicLegendWindow" top="15" left="15" width="255" height="295" skin="F1" canresize="true" canclose="true" visible="false">
-*        <string id="title" en="Legend" nl="Legenda"/>
-*        <roo:DynamicLegend id="dynamicLegend" width="230" height="260" listento="map,filterLayer" fileurl="${assetlocation}" wmsurl="${ogcplanservice}?service=WMS" wfsurl="${ogcplanservice}">
-*          	<roo:DynamicLegendHeading listento="bgLayer,boLayer" title="Best./Inp.plan"/>
-*          	<roo:DynamicLegendLayer listento="bgLayer,boLayer,bpAgrarischLayer,bpBedrijfLayer,bpBedrijventerreinLayer,bpBosLayer,bpCentrumLayer,bpDetailhandelLayer,bpDienstverleningLayer,bpGemengdLayer,bpWonenLayer" graphicuri="file://provinciaal-plan/p-plangebied.png" title="best.plangebied" featuretype="app:Bestemmingsplangebied;app:geometrie;app=&quot;http://www.deegree.org/app&quot;" whereclause="app:typeplan;*bestemmingsplan*"/>
-*          	<roo:DynamicLegendLayer listento="bgLayer,boLayer,bpAgrarischLayer,bpBedrijfLayer,bpBedrijventerreinLayer,bpBosLayer,bpCentrumLayer,bpDetailhandelLayer,bpDienstverleningLayer,bpGemengdLayer,bpWonenLayer" graphicuri="file://provinciaal-plan/p-plangebied.png" title="inp.plangebied" featuretype="app:Bestemmingsplangebied;app:geometrie;app=&quot;http://www.deegree.org/app&quot;" whereclause="app:typeplan;*inpassingsplan*"/>
-*   		....
-*        </roo:DynamicLegend>
-*    </fmc:Window>
-*	 ...
-*	</Flamingo>	 
-* @attr fileurl
-* @attr wmsurl
-* @attr	wfsurl
-*/
-/** @tag	<roo:DynamicLegendHeading>  
-* This tag defines a title that will be shown in the Dynamic legend. 
-* @hierarchy childnode of roo:DynamicLegend 
-* @attr title (no defaultvalue) the title text to be used as title
-*/
-
-/** @tag	<roo:DynamicLegendLayer>
-* @attr 
-* 
- */
-
-import mx.controls.CheckBox;
+﻿import mx.controls.CheckBox;
 import mx.utils.Delegate;
 
 import core.AbstractComponent;
-import roo.FeatureType;
-import roo.WhereClause;
 import roo.DynamicLegendItem;
+import roo.DynamicLegendLayer;
+import roo.FilterLayer;
 
 class roo.DynamicLegend extends AbstractComponent {
     
@@ -64,15 +15,20 @@ class roo.DynamicLegend extends AbstractComponent {
     private var vertiSpacing:Number = 3;
     private var fileURL:String = null;
     private var wmsURL:String = null;
-    private var wfsURL:String = null;
+	private var swfLibURL:String = null;
+    private var dynLegendServiceURL:String = null;
     private var dynamicLegendItems:Array = null;
-    private var layoutNeeded:Boolean = false;
+    private var refreshNeeded:Boolean = false;
+    private var reloadNeeded:Boolean = false;
+    private var dynLegendResponse:XML = null;
+    private var loading:Boolean = false;
+    private var mcSwfLib:MovieClip = null;
     
     function onLoad():Void {
-        super.onLoad();
-        
+        super.onLoad();      
         addCheckBox();
-        var refreshId:Number = setInterval(this, "layout", 1000);        
+        var refreshId:Number = setInterval(this, "layout", 300);
+        var reloadId:Number = setInterval(this, "getLegendContent", 300);
     }
     
     function setAttribute(name:String, value:String):Void {
@@ -85,22 +41,20 @@ class roo.DynamicLegend extends AbstractComponent {
             fileURL = value;
         } else if (name == "wmsurl") {
             wmsURL = value;
-        } else if (name == "wfsurl") {
-            wfsURL = value;
+		} else if (name == "swfliburl") {
+            swfLibURL = _global.flamingo.correctUrl(value);	
+			//mcSwfLib = createEmptyMovieClip("mSwfLib", getNextHighestDepth());
+			//mcSwfLib.loadMovie(swfLibURL);
+        } else if (name == "dynlegendserviceurl") {
+            dynLegendServiceURL = value;
         }
     }
     
-    function addComponent(name:String, value:XMLNode):Void {
-    	var names:Array = name.split(":");
-    	if(names.length==1){
-    		name = name;
-    	} else {
-    		name = names[1];
-    	}
+    function addComposite(name:String, value:XMLNode):Void {
         if (name == "DynamicLegendLayer") {
-            addDynamicLegendLayer(value.attributes["listento"].split(","), value.attributes["graphicuri"], value.attributes["title"], value.attributes["featuretype"], value.attributes["whereclause"]);
+            addDynamicLegendLayer(value.attributes["listento"].split(","), value.attributes["graphicuri"], value.attributes["serverids"], value.attributes["legendCriteria"], value.attributes["title"]);
         } else if (name == "DynamicLegendHeading") {
-            addDynamicLegendHeading(value.attributes["listento"], value.attributes["title"]);
+            addDynamicLegendHeading(value.attributes["listento"].split(","), value.attributes["id"], value.attributes["title"]);
         }
     }
     
@@ -127,9 +81,17 @@ class roo.DynamicLegend extends AbstractComponent {
     function getWMSURL():String {
         return wmsURL;
     }
+	
+	function getSwfLibURL():String {
+        return swfLibURL;
+    }
     
-    function getWFSURL():String {
-        return wfsURL;
+	function getSwfLib():MovieClip {
+        return mcSwfLib;
+    }
+    
+    function getDynLegendServiceURL():String {
+        return dynLegendServiceURL;
     }
     
     private function addCheckBox():Void {
@@ -148,12 +110,16 @@ class roo.DynamicLegend extends AbstractComponent {
         dynamik = !eventObject.target.selected;
         
         for (var i:Number = 0; i < dynamicLegendItems.length; i++) {
-            DynamicLegendItem(dynamicLegendItems[i]).setVisible();
+            var dynamicLegendItem:DynamicLegendItem = DynamicLegendItem(dynamicLegendItems[i]);
+            if (dynamicLegendItem.isOneLayerVisible()) {
+                dynamicLegendItem.setVisible();
+            }
         }
-        this.layoutNeeded = true;
+
+        refresh();
     }
     
-    private function addDynamicLegendLayer(layers:Array, graphicURI:String, title:String, featureTypeString:String, whereClauseString:String):Void {
+    private function addDynamicLegendLayer(layers:Array, graphicURI:String, serverids:String, legendCriteria:String, title:String):Void {
         if (dynamicLegendItems == null) {
             dynamicLegendItems = new Array();
         }
@@ -164,17 +130,13 @@ class roo.DynamicLegend extends AbstractComponent {
         initObject["layers"] = layers;
         initObject["dynamicLegend"] = this;
         initObject["graphicURI"] = graphicURI;
+        initObject["serverids"] = serverids;
+        initObject["legendCriteria"] = legendCriteria;
         initObject["title"] = title;
-        var split:Array = featureTypeString.split(";");
-        initObject["featureType"] = new FeatureType(split[0], split[1], split[2]);
-        if (whereClauseString != null) {
-            split = whereClauseString.split(";");
-            initObject["whereClause"] = new WhereClause(split[0], split[1], WhereClause.EQUALS);
-        }
         dynamicLegendItems.push(attachMovie("DynamicLegendLayer", "mDynamicLegendLayer" + depth, depth, initObject));
     }
     
-    private function addDynamicLegendHeading(layers:String, title:String):Void {
+    private function addDynamicLegendHeading(layers:String, id:String, title:String):Void {
         if (dynamicLegendItems == null) {
             dynamicLegendItems = new Array();
         }
@@ -183,6 +145,7 @@ class roo.DynamicLegend extends AbstractComponent {
         var initObject:Object = new Object();
         initObject["layers"] = layers;
         initObject["dynamicLegend"] = this;
+        initObject["id"] = id;
         initObject["title"] = title;
         dynamicLegendItems.push(attachMovie("DynamicLegendHeading", "mDynamicLegendHeading" + depth, depth, initObject));
     }
@@ -193,17 +156,148 @@ class roo.DynamicLegend extends AbstractComponent {
 
 
     function refresh():Void {
-        this.layoutNeeded = true;
+        if (isDynamic()) {
+            this.reloadNeeded = true;
+        }
+        else {
+            this.refreshNeeded = true;
+        }
     }
     
-    private function layout():Void {
+    private function getLegendContent():Void {
+        if (!this.reloadNeeded || this.loading) {
+            return;
+        }
 
         if (!_parent._parent._parent._parent.visible) { //dynamicLegendWindow
             return;
         }
+        else {
+			this._visible = true;  //set content visible when Window visible
+		}
 
-        //_global.flamingo.tracer("this.layoutNeeded = " + this.layoutNeeded);
-        if (!this.layoutNeeded) {
+        this.loading = true;
+        
+        var loadVars:LoadVars = new LoadVars();
+
+		var layersParam:String = "";
+        for (var i:Number = 0; i < dynamicLegendItems.length; i++) {
+            if (dynamicLegendItems[i] instanceof DynamicLegendLayer) {
+            	var dynamicLegendLayer:DynamicLegendLayer = DynamicLegendLayer(dynamicLegendItems[i]);
+            	dynamicLegendLayer.doSetVisible(false);
+            	if (dynamicLegendLayer.isOneLayerVisible()) {
+	            	var layers:Array  = dynamicLegendLayer.getLayers();
+	            	for (var j:Number = 0; j < layers.length; j++) {
+	            		var layer:MovieClip = _global.flamingo.getComponent(getMap() + "_" + layers[j]);
+	            		if (layer.getSLDparam() != undefined && layer.getSLDparam() && layer.getVisible() == 1) {
+	            			var namevaluepairsSLD:Array = String(layer.getSLDparam()).split("&");
+	            			var legendCriteria:Array = dynamicLegendLayer.getLegendCriteria().split(";");
+	            			//_global.flamingo.tracer("sld = " + layer.getSLDparam() + " namevaluepairsSLD = " + namevaluepairsSLD + " legendCriteria = " + legendCriteria);
+	            			for (var k:Number = 0; k < namevaluepairsSLD.length; k++) {
+		            			var paramSLD:Array = String(namevaluepairsSLD[k]).split("=");
+                                for (var l:Number = 0; l < legendCriteria.length; l++) {
+		            				var paramCrit:Array = String(legendCriteria[l]).split("=");
+		            				//_global.flamingo.tracer("paramSLD[0] = " + paramSLD[0] + " paramCrit[0] = " + paramCrit[0]);
+		            				if (paramSLD[0] == paramCrit[0]) {
+		            					var valuesSLD:Array = String(paramSLD[1]).split(",");
+		            					var valuesCrit:Array = String(paramCrit[1]).split(",");
+		            					for (var m:Number = 0; m < valuesSLD.length; m++) {
+		            						for (var n:Number = 0; n < valuesCrit.length; n++) {
+		            							//_global.flamingo.tracer("valuesSLD[m] = " + valuesSLD[m] + " valuesCrit[n] = " + valuesCrit[n]);
+		            							if (valuesSLD[m] == valuesCrit[n] && layersParam.indexOf(dynamicLegendLayer.getServerIds()) == -1) {
+            	        							layersParam += dynamicLegendLayer.getServerIds() + ",";
+		            							}
+		            						}
+		            					}
+		            				}
+                                }
+	            			}
+	            		}
+            	        else if (layer.getVisible() == 1){ //no filter on maplayer so legendlayer must be included
+            	        	layersParam += dynamicLegendLayer.getServerIds() + ",";
+            	        }
+	            	}
+            	}
+            }
+        }
+        
+        loadVars["layers"] = layersParam;
+
+        var extent:Object = _global.flamingo.getComponent(getMap()).getMapExtent();        
+        loadVars["bbox"] = extent.minx + "," + extent.miny + "," + extent.maxx + "," + extent.maxy;
+
+
+        var filterLayerComp:FilterLayer = FilterLayer(_global.flamingo.getComponent(listento[1]));
+        //_global.flamingo.tracer("setVisible, filterLayer = " + filterLayer + " filterLayerComp = " + filterLayerComp);
+        var filterconditions:Object = filterLayerComp.getFilterconditions();
+		for (var filtername:String in filterconditions) {
+    		var filtercondition:String = filterLayerComp.getFiltercondition(filtername);
+
+        	var template:String = filterLayerComp.getFilterTemplate(filtername);
+    		//_global.flamingo.tracer("setVisible, template = " + template);
+
+			var namevaluepairActual:Array = filtercondition.split("=");
+			var nameParam:String = "[" + namevaluepairActual[0] + "]";
+			var value:String = namevaluepairActual[1];
+			var namevaluepairFormal:Array = template.split("=");
+			value = namevaluepairFormal[1].split(nameParam).join(value);
+		    loadVars[namevaluepairFormal[0]] = value;
+		}
+		
+        
+        var responseObj:Object = new Object();
+        responseObj.parent = this;
+        responseObj.onHTTPStatus = function(httpStatus:Number) {
+                _global.flamingo.tracer("HTTP Status: " + httpStatus + "!!");
+        };
+        responseObj.onData = function(str:String) {
+                this.parent.dynLegendResponse = new XML();
+                this.parent.dynLegendResponse.ignoreWhite = true;
+                this.parent.dynLegendResponse.parseXML(str);
+                //_global.flamingo.tracer("resp = " + str);
+                this.parent.parseDynamicLegendResponse();
+        };
+        
+        loadVars.contentType = "application/x-www-form-urlencoded; charset=utf-8";
+        loadVars.sendAndLoad(dynLegendServiceURL, responseObj, "POST");
+
+    }
+
+    private function parseDynamicLegendResponse():Void {
+        this.reloadNeeded = false;
+        this.loading = false;
+        if (dynLegendResponse.firstChild.localName == "DynamicLegendException") {
+            _global.flamingo.tracer("Error while retrieving dynamic-legend-response: " );
+            var childs:Array = dynLegendResponse.firstChild.childNodes;
+						for (var i:Number = 0; i<childs.length; i++) {
+                _global.flamingo.tracer(childs[i].localName + ": " + childs[i].firstChild.nodeValue);
+            }
+            return;
+        }
+				var layers:Array = dynLegendResponse.firstChild.childNodes;
+				for (var i:Number = 0; i<layers.length; i++) {
+				    var layerId:String = layers[i].attributes["name"];
+				    var hits:String = layers[i].attributes["hits"];
+				    var vis:Boolean = (hits == "0" ? false : true);
+			        for (var j:Number = 0; j < dynamicLegendItems.length; j++) {
+			            if (dynamicLegendItems[j] instanceof DynamicLegendLayer) {
+			            	var dynLegendLayer:DynamicLegendLayer = DynamicLegendLayer(dynamicLegendItems[j]);
+			            	//if (layerId == "overig_s2006") {
+					          //  _global.flamingo.tracer("serverIds = " + dynLegendLayer.getServerIds() + " indexOf = " + dynLegendLayer.getServerIds().indexOf(layerId) + " layerId = " + layerId + " vis = " + vis);
+					          //}
+			            	if (String("," + dynLegendLayer.getServerIds() + ",").indexOf("," + layerId + ",") > -1 && vis ) {
+			            	    dynLegendLayer.doSetVisible(vis);
+			            	}
+			            }
+			        }				    
+				}
+				
+        this.refreshNeeded = true;
+    }
+
+    private function layout():Void {
+
+        if (!this.refreshNeeded) {
             return;
         }
 
@@ -229,7 +323,7 @@ class roo.DynamicLegend extends AbstractComponent {
                 dynamicLegendItem._y = 0;
             }
         }
-        this.layoutNeeded = false;
+        this.refreshNeeded = false;
     }
     
 }

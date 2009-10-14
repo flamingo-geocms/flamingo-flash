@@ -1,12 +1,6 @@
 import roo.DynamicLegendLayer;
 import roo.FilterLayer;
 
-/*-----------------------------------------------------------------------------
-* This file is part of Flamingo MapComponents.
-* Author: Herman Assink.
-* IDgis bv
- -----------------------------------------------------------------------------*/
-
 class roo.FilterLayerDynamicLegendLayerAdapter {
 
 	private var dynamicLegendLayer:DynamicLegendLayer = null;

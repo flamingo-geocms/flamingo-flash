@@ -1,9 +1,3 @@
-/*-----------------------------------------------------------------------------
-* This file is part of Flamingo MapComponents.
-* Author: Herman Assink.
-* IDgis bv
- -----------------------------------------------------------------------------*/
- 
 import mx.controls.RadioButton;
 import mx.utils.Delegate;
 
@@ -15,19 +9,31 @@ class roo.LayerSwitch extends AbstractComponent {
     private var layerOGWMSLayerSwitchAdapter:LayerOGWMSLayerSwitchAdapter = null;
     private var radioButton0:RadioButton = null;
     private var radioButton1:RadioButton = null;
-    
-    function onLoad():Void {
+    private var layers0:Array = null;
+    private var layers1:Array = null;
+    private var layerNames0:String = null;
+    private var layerNames1:String = null;
+	private var windowButton : String;
+
+	function onLoad():Void {
         super.onLoad();
         
         layerOGWMSLayerSwitchAdapter = new LayerOGWMSLayerSwitchAdapter(this);
-        _global.flamingo.addListener(layerOGWMSLayerSwitchAdapter, listento[0], this);
-        _global.flamingo.addListener(layerOGWMSLayerSwitchAdapter, listento[1], this);
+        for (var i:Number = 0; i < listento.length; i++) {
+            _global.flamingo.addListener(layerOGWMSLayerSwitchAdapter, listento[i], this);
+        }
         _global.flamingo.addListener(this, "flamingo", this);
     }
     
     function setAttribute(name:String, value:String):Void {
         if (name == "titles") {
             addRadioButtons(value.split(","));
+        }
+        if (name == "layers1") {
+        	layerNames0 = value;
+        }
+        if (name == "layers2") {
+        	layerNames1 = value;
         }
     }
     
@@ -48,8 +54,6 @@ class roo.LayerSwitch extends AbstractComponent {
     }
     
     function onClickRadioButton(eventObject:Object):Void {
-        var layer0:MovieClip = _global.flamingo.getComponent(listento[0]);
-        var layer1:MovieClip = _global.flamingo.getComponent(listento[1]);
         
         if (eventObject.target == radioButton0) {
             radioButton1.selected = false;
@@ -64,51 +68,64 @@ class roo.LayerSwitch extends AbstractComponent {
     }
     
     function swizch():Void {
-        var layer0:MovieClip = _global.flamingo.getComponent(listento[0]);
-        var layer1:MovieClip = _global.flamingo.getComponent(listento[1]);
 
-        //set visibility according to radio buttons
-        var layer0Visible:Number = layer0.getVisible();
-        var layer1Visible:Number = layer1.getVisible();
-        if (radioButton0.selected) {
-            if (layer0Visible == -1) {
-                layer0.setVisible(true);
-            }
-            if (layer1Visible == 1) {
-                layer1.setVisible(false);
-            }
-        } else {
-            if (layer1Visible == -1) {
-                layer1.setVisible(true);
-            }
-            if (layer0Visible == 1) {
-                layer0.setVisible(false);
-            }
+        if (layers0 == null) {
+        	layers0 = getLayerComponents(layerNames0);
         }
 
-        //switch visibility when out-of-scale
-        var layer0Visible:Number = layer0.getVisible();
-        var layer1Visible:Number = layer1.getVisible();
-        if (Math.abs(layer0Visible) == 2) {
-            if (layer1Visible == -1) {
-                layer1.setVisible(true);
-            }
-        } else if (Math.abs(layer1Visible) == 2) {
-            if (layer0Visible == -1) {
-                layer0.setVisible(true);
-            }
+        if (layers1 == null) {
+        	layers1 = getLayerComponents(layerNames1);
         }
+
+        for (var i:Number = 0; i < layers0.length; i++) {
+        	setLayerVisibility(layers0[i], radioButton0.selected, isAllOutOfScale(layers1));
+        }
+
+        for (var j:Number = 0; j < layers1.length; j++) {
+        	setLayerVisibility(layers1[j], radioButton1.selected, isAllOutOfScale(layers0));
+        }
+
         
-        //enable radio buttons when both layers are within scale range, otherwise disable
-        var layer0Visible:Number = layer0.getVisible();
-        var layer1Visible:Number = layer1.getVisible();
-        if ((Math.abs(layer0Visible) == 2) || (Math.abs(layer1Visible) == 2)) {
-            radioButton0.enabled = false;
-            radioButton1.enabled = false;
-        } else if ((Math.abs(layer0Visible) == 1) && (Math.abs(layer1Visible) == 1)) {
+        //enable radio buttons when both layer sets are within scale range, otherwise disable
+    
+        if ((!isAllOutOfScale(layers0)) && (!isAllOutOfScale(layers1))) {
             radioButton0.enabled = true;
             radioButton1.enabled = true;
+           } else {
+            radioButton0.enabled = false;
+            radioButton1.enabled = false;
         }
+    }
+    
+    
+    private function getLayerComponents(layerNames:String):Array {
+    	var lyrs:Array = layerNames.split(",");
+    	var lyrComp:Array = new Array();
+    	for (var i:Number = 0; i < lyrs.length; i++) {
+    		lyrComp.push(_global.flamingo.getComponent(lyrs[i]));
+    	}
+    	return lyrComp;
+    }
+    
+    private function setLayerVisibility(layer:MovieClip, buttonSelected:Boolean, othersOutOfScale:Boolean):Void {
+        if ((buttonSelected || othersOutOfScale) && layer.getVisible() < 0) {
+          //_global.flamingo.tracer("layer = " + layer + " buttonSelected = " + buttonSelected + " othersOutOfScale = " + othersOutOfScale + " vis = " + layer.getVisible() );
+        	layer.setVisible(true);
+        }
+        else if ((!buttonSelected && !othersOutOfScale) && layer.getVisible() > 0) {
+          //_global.flamingo.tracer("layer = " + layer + " buttonSelected = " + buttonSelected + " othersOutOfScale = " + othersOutOfScale + " vis = " + layer.getVisible() );
+        	layer.setVisible(false);
+        }
+    }
+    
+    private function isAllOutOfScale(layers:Array):Boolean {
+    	var allOutOfScale:Boolean = true;
+    	for (var i:Number = 0; i < layers.length; i++) {
+    		if (Math.abs(layers[i].getVisible()) != 2) {
+    			allOutOfScale = false;
+    		}
+    	}
+    	return allOutOfScale;
     }
     
 }

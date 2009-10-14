@@ -1,11 +1,5 @@
 import roo.Locations;
 
-/*-----------------------------------------------------------------------------
-* This file is part of Flamingo MapComponents.
-* Author: Herman Assink.
-* IDgis bv
- -----------------------------------------------------------------------------*/
-
 class roo.MapLocationsAdapter {
 
 	private var locations:Locations = null;

@@ -4,12 +4,6 @@ import roo.WhereClause;
 import roo.XMLTools;
 import roo.WFSFeature;
 
-/*-----------------------------------------------------------------------------
-* This file is part of Flamingo MapComponents.
-* Author: Herman Assink.
-* IDgis bv
- -----------------------------------------------------------------------------*/
-
 class roo.WFSConnector {
 
 	static private var instances:Object = new Object(); // Associative array;
@@ -70,6 +64,7 @@ class roo.WFSConnector {
                 var whereClause:WhereClause = null;
                 for (var i:String in whereClauses) {
                     whereClause = WhereClause(whereClauses[i]);
+                    //_global.flamingo.tracer("whereClauses[" + i + "] = " + whereClauses[i] + " whereClause = " + whereClause);
                     if (whereClause.getOperator() == WhereClause.EQUALS) {
                         requestString += "        <ogc:PropertyIsLike wildCard=\"*\" singleChar=\"#\" escapeChar=\"!\">\n";
                         requestString += "          <ogc:PropertyName>" + whereClause.getColumnName() + "</ogc:PropertyName>\n";

@@ -2,12 +2,6 @@ import core.AbstractComponent;
 import roo.MapLocationsAdapter;
 import roo.Location;
 
-/*-----------------------------------------------------------------------------
-* This file is part of Flamingo MapComponents.
-* Author: Herman Assink.
-* IDgis bv
- -----------------------------------------------------------------------------*/
-
 class roo.Locations extends AbstractComponent {
     
     private var map:Object = null;

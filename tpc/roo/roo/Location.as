@@ -1,11 +1,5 @@
 import roo.MapLocationAdapter;
 
-/*-----------------------------------------------------------------------------
-* This file is part of Flamingo MapComponents.
-* Author: Herman Assink.
-* IDgis bv
- -----------------------------------------------------------------------------*/
-
 class roo.Location extends MovieClip {
     
     private var map:Object = null;

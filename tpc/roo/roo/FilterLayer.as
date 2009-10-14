@@ -1,12 +1,6 @@
 import core.AbstractComponent;
 import roo.XMLTools;
 
-/*-----------------------------------------------------------------------------
-* This file is part of Flamingo MapComponents.
-* Author: Herman Assink.
-* IDgis bv
- -----------------------------------------------------------------------------*/
-
 class roo.FilterLayer extends AbstractComponent {
     
     private var sldURL:String = "";

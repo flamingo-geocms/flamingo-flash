@@ -1,8 +1,3 @@
-/*-----------------------------------------------------------------------------
-* This file is part of Flamingo MapComponents.
-* Author: Herman Assink.
-* IDgis bv
- -----------------------------------------------------------------------------*/
 
 class roo.XMLTools {
 
@@ -88,10 +83,6 @@ class roo.XMLTools {
             return false;
         }
         return null;
-    }
-    
-    static function urlEncode(str:String):String {
-        return str.split("/").join("%2F").split(":").join("%3A").split("?").join("%3F").split("&").join("%26").split("=").join("%3D");
     }
     
     static function xmlDecode(str:String):String {

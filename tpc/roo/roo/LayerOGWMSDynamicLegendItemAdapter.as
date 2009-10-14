@@ -1,11 +1,5 @@
 import roo.DynamicLegendItem;
 
-/*-----------------------------------------------------------------------------
-* This file is part of Flamingo MapComponents.
-* Author: Herman Assink.
-* IDgis bv
- -----------------------------------------------------------------------------*/
-
 class roo.LayerOGWMSDynamicLegendItemAdapter {
 
 	private var dynamicLegendItem:DynamicLegendItem = null;
@@ -20,6 +14,10 @@ class roo.LayerOGWMSDynamicLegendItemAdapter {
     }
     
     function onHide():Void {
+        dynamicLegendItem.setVisible();
+    }
+    
+    function onUpdate():Void {
         dynamicLegendItem.setVisible();
     }
     

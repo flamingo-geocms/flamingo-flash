@@ -1,9 +1,3 @@
-/*-----------------------------------------------------------------------------
-* This file is part of Flamingo MapComponents.
-* Author: Herman Assink.
-* IDgis bv
- -----------------------------------------------------------------------------*/
- 
 import mx.controls.CheckBox;
 import mx.utils.Delegate;
 

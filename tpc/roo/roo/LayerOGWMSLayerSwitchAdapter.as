@@ -1,11 +1,5 @@
 import roo.LayerSwitch;
 
-/*-----------------------------------------------------------------------------
-* This file is part of Flamingo MapComponents.
-* Author: Herman Assink.
-* IDgis bv
- -----------------------------------------------------------------------------*/
-
 class roo.LayerOGWMSLayerSwitchAdapter {
 
 	private var layerSwitch:LayerSwitch = null;
