@@ -747,6 +747,19 @@ function itemById(id2m:String, items:Array, parentItem:Object):Object {
 	return null;
 }
 
+/**
+* Find node object of the legend by id
+* @return Boolean True or false. Indicates found or not found.
+*/
+function legendItemExists(id2m:String):Boolean {
+	var fItem:Object = itemById(id2m, this.legenditems, null);
+	if (fItem != null) {
+		return true;
+	}
+	return false;
+}
+
+
 function removeListenersOfNodeObjectTree(item:Object):Void {
 	//delete listener of item if existing
 	if (item.type == "item") {
