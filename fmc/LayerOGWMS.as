@@ -435,6 +435,14 @@ function setAlpha(alpha:Number) {
 	_global.flamingo.raiseEvent(this, "onSetValue", "setAlpha", alpha);	
 }
 
+/**
+* Gets the transparancy of a layer.
+* @return alpha, number between 0 and 100, 0=transparent, 100=opaque
+*/
+function getAlpha(){
+	return this._alpha;
+}
+
 function _parseLayers(tlayers:Object) {
 	for (var item in tlayers) {
 		if (item == "layers") {

@@ -483,6 +483,13 @@ function setAlpha(alpha:Number) {
 	this._alpha = alpha;
 }
 /**
+* Gets the transparancy of a layer.
+* @return alpha, number between 0 and 100, 0=transparent, 100=opaque
+*/
+function getAlpha(){
+	return this._alpha;
+}
+/**
 * Hides a layer.
 */
 function hide():Void {
