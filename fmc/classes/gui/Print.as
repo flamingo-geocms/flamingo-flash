@@ -39,6 +39,7 @@
 * It is this map that informs the maps in the templates about its zoom en pan events and its identify events.
 * @class gui.Print extends AbstractContainer
 * @hierarchy child node of Flamingo or a container component. 
+* @attr scales (optional) default: "500000,250000,100000,50000,20000,10000,5000,2000" comma seperated scale list.
 * @example
 	<fmc:Window id="printWindow" top="60" left="60" width="585" height="680" visible="false" skin="g"
         canresize="true" canclose="true">
@@ -93,7 +94,7 @@ class gui.Print extends AbstractContainer {
     private var scrollPane:ScrollPane = null;
     private var checkBox:CheckBox = null;
   	private var templateComboBox:ComboBox = null;
-    
+    private var scales:Array= new Array("500000", "250000", "100000", "50000", "20000", "10000", "5000", "2000");
     private var intervalID:Number = null;
     private var availPreviewWidth:Number = 0;
 		private var availPreviewHeight:Number = 0;
@@ -123,7 +124,6 @@ class gui.Print extends AbstractContainer {
             _global.flamingo.tracer("Exception in gui.Print.<<init>>()\nNo print templates configured.");
             return;
         }
-        
         mapPrintAdapter = new MapPrintAdapter(this);
         
         addTemplateSelector();
@@ -138,6 +138,11 @@ class gui.Print extends AbstractContainer {
 
     }
 	
+	function setAttribute(name:String, value:String):Void {
+		if (name.toLowerCase()=="scales"){
+			scales=value.split(",");
+		}
+	}
 	
 	function setVisible(vis:Boolean):Void{
 		super.setVisible(vis);
@@ -191,9 +196,9 @@ class gui.Print extends AbstractContainer {
         initObject = new Object();
         initObject["_x"] = 235;
         initObject["_width"] = 150;
-        initObject["dataProvider"] = new Array("500000", "250000", "100000", "50000", "20000", "10000", "5000", "2000");
+        initObject["dataProvider"] = scales;
         initObject["editable"] = true;
-        initObject["rowCount"] = 8;
+        initObject["rowCount"] = scales.length;
         
         var comboBoxContainer:MovieClip = createEmptyMovieClip("mScaleComboBoxContainer", 7);
         comboBoxContainer._lockroot = true; // Without this line comboboxes wouldn't open.
