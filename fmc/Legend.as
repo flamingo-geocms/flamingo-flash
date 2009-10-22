@@ -376,8 +376,8 @@ function parseCustomAttr(xml:Object){
 
 function addItem(xml:Object, items:Array, insertIndex:Number):Void {
 	if (insertIndex != undefined && (insertIndex == null || insertIndex < 0 || insertIndex >= items.length)) {
-		_global.flamingo.showError("ERROR in Legend.as addItem()","<<insertIndex out of range.>>\ninsertIndex = "+insertIndex, 3000);
-		return;
+		//if insertIndex is wrong then make undefined
+		insertIndex=undefined;
 	}
 	if (items == undefined) {
 		items = this.legenditems;
