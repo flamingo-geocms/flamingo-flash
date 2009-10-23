@@ -40,7 +40,7 @@ class gui.dde.DownloadLegend extends MovieClip implements DDEConnectorListener{
 			var mapLayer:MovieClip = _global.flamingo.getComponent( mapLayers[i].toString());
 			//_global.flamingo.addListener(this,mapLayer,this);
 			
-			var mapService:String = mapLayer.mapservice;
+			var mapService:String =getMapserviceFromLayer(mapLayer);			
 			
 			if(mapService != undefined){
 				var ids:Array = mapLayer.getLayerIds();
@@ -426,6 +426,17 @@ class gui.dde.DownloadLegend extends MovieClip implements DDEConnectorListener{
 				break; 
 		}
 	}
-
+	/**Gets the mapservice from a layer. If the layer is a Arc layer the mapservice is returned.
+	* Otherwise the url is returned (wms)
+	* @param mapLayer A layer movieclip
+	*/
+	function getMapserviceFromLayer(mapLayer:Object):String{
+		var mapService:String= mapLayer.mapservice;
+		//Maybe its a OGCLayer?
+		if (mapService==undefined){
+			mapService = mapLayer.url;
+		}				
+		return mapService;
+	}
 
 }
