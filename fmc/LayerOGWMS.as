@@ -173,8 +173,13 @@ function init():Void {
 /**
 * Configurates a component by setting a xml.
 * @attr xml:Object Xml or string representation of a xml.
+* @attr dontGetCap:Boolean default=false. If you dont want to let flamingo do a getCap request.
+* Be carefull with this, because flamingo adds listeners etc. and replaces #ALL# with all layers while doing a getCap request.
 */
-function setConfig(xml:Object) {
+function setConfig(xml:Object,dontGetCap:Boolean) {
+	if (dontGetCap == undefined){
+		dontGetCap=false;
+	}
 	if (typeof (xml) == "string") {
 		xml = new XML(String(xml)).firstChild;
 	}
@@ -407,7 +412,9 @@ function setConfig(xml:Object) {
 	if (args.SERVICE==undefined){
 		args.SERVICE="WMS";
 	}
-	cogwms.getCapabilities(this.getcapabilitiesurl, args, lConn);
+	if(!dontGetCap){
+		cogwms.getCapabilities(this.getcapabilitiesurl, args, lConn);
+	}
 }
 /**
 * Sets a url parameter to be used with sld attribute
