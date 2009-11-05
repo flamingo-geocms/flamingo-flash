@@ -849,8 +849,6 @@ function handleSLDarg(argsLocal:Object):Object {
   	  argsLocal[attr.toUpperCase()] = this.attributes[attr];
 	}
 	if ((argsLocal["SLD"] != null) && (argsLocal["SLD"] != "")) {
-		argsLocal["LAYERS"] = "";
-		argsLocal["STYLES"] = "";
 		argsLocal["SLD"] += escape(sldParam.split(" ").join("+")); //replace spaces with "+" and url encode (spaces must be 'double encoded')
 		if (this.filterLayerLayerOGWMSAdapter != undefined) {
 		     argsLocal["SLD"] += this.filterLayerLayerOGWMSAdapter.getUrlFilter();
