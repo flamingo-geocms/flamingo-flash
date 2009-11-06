@@ -1216,7 +1216,13 @@ function drawLegend(list:Array, parent:MovieClip, _indent:Number) {
 							} else {
 								comp.hide();
 							}
+							//show hide the component but also all layers in the component.
+							comp.setLayerProperty("#ALL#", "visible", checked);
 						} else {
+							//if checked the component must be set visible
+							if (checked) {
+								comp.show();
+							}
 							comp.setLayerProperty(layers, "visible", checked);
 							updatelayers[maplayer] = 1;
 							updateid = setInterval(thisObj, "update", thisObj.updatedelay);

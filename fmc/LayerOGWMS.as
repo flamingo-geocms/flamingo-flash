@@ -70,6 +70,7 @@ var lastFiltersFingerprint:String = null;
 var sldParam:String = "";
 var maxHttpGetUrlLength:Number=0;
 var noCache:Boolean = false;
+var visible_layers="";
 //-------------------------------------
 //listenerobject for map
 var lMap:Object = new Object();
@@ -135,6 +136,8 @@ init();
 * @attr alpha (defaultvalue = "100") Transparency of the layer.
 * @attr maxHttpGetUrlLength default: 0 If a url is longer then the maxHttpGetUrlLength the layer tries to do a HTTP POST request. If set to 0 (default)the layer wil alwalys do a HTTP GET.
 * @attr nocache default:false if set to true the getMap requests are done with a extra parameter to force a no cache
+* @attr visible default:true if set to false this component will be set to invisible but also all the layers will be set to visible=false;
+* @attr visible_layers Comma seperated list of layers that must be visible. If omitted all layers are visible.
 */
 /** @tag <layer>  
 * This defines a sublayer of an OG-WMS service.
@@ -223,37 +226,23 @@ function setConfig(xml:Object,dontGetCap:Boolean) {
 			if (val.toUpperCase() == "#ALL#") {
 				val = "#ALL#";
 			}
-			this.slayers = val;
-			setLayerProperty(val, "visible", true);
+			this.slayers = val;			
 			break;
 		case "styles" :
-			styles = val;
-			if (styles.length>0) {
-				var a_styles = _global.flamingo.asArray(styles);
-				var a_layers = _global.flamingo.asArray(slayers);
-				if (a_styles.length == a_layers.length) {
-					for (var i = 0; i<a_styles.length; i++) {
-						this.setLayerProperty(a_layers[i], "style", a_styles[i]);
-					}
-				}
-			}
+			styles = val;			
 			break;
 		case "maptip_layers" :
 			this.canmaptip = true;
 			if (val.toUpperCase() == "#ALL#") {
 				val = "#ALL#";
 			}
-			maptip_layers = val;
-			setLayerProperty(val, "maptip", true);
-			setLayerProperty(val, "queryable", true);
+			maptip_layers = val;			
 			break;
 		case "query_layers" :
 			if (val.toUpperCase() == "#ALL#") {
 				val = "#ALL#";
 			}
-			query_layers = val;
-			setLayerProperty(val, "identify", true);
-			setLayerProperty(val, "queryable", true);
+			query_layers = val;			
 			break;
 		case "alpha" :
 			this._alpha = Number(val);
@@ -312,6 +301,9 @@ function setConfig(xml:Object,dontGetCap:Boolean) {
 		case "maxhttpgeturllength" :
 			this.maxHttpGetUrlLength= Number(val);
 			break;
+		case "visible_layers" :
+			this.visible_layers=val;
+			break;
 		case "nocache" :
 			if (val.toLowerCase() == "true") {
 				this.noCache = true;
@@ -326,6 +318,35 @@ function setConfig(xml:Object,dontGetCap:Boolean) {
 			break;
 		}
 	}
+	//after loading all parameters set the layer properties.
+	if (nullIfEmpty(slayers)!=null){
+		if (nullIfEmpty(visible_layers)!=null || visible_layers==""){
+			setLayerProperty(slayers,"visible",false);
+			setLayerProperty(visible_layers,"visible",true);
+	    }else{
+			setLayerProperty(slayers, "visible", true);
+		}
+	}
+	if (nullIfEmpty(styles)!=null){
+		if (styles.length>0) {
+			var a_styles = _global.flamingo.asArray(styles);
+			var a_layers = _global.flamingo.asArray(slayers);
+			if (a_styles.length == a_layers.length) {
+				for (var i = 0; i<a_styles.length; i++) {
+					this.setLayerProperty(a_layers[i], "style", a_styles[i]);
+				}
+			}
+		}
+	}
+	if (nullIfEmpty(maptip_layers)!=null){
+		setLayerProperty(val, "maptip", true);
+		setLayerProperty(val, "queryable", true);
+	}
+	if (nullIfEmpty(query_layers)!=null){
+		setLayerProperty(val, "identify", true);
+		setLayerProperty(val, "queryable", true);
+	}	
+	//walk through xml (layer) childs.
 	var xlayers:Array = xml.childNodes;
 	if (xlayers.length>0) {
 		for (var i:Number = xlayers.length-1; i>=0; i--) {
@@ -1401,6 +1422,25 @@ function _getString(item:Object, stringid:String):String {
 	//option D
 	return "";
 }
+/**
+* Returns null if the string is empty
+* attr s the string to check
+*/
+function nullIfEmpty(s:String):Object{
+	if (s==undefined){
+		return null;
+	}
+	if (s==""){
+		return null;
+	}
+	if (s.length <= 0){
+		return null;
+	}
+	return s;		
+}
+
+
+
 /**
 * Dispatched when the layer gets a request object from the connector.
 * @param layer:MovieClip a reference to the layer.
