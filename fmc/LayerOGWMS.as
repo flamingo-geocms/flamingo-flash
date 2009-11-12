@@ -70,7 +70,7 @@ var lastFiltersFingerprint:String = null;
 var sldParam:String = "";
 var maxHttpGetUrlLength:Number=0;
 var noCache:Boolean = false;
-var visible_layers="";
+var visible_layers=null;
 //-------------------------------------
 //listenerobject for map
 var lMap:Object = new Object();
@@ -320,11 +320,13 @@ function setConfig(xml:Object,dontGetCap:Boolean) {
 	}
 	//after loading all parameters set the layer properties.
 	if (nullIfEmpty(slayers)!=null){
-		if (nullIfEmpty(visible_layers)!=null || visible_layers==""){
-			setLayerProperty(slayers,"visible",false);
-			setLayerProperty(visible_layers,"visible",true);
-	    }else{
+		if (visible_layers==null){
 			setLayerProperty(slayers, "visible", true);
+	    }else{
+			setLayerProperty(slayers,"visible",false);
+			if (nullIfEmpty(visible_layers)!=null){
+				setLayerProperty(visible_layers,"visible",true);
+			}
 		}
 	}
 	if (nullIfEmpty(styles)!=null){
