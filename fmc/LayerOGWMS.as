@@ -603,7 +603,7 @@ function _update(nrtry:Number, forceupdate:Boolean){
 	}
 	caches[nrcache] = "";
 	//extent;
-	//listener for OGWMSConnector
+	//listener for OGWMSConnector	
 	var lConn:Object = new Object();
 	lConn.onRequest = function(connector:OGWMSConnector) {
 		//_global.flamingo.tracer(requestobject.url);
@@ -761,6 +761,13 @@ function _update(nrtry:Number, forceupdate:Boolean){
 	//
 	var vislayers = _getVisLayers();
 	_global.flamingo.raiseEvent(thisObj, "onUpdate", thisObj, nrtry);
+	//if the args.width or args.height are lower or equal to 0 then don't do a update.
+	if (Number(args.WIDTH) <=0 || Number(args.HEIGHT) <=0){
+		trace("update=false");
+		updating = false;
+		_visible = false;
+		return;
+	}
 	if (this.noCache==true){
 		var newurl=_global.flamingo.getNocacheName(url,'second');
 		cogwms.getMap(newurl, args);
