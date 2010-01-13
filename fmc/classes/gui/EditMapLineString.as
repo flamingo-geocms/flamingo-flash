@@ -22,6 +22,7 @@ class gui.EditMapLineString extends EditMapGeometry implements GeometryListener 
 	private var editMapLineStringGraphics:Array = null;
 	private var intersectionPoint:Point;
 	private var intersectionPixel:Pixel;
+	private var drawSolidLine:Boolean = true;
 	
 	private var thisObj:Object;
     
@@ -51,76 +52,6 @@ class gui.EditMapLineString extends EditMapGeometry implements GeometryListener 
 		//do nothing
     }
     
-	/*
-	function polygonIsSimpleTest():Boolean {
-		var lineString:LineString = LineString(_geometry);
-        var points:Array = lineString.getPoints();
-		
-		var isClosed:Number = 0;
-		if (points.length >=2) {
-			if (Point(points[0]) == Point(points[points.length - 1])){
-				isClosed = 1;
-			}
-		}
-	
-		var intersection:Boolean = false;
-		var polygonSimple:Boolean = true;
-		//test on line segment length != 0
-		for (var i:Number = 0; i < points.length - isClosed - 1; i++) {
-			//test on line segment length != 0
-			if (points[i].getDistance(points[i+1] == 0)) {
-				polygonSimple = false;
-				break;
-			}
-			else {	
-				//test if connected line segments are parallel
-				if ( i < points.length - isClosed - 1) {
-					if (lineSegmentIntersectionTest(points[i], points[i+1], points[i+1], points[i+2]) == "PARALLEL") {
-						polygonSimple = false;
-						break;
-					}
-				}
-			}
-		
-		}
-		
-		if (selfIntersectionTest()){
-			polygonSimple = false;
-		}
-		return polygonSimple;
-	}
-    
-	
-	function selfIntersectionTest():Boolean {
-		var intersection:Boolean = false;
-		
-		var lineString:LineString = LineString(_geometry);
-        var points:Array = lineString.getPoints();
-		
-		var isClosed:Number = 0;
-		if (points.length >=2) {
-			if (Point(points[0]) == Point(points[points.length - 1])){
-				isClosed = 1;
-			}
-		}
-			
-		//test selfintersection 
-		for (var i:Number = 0; i < points.length - isClosed; i++) {
-			for (var j:Number = i + 2; j < points.length - isClosed - 1; j++) {
-				if (points[i] != points[i+1] && points[j] != points[j+1]) {
-					if (lineSegmentIntersectionTest(points[i], points[i+1], points[j], points[j+1]) == "INTERSECTING") {
-						intersection = true;
-						break;
-					}
-				}
-			}
-		}
-		
-		return intersection;
-	}
-	*/
-	
-	
 	function selfIntersectionTestDragPoint(dragPointNr:Number, testPoint:Point):Boolean {
 		var intersection:Boolean = false;
 		
@@ -245,6 +176,14 @@ class gui.EditMapLineString extends EditMapGeometry implements GeometryListener 
 		//return geometryProperty.getFlashValue(val);
 	}
 	
+	private function dashStyleStringToArray(dashStyle:String):Array{
+		var dashStyleArray:Array = new Array(10.0, 0.0, 10.0, 0.0);		//default solid line
+		if (dashStyle != null) {
+			dashStyleArray = dashStyle.split(" ");
+		}
+		return dashStyleArray;
+	}
+	
 	function doDraw():Void {
 		if (editMapEditable) {
 			var feature:Feature = this.getFirstAncestor()._parent.getFeature();
@@ -266,13 +205,28 @@ class gui.EditMapLineString extends EditMapGeometry implements GeometryListener 
 				lineStringStyle = flashValue;
 			}
 			
-			/*
+			flashValue = getFlashValue(feature, layer, "linedashstyle");
+			if (flashValue != null){
+				lineDashStyle = flashValue;
+			}
+			
+			
+			
 			//trace("EditMapLineString.as doDraw() feature = "+feature);
 			//trace("EditMapLineString.as doDraw() strokecolor value = "+feature.getValueWithPropType("strokecolor"));
 			//trace("EditMapLineString.as doDraw() strokeopacity value = "+feature.getValueWithPropType("strokeopacity"));
 			//trace("EditMapLineString.as doDraw() linestyle value = "+feature.getValueWithPropType("linestyle"));
-			trace("EditMapLineString.as doDraw() strokeWidth = "+strokeWidth);
-			*/
+			//trace("EditMapLineString.as doDraw() linedashstyle value = "+feature.getValueWithPropType("linedashstyle"));
+			//trace("EditMapLineString.as doDraw() strokeWidth = "+strokeWidth);
+			
+			//trace("EditMapLineString.as doDraw() lineStringStyle = "+lineStringStyle);
+			//trace("EditMapLineString.as doDraw() lineDashStyle = "+lineDashStyle);
+			if (lineDashStyle != null && lineDashStyle.split(" ").length > 1) {
+				drawSolidLine = false;
+			} else {
+				drawSolidLine = true;
+			}
+			
 			doDrawEditable();
 		}
 		else {
@@ -511,23 +465,97 @@ class gui.EditMapLineString extends EditMapGeometry implements GeometryListener 
 			//lineStyle(style.getStrokeWidth(), style.getStrokeColor(), style.getStrokeOpacity());
 			lineStyle(thisObj.strokeWidth, thisObj.strokeColor, thisObj.strokeOpacity);
 
-			if (lineStringStyle == "solid" || lineStringStyle == null){
+			if (drawSolidLine == true){
 				//=== solid line ===
 				for (var i:Number = 1; i < points.length; i++) {
 					pixel = point2Pixel(Point(points[i]));			
 					lineTo(pixel.getX(), pixel.getY());
 				}
-			} else if (lineStringStyle == "arrow" || lineStringStyle == "arrow_closed"){
+			} else {
+				//=== dashed line ===			as specified by lineDashStyle
+				
+				var lastPixel:Pixel = new Pixel(x,y);
+				
+				var dashStyleArray:Array = dashStyleStringToArray(lineDashStyle);
+				var firstpenOnLength:Number = Number(dashStyleArray[0]);
+				var dlsection:Number = firstpenOnLength;
+				var penOn:Boolean = true;
+				var cycleIndexOffset:Number = 0;
+				var dl:Number=0;
+				
+				for (var i:Number = 1; i < points.length; i++) {
+					pixel = point2Pixel(Point(points[i]));
+					//calc length linesegment and normalise it
+					var ls:flash.geom.Point = new flash.geom.Point(pixel.getX() - lastPixel.getX(), pixel.getY() - lastPixel.getY());
+					var lsl:Number = ls.length;
+					if (lsl == 0) {
+						//skip this point and line segment
+					} else {
+						ls.x /=lsl;
+						ls.y /=lsl;
+						
+						var pen:flash.geom.Point = new flash.geom.Point(lastPixel.getX(), lastPixel.getY());
+						if (dlsection > lsl) {
+							//draw first solid truncated section
+							lineTo(pixel.getX(), pixel.getY());
+						} else {
+							//draw dashed line section
+							do {
+								if (penOn) {
+									//draw: pen on
+									pen.x += ls.x * dlsection;
+									pen.y += ls.y * dlsection;
+									lineTo(pen.x, pen.y);
+								} else {
+									//move: pen off
+									pen.x += ls.x * dlsection;
+									pen.y += ls.y * dlsection;
+									moveTo(pen.x, pen.y);
+								}
+								dl += dlsection;
+								penOn = !penOn;
+								
+								cycleIndexOffset++;
+								if (cycleIndexOffset >= dashStyleArray.length) {
+									cycleIndexOffset = 0;
+									penOn = true;
+								}
+								dlsection = Number(dashStyleArray[cycleIndexOffset]);
+								
+								if (dl + dlsection > lsl) {
+									if (penOn) {
+										//draw end piece to corner or go around a corner
+										lineTo(pixel.getX(), pixel.getY());
+									} else {
+										moveTo(pixel.getX(), pixel.getY());
+									}
+									break;
+								}
+							} 
+							while (dl < lsl);
+						}
+						
+						//for the next loop
+						lastPixel = pixel;
+						moveTo(pixel.getX(), pixel.getY());
+						dl = 0;
+					}	
+				}
+			}
+			
+			
+			
+			
+			if (lineStringStyle == "arrow" || lineStringStyle == "arrow_closed"){
 				//=== arrow line ===				
 				var lastPixel:Pixel = new Pixel(x,y);
 				for (var i:Number = 1; i < points.length; i++) {
 					pixel = point2Pixel(Point(points[i]));	
 					//draw linesegment
-					lineTo(pixel.getX(), pixel.getY());
+					//lineTo(pixel.getX(), pixel.getY());
 					
 					//calc arrow head end points e1 and e2						
 					var a:flash.geom.Point = new flash.geom.Point(pixel.getX() - lastPixel.getX(), pixel.getY() - lastPixel.getY());
-					//trace("EditMapLineString.as a = "+a);
 					var al:Number = a.length;
 					a.x /=al;
 					a.y /=al;
@@ -539,8 +567,6 @@ class gui.EditMapLineString extends EditMapGeometry implements GeometryListener 
 					var e1:flash.geom.Point = new flash.geom.Point(pixel.getX() - a.x + b.x, pixel.getY() - a.y + b.y);
 					var e2:flash.geom.Point = new flash.geom.Point(pixel.getX() - a.x - b.x, pixel.getY() - a.y - b.y);
 					
-					//trace("EditMapLineString.as pixel = "+pixel+" lastPixel ="+lastPixel);
-					//trace("EditMapLineString.as a = "+a+" b ="+b+" e1 ="+e1+" e2 ="+e2);
 					//draw arrow head linepieces
 					if (lineStringStyle == "arrow_closed"){
 						beginFill(thisObj.strokeColor, thisObj.strokeOpacity);
@@ -561,102 +587,9 @@ class gui.EditMapLineString extends EditMapGeometry implements GeometryListener 
 					lastPixel = pixel;
 					moveTo(pixel.getX(), pixel.getY());
 				}	
-			} else if (lineStringStyle == "dashed"){
-				//=== dashed line ===
-				var lastPixel:Pixel = new Pixel(x,y);
-				//var penOnOffLengths:Array = new Array(20,10,5,5);
-				var penOnOffLengths:Array = new Array(20,20);
-				var penOnLength:Number = 6;
-				var penOffLength:Number = 4;
-				if (penOnOffLengths.length >= 2) {
-					penOnLength = penOnOffLengths[0];
-					penOffLength = penOnOffLengths[1];
-				}
-				//trace("EditMapLineString.as penOnOffLengths = "+penOnOffLengths);
-				var dlsection:Number = penOnLength;
-				var penOn:Boolean = true;
-				var penOnOffIndex:Number = 0;
-				var dl:Number=0;
-				
-				for (var i:Number = 1; i < points.length; i++) {
-					pixel = point2Pixel(Point(points[i]));
-					//calc length linesegment and normalise it
-					var ls:flash.geom.Point = new flash.geom.Point(pixel.getX() - lastPixel.getX(), pixel.getY() - lastPixel.getY());
-					//trace("EditMapLineString.as ls = "+ls);
-					//ls.normalize();
-					var lsl:Number = ls.length;
-					//trace("EditMapLineString.as normalised ls = "+ls);
-					if (lsl == 0) {
-						//skip this point and line segment
-					} else {
-						ls.x /=lsl;
-						ls.y /=lsl;
-						
-						
-										
-						var pen:flash.geom.Point = new flash.geom.Point(lastPixel.getX(), lastPixel.getY());
-						if (dlsection > lsl) {
-							//draw first solid truncated section
-							lineTo(pixel.getX(), pixel.getY());
-						} else {
-							//draw dashed line section
-							do {
-								if (penOn) {
-									//draw: pen on
-									pen.x += ls.x * penOnLength;
-									pen.y += ls.y * penOnLength;
-									lineTo(pen.x, pen.y);
-									dlsection = penOnLength;
-								} else {
-									//move: pen off
-									pen.x += ls.x * penOffLength;
-									pen.y += ls.y * penOffLength;
-									moveTo(pen.x, pen.y);
-									dlsection = penOffLength;
-								}
-								dl += dlsection;
-								//trace("EditMapLineString.as dl = "+dl+"  penOn = "+penOn+"   pen = "+pen);
-								penOn = !penOn;
-								
-								if (penOn) {
-									//cycle pen on/off lengths
-									penOnOffIndex += 2;
-									if (penOnOffIndex > penOnOffLengths.length - 1) {
-										penOnOffIndex = 0;
-									}
-									penOnLength = penOnOffLengths[penOnOffIndex];
-									penOffLength = penOnOffLengths[penOnOffIndex + 1];
-									if (penOn) {
-										dlsection = penOnLength;
-									} else {
-										dlsection = penOffLength;
-									}
-									//trace("EditMapLineString.as penOnOffIndex = "+penOnOffIndex+"   penOnLength = "+penOnLength+"  penOffLength = "+penOffLength);
-								}
-								
-								//check if next loop round will exceed the line segment length
-								if (dl + dlsection > lsl) {
-									if (penOn) {
-										//draw end piece to corner or go around a corner
-										lineTo(pixel.getX(), pixel.getY());
-									} else {
-										moveTo(pixel.getX(), pixel.getY());
-									}
-									//trace("EditMapLineString.as last piece penOn = "+penOn);
-									break;
-								}
-							} 
-							while (dl + dlsection < lsl);
-						}
-						
-						//trace("EditMapLineString.as pixel = "+pixel+" lastPixel ="+lastPixel);
-						
-						//for the next loop
-						lastPixel = pixel;
-						moveTo(pixel.getX(), pixel.getY());
-					}	
-				}
-			}
+			} 
+			
+		
 		}
 	}
 		

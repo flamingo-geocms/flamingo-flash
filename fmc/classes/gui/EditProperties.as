@@ -371,6 +371,12 @@ class gui.EditProperties extends AbstractComponent implements StateEventListener
 					components.push(componentsPanel.attachMovie("OpacityPicker", "mComponent" + layerName + i, i * 2 + 1, initObject));
 				} else if (propertyType == "LineTypePicker") {
 					components.push(componentsPanel.attachMovie("LineTypePicker", "mComponent" + layerName + i, i * 2 + 1, initObject));
+				}  else if (propertyType == "DashStylePicker") {
+					initObject["minvalue"] = GeometryProperty(properties[k]).getMinvalue();
+					initObject["maxvalue"] = GeometryProperty(properties[k]).getMaxvalue();
+					initObject["nrTilesHor"] = GeometryProperty(properties[k]).getNrTilesHor();
+					initObject["nrTilesVer"] = GeometryProperty(properties[k]).getNrTilesVer();
+					components.push(componentsPanel.attachMovie("DashStylePicker", "mComponent" + layerName + i, i * 2 + 1, initObject));
 				} else if (propertyType == "PatternPicker") {
 					initObject["minvalue"] = GeometryProperty(properties[k]).getMinvalue();
 					initObject["maxvalue"] = GeometryProperty(properties[k]).getMaxvalue();
@@ -465,6 +471,9 @@ class gui.EditProperties extends AbstractComponent implements StateEventListener
 				if (component instanceof ColorPalettePicker) {
 					//set available colors
 					component.setAvailableColors(GeometryProperty(property).getAvailableColors());
+				} else if (component instanceof DashStylePicker) {
+					//set available dashStyles
+					component.setAvailableDashStyles(GeometryProperty(property).getAvailableDashStyles());
 				} else if (component instanceof IconPicker) {
 					//set available icons
 					component.setAvailableIcons(GeometryProperty(property).getAvailableIcons());
@@ -511,7 +520,7 @@ class gui.EditProperties extends AbstractComponent implements StateEventListener
 				}
 			} else if (component instanceof IconPicker || component instanceof OpacityInput || component instanceof OpacityPicker 
 			      || component instanceof ColorPalettePicker || component instanceof PointTextEditor || component instanceof LineTypePicker
-				  || component instanceof PatternPicker) {
+				  || component instanceof DashStylePicker || component instanceof PatternPicker) {
 				value = component.getValue();
 			} else {
                 value = component.text;

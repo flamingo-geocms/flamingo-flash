@@ -12,6 +12,7 @@ class gismodel.GeometryProperty extends Property {
     private var availableColors:Array = null;
 	private var availableIcons:Array = null;
 	private var availablePatterns:Array = null;
+	private var availableDashStyles:Array = null;
 	private var inGeometryTypes:Array = null;
 	private var minvalue:Number = null;
 	private var maxvalue:Number = null;
@@ -60,6 +61,11 @@ class gismodel.GeometryProperty extends Property {
 				availablePatterns = new Array();
 			}
             availablePatterns.push(new AvailablePattern(xmlNode));
+        } else if (name == "availableDashStyle") {
+			if (availableDashStyles == null){
+				availableDashStyles = new Array();
+			}
+			availableDashStyles.push(new AvailableDashStyle(xmlNode));
         }
     }
 	
@@ -114,6 +120,13 @@ class gismodel.GeometryProperty extends Property {
 				}
 			}
 			return "";			
+		} else if (type == "DashStylePicker") {
+			for (var i:Number = 0; i<availableDashStyles.length; i++) { 
+				if (availableDashStyles[i].getValue() == val) {
+					return availableDashStyles[i].getPickDashStyle();
+				}
+			}
+			return "";			
 		}
 		
 		return val;
@@ -129,6 +142,10 @@ class gismodel.GeometryProperty extends Property {
 	
 	function getAvailablePatterns():Array {
         return availablePatterns.concat();
+    }
+	
+	function getAvailableDashStyles():Array {
+        return availableDashStyles.concat();
     }
 	
 	function setCurColorName(curColorName:String):Void {

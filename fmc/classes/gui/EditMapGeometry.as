@@ -33,6 +33,7 @@ class gui.EditMapGeometry extends GeometryPane implements GeometryListener {
     private var strokeOpacity:Number = -1;
     private var strokeWidth:Number = 2;
 	private var lineStringStyle:String = null;
+	private var lineDashStyle:String = null;
     private var fillColor:Number = -1;
     private var fillOpacity:Number = -1;
 	private var fillPatternUrl:String = null;

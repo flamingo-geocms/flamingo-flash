@@ -138,10 +138,10 @@
             <fmc:Property name="app:name" title="Naam" type="SingleLine" defaultvalue="YAYA"/>
             <fmc:Property name="app:description" title="Omschrijving" type="MultiLine" immutable="true"/>
 * @attr name (no default value) Name of the property this should correspond with the feature type property name on the server (incl. namespace).
-* @attr propertytype (possible values: "pointcolor", "pointopacity", "pointicon", "pointtext", "strokecolor", "strokeopacity", "linestyle", "fillcolor", "fillopacity")
+* @attr propertytype (possible values: "pointcolor", "pointopacity", "pointicon", "pointtext", "strokecolor", "strokeopacity", "linestyle", "linedashstyle", "fillcolor", "fillopacity")
 * Propertytype of the property, indicates the styling of the editMap geometry drawn by flash.
 * @attr title (default value: “”) Name by which the property is presented to the user, for example on a label in the edit properties component.
-* @attr type (no default value, implemented are: "ColorPalettePicker", "OpacityInput", "OpacityPicker", "IconPicker", "PointTextEditor", "LineTypePicker") Defines the user interface presentation type of input.
+* @attr type (no default value, implemented are: "ColorPalettePicker", "OpacityInput", "OpacityPicker", "IconPicker", "PointTextEditor", "LineTypePicker", "DashStylePicker") Defines the user interface presentation type of input.
 * This type defines how the property will appear in the edit properties component. As a popup picker 
 * window, a line input editor, etc. 
 * @attr defaultvalue Value that the property gets when a new feature is created. In case of the ColorPalettePicker and the IconPicker this should match the value attribute of an availableColor, resp. availableIcon.
@@ -185,6 +185,25 @@
 * @attr name (no default value) Friendly name presented to the user.
 * @attr pickiconurl Url of the icon used by flamingo to load the icon.
 * @attr value (String) Url of the icon send to server.
+*/
+
+/** @tag <fmc:availableDashStyle>
+* This tag defines the available styles of the geometry property "DashStylePicker" instance. 
+* @class gismodel.AvailableDashStyle extends PropertyItem
+* @hierarchy childnode of GeometryProperty.
+* @example
+	<fmc:GeometryProperty name="app:linedashstyle" title="Stippelstijl " propertytype="linedashstyle" type="DashStylePicker" defaultvalue="1.0" nrtileshor="1" nrtilesver="4" ingeometrytypes="LineString">
+		<fmc:availableDashStyle title="Getrokken" name="solid" pickdashstyle="1.0" value="1.0"/>
+		<fmc:availableDashStyle title="Stippel 1" name="dash2" pickdashstyle="5.0 5.0" value="5.0 5.0"/>
+		<fmc:availableDashStyle title="Stippel 2" name="dash3" pickdashstyle="20.0 5.0 5.0 5.0" value="20.0 5.0 5.0 5.0"/>
+		<fmc:availableDashStyle title="Stippel 3" name="dash4" pickdashstyle="20.0 5.0 5.0 5.0 14.0" value="20.0 5.0 5.0 5.0 14.0"/>
+		...
+	</fmc:GeometryProperty>
+
+* @attr title (default value: “”) Name by which the property is presented to the user, for example on a label in the edit properties component.
+* @attr name (no default value) Friendly name presented to the user.
+* @attr pickdashstyle String with the alternating pen on / pen off lengths. Values are of float type describing the length in pixels. Values are space delimmited.
+* @attr value (String)  send to server.
 */
 
 import gismodel.*;
