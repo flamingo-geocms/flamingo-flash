@@ -22,6 +22,7 @@ class gismodel.AvailableDashStyle extends PropertyItem {
 				pickDashStyle = String(value);
 			} else {
 				_global.flamingo.tracer("Exception in gismodel.AvailableDashStyle.setAttribute() \nInvalid value for AvailableDashStyle in xml config. \nAttributes name = "+name+", type = "+type);
+				pickDashStyle = "1.0";
 			}
         }
     }
