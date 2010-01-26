@@ -57,6 +57,7 @@ class coregui.ComponentVisibleButton extends BaseButton {
     private var component:MovieClip = null;
     
 	function onLoad():Void { // This method is a stub. It is necessary though, because of the "super" bug in Flash.
+        this._visible=false;
         super.onLoad();
 	
 		//For what ever reason the super.init() call in the init() function below does not do it's job therefore this workaround.
@@ -64,9 +65,9 @@ class coregui.ComponentVisibleButton extends BaseButton {
 	}	
 	
     function init():Void {
-		
         super.init();
         component = _global.flamingo.getComponent(listento[0]);
+        this._visible=true;
     }
     
     function onPress():Void {
