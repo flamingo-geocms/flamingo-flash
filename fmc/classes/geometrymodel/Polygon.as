@@ -51,6 +51,10 @@ class geometrymodel.Polygon extends Geometry {
         return exteriorRing;
     }
     
+    function getEnvelope():Envelope{
+    	return getExteriorRing().getEnvelope();
+    }
+    
     
 	function getArea(performSimpleTest:Boolean):Number {
 		var points:Array = exteriorRing.getPoints();

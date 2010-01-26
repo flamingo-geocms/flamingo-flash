@@ -17,6 +17,10 @@ class geometrymodel.LinearRing extends LineString {
         }
     }
     
+    function getEnvelope():Envelope{
+    	return super.getEnvelope();
+    }
+    
      function getEndPoint():Point {
      	return Point(points[points.length - 2]);
      }
