@@ -1,7 +1,9 @@
+/*-----------------------------------------------------------------------------
+* This file is part of Flamingo MapComponents.
+* Author: Linda Vels.
+* IDgis bv
+ -----------------------------------------------------------------------------*/
 
-/**
- * @author velsll
- */
 class roo.GradientFill {
 	private var color1 : Number = 0x000000;
 	private var color2 : Number = 0xffffff;
@@ -40,11 +42,16 @@ class roo.GradientFill {
         if(gradientDirection=="ver"){
         	rotation = Math.PI/2;
         }
+        var wdth:Number = parent.__width;
+        var hght:Number = parent.__height;
+        if (wdth==undefined){
+        	wdth = parent._width;
+        }
+        if (hght == undefined){
+        	hght = parent._height;
+        }	       
         
-        
-        
-        var matrix:Object = {matrixType: "box", x: 0, y: 0, w:parent.__width, h:parent.__height, r: rotation};
-		
+        var matrix:Object = {matrixType: "box", x: 0, y: 0, w:wdth, h:hght, r: rotation};
 		
         parent.clear();
         if(outline){
@@ -57,22 +64,22 @@ class roo.GradientFill {
         	parent.curveTo(0,0,cSize,0);
         }
         if(roundedCorners.indexOf("ur")!=-1){
-        	parent.lineTo(parent.__width - cSize, 0);
-        	parent.curveTo(parent.__width, 0,parent.__width,cSize);
+        	parent.lineTo(wdth - cSize, 0);
+        	parent.curveTo(wdth, 0,wdth,cSize);
         } else {	
-        	parent.lineTo(parent.__width, 0);
+        	parent.lineTo(wdth, 0);
         }
        	if(roundedCorners.indexOf("lr")!=-1){	
-        	parent.lineTo(parent.__width,parent.__height -cSize);
-        	parent.curveTo(parent.__width, parent.__height, parent.__width -cSize, parent.__height);
+        	parent.lineTo(wdth,hght -cSize);
+        	parent.curveTo(wdth, hght, wdth -cSize, hght);
         } else {
-        	parent.lineTo(parent.__width,parent.__height);
+        	parent.lineTo(wdth,hght);
         } 
         if(roundedCorners.indexOf("ll")!=-1){
-        	parent.lineTo(cSize, parent.__height);
-        	parent.curveTo(0,parent.__height,0,parent.__height - cSize);	
+        	parent.lineTo(cSize, hght);
+        	parent.curveTo(0,hght,0,hght - cSize);	
         } else {	
-        	parent.lineTo(0, parent.__height);
+        	parent.lineTo(0, hght);
         } 
         if(roundedCorners.indexOf("ul")!=-1){
         	parent.lineTo(0, cSize);
