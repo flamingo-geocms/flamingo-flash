@@ -19,16 +19,20 @@
 * @class gui.ExtentSelector 
 * @hierarchy child node of Flamingo 
 * @example
-  <fmc:ExtentSelector  id="extentselector"   left="0" top="210" width="200" listento="map">
+   <fmc:ExtentSelector  id="extentselector"   left="0" top="210" width="200" listento="map">
     <fmc:Extent  id="fullExtent" extent="full">
-      <string id="label" nl="Zoeken binnen gehele bestand" en="Zoeken binnen gehele bestand" de="Zoeken binnen gehele bestand" fr="Zoeken binnen gehele bestand" />
+      <string id="label" nl="Zoeken binnen gehele bestand" />
     </fmc:Extent>
     <fmc:Extent id="currentExtent" extent="current">
-      <string id="label" nl="Zoeken binnen kaartbeeld " en="Zoeken binnen kaartbeeld" de="Zoeken binnen kaartbeeld" fr="Zoeken binnen kaartbeeld" />
-      </fmc:Extent>
+      <string id="label" nl="Zoeken binnen kaartbeeld"/>
+    </fmc:Extent>
+    <fmc:Extent id="nedExtent" extent="13562,306839;13562,875000;278026,875000;278026,306839">
+      <string id="label" nl="Zoeken binnen Nederland"/>
+     </fmc:Extent> 
   </fmc:ExtentSelector>
+* @attr	default This is the id of an Extent that has to be selected at startup. By default the first Extent is selected. 
 */
-
+import gui.Tab;
 
 import mx.controls.RadioButton;
 
@@ -44,12 +48,13 @@ class gui.ExtentSelector extends AbstractContainer {
     private var currentExtent:Extent = null;
     private var extents:Array;
     private var numExtents:Number = 0;
+	private var defaultExtentId : String;
+	private var componentIDs:Array 
 
- 
- 	function init():Void {
+	function init():Void {
 		setVisible(false);
 		this.map =_global.flamingo.getComponent(listento[0]);
-        var componentIDs:Array = getComponents();
+        componentIDs = getComponents();
         var component:MovieClip = null;
         extents= new Array();
         for (var comp:String in componentIDs) {
@@ -62,11 +67,16 @@ class gui.ExtentSelector extends AbstractContainer {
 			numExtents++;
         }
         if (extents.length == 0) {
-            _global.flamingo.tracer("Exception in gui.ExtentSelector.<<init>>()\nNo themes configured.");
+            _global.flamingo.tracer("Exception in gui.ExtentSelector.<<init>>()\nNo extent configured.");
             return;
         }
-		_global.flamingo.addListener(this,"flamingo",this);	
  	}
+ 	
+ 	function setAttribute(name:String, value:String):Void {		     
+        if(name="default"){
+        	defaultExtentId = value;
+        }    
+    }
  	
  	function extentReady():Void{
 		numExtents--;
@@ -91,8 +101,17 @@ class gui.ExtentSelector extends AbstractContainer {
 		return extents;
 	}
 	
+	function setVisible(vis:Boolean, initiator:String):Void{
+		//Make only (in)visible when initiated by the LocationFinder
+		if(initiator=="locationFinder"){
+			this.visible = vis;
+			this._visible = vis;
+		} 
+	}
+	
     private function drawExtentSelector():Void {
     	var radioContainer:MovieClip = this.createEmptyMovieClip("mRadio", this.getNextHighestDepth());
+    	componentIDs.reverse();
     	for(var i:Number=0;i<extents.length;i++){
     		var nr:Number =radioContainer.getNextHighestDepth();
     	 	var extent:RadioButton = RadioButton(radioContainer.attachMovie("RadioButton", "mInAreaRadioButton" + nr, nr));
@@ -100,8 +119,13 @@ class gui.ExtentSelector extends AbstractContainer {
 			extent.data = extents[i];
 			extent.groupName = "inExtent";
 			extent.label = Extent(extents[i]).getLabel();
-			extent.setSize(this.__width - 5 , 20);
-			if(i==0){
+			extent.setSize(this.__width - 5 , 20);		
+			if(defaultExtentId != null){
+				if(componentIDs[i] == defaultExtentId){
+					extent.selected = true;
+					currentExtent = extents[i];
+				}
+			} else if(i==0){
 				extent.selected = true;
 				currentExtent = extents[i];
 			}
