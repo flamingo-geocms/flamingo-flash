@@ -1,7 +1,8 @@
-
-/**
- * @author velsll
- */
+/*-----------------------------------------------------------------------------
+* This file is part of Flamingo MapComponents.
+* Author: Linda Vels.
+* IDgis bv
+ -----------------------------------------------------------------------------*/
 import roo.GradientFill; 
 
 import core.AbstractComponent;
@@ -55,8 +56,10 @@ class roo.GradientDecoration extends AbstractComponent {
 	 			outline = true;
 	 		} else {
 	 			outline = false;
-	 		}
-	 	} 	
+	 		} 	
+	 	} else if (name == "linecolor") {
+	 		linecolor = Number(value);
+	 	} 
 	}
 	
 	
