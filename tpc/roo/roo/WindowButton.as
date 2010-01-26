@@ -22,6 +22,12 @@ class roo.WindowButton extends AbstractComponent {
 
 	function onLoad():Void {
         super.onLoad();
+
+		
+	}
+	
+	function init():Void {
+        super.init();
         this.useHandCursor = false;
         buttonLabel = Label(this.attachMovie("Label", "mLabel", this.getNextHighestDepth(),{_width:this.__width,_height:this.__height}));
         var style:Object = _global.flamingo.getStyleSheet("flamingo").getStyle(".general");
@@ -35,11 +41,11 @@ class roo.WindowButton extends AbstractComponent {
 		gradientDown = new GradientFill(0xffffff,0xffffff,100,100,"ll,ul,lr,ur","ver",cSize,true,0x666666);
 		gradientUp = new GradientFill(0x000000,0x000000,0,0,"ll,ul,lr,ur","ver",cSize,true,0x666666);
 		gradientOver = new GradientFill(0x000000,0x000000,0,0,"ll,ul,lr,ur","ver",cSize,true,0x666666);
-		draw();
+        window = _global.flamingo.getComponent(listento[0]);
+        draw();
 	}
 	
 	function draw(){
-		window = _global.flamingo.getComponent(listento[0]);
 		_global.flamingo.addListener( this,window, this);
 		if(window._visible){
 			window_visible = true;
