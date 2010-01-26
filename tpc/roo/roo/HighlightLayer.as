@@ -41,7 +41,7 @@ class roo.HighlightLayer extends AbstractComponent {
         layerXML += "<fmc:LayerOGWMS xmlns:fmc=\"fmc\" id=\"" + name + "\" ";
         layerXML += "url=\"" + wmsUrl + "\" ";
         layerXML += "srs=\"" + srs + "\" ";
-        layerXML += "layers=\"dummy\" showerrors=\"true\" ";
+        layerXML += "layers=\"\" showerrors=\"true\" ";
         if (objectAlpha == undefined || objectAlpha == 0) {
         	layerXML += "alpha=\"" + alpha + "\" ";
         }
@@ -58,7 +58,6 @@ class roo.HighlightLayer extends AbstractComponent {
             name = "highlight";
         }
         name = _global.flamingo.getId(map) + "_" + name;
-        
         map.removeLayer(name);
     }
     
