@@ -15,21 +15,24 @@ class geometrymodel.GeometryParser {
                                                    && (geometryNode.nodeName != "gml:LineString")
                                                    && (geometryNode.nodeName != "gml:LineStringSegment")
                                                    && (geometryNode.nodeName != "gml:Polygon")
-                                                   && (geometryNode.nodeName != "gml:PolygonPatch")) {
+                                                   && (geometryNode.nodeName != "gml:PolygonPatch")
+                                                   && (geometryNode.nodeName != "gml:Envelope")) {
             geometryNode = geometryNode.firstChild;
         }		
         if ((geometryNode.nodeName != "gml:Point") && (geometryNode.nodeName != "gml:LinearRing")
                                                    && (geometryNode.nodeName != "gml:LineString")
                                                    && (geometryNode.nodeName != "gml:LineStringSegment")
                                                    && (geometryNode.nodeName != "gml:Polygon")
-                                                   && (geometryNode.nodeName != "gml:PolygonPatch")) {
+                                                   && (geometryNode.nodeName != "gml:PolygonPatch")
+													&& (geometryNode.nodeName != "gml:Envelope")) {
             geometryNode = geometryNode.firstChild;
         }
         if ((geometryNode.nodeName != "gml:Point") && (geometryNode.nodeName != "gml:LinearRing")
                                                    && (geometryNode.nodeName != "gml:LineString")
                                                    && (geometryNode.nodeName != "gml:LineStringSegment")
                                                    && (geometryNode.nodeName != "gml:Polygon")
-                                                   && (geometryNode.nodeName != "gml:PolygonPatch")) {
+                                                   && (geometryNode.nodeName != "gml:PolygonPatch")
+												   && (geometryNode.nodeName != "gml:Envelope")) {
             _global.flamingo.tracer("Exception in GeometryParser.parseGeometry()");
             return;
         }	
@@ -140,6 +143,10 @@ class geometrymodel.GeometryParser {
             outerBoundaryNode = XMLTools.getChild("gml:exterior", geometryNode);
             linearRingNode = XMLTools.getChild("gml:LinearRing", outerBoundaryNode);
             geometry = new Polygon(LinearRing(parseGeometry(linearRingNode)));
+        } else if (geometryNode.nodeName == "gml:Envelope") {
+        	var lowerCorner:Array = XMLTools.getStringValue("gml:lowerCorner", geometryNode).split(" ");
+        	var upperCorner:Array = XMLTools.getStringValue("gml:upperCorner", geometryNode).split(" ");
+			geometry = new Envelope(lowerCorner[0],lowerCorner[1],upperCorner[0],upperCorner[1]);
         }
         return geometry;
     }
