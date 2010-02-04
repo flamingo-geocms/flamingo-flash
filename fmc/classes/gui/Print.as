@@ -97,7 +97,7 @@ class gui.Print extends AbstractContainer {
     private var scales:Array= new Array("500000", "250000", "100000", "50000", "20000", "10000", "5000", "2000");
     private var intervalID:Number = null;
     private var availPreviewWidth:Number = 0;
-		private var availPreviewHeight:Number = 0;
+	private var availPreviewHeight:Number = 0;
     
     function init():Void {
         map = _global.flamingo.getComponent(listento[0]);
@@ -146,8 +146,12 @@ class gui.Print extends AbstractContainer {
 	
 	function setVisible(vis:Boolean):Void{
 		super.setVisible(vis);
-		setCurrentPrintTemplate(null);
-		templateComboBox.selectedIndex = 0;
+		if(printTemplates.length>1){
+			setCurrentPrintTemplate(null);
+			templateComboBox.selectedIndex = 0;
+		} else {	
+				currentPrintTemplate.setVisible(vis);
+		}
 	}
 
     function getMap():MovieClip {
@@ -160,28 +164,32 @@ class gui.Print extends AbstractContainer {
     }
     
     private function addTemplateSelector():Void {
-        var item:Object = null;
-        var items:Array = new Array();
-		item = new Object();
-		item["label"] = _global.flamingo.getString(this, "choseTemplate");;
-		item["data"] = null;
-		items.push(item);
-        for (var i:Number = 0; i < printTemplates.length; i++) {
-            item = new Object();
-            item["label"] = printTemplates[i].name;
-            item["data"] = printTemplates[i];
-            items.push(item);
-        }
-        
-        var initObject:Object = new Object();
-        initObject["_width"] = 200;
-        initObject["dataProvider"] = items;
-        
-        var comboBoxContainer:MovieClip = createEmptyMovieClip("mTemplateComboBoxContainer", 9);
-        comboBoxContainer._lockroot = true; // Without this line comboboxes wouldn't open.
-        templateComboBox = ComboBox(comboBoxContainer.attachMovie("ComboBox", "mTemplateComboBox", 0, initObject));
-        templateComboBox.getDropdown().drawFocus = ""; // Without this line the green focus would remain after selecting from the combobox.
-        templateComboBox.addEventListener("change", Delegate.create(this, onChangeTemplateComboBox));
+		var comboBoxContainer:MovieClip = createEmptyMovieClip("mTemplateComboBoxContainer", 9);
+    	var initObject:Object = new Object();
+	    initObject["_width"] = 200;
+        if(printTemplates.length>1){
+	        var item:Object = null;
+	        var items:Array = new Array();
+			item = new Object();
+			item["label"] = _global.flamingo.getString(this, "choseTemplate");
+			item["data"] = null;
+			items.push(item);
+	        for (var i:Number = 0; i < printTemplates.length; i++) {
+	            item = new Object();
+	            item["label"] = printTemplates[i].name;
+	            item["data"] = printTemplates[i];
+	            items.push(item);
+	        }
+	        initObject["dataProvider"] = items;	        	       
+	        comboBoxContainer._lockroot = true; // Without this line comboboxes wouldn't open.
+	        templateComboBox = ComboBox(comboBoxContainer.attachMovie("ComboBox", "mTemplateComboBox", 0, initObject));
+	        templateComboBox.getDropdown().drawFocus = ""; // Without this line the green focus would remain after selecting from the combobox.
+	        templateComboBox.addEventListener("change", Delegate.create(this, onChangeTemplateComboBox));
+        } else {
+        	var templateLabel:Label = Label(comboBoxContainer.attachMovie("Label", "mTemplateText", 0, initObject));
+        	templateLabel.text = printTemplates[0].name;
+        	setCurrentPrintTemplate(printTemplates[0]);
+		}    
     }
     
     private function addScaleComponents():Void {
@@ -370,7 +378,7 @@ class gui.Print extends AbstractContainer {
             
             currentPrintTemplate.setScale(100 / dpiFactor);
             
-            var printPage:MovieClip = currentPrintTemplate.getContentPane();
+            var printPage:MovieClip = currentPrintTemplate.getContentPane();       
             if (currentPrintTemplate.getOrientation() != printJob.orientation) {
                 _global.flamingo.showError("Orientation Error", "The chosen printer orientation is " + printJob.orientation + ", whereas the template orientation is " + currentPrintTemplate.getOrientation() + ".");
                 delete printJob;
@@ -393,7 +401,7 @@ class gui.Print extends AbstractContainer {
            
 			var width:Number = printPage._width;
             var height:Number = printPage._height;
-        	var componentIDs:Array = currentPrintTemplate.getComponents();
+        	//var componentIDs:Array = currentPrintTemplate.getComponents();
             var xMargin:Number = ((printJob.pageWidth * dpiFactor)-(currentPrintTemplate.__width)) / 2;
             var yMargin:Number = ((printJob.pageHeight * dpiFactor)-(currentPrintTemplate.__height)) / 2;			
             var printArea:Object = new Object();
@@ -406,10 +414,16 @@ class gui.Print extends AbstractContainer {
 			// fill a new MovieClip with this bitmap and print this MovieClip to the printer
 			// with printAsBitMap = false;
 			
-			var bitmap:BitmapData = new BitmapData(2880, 2880, false, 0xffffff);;
+			//TODO: with a matrix you can rotate and translate in such a way that a lanscape image can be printed in portrait and vv 
+			//var myMatrix:Matrix = new Matrix();
+			//myMatrix.rotate(Math.PI/2);
+			//myMatrix.translate(-(width/2 - height/2), (width/2 - height/2))
+			
+			var bitmap:BitmapData = new BitmapData(2880, 2880, false, 0xffffff);
 			bitmap.draw(printPage);
 			var tmp:MovieClip = _root.createEmptyMovieClip("rasterPage", _root.getNextHighestDepth());
 			tmp.beginBitmapFill(bitmap);
+			
 			tmp.moveTo(-xMargin, -yMargin);
 			tmp.lineTo(2880, -yMargin);
 			tmp.lineTo(2880, 2880);
@@ -418,7 +432,8 @@ class gui.Print extends AbstractContainer {
 			tmp._x = -tmp._width;
 			tmp._xscale =(1/dpiFactor) * 100;
 			tmp._yscale =(1/dpiFactor) * 100;
-			
+			tmp.endFill();
+
             if (printJob.addPage(tmp, printArea, {printAsBitmap: false})) {
                 printJob.send();
             }
