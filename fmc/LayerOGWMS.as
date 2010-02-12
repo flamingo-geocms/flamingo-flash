@@ -473,6 +473,14 @@ function getAlpha(){
 	return this._alpha;
 }
 
+/**
+* Gets the url of a service
+* @return the url
+*/
+function getUrl(){
+	return this.url;
+}
+
 function _parseLayers(tlayers:Object) {
 	for (var item in tlayers) {
 		if (item == "layers") {
