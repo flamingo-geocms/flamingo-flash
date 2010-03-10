@@ -37,6 +37,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 import flash.external.ExternalInterface;
 import flash.filters.DropShadowFilter;
+import tools.Logger;
+
 class Flamingo {
 	private var version:String = "3.1.0";
 	//reference to main movie from which this class is loaded
@@ -94,6 +96,11 @@ class Flamingo {
 	private var isloadingcomponent:Boolean;
 	private var callbacktype:String;
 	private var nrconfigs:Number;
+	//log levels
+	//All log messages with this loglevel or higher wil be logged in the flash_log (possible values: Logger.DEBUG,Logger.INFO,Logger.WARN,Logger.ERROR,Logger.CRITICAL)
+	private var logLevel:Number=Logger.ERROR;
+	//All log messages with this loglevel or higher wil be logged on the screen (possible values: Logger.DEBUG,Logger.INFO,Logger.WARN,Logger.ERROR,Logger.CRITICAL)
+	private var screenLogLevel:Number=Logger.ERROR;
 	//Flamingo class constructor
 	//@param mc MovieClip 
 	public function Flamingo(mc:MovieClip) {
@@ -599,6 +606,8 @@ class Flamingo {
 	* @attr tooltipshadow (defaultvalue "true") True or false. 
 	* @attr callbacktype (defaultvalue "id") The names of the events are composed as follows: [componenttype]_[eventname] e.g. Map_onMouseMove  However if callbacktype = "id" , names of events are composed as follows: [componentid]_[eventname] e.g. myMap_onMouseMove
 	* @attr allowstrangers (defaultvalue "false") True or false.  False: only components with id's already loaded will load. True: all components load.   For the first configuration allowstrangers is always true. 
+	* @attr loglevel (default: ERROR). The log level that is used by all classes that use the logger. All log messages with this loglevel or higher wil be logged in the flash_log (possible values: DEBUG,INFO,WARN,ERROR,CRITICAL)
+	* @attr screenloglevel (default: ERROR)The log level that is used by all classes that use the logger. All log messages with this loglevel or higher wil be logged on the screen (possible values: DEBUG,INFO,WARN,ERROR,CRITICAL)
 	*/
 	private function parseConfigXML(xml:Object):Void {
 		//parses the ini-xml
@@ -707,6 +716,12 @@ class Flamingo {
 					} else {
 						this.useexternalinterface = false;
 					}
+					break;
+				case "loglevel":
+					this.logLevel=Logger.logLevelToNumber(val);
+					break;
+				case "screenloglevel":
+					this.screenLogLevel=Logger.logLevelToNumber(val);
 					break;
 				}
 			}
@@ -3112,5 +3127,19 @@ class Flamingo {
 		var filterArray:Array = new Array();
 		filterArray.push(filter);
 		mc.filters = filterArray;
+	}
+	
+	/*Getters and setters for logging.*/
+	public function getLogLevel():Number{
+		return this.logLevel;
+	}
+	public function setLogLevel(logLevel:Number):Void{
+		this.logLevel=logLevel;
+	}
+	public function getScreenLogLevel():Number{
+		return this.screenLogLevel;
+	}
+	public function setScreenLogLevel(screenLogLevel:Number):Void{
+		this.screenLogLevel=screenLogLevel;
 	}
 }

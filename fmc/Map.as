@@ -1348,13 +1348,13 @@ dynamic class Map extends MovieClip {
 		if (minscale==undefined){
 			return extent;
 		}
-		//make integers, floating points may cause rounding problems  
-		var curScale:Number = Math.round(((extent.maxx-extent.minx)/this.__width)*10000);
-		var calcScale:Number = Math.round(minscale*10000);
-		while (curScale > calcScale) {	
+		//calculate the scale with the zoomScaleFactor (pre defined scales)
+		var curScale:Number = (extent.maxx-extent.minx)/this.__width;
+		var calcScale:Number = minscale;
+		//do while the calcScale is smaller then or les smaller then a small number (fix for double inaccuracy)
+		while(curScale > calcScale+0.00000000001){
 			calcScale = calcScale * zoomScaleFactor;
 		}
-		calcScale = Number(calcScale/10000);
 		
 		var intExtent:Object = copyExtent(_initialextent);
 		correctExtent(intExtent);
