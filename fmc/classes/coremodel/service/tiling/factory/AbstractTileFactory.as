@@ -3,6 +3,7 @@ import coremodel.service.tiling.Tile;
 import tools.Logger;
 /*Abstract class TileFactory*/
 class coremodel.service.tiling.factory.AbstractTileFactory{
+	private var extraUrlParams:Object=null;	
 	private var log:Logger=null;
 	/*Static epsilon*/
 	private static var epsilon=0.00001;
@@ -69,6 +70,12 @@ class coremodel.service.tiling.factory.AbstractTileFactory{
 	public function getMap():Object{
 		return this.map;
 	}	
+	public function setExtraParams(paramsObject:Object):Void{
+		this.extraUrlParams=paramsObject;
+	}
+	public function getExtraParams():Object{
+		return this.extraUrlParams;
+	}
 	/*Create a 'empty' tile: A tile without url and screen coordinates. (setTileScreen location not called)
 	@param xIndex the x index of this tile
 	@param yIndex the y index of this tile

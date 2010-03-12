@@ -46,7 +46,9 @@
 **/
 /** @tag <TilingParam>
 * With this tag you can define extra parameters for the tilingFactory
-For example this params are used by the WMSc tiling factory to complete the url. All params are added to the url
+For example this params are used by the WMSc tiling factory to complete the url. All params are added to the url.
+Don't add Widht, Height and Bbox for WMSc tiling. Those are calculated.
+For TMS the TilingParams are added after the calculated tile url for example http://host/tiling/0/1/1?name=value
 * @hierarchy childnode of TilingLayer.
 * @attr name is the name of the tilingparam.
 * @example 

@@ -15,6 +15,9 @@ interface coremodel.service.tiling.factory.TileFactoryInterface{
 	
 	public function getZoomLevel(res:Number):Number;
 	
+	public function	setExtraParams(extraParams:Object):Void;
+	public function	getExtraParams():Object;
+	
 	public function createTile(xIndex:Number, yIndex:Number, zoomLevel:Number):Tile;
 	
 	public function setTileScreenLocation(tile:Tile,mapExtent:Object):Tile;

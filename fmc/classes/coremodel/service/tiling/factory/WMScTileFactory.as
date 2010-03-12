@@ -5,19 +5,12 @@ import coremodel.service.tiling.Tile;
 import geometrymodel.Envelope;
 
 class coremodel.service.tiling.factory.WMScTileFactory extends AbstractTileFactory implements TileFactoryInterface{
-	private var extraUrlParams:Object=null;	
+	
 	/*Constructor*/
 	function WMScTileFactory(r:Array,e:Envelope,url:String,map:Object){			
 		super(r,e,url,map);		
-	}
-	/*Getters and setters*/
-	function setExtraParams(paramsObject:Object){
-		this.extraUrlParams=paramsObject;
-	}
-	function getExtraParams():Object{
-		return this.extraUrlParams;
-	}
-	/*Create a TMS tile
+	}	
+	/*Create a WMSc tile
 	@param xIndex the x index of this tile
 	@param yIndex the y index of this tile
 	@param zoomLevel the zoomlevel index (index to resolution) of this tile.

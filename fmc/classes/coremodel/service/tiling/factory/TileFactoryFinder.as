@@ -23,33 +23,32 @@ class coremodel.service.tiling.factory.TileFactoryFinder{
 			log.critical("Param "+AbstractTileFactory.BBOX_KEY+" is mandatory for tiling");
 			return;
 		}
+		var factory:TileFactoryInterface;
 		//create tiling tms factory
 		if (options[AbstractTileFactory.TILINGTYPE_KEY].toLowerCase()=="tms"){			
 		//check if its necessary to get the params with the url.
-			if (options[AbstractTileFactory.RESOLUTIONS_KEY]!=undefined && options[AbstractTileFactory.BBOX_KEY]!=undefined){
-				return new TMSTileFactory(options[AbstractTileFactory.RESOLUTIONS_KEY]
+			factory= new TMSTileFactory(options[AbstractTileFactory.RESOLUTIONS_KEY]
 														,options[AbstractTileFactory.BBOX_KEY]
 														,options[AbstractTileFactory.SERVICEURL_KEY]
 														,options[AbstractTileFactory.MAP_KEY]);
-			}else{
-				log.critical("Can not create TMSTilingFactory because not all parameters are given");
-			}			
+						
 		}else if (options[AbstractTileFactory.TILINGTYPE_KEY].toLowerCase()=="wmsc"){
-			var factory:WMScTileFactory= new WMScTileFactory(options[AbstractTileFactory.RESOLUTIONS_KEY]
+			factory= new WMScTileFactory(options[AbstractTileFactory.RESOLUTIONS_KEY]
 														,options[AbstractTileFactory.BBOX_KEY]
 														,options[AbstractTileFactory.SERVICEURL_KEY]
 														,options[AbstractTileFactory.MAP_KEY]);
-			var extraParams:Object = new Object();
-			for (var optionsKey in options){
-				if (optionsKey!= AbstractTileFactory.RESOLUTIONS_KEY &&
-						optionsKey!= AbstractTileFactory.BBOX_KEY &&
-						optionsKey!= AbstractTileFactory.SERVICEURL_KEY &&
-						optionsKey!= AbstractTileFactory.MAP_KEY){
-					extraParams[optionsKey]=options[optionsKey];
-				}
-			}
-			factory.setExtraParams(extraParams);
-			return factory;
+			
 		}
+		var extraParams:Object = new Object();
+		for (var optionsKey in options){
+			if (optionsKey!= AbstractTileFactory.RESOLUTIONS_KEY &&
+					optionsKey!= AbstractTileFactory.BBOX_KEY &&
+					optionsKey!= AbstractTileFactory.SERVICEURL_KEY &&
+					optionsKey!= AbstractTileFactory.MAP_KEY){
+				extraParams[optionsKey]=options[optionsKey];
+			}
+		}
+		factory.setExtraParams(extraParams);
+		return factory;
 	}	
 }
