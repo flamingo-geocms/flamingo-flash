@@ -22,17 +22,14 @@ class gui.URLButton extends GradientButton {
 	   
 	}
 
-	function init(){
-		super.init();
-		url =_global.flamingo.getComponent(urlId);
-		url.setMap(_global.flamingo.getComponent(listento[0]));
-	}	
-
-  
+	
 
 
     function onPress():Void {
-    	_global.flamingo.tracer("gedrukttttt " + this.url + this);
+    	if(url==null){
+    		url =_global.flamingo.getComponent(urlId);
+			url.setMap(_global.flamingo.getComponent(listento[0]));
+    	}	
 		var my_xml:XML = new XML();
 		my_xml.contentType = "text/xml";
 		my_xml.send(url.getUrl(), url.getTarget());	    			
