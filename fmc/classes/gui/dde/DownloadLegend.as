@@ -303,18 +303,20 @@ class gui.dde.DownloadLegend extends MovieClip implements DDEConnectorListener{
 		
 	}
 	
-	public function onSetLayerProperty(layer:MovieClip, ids:String):Void{
-		var ids:Array = layer.getLayerIds();
-		for(var i:Number=0;i<ids.length;i++){
-			var vis:Boolean = layer.getLayerProperty(ids[i], "visible");
-			for(var j:Number=0;j<itemclips.length;j++){
-				if(itemclips[j].item["id"]==ids[i]){
-					itemclips[j].item["vis"] = vis;
+	public function onSetLayerProperty(layer:MovieClip, ids:String, property:String):Void{
+		if(property=="visible"){
+			var ids:Array = layer.getLayerIds();
+			for(var i:Number=0;i<ids.length;i++){
+				var vis:Boolean = layer.getLayerProperty(ids[i], "visible");
+				for(var j:Number=0;j<itemclips.length;j++){
+					if(itemclips[j].item["id"]==ids[i]){
+						itemclips[j].item["vis"] = vis;
+					}
 				}
+				//LV: switching on and off layers in the legend used to switch on and 
+				//and off layers in the DDEDonwloadlegend, this feature is now disabled
+				//refresh();
 			}
-			//LV: switching on and off layers in the legend used to switch on and 
-			//and off layers in the DDEDonwloadlegend, this feature is now disabled
-			//refresh();
 		}
 	}
 	
