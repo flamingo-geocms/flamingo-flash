@@ -42,7 +42,7 @@ var defaultXML:String = "<?xml version='1.0' encoding='UTF-8'?>" +
 						"<style id='.seperator' font-family='verdana' font-size='11px' color='#333333' display='block' font-weight='normal'/>" +
 						"<style id='.error' font-family='verdana' font-size='11px' color='#ff6600' display='block' font-weight='normal'/>" +
 						"</IdentifyResultsHTML>";
-//var info:Object;
+
 var thisObj = this;
 var skin = "";
 var stripdatabase:Boolean = true;
@@ -52,6 +52,8 @@ var wordwrap:Boolean = true;
 var textinfo:String = "";
 var htmlwindow:String = null;
 var htmlfield:String = null;
+var seperatedfields:Array = null;
+var seperator:String = ",";
 
 //---------------------------------
 var lMap:Object = new Object();
@@ -123,6 +125,12 @@ function convertInfo(infostring:String, record:Object):String {
 	//convert \\t to \t 
 	t = t.split("\\t").join("\t");
 	for (var field in record) {
+		var sep:Boolean = false;
+		for (var i:Number=0;i<seperatedfields.length;i++) {
+			if(seperatedfields[i]==field){
+				sep=true
+			}
+		}
 		var value:String = record[field];
 		//replace < with &lt; < causes problems in a htmlTextField
 		var valArray:Array = value.split("<");
@@ -131,13 +139,29 @@ function convertInfo(infostring:String, record:Object):String {
 			for(var i:Number=1;i<valArray.length;i++){
 				value+="&lt;" + valArray[i];
 			}
-		}	
+		}
 		var fieldname = field;
 		if (stripdatabase) {
 			var a = field.split(".");
 			var fieldname = "["+a[a.length-1]+"]";
 		}
-		t = t.split(fieldname).join(value);
+		if(sep){
+			valArray = value.split(seperator);
+			var strArray:Array = t.split(fieldname);
+			var from:Number = strArray[0].lastIndexOf("#sep#");
+			var to:Number = t.indexOf("#sep#", from + 5);
+			if(from==-1 || to==-1){
+				_global.flamingo.tracer("Configuration Error:Splitter(s)(#sep#) missing in string for seperatedfield " + fieldname);
+			}
+			var totalStr = + t.substr(0,from) + "\r";
+			for (var i:Number=0;i<valArray.length;i++){
+				totalStr += t.substring(from + 5,to).split(fieldname).join(valArray[i])+ "\r"; 	
+			}	
+			totalStr += t.substr(to + 5);
+			t=totalStr;
+		} else {
+			t = t.split(fieldname).join(value);
+		}	
 	}
 	return t;
 }
@@ -245,6 +269,12 @@ function show() {
 * This window must contain the TextArea which is reffered to in the htmlfield attribute.   
 * @attr htmlfield  (no defaultvalue) id of a TextArea component in which the html text will be shown. The TextArea can be anywhere in
 * the flamingo viewer. 
+* @attr seperatedfields (no defaultvalue) A (list of) field(s) for which the value is a seperated string. Use the attribute seperator 
+* to indicate the seperator character(s). For the seperated values part of the string will be repeated. This part is indicated by
+* "#sep#" at the start and the end. 
+* For example: 
+* \tplanteksten:#sep#\t<a href="http://www.ruimtelijkeplannen.nl/documents/[identificatie]/[verwijzingNaarTekst]" target="_blank"><u>[verwijzingNaarTekst]</u></a>#sep#       
+* @attr seperator (defaultvalue = ",") Indicates the seperator character(s) for the seperatedfields.
 */
 function init():Void {
 	if (flamingo == undefined) {
@@ -331,8 +361,15 @@ function setConfig(xml:Object) {
 			break;	
 		case "showonidentify":
 			showOnIdentify = val.toLowerCase() == "true";
-			break;				
-		}	
+			break;	
+		case "seperatedfields":	
+			seperatedfields=val.split(","); 
+			break;
+		case "seperator":	
+			seperator=val; 
+			break;
+		}				
+
 	}
 	//    
 	txtInfo.styleSheet = flamingo.getStyleSheet(this);
@@ -416,7 +453,7 @@ function hideIcon() {
 		flamingo.raiseEvent(map, "onHideIdentifyIcon", map);
 	}
 }
-function refresh() {	
+function refresh() {
 	txtInfo.htmlText = str;
 	txtInfo.scroll = txtInfo.maxscroll;
 }
