@@ -20,7 +20,7 @@
 
 /** @tag <fmc:Theme> 
 * This tag defines a theme instance. 
-* @class gui.Theme 
+* @class gui.Theme extends AbstractComponent 
 * @hierarchy child node of ThemeSelector 
 * @example
        <fmc:ThemeSelector id="themeselector"   left="right -230"   top="top" width="230"  borderwidth="0" listlength="8"
@@ -65,6 +65,10 @@ class gui.Theme extends AbstractComponent  {
     
     function getLabel():String {
         return _global.flamingo.getString(this,"label");
+    }  
+    
+    function getName():String {
+        return name;
     }  
     
     function go():Void {
