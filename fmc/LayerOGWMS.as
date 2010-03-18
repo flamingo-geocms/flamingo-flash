@@ -7,6 +7,15 @@ Flamingo MapComponents is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
 as published by the Free Software Foundation; either version 2
 of the License, or (at your option) any later version.
+/*-----------------------------------------------------------------------------
+Copyright (C) 2006  Menko Kroeske
+
+This file is part of Flamingo MapComponents.
+
+Flamingo MapComponents is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
 
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -56,6 +65,7 @@ var canmaptip:Boolean = false;
 var maptipFeatureCount:Number=1;
 //-------------------------------------
 var updating:Boolean = false;
+var updateWhenEmpty:Boolean = true;
 var layers:Object = new Object();
 var timeoutid:Number;
 var nrcache:Number = 0;
@@ -71,6 +81,7 @@ var sldParam:String = "";
 var maxHttpGetUrlLength:Number=0;
 var noCache:Boolean = false;
 var visible_layers=null;
+var initialized:Boolean = false;
 //-------------------------------------
 //listenerobject for map
 var lMap:Object = new Object();
@@ -138,6 +149,7 @@ init();
 * @attr nocache default:false if set to true the getMap requests are done with a extra parameter to force a no cache
 * @attr visible default:true if set to false this component will be set to invisible but also all the layers will be set to visible=false;
 * @attr visible_layers Comma seperated list of layers that must be visible. If omitted all layers are visible.
+* @attr updateWhenEmpty deafult:false If set to true the layer will not get updated when the layerstring is empty(no sublayers), although the sld parameter may be set. The layer will be set invisible instead. 
 */
 /** @tag <layer>  
 * This defines a sublayer of an OG-WMS service.
@@ -226,7 +238,14 @@ function setConfig(xml:Object,dontGetCap:Boolean) {
 			if (val.toUpperCase() == "#ALL#") {
 				val = "#ALL#";
 			}
-			this.slayers = val;			
+			//remove spaces in layers val		
+			var lyrs:Array = new Array();
+			lyrs = val.split(",");
+			this.slayers = "";
+			for (var n:Number=0;n<lyrs.length;n++){
+				this.slayers += trim(lyrs[n]) + ",";
+			}
+			this.slayers = this.slayers.substr(0,slayers.length - 1);	
 			break;
 		case "styles" :
 			styles = val;			
@@ -236,13 +255,25 @@ function setConfig(xml:Object,dontGetCap:Boolean) {
 			if (val.toUpperCase() == "#ALL#") {
 				val = "#ALL#";
 			}
-			maptip_layers = val;			
+			var lyrs:Array = new Array();
+			lyrs = val.split(",");
+			this.maptip_layers  = "";
+			for (var n:Number=0;n<lyrs.length;n++){
+				this.maptip_layers  += trim(lyrs[n]) + ",";
+			}
+			this.maptip_layers  = this.maptip_layers.substr(0,maptip_layers.length - 1);			
 			break;
 		case "query_layers" :
 			if (val.toUpperCase() == "#ALL#") {
 				val = "#ALL#";
 			}
-			query_layers = val;			
+			var lyrs:Array = new Array();
+			lyrs = val.split(",");
+			this.query_layers  = "";
+			for (var n:Number=0;n<lyrs.length;n++){
+				this.query_layers  += trim(lyrs[n]) + ",";
+			}
+			this.query_layers  = this.query_layers.substr(0,query_layers.length - 1);				
 			break;
 		case "alpha" :
 			this._alpha = Number(val);
@@ -311,6 +342,13 @@ function setConfig(xml:Object,dontGetCap:Boolean) {
 				this.noCache = false;
 			}
 			break;
+		case "updatewhenempty" :
+			if(val.toLowerCase() == "true"){
+				this.updateWhenEmpty = true;
+			} else {	
+				this.updateWhenEmpty = false;
+			}
+			break;
 		default :
 			if (attr.toLowerCase().indexOf("xmlns:", 0) == -1) {
 				this.attributes[attr] = val;
@@ -321,14 +359,23 @@ function setConfig(xml:Object,dontGetCap:Boolean) {
 	//after loading all parameters set the layer properties.
 	if (nullIfEmpty(slayers)!=null){
 		if (visible_layers==null){
-			setLayerProperty(slayers, "visible", true);
+			//_global.flamingo.tracer("LayerOGWMS setLayerProperty " + this.visible + " slayers " + slayers);
+			setLayerProperty(slayers, "visible", this.visible);
 	    }else{
 			setLayerProperty(slayers,"visible",false);
 			if (nullIfEmpty(visible_layers)!=null){
 				setLayerProperty(visible_layers,"visible",true);
 			}
-		}
+		}	
 	}
+	if (nullIfEmpty(slayers)!=null){
+		if(maxscale!=null){
+			setLayerProperty(slayers, "maxscale", maxscale);
+		}
+		if(minscale!=null){
+			setLayerProperty(slayers, "minscale", minscale);
+		}	
+	}	
 	if (nullIfEmpty(styles)!=null){
 		if (styles.length>0) {
 			var a_styles = _global.flamingo.asArray(styles);
@@ -412,6 +459,8 @@ function setConfig(xml:Object,dontGetCap:Boolean) {
 		}
 		thisObj._parseLayers(servicelayers);
 		_global.flamingo.raiseEvent(thisObj, "onGetCapabilities", thisObj);
+		//set initialized in analogy with LayerArcIMS and LayerArcServer.
+		initialized = true;
 		//The update is done in the Map in lLayer.onGetCapabilities 
 		//if (thisObj.slayers == "#ALL#") {
 		//thisObj.update();
@@ -439,6 +488,12 @@ function setConfig(xml:Object,dontGetCap:Boolean) {
 		cogwms.getCapabilities(this.getcapabilitiesurl, args, lConn);
 	}
 }
+
+function trim(str:String):String	{
+	for(var i = 0; str.charCodeAt(i) < 33; i++);
+	for(var j = str.length-1; str.charCodeAt(j) < 33; j--);
+	return str.substring(i, j+1);
+}
 /**
 * Sets a url parameter to be used with sld attribute
 * @param sldParamNew: String value to be appended to the sld attribute, must be url encoded
@@ -462,7 +517,7 @@ function getSLDparam():String {
 */
 function setAlpha(alpha:Number) {
 	this._alpha = alpha;
-	_global.flamingo.raiseEvent(this, "onSetValue", "setAlpha", alpha);	
+	_global.flamingo.raiseEvent(this, "onSetValue", "setAlpha", alpha, this);	
 }
 
 /**
@@ -526,12 +581,14 @@ function update(forceupdate:Boolean) {
 	_update(1,forceupdate);
 }
 function update() {
+	//_global.flamingo.tracer("LayerOGWMS update " + _global.flamingo.getId(this) );
 	_update(1);
 }
 function _update(nrtry:Number) {
 	_update(nrtry,false);
 }
 function _update(nrtry:Number, forceupdate:Boolean){
+	//_global.flamingo.tracer("LayerOGWMS _update " + _global.flamingo.getId(this) + " visible " + visible);
 	if (not visible || not map.visible) {
 		_visible = false;
 		return;
@@ -571,7 +628,8 @@ function _update(nrtry:Number, forceupdate:Boolean){
 		}
 	}
 	var layerstring = getLayersString();
-	if (layerstring.length<=0) {
+	//_global.flamingo.tracer("_Update " + _global.flamingo.getId(this) + " layerstring==" + layerstring);
+	if (layerstring.length<=0 && ((this.attributes["sld"] == undefined)||!updateWhenEmpty)) {
 		_global.flamingo.raiseEvent(thisObj, "onUpdate", thisObj, nrtry);
 		_global.flamingo.raiseEvent(thisObj, "onUpdateComplete", thisObj, 0, 0, 0);
 		_visible = false;
@@ -776,7 +834,7 @@ function _update(nrtry:Number, forceupdate:Boolean){
 		_visible = false;
 		return;
 	}
-	if (this.noCache==true){
+	if (this.noCache==true){			
 		var newurl=_global.flamingo.getNocacheName(url,'second');
 		cogwms.getMap(newurl, args);
 	}else{
@@ -1233,17 +1291,18 @@ function setLayerProperty(ids:String, field:String, value:Object) {
 		}
 	} else {
 		var a_ids = _global.flamingo.asArray(ids);
-		for (var i = 0; i<a_ids.length; i++) {
+		for (var i = 0; i<a_ids.length; i++) {	
 			var id = a_ids[i];
-			if (layers[id] == undefined and not initialized) {
+			if (layers[id] == undefined) {
 				layers[id] = new Object();
 				layers[id][field] = value;
 			} else {
 				layers[id][field] = value;
 			}
+			//_global.flamingo.tracer("voor " + layers[id] + " field " + field + " issetto " + value); 
 		}
 	}
-	_global.flamingo.raiseEvent(thisObj, "onSetLayerProperty", thisObj, ids);
+	_global.flamingo.raiseEvent(thisObj, "onSetLayerProperty", thisObj, ids, field);
 }
 /** 
 * Gets a property of a layer in the layers collection.
@@ -1348,10 +1407,7 @@ function setVisible(vis:Boolean, id:String) {
 *  3 = layer is visible and maplayer is not visible
 */
 function getVisible(id:String):Number {
-	//returns 0 : not visible or 1:  visible or 2: visible but not in scalerange
 	var ms:Number = map.getScaleHint(map.getMapExtent());
-	//_global.flamingo.tracer("ms = " + ms);
-	//var vis:Boolean = _global.flamingo.getVisible(this)
 	if (id.length == 0 or id == undefined) {
 		//examine whole layer
 		if (visible) {
@@ -1381,6 +1437,7 @@ function getVisible(id:String):Number {
 		}
 	} else {
 		var sublayer = layers[id];
+		//_global.flamingo.tracer("LayerOGWMS sublayer.visible "+ sublayer.visible + " sublayer.maxscale " + sublayer.maxscale + " ms " + ms);
 		if (sublayer == undefined) {
 			return 0;
 		} else {
@@ -1553,7 +1610,7 @@ function nullIfEmpty(s:String):Object{
 * @param layer:MovieClip A reference to the layer.
 * @param ids:String  The affected layers.
 */
-//public function onSetLayerProperty(layer:MovieClip, ids:String):Void {
+//public function onSetLayerProperty(layer:MovieClip, ids:String, prop:String):Void {
 /**
 * Dispatched when a layer has data for a maptip.
 * @param layer:MovieClip A reference to the layer.
