@@ -481,6 +481,7 @@ function setConfig(xml:Object) {
 */
 function setAlpha(alpha:Number) {
 	this._alpha = alpha;
+	_global.flamingo.raiseEvent(this, "onSetValue", "setAlpha", alpha, this);	
 }
 /**
 * Gets the transparancy of a layer.
@@ -1114,7 +1115,7 @@ function setLayerProperty(ids:String, field:String, value:Object) {
 			}
 		}
 	}
-	flamingo.raiseEvent(thisObj, "onSetLayerProperty", thisObj, ids);
+	flamingo.raiseEvent(thisObj, "onSetLayerProperty", thisObj, ids, field);
 }
 /** 
 * Gets a property of a layer in the layers collection.
@@ -1868,7 +1869,7 @@ function getServer():String
 * @param layer:MovieClip A reference to the layer.
 * @param ids:String  The affected layers.
 */
-//public function onSetLayerProperty(layer:MovieClip, ids:String):Void {
+//public function onSetLayerProperty(layer:MovieClip, ids:String, prop:String):Void {
 //
 /**
 * Dispatched when a layer has data for a maptip.
