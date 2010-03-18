@@ -3,6 +3,7 @@
 * Author: Michiel J. van Heek.
 * IDgis bv
  -----------------------------------------------------------------------------*/
+import geometrymodel.Envelope;
 
 import coremodel.service.*;
 
@@ -11,7 +12,8 @@ class coremodel.service.ServiceFeature {
     private var serviceLayer:ServiceLayer = null;
     private var id:String = null;
     private var values:Array = null;
-    
+	private var envelope:Envelope = null;  
+	  
     function getServiceLayer():ServiceLayer {
         return serviceLayer;
     }
@@ -47,5 +49,8 @@ class coremodel.service.ServiceFeature {
         _global.flamingo.tracer("Exception in coremodel.service.ServiceFeature.getValue(" + name + ")");
         return null;
     }
-    
+	
+	function getEnvelope():Envelope{
+		    return envelope;
+	}
 }
