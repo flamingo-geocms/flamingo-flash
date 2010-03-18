@@ -10,15 +10,15 @@
 * All other layers will be switched off except the ones listed in the persitentlayerids attribute. 
 * A theme can also be set in the url (http://www.bla.nl?thema=all).  
 * The ThemeSelector should listento a mapComponent.
-* @file flamingo/tpc/classes/flamingo/gui/ThemePicker.as  (sourcefile)
-* @file flamingo/fmc/ThemePicker.fla (sourcefile)
-* @file flamingo/fmc/ThemePicker.swf (compiled component, needed for publication on internet)
+* @file flamingo/fmc/classes/flamingo/gui/ThemeSelector.as  (sourcefile)
+* @file flamingo/fmc/ThemeSelector.fla (sourcefile)
+* @file flamingo/fmc/ThemeSelector.swf (compiled component, needed for publication on internet)
 * @configstring label Label text for the combobox.
 */
 
 /** @tag <fmc:ThemeSelector> 
 * This tag defines a themeSelector instance. ...
-* @class gui.ThemeSelector 
+* @class gui.ThemeSelector extends AbstractContainer
 * @hierarchy child node of Flamingo 
 * @example
        <fmc:ThemeSelector id="themeselector"   left="right -230"   top="top" width="230"  borderwidth="0" listlength="8"
@@ -65,6 +65,7 @@ class gui.ThemeSelector extends AbstractContainer {
 	private var listlength:Number = 5;
 	//currentTheme can be set by flamingo setArgument
     private var currentTheme:Theme = null;
+    private var firstTimeSet:Boolean = false;
     
  	function init():Void {
         this.map =_global.flamingo.getComponent(listento[0]);
@@ -97,7 +98,9 @@ class gui.ThemeSelector extends AbstractContainer {
  	}
  	
  	public function onConfigComplete():Void {
+ 		//_global.flamingo.tracer("configComplete currentTheme= " + currentTheme);
 		if(currentTheme!=null){
+			//this to prevent double setting of currentSelectedTheme
 	    	for(var i:Number=0;i<themeComboBox.dataProvider.length;i++){
 	    		if(themeComboBox.dataProvider[i].data == currentTheme){
 	    			themeComboBox.setSelectedIndex(i);
@@ -186,11 +189,15 @@ class gui.ThemeSelector extends AbstractContainer {
 	}
 	
 	private function onChangeThemeComboBox(eventObject:Object) : Void {
-		if(eventObject.target.selectedItem.data!=null){	
+		if(eventObject.target.selectedItem.data!=null && eventObject.target.selectedItem.data!=currentTheme){	
 			currentTheme = eventObject.target.selectedItem.data;
 			setCurrentTheme();
 		}	
 	}
+	
+	function getCurrentTheme(){
+		return currentTheme;
+	}	
 	
 	private function setCurrentTheme() : Void{
 		//if(map==undefined){
@@ -230,6 +237,7 @@ class gui.ThemeSelector extends AbstractContainer {
 					}	
 				}	
 			}
+			//_global.flamingo.tracer("ThemeSelector current Theme=" + currentTheme.name + " layer="+ mapLayers[i] + " naar update()"); 
 			mapLayer.update();	
 		}
 	}
