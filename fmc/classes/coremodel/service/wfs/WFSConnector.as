@@ -47,7 +47,8 @@ class coremodel.service.wfs.WFSConnector extends ServiceConnector {
         request(url, requestString, processDescribeFeatureType, null, actionEventListener, 0);
     }
     
-    function performGetFeature(serviceLayer:ServiceLayer, extent:Geometry, whereClauses:Array, notWhereClause:WhereClause, hitsOnly:Boolean, actionEventListener:ActionEventListener):Void {
+    function performGetFeature(serviceLayer:ServiceLayer, extent:Geometry, whereClauses:Array, notWhereClause:WhereClause, hitsOnly:Boolean, 
+    							actionEventListener:ActionEventListener, requestProperties:Array):Void {
 		var numFilterElements:Number = ((extent == null)? 0: 1) + ((whereClauses == null)? 0: whereClauses.length) + ((notWhereClause == null)? 0: 1);
         var featureTypeName:String = serviceLayer.getName();
         var requestString:String = "";
@@ -64,7 +65,11 @@ class coremodel.service.wfs.WFSConnector extends ServiceConnector {
         requestString += "  xmlns:gml=\"http://www.opengis.net/gml\"\n";
         requestString += "  xmlns:" + serviceLayer.getNamespace() + ">\n";
         requestString += "  <wfs:Query typeName=\"" + featureTypeName + "\">\n";
-        
+        if(requestProperties!=null){
+        	for(var i:Number = 0; i<requestProperties.length; i++){
+        		requestString += "		<wfs:PropertyName>" + requestProperties[i] + "</wfs:PropertyName>\n";
+        	}
+        }
         if (numFilterElements > 0) {
             requestString += "    <ogc:Filter>\n";
             if (numFilterElements > 1) {
@@ -79,12 +84,12 @@ class coremodel.service.wfs.WFSConnector extends ServiceConnector {
 				requestString += "          </gml:Box>\n";
 				requestString += "        </ogc:BBOX>\n";            
 			} else if (extent instanceof Geometry) {
-				requestString += "        <ogc:Intersect>\n";
+				requestString += "        <ogc:Intersects>\n";
 				requestString += "        	<ogc:PropertyName>\n";
-				requestString += "        		Geometry\n";
+				requestString += 			serviceLayer.getDefaultGeometryProperty().getName() + "\n";
 				requestString += "        	</ogc:PropertyName>\n";
 				requestString += "        	" + extent.toGMLString(this.srsName);
-				requestString += "        </ogc:Intersect>\n";
+				requestString += "        </ogc:Intersects>\n";
 			}
 				
 			if ((whereClauses != null) && (whereClauses.length > 0)) {
@@ -156,6 +161,7 @@ class coremodel.service.wfs.WFSConnector extends ServiceConnector {
     }
     
     function processGetFeature(responseXML:XML, serviceLayer:ServiceLayer, actionEventListener:ActionEventListener):Void {
+		_global.flamingo.raiseEvent("WFSConnector processGetFeature ");
 		var numFeatures:Number = Number(responseXML.firstChild.attributes["numberOfFeatures"]);
         
         var featureNodes:Array = XMLTools.getChildNodes("gml:featureMember", responseXML.firstChild);
@@ -168,7 +174,7 @@ class coremodel.service.wfs.WFSConnector extends ServiceConnector {
         actionEvent["numFeatures"] = numFeatures;
         actionEvent["features"] = features;
         actionEventListener.onActionEvent(actionEvent);
-        _global.flamingo.raiseEvent(this,"onActionEvent",this + actionEvent.toString());
+        
     }
     
     function processTransaction(responseXML:XML, serviceLayer:ServiceLayer, actionEventListener:ActionEventListener):Void {
