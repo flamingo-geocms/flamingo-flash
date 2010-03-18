@@ -83,7 +83,7 @@ class coremodel.service.ServiceConnector {
                         } else {
                             _global.flamingo.tracer("There is a crossdomain file, " + crossDomainURL + ", though. Its status is: " + this.status + ".");
                         }
-                    }
+                    };
                     crossDomainXML.load(crossDomainURL);
                 }
             } else {
