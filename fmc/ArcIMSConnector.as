@@ -74,7 +74,8 @@ class ArcIMSConnector {
 	private var identifyColorLayer:String;
 	private var identifyColorLayerKey:String;
 	private var record:Boolean = false;
-
+	static var  serviceInfoResponses:Array = null;
+	static var  serviceInfoResponseListeners:Array = null;
 	function setIdentifyColorLayer(s:String) {
 		this.identifyColorLayer = s;
 	}
@@ -130,10 +131,21 @@ class ArcIMSConnector {
 	function addListener(listener:Object) {
 		events.addListener(listener);
 	}
+	
+	static function addInfoReponseListener(listener:Object) {
+		if(serviceInfoResponseListeners==null){
+			 serviceInfoResponseListeners = new Array();
+		}
+		serviceInfoResponseListeners.push(listener); 
+	}
+	
 	function removeListener(listener:Object) {
 		events.removeListener(listener);
 	}
 	function ArcIMSConnector(server:String) {
+		if(serviceInfoResponses==null){
+			serviceInfoResponses = new Array();
+		}	
 		this.server = server;
 		events = new Object();
 		AsBroadcaster.initialize(events);
@@ -169,6 +181,7 @@ class ArcIMSConnector {
 		return (_server+_servlet+"?ServiceName="+_service+"&ClientVersion=4.0&Form=false&Encode=false"+extra);
 	}
 	private function _sendrequest(sxml:String, requesttype:String, objecttag:Object):Number {
+		//_global.flamingo.tracer("busy" + busy);
 		if (this.busy) {
 			this.error = "busy processing request...";
 			this.events.broadcastMessage("onError",this.error,objecttag,this.requestid);
@@ -216,7 +229,7 @@ class ArcIMSConnector {
 							thisObj._processRasterInfo(this,objecttag,thisObj.requestid);
 							break;
 						case "getServiceInfo" :
-							thisObj._processServiceInfo(this,objecttag,thisObj.requestid);
+							thisObj._storeServiceInfo(this);
 							break;
 						case "getFeatures" :
 							thisObj._processFeatures(this,objecttag,thisObj.requestid);
@@ -260,15 +273,47 @@ class ArcIMSConnector {
 		if (service != undefined) {
 			this.service = service;
 		}
-		var str:String = this.xmlheader+"\n";
-		str = str+"<ARCXML version=\"1.1\">\n";
-		str = str+"<REQUEST>\n";
-		str = str+"<GET_SERVICE_INFO  dpi = \"96\" envelope=\"false\" renderer=\""+String(this.renderer)+"\" extensions=\""+String(this.extensions)+"\" fields=\""+String(this.fields)+"\"/>\n";
-		str = str+"</REQUEST>\n";
-		str = str+"</ARCXML>";
-		return (this._sendrequest(str, "getServiceInfo", objecttag));
+		var infoResponseId:String = server + "_" + service;
+		//_global.flamingo.tracer("ArcImsConnector nog geen request verstuurd " + infoResponseId + serviceInfoResponses[infoResponseId]);
+		if(serviceInfoResponses[infoResponseId] != null){
+			//_global.flamingo.tracer("ArcImsConnector request al verstuurd" + infoResponseId);
+			if(serviceInfoResponses[infoResponseId].xml != null){
+				//_global.flamingo.tracer("ArcImsConnector request al binnen " + infoResponseId);
+				_processServiceInfo(serviceInfoResponses[infoResponseId].xml,objecttag);
+			} 
+		} else {
+			serviceInfoResponses[infoResponseId] = new Object();
+			var str:String = this.xmlheader+"\n";
+			str = str+"<ARCXML version=\"1.1\">\n";
+			str = str+"<REQUEST>\n";
+			str = str+"<GET_SERVICE_INFO  dpi = \"96\" envelope=\"false\" renderer=\""+String(this.renderer)+"\" extensions=\""+String(this.extensions)+"\" fields=\""+String(this.fields)+"\"/>\n";
+			str = str+"</REQUEST>\n";
+			str = str+"</ARCXML>";
+			objecttag.infoResponseId = infoResponseId;
+			return (this._sendrequest(str, "getServiceInfo", objecttag));
+		}
 	}
-	private function _processServiceInfo(xml:XML, objecttag:Object, requestid:Number):Void {
+	
+	static function getServiceInfoFromStore(server:String,service:String, listener:Object):Void{
+		var infoResponseId:String = server + "_" + service;
+		if(serviceInfoResponses[infoResponseId].xml != null){
+			_processServiceInfo(serviceInfoResponses[infoResponseId].xml,listener);
+		} 
+		
+	}
+	 
+	private function _storeServiceInfo(xml:XML):Void {
+		var infoResponseId:String = server + "_" + service;
+		if(serviceInfoResponses[infoResponseId]!=null && serviceInfoResponses[infoResponseId].xml == null){
+			serviceInfoResponses[infoResponseId].xml = xml;
+		}
+		for(var i:Number=0;i<serviceInfoResponseListeners.length;i++){
+			serviceInfoResponseListeners[i].onStoreServiceInfo();	 
+		}
+	}
+		
+		  
+	private static function _processServiceInfo(xml:XML, listener:Object):Void {
 		var layer:Object;
 		var field:Object;
 		var layers = new Object();
@@ -290,8 +335,8 @@ class ArcIMSConnector {
 					}
 					layer.name = xnSI[i].attributes.name;
 					layer.id = xnSI[i].attributes.id;
-					layer.minscale = this._asNumber(xnSI[i].attributes.minscale);
-					layer.maxscale = this._asNumber(xnSI[i].attributes.maxscale);
+					layer.minscale = ArcIMSConnector._asNumber(xnSI[i].attributes.minscale);
+					layer.maxscale = ArcIMSConnector._asNumber(xnSI[i].attributes.maxscale);
 					layer.fields = new Object();
 					layer.query = "";
 					//veld informatie
@@ -303,7 +348,7 @@ class ArcIMSConnector {
 								if (xnFIELD[k].nodeName == "FIELD") {
 									field = new Object();
 									field.name = xnFIELD[k].attributes.name;
-									field.shortname = this._stripGeodatabase(field.name);
+									field.shortname = ArcIMSConnector._stripGeodatabase(field.name);
 									field.type = xnFIELD[k].attributes.type;
 									field.size = xnFIELD[k].attributes.size;
 									field.precision = xnFIELD[k].attributes.precision;
@@ -319,10 +364,10 @@ class ArcIMSConnector {
 					for (var j:Number = 0; j<xnPROPERTIES.length; j++) {
 						if (xnPROPERTIES[j].nodeName == "ENVELOPE") {
 							extent.name = xnPROPERTIES[j].attributes.name;
-							extent.minx = this._asNumber(xnPROPERTIES[j].attributes.minx);
-							extent.miny = this._asNumber(xnPROPERTIES[j].attributes.miny);
-							extent.maxx = this._asNumber(xnPROPERTIES[j].attributes.maxx);
-							extent.maxy = this._asNumber(xnPROPERTIES[j].attributes.maxy);
+							extent.minx = ArcIMSConnector._asNumber(xnPROPERTIES[j].attributes.minx);
+							extent.miny = ArcIMSConnector._asNumber(xnPROPERTIES[j].attributes.miny);
+							extent.maxx = ArcIMSConnector._asNumber(xnPROPERTIES[j].attributes.maxx);
+							extent.maxy = ArcIMSConnector._asNumber(xnPROPERTIES[j].attributes.maxy);
 						}
 					}
 					break;
@@ -330,7 +375,9 @@ class ArcIMSConnector {
 					break;
 			}
 		}
-		this.events.broadcastMessage("onGetServiceInfo",extent,layers,objecttag,requestid);
+
+		listener.onGetServiceInfo(extent,layers);
+		//this.events.broadcastMessage("onGetServiceInfo",extent,layers,objecttag,requestid);
 	}
 	function getImage(service:String, extent:Object, size:Object, layers:Object, objecttag:Object):Number {
 		if (service != undefined) {
@@ -536,10 +583,10 @@ class ArcIMSConnector {
 		for (var i:Number = 0; i<xnIMAGE.length; i++) {
 			switch (xnIMAGE[i].nodeName) {
 				case "ENVELOPE" :
-					extent.minx = this._asNumber(xnIMAGE[i].attributes.minx);
-					extent.miny = this._asNumber(xnIMAGE[i].attributes.miny);
-					extent.maxx = this._asNumber(xnIMAGE[i].attributes.maxx);
-					extent.maxy = this._asNumber(xnIMAGE[i].attributes.maxy);
+					extent.minx = ArcIMSConnector._asNumber(xnIMAGE[i].attributes.minx);
+					extent.miny = ArcIMSConnector._asNumber(xnIMAGE[i].attributes.miny);
+					extent.maxx = ArcIMSConnector._asNumber(xnIMAGE[i].attributes.maxx);
+					extent.maxy = ArcIMSConnector._asNumber(xnIMAGE[i].attributes.maxy);
 					break;
 				case "OUTPUT" :
 					imageurl = xnIMAGE[i].attributes.url;
@@ -659,10 +706,10 @@ class ArcIMSConnector {
 								break;
 							case "ENVELOPE" :
 								var ext:Object = new Object();
-								ext.minx = this._asNumber(FEATURE[j].attributes.minx);
-								ext.miny = this._asNumber(FEATURE[j].attributes.miny);
-								ext.maxx = this._asNumber(FEATURE[j].attributes.maxx);
-								ext.maxy = this._asNumber(FEATURE[j].attributes.maxy);
+								ext.minx = ArcIMSConnector._asNumber(FEATURE[j].attributes.minx);
+								ext.miny = ArcIMSConnector._asNumber(FEATURE[j].attributes.miny);
+								ext.maxx = ArcIMSConnector._asNumber(FEATURE[j].attributes.maxx);
+								ext.maxy = ArcIMSConnector._asNumber(FEATURE[j].attributes.maxy);
 								record["SHAPE.ENVELOPE"] = ext;
 								break;
 							case "MULTIPOINT" :
@@ -673,7 +720,7 @@ class ArcIMSConnector {
 										var COORDS = xmultipoint[k].childNodes;
 										for (var l = 0; l<COORDS.length; l++) {
 											var xy:Array = COORDS[l].nodeValue.split(" ");
-											multipoint.push({x:this._asNumber(xy[0]), y:this._asNumber(xy[1])});
+											multipoint.push({x:ArcIMSConnector._asNumber(xy[0]), y:ArcIMSConnector._asNumber(xy[1])});
 										}
 									}
 								}
@@ -743,7 +790,7 @@ class ArcIMSConnector {
 		}
 		this.events.broadcastMessage("onGetFeatures",this.layerid,data,count,hasmore,objecttag,requestid);
 	}
-	private function _asNumber(s:String):Number {
+	private static function _asNumber(s:String):Number {
 		if (s == undefined) {
 			return (undefined);
 		}
@@ -753,7 +800,7 @@ class ArcIMSConnector {
 		}
 		return (Number(s));
 	}
-	private function _stripGeodatabase(s:String):String {
+	private static function _stripGeodatabase(s:String):String {
 		var a:Array = s.split(".");
 		return (a[a.length-1]);
 	}
