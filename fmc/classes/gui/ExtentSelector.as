@@ -73,7 +73,7 @@ class gui.ExtentSelector extends AbstractContainer {
  	}
  	
  	function setAttribute(name:String, value:String):Void {		     
-        if(name="default"){
+        if(name=="default"){
         	defaultExtentId = value;
         }    
     }
