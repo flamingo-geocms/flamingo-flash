@@ -104,6 +104,7 @@ class Flamingo {
 	//Flamingo class constructor
 	//@param mc MovieClip 
 	public function Flamingo(mc:MovieClip) {
+		System.security.allowDomain("*");
 		//save base url of flamingo.swf
 		var url = mc._url.split("?")[0];
 		if (url.indexOf("\\", 0)<0) {
