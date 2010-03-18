@@ -100,12 +100,14 @@ dynamic class Map extends MovieClip {
 	private var saveextent:Boolean;
 	private var clearlayers:Boolean; 
 	//
-	private var configObj:Object;
+	private var configObjId:String;
 	public var hasextent:Boolean;
 	//
 	private var nextDepth:Number=0
 	private var markers:Array=null;
 	private var markerIDnr:Number = 0;
+	
+	public var nrOfServiceLayers:Number = 0;
 	
 	
 	function Map() {
@@ -167,10 +169,10 @@ dynamic class Map extends MovieClip {
 				flamingo.raiseEvent(thisObj, "onAddLayer", thisObj, mc);
 			}
 		};
-		lFlamingo.onConfigComplete = function() {
+		lFlamingo.onConfigComplete = function() { 
 			//deal with arguments
 			var val = flamingo.getArgument(thisObj, "extent");
-			if (val != undefined) {
+			if (val != undefined && configObjId==null) {
 				if (val.toLowerCase() == "cookie") {
 					var e = flamingo.getCookie(flamingo.getId(thisObj)+".mapextent");
 				} else {
@@ -342,29 +344,26 @@ dynamic class Map extends MovieClip {
 		clearlayers = false;
 		//load default attributes, strings, styles and cursors 
 		flamingo.parseXML(this, xml);
-	
-		//parse custom attributes
-		//LV:
-		if(xml.attributes["configobject"]!=undefined){
-			configObject = flamingo.getComponent(xml.attributes["configobject"]);
-			var allXML:Array = _global.flamingo.getXMLs(configObject);
-			for(var i:Number=0;i<allXML.length;i++){
-				this.parseCustomAtrr(allXML[i]);
-			}
-		}
-		else {
-			this.parseCustomAtrr(xml);
-		}
+		this.parseCustomAttr(xml);
+		
 	}
 		
-	private function parseCustomAtrr(xml:Object){
+	private function parseCustomAttr(xml:Object){
 		for (var attr in xml.attributes) {
 			var attr:String = attr.toLowerCase();
 			var val:String = xml.attributes[attr];
 			switch (attr) {
+			case "configobject" :
+				configObjId = val;
+				//_global.flamingo.tracer(_global.flamingo.getId(this) + " Legend set configObj " + _global.flamingo.getId(configObj) + flamingo.getXMLs(configObj).length);
+				//parsing of xml is done when printTemplate becomes visible
+				break;
 			case "clear" :
 				if (val.toLowerCase() == "true") {
 					clearlayers = true;
+				}
+				if(configObjId!=null){
+					clearlayers = false;
 				}
 				break;
 			case "extenthistory" :
@@ -548,9 +547,9 @@ dynamic class Map extends MovieClip {
 		if(xml.localName == "LayerIdentifyIcon"){
 			depth=10000;
 		}
-		if (flamingo.exists(layerid)) {
+		if (_global.flamingo.exists(layerid)) {
 			// let flamingo deal with double ids
-			flamingo.addComponent(xml, layerid);
+			_global.flamingo.addComponent(xml, layerid);
 			//if (this.mLayers[layerid] != undefined) {
 			//flamingo.loadComponent(xml, this.mLayers[layerid], layerid);
 			//}
@@ -619,38 +618,49 @@ dynamic class Map extends MovieClip {
 				}
 			};
 			lLayer.onGetServiceInfo = function(layer:MovieClip) {
+				thisObj.nrOfServiceLayers--;
 				var themeSelector:Object = thisObj.getThemeSelector();
-				if(themeSelector!=null  || !thisObj.visible){
-					if(themeSelector!=null){
-						themeSelector.setCurrentTheme();
-					}
+				if(configObjId!=null){
 					return;
 				}
-				layer.update();
+				if(themeSelector==null){
+					layer.update();
+				//if all service layers have serviceinfo/capabilities set currentTheme
+				} else if (thisObj.nrOfServiceLayers==0){
+					themeSelector.setCurrentTheme();
+				} 	
 			};
 			lLayer.onGetCapabilities =  function(layer:MovieClip) {
+				thisObj.nrOfServiceLayers--;
 				var themeSelector:Object = thisObj.getThemeSelector();
-				if(themeSelector!=null || !thisObj.visible){
-					if(themeSelector!=null){
-						themeSelector.setCurrentTheme();
-					}
+				if(configObjId!=null){
 					return;
 				}
-				layer.update();
-				
+				if(themeSelector==null){
+					layer.update();
+				} else if (thisObj.nrOfServiceLayers==0){
+					themeSelector.setCurrentTheme();
+				} 				
 			};
+			//_global.flamingo.tracer("Map " + _global.flamingo.getId(this)+ " addLayer "  + layerid + " url " + _global.flamingo.getUrl(layerid) + _global.flamingo.getUrl(layerid).indexOf("LayerArcIMS"));
+			//count the number of serviceLayers
+			if(_global.flamingo.getUrl(layerid).indexOf("LayerArcIMS")>0 || 
+				_global.flamingo.getUrl(layerid).indexOf("LayerArcServer")>0 ||
+					_global.flamingo.getUrl(layerid).indexOf("LayerOGWMS")>0){
+				nrOfServiceLayers++;
+			} 
 			flamingo.addListener(lLayer, layerid, this);
 			return id;
 		}
 	}
 	
-	private function getThemeSelector():Object {
+	function getThemeSelector():Object {
 		var comps:Array = _global.flamingo.getComponents();
 		var themeSelector:Object = null;
 		for(var i:Number=0;i<comps.length;i++){
 			if(_global.flamingo.getType(comps[i])=="ThemeSelector"){
 				var mapId:String =  _global.flamingo.getComponent(comps[i]).getMapId();
-				if(mapId == _global.flamingo.getId(this) || mapId == _global.flamingo.getId(configObject)){
+				if(mapId == _global.flamingo.getId(this) || mapId == configObjId){
 					themeSelector=_global.flamingo.getComponent(comps[i]);
 				}
 			}	
@@ -771,8 +781,7 @@ dynamic class Map extends MovieClip {
 	* This will raise the onShowLayer event.
 	* @param id:String Layerid.
 	*/
-	public function showLayer(id:String):Void {
-		
+	public function showLayer(id:String):Void {	
 		this.mLayers[id].show();
 		flamingo.raiseEvent(this, "onShowLayer", this, this.mLayers[id]);
 	}
@@ -790,7 +799,7 @@ dynamic class Map extends MovieClip {
 	* Shows the map.
 	* This will raise the onShow event.
 	*/
-	public function show():Void {
+	public function show():Void {	
 		this._visible = true;
 		//LV: make also the visible attribute true
 		this.visible = true;
@@ -824,7 +833,7 @@ dynamic class Map extends MovieClip {
 	* @param identifyextent:Object Extent defining identify area.
 	*/
 	public function hotlink(identifyextent:Object):Void {
-		if (this.holdonidentify and this.identifying) {
+		if (this.holdonidentify && this.identifying) {
 			return;
 		}
 		this._identifyextent = this.copyExtent(identifyextent);
