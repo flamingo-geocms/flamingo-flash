@@ -49,7 +49,12 @@ class gui.TabControler extends AbstractContainer {
 	private var numTabs : Number;
 	var buttons:MovieClip = null;
 	
-	function init():Void {
+	function onLoad(){
+		super.onLoad();
+		this.setVisible(false);
+	}
+		
+	function init():Void {	
 	    var tabIDs:Array = getComponents();
         var tab:Tab = null;
         tabs = new Array();
@@ -72,6 +77,7 @@ class gui.TabControler extends AbstractContainer {
         }
         drawTabButtons();
 		_global.flamingo.addListener(this,"flamingo",this);	
+		this.setVisible(true);
 	}
 
 	private function drawTabButtons() : Void {

@@ -52,6 +52,10 @@ class gui.Tab extends AbstractContainer {
 	private var gradientVisible:GradientFill=null;
 	private var gradientInvisible:GradientFill=null;
 
+	function onLoad(){
+		super.onLoad();
+		this.setVisible(false);
+	}	
    	function init(){
 		label = _global.flamingo.getString(this,"buttonlabel");
 		gradientVisible = new GradientFill(0xffffff,0xffffff,100,100,"ur","ver",10,true,bordercolor);
