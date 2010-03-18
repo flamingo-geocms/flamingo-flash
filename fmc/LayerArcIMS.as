@@ -91,6 +91,7 @@ var showmaptip:Boolean;
 var canmaptip:Boolean = false;
 var timeoutid:Number;
 var initialized:Boolean = false;
+var serviceInfoRequestSent = false;
 var extent:Object;
 var nrlayersqueried:Number;
 var layerliststring:String;
@@ -101,8 +102,7 @@ var colorIdsKey:String;
 var record:Boolean = false;
 var visualisationSelected:Object = new Object();
 //-------------------------------------------
-var serviceInfoRequestSent:Boolean = false
-var serviceInfoRecieved:Boolean = false
+
 
 
 var addRecorded:Object = new Object();
@@ -303,6 +303,8 @@ function init():Void {
 * @attr xml:Object Xml or string representation of a xml.
 */
 function setConfig(xml:Object) {
+	
+	//_global.flamingo.tracer(" LayerArcIMS setConfig server /n/n/n" + xml.toString());
 	if (xml == undefined) {
 		return;
 	}
@@ -388,6 +390,7 @@ function setConfig(xml:Object) {
 			dropShadow();
 			break;
 		case "server" :
+		//_global.flamingo.tracer(" LayerArcIMS setConfig server " + val);
 			server = val;
 			break;
 		case "servlet" :
@@ -536,6 +539,7 @@ function setConfig(xml:Object) {
 	}
 	//                                                                                                                                                                           
 	//
+	//_global.flamingo.tracer(" LayerArcIMS setConfig" + _global.flamingo.getId(this) +" server = " + server + " mapservice = " + mapservice);
 	if (visible == undefined) {
 		visible = true;
 	}
@@ -565,22 +569,25 @@ function setConfig(xml:Object) {
 		flamingo.raiseEvent(thisObj, "onResponse", thisObj, "init", connector);
 	};
 	lConn.onRequest = function(connector:ArcIMSConnector,requesttype:String) {
-		if(requesttype=="getServiceInfo"){
-			serviceInfoRequestSent = true;
-		}	
 		flamingo.raiseEvent(thisObj, "onRequest", thisObj, "init", connector);
 	};
 	lConn.onError = function(error:String, objecttag:Object, requestid:String) {
 		flamingo.raiseEvent(thisObj, "onError", thisObj, "init", error);
 	};
+	lConn.onStoreServiceInfo = function(){
+		if(!initialized){
+			ArcIMSConnector.getServiceInfoFromStore(server, mapservice,this);
+		}
+	} 
 	lConn.onGetServiceInfo = function(extent, servicelayers, objecttag, requestid) {
-		
+		//_global.flamingo.tracer(" LayerArcIMS onGetServiceInfo" + _global.flamingo.getId(thisObj));
+		initialized = true;
 		for (var id in servicelayers) {
 			if (layers[id] == undefined) {
 				layers[id] = new Object();
 			}
 			for (var attr in servicelayers[id]) {
-				if (layers[id][attr] == undefined) {
+				if (layers[id][attr] == undefined) {				
 					layers[id][attr] = servicelayers[id][attr];
 				}
 			}
@@ -616,19 +623,24 @@ function setConfig(xml:Object) {
 		if (thisObj.maptipids.toUpperCase() == "#ALL#") {
 			thisObj.setLayerProperty("#ALL#", "maptipable", true);
 		}
+		//update is done in lLayer.onGetServiceResponse of the Map
 		//thisObj.update();
-		serviceInfoRecieved = true;
+		
 		flamingo.raiseEvent(thisObj, "onGetServiceInfo", thisObj);
-		initialized = true;
+		
 	};
 	var conn:ArcIMSConnector = new ArcIMSConnector(server);
-	conn.addListener(lConn);
+	//_global.flamingo.tracer(" LayerArcIMS addInfoReponseListener" + _global.flamingo.getId(this));
+	ArcIMSConnector.addInfoReponseListener(lConn,server,mapservice);
 	if (servlet.length>0) {
 		conn.servlet = servlet;
 	} 
+	//_global.flamingo.tracer(_global.flamingo.getId(this) + " naar getServiceInfo " + mapservice);
 	if(!serviceInfoRequestSent){
-		conn.getServiceInfo(mapservice);
-	}	
+		serviceInfoRequestSent = true;
+		//_global.flamingo.tracer(_global.flamingo.getId(this) + " naar getServiceInfo " + mapservice);
+		conn.getServiceInfo(mapservice,lConn);
+	}
 }
 /**
 * Remove custom data from a layer.
@@ -945,6 +957,7 @@ function addMydata(layerid:String, jointo:String, table:Object, joinfield:String
 */
 function setAlpha(alpha:Number) {
 	this._alpha = alpha;
+	_global.flamingo.raiseEvent(this, "onSetValue", "setAlpha", alpha, this);	
 }
 /**
 * Gets the transparancy of a layer.
@@ -957,18 +970,22 @@ function getAlpha(){
 * Hides a layer.
 */
 function hide():Void {
-	visible = false;
-	update();
-	flamingo.raiseEvent(thisObj, "onHide", thisObj);
+	if(visible!=false){
+		visible = false;
+		update();
+		flamingo.raiseEvent(thisObj, "onHide", thisObj);
+	}	
 }
 /**
 * Shows a layer.
 */
 function show():Void {
-	visible = true;
-	updateCaches();
-	update();
-	flamingo.raiseEvent(thisObj, "onShow", thisObj);
+	if(visible!=true){
+		visible = true;
+		updateCaches();
+		update();
+		flamingo.raiseEvent(thisObj, "onShow", thisObj);
+	}
 }
 
 function autoRefresh():Void {
@@ -985,16 +1002,36 @@ function refresh():Void {
 * Updates a layer.
 */
 function update():Void {
-	if(serviceInfoRecieved){
+	if(initialized){
 		_update(1);
 	}	
 }
+
+/*function noLayersVisible():Boolean {
+	var lyrs:Object = this.getLayers();
+	if(lyrs != null){
+		for (var lyr in lyrs){
+			if(getLayerProperty(lyr,"visible")){
+				return false; 
+			}
+		}
+		return true;
+	} else {
+		return false;		
+	}
+}*/
+
 function _update(nrtry:Number):Void {
 	
-	if (not visible || not map.visible) {
+	if (not visible || not map.visible)  {	
 		_visible = false;
 		return;
 	}
+	//check if any sublayer is visible 
+	//if(noLayersVisible()){
+		//_visible = false;
+		//return;
+	//}		
 	if (updating) {
 		return;
 	}
@@ -1060,7 +1097,7 @@ function _update(nrtry:Number):Void {
 			flamingo.raiseEvent(thisObj, "onError", thisObj, "update", error);
 		}
 	};
-	lConn.onGetImage = function(ext:Object, imageurl:String, legurl:String, objecttag:Object, requestid:String) {
+	lConn.onGetImage = function(ext:Object, imageurl:String, legurl:String, objecttag:Object, requestid:String) {	
 		if (legurl.length>0) {
 			legendurl = legurl;
 			flamingo.raiseEvent(thisObj, "onGetLegend", thisObj, legendurl);
@@ -1098,8 +1135,9 @@ function _update(nrtry:Number):Void {
 						delete cache.totalbytes;
 						this.updating = false;
 						this._clearCache();
-						//_global.flamingo.tracer("vislayers " + vislayers);
-						//_global.flamingo.tracer("_getVisLayers() " + _getVisLayers());
+						//_global.flamingo.tracer(_global.flamingo.getId(thisObj) + " vislayers " + vislayers);
+						//_global.flamingo.tracer(_global.flamingo.getId(thisObj) + " _getVisLayers() " + _getVisLayers());
+						//_global.flamingo.tracer(_global.flamingo.getId(thisObj) + " map.isEqualExtent(extent) " + map.isEqualExtent(extent));
 						if (not map.isEqualExtent(extent) or _getVisLayers() != vislayers) {
 							this.update();
 						}
@@ -1666,7 +1704,7 @@ function setLayerProperty(ids:String, field:String, value:Object) {
 			}
 		}
 	}
-	flamingo.raiseEvent(thisObj, "onSetLayerProperty", thisObj, ids);
+	flamingo.raiseEvent(thisObj, "onSetLayerProperty", thisObj, ids, field);
 }
 /** 
 * Gets a property of a layer in the layers collection.
@@ -2281,7 +2319,7 @@ function log(stringtolog:Object){
 * @param layer:MovieClip A reference to the layer.
 * @param ids:String  The affected layers.
 */
-//public function onSetLayerProperty(layer:MovieClip, ids:String):Void {
+//public function onSetLayerProperty(layer:MovieClip, ids:String, prop:String):Void {
 //
 /**
 * Dispatched when a layer has data for a maptip.
