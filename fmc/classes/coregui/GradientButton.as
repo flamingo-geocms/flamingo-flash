@@ -57,7 +57,6 @@ class coregui.GradientButton extends AbstractComponent{
     function onReleaseOutside():Void {
     	if(!disabled){
 	    	gradient1.draw(this);
-			buttonLabel.setStyle("fontWeight", "normal");
     	}
 
     }
@@ -65,7 +64,6 @@ class coregui.GradientButton extends AbstractComponent{
     function onRollOver():Void {
     	if(!disabled){
 			gradient2.draw(this);
-			buttonLabel.setStyle("fontWeight", "bold");
 			_global.flamingo.showTooltip(tooltipText, this);
     	}
     }
@@ -73,7 +71,6 @@ class coregui.GradientButton extends AbstractComponent{
     function onRollOut():Void {
     	if(!disabled){
 			gradient1.draw(this);
-			buttonLabel.setStyle("fontWeight", "normal");
     	}
     }
        
