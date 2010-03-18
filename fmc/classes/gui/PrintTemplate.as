@@ -67,6 +67,11 @@ class gui.PrintTemplate extends ScalableContainer {
     private var maps:Array = null;
 	private var layerIDs:Array;
 	private var map:MovieClip;
+    private var mapListener:Object;
+    private var layerListeners:Array;
+    private var lFlamingo:Object;
+    private var mapConfigLoaded:Boolean = false;
+    private var legendConfigLoaded:Boolean = false;
     
     function PrintTemplate() {
     }
@@ -90,37 +95,120 @@ class gui.PrintTemplate extends ScalableContainer {
     }
     
     function go():Void {
-       	map = getParent("Print").getMap();
-       	layerIDs = map.getLayers();
+      map = getParent("Print").getMap();
+      
+       /*	layerIDs = map.getLayers();
 		_global.flamingo.addListener(new MapPrintTemplateAdapter(this), map, this);
        	for (var i:String in layerIDs) {
           	_global.flamingo.addListener(new LayerPrintTemplateAdapter(this), layerIDs[i], this);
-       	}
-	   	maps = new Array()
+       	}*/
+	   	maps = new Array();
 		for (var i:Number = 0; i < mapStrings.length; i++) {
 			maps.push(_global.flamingo.getComponent(mapStrings[i]));
         }
     }
     
-    function setVisible(visible:Boolean):Void {
 
+    
+    function addLayerListeners():Void{
+    	layerIDs = map.getLayers();
+       	layerListeners= new Array();
+       	for (var i:String in layerIDs) {
+       		var layerId:String  = layerIDs[i];
+       		var layerListener:Object = new LayerPrintTemplateAdapter(this) 
+          	_global.flamingo.addListener(layerListener, layerId, this);
+          	layerListeners[_global.flamingo.getId(this) + layerId] = layerListener;
+       	}
+    }
+    
+    function removeLayerListeners():Void{
+    	for(var i:String in layerListeners){
+    		_global.flamingo.removeListener(layerListeners[i],i,this)
+    	}
+  
+    }
+    
+    function setVisible(visible:Boolean):Void {
         super.setVisible(visible);
-        
-        var component:MovieClip = null;
+        _global.flamingo.tracer("PrintTemplate " + _global.flamingo.getId(this) + " setVisible " + visible); 
+        lFlamingo = new Object;
+		var component:MovieClip = null;
+		//parse legend xml
         for (var i:String in listento) {
             component = _global.flamingo.getComponent(listento[i]);
+            if(visible){
+            	if((_global.flamingo.getUrl(component)).indexOf("Legend") > 0){
+	            	if(component.configObjId!=null && !legendConfigLoaded){
+	            		var legendConfigObj:Object = _global.flamingo.getComponent(component.configObjId);
+		            	var xmls:Array= _global.flamingo.getXMLs(legendConfigObj);
+						for (var i = 0; i < xmls.length; i++){
+							component.parseCustomAttr(xmls[i]);
+						}
+						legendConfigLoaded = true;
+	            	}
+	            }
+            }
             if ((component.legenditems != undefined) || (component.monitorobjects != undefined))  { // Instance of Legend or MonitorLayer.
                 component._visible = visible;
             }
-        }
-		for(var i:Number=0;i<maps.length;i++){
-			if(visible){
-				maps[i].show();
+        }   
+		if(visible && maps!=null){	
+			var thisObj:Object = this; 
+			lFlamingo.onConfigComplete = function() { 
+				_global.flamingo.removeListener(thisObj.lFlamingo, "flamingo", thisObj);
+				thisObj.showMap();
+    		};
+    		 //parse map xml
+    		_global.flamingo.addListener(lFlamingo, "flamingo", this);
+    		//_global.flamingo.tracer(_global.flamingo.getId(thisObj) + " mapConfigObjId==" + maps[0].configObjId + " mapLoaded " + mapConfigLoaded);
+			
+			if(maps[0].configObjId!=null && !mapConfigLoaded){
+				var mapConfigObj:Object = _global.flamingo.getComponent(maps[0].configObjId);
+				var allXML:Array = _global.flamingo.getXMLs(mapConfigObj);
+				for(var i:Number=0;i<allXML.length;i++){
+					maps[0].parseCustomAttr(allXML[i]);
+				}
+				mapListener = new MapPrintTemplateAdapter(this);
+				_global.flamingo.addListener(mapListener, map, this);
+				//thisObj.moveToExtent(thisObj.configObj.getCurrentExtent(), 0, 0);
+				mapConfigLoaded = true;
 			} else {
-				maps[i].hide();
-			}
+				showMap();
+			}		
+
+		} else {		
+			removeLayerListeners();
+			maps[0].hide();
 		}
 		
+
+    }
+    
+    private function showMap(){
+    	synchronizeLayers();
+		addLayerListeners();
+		maps[0].moveToExtent(map.getCurrentExtent(), 0, 0);
+		maps[0].show();
+    }
+    
+    private function synchronizeLayers():Void{
+    	layerIDs = map.getLayers();
+ 		for (var layerId:String in layerIDs) {
+ 			var masterLayerId:String = layerIDs[layerId];
+ 			var masterLayer:Object  = _global.flamingo.getComponent(masterLayerId);
+ 			var masterMapId:String=_global.flamingo.getId(map);
+ 			var mapID:String = _global.flamingo.getId(maps[0]);
+			var printLayerId:String = mapID + masterLayerId.substr(masterMapId.length);
+			var printLayer:Object =  _global.flamingo.getComponent(printLayerId);
+			var lyrs:Array = masterLayer.layers;
+ 			for (var id in lyrs) {
+				visible = masterLayer.getLayerProperty(id, "visible");
+				printLayer.setLayerProperty(id, "visible", visible);
+ 			}
+ 			printLayer.visible = masterLayer.visible;
+			printLayer.updateCaches();
+			_global.flamingo.raiseEvent(printLayer, "onShow", printLayer);
+ 		}
     }
     
     function getOrientation():String {
@@ -135,7 +223,7 @@ class gui.PrintTemplate extends ScalableContainer {
         return maps.concat();
     }
 
-		private function setWidthAndHeigth():Void {
+	private function setWidthAndHeigth():Void {
         if ((format == "A4") && (orientation == "landscape")) {
             width = "" + Math.floor(813 * getDPIFactor());
             height = "" + Math.floor(561 * getDPIFactor());
