@@ -73,15 +73,34 @@ var controls:Boolean = true;
 var namespaces:Object;
 var entersDone:Number=0;
 var currentExtentSelector:Object;
+var resultViewerId:String;
+var resultViewer:Object;
 
 var tFeaturesDelta:Number = 0;
 
 //---------------------------------------
 import mx.controls.ComboBox;
 import mx.controls.TextInput;
+import event.ActionEventListener;
+import event.ActionEvent;
+import coremodel.service.*;
+import geometrymodel.Envelope;
+import geometrymodel.Geometry;
+
+
 var lParent:Object = new Object();
 lParent.onResize = function(mc:MovieClip) {
 	resize();
+};
+lParent.onSetVisible = function(mc:MovieClip,visible:Boolean) {
+	for (var i in thisObj.locationdata ) {
+		thisObj.locationdata[i].extentSelector.setVisible(false,"locationFinder");
+	}
+	thisObj.tFeaturesDelta = 0;
+	if(thisObj.currentExtentSelector!=null && visible){
+		thisObj.currentExtentSelector.setVisible(true,"locationFinder");
+		thisObj.tFeaturesDelta = 10 + thisObj.currentExtentSelector.getExtents().length * 20;
+	}	
 };
 flamingo.addListener(lParent, flamingo.getParent(this), this);
 //---------------------------------------
@@ -188,6 +207,9 @@ function setConfig(xml:Object) {
 				controls = false;
 			}
 			break;
+		case "resultviewer" :
+			resultViewerId = val;
+			break;	
 		}
 	}
 	initControls();
@@ -237,12 +259,26 @@ function loadXML(file:String) {
 <string id="label" nl="Zoek een plaats" en="Search a place"/>
 <string id="hint" nl="Type een plaatsnaam of een paar letters daarvan in het tekstvak hierboven..." en="Type a placename or a few letters in the textbox..."/>
 </LOCATIONS>
+<LOCATIONS id="ro_onlineplan0"
+    server="http://afnemers.ruimtelijkeplannen.nl/afnemers/services" 
+    type="WFS" serverVersion="1.1.0" srs="EPSG:28992"  
+    layerid="app:Bestemmingsplangebied"  searchfield="app:naamOverheid"  
+    extentselector ="extentSelector"
+    outputfields="app:naamOverheid,app:identificatie,app:naam"
+    highlightlayer="highlightlayer" highlightwmsurl="http://afnemers.ruimtelijkeplannen.nl/afnemers/services?service=WMS" highlightsldservleturl="http://support.idgis.eu/sldtest"  
+    highlightfeaturetypename="app:Bestemmingsplangebied" highlightpropertyname="app:identificatie">
+    <string id="output" nl="[app:naamOverheid]: [app:naam]" />
+    <string id="label" nl="Zoek op RO-online naam overheid" />
+    <string id="hint" nl="Type een (deel van de) naam overheid  in het 
+        tekstvak hierboven..." />
+</LOCATIONS>
 </flamingo>
 * @attr id Unique identifier for each location source.
 * @attr visible (defaultvalue = true) True or False.
 * @attr type (defaultvalue = arcims) value shoule be arcims, arcserver or wfs.
 * @attr label Label that appears in the combobox of the locationfinder. Use string tag (id="label") to support multi-languages.
 * @attr hint A hint which is shown in loactionfinder. Use string tag (id="hint") to support multi-languages. 
+* @attr inputprefix A prefix which is shown in the input field. Can be used if the input always starts with the same string
 * @attr servlet Servletalias of ArcIMS server.
 * @attr server Servername of ArcIMS server or ArcGIS Server.
 * @attr service Name of mapservice.
@@ -250,13 +286,19 @@ function loadXML(file:String) {
 * @attr searchfield Query field (just one).
 * @attr fieldtype "n" for numeric fields. If omitted the locationfinder makes a query for string fields.
 * @attr extentlabel Field for labeling the extent.
-* @attr outputfields Comma seperated list of fields, the query returns
+* @attr outputfields Comma seperated list of fields, the query returns, must be filled for queries on OGWFS layers
 * @attr output String that will be shown in locationfinder.  [fieldname] will be replaced by actually values. Use string tag (id="output") to support multi-languages. 
 * @attr srs The srs you want the gml in.
 * @attr serverversion The WFS server version
 * @attr enlargeextent If the min coordinates and max coordinates of the GML bbox (service type = WFS) are te same the BBOX is enlarged with this attribute
 * @attr namespaces the namespaces that are needed to do a wfs request
 * @attr extentSelector id of an extentSelector component
+* 
+* @attr highlightlayer id of an highlightlayer component 
+* @attr highlightwmsurl
+* @attr highlightsldservleturl
+* @attr highlightfeaturetypename
+* @attr highlightpropertyname
 */
 //
 /** @tag <location>  
@@ -355,9 +397,23 @@ function addLocation(xml:Object) {
 						break;
 					case "extentselector":
 						location.extentSelector=_global.flamingo.getComponent(val);
-
 						flamingo.addListener(this, location.extentSelector, this);
 						break;
+					case "highlightlayer":
+           				location.hllayerid = String(val);	
+						break;
+    				case "highlightwmsurl":
+    					location.wmsUrl = String(val);
+    					break;
+    				case "highlightsldservleturl":
+    					location.sldServletUrl = String(val);
+    					break;
+    				case "highlightfeaturetypename":
+    					location.featureTypeName = String(val);
+    					break;
+    				case "highlightpropertyname":
+    					location.propertyName = String(val);
+    					break;
 				    default: 
 						flamingo.tracer("unknown attribute in confige file for LocationFinder: "+attr);
 					}
@@ -483,107 +539,76 @@ function _findLocation(locationdata:Object, search:String, nr:Number, updatefeat
 }
 
 function _findLocationWFS(locationdata:Object, search:String, nr:Number, updatefeatures:Boolean, zoom:Boolean) {	
-	var lConn = new Object();
-	lConn.onResponse = function(connector:OGWFSConnector) {
-		mHolder.tFeatures.htmlText = "";
-		flamingo.raiseEvent(thisObj, "onServerResponse", thisObj, responseobject);
-	};
-	lConn.onRequest = function(connector:OGWFSConnector) {
-		flamingo.raiseEvent(thisObj, "onServerRequest", thisObj, requestobject);
-	};
-	lConn.onError = function(error:String, objecttag:Object, requestid:String) {
-		var str:String;
-		if (error.indexOf("no results")>0){
-			str = "<span class='nohit'>"+flamingo.getString(thisObj, "nohit")+"</span>";
-		}else{
-			flamingo.raiseEvent(thisObj, "onError", thisObj, error);
-			if (updatefeatures) {
-				str = "<span class='error'>"+error+"</span>";
-			}
-		}
-		mHolder.tFeatures.htmlText=str;
-	};
-	lConn.onGetFeatureInfo = function(features:Object, obj:Object, requestid:String) {				
-		var featureLayers:Array=locationdata.layerid.split(",");
-		foundlocations = new Array();
-		for (var f=0; f < featureLayers.length; f++){
-			var layerIdWithoutPrefix:String;
-			if (featureLayers[f].indexOf(":")>0){
-				layerIdWithoutPrefix=featureLayers[f].split(":")[1];
-			}else{
-				layerIdWithoutPrefix=featureLayers[f];
-			}			
-			var data:Object = features[layerIdWithoutPrefix];			
-			for (var i = 0; i<data.length; i++) {			
-				var r = new Object();			
-				delete data[i]["#SHAPE#"];
-				for (var field in data[i]) {					
-					if (field == "BOUNDEDBY") {
-						var ext:Object = new Object();					
-						var coordsArray:Array=data[i][field].split(",");
-						if(coordsArray.length==4){
-							ext.minx=coordsArray[0];
-							ext.miny=coordsArray[1];
-							ext.maxx=coordsArray[2];
-							ext.maxy=coordsArray[3];
-						}else if (coordsArray.length==3 && coordsArray[1].indexOf(' ')>0){
-							ext.minx=coordsArray[0];
-							ext.miny=coordsArray[1].split(' ')[0];
-							ext.maxx=coordsArray[1].split(' ')[1];
-							ext.maxy=coordsArray[2];
-						}else if (coordsArray.length==2){
-							ext.minx=coordsArray[0].split(' ')[0];
-							ext.miny=coordsArray[0].split(' ')[1];
-							ext.maxx=coordsArray[1].split(' ')[0];
-							ext.maxy=coordsArray[1].split(' ')[1];
-						}
-						//if its a extent of a point, enlarge it:
-						if (ext.minx==ext.maxx && ext.miny==ext.maxy&&locationdata.enlargeExtent!=undefined){													
-							ext.minx=Number(ext.minx)-locationdata.enlargeExtent;
-							ext.miny=Number(ext.miny)-locationdata.enlargeExtent;
-							ext.maxx=Number(ext.maxx)+locationdata.enlargeExtent;
-							ext.maxy=Number(ext.maxy)+locationdata.enlargeExtent;					
-						}
-						r.extent = ext;
-					} else {
-						var a = field.split(".");
-						r[a[a.length-1]] = data[i][field];
-					}
-				}			
-				//outputstring
-				var label = getString(locationdata, "output");				
-				if (label.length>0) {
-					for (var field in r) {
-						if (label.indexOf(field, 0)>=0) {
-							if (label.indexOf("["+field+"]")>=0){
-								label = label.split("["+field+"]").join(r[field]);
-							}else if (label.indexOf("|"+field)>0 || label.indexOf(field+"|")>0 ){
-								var fieldIndex:Number= label.indexOf("|"+field);
-								if (fieldIndex < 0){
-									fieldIndex= label.indexOf(field+"|");
-								}
-								var lastIndex:Number=label.indexOf("]",fieldIndex);
-								var firstIndex:Number;
-								var tempIndex:Number=label.indexOf("[");
-								while(firstIndex==undefined){
-									var index= label.indexOf("[",tempIndex+1);
-									if (index > fieldIndex || index < 0){
-										firstIndex=tempIndex;
-									}else{
-										tempIndex=index;
-									}
-									
-								}								
-								label= label.substring(0,firstIndex)+r[field]+label.substring(lastIndex+1,label.length);								
-							}
-						}
-					}					
-					r.label = label;
+	//var lConn = new Object();
+	var lConn = new ActionEventListener();
+	lConn.onActionEvent= function(actionEvent:ActionEvent){
+		var sourceClassName:String = actionEvent.getSourceClassName();
+		var actionType:Number = actionEvent.getActionType();
+		if (sourceClassName + "_" + actionType == "ServiceConnector_" + ActionEvent.LOAD) {
+            var exceptionMessage:String = actionEvent["exceptionMessage"];
+            var serviceLayer:ServiceLayer = ServiceLayer(actionEvent["serviceLayer"]);
+			var serviceFeatures:Array = actionEvent["features"];
+            var transactionResponse:TransactionResponse = TransactionResponse(actionEvent["transactionResponse"]);
+            if (exceptionMessage != null) {
+                _global.flamingo.showError("Fout bij het laden", exceptionMessage, 0);
+            } else if (serviceLayer != null) {
+				var whereClauses:Array = new Array();
+				whereClauses.push(whereClause);
+				var env:Envelope = null;
+				var reqprops:Array = locationdata.outputfields.split(" ");
+				if(extent instanceof Geometry){
+					conn.performGetFeature(serviceLayer, Geometry(extent), whereClauses, null, false, this, reqprops);
 				} else {
-					r.label = r[0];
+					var env:Envelope = new Envelope(extent.minx, extent.miny, extent.maxx, extent.maxy) ;
+                	conn.performGetFeature(serviceLayer, env, whereClauses, null, false, this, reqprops);
 				}
-				// add extent label
-				var extentlabel = getString(locationdata, "extentlabel");
+                	
+			} else if (serviceFeatures != null) {
+				foundlocations = new Array();
+            	var label = getString(locationdata, "output");	
+            	for(var i:Number = 0;i < serviceFeatures.length;i++ ){
+					var loc:Object = new Object();
+					var env:Envelope = serviceFeatures[i].getEnvelope()
+					var ext:Object = new Object();
+					ext.minx = env.getMinX();
+					ext.miny = env.getMinY();
+					ext.maxx = env.getMaxX();
+					ext.maxy = env.getMaxY();
+					//if its a extent of a point, enlarge it:
+					if (ext.minx==ext.maxx && ext.miny==ext.maxy&&locationdata.enlargeExtent!=undefined){													
+						ext.minx=Number(ext.minx)-locationdata.enlargeExtent;
+						ext.miny=Number(ext.miny)-locationdata.enlargeExtent;
+						ext.maxx=Number(ext.maxx)+locationdata.enlargeExtent;
+						ext.maxy=Number(ext.maxy)+locationdata.enlargeExtent;					
+					}
+
+					loc.locationdata = locationdata;			
+					loc.extent = ext;
+					loc.label = "";
+					if (label.length>0) {
+						var lbl:String = label;
+						var props:Array = serviceFeatures[i].getServiceLayer().getServiceProperties();
+	            		for(var l:Number = 0;l < props.length;l++ ){
+							//LV ?? "|"in output string??
+							//var fieldIndex:Number= label.indexOf("|"+field);
+							//if (fieldIndex < 0){
+							//fieldIndex= label.indexOf(field+"|");
+							//}
+							if(locationdata.propertyName!=null){
+								if(props[l].getName()==locationdata.propertyName){
+									loc.propertyvalue =  serviceFeatures[i].getValue(props[l].getName());
+								}
+							}
+	            			var n:Number =lbl.indexOf("["+props[l].getName()+"]", 0);
+	            			if (n >= 0) {
+								lbl = lbl.substring(0,n) + serviceFeatures[i].getValue(props[l].getName()) +
+										lbl.substr(n + (props[l].getName()).length + 2);
+	            			}
+	            		}
+					}
+				
+				// add extent label ????
+				/*var extentlabel = getString(locationdata, "extentlabel");
 				if (extentlabel.length>0) {
 					for (var field in r) {
 						if (extentlabel.indexOf(field, 0)>=0) {
@@ -591,35 +616,32 @@ function _findLocationWFS(locationdata:Object, search:String, nr:Number, updatef
 						}
 					}
 					r.extent.name = extentlabel;
-				}			
-				//done   
-				foundlocations.push(r);
-			}
+				}	*/
+				loc.label = lbl;
+				foundlocations.push(loc);
+				
+				}
+            	flamingo.raiseEvent(thisObj, "onFindLocation", thisObj, foundlocations, updatefeatures);
+				if (updatefeatures) {
+					_updateFeatures(hasmore);
+				}		
+				if (zoom) {
+					_zoom(0);
+				}
+            } 
 		}
-		delete data;
-		flamingo.raiseEvent(thisObj, "onFindLocation", thisObj, foundlocations, updatefeatures);
-		if (updatefeatures) {
-			_updateFeatures(hasmore);
-		}		
-		if (zoom) {
-			_zoom(0);
-		}
+
 	};
+	
 	var server = locationdata.server;
 	var layerid = locationdata.layerid;
 	var searchfield = locationdata.searchfield;
-	var conn:OGWFSConnector = new OGWFSConnector(server);
 	
-	conn.addListener(lConn);		
-	conn.setMaxFeatures(nr.toString());
-	conn.setWfsLayers(layerid);
-	conn.setSrs(locationdata.srs);
-	
+	var url:String = locationdata.type.toLowerCase() + "::" + server;
+	var  conn:ServiceConnector = ServiceConnector.getInstance(url);
+	conn.setSrsName(locationdata.srs);
 	if(locationdata.serverVersion!=undefined){
-		conn.setWfsVersion(locationdata.serverVersion);
-	}
-	if (this.namespaces!=undefined){
-		conn.setNamespaces(this.namespaces);
+		conn.setServiceVersion(locationdata.serverVersion);
 	}
 	var map = flamingo.getComponent(this.listento[0]);
 	//Get extent
@@ -629,14 +651,17 @@ function _findLocationWFS(locationdata:Object, search:String, nr:Number, updatef
 	} else {
 		extent = map.getFullExtent();
 	}
-	//TODO: extent verwerken in de conditions of als args Object meegeven 
-	
-	var conditions:Object = new Object();
-	conditions.key=searchfield;
-	conditions.value = locationdata.fieldtype.toLowerCase() == "n" ? search : '*'+search+'*';
-	conn.getFeature(server,undefined,conditions);
+	conn.performDescribeFeatureType(layerid, lConn)
+
+	var whereClause:WhereClause = new WhereClause(searchfield,locationdata.fieldtype.toLowerCase() == "n" ? search : '*'+search+'*',
+										WhereClause.EQUALS,false);
 	if (updatefeatures) {
-		mHolder.tFeatures.htmlText = "<span class='busy'>"+flamingo.getString(thisObj, "busy")+"</span>";
+		var str:String = "<span class='busy'>"+flamingo.getString(thisObj, "busy")+"</span>";
+		if(resultViewerId!=null){
+			showTextInResultViewer(str);
+		} else {	
+			mHolder.tFeatures.htmlText = str;
+		}
 	}
 }
 function _findLocationARC(locationdata:Object, search:String, nr:Number, updatefeatures:Boolean, zoom:Boolean) {
@@ -648,7 +673,14 @@ function _findLocationARC(locationdata:Object, search:String, nr:Number, updatef
 	} else {
 		extent = map.getFullExtent();
 	}
- 
+ 	if (extent instanceof Geometry){
+ 		ext = new Object();
+ 		ext.minx = extent.getEnvelope().getMinX();
+		ext.miny = extent.getEnvelope().getMinY();
+		ext.maxx = extent.getEnvelope().getMaxX();
+		ext.maxy = extent.getEnvelope().getMaxY(); 
+ 		extent = ext;
+ 	}
 	//Make query
 	var astr = search.toUpperCase().split(" ");
 	if (astr.length == 0) {
@@ -848,7 +880,7 @@ function _findLocationARC(locationdata:Object, search:String, nr:Number, updatef
 
 	if(locationdata.type.toLowerCase() == "arcims")
 	{
-		var connArcIMS:ArcIMSConnector = new ArcIMSConnector(server);
+		var connArcIMS:ArcIMSConnector = new ArcIMSConnector(server, service);
 		if (servlet.length>0) {
 			connArcIMS.servlet = servlet;
 		}	
@@ -860,9 +892,14 @@ function _findLocationARC(locationdata:Object, search:String, nr:Number, updatef
 		} else {
 			connArcIMS.beginrecord = 1;
 		}
-		connArcIMS.getFeatures(service, layerid, extent, outputfields, query);
+		connArcIMS.getFeatures(service, layerid, extent, outputfields, query, objecttag);
 		if (updatefeatures) {
-			mHolder.tFeatures.htmlText = "<span class='busy'>"+flamingo.getString(thisObj, "busy")+"</span>";
+			var str:String  = "<span class='busy'>"+flamingo.getString(thisObj, "busy")+"</span>";
+				if(resultViewerId!=null){
+					showTextInResultViewer(str);
+				} else {
+					mHolder.tFeatures.htmlText = str;
+				}
 		}
 	}
 	else if(locationdata.type.toLowerCase() == "arcserver")
@@ -882,7 +919,12 @@ function _findLocationARC(locationdata:Object, search:String, nr:Number, updatef
 
 		connArcServer.getFeatures(service, layerid, extent, outputfields, query);
 		if (updatefeatures) {
-			mHolder.tFeatures.htmlText = "<span class='busy'>"+flamingo.getString(thisObj, "busy")+"</span>";
+			var str:String ="<span class='busy'>"+flamingo.getString(thisObj, "busy")+"</span>";
+			if(resultViewerId!=null){
+				showTextInResultViewer(str);
+			} else {
+				mHolder.tFeatures.htmlText = str; 
+			}
 		}
 	}	
 }
@@ -907,6 +949,7 @@ function _updateFeatures(hasmore:Boolean) {
 			} else {
 				str = str+"<br><span class='feature'><a href='asfunction:_parent._zoom,"+i+"'>"+value+"</a></span>";
 			}
+			foundlocations[i].str = "<span class='feature'><a href='asfunction:_parent._zoom,"+i+"'>"+value+"</a></span>";
 		}
 		if (hasmore) {
 			if (this.beginrecord == 1) {
@@ -923,8 +966,18 @@ function _updateFeatures(hasmore:Boolean) {
 	} else {
 		str = "<span class='nohit'>"+flamingo.getString(thisObj, "nohit")+"</span>";
 	}
-	mHolder.tFeatures.wordWrap = false;
-	mHolder.tFeatures.htmlText = str;
+	
+	if(resultViewerId==null){
+		mHolder.tFeatures.wordWrap = false;
+		mHolder.tFeatures.htmlText = str;
+	} else {
+		mHolder.tFeatures.htmlText = "";
+		if(foundlocations.length>0 && foundlocations[0].locationdata.hllayerid != null){
+			resultViewer.setLocations(foundlocations);
+		} else {
+			resultViewer.setText(str);
+		}
+	}
 }
 function _zoom(index:Number) {
 	var ext = foundlocations[index].extent;
@@ -1000,13 +1053,17 @@ function initControls() {
 		}
 		var hint = getString(locationdata[locationindex], "hint");
 		var label = getString(locationdata[locationindex], "label");
-		if(currentExtentSelector!=null){
-			currentExtentSelector.setVisible(false);
+		var inputPrefix = getString(locationdata[locationindex], "inputprefix");
+
+		for (var i in locationdata ) {
+			if(locationdata[i].extentSelector!=null){
+				locationdata[i].extentSelector.setVisible(false,"locationFinder");
+			}
 			tFeaturesDelta = 0;
 		}
 		currentExtentSelector = locationdata[locationindex].extentSelector;
 		if(currentExtentSelector!=null){
-			currentExtentSelector.setVisible(true);
+			currentExtentSelector.setVisible(true,"locationFinder");
 			tFeaturesDelta = 10 + currentExtentSelector.getExtents().length * 20;
 		}
 		if (locationdata[locationindex].features == undefined) {
@@ -1015,7 +1072,11 @@ function initControls() {
 			mHolder.cbFeature._visible = false;
 			mHolder.cbFeature.removeAll();
 			mHolder.tSearch._visible = true;
-			mHolder.tSearch.text = "";
+			if (inputPrefix.length>0) {
+				mHolder.tSearch.text = inputPrefix;
+			} else {
+				mHolder.tSearch.text = "";
+			}
 			_global['setTimeout'](mHolder.tSearch, 'setFocus', 10);
 			//
 			//if (locationdata[locationindex].searchstring.length > 0){
@@ -1152,7 +1213,13 @@ function resize() {
 	//-mHolder.tFeatures._y;
 	// calculate number of lines
 	mHolder.tFeatures.htmlText = "<span class='feature'>XXXYYYgggg</span>";
-	nrlines = Math.floor((mHolder.tFeatures._height-(mHolder.tFeatures.textHeight*2))/mHolder.tFeatures.textHeight)-2;
+	var th:Number = mHolder.tFeatures.textHeight;
+	if(resultViewerId==null){
+		nrlines = Math.floor((mHolder.tFeatures._height-(th*2))/th)-2;
+	} else {
+		var resultViewer:Object = _global.flamingo.getComponent(resultViewerId);
+		nrlines = Math.floor((resultViewer.__height-(th*3))/th)-2;
+	}
 	var nritems = Math.floor((h-48)/22);
 	mHolder.tFeatures.htmlText = "";
 	mHolder.cbFeature.setRowCount(Math.max(2, nritems));
@@ -1171,6 +1238,13 @@ function getString(item:Object, stringid:String):String {
 		return item.language[stringid][attr];
 	}
 	return "";
+}
+
+function showTextInResultViewer(text:String):Void{
+			resultViewer = _global.flamingo.getComponent(resultViewerId);
+			resultViewer.setLocationFinder(this);
+			resultViewer.setVisible(true);
+			resultViewer.setText(text);
 }
 /**
 * Dispatched when 'findLocation' or 'moveToLocation' is called or when a location is set by using the controls.
