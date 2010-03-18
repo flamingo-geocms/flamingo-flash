@@ -78,7 +78,7 @@ var symboldx = 0;
 var skin = "";
 var updatelayers:Object = new Object();
 var updateid:Number;
-var configobject:String = null;
+var configObjId:String;
 //----------------------------------
 var lLayer:Object = new Object();
 lLayer.onShow = function(layer:MovieClip) {
@@ -149,6 +149,9 @@ init();
 * @attr shadowsymbols (defaultvalue = "false") True or false. True: a dropshadow will be applied to symbols.
 * @attr updatedelay (defaultvalue = "1000") Time in milliseconds (1000 = 1 second) between (un)checking a item and performing an layerupdate.
 * @attr skin (defaultvalue = "") Skin. Available skins: "", "f1", "f2" 
+* @attr symbolurl the url where the symbol can be found (might be an swf or png etc.)
+* @attr liblinkage the library linkage of a symbol, this can only be used when the symbolurl points to an swf with symbols in the library. 
+* The first frame of the swf must contain the following code: function attachSymbol(symbolName:String,depth:Number):Void{this.attachMovie(symbolName,"mSymbol",depth);} 
 * @attr symbolpath (defaultvalue = "") Path prefix that will be attached to the symbolurl.
 * @attr groupdx (defaultvalue = "0") General x-offset of groups.
 * @attr groupdy (defaultvalue = "0") General y-offset of groups.
@@ -215,12 +218,9 @@ function parseCustomAttr(xml:Object){
 		var val:String = xml.attributes[attr];
 		switch (attr.toLowerCase()) {
 		case "configobject" :
-				configobject = val;
-				var configObj:Object = flamingo.getComponent(val);
-				var xmls:Array= flamingo.getXMLs(configObj);
-				for (var i = 0; i < xmls.length; i++){
-					parseCustomAttr(xmls[i]);
-				}
+				configObjId = val;
+				//_global.flamingo.tracer(_global.flamingo.getId(this) + " Legend set configObj " + _global.flamingo.getId(configObj) + flamingo.getXMLs(configObj).length);
+				//parsing of xml is done when printTemplate becomes visible
 				break;
 		case "shadowsymbols" :
 			if (val.toLowerCase() == "true") {
@@ -598,6 +598,9 @@ function addItem(xml:Object, items:Array, insertIndex:Number):Void {
 					case "symbolurl" :
 						sym.url = val;
 						break;
+					case "liblinkage" :
+						sym.linkage = val;
+						break;	
 					case "minscale" :
 						sym.minscale = Number(val);
 						break;
@@ -1110,11 +1113,22 @@ function _getVisible(listento:Object):Number {
 		var mc:MovieClip = flamingo.getComponent(maplayer);
 		if (listento[maplayer].length == 0) {
 			//no sublayers, examin whole maplayer
-			return mc.getVisible();
+			return mc.getVisible();	
 		} else {
+			//1 or more layers, examine all
+			var lyrs:Array = listento[maplayer].split(",");
+			var vis:Number = -3; //not visible
+			for(var i:Number=0;i<lyrs.length;i++){
+				if(mc.getVisible(lyrs[i]) > vis){
+					vis = mc.getVisible(lyrs[i]);
+				}
+			}	
+			return vis;
+			
 			//1 or more sublayers, examine the first one
-			var layer = listento[maplayer].split(",")[0];
-			return mc.getVisible(layer);
+			
+			//var layer = listento[maplayer].split(",")[0];
+			//return mc.getVisible(layer);
 			//if (vis>0) {
 			// sublayer is visible, but is the maplayer visible
 			//var mapvis = mc.getVisible();
@@ -1209,24 +1223,33 @@ function drawLegend(list:Array, parent:MovieClip, _indent:Number) {
 					//mc.item.itemvisible;
 					for (var maplayer in this.item.listento) {
 						var layers = this.item.listento[maplayer];
-						var comp = flamingo.getComponent(maplayer);					
+						var comp = flamingo.getComponent(maplayer);
 						if (layers.length == 0) {
 							if (checked) {
-								comp.show();
+								//do not use comp.show() to avoid double updating
+								comp.visible = true;
+								comp.updateCaches();
+								_global.flamingo.raiseEvent(comp, "onShow", comp);
 							} else {
-								comp.hide();
+								comp.visible = false;
+								flamingo.raiseEvent(comp, "onHide", comp);
 							}
 							//show hide the component but also all layers in the component.
-							comp.setLayerProperty("#ALL#", "visible", checked);
+							comp.setLayerProperty("#ALL#", "visible", checked);	
 						} else {
 							//if checked the component must be set visible
 							if (checked) {
-								comp.show();
+								//do not use comp.show() to avoid double updating
+								comp.visible = true;
+								comp.updateCaches();
+								_global.flamingo.raiseEvent(comp, "onShow", comp);
 							}
 							comp.setLayerProperty(layers, "visible", checked);
-							updatelayers[maplayer] = 1;
-							updateid = setInterval(thisObj, "update", thisObj.updatedelay);
+							
 						}
+						//do update here to make sure that show/hide and setLayerProperty is done before update.
+						updatelayers[maplayer] = 1;
+						updateid = setInterval(thisObj, "update", thisObj.updatedelay);
 						if (not checked) {
 							this.chkButton.setSkin(skin+"_checked", skin+"_checkeddown", skin+"_checkedover");
 						}
@@ -1311,7 +1334,11 @@ function drawLegend(list:Array, parent:MovieClip, _indent:Number) {
 							break;
 						default :
 							mcsymbol[attr] = mcsymbol._parent.item[attr];
-						}
+						}	
+					}
+					if(mcsymbol["linkage"] != null){
+							mcsymbol.attachSymbol(mcsymbol["linkage"],1);
+						
 					}
 					mcsymbol.init();
 					_refreshItems(mcsymbol._parent);
