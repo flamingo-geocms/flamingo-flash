@@ -982,6 +982,10 @@ function _updateFeatures(hasmore:Boolean) {
 function _zoom(index:Number) {
 	var ext = foundlocations[index].extent;
 	var sext = extent2String(ext);
+	var foundLoc= new Object();
+	foundLoc["label"]=foundlocations[index].label;
+	foundLoc["extent"]=ext;
+    _global.flamingo.raiseEvent(this, "onZoomToLocation", this, foundLoc);	
 	if (ext != undefined) {
 		for (var i = 0; i<this.listento.length; i++) {
 			var map = flamingo.getComponent(listento[i]);
@@ -1273,4 +1277,7 @@ function showTextInResultViewer(text:String):Void{
 */
 //public function onData(locationfinder:MovieClip):Void {
 //
-
+/**
+* Dispatched when a location is found/selected and the map zooms to the object.
+*/
+//public function onZoomToLocation(ocationfinder:MovieClip,locationObject:Object):Void{
