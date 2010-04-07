@@ -360,7 +360,7 @@ function setConfig(xml:Object,dontGetCap:Boolean) {
 	if (nullIfEmpty(slayers)!=null){
 		if (visible_layers==null){
 			//_global.flamingo.tracer("LayerOGWMS setLayerProperty " + this.visible + " slayers " + slayers);
-			setLayerProperty(slayers, "visible", this.visible);
+			setLayerProperty(slayers, "visible", true);
 	    }else{
 			setLayerProperty(slayers,"visible",false);
 			if (nullIfEmpty(visible_layers)!=null){
