@@ -1,4 +1,4 @@
-﻿/*-----------------------------------------------------------------------------
+/*-----------------------------------------------------------------------------
 * This file is part of Flamingo MapComponents.
 * Author: Michiel J. van Heek.
 * IDgis bv
@@ -130,7 +130,7 @@ class gui.PrintTemplate extends ScalableContainer {
     
     function setVisible(visible:Boolean):Void {
         super.setVisible(visible);
-        _global.flamingo.tracer("PrintTemplate " + _global.flamingo.getId(this) + " setVisible " + visible); 
+//        _global.flamingo.tracer("PrintTemplate " + _global.flamingo.getId(this) + " setVisible " + visible); 
         lFlamingo = new Object;
 		var component:MovieClip = null;
 		//parse legend xml
