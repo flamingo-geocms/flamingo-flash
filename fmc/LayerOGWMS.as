@@ -65,7 +65,7 @@ var canmaptip:Boolean = false;
 var maptipFeatureCount:Number=1;
 //-------------------------------------
 var updating:Boolean = false;
-var updateWhenEmpty:Boolean = true;
+var updateWhenEmpty:Boolean = false;
 var layers:Object = new Object();
 var timeoutid:Number;
 var nrcache:Number = 0;
@@ -149,7 +149,7 @@ init();
 * @attr nocache default:false if set to true the getMap requests are done with a extra parameter to force a no cache
 * @attr visible default:true if set to false this component will be set to invisible but also all the layers will be set to visible=false;
 * @attr visible_layers Comma seperated list of layers that must be visible. If omitted all layers are visible.
-* @attr updateWhenEmpty deafult:false If set to true the layer will not get updated when the layerstring is empty(no sublayers), although the sld parameter may be set. The layer will be set invisible instead. 
+* @attr updateWhenEmpty default:false If set to true the layer will get updated when the layerstring is empty(no sublayers). Use this when the sld parameter may be set. The layer will be set visible. 
 */
 /** @tag <layer>  
 * This defines a sublayer of an OG-WMS service.
@@ -1256,7 +1256,12 @@ function updateCache(cache:MovieClip) {
 				return;
 			}
 		}
-		_visible = true;
+		/*Why do a _visible=true????? 
+		*Don't set the visibility if the cache is updated!
+		*It causes some unpredictable stuff....
+		*If all layers are not visible and the map is updated the cache will be visible for a short time! 
+		*/
+		//_visible = true;
 		var r:Object = map.extent2Rect(cache.extent);
 		//cache.scrollRect = new flash.geom.Rectangle(0, 0, map.__width, map.__height);
 		cache._x = r.x;
@@ -1385,7 +1390,7 @@ function moveToLayer(ids:String, coord:Object, updatedelay:Number, movetime:Numb
 */
 function setVisible(vis:Boolean, id:String) {
 	if (id.length == 0 or id == undefined) {
-		if (vis) {
+		if (vis) {			
 			this.show();
 		} else {
 			this.hide();
