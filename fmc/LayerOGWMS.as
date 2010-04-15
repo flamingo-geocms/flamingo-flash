@@ -65,7 +65,7 @@ var canmaptip:Boolean = false;
 var maptipFeatureCount:Number=1;
 //-------------------------------------
 var updating:Boolean = false;
-var updateWhenEmpty:Boolean = false;
+var updateWhenEmpty:Boolean = true;
 var layers:Object = new Object();
 var timeoutid:Number;
 var nrcache:Number = 0;
@@ -149,7 +149,7 @@ init();
 * @attr nocache default:false if set to true the getMap requests are done with a extra parameter to force a no cache
 * @attr visible default:true if set to false this component will be set to invisible but also all the layers will be set to visible=false;
 * @attr visible_layers Comma seperated list of layers that must be visible. If omitted all layers are visible.
-* @attr updateWhenEmpty default:false If set to true the layer will get updated when the layerstring is empty(no sublayers). Use this when the sld parameter may be set. The layer will be set visible. 
+* @attr updateWhenEmpty deafult:true If set to false the layer will not get updated when the layerstring is empty(no sublayers), although the sld parameter may be set. The layer will be set invisible instead. 
 */
 /** @tag <layer>  
 * This defines a sublayer of an OG-WMS service.
