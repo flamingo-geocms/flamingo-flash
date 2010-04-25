@@ -1368,9 +1368,9 @@ dynamic class Map extends MovieClip {
 		var intExtent:Object = copyExtent(_initialextent);
 		correctExtent(intExtent);
 		var initialScale:Number = (intExtent.maxx-intExtent.minx)/this.__width;//Math.max(((_initialextent.maxx-_initialextent.minx)/this.__width)/pixelSize,((_initialextent.maxy-_initialextent.miny)/this.__width)/pixelSize);
-		if(calcScale>initialScale){
+		/*if(calcScale>initialScale){
 			return extent;
-		}
+		}*/
 		var nw = this.__width*calcScale;
 		var nh = this.__height*calcScale;
 		var x =  extent.minx + ((extent.maxx - extent.minx)/2);
@@ -2286,6 +2286,15 @@ dynamic class Map extends MovieClip {
 		_global.flamingo.addListener(lMap,this, mcMarker);
 		
 		return mcMarker;
+	}
+	/*give a extent and return as string*/
+	public function extentToString(extent):String{
+		var str="";
+		str+=extent.minx;
+		str+=","+extent.miny
+		str+=","+extent.maxx;
+		str+=","+extent.maxy;
+		return str;		
 	}
 		
 	/** 
