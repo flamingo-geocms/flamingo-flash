@@ -1,4 +1,4 @@
-// This file is part of Flamingo MapComponents.
+﻿// This file is part of Flamingo MapComponents.
 // Author: Michiel J. van Heek.
 // Changes by author: Maurits Kelder, B3partners bv
 

@@ -92,6 +92,12 @@ class gui.layers.AbstractLayer extends core.AbstractComponent{
 		return this.id;
 	}
 	
+	function setVisible(visible){
+		this._visible=visible;
+	}
+	function getVisible(){
+		return this._visible;
+	}
 	/*
 	Functions that will be called by the map (listento.
 	*/

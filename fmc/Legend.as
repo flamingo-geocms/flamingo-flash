@@ -973,7 +973,7 @@ function _refreshItem(mc:MovieClip, animate:Boolean) {
 				}
 			} else if (mc.item.itemvisible == 0) {
 				mc.chkButton.setChecked(false);
-				mc.chkButton.setEnabled(false);
+				//mc.chkButton.setEnabled(false);
 			} else {
 				mc.chkButton.setChecked(false);
 			}
@@ -1226,12 +1226,20 @@ function drawLegend(list:Array, parent:MovieClip, _indent:Number) {
 						var comp = flamingo.getComponent(maplayer);
 						if (layers.length == 0) {
 							if (checked) {
-								//do not use comp.show() to avoid double updating
-								comp.visible = true;
-								comp.updateCaches();
+								if (comp instanceof gui.layers.AbstractLayer){
+									comp.setVisible(true);
+								}else{
+									//do not use comp.show() to avoid double updating								
+									comp.visible = true;
+									comp.updateCaches();
+								}
 								_global.flamingo.raiseEvent(comp, "onShow", comp);
 							} else {
-								comp.visible = false;
+								if (comp instanceof gui.layers.AbstractLayer){
+									comp.setVisible(false);
+								}else{
+									comp.visible = false;
+								}
 								flamingo.raiseEvent(comp, "onHide", comp);
 							}
 							//show hide the component but also all layers in the component.
