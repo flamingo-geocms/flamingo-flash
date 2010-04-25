@@ -245,10 +245,11 @@ class gui.layers.TilingLayer extends AbstractLayer{
 	function changeExtent(map:Object):Void{			
 		log.debug("changeExtent");
 		var ext=map.getMapExtent();
-		correctPosition(ext);
+		correctPosition(map.getCurrentExtent());
 		//if still in the same zoomlevel. (panning)
 		var mapRes=map.getScale();
 		if (this.getVisible()){
+			//if in the same zoomlevel (panning)
 			if(this.currentMapRes == mapRes|| (this.currentMapRes+0.00000000001 > mapRes && this.currentMapRes - 0.00000000001 < mapRes)){
 				//check if we need to load a new tile. Load 1 tile more then needed ;)
 				var tileWidth:Number= this.currentMapRes* this.tileFactory.getTileWidth()*this.extraTiles;
@@ -304,8 +305,8 @@ class gui.layers.TilingLayer extends AbstractLayer{
 		var maxXIndex:Number=tileFactory.getTileIndexX(extent.maxx,zoomLevel);
 		var maxYIndex:Number=tileFactory.getTileIndexY(extent.maxy,zoomLevel);
 		
-		if (isNaN(minXIndex) || isNaN(minXIndex) || isNaN(minXIndex) || isNaN(minXIndex)){
-			log.error("one of the tileindexes is not a number");
+		if (isNaN(minXIndex) || isNaN(minYIndex) || isNaN(maxXIndex) || isNaN(maxYIndex)){
+			log.error("one of the tileindexes is not a number: \n MinxIndex: "+minXIndex+"\n MinYIndex: "+minYIndex+"\n MaxXIndex: "+maxXIndex+"\n MaxYIndex: "+maxYIndex);
 			return new Array();
 		}
 		log.debug("create tiles with zoomlevel "+zoomLevel+" from: "+minXIndex+" "+minYIndex+" to "+maxXIndex+" "+maxYIndex);
