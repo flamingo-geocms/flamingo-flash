@@ -235,7 +235,9 @@ class gui.layers.TilingLayer extends AbstractLayer{
 		//new processId
 		this.processId++;
 		//create the tiles
-		loadNewTiles(extent,currentZoomLevel);		
+		if (this.getVisible()){
+			loadNewTiles(extent,currentZoomLevel);		
+		}
 		correctPosition(extent);
 	}
 	
@@ -246,20 +248,22 @@ class gui.layers.TilingLayer extends AbstractLayer{
 		correctPosition(ext);
 		//if still in the same zoomlevel. (panning)
 		var mapRes=map.getScale();
-		if(this.currentMapRes == mapRes|| (this.currentMapRes+0.00000000001 > mapRes && this.currentMapRes - 0.00000000001 < mapRes)){
-			//check if we need to load a new tile. Load 1 tile more then needed ;)
-			var tileWidth:Number= this.currentMapRes* this.tileFactory.getTileWidth()*this.extraTiles;
-			var tileHeight:Number= this.currentMapRes* this.tileFactory.getTileHeight()*this.extraTiles;
-			ext.minx-=tileWidth;
-			ext.miny-=tileHeight;
-			ext.maxx+=tileWidth;
-			ext.maxy+=tileHeight;
-			if (ext.minx<this.loadedTileExtent.minx ||
-					ext.miny<this.loadedTileExtent.miny ||
-					ext.maxx>this.loadedTileExtent.maxx ||
-					ext.maxy>this.loadedTileExtent.maxy){
-				loadNewTiles(ext,this.currentZoomLevel);							
-			}
+		if (this.getVisible()){
+			if(this.currentMapRes == mapRes|| (this.currentMapRes+0.00000000001 > mapRes && this.currentMapRes - 0.00000000001 < mapRes)){
+				//check if we need to load a new tile. Load 1 tile more then needed ;)
+				var tileWidth:Number= this.currentMapRes* this.tileFactory.getTileWidth()*this.extraTiles;
+				var tileHeight:Number= this.currentMapRes* this.tileFactory.getTileHeight()*this.extraTiles;
+				ext.minx-=tileWidth;
+				ext.miny-=tileHeight;
+				ext.maxx+=tileWidth;
+				ext.maxy+=tileHeight;
+				if (ext.minx<this.loadedTileExtent.minx ||
+						ext.miny<this.loadedTileExtent.miny ||
+						ext.maxx>this.loadedTileExtent.maxx ||
+						ext.maxy>this.loadedTileExtent.maxy){
+					loadNewTiles(ext,this.currentZoomLevel);							
+				}
+			}	
 		}
 	}
 	function identify(identifyextent:Object):Void{
