@@ -88,7 +88,7 @@ function init() {
 	flamingo.deleteXML(this);
 	
 	var eventHandler:Object = new Object();
-	eventHandler.onSetValue = function (sourceSetter:String, newValue:Number) {
+	eventHandler.onSetValue = function (sourceSetter:String, newValue:Number, layer:Object) {
 	  if (sourceSetter == setter) {
 	    currentValue = newValue;
 	    thisObj.refresh();
