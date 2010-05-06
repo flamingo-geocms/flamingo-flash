@@ -53,7 +53,6 @@ class gui.BitmapClone extends AbstractComponent {
     
     function init():Void {
         source = _global.flamingo.getComponent(listento[0]);
-
 		if (source.mScrollPane != undefined){
 			mask = source.mScrollPane.mask_mc;
 			source = source.mScrollPane.spContentHolder;
@@ -66,28 +65,31 @@ class gui.BitmapClone extends AbstractComponent {
     }
     
     function cloneBitmap():Void {
-		var width:Number = __width;
-        var height:Number = __height;
-		 if (bitmapData != null) {
-			 bitmapData.dispose();
-        }
-		if (width > source._width) {
-			width = source._width;
-		}
-		if (height > source._height) {
-			height = source._height;
-		}
-		
-        bitmapData = new BitmapData(width,height);
-		attachBitmap(bitmapData, 0, "auto", true);
-		
-		if (mask != undefined){
-			source.setMask(null);
-			bitmapData.draw(source);
-			source.setMask(mask); 
-		} else {
-			bitmapData.draw(source);
-		}
+    	if (this._parent._parent._parent instanceof PrintTemplate && !this._parent._parent._parent._visible) {
+    	} else {
+			var width:Number = __width;
+	        var height:Number = __height;
+			 if (bitmapData != null) {
+				 bitmapData.dispose();
+	        }
+			if (width > source._width) {
+				width = source._width;
+			}
+			if (height > source._height) {
+				height = source._height;
+			}
+	        bitmapData = new BitmapData(width,height);
+			attachBitmap(bitmapData, 0, "auto", true);
+			
+			if (mask != undefined){
+				source.setMask(null);
+				bitmapData.draw(source);
+				source.setMask(mask); 
+			} else {
+				bitmapData.draw(source);
+			}
+    	}
+	
 		
     }
     
