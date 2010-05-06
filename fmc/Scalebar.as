@@ -160,6 +160,7 @@ function setConfig(xml:Object) {
 		t.wordWrap = false;
 		t.html = true;
 		t.selectable = false;
+		t.autoSize = true;
 	}
 	if (unitposition != "LASTLABEL") {
 		var t = mHolder.createTextField("tUnit", labelcount+2, 0, 0, 0, 0);
@@ -168,6 +169,7 @@ function setConfig(xml:Object) {
 		t.wordWrap = false;
 		t.html = true;
 		t.selectable = false;
+		t.autoSize = true;
 	}
 /*
 	tScale = mHolder.createTextField("tScale", labelcount+3, 0, 0, 0, 0);
