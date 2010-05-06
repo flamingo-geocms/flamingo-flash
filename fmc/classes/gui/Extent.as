@@ -45,8 +45,8 @@ class gui.Extent extends AbstractComponent  {
     private var extString:String;
 
 	function setAttribute(name:String, value:String):Void {
-		     
-        if(name="extent"){
+		    
+        if(name=="extent"){
         	extString = value;
         }    
     }
