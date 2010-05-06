@@ -408,7 +408,11 @@
 	//}
 	private function _processCapabilities(xml:XML, obj, reqid) {
 		var service:Object = new Object();
-		var layers:Object = new Object();
+		//use an Array instead of an Object for layers
+		//Reason:some WMS(group) Layers do not have a name. The name
+		//was used to identify the Layer in the layers Object.
+		//var layers:Object = new Object();
+		var layers:Array = new Array();
 		var xService = xml.firstChild.childNodes[0];
 		for (var i:Number = xService.childNodes.length-1; i>=0; i--) {
 			var val:String = xService.childNodes[i].firstChild.nodeValue;
@@ -423,7 +427,7 @@
 				service.abstract = val;
 				break;
 			}
-		}
+		}		
 		var xCapability = xml.firstChild.childNodes[1];
 		for (var i:Number = xCapability.childNodes.length-1; i>=0; i--) {
 			switch (xCapability.childNodes[i].nodeName.toLowerCase()) {
@@ -442,9 +446,9 @@
 		this.capReqid = reqid;
 		this.events.broadcastMessage("onGetCapabilities", service, layers, obj, reqid);
 	}
-	private function _getLayers(xml:XML, layers:Object):Object {
+	private function _getLayers(xml:XML, layers:Array):Array{
 		var layer:Object = new Object();
-		layer.layers = new Object();
+		layer.layers = new Array();
 		layer.queryable = false;
 		if (xml.attributes.queryable == "1") {
 			layer.queryable = true;
@@ -461,13 +465,14 @@
 		if (xml.attributes.cascaded == "1") {
 			layer.cascaded = true;
 		}
-		for (var j:Number = xml.childNodes.length; j>=0; j--) {
+		for (var j:Number = xml.childNodes.length; j>=0; j--) {			
 			switch (xml.childNodes[j].nodeName.toLowerCase()) {
 			case "name" :
 				layer.name = xml.childNodes[j].firstChild.nodeValue;
 				break;
 			case "title" :
 				layer.title = xml.childNodes[j].firstChild.nodeValue;
+				//_global.flamingo.tracer("OGWMSConnector processCapabilities layer title " + layer.title ); 
 				break;
 			case "abstract" :
 				layer.abstract = xml.childNodes[j].firstChild.nodeValue;
@@ -532,11 +537,12 @@
 				layer.styles[style.name] = style;
 				break;
 			case "layer" :
-				layer.layers = this._getLayers(xml.childNodes[j], layer.layers);
+				layer.layers = this._getLayers(xml.childNodes[j], layer.layers);		
 				break;
 			}
 		}
-		layers[layer.name] = layer;
+		//layers[layer.name] = layer;
+		layers.push(layer);
 		return (layers);
 	}
 	private function _changeArgs(url:String, arg:String, val:String):String {
