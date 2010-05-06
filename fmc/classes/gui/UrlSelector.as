@@ -75,27 +75,28 @@ class gui.UrlSelector extends AbstractContainer {
 			urls.push(component); 
         }
         if (urls.length == 0) {
-            _global.flamingo.tracer("Exception in gui.URLSelector.<<init>>()\nNo urls configured.");
+            //_global.flamingo.tracer("Exception in gui.URLSelector.<<init>>()\nNo urls configured.");
             return;
         }
         addURLGroupSelector();  
 		_global.flamingo.addListener(this,"flamingo",this);	
  	}
- 		    
+ 	
    	function setAttribute(name:String, value:String):Void {  
         if(name=="listlength"){
         	this.listlength = Number(value);
         } 	
    
     }
+       
     
     
-    function setBounds(x:Number, y:Number, width:Number, height:Number):Void {
-    	urlComboBox.setSize(width,22);
-    	groupComboBox.setSize(width,22);
-    	urlComboBox._y = y + this.y;
-    	super.setBounds(x,y,width,height);
-    }    	
+    function layout(){
+    	urlComboBox.setSize(this.__width,22);
+    	groupComboBox.setSize(this.__width,22);
+    	urlComboBox._y = this.y;
+    	
+    }	
 
  	private function addURLGroupSelector():Void {
  		var groups:Array = getURLGroups();
@@ -112,7 +113,7 @@ class gui.UrlSelector extends AbstractContainer {
 			groupComboBox.setSize(this.__width,22);
 			groupComboBox.addEventListener("close", Delegate.create(this, onChangeURLGroupComboBox));
 			groupComboBox.setDataProvider(groups);
-			y += 10;
+			y += 30;
  		}
  		addURLSelector();
  	}
