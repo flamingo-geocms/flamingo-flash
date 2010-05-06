@@ -54,6 +54,7 @@ var htmlwindow:String = null;
 var htmlfield:String = null;
 var seperatedfields:Array = null;
 var seperator:String = ",";
+var emptyWhenNotFound:Boolean = false;
 
 //---------------------------------
 var lMap:Object = new Object();
@@ -163,8 +164,36 @@ function convertInfo(infostring:String, record:Object):String {
 			t = t.split(fieldname).join(value);
 		}	
 	}
+	if(emptyWhenNotFound){
+		t = makeEmptyWhenNotFound(t);	
+	}
 	return t;
 }
+
+function makeEmptyWhenNotFound(str:String):String {
+	var tStr = str;
+	global.flamingo.tracer(tStr.indexOf("["));
+	while(tStr.indexOf("[") != -1){
+		var begin:Number = tStr.indexOf("[");
+		var end:Number =  tStr.indexOf("]") + 1;
+		if(end == -1 || end<begin){
+			return tStr;
+		}
+		tStr = tStr.split(tStr.substring(begin,end)).join(""); 
+	}
+	while(tStr.indexOf("#sep#") != -1){
+		var begin:Number = tStr.indexOf("#sep#");
+		var end:Number =  tStr.substr(begin + 5).indexOf("#sep#") + 10 + begin;
+		if(end == -1 || end<begin){
+			return tStr;
+		}
+		tStr = tStr.split(tStr.substring(begin,end)).join(""); 
+	}
+	return tStr;
+	
+}
+
+
 lMap.onIdentifyComplete = function(map:MovieClip) {
 	var s = flamingo.getString(thisObj, "identify", "identify progress [progress]%");
 	s = s.split("[progress]").join("100");
@@ -275,6 +304,7 @@ function show() {
 * For example: 
 * \tplanteksten:#sep#\t<a href="http://www.ruimtelijkeplannen.nl/documents/[identificatie]/[verwijzingNaarTekst]" target="_blank"><u>[verwijzingNaarTekst]</u></a>#sep#       
 * @attr seperator (defaultvalue = ",") Indicates the seperator character(s) for the seperatedfields.
+* @attr emptywhennotfound (defaultvalue = false) Shows the output value as an empty string when the response doesnot contain the requested field.  
 */
 function init():Void {
 	if (flamingo == undefined) {
@@ -367,6 +397,11 @@ function setConfig(xml:Object) {
 			break;
 		case "seperator":	
 			seperator=val; 
+			break;
+		case "emptywhennotfound":
+			if (val.toLowerCase() == "true") {
+				emptyWhenNotFound=true;
+			}	
 			break;
 		}				
 
