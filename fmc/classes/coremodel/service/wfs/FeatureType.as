@@ -19,7 +19,9 @@ class coremodel.service.wfs.FeatureType extends ServiceLayer {
     function FeatureType(rootNode:XMLNode) {
 		xmlSchema = new XMLSchema(rootNode);
 		namespacePrefix = xmlSchema.getTargetNamespacePrefix(); 
+		//_global.flamingo.tracer("FeatureType namespacePrefix==" + namespacePrefix);
 		ftNamespacePrefix = xmlSchema.getSchemaNamespacePrefix();
+		//_global.flamingo.tracer("FeatureType ftNamespacePrefix==" + ftNamespacePrefix);
 		var xpathExpression= "/";
 		if (ftNamespacePrefix!=undefined){
 			xpathExpression+=ftNamespacePrefix+":";
@@ -65,9 +67,11 @@ class coremodel.service.wfs.FeatureType extends ServiceLayer {
         serviceProperties = new Array();
         geometryProperties = new Array();
         for (var i:Number = 0; i < propertyNodes.length; i++) {
+        	//_global.flamingo.tracer("FeatureType property.getType()" + property.getType());
             property = new WFSProperty(XMLNode(propertyNodes[i]), namespacePrefix);
             serviceProperties.push(property);
-            if (property.getType() == "gml:GeometryPropertyType") {
+            if (property.getType() == "gml:GeometryPropertyType" 
+            	|| property.getType() == "gml:MultiSurfacePropertyType") {
                 geometryProperties.push(property);
             }
         }
