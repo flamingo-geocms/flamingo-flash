@@ -44,7 +44,9 @@ class coregui.BaseButton extends AbstractComponent {
     private var windowName:String = "_blank";
 	private var thisObj:Object;
 	private var selected:Boolean = false;
-    
+    private var uplink:String = null;
+    private var overlink:String = null;
+    private var downlink:String = null;
 	//*** graphical buttonstates
 	//frame 1: up
 	//frame 2: over
@@ -67,6 +69,14 @@ class coregui.BaseButton extends AbstractComponent {
 			tooltipText = _global.flamingo.getString(this, "tooltip");
 		}
     }
+    
+    function setAttribute(name:String, value:String):Void {
+    	if(name=="skin"){
+    		uplink = value + "_up";
+    		downlink = value + "_down";
+    		overlink = value + "_over";	
+    	}
+	}
 	
 	function getID():Number {
         return id;
