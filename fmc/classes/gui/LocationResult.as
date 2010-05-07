@@ -29,6 +29,17 @@ class gui.LocationResult extends MovieClip {
 	}
 	
 	function onRollOver():Void{
+		var tooltip:String = viewer.getString(location.locationdata,"locationtip");
+		for (var a in location){ 
+			var n:Number =tooltip.indexOf("["+a+"]", 0);
+			if (n >= 0) {
+				tooltip = tooltip.substring(0,n) + location[a] +
+						tooltip.substr(n + a.length + 2);
+			}
+		} 
+		if (tooltip!=null){	
+			_global.flamingo.showTooltip(tooltip, this);
+		}
 		viewer.doClearInterval();
 		this.over = true;
 		TextField(this["text"]).textColor = 0x00ff00;
