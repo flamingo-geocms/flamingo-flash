@@ -42,6 +42,8 @@ import mx.utils.Delegate;
 
 import core.AbstractComponent;
 
+import mx.core.UIObject;
+
 class gui.PrintLabel extends AbstractComponent {
     
     private var text:String = "";
@@ -107,11 +109,13 @@ class gui.PrintLabel extends AbstractComponent {
             label.setStyle("embedFonts", true);
         }
         setComponentsText();
-        
         var env:PrintLabel = this;
         label.onPress = function():Void {
             env.addTextArea();
-        }
+        };
+        label.onRollOver = function():Void {
+             _global.flamingo.showTooltip(_global.flamingo.getString(env, "tooltip_label"), this);
+        };
     }
     
     private function addTextArea():Void {
@@ -164,12 +168,14 @@ class gui.PrintLabel extends AbstractComponent {
 		} else {
 			label.text = text
 		}
-        label.setSize(label._width * 1.2 ,numLines * fontSize * 1.3);
+		
+		//label is autosized??
+        //label.setSize(label._width * 1.2 ,numLines * fontSize * 1.3);
         
         if (textArea != null) {
             textArea.text = text;
             textArea._x = label._x - 2;
-            textArea.setSize(label._width + 20, numLines * fontSize * 1.3 + 20);
+            textArea.setSize(label._width + 20, numLines * fontSize * 1.3 + 5);
         }
     }
     
