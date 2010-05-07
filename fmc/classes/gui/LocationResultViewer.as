@@ -43,7 +43,6 @@ import core.AbstractContainer;
 
 import mx.utils.Delegate;
 
-import gui.LocationResult;
 
 class gui.LocationResultViewer extends AbstractComponent {
     
@@ -79,6 +78,9 @@ class gui.LocationResultViewer extends AbstractComponent {
 		intervalId = id;
 	}
 	
+	function getString(item:Object, stringid:String):String {
+		return locationFinder.getString(item,stringid);
+	}
 	function _zoom(index:Number) {
 	 	locationFinder._zoom(index);	
 	}
