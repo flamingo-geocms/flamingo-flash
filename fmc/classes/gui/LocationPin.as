@@ -6,7 +6,7 @@ import core.AbstractComponent;
 * IDgis bv
  -----------------------------------------------------------------------------*/
 
-* /** @component LocationPin
+/** @component LocationPin
 * A component that can be used in combination with the LocationFinder to indicate the position of a found location. 
 * The pin is placed in the centre of the zoombox after the user zoomed to a location. It will remain untill the user zooms
 * to another location or the user removes the pin by clicking on the cross. 
