@@ -17,6 +17,7 @@ class gui.LayerPrintTemplateAdapter {
     }
     
     function onSetLayerProperty(layer:MovieClip, ids:String, property:String):Void {
+    	//_global.flamingo.tracer("LayerPrintAdapter onSetLayerProperty " + ids + property);
     	if(property == "visible"){
 			var update:Boolean = false;
 			var printLayer:Object = getPrintLayer(layer); 
@@ -59,6 +60,7 @@ class gui.LayerPrintTemplateAdapter {
 		//_global.flamingo.tracer("LayerPrintTemplateAdapter onHide == " +_global.flamingo.getId(layer));
 		var printLayer:Object =  getPrintLayer(layer);
 		printLayer.visible = false;
+		printLayer.update();
 		_global.flamingo.raiseEvent(printLayer, "onHide", printLayer);
 	}
 	
@@ -68,6 +70,8 @@ class gui.LayerPrintTemplateAdapter {
 		//_global.flamingo.tracer("LayerPrintTemplateAdapter show == " +_global.flamingo.getId(layer));
 		printLayer.visible = true;
 		printLayer.updateCaches();
+		
+		printLayer.update();
 		_global.flamingo.raiseEvent(printLayer, "onShow", printLayer);
 	}
 	
