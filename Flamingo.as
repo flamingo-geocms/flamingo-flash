@@ -819,12 +819,15 @@ class Flamingo {
 			}
 			//load component into existing component when type's are the same   
 			if (type == this.components[targetid].type) {
-				var mc = getComponent(targetid);
+			var mc = getComponent(targetid);
 				if (target == "") {
 					//movieclip is being loaded
 					this.components[targetid].xmls.push(xml);
 					this.doneLoading();
 				} else {
+					if(mc._name == "mKid"){
+						mc = mc._parent;
+					}	
 					this.loadComponent(xml, mc, targetid);
 				}
 			} else {
@@ -877,8 +880,9 @@ class Flamingo {
 			this.doneLoading();
 			return;
 		}
+
 		if (this.components[targetid].target != undefined) {
-			mc = eval(this.components[targetid].target);
+			//mc = eval(this.components[targetid].target);
 		}
 		if (this.components[targetid].type == type and mc.setConfig != undefined) {
 			//component already exists and it can be configurated
@@ -2396,6 +2400,9 @@ class Flamingo {
 			pw = Stage.width;
 		}
 		var pt:Object = new Object();
+		
+		
+		var id = this.getId(mc);
 		if (mc.left.length>0 and mc.width.length>0) {
 			//trace("x1")
 			pt.width = getAbs(mc.width, pw);
