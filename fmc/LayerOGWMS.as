@@ -536,39 +536,42 @@ function getUrl(){
 	return this.url;
 }
 
-function _parseLayers(tlayers:Object) {
-	for (var item in tlayers) {
-		if (item == "layers") {
-			for (var layerid in tlayers[item]) {
-				var old = thisObj.layers[layerid];
-				delete thisObj.layers[layerid];
-				if (thisObj.layers[layerid] == undefined) {
-					thisObj.layers[layerid] = new Object();
-					if (thisObj.slayers == "#ALL#") {
-						thisObj.layers[layerid].visible = true;
-					}
-					if (thisObj.query_layers == "#ALL#") {
-						thisObj.layers[layerid].identify = true;
-					}
+function _parseLayers(tlayers:Array) {
+	for(var i:Number=0;i<tlayers.length;i++){
+		if(tlayers[i].name!=null){
+			var layerid:String = tlayers[i].name;
+			var old = thisObj.layers[layerid];
+			delete thisObj.layers[layerid];
+			if (thisObj.layers[layerid] == undefined) {
+				thisObj.layers[layerid] = new Object();
+				if (thisObj.slayers == "#ALL#") {
+					thisObj.layers[layerid].visible = true;
 				}
-				for (var attr in old) {
-					thisObj.layers[layerid][attr] = old[attr];
-				}
-				delete old;
-				for (var attr in tlayers[item][layerid]) {
-					//
-					if (thisObj.layers[layerid][attr] == undefined) {
-						thisObj.layers[layerid][attr] = tlayers[item][layerid][attr];
-					}
-					if (attr == "styles") {
-						var s_style = tlayers[item][layerid].style;
-						var s_url = tlayers[item][layerid].styles[s_style].legendurl;
-						_global.flamingo.raiseEvent(thisObj, "onGetLegend", thisObj, s_url, layerid);
-					}
+				if (thisObj.query_layers == "#ALL#") {
+					thisObj.layers[layerid].identify = true;
 				}
 			}
+			for (var attr in old) {
+				thisObj.layers[layerid][attr] = old[attr];
+			}
+			delete old;
 		}
-		_parseLayers(tlayers[item]);
+		for (var attr in tlayers[i]) {
+			if(tlayers[i].name!=null){
+				var layerid:String = tlayers[i].name;
+				if (thisObj.layers[layerid][attr] == undefined) {
+					thisObj.layers[layerid][attr] = tlayers[i][attr];
+				}
+				if (attr == "styles") {
+					var s_style = tlayers[i].style;
+					var s_url = tlayers[i].styles[s_style].legendurl;
+					_global.flamingo.raiseEvent(thisObj, "onGetLegend", thisObj, s_url, layerid);
+				}
+			}
+			if (attr == "layers") {
+				_parseLayers(tlayers[i][attr]);
+			}
+		} 		
 	}
 }
 /**
@@ -1325,7 +1328,7 @@ function getLayerProperty(id:String, field:String):Object {
 /** 
 * Returns a reference to the layers collection.
 * Be carefull for making changes.
-* @return Object Collection of layers. A layer is an object with several properties, such as name, id, minscale, maxscale etc.
+* @return Object Collection of layers. A layer is an object with several properties, such as name, id, maxscale etc.
 */
 function getLayers():Object {
 	return layers;
