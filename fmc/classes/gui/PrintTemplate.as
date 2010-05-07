@@ -239,4 +239,54 @@ class gui.PrintTemplate extends ScalableContainer {
         }
     }
     
+       private function setScales():Void {
+    	super.setScales();
+    	if(this._visible){
+        	//trick to trigger the autoSize of TextFields and Label fields
+        	resetLabels(this.contentPane);
+        	
+        }
+    } 
+    
+     private function isParent(parent : MovieClip, child : MovieClip) : Boolean {
+    	var currentParent : MovieClip = parent;
+    	while(currentParent != _root) {
+    		if(child == currentParent) {
+    			return true;
+    		}
+    		currentParent = currentParent._parent;
+    	}
+		return false;
+    }
+    
+    private function resetLabels(parent:MovieClip){
+    	for(var a in parent){
+    		        	
+
+    		if (typeof(parent[a])=="movieclip"){	
+    			
+    			if(isParent(parent, parent[a])) {
+    					
+    			} else { 
+    				if(parent[a].autoSize!=null){
+		    			parent[a].autoSize = parent[a].autoSize;			
+		    			var txt:String = parent[a].text;
+		    			var nrOfSpaces:Number =  Math.round(txt.length/8.5);
+		    			var spaces:String = "";
+		    			for(var i:Number=0;i<nrOfSpaces;i++){
+		    				spaces += " ";
+		    			}  
+		    			if(txt.substr(txt.length-nrOfSpaces) == spaces){
+		    			} else {
+		    				parent[a].setTextFormat(parent[a].getTextFormat());
+		    				parent[a].text = txt + spaces;
+		    			}	
+    				} 			
+    				resetLabels(parent[a]);
+    			}	
+    		}			
+    	}
+	}
+    
+    
 }
