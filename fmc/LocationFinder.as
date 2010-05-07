@@ -77,6 +77,9 @@ var resultViewerId:String;
 var resultViewer:Object;
 
 var tFeaturesDelta:Number = 0;
+var locationPin:MovieClip = null;
+var map:Object = null;
+var coord:Object = null;
 
 //---------------------------------------
 import mx.controls.ComboBox;
@@ -86,6 +89,7 @@ import event.ActionEvent;
 import coremodel.service.*;
 import geometrymodel.Envelope;
 import geometrymodel.Geometry;
+import gui.LocationPin;
 
 
 var lParent:Object = new Object();
@@ -254,10 +258,14 @@ function loadXML(file:String) {
 * @hierarchy childnode of <fmc:LocationFinder>  or <flamingo> in case of an external file
 * @example
 <flamingo>
-<LOCATIONS  id="plaats"  server="www.myserver.com" service="mymapservice" layerid="searchlayer" searchfield="searchfield"  outputfields="NAME" extentlabel="[NAME]" extentSelector="extentSelector">
+<LOCATIONS  id="plaats"  server="www.myserver.com" service="mymapservice" layerid="searchlayer" searchfield="searchfield"  
+ outputfields="NAME" extentlabel="[NAME]" extentSelector="extentSelector"
+ pinlocation="true"/>
 <string id="output" nl="Zoom naar [NAME]..." en="Zoom to [NAME]..."  />
 <string id="label" nl="Zoek een plaats" en="Search a place"/>
 <string id="hint" nl="Type een plaatsnaam of een paar letters daarvan in het tekstvak hierboven..." en="Type a placename or a few letters in the textbox..."/>
+<string id="closepin" nl="verwijder lokatie indicator" en="remove loaction indicator" de="remove loaction indicator" fr="remove loaction indicator" />
+
 </LOCATIONS>
 <LOCATIONS id="ro_onlineplan0"
     server="http://afnemers.ruimtelijkeplannen.nl/afnemers/services" 
@@ -266,11 +274,10 @@ function loadXML(file:String) {
     extentselector ="extentSelector"
     outputfields="app:naamOverheid,app:identificatie,app:naam"
     highlightlayer="highlightlayer" highlightwmsurl="http://afnemers.ruimtelijkeplannen.nl/afnemers/services?service=WMS" highlightsldservleturl="http://support.idgis.eu/sldtest"  
-    highlightfeaturetypename="app:Bestemmingsplangebied" highlightpropertyname="app:identificatie">
+    highlightfeaturetypename="app:Bestemmingsplangebied" highlightpropertyname="app:identificatie"/>
     <string id="output" nl="[app:naamOverheid]: [app:naam]" />
     <string id="label" nl="Zoek op RO-online naam overheid" />
-    <string id="hint" nl="Type een (deel van de) naam overheid  in het 
-        tekstvak hierboven..." />
+    <string id="hint" nl="Type een (deel van de) naam overheid  in het tekstvak hierboven..." />
 </LOCATIONS>
 </flamingo>
 * @attr id Unique identifier for each location source.
@@ -293,6 +300,7 @@ function loadXML(file:String) {
 * @attr enlargeextent If the min coordinates and max coordinates of the GML bbox (service type = WFS) are te same the BBOX is enlarged with this attribute
 * @attr namespaces the namespaces that are needed to do a wfs request
 * @attr extentSelector id of an extentSelector component
+* @attr pinlocation default:false If true a found location will be pinned on the map 
 * 
 * @attr highlightlayer id of an highlightlayer component 
 * @attr highlightwmsurl
@@ -395,10 +403,6 @@ function addLocation(xml:Object) {
 							namespaces[ns[b].split("=")[0]]=ns[b].split("=")[1];
 						}
 						break;
-					case "extentselector":
-						location.extentSelector=_global.flamingo.getComponent(val);
-						flamingo.addListener(this, location.extentSelector, this);
-						break;
 					case "highlightlayer":
            				location.hllayerid = String(val);	
 						break;
@@ -414,10 +418,25 @@ function addLocation(xml:Object) {
     				case "highlightpropertyname":
     					location.propertyName = String(val);
     					break;
+    				case "pinlocation":
+						if(val=="true"){
+							location.pinLocation = true;
+						} else {
+							location.pinLocation = false;
+						}						
+						break;	
+					case "closepin":
+						location.closePin = value;					
+						break;		
+					case "extentselector":
+						location.extentSelector=_global.flamingo.getComponent(val);
+						flamingo.addListener(this, location.extentSelector, this);
+						break;	
 				    default: 
 						flamingo.tracer("unknown attribute in confige file for LocationFinder: "+attr);
 					}
 				}
+				
 				for (var j:Number = xnode[i].childNodes.length-1; j>=0; j--) {
 					switch (xnode[i].childNodes[j].nodeName.toLowerCase()) {
 					case "location" :
@@ -604,6 +623,10 @@ function _findLocationWFS(locationdata:Object, search:String, nr:Number, updatef
 								lbl = lbl.substring(0,n) + serviceFeatures[i].getValue(props[l].getName()) +
 										lbl.substr(n + (props[l].getName()).length + 2);
 	            			}
+	            			if(serviceFeatures[i].getValue(props[l].getName())!=undefined){
+	            				loc[props[l].getName()] = serviceFeatures[i].getValue(props[l].getName()); 
+	            			}          			
+	            			
 	            		}
 					}
 				
@@ -966,7 +989,6 @@ function _updateFeatures(hasmore:Boolean) {
 	} else {
 		str = "<span class='nohit'>"+flamingo.getString(thisObj, "nohit")+"</span>";
 	}
-	
 	if(resultViewerId==null){
 		mHolder.tFeatures.wordWrap = false;
 		mHolder.tFeatures.htmlText = str;
@@ -982,21 +1004,50 @@ function _updateFeatures(hasmore:Boolean) {
 function _zoom(index:Number) {
 	var ext = foundlocations[index].extent;
 	var sext = extent2String(ext);
-	var foundLoc= new Object();
-	foundLoc["label"]=foundlocations[index].label;
-	foundLoc["extent"]=ext;
-    _global.flamingo.raiseEvent(this, "onZoomToLocation", this, foundLoc);	
 	if (ext != undefined) {
 		for (var i = 0; i<this.listento.length; i++) {
-			var map = flamingo.getComponent(listento[i]);
+			map = flamingo.getComponent(listento[i]);
+			
 			if (map != undefined) {
-				map.moveToExtent(ext, 0);
+				var location:Object = locationdata[mHolder.cbChoice.selectedIndex -1]
+				if(location.pinLocation){
+					coord = new Object();
+					coord.x = Number(ext.minx) + (Number(ext.maxx) - Number(ext.minx))/2;
+					coord.y = Number(ext.maxy) - (Number(ext.maxy) - Number(ext.miny))/2;
+					if(locationPin == null){
+						map.createEmptyMovieClip("mPin", map.getNextHighestDepth());
+						var thisObj:Object = this;
+						mc.createEmptyMovieClip("mSymbol", 2);
+						var listener:Object = new Object();
+						listener.onLoadInit = function(mc:MovieClip) {
+							thisObj.locationPin = mc.kid;
+							thisObj.locationPin.setMap(thisObj.map);
+							thisObj.locationPin.setCoord(thisObj.coord);
+							
+							thisObj.locationPin.setTooltipText(_global.flamingo.getString(thisObj, "closepin"));
+							thisObj.locationPin.placePin();	
+							
+						};
+						var mcl:MovieClipLoader = new MovieClipLoader();
+						mcl.addListener(listener);
+						mcl.loadClip(_global.flamingo.correctUrl("fmc/LocationPin.swf"), map.mPin);	
+					} else {
+						locationPin.setCoord(coord);
+					}
+				}
+				map.moveToExtent(ext, 0);	
 			} else {
 				flamingo.setArgument(listento[i], "extent", sext);
 			}
 		}
 	}
+
 }
+
+
+
+
+
 function extent2String(extent:Object):String {
 	return (extent.minx+","+extent.miny+","+extent.maxx+","+extent.maxy);
 }
@@ -1277,7 +1328,4 @@ function showTextInResultViewer(text:String):Void{
 */
 //public function onData(locationfinder:MovieClip):Void {
 //
-/**
-* Dispatched when a location is found/selected and the map zooms to the object.
-*/
-//public function onZoomToLocation(ocationfinder:MovieClip,locationObject:Object):Void{
+
