@@ -40,8 +40,15 @@ class gui.dde.DownloadAreas  extends ComboBox  implements DDEConnectorListener{
 			areas = new Array();
 		 	var list:Array = result.firstChild.childNodes;
 			for (var i = 0; i<list.length; i++) {
+				
 				if(list[i].nodeName == "DownloadArea"){
-					areas.push({label:list[i].attributes["label"],data:"fromServer"+list[i].attributes["id"],sortOrder:list[i].attributes["sortOrder"]+String(list[i].attributes["label"]).toUpperCase()});
+					var label:String;
+					if(list[i].attributes["label"]==null){
+						label= XMLNode(list[i]).firstChild.firstChild.nodeValue;
+					} else {
+						label = list[i].attributes["label"];
+					} 	
+					areas.push({label:label,data:"fromServer"+list[i].attributes["id"],sortOrder:list[i].attributes["sortOrder"]+label.toUpperCase()});
 				}
 			}	
 			areas.sortOn("sortOrder");

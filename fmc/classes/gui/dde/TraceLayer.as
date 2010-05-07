@@ -31,12 +31,13 @@ class gui.dde.TraceLayer {
 	}
 	
 	private function drawLayer():Void{
+		var rect:Object = map.extent2Rect(map.getCurrentExtent());
 		traceSheet = map.createEmptyMovieClip("mTraceSheet",map.getNextHighestDepth());
 		traceSheet.beginFill(0xAA6600,20);
 		traceSheet.moveTo(0, 0);
-		traceSheet.lineTo(map.getWidth(),0);
-		traceSheet.lineTo(map.getWidth(), map.getHeight());
-		traceSheet.lineTo(0, map.getHeight());
+		traceSheet.lineTo(rect.width,0);
+		traceSheet.lineTo(rect.width, rect.height);
+		traceSheet.lineTo(0, rect.height);
 		traceSheet.lineTo(0, 0);
 		traceSheet.endFill();
 		var tl:Object = this
@@ -109,6 +110,7 @@ class gui.dde.TraceLayer {
 		else {
 			if (double){
 				firstClick = true;
+				geometry.setReady();
 				if(traceMode == "tracePoly" ){ 
 					geometry.removePoint(null);
 				} 
@@ -120,10 +122,12 @@ class gui.dde.TraceLayer {
 				case "traceBox":
 					geometry.removePoint();
 					Square(geometry).addPoint(point);
+					geometry.setReady();
 					firstClick = true;
 					break;	
 				case "traceCircle" :
 					Circle(geometry).setPointXY(point.getX(),point.getY());
+					geometry.setReady();
 					firstClick = true;
 					break;		
 				}

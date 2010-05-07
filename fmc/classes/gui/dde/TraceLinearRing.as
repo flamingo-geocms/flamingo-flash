@@ -43,4 +43,7 @@ function draw():Void {
 function onChangeGeometry(geometry:Geometry):Void {
 	draw()
  }
+ 
+ function onFinishGeometry(geometry:Geometry):Void {
+ }
  }

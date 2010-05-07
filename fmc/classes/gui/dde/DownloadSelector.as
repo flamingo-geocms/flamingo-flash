@@ -227,7 +227,7 @@ class gui.dde.DownloadSelector extends AbstractComponent implements GeometryList
 		
     }
 
-	private function loadAreas(){
+	private function loadAreas():Void{
 		
 	
 	}
@@ -250,7 +250,7 @@ class gui.dde.DownloadSelector extends AbstractComponent implements GeometryList
 		inArea.label =_global.flamingo.getString(this,"inArea");
 		inArea.selected = true;
 		inArea.setSize(200,20);
-		 inAreaChoser = DownloadAreas(this["mHolder"].attachMovie("DownloadAreas", "cmbInAreaChoser", 1));
+		inAreaChoser = DownloadAreas(this["mHolder"].attachMovie("DownloadAreas", "cmbInAreaChoser", 1));
 		// = this["mHolder"].createClassObject(mx.controls.ComboBox, "cmbInAreaChoser", 1);
 		inAreaChoser.dataProvider = inAreas;
 		inAreaChoser.move(265, 20);
@@ -424,7 +424,8 @@ class gui.dde.DownloadSelector extends AbstractComponent implements GeometryList
 			ddeConnector.setAreaSelectionType("inArea");
 			RadioButton(this["mInAreaRadioButton"]).selected = true;
 			RadioButton(this["mInAreaRadioButton"]).setFocus();
-			
+			ddeConnector.setAreaSelectionType("inArea");
+			inAreaChoser.enabled = true;
 			llX.enabled = false;
 			llY.enabled = false;
 			urX.enabled = false;
@@ -598,7 +599,10 @@ class gui.dde.DownloadSelector extends AbstractComponent implements GeometryList
 	}
 
 	function onChangeGeometry(geometry:Geometry):Void{
-		ddeConnector.setClippingPoints(geometry.getCoords())
+		ddeConnector.setClippingPoints(geometry.getCoords());
+	}
+	
+	function onFinishGeometry(geometry:Geometry):Void{
 	}
 	
 	function onDDELoad(result:XML):Void{
