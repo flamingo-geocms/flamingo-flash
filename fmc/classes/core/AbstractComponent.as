@@ -230,17 +230,16 @@ class core.AbstractComponent extends MovieClip {
     * @param visible:Boolean True or false.
     */
     function setVisible(visible:Boolean):Void {
-        if (this.visible != visible) {
-            this.visible = visible;
+        //if (this.visible != visible) {
+             this.visible = visible;
             _visible = visible;
-            
             _global.flamingo.raiseEvent(this, "onSetVisible", this, visible);
             
             // If the component's immediate parent is a window, the window will get the same visibility as given to the component. This is to make a window close on setting its content invisible. If this behavior is not desired, configure an extra container between the window and its content. That way the window will not be the component's immediate parent anymore.
             if (_parent._parent._parent._name == "mWindow") {
                 _parent._parent._parent._parent.setVisible(visible);
             }
-        }
+        //}
     }
     
     /**
