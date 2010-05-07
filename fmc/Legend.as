@@ -87,7 +87,7 @@ lLayer.onShow = function(layer:MovieClip) {
 	//var id = id.substring(mapid.length+1, layerid.length)
 	//remember scale of layer in scales object
 	scales[id] = layer.getScale();
-	refresh();
+	thisObj.refresh();
 };
 lLayer.onHide = function(layer:MovieClip) {
 	var id = flamingo.getId(layer)
@@ -95,7 +95,7 @@ lLayer.onHide = function(layer:MovieClip) {
 	//var id = id.substring(mapid.length+1, layerid.length)
 	//remember scale of layer in scales object
 	scales[id] = layer.getScale();
-	refresh();
+	thisObj.refresh();
 };
 lLayer.onUpdateComplete = function(layer:MovieClip) {
 	var id = flamingo.getId(layer)
@@ -103,18 +103,18 @@ lLayer.onUpdateComplete = function(layer:MovieClip) {
 	//var id = id.substring(mapid.length+1, layerid.length)
 	//remember scale of layer in scales object
 	scales[id] = layer.getScale();
-	refresh();
+	thisObj.refresh();
 };
 //---------------------------------------
 var lParent:Object = new Object();
 lParent.onResize = function(mc:MovieClip ) {
-	refresh();
+	thisObj.refresh();
 };
 flamingo.addListener(lParent, flamingo.getParent(this), this);
 //
 var lFlamingo:Object = new Object();
 lFlamingo.onSetLanguage = function( lang:String ) {
-	refresh();
+	thisObj.refresh();
 };
 flamingo.addListener(lFlamingo, "flamingo", this);
 //----------------
@@ -1046,7 +1046,7 @@ function _refreshItem(mc:MovieClip, animate:Boolean) {
 			mc.mLabel._x = mc.mSymbol._x+mc.mSymbol._width;
 			mc.mSymbol._y = Math.max(0, ((mc.mLabel._height/2)-(mc.mSymbol._height/2)));
 			mc.mLabel._y = Math.max(0, ((mc.mSymbol._y+mc.mSymbol._height/2)-(mc.mLabel._height/2)));
-			if (mc._parent._parent.item.itemvisible or mc._parent._parent.item.itemvisible ==undefined) {
+			if (_getVisible(mc._parent._parent.item.listento) == 1 or mc._parent._parent.item.itemvisible ==undefined) {
 				_clear(mc.mSymbol);
 				if (shadowsymbols) {
 					_dropShadow(mc.mSymbol);
@@ -1101,30 +1101,40 @@ function _getScale(listento:Object):Number {
 	if (listento == undefined) {
 		return;
 	}
+	var scale:Number = undefined;
 	for (var layer in listento) {
-		return scales[layer];
+		if(scale == undefined || scale < scales[layer]){
+			scale = scales[layer];
+		}
 	}
+	return scale;
 }
 function _getVisible(listento:Object):Number {
 	if (listento == undefined) {
 		return;
 	}
+	var vis:Number = -3; //not visible
 	for (var maplayer in listento) {
-		var mc:MovieClip = flamingo.getComponent(maplayer);
+		//if one is visible (vis == 1) return
+		var mc:MovieClip = flamingo.getComponent(maplayer);	
 		if (listento[maplayer].length == 0) {
-			//no sublayers, examin whole maplayer
-			return mc.getVisible();	
+			if(mc.getVisible(lyrs[i])==1){
+				return 1;
+			}
+			if(mc.getVisible(lyrs[i]) > vis){
+				vis = mc.getVisible();
+			}		
 		} else {
-			//1 or more layers, examine all
+			//1 or more sublayers, examine all if one is visible (vis == 1) return
 			var lyrs:Array = listento[maplayer].split(",");
-			var vis:Number = -3; //not visible
 			for(var i:Number=0;i<lyrs.length;i++){
+				if(mc.getVisible(lyrs[i])==1){
+					return 1;
+				} 
 				if(mc.getVisible(lyrs[i]) > vis){
 					vis = mc.getVisible(lyrs[i]);
 				}
-			}	
-			return vis;
-			
+			}
 			//1 or more sublayers, examine the first one
 			
 			//var layer = listento[maplayer].split(",")[0];
@@ -1140,6 +1150,7 @@ function _getVisible(listento:Object):Number {
 			//return vis;
 		}
 	}
+	return vis;
 }
 function _drawGroupLabel(mc:MovieClip, mouseover:Boolean) {
 	var url = getString(mc.item, "infourl");
@@ -1242,8 +1253,6 @@ function drawLegend(list:Array, parent:MovieClip, _indent:Number) {
 								}
 								flamingo.raiseEvent(comp, "onHide", comp);
 							}
-							//show hide the component but also all layers in the component.
-							comp.setLayerProperty("#ALL#", "visible", checked);	
 						} else {
 							//if checked the component must be set visible
 							if (checked) {
@@ -1253,7 +1262,6 @@ function drawLegend(list:Array, parent:MovieClip, _indent:Number) {
 								_global.flamingo.raiseEvent(comp, "onShow", comp);
 							}
 							comp.setLayerProperty(layers, "visible", checked);
-							
 						}
 						//do update here to make sure that show/hide and setLayerProperty is done before update.
 						updatelayers[maplayer] = 1;
@@ -1475,7 +1483,6 @@ function _grayOut(mc:MovieClip) {
 }
 function getString(item:Object, stringid:String):String {
 
-	
 	var lang = flamingo.getLanguage();
 
 	var s = item.language[stringid][lang];
