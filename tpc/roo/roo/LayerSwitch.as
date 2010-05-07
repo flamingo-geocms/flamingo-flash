@@ -128,4 +128,9 @@ class roo.LayerSwitch extends AbstractComponent {
     	return allOutOfScale;
     }
     
+    
+    function onUpdateComplete(layer:MovieClip, updateTime:Number):Void {
+        swizch();
+    }
+    
 }
