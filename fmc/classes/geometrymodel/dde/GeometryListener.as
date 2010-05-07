@@ -9,4 +9,7 @@ interface geometrymodel.dde.GeometryListener {
     
     function onChangeGeometry(geometry:Geometry):Void;
     
+
+    function onFinishGeometry(geometry:Geometry):Void;
+    
 }

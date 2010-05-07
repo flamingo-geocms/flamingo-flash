@@ -26,6 +26,8 @@ class geometrymodel.dde.LinearRing extends LineString {
         points.push(endPoint);
 		geometryEventDispatcher.changeGeometry(this);
     }
+    
+
 
 	
     function removePoint(point:Point, permanent:Boolean):Void {

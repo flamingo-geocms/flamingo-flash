@@ -25,6 +25,13 @@ class geometrymodel.dde.GeometryEventDispatcher {
         }
     }
 
+    function finishGeometry(geometry:Geometry):Void {
+        //trace("GeometryEventDispatcher.changeGeometry()")
+        updateListeners(geometryListeners);
+        for (var i:Number = 0; i < geometryListeners.length; i++) {
+            GeometryListener(geometryListeners[i]).onFinishGeometry(geometry);
+        }
+    }
     function changeGeometry(geometry:Geometry):Void {
         //trace("GeometryEventDispatcher.changeGeometry()");
 		

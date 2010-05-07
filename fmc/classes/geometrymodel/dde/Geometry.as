@@ -43,6 +43,9 @@ class geometrymodel.dde.Geometry {
 		geometryEventDispatcher.addGeometryListener(geometryListener);
 	}
 
+	function setReady(){
+		geometryEventDispatcher.finishGeometry(this);
+	}
     function getGeometries():Array {return null;}
 
     function addPoint(point:Point):Void { }
