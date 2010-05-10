@@ -1,4 +1,4 @@
-/*-----------------------------------------------------------------------------
+﻿/*-----------------------------------------------------------------------------
 * This file is part of Flamingo MapComponents.
 * Author: Linda vels
 * IDgis bv
@@ -32,8 +32,6 @@
 
 
 import mx.containers.ScrollPane;
-
-import roo.HighlightLayer;
 
 import mx.core.UIObject;
 import mx.controls.TextArea;
