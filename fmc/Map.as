@@ -99,6 +99,7 @@ dynamic class Map extends MovieClip {
 	private var maptipcoord:Object;
 	private var saveextent:Boolean;
 	private var clearlayers:Boolean; 
+	private var initExtentToScale:Boolean;
 	//
 	private var configObjId:String;
 	public var hasextent:Boolean;
@@ -144,6 +145,7 @@ dynamic class Map extends MovieClip {
 		minscale = undefined;
 		maxscale = undefined;
 		zoomScaleFactor = undefined;
+		initExtentToScale=true;
 		hasextent = false;
 		layersupdating = new Object();
 		layersidentifying = new Object();
@@ -319,6 +321,7 @@ dynamic class Map extends MovieClip {
 	* @attr minscale  A map cannot zoom further in than this scale (defined in mapunits per pixel).
 	* @attr maxscale  A map cannot zoom further out than this scale (defined in mapunits per pixel).
 	* @attr zoomscalefactor  The map zooms in steps with this factor starting with the minScale (minscale is required) and ending with the initialextent (when configured);
+	* @attr initextenttoscale (defaultvalue "true") if set to false the init extent will not respect the zoomscale levels set with zoomscalefactor.
 	* @attr holdonupdate  (defaultvalue "false") True or false. True: the map cannot update until the previous update is completed.
 	* @attr holdonidentify (defaultvalue "false") True or false. True: the map cannot perform an identify until the previous identify is completed.
 	* @attr fadesteps  (defaultvalue "3")  Number of steps of the fade-effect, which layers use to appear.
@@ -415,6 +418,13 @@ dynamic class Map extends MovieClip {
 			case "zoomscalefactor" :
 				this.zoomScaleFactor = Number(val);
 				break;				
+			case "initextenttoscale" :
+				if (val.toLowerCase() == "true") {
+					this.initExtentToScale = true;
+				} else {
+					this.initExtentToScale = false;
+				}
+				break;
 			case "movetime" :
 				this.movetime = Number(val);
 				break;
@@ -1368,9 +1378,9 @@ dynamic class Map extends MovieClip {
 		var intExtent:Object = copyExtent(_initialextent);
 		correctExtent(intExtent);
 		var initialScale:Number = (intExtent.maxx-intExtent.minx)/this.__width;//Math.max(((_initialextent.maxx-_initialextent.minx)/this.__width)/pixelSize,((_initialextent.maxy-_initialextent.miny)/this.__width)/pixelSize);
-		/*if(calcScale>initialScale){
+		if(calcScale>initialScale && !initExtentToScale){
 			return extent;
-		}*/
+		}
 		var nw = this.__width*calcScale;
 		var nh = this.__height*calcScale;
 		var x =  extent.minx + ((extent.maxx - extent.minx)/2);
