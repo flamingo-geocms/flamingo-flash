@@ -1,4 +1,4 @@
-﻿/*-----------------------------------------------------------------------------
+/*-----------------------------------------------------------------------------
 * This file is part of Flamingo MapComponents.
 * Author: Michiel J. van Heek.
 * IDgis bv
@@ -11,10 +11,10 @@
 * With the print component a user can select a template and change its make-up. 
 * Two settings of a template are set outside the print component. 
 * The user can use the "main map" for that. These settings are: the rough zoom area, and optionally an identify location. 
-* The first map in every template will react to these events from Flamingo's “main map”. 
+* The first map in every template will react to these events from Flamingo's "main map". 
 * All other settings are done using the print component. 
-* These settings are: the exact scale, which components within the template be visible (using a “container inspector” with check boxes), 
-* which layers be visible in the map (using a dedicated legend in the “legend container”), and, finally, whether identify results be visible.
+* These settings are: the exact scale, which components within the template be visible (using a "container inspector" with check boxes), 
+* which layers be visible in the map (using a dedicated legend in the "legend container"), and, finally, whether identify results be visible.
 *
 * By default, the print component shows a scaled preview of the selected templates. 
 * The user can choose to see the preview in the original size. 
@@ -31,11 +31,11 @@
 
 /** @tag <fmc:Print> 
 * This tag defines a print component instance. Print extends AbstractContainer and as such can hold child components. 
-* Every print component should hold one “legend container” and one or more print templates. 
-* The “legend container” holds the several legend components to control the maps within the templates. 
+* Every print component should hold one "legend container" and one or more print templates. 
+* The "legend container" holds the several legend components to control the maps within the templates. 
 * It should be positioned at (220, 35). 
 * Every legend within the container must be given an id and its corresponding template should be registered as listener to that legend. 
-* That way the visibility of a legend will follow that of its template. The print listens to the “main map”. 
+* That way the visibility of a legend will follow that of its template. The print listens to the "main map". 
 * It is this map that informs the maps in the templates about its zoom en pan events and its identify events.
 * @class gui.Print extends AbstractContainer
 * @hierarchy child node of Flamingo or a container component. 

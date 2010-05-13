@@ -1,4 +1,4 @@
-﻿/*-----------------------------------------------------------------------------
+/*-----------------------------------------------------------------------------
 * This file is part of Flamingo MapComponents.
 * Author: Michiel J. van Heek.
 * IDgis bv
@@ -47,7 +47,7 @@
 		...
 		</fmc:GIS>
 	</Flamingo>	
-* @attr authentication Reference to the authentication component. This value must be equal to the “listento”.
+* @attr authentication Reference to the authentication component. This value must be equal to the "listento".
 * @attr updateMaps Comma seperate list of maps that should be updated after a commit to the server. Set this attribute when
 * the Layers in your map(s) (LayerOGWMS, LayerArcIMS) are based on the same data as the (WFS)Layers in the GIS (EditMap)
 * @attr geometryeditable Switch, value = "yes" or "no". If yes the editMap geometries for the layer corresponding to this gis
@@ -71,10 +71,10 @@
 	</fmc:GIS>
 * @attr title Name by which the layer is presented to the user, for example in the edit legend.
 * @attr visible	(true, false, defaultvalue = false) Whether or not the layer's features be visible in the edit map.
-* @attr wfsurl	URL to the server that serves the layer's features. Standard url format is used, with the exception that it is preceded by “wfs::”. 
+* @attr wfsurl	URL to the server that serves the layer's features. Standard url format is used, with the exception that it is preceded by "wfs::". 
 * Currently, only the OGC web feature service protocol is supported.
 * @attr featuretypename	Name of the feature type that defines the layer's features on the server.
-* @attr geometrytypes(“Point”, “LineString”, “Polygon”, “Circle”, or a combination of these, comma-separated, no default value) 
+* @attr geometrytypes("Point", "LineString", "Polygon", "Circle", or a combination of these, comma-separated, no default value) 
 * Geometry types that the user be able to draw when a new feature is created. 
 * Every possible geometry type will appear as a create button in the edit legend.
 * NB the geometrytype Circle not supported when editing WFS Layers, is only applicable for red-lining 
@@ -100,8 +100,8 @@
             <fmc:Property name="app:name" title="Naam" type="SingleLine" defaultvalue="YAYA"/>
             <fmc:Property name="app:description" title="Omschrijving" type="MultiLine" immutable="true"/>
 * @attr name (no default value) Name of the property, this should correspond with the feature type property name on the server (incl. namespace).			
-* @attr title (default value: “”) Name by which the property is presented to the user, for example on a label in the edit properties component.
-* @attr type (“SingleLine”, “MultiLine”, “DropDown”, default value = “SingleLine”) Presentation type of the property. 
+* @attr title (default value: "") Name by which the property is presented to the user, for example on a label in the edit properties component.
+* @attr type ("SingleLine", "MultiLine", "DropDown", default value = "SingleLine") Presentation type of the property. 
 * This type defines how the property will appear in the edit properties component. As a single line or multi line text input, 
 * or a drop down list with fixed values.
 * @attr defaultvalue Value that the property gets when a new feature is created.
@@ -140,7 +140,7 @@
 * @attr name (no default value) Name of the property this should correspond with the feature type property name on the server (incl. namespace).
 * @attr propertytype (possible values: "pointcolor", "pointopacity", "pointicon", "pointtext", "strokecolor", "strokeopacity", "linestyle", "linedashstyle", "fillcolor", "fillopacity")
 * Propertytype of the property, indicates the styling of the editMap geometry drawn by flash.
-* @attr title (default value: “”) Name by which the property is presented to the user, for example on a label in the edit properties component.
+* @attr title (default value: "") Name by which the property is presented to the user, for example on a label in the edit properties component.
 * @attr type (no default value, implemented are: "ColorPalettePicker", "OpacityInput", "OpacityPicker", "IconPicker", "PointTextEditor", "LineTypePicker", "DashStylePicker") Defines the user interface presentation type of input.
 * This type defines how the property will appear in the edit properties component. As a popup picker 
 * window, a line input editor, etc. 
@@ -164,7 +164,7 @@
 		...
 	</fmc:GeometryProperty>
 
-* @attr title (default value: “”) Name by which the property is presented to the user, for example on a label in the edit properties component.
+* @attr title (default value: "") Name by which the property is presented to the user, for example on a label in the edit properties component.
 * @attr name (no default value) Friendly name presented to the user.
 * @attr pickcolor Color value used by flamingo in 0xffffff format.
 * @attr value (String) Color value send to server.
@@ -181,7 +181,7 @@
 		...
 	</fmc:GeometryProperty>
 
-* @attr title (default value: “”) Name by which the property is presented to the user, for example on a label in the edit properties component.
+* @attr title (default value: "") Name by which the property is presented to the user, for example on a label in the edit properties component.
 * @attr name (no default value) Friendly name presented to the user.
 * @attr pickiconurl Url of the icon used by flamingo to load the icon.
 * @attr value (String) Url of the icon send to server.
@@ -200,7 +200,7 @@
 		...
 	</fmc:GeometryProperty>
 
-* @attr title (default value: “”) Name by which the property is presented to the user, for example on a label in the edit properties component.
+* @attr title (default value: "") Name by which the property is presented to the user, for example on a label in the edit properties component.
 * @attr name (no default value) Friendly name presented to the user.
 * @attr pickdashstyle String with the alternating pen on / pen off lengths. Values are of float type describing the length in pixels. Values are space delimmited.
 * @attr value (String)  send to server.

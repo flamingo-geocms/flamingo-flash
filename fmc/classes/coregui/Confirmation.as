@@ -1,4 +1,4 @@
-﻿/*-----------------------------------------------------------------------------
+/*-----------------------------------------------------------------------------
 * This file is part of Flamingo MapComponents.
 * Author: Michiel J. van Heek.
 * IDgis bv
@@ -10,9 +10,9 @@
 * @file flamingo/fmc/Confirmation.fla (sourcefile)
 * @file flamingo/fmc/Confirmation.swf (compiled component, needed for publication on internet)
 * @file flamingo/fmc/Confirmation.xml (configurationfile, needed for publication on internet)
-* @configstring question Question to ask the user for confirmation. For example: “Are you sure?”
-* @configstring yes Text to appear on the “confirm” button.
-* @configstring no Text to appear on the “deny” button.
+* @configstring question Question to ask the user for confirmation. For example: "Are you sure?"
+* @configstring yes Text to appear on the "confirm" button.
+* @configstring no Text to appear on the "deny" button.
 */
 
 /** @tag <fmc:Confirmation>
@@ -20,7 +20,7 @@
 * A confirmation component listens to two other components: one is a veil and the other can be any component that is interested in a confirmation event. 
 * The veil's visibility is automatically linked to the visibility of the confirmation component. 
 * An example of a component interested in confirmation events is the edit bar. 
-* When a “confirm” event reaches the edit bar, the edit bar continues to delete the active feature in the feature model. 
+* When a "confirm" event reaches the edit bar, the edit bar continues to delete the active feature in the feature model. 
 * A confirmation component should be placed in a window so that a component visible button can make it pop-up.
 * @class coregui.Confirmation extends AbstractComponent
 * @hierarchy childnode of Flamingo or a container component.

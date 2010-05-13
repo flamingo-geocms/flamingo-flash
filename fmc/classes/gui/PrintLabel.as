@@ -1,4 +1,4 @@
-﻿/*-----------------------------------------------------------------------------
+/*-----------------------------------------------------------------------------
 * This file is part of Flamingo MapComponents.
 * Author: Michiel J. van Heek.
 * IDgis bv
@@ -16,7 +16,7 @@
 
 /** @tag <fmc:PrintLabel> 
 * This tag defines a print label. The print label should be registered as a listener to a map within the same template as the print label. 
-* This way the print label can substitute the text “[scale]” to the actual and current scale of that map.
+* This way the print label can substitute the text "[scale]" to the actual and current scale of that map.
 * @class gui.PrintLabel extends AbstractComponent
 * @hierarchy child node of PrintTemplate.
 * @example
@@ -26,12 +26,12 @@
 			<fmc:PrintLabel name="titel" top="20"  left="50%" listento="printMap0"
 			text="Grondwatergebieden (schaal: [scale])" fontfamily="arial" fontsize="60" alignment="center"/>
 	</fmc:PrintTemplate>
-* @attr text	(default value: “”) Text to be displayed.
-* @attr fontfamily	(“serif-embed”, “sans-serif-embed”, “monospace-embed”, or any system font, default value: Flamingo's general style setting) 
+* @attr text	(default value: "") Text to be displayed.
+* @attr fontfamily	("serif-embed", "sans-serif-embed", "monospace-embed", or any system font, default value: Flamingo's general style setting) 
 * Name of the font in which the text be displayed. If a system font is used instead of one of the three embedded  fonts, 
 * parts of the print label may not be visible on the print, despite the fact that they are visible in the preview.
 * @attr fontsize	(default value: Flamingo's general style setting) Size of the font in which the text be displayed.
-* @attr alignment	("left", "center", "right", default value: “left”) Alignment of the text relative to the position of the print label component.
+* @attr alignment	("left", "center", "right", default value: "left") Alignment of the text relative to the position of the print label component.
 */
 
 import gui.*;
