@@ -267,8 +267,7 @@ class gui.EditMapPoint extends EditMapGeometry {
 					
 					var intersectionTestResult:Boolean = false;
 					
-					if (thisObj._geometry.getFirstAncestor() instanceof Polygon) {
-						
+					if ((thisObj._geometry.getFirstAncestor() instanceof Polygon) || (thisObj._geometry.getFirstAncestor() instanceof MultiPolygon)) {
 						var pixel:Pixel = new Pixel(this._x + this._parent._x, this._y + this._parent._y);
 						var testPoint:Point = _parent.pixel2Point(pixel);
 						intersectionTestResult = thisObj._parent.selfIntersectionTestDragPoint(thisObj.pointNr, testPoint);						
