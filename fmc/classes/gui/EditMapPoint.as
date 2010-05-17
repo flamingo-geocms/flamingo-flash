@@ -240,37 +240,14 @@ class gui.EditMapPoint extends EditMapGeometry {
 				}
 				else {
 					//User requested to delete this point.
-					//1. if geometry's first ancestor is a point, do not delete the point.
-					//2. if geometry's first ancestor is a linestring:
-					//		- delete the point if the nr of points >= 3. Otherwise do not delete the point.
-					//3. if geometry's first ancestor is a polygon. Delete the point if:
-					// 		- the nr of points >= 5. Remember that a polygon has a closed linestring ring so one point extra
-					// 		- after deletion the polygon does not selfintersect. FOR NOW WE SKIP THIS TEST
-					
+					//if geometry's first ancestor is a point, do not delete the point.
 					var geom:Geometry = thisObj._geometry.getFirstAncestor();
 					if (geom instanceof Point) {
 						//do nothing
+					}else{						
+						thisObj._geometry.getParent().removePoint(Point(thisObj._geometry));						
 					}
-					else if (geom instanceof LineString) {
-						if (geom.getPoints().length >= 3) {
-							//delete the point
-							thisObj._geometry.getParent().removePoint(Point(thisObj._geometry));
-							
-							//redraw geometry
-							thisObj._parent.draw();
-						}
-					}
-					else if (geom instanceof Polygon) {
-						if (geom.getPoints().length >= 5) {
-							//delete the point
-							thisObj._geometry.getParent().removePoint(Point(thisObj._geometry));
-							
-							//redraw geometry, especially the fill of the polygon
-							thisObj._parent._parent.draw();
-							thisObj._parent.draw();
-							
-						}
-					}
+					
 					//remove this editMapPoint and it's graphic !!!
 					if (mPointGraphic != null) {
 						with (this.mPointGraphic) {
@@ -303,11 +280,9 @@ class gui.EditMapPoint extends EditMapGeometry {
 						this._x = 0;
 						this._y = 0;
 						thisObj._geometry.setXY(p.getX(),p.getY());
-						if (thisObj._geometry.getFirstAncestor() instanceof Polygon) {
-							//redraw geometry, especially the fill of the polygon
-							thisObj._parent._parent.draw();
-							thisObj._parent.draw();
-						}
+						//if (thisObj._geometry.getFirstAncestor() instanceof Polygon) {
+							thisObj._geometry.getFirstAncestor().getGeometryEventDispatcher().changeGeometry(this);
+						//}
 					}
 					else {
 						var pixel:Pixel = new Pixel(this._x + this._parent._x, this._y + this._parent._y);
@@ -320,24 +295,7 @@ class gui.EditMapPoint extends EditMapGeometry {
 						this._parent._y += this._y;
 						this._x = 0;
 						this._y = 0;
-						//trace(thisObj._geometry.getFirstAncestor().toString());
-						if (thisObj._geometry.getFirstAncestor() instanceof MultiPolygon){
-							//redraw the multi,single and point
-							thisObj._parent._parent._parent.draw();
-							thisObj._parent._parent.draw();
-							thisObj._parent.draw();
-							
-						}
-						if (thisObj._geometry.getFirstAncestor() instanceof Polygon) {
-							//redraw geometry, especially the fill of the polygon
-							thisObj._parent._parent.draw();
-							thisObj._parent.draw();
-						}
-						else if (thisObj._geometry.getFirstAncestor() instanceof LineString) {
-							//redraw geometry
-							thisObj._parent.draw();
-						}
-						
+						thisObj._geometry.getFirstAncestor().getGeometryEventDispatcher().changeGeometry(this);
 						//raise event onGeometryDrawUpdate via editMap through gis
 						thisObj.gis.geometryUpdate();
 					}

@@ -32,6 +32,9 @@ class geometrymodel.Geometry {
 		geometryEventDispatcher.removeGeometryListener(geometryListener);
 	}
      
+	function getGeometryEventDispatcher():GeometryEventDispatcher{
+		return geometryEventDispatcher;
+	}
 	function setParent(parent:Geometry):Void {
         if (this.parent != parent) {
             if (parent != null) {

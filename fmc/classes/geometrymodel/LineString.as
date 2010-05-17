@@ -8,17 +8,19 @@ import geometrymodel.*;
 
 import event.AddRemoveEvent;
 import event.GeometryListener;
+import tools.Logger;
 
 class geometrymodel.LineString extends Geometry implements GeometryListener {
     
     private var points:Array = null;
-    
+    private var log:Logger=null;
+	
     function LineString(points:Array) {
+		this.log = new Logger("geometrymodel.LineString",_global.flamingo.getLogLevel(),_global.flamingo.getScreenLogLevel());
         if ((points == null) || (points.length < 2)) {
             _global.flamingo.tracer("Exception in geometrymodel.LineString.<<init>>(" + points.toString() + ")");
             return;
         }
-        
         this.points = points;
         for (var i:String in points) {
             addGeometryListener(points[i]);
@@ -70,15 +72,10 @@ class geometrymodel.LineString extends Geometry implements GeometryListener {
         
     }
 	
-	function removePoint(point:Point):Void {
-		if ((points.length == 3) && (isClosed())) {
-            // Point cannot be removed. This is a non-exceptional precondition.
-            return;
-        }
-        
+	function removePoint(point:Point):Void {		
         if (points.length == 2) {
             if (isClosed()) {
-                //Point cannot be removed. This is a non-exceptional precondition.
+                log.debug("Can not remove point. LineString needs to have at least 2 points");
                 return;
             } else {
                 var otherPoint:Point = null;
@@ -110,8 +107,7 @@ class geometrymodel.LineString extends Geometry implements GeometryListener {
         point.setParent(null);
         removeGeometryListener(point);
   		point = null;
-		geometryEventDispatcher.changeGeometry(this);
-        
+		getFirstAncestor().getGeometryEventDispatcher().changeGeometry(this);
     }
 	
 	function removePointNr(pointNr:Number):Void {
