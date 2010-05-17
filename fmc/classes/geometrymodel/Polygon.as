@@ -25,7 +25,8 @@ class geometrymodel.Polygon extends Geometry implements GeometryListener{
     }
     function addInteriorRing(interiorRing:LinearRing){
         interiorRing.setParent(this);
-		interiorRings.push(interiorRing);
+		interiorRings.push(interiorRing);		
+		addGeometryListener(interiorRing);
 		geometryEventDispatcher.addChild(this,interiorRing);
 	}
 	function getInteriorRings():Array{
