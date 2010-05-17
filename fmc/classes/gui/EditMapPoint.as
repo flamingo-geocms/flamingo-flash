@@ -10,11 +10,13 @@ import gui.*;
 import geometrymodel.Geometry;
 import geometrymodel.Point;
 import geometrymodel.Polygon;
+import geometrymodel.MultiPolygon;
 import geometrymodel.LineString;
 
 import gismodel.Feature;
 import gismodel.Layer;
 import gismodel.GeometryProperty;
+import tools.Logger;
 
 class gui.EditMapPoint extends EditMapGeometry {
     private var m_pixel:Pixel = null;
@@ -29,9 +31,12 @@ class gui.EditMapPoint extends EditMapGeometry {
 	private var pointOpacity:Number = -1;
 	private var pointIconUrl:String = null;
 	private var pointText:String = null;
+	
+	public var log:Logger=null;
 	    
     function onLoad():Void { // This method is a stub. It is necessary though, because of the "super" bug in Flash.
       	super.onLoad();    
+		this.log = new Logger("gui.EditMapPoint",_global.flamingo.getLogLevel(),_global.flamingo.getScreenLogLevel());
     }
     
    function setSize(width:Number, height:Number):Void { // This method is a stub. It is necessary though, because of the "super" bug in Flash.
@@ -280,7 +285,7 @@ class gui.EditMapPoint extends EditMapGeometry {
 			
 			mPointGraphic.onReleaseHandler = function(){
 				// onRelease
-				if (!thisObj.gis.getEditRemoveVertex()) {
+				if (!thisObj.gis.getEditRemoveVertex()) {					
 					this.stopDrag();
 					
 					var intersectionTestResult:Boolean = false;
@@ -289,7 +294,7 @@ class gui.EditMapPoint extends EditMapGeometry {
 						
 						var pixel:Pixel = new Pixel(this._x + this._parent._x, this._y + this._parent._y);
 						var testPoint:Point = _parent.pixel2Point(pixel);
-						intersectionTestResult = thisObj._parent.selfIntersectionTestDragPoint(thisObj.pointNr, testPoint);
+						intersectionTestResult = thisObj._parent.selfIntersectionTestDragPoint(thisObj.pointNr, testPoint);						
 					}
 					if (intersectionTestResult) {
 						//animate point back to original location
@@ -315,7 +320,14 @@ class gui.EditMapPoint extends EditMapGeometry {
 						this._parent._y += this._y;
 						this._x = 0;
 						this._y = 0;
-						
+						//trace(thisObj._geometry.getFirstAncestor().toString());
+						if (thisObj._geometry.getFirstAncestor() instanceof MultiPolygon){
+							//redraw the multi,single and point
+							thisObj._parent._parent._parent.draw();
+							thisObj._parent._parent.draw();
+							thisObj._parent.draw();
+							
+						}
 						if (thisObj._geometry.getFirstAncestor() instanceof Polygon) {
 							//redraw geometry, especially the fill of the polygon
 							thisObj._parent._parent.draw();

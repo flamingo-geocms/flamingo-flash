@@ -1,4 +1,4 @@
-/*-----------------------------------------------------------------------------
+﻿/*-----------------------------------------------------------------------------
 * This file is part of Flamingo MapComponents.
 * Author: Michiel J. van Heek.
 * IDgis bv
@@ -12,7 +12,10 @@ import geometrymodel.Geometry;
 import geometrymodel.Point;
 import geometrymodel.LineString;
 import geometrymodel.Polygon;
+import geometrymodel.MultiPolygon;
 import geometrymodel.Circle;
+import geometrymodel.LinearRing;
+import tools.Logger;
 
 class gui.GeometryPane extends MovieClip {
     
@@ -22,8 +25,10 @@ class gui.GeometryPane extends MovieClip {
     private var width:Number = -1; // Set by init object.
     private var height:Number = -1; // Set by init object.
     private var editMapGeometries:Array = null;
+	private var log:Logger=null;
     
     function onLoad():Void {
+		this.log = new Logger("gui.GeometryPane",_global.flamingo.getLogLevel(),_global.flamingo.getScreenLogLevel());
         editMapGeometries = new Array();
     }
     
@@ -51,14 +56,18 @@ class gui.GeometryPane extends MovieClip {
 		initObject["editMapEditable"] = gis.getEditMapEditable();
 		initObject["alwaysDrawPoints"] = gis.getAlwaysDrawPoints();
 		if (geometry instanceof Point) {
-            editMapGeometries.push(attachMovie("EditMapPoint", "mEditMapPoint" + depth, depth, initObject));
+            editMapGeometries.push(this.attachMovie("EditMapPoint", "mEditMapPoint" + depth, depth, initObject));
         } else if (geometry instanceof LineString) {
-            editMapGeometries.push(attachMovie("EditMapLineString", "mEditMapLineString" + depth, depth, initObject));
+            editMapGeometries.push(this.attachMovie("EditMapLineString", "mEditMapLineString" + depth, depth, initObject));
+        } else if (geometry instanceof LinearRing) {
+            editMapGeometries.push(this.attachMovie("EditMapLineString", "mEditMapLinearRing" + depth, depth, initObject));
         } else if (geometry instanceof Polygon) {
-            editMapGeometries.push(attachMovie("EditMapPolygon", "mEditMapPolygon" + depth, depth, initObject));
+            editMapGeometries.push(this.attachMovie("EditMapPolygon", "mEditMapPolygon" + depth, depth, initObject));
         } else if (geometry instanceof Circle) {
-            editMapGeometries.push(attachMovie("EditMapCircle", "mEditMapCircle" + depth, depth, initObject));
-        }
+            editMapGeometries.push(this.attachMovie("EditMapCircle", "mEditMapCircle" + depth, depth, initObject));
+        } else if (geometry instanceof MultiPolygon){
+			editMapGeometries.push(this.attachMovie("EditMapMultiPolygon", "mEditMapMultiPolygon" + depth, depth, initObject));
+		}
     }
     
     private function setTypeChildren(type:Number):Void {

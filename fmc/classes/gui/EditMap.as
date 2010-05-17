@@ -51,6 +51,7 @@ import gismodel.CreateGeometry;
 import geometrymodel.*;
 import gismodel.Feature;
 import coremodel.service.js.JsFeature;
+import tools.Logger;
 
 import core.AbstractComponent;
 
@@ -66,6 +67,7 @@ class gui.EditMap extends AbstractComponent implements StateEventListener {
     private var editMapCreateGeometryDepth:Number = 1001; // Assumes that there will never be more than 1000 layers at the same time.
 	private var editMapSelectFeature:EditMapSelectFeature=null;
 	private var ctrlKeyDown:Boolean = false;
+	private var log:Logger=null;
 	
 	function setAttribute(name:String, value:String):Void {
 		  if (name == "editable") {
@@ -94,6 +96,7 @@ class gui.EditMap extends AbstractComponent implements StateEventListener {
     }
     
     function init():Void {
+		this.log = new Logger("gui.EditMap",_global.flamingo.getLogLevel(),_global.flamingo.getScreenLogLevel());
         editMapLayers = new Array();
 		gis=_global.flamingo.getComponent(listento[0]);
         map=_global.flamingo.getComponent(listento[1]);
@@ -323,6 +326,7 @@ class gui.EditMap extends AbstractComponent implements StateEventListener {
 		//create new JsFeature with featureObject and add it to the layer
 		var jsFeature:JsFeature= new JsFeature(featureObject,layer.getServiceLayer());
 		if (jsFeature != null) {
+			log.info("addFeature");
 			layer.addFeature(jsFeature);	//the feature is made active by the postAction in Layer.as addFeature().
 		} else {
 			_global.flamingo.tracer("Exception in EditMap.addFeature()\n JsFeature is <<null>>. Can not add it to layer with layerName = "+layerName);

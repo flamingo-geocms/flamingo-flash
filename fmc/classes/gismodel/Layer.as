@@ -14,6 +14,7 @@ import coremodel.service.js.JsFeature;
 import geometrymodel.*;
 import tools.Randomizer;
 import core.AbstractComposite;
+import tools.Logger;
 
 class gismodel.Layer extends AbstractComposite implements ActionEventListener {
     
@@ -37,7 +38,10 @@ class gismodel.Layer extends AbstractComposite implements ActionEventListener {
     
     private var stateEventDispatcher:StateEventDispatcher = null;
     
+	private var log:Logger=null;
+	
     function Layer(gis:GIS, xmlNode:XMLNode) {
+		this.log = new Logger("gismodel.Layer",_global.flamingo.getLogLevel(),_global.flamingo.getScreenLogLevel());
         stateEventDispatcher = new StateEventDispatcher();
         
         this.gis = gis;
@@ -284,6 +288,7 @@ class gismodel.Layer extends AbstractComposite implements ActionEventListener {
     }
     
     function addFeature(_object:Object):Void {
+		log.debug("AddFeature is called");
         if (_object == null) {
             _global.flamingo.tracer("Exception in gismodel.Layer.addFeature()\No service feature or geometry given.");
             return;

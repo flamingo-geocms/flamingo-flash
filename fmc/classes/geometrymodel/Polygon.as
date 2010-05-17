@@ -5,24 +5,33 @@
 * Changes by author: Maurits Kelder, B3partners bv
  -----------------------------------------------------------------------------*/
 import geometrymodel.*;
+import event.GeometryListener;
 
-class geometrymodel.Polygon extends Geometry {
+class geometrymodel.Polygon extends Geometry implements GeometryListener{
     
     private var exteriorRing:LinearRing = null;
-    
+    private var interiorRings:Array=null;
     function Polygon(exteriorRing:LinearRing) {
         if (exteriorRing == null) {
             _global.flamingo.tracer("Exception in geometrymodel.Polygon.<<init>>(null)");
             return;
         }
-        
+        interiorRings=new Array();
 		exteriorRing.removeConsecutiveDoubles();
         this.exteriorRing = exteriorRing;
         exteriorRing.setParent(this);
         addGeometryListener(exteriorRing);
-        geometryEventDispatcher.addChild(this,exteriorRing);
+        geometryEventDispatcher.addChild(this,exteriorRing);		
     }
-    
+    function addInteriorRing(interiorRing:LinearRing){
+        interiorRing.setParent(this);
+		interiorRings.push(interiorRing);
+		geometryEventDispatcher.addChild(this,interiorRing);
+	}
+	function getInteriorRings():Array{
+		return interiorRings;
+	}
+	
     function addPoint(point:Point):Void {        
         exteriorRing.addPoint(point);
     }
@@ -32,7 +41,12 @@ class geometrymodel.Polygon extends Geometry {
     }
 	
     function getChildGeometries():Array {
-        return new Array(exteriorRing);
+        var rings:Array= new Array();
+		rings.push(exteriorRing);
+		for (var i=0; i < interiorRings.length; i++){
+			rings.push(interiorRings[i]);
+		}
+		return rings;
     }
     
     function getPoints():Array {
@@ -191,7 +205,9 @@ class geometrymodel.Polygon extends Geometry {
         var gmlString:String = "";
 		if (srsName == undefined) {
 			gmlString += "<gml:Polygon srsName=\"urn:ogc:def:crs:EPSG::28992\">\n";
-        } else {
+        } else if(srsName==null){
+			gmlString+= "<gml:Polygon>\n";
+		} else {
 		    gmlString += "<gml:Polygon srsName=\""+srsName+"\">\n";
 		}
 		gmlString += "  <gml:outerBoundaryIs>\n";
@@ -237,11 +253,39 @@ class geometrymodel.Polygon extends Geometry {
             wktGeom += (point.getX() + " " + point.getY());
 		}
 		wktGeom+=")";
+		for (var b:Number=0; b < interiorRings.length; b++){
+			points=interiorRings[b].getPoints();
+			wktGeom+=",(";
+			for (var i:Number = 0; i < points.length; i++) {
+				if (i!=0){
+					wktGeom+=",";
+				}
+				point = Point(points[i]);            
+				wktGeom += (point.getX() + " " + point.getY());
+			}
+			wktGeom+=")";
+		}
+		
 		return wktGeom;
 	}
 	
 	function toString():String {
         return ("Polygon (" + exteriorRing.toString() + ")");
+    }
+	
+	function onChangeGeometry(geometry:Geometry):Void{
+    	//parent changed
+    	geometryEventDispatcher.changeGeometry(this);
+    }
+    
+    function onAddChild(geometry:Geometry,child:Geometry):Void{
+    	//parent changed
+    	geometryEventDispatcher.changeGeometry(this);
+    }
+	
+	public function onRemoveChild(geometry:Geometry,child:Geometry) : Void {
+		//parent changed
+    	geometryEventDispatcher.changeGeometry(this);
     }
     
 }

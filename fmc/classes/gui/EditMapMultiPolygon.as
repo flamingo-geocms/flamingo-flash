@@ -11,18 +11,24 @@ import geometrymodel.LinearRing;
 import geometrymodel.Point;
 import geometrymodel.Polygon;
 import geometrymodel.Envelope;
+import geometrymodel.Geometry;
 import geometrymodel.LineString;
+import geometrymodel.MultiPolygon;
 import gismodel.Feature;
 import gismodel.Layer;
 import gismodel.GeometryProperty;
+import tools.Logger;
 
-class gui.EditMapPolygon extends EditMapGeometry {
+class gui.EditMapMultiPolygon extends EditMapGeometry {
 
 	private var intersectionPixel:Pixel;
 	private var drawFillPattern:Boolean;
+	private var log:Logger=null;
     
     function onLoad():Void { // This method is a stub. It is necessary though, because of the "super" bug in Flash.
         super.onLoad();
+		this.log = new Logger("gui.EditMapMultiPolygon",_global.flamingo.getLogLevel(),_global.flamingo.getScreenLogLevel());
+		log.debug("onload is called");
 		drawFillPattern = false;
     }
     
@@ -37,6 +43,8 @@ class gui.EditMapPolygon extends EditMapGeometry {
 	}
 	
     function doDraw():Void {
+		log.debug("doDraw is called11");
+		var multiPolygon:MultiPolygon = MultiPolygon(_geometry);
 		if (editMapEditable) {
 			var feature:Feature = this.getFirstAncestor()._parent.getFeature();
 			var layer:Layer = feature.getLayer();
@@ -61,52 +69,15 @@ class gui.EditMapPolygon extends EditMapGeometry {
 			
 			fillPatternUrl = getFlashValue(feature, layer, "fillpattern");
 			
-			drawFillPattern = !(fillPatternUrl == null || fillPatternUrl == "null" || fillPatternUrl == NaN || fillPatternUrl == undefined);
-		}
-		var polygon:Polygon = Polygon(_geometry);
-		var exteriorRing:LinearRing = polygon.getExteriorRing();
-		var interiorRings:Array = polygon.getInteriorRings();
-		var points:Array = exteriorRing.getPoints();
-		var pixel:Pixel = point2Pixel(points[0]);
-		var x:Number = pixel.getX();
-		var y:Number = pixel.getY();
-		
+			drawFillPattern = !(fillPatternUrl == null || fillPatternUrl == "null" || fillPatternUrl == NaN || fillPatternUrl == undefined);			
+		}			
 		clear();
-		moveTo(x, y);
+		
 		if (type == ACTIVE) {
 			lineStyle(0, strokeColor, strokeOpacity);
 		} else {
-			lineStyle(strokeWidth , strokeColor, strokeOpacity);
-		}		
-		if (style.getFillOpacity() > 0) {
-			beginFill(fillColor, fillOpacity);
+			lineStyle(strokeWidth , strokeColor, strokeOpacity);		
 		}
-		for (var i:Number = 1; i < points.length; i++) {
-			pixel =  point2Pixel(points[i]);
-			lineTo(pixel.getX(), pixel.getY());
-		}
-		//walk over the interior rings
-		for (var i:Number =0; i <  interiorRings.length; i++){			
-			var innerPoints:Array = LinearRing(interiorRings[i]).getPoints();
-			moveTo(point2Pixel(innerPoints[0]).getX(), point2Pixel(innerPoints[0]).getY());
-			for (var i:Number = 1; i < innerPoints.length; i++) {
-				pixel =  point2Pixel(innerPoints[i]);
-				lineTo(pixel.getX(), pixel.getY());
-			}
-		}
-		
-		if (fillOpacity > 0) {
-			endFill();
-		}
-		
-		if (type != ACTIVE) {
-			moveTo(x, y);
-			lineStyle(strokeWidth * 2, 0, 0);
-			for (var i:Number = 1; i < points.length; i++) {
-				pixel =  point2Pixel(points[i]);
-				lineTo(pixel.getX(), pixel.getY());
-			}
-		}		
 	}
 	
 	private function intersectWithViewPort(startPixel:Pixel, endPixel:Pixel):Boolean {
@@ -164,7 +135,7 @@ class gui.EditMapPolygon extends EditMapGeometry {
 		return intersection;
 	}
 	
-	private function lineSegmentIntersectionTest_px(p1:Pixel, p2:Pixel, p3:Pixel, p4:Pixel):String {		
+	private function lineSegmentIntersectionTest_px(p1:Pixel, p2:Pixel, p3:Pixel, p4:Pixel):String {
 		//Line Segment A: Pixel p1 & p2
 		//Line Segment B: Pixel p3 & p4
 		var denom:Number = 	((p4.getY() - p3.getY())*(p2.getX() - p1.getX())) - ((p4.getX() - p3.getX())*(p2.getY() - p1.getY()));
@@ -191,6 +162,5 @@ class gui.EditMapPolygon extends EditMapGeometry {
 
 		return "NOT_INTERSECTING";
 	
-	}
-    
+	}    
 }

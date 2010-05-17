@@ -9,6 +9,7 @@ import event.*;
 import gismodel.GIS;
 import gismodel.Layer;
 import gismodel.Feature;
+import tools.Logger;
 
 class gui.EditMapLayer extends MovieClip implements StateEventListener {
     
@@ -21,7 +22,10 @@ class gui.EditMapLayer extends MovieClip implements StateEventListener {
     private var editMapFeatures:Array = null;
     private var stateEventDispatcher:StateEventDispatcher;
     
+	private var log:Logger=null;
+	
     function onLoad():Void {
+		this.log = new Logger("gui.EditMapLayer",_global.flamingo.getLogLevel(),_global.flamingo.getScreenLogLevel());
         editMapFeatures = new Array();
         addEditMapFeatures(layer.getFeatures());
         layer.addEventListener(this, "Layer", StateEvent.ADD_REMOVE, "features");

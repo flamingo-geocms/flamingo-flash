@@ -7,9 +7,12 @@
 import geometrymodel.*;
 
 import tools.XMLTools;
+import tools.Logger;
 
 class geometrymodel.GeometryParser {
     
+	private static var log:Logger= new Logger("gui.EditMapPolygon",_global.flamingo.getLogLevel(),_global.flamingo.getScreenLogLevel());
+	
     static function parseGeometry(geometryNode:XMLNode):Geometry {		
         if ((geometryNode.nodeName != "gml:Point") && (geometryNode.nodeName != "gml:LinearRing")
                                                    && (geometryNode.nodeName != "gml:LineString")
@@ -153,7 +156,7 @@ class geometrymodel.GeometryParser {
 	
 	static function parseGeometryFromWkt(wktGeom:String):Geometry {
 		
-		trace("GeometryParser.as parseGeometryFromWkt() wktGeom = "+wktGeom);
+		log.debug("GeometryParser.as parseGeometryFromWkt() wktGeom = "+wktGeom);
 		
 		var geometry:Geometry = null;
 		
@@ -163,15 +166,20 @@ class geometrymodel.GeometryParser {
 		var y:Number = 0;
 		var coordinatePairs:Array;
 		
-		
+		//handle the multi's
 		if (wktGeom.indexOf("MULTI") != -1) {
 			//intercept Multi Polygon
-			_global.flamingo.tracer("Exception in GeometryParser.parseGeometryFromWkt()\nUnable to parse MULTI POLYGON geometry. \nwktGeom = "+wktGeom);
-			return null;
-		}
-		
-		//create geometry according to geometryType 
-		if (wktGeom.indexOf("POINT") != -1) {
+			if (wktGeom.indexOf("MULTIPOLYGON") != -1){
+				//MULTIPOLYGON(((1 1,5 1,5 5,1 5,1 1),(2 2,2 3,3 3,3 2,2 2)),((6 3,9 2,9 4,6 3)))
+				var wktMultiPolygon:String=""+wktGeom;
+				wktMultiPolygon=wktMultiPolygon.substring("MULTIPOLYGON".length,wktMultiPolygon.length);				
+				geometry=parseWktMultiPolygon(wktMultiPolygon);				
+			}else{
+				_global.flamingo.tracer("Exception in GeometryParser.parseGeometryFromWkt()\nUnable to parse MULTI geometry. \nwktGeom = "+wktGeom);
+				return null;
+			}
+		}//create geometry according to geometryType 
+		else if (wktGeom.indexOf("POINT") != -1) {
 			var wktPoints:String = wktGeom.slice(wktGeom.indexOf("(") + 1,wktGeom.indexOf(")"));
 			//if existing remove first " " (space character).
 			if (wktPoints.charAt(0) == " ") {
@@ -183,45 +191,119 @@ class geometrymodel.GeometryParser {
             y = Number(coordinatePairs[1]);
 			geometry = new Point(x, y);
 		
-		} else if ( (wktGeom.indexOf("LINESTRING") != -1) || (wktGeom.indexOf("POLYGON") != -1) ) {
+		} else if (wktGeom.indexOf("LINESTRING") != -1) {
 			var wktPoints:String = wktGeom.slice(wktGeom.lastIndexOf("(") + 1,wktGeom.indexOf(")"));
 			coordinatePairs = wktPoints.split(",");
 					
-			//_global.flamingo.tracer("TRACE in GeometryParser.parseGeometryFromWkt() coordinatePairs = "+coordinatePairs);
+			points = createPoints(coordinatePairs);
 			
-			points = new Array();
-			for (var j:Number = 0; j < coordinatePairs.length; j++) {
-				//if existing remove first " " (space character).
-				if (coordinatePairs[j].charAt(0) == " ") {
-					coordinatePairs[j] = coordinatePairs[j].substr(1);
-				}
-                var coordinatePair:Array = coordinatePairs[j].split(" ");
-				x = Number(coordinatePair[0]);
-                y = Number(coordinatePair[1]);
-				points.push(new geometrymodel.Point(x, y));
-				
-			}
 			if (points!=null){
-				if (wktGeom.indexOf("LINESTRING") != -1) {
-					geometry = new LineString(points);
-				} else if (wktGeom.indexOf("POLYGON") != -1) {
-					//We assume a correct wkt geometry. 
-					//Because the LinearRing class only tests if objects are equal,
-					//we ensure that the last point equals the first point to close the ring and avoid an error message. 
-					 
-					points[points.length - 1] = points[0];
-					
-					var polygon:Polygon = new Polygon(new LinearRing(points));
-					geometry = polygon;
-				}
+				geometry = new LineString(points);				
 			}
-		} else {
+		} else if (wktGeom.indexOf("POLYGON") != -1){
+			geometry=parseWktPolygon(wktGeom);
+		}else {
 			//unidentified geometry type
 			_global.flamingo.tracer("Exception in GeometryParser.parseGeometryFromWkt() \nUnidentified geometry type.\nwktGeom = "+wktGeom);
 		}
 		
 		return geometry;
 	}
+	
+	static function createPoints(coordinatePairs:Array):Array{
+		var x:Number = 0;
+		var y:Number = 0;
+		var points = new Array();
+		for (var j:Number = 0; j < coordinatePairs.length; j++) {
+			//if existing remove first " " (space character).
+			if (coordinatePairs[j].charAt(0) == " ") {
+				coordinatePairs[j] = coordinatePairs[j].substr(1);
+			}
+			var coordinatePair:Array = coordinatePairs[j].split(" ");
+			x = Number(coordinatePair[0]);
+			y = Number(coordinatePair[1]);  
+			points.push(new geometrymodel.Point(x, y));			
+		}
+		return points;
+	}
+	
+	static function parseWktLinearRing(wktGeom):LinearRing{
+		log.debug("parseWktLinearRing: "+wktGeom);
+		var wktLinearRing=""+wktGeom;
+		//remove first and last ()
+		wktLinearRing=wktLinearRing.substring(1,wktLinearRing.length-1);		
+		var coordinatePairs = wktLinearRing.split(",");					
+		var points:Array = createPoints(coordinatePairs);
+		if (points==null){
+			return null;
+		}
+		//make first == last;
+		points[points.length-1]=points[0];
+		return new LinearRing(points);
+	}
     
+	static function parseWktPolygon(wktGeom:String):Polygon{
+		log.debug("parseWktPolygon: "+wktGeom);
+		var wktPolygon:String=""+wktGeom;
+		if (wktPolygon.indexOf("POLYGON")!=-1){			
+			wktPolygon=wktPolygon.substring("POLYGON".length,wktPolygon.length);
+		}
+		//remove the first( and last ) so only the polygons stay
+		wktPolygon=wktPolygon.substring(1,wktPolygon.length-1);
+		var geometry:Polygon=null;
+		while (wktPolygon!=null && wktPolygon.length > 0){
+			var beginIndex:Number=wktPolygon.indexOf("(");
+			var endIndex:Number=wktPolygon.indexOf(")");			
+			if (endIndex > 0){
+				endIndex+=1;
+			}
+			var wktLinearRing:String = wktPolygon.substring(beginIndex,endIndex);
+			var linearRing:LinearRing = parseWktLinearRing(wktLinearRing);			
+			if (geometry==null){
+				geometry = new Polygon(linearRing);
+			}else{
+				Polygon(geometry).addInteriorRing(linearRing);
+			}
+			//check if there is next polygon
+			if (wktPolygon.indexOf("(",endIndex)<0){
+				wktPolygon=null;
+			}else{
+				wktPolygon= wktPolygon.substring(endIndex,wktPolygon.length);
+			}
+		}
+		return geometry;
+	}
+	
+	static function parseWktMultiPolygon(wktGeom:String):MultiPolygon{
+		log.debug("parseWktMultiPolygon: "+wktGeom);
+		var wktMultiPolygon:String=""+wktGeom;
+		if (wktMultiPolygon.indexOf("MULTIPOLYGON")!=-1){			
+			wktMultiPolygon=wktMultiPolygon.substring("MULTIPOLYGON".length,wktMultiPolygon.length);
+		}
+		//remove the first( and last ) so only the polygons stay
+		wktMultiPolygon=wktMultiPolygon.substring(1,wktMultiPolygon.length-1);
+		var geometry:MultiPolygon=null;
+		while (wktMultiPolygon!=null && wktMultiPolygon.length > 0){
+			var beginIndex:Number=wktMultiPolygon.indexOf("((");
+			var endIndex:Number=wktMultiPolygon.indexOf("))");
+			if (endIndex > 0){
+				endIndex+=2;
+			}
+			var wktPolygonPart=wktMultiPolygon.substring(beginIndex,endIndex);
+			var polygon:Polygon= parseWktPolygon(wktPolygonPart);
+			if (geometry==null){
+				geometry = new MultiPolygon(polygon);
+			}else{
+				MultiPolygon(geometry).addPolygon(polygon);
+			}
+			//check if there is next polygon
+			if (wktMultiPolygon.indexOf("((",endIndex)<0){
+				wktMultiPolygon=null;
+			}else{
+				wktMultiPolygon= wktMultiPolygon.substring(endIndex,wktMultiPolygon.length);
+			}
+		}				
+		return geometry;
+	}
 }
 

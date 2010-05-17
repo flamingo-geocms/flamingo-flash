@@ -1,4 +1,9 @@
-﻿class tools.Logger{
+﻿/*-----------------------------------------------------------------------------
+* This file is part of Flamingo MapComponents.
+* Author: Roy Braam
+* B3partners bv
+ -----------------------------------------------------------------------------*/
+ class tools.Logger{
 	private var className="";
 	public static var DEBUG:Number=10;
 	public static var INFO:Number=8;

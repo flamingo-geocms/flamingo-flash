@@ -1,4 +1,4 @@
-/*-----------------------------------------------------------------------------
+﻿/*-----------------------------------------------------------------------------
 * This file is part of Flamingo MapComponents.
 * Author: Linda vels
 * IDgis bv
@@ -7,8 +7,6 @@
 
 import mx.utils.Delegate;
 import gui.LocationResultViewer;
-import roo.HighlightLayer;
-
 
 class gui.LocationResult extends MovieClip {
 	var location: Object; //set by initObject

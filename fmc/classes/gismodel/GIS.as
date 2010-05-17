@@ -212,6 +212,7 @@ import event.*;
 import geometrymodel.Envelope;
 import geometrymodel.Geometry;
 import core.AbstractComponent;
+import tools.Logger;
 
 class gismodel.GIS extends AbstractComponent {
     
@@ -234,11 +235,12 @@ class gismodel.GIS extends AbstractComponent {
 	private var alwaysDrawPoints:Boolean = true;
 	private var selectedEditTool:String= null;
     
+	private var log:Logger=null;
 	
-	function onLoad(){
+	function onLoad(){		
 		layers = new Array();
 		super.onLoad();
-		
+		this.log = new Logger("gismodel.GIS",_global.flamingo.getLogLevel(),_global.flamingo.getScreenLogLevel());
 	}
 	
 	function init():Void{

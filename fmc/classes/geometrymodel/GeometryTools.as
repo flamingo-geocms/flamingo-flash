@@ -1,4 +1,4 @@
-/*-----------------------------------------------------------------------------
+﻿/*-----------------------------------------------------------------------------
 * This file is part of Flamingo MapComponents.
 * Author: Michiel J. van Heek.
 * IDgis bv
@@ -19,8 +19,9 @@ class geometrymodel.GeometryTools {
             return Polygon;
         } else if (geometryType == "Circle") {
             return Circle;
-        }
-        
+        } else if (geometryType == "MultiPolygon") {
+            return MultiPolygon;
+        }        
         _global.flamingo.tracer("Exception in geometrymodel.GeometryTools.getGeometryClass(" + geometryType + ")");
         return null;
     }

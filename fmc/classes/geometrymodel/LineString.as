@@ -219,8 +219,13 @@ class geometrymodel.LineString extends Geometry implements GeometryListener {
         if (points[0] == points[points.length - 1]) {
             return true;
         } else {
-            return false;
-        }
+			var firstPoint:Point=Point(points[0]);
+			var lastPoint:Point=Point(points[points.length -1]);
+			if (firstPoint.getX() == lastPoint.getX() && firstPoint.getY()== lastPoint.getY()){
+				return true;
+			}
+			return false;
+		}
     }
     
 	function getLength():Number {

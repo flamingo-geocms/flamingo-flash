@@ -9,16 +9,18 @@ import gui.*
 
 import event.StateEventListener;
 import event.StateEvent;
+import tools.Logger;
 
 import gismodel.Feature;
 
 class gui.EditMapFeature extends GeometryPane implements StateEventListener {
     
     private var feature:Feature = null; // Set by init object.
+	private var log:Logger=null;
     
     function onLoad():Void {
         super.onLoad(); 
-        
+        this.log = new Logger("gui.EditMapFeature",_global.flamingo.getLogLevel(),_global.flamingo.getScreenLogLevel());
         gis.addEventListener(this, "GIS", StateEvent.CHANGE, "activeFeature");
         feature.addEventListener(this, "Feature", StateEvent.CHANGE, "values");
         if (feature == gis.getActiveFeature()) {

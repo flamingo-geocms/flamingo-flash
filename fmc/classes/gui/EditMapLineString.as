@@ -270,10 +270,10 @@ class gui.EditMapLineString extends EditMapGeometry implements GeometryListener 
 		}
 		
 		//clean from mEditMapLineGraphic members
-		for (_name in this) {
+		for (var movieClipName in this) {		
 			//if (this[_name] instanceof MovieClip) {
-			if (this[_name] instanceof EditMapLineGraphic) {
-				this[_name].removeMovieClip();
+			if (this[movieClipName] instanceof EditMapLineGraphic) {
+				this[movieClipName].removeMovieClip();				
 			}
 		}
 		
