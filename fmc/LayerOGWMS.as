@@ -1127,14 +1127,12 @@ function getStylesString():String {
 	if (slayers.length == 0) {
 		return s;
 	}
-	//                             
-	for (var id in layers) {
-		if (layers[id].styles == undefined) {
-			return s;
-		}
-	}
-	//
 	if (slayers == "#ALL#") {
+		for (var id in layers) {
+			if (layers[id].styles == undefined) {
+				return s;
+			}
+		}
 		var a = new Object();
 		for (var id in layers) {
 			if (layers[id].visible) {
@@ -1155,6 +1153,9 @@ function getStylesString():String {
 		var id = a[i];
 		if (layers[id].visible == false) {
 			continue;
+		}
+		if (layers[id].style==undefined){
+			return "";
 		}
 		if (s == "") {
 			s = layers[id].style;
