@@ -218,8 +218,8 @@ class geometrymodel.GeometryParser {
 			//if existing remove first " " (space character).
 			if (coordinatePairs[j].charAt(0) == " ") {
 				coordinatePairs[j] = coordinatePairs[j].substr(1);
-			}
-			var coordinatePair:Array = coordinatePairs[j].split(" ");
+			}			
+			var coordinatePair:Array = coordinatePairs[j].split(" ");						
 			x = Number(coordinatePair[0]);
 			y = Number(coordinatePair[1]);  
 			points.push(new geometrymodel.Point(x, y));			
@@ -231,7 +231,7 @@ class geometrymodel.GeometryParser {
 		log.debug("parseWktLinearRing: "+wktGeom);
 		var wktLinearRing=""+wktGeom;
 		//remove first and last ()
-		wktLinearRing=wktLinearRing.substring(1,wktLinearRing.length-1);		
+		wktLinearRing=wktLinearRing.substring(wktLinearRing.indexOf("(")+1,wktLinearRing.indexOf(")"));				
 		var coordinatePairs = wktLinearRing.split(",");					
 		var points:Array = createPoints(coordinatePairs);
 		if (points==null){
@@ -249,7 +249,7 @@ class geometrymodel.GeometryParser {
 			wktPolygon=wktPolygon.substring("POLYGON".length,wktPolygon.length);
 		}
 		//remove the first( and last ) so only the polygons stay
-		wktPolygon=wktPolygon.substring(1,wktPolygon.length-1);
+		wktPolygon=wktPolygon.substring(wktPolygon.indexOf("(")+1,wktPolygon.lastIndexOf(")"));
 		var geometry:Polygon=null;
 		while (wktPolygon!=null && wktPolygon.length > 0){
 			var beginIndex:Number=wktPolygon.indexOf("(");
@@ -281,7 +281,7 @@ class geometrymodel.GeometryParser {
 			wktMultiPolygon=wktMultiPolygon.substring("MULTIPOLYGON".length,wktMultiPolygon.length);
 		}
 		//remove the first( and last ) so only the polygons stay
-		wktMultiPolygon=wktMultiPolygon.substring(1,wktMultiPolygon.length-1);
+		wktMultiPolygon=wktMultiPolygon.substring(wktMultiPolygon.indexOf("(")+1,wktMultiPolygon.lastIndexOf(")"));
 		var geometry:MultiPolygon=null;
 		while (wktMultiPolygon!=null && wktMultiPolygon.length > 0){
 			var beginIndex:Number=wktMultiPolygon.indexOf("((");
