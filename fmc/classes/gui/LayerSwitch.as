@@ -1,3 +1,34 @@
+/*-----------------------------------------------------------------------------
+* This file is part of Flamingo MapComponents.
+* Author: Herman Assink, Linda Vels.
+* IDgis bv
+ -----------------------------------------------------------------------------*/
+/** @component LayerSwitch
+* The LayerSwitch Component is a google like button that switches between layers (f.e. topographic layers vs. areal photographs).
+* The button is only enabled when (one of) the layer(s) in the layers1 resp layers2 list is (zoom)visible.
+* @file flamingo/tpc/classes/flamingo/gui/LayerSwitch.as  (sourcefile)
+* @file flamingo/fmc/LayerSwitch.fla (sourcefile)
+* @file flamingo/fmc/LayerSwitch.swf (compiled component, needed for publication on internet)
+* @configstring label1 Button label shown when layers1 are visible.
+* @configstring label2 Button label shown when layers2 are visible.
+* @configstring tooltip Tooltip text for the button.
+*/
+
+/** @tag <fmc:LayerSwitch> 
+* This tag defines an layerswitch instance. 
+* @class gui.LayerSwitch extends GradientButton
+* @hierarchy childnode of Flamingo or a container component.
+* @example
+*     <fmc:LayerSwitch id="ondergrondSwitch" left="right -90" width = "80" height = "20" top= "10" listento="map_ondergrond" layers2="map_ondergrond.toplufo" layers1="map_ondergrond.topvlak,map_ondergrond.topvlak2" >
+        <string id="label2" nl="Topografie"/>
+        <string id="label1" nl="Luchtfoto"/>
+        <string id="tooltip" nl="Switch ondergrondlaag"/>
+    </fmc:LayerSwitch>
+* @attr listento	(list of) layercomponent(s) to listen to (is a comma seperated list of combinations of the id of the map ("map") and the layername ("ondergrond")) 
+* @attr layers1	(list of) layer(s) that is initially visible and made invisible when pressing the switchbutton    
+* @attr layers2	(list of) layer(s) that is initially not visible and made visible when pressing the switchbutton   
+ */
+
 import coregui.GradientButton;
 
 
