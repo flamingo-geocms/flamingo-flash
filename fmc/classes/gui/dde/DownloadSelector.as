@@ -30,6 +30,7 @@
 * @file flamingo/fmc/classes/flamingo/geometrymodel/dde/GeometryListener.as (geometry listener interface class)
 * @file flamingo/fmc/classes/flamingo/gui/dde/TraceLayer.as (dummy layer for tracing geometries in the mapviewer)
 * @file flamingo/fmc/classes/flamingo/gui/dde/TraceLinearRing.as (the representation of the traced geometry in the TraceLayer)
+* @file flamingo/fmc/classes/flamingo/gui/dde/DownloadArea.as (data class to store download area information)
 * @configstring layers label above the layer legend
 * @configstring inArea radiobuttonlabel for selecting predefined areas (in a combobox)
 * @configstring inBox radiobuttonlabel for lowerleft and upperright coördinate input (in textinput fields)
@@ -671,8 +672,5 @@ class gui.dde.DownloadSelector extends AbstractComponent implements GeometryList
 	
 	function onUpdate(map:MovieClip):Void{
 		
-	}
-
-
-    
+	}   
 }
