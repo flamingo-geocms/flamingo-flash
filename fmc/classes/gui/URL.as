@@ -18,7 +18,7 @@
 * the url should listen to the map component.
 * @class gui.URL extends AbstractComponent 
 * @hierarchy child node of URLSelector or Flamingo or a Container component
-* @example
+* @example (use of URL in an URLSelector Component)
 * <fmc:UrlSelector left="10" top="20" right="right -10" height="50"  borderalpha="0">
      <string id="groupsellabel" nl="Selecteer een thema..."/>
      <string id="urlsellabel" nl="Kies een atlas..."/>
@@ -32,14 +32,20 @@
      </fmc:URL>
      .....
    </fmc:URLSelector> 
-* @example
-  <fmc:Window id="linkWindow" top="120" left="590" width="500" height="70" visible="false" skin="g"
+* @example (use of URL in an Window Component)
+  ...
+  <fmc:LinkButton left="560" bottom="bottom +5" listento="linkWindow">
+    <string id="tooltip" en="open/ close the link window" nl="open/sluit link"/>
+  </fmc:LinkButton> 
+  ....
+   <fmc:Window id="linkWindow" top="120" left="590" width="500" height="70" visible="false" skin="g"
     canresize="true" canclose="false">
     <string id="title" en="Copy/paste link" nl="Link kopiëren/plakken"/>
         <fmc:URL id="risurl"  width="95%" height="95%" showaslink="true" listento="map" visible="false">
           <style id="a" font-family="arial,verdana" font-size="12px" color="#0033cc" display="block" font-weight="normal" text-decoration="underline"/>
         </fmc:URL>
   </fmc:Window>  
+   
 * @attr url no default Defines the url to open in the browser when selecting an url instance from the combobox 
 * in the URLSelector.
 * @attr target default: _blank Defines the target paramater when opening the url (p.e. _blank or _self) 
