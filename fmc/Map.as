@@ -500,7 +500,7 @@ dynamic class Map extends MovieClip {
 		this.rememberextent = false;
 		var c = this.copyExtent(this._extent);
 		this.correctExtent(c);
-		this.moveToExtent(c, undefined, 0);
+		this.moveToExtent(c, undefined, 0,false);
 		flamingo.raiseEvent(this, "onResize", this);
 		this.update();
 	}
@@ -1286,17 +1286,23 @@ dynamic class Map extends MovieClip {
 	* @param extent:Object Extent. An extent has 4 properties 'minx', 'miny', 'miny', 'maxy' and optional 'name'
 	* @param updatedelay:Number [optional] Delay in milliseconds. If updatedelay is undefined or -1 there will be no onUpdate event.
 	* @param movetime:Number [optional] Total time of move-animation. If movetime is 0, there wil be no animation. The Extent is set immediately. If movetime is undefined, the default movetime of the map will be used.  
+	* @param isNotCorrectedExtent:Boolean [optional] (Default:true). This indicates if the given extent is already CORRECTED with the aspect ratio of the screen.
 	*/
-	public function moveToExtent(extent:Object, updatedelay:Number, movetime:Number):Void {
+	public function moveToExtent(extent:Object, updatedelay:Number, movetime:Number, isNotCorrectedExtent:Boolean):Void {
 		if (!this.isValidExtent(extent)) {
 			return;
+		}
+		if (isNotCorrectedExtent==undefined){
+			isNotCorrectedExtent=true;
 		}
 		this.clearDrawings();
 		flamingo.raiseEvent(this, "onMaptipCancel", this);
 		// remember the original uncorrected extent
 		// correct the extent and set as mapextent  
 		if (!this.isEqualExtent(this._extent, extent)) {
-			this._extent = this.copyExtent(extent);
+			if(isNotCorrectedExtent){				
+				this._extent = this.copyExtent(extent);
+			}
 			this._mapextent = this.copyExtent(extent);
 			this.correctExtent(this._mapextent);
 			if(zoomScaleFactor!=undefined){
