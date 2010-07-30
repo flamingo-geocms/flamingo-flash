@@ -1,4 +1,4 @@
-/*-----------------------------------------------------------------------------
+﻿/*-----------------------------------------------------------------------------
 * This file is part of Flamingo MapComponents.
 * Author: Michiel J. van Heek.
 * IDgis bv
@@ -9,6 +9,7 @@ import gui.*;
 
 import gismodel.CreateGeometry;
 import gismodel.Feature;
+import gismodel.Style;
 import geometrymodel.Geometry;
 
 
@@ -26,6 +27,7 @@ class gui.EditMapCreateGeometry extends MovieClip {
     private var gis:gismodel.GIS = null; // Set by init object.
 	private var map:Object = null; // Set by init object.
     private var createGeometry:CreateGeometry = null; // Set by init object.
+	private var style=null;
     
     private var numMouseDowns:Number = 0;
     private var intervalID:Number = null;
@@ -51,10 +53,15 @@ class gui.EditMapCreateGeometry extends MovieClip {
     }
     
     private function draw():Void {
-        clear();
+        clear();		
         moveTo(0, 0);
-        lineStyle(0, 0x000000, 100);
-        beginFill(0xAA6600, 30);
+		if (style!=null){
+			lineStyle(style.getStrokeWidth(),style.getStrokeColor(),style.getStrokeOpacity());
+			beginFill(style.getFillColor(), style.getFillOpacity());
+		}else{
+			lineStyle(0, 0x000000, 100);
+	        beginFill(0xFF0000, 30);
+		}
         lineTo(width, 0);
         lineTo(width, height);
         lineTo(0, height);

@@ -43,11 +43,27 @@
 * not editable
 */
 
+/** @tag <fmc:Style>
+* This tag defines a Style for the overlay when drawing a geometry
+* @class gismodel.Style extends AbstractComposite
+* @hierarchy childnode of EditMap.
+* @example
+	<fmc:EditMap .... >
+	 	...
+		<fmc:Style fillcolor="0xFFCC00" fillopacity="30" strokecolor="0xFFCC00" strokeopacity="100"/>
+	</fmc:Layer>
+* @attr fillcolor (0x000000 – 0xFFFFFF, Default: 0xFF0000) Fill color. Not applicable to point or line string geometries.
+* @attr fillopacity	(0 – 100, Default: 30) Fill opacity. A value of 0 means completely transparent. Not applicable to point or line string geometries. If a feature's geometry is not completely transparent, a click on its fill will make the feature the active feature. If the geometry is completely transparent the user's mouse will click right through it.
+* @attr strokecolor	(0x000000 – 0xFFFFFF, Default: 0x000000) Stroke color.
+* @attr strokeopacity (0 – 100, Default: 100) Stroke opacity. A value of 0 means completely transparent.
+*/
+
 import gui.*;
 import event.*;
 import gismodel.GIS;
 import gismodel.Layer;
 import gismodel.CreateGeometry;
+import gismodel.Style;
 import geometrymodel.*;
 import gismodel.Feature;
 import coremodel.service.js.JsFeature;
@@ -68,6 +84,7 @@ class gui.EditMap extends AbstractComponent implements StateEventListener {
 	private var editMapSelectFeature:EditMapSelectFeature=null;
 	private var ctrlKeyDown:Boolean = false;
 	private var log:Logger=null;
+	private var style:Style=null;
 	
 	function setAttribute(name:String, value:String):Void {
 		  if (name == "editable") {
@@ -76,6 +93,12 @@ class gui.EditMap extends AbstractComponent implements StateEventListener {
 			}
 		 } 
 	}
+	function addComposite(name:String, xmlNode:XMLNode):Void { 
+        if (name == "Style") {
+            style = new Style(xmlNode);
+        }
+		
+    }
 	
     function setBounds(x:Number, y:Number, width:Number, height:Number):Void {
 	   if (mask == null) {
@@ -433,7 +456,7 @@ class gui.EditMap extends AbstractComponent implements StateEventListener {
         initObject["layer"] = layer;
         initObject["width"] = __width;
         initObject["height"] = __height;
-		initObject["editable"] = editable;
+		initObject["editable"] = editable;		
         editMapLayers.push(attachMovie("EditMapLayer", "mEditMapLayer" + depth, depth, initObject));
     }
     
@@ -457,6 +480,9 @@ class gui.EditMap extends AbstractComponent implements StateEventListener {
         initObject["createGeometry"] = createGeometry;
         initObject["width"] = __width;
         initObject["height"] = __height;
+		if (style!=null){
+			initObject["style"]= style;
+		}
         editMapCreateGeometry = EditMapCreateGeometry(attachMovie("EditMapCreateGeometry", "mEditMapCreateGeometry", editMapCreateGeometryDepth, initObject));
     }
 	/**
