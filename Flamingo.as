@@ -65,6 +65,8 @@ class Flamingo {
 	private var moviedepth:Number;
 	//filename of configfile
 	private var useexternalinterface:Boolean;
+	private var allowExternalInterface:Array;
+	private var denyExternalInterface:Array;
 	private var tooltipdelay:Number = 500;
 	private var lang:String = "en";
 	private var width:String = "100%";
@@ -174,6 +176,8 @@ class Flamingo {
 		this.mFlamingo.createEmptyMovieClip("flamingoCursors", 50005);
 		this.mFlamingo.createEmptyMovieClip("flamingoBorder", 50001);
 		this.useexternalinterface = true;
+		this.allowExternalInterface=null;
+		this.denyExternalInterface=null;	
 		this.moviedepth = 10000;
 		this.tooltipdelay = 500;
 		this.loading = false;
@@ -596,6 +600,10 @@ class Flamingo {
 	* @attr width  (defaultvalue "100%") The width of the application. By default the application fills the available space of the flamingo.swf. This space is controled in the html page.
 	* @attr height (defaultvalue "100%") The height of the application. By default the application fills the available space of the flamingo.swf. This space is controled in the html page.
 	* @attr useexternalinterface (defaultvalue "true") If set to "true" flamingo will pass all events to the browser. And with javascript you can talk with Flamingo.
+	* @attr allowexternalinterface (defaultvalue null) A comma seperated list with "[Component ID].[Event]" (case insensitive). The ".[Event]" part is optional. For example "mapid.onmousemove,editmap". If no denyExternalInterfaces are set only these external calls are done to the browser.
+	* see also denyExternalInterface.
+	* @attr denyexternalinterface (defaultvalue null) A comma seperated list with "[Component ID].[Event]" (case insensitive). The ".[Event]" part is optional. For example "mapid.onmousemove,editmap". If no allowExternalInterfaces are set only these external calls are not done to the browser.
+	* The deny setting overwrites the allow setting. But the allow param "[Component ID].[Event]" overwrites the deny "[Component ID]". For example deny..="mapid" allow..="mapid.onIdentify". All calls from the component with id 'mapid' are denied, except the event 'onIdentify'
 	* @attr bordercolor  Color of a border arround the application in a hexadecimal notation. e.g. bordercolor="#00ff33" 
 	* @attr borderwidth  Width of the border in pixels. If set to "0" (meaning 'hairline') or greater Flamingo will draw a border.
 	* @attr borderalpha (defaultvalue "100") Transparency of border. Default is "100" meaning opaque.
@@ -717,6 +725,12 @@ class Flamingo {
 					} else {
 						this.useexternalinterface = false;
 					}
+					break;
+				case "allowexternalinterface":
+					this.allowExternalInterface= val.split(",");
+					break;
+				case "denyexternalinterface":
+					this.denyExternalInterface= val.split(",");
 					break;
 				case "loglevel":
 					this.logLevel=Logger.logLevelToNumber(val);
@@ -2111,10 +2125,45 @@ class Flamingo {
 		// the outer world:
 		//all events of the framework will be fired to the outer world
 		//all events of other components will be fires to the outer world if useexternalinterface = true
-		var fire:Boolean = this.useexternalinterface;
+		var fire:Boolean = this.useexternalinterface;		
+		//check if the allowExternalInterface and denyExternalInterface
+		if (this.useexternalinterface){
+			//if the call is allowed by a setting of the id+.+event then it is allowed if the
+			//deny is set for only the id. Otherwise the deny overwrites the allow
+			var allowedByEvent:Boolean= false;
+			var lowerId=id.toLowerCase();
+			var lowerIdEvent=lowerId+"."+event.toLowerCase();
+			if (this.allowExternalInterface!=null){
+				//if no deny is set all are denied accept the allowed;
+				if (this.denyExternalInterface==null){
+					fire=false;
+				}
+				for (var i:Number=0; i < this.allowExternalInterface.length; i++){
+					if (this.allowExternalInterface[i].toLowerCase()==lowerId){
+						fire=true;
+					}
+					if (this.allowExternalInterface[i].toLowerCase()==lowerIdEvent){
+						fire=true;
+						allowedByEvent=true;
+					}						
+				}
+			}
+			if (fire==true && this.denyExternalInterface!=null){
+				for (var i:Number=0; i < this.denyExternalInterface.length && fire==true ; i++){
+					if (this.denyExternalInterface[i].toLowerCase()==lowerId){
+						if (!allowedByEvent){
+							fire=false;
+						}
+					}else if (this.denyExternalInterface[i].toLowerCase()==lowerIdEvent){
+						fire=false;
+					}						
+				}
+			}
+		}
 		if (id == "flamingo") {
 			fire = true;
 		}
+		//trace(""+id+"."+event+" is allowed? "+fire);
 		//                                         
 		if (fire) {
 			for (var i = 0; i<arguments.length; i++) {
