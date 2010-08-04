@@ -2106,6 +2106,45 @@ class Flamingo {
 			this.components[callerid]._addedlisteners[id].push(listener);
 		}
 	}
+	/**
+	* Set the useExternalInterface param. Setting flamingo allowed to call javascript
+	* @param setting: a boolean
+	*/
+	public function setUseExternalInterface(setting:Boolean){
+		this.useexternalinterface=setting;
+	}
+	/**
+	* Get the useExternalInterface param
+	*/
+	public function getUseExternalInterface():Boolean{
+		return this.useexternalinterface;
+	}
+	/**
+	* Set the allowExternalInterface param.
+	* @param commaSeperatedString: a commasperated string with component/component.events
+	*/
+	public function setAllowExternalInterface(commaSeperatedString:String){
+		this.allowExternalInterface=commaSeperatedString.split(",");		
+	}
+	/**
+	* get the allowExternalInterface param
+	*/
+	public function getAllowExternalInterface():Array{
+		return allowExternalInterface;
+	}
+	/**
+	* Set the denyExternalInterface param
+	* @param commaSeperatedString: a commasperated string with component/component.events
+	*/
+	public function setDenyExternalInterface(commaSeperatedString:String){
+		this.denyExternalInterface=commaSeperatedString.split(",");		
+	}
+	/**
+	* get the denyExternalInterface param
+	*/
+	public function getDenyExternalInterface():Array{
+		return this.denyExternalInterface;
+	}
 	/** 
 	* Fires an event for a component.
 	* @param comp:Object MovieClip or componentid.
