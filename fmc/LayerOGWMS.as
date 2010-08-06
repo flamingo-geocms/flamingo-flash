@@ -40,6 +40,8 @@ var version:String = "2.0";
 var defaultXML:String = "";
 var visible:Boolean;
 var query_layers:String;
+//same as query_layers, needed for IdentifyResultsHTML, to make interface for LayerArcIMS, LayerArcServer vs LayerOGWMS equal 
+var identifyids:String; 
 var feature_count:Number = 10;
 var info_format:String = "application/vnd.ogc.gml";
 var exceptions:String = "application/vnd.ogc.se_xml";
@@ -82,6 +84,14 @@ var maxHttpGetUrlLength:Number=0;
 var noCache:Boolean = false;
 var visible_layers=null;
 var initialized:Boolean = false;
+
+//When true, an identify request will be sent for each sublayer seperately
+//when sending the identify request per sublayer you know the sublayer name when handling 
+//the response. The FeatureInfo response of ArcGisServer WMS often doesn't contain the 
+//faeturetype (or sublayer) name.  
+var identPerLayer:Boolean = false;
+var identsSent:Number = 0;
+
 //-------------------------------------
 //listenerobject for map
 var lMap:Object = new Object();
@@ -273,7 +283,7 @@ function setConfig(xml:Object,dontGetCap:Boolean) {
 			for (var n:Number=0;n<lyrs.length;n++){
 				this.query_layers  += trim(lyrs[n]) + ",";
 			}
-			this.query_layers  = this.query_layers.substr(0,query_layers.length - 1);				
+			this.query_layers  = this.identifyids = this.query_layers.substr(0,query_layers.length - 1);				
 			break;
 		case "alpha" :
 			this._alpha = Number(val);
@@ -349,6 +359,13 @@ function setConfig(xml:Object,dontGetCap:Boolean) {
 				this.updateWhenEmpty = false;
 			}
 			break;
+		case "identifyperlayer" :
+			if(val.toLowerCase() == "true"){
+				this.identPerLayer = true;
+			} else {	
+				this.identPerLayer = false;
+			}
+			break;	
 		default :
 			if (attr.toLowerCase().indexOf("xmlns:", 0) == -1) {
 				this.attributes[attr] = val;
@@ -907,15 +924,21 @@ function identify(extent:Object) {
 				}
 			}
 			_global.flamingo.raiseEvent(thisObj, "onIdentifyData", thisObj, features, obj, nrlayersqueried, nrlayersqueried);
-			_global.flamingo.raiseEvent(thisObj, "onIdentifyComplete", thisObj, identifytime);
+			if(identPerLayer){
+				identsSent--;
+				if(identsSent == 0){
+				 	_global.flamingo.raiseEvent(thisObj, "onIdentifyComplete", thisObj, identifytime);
+				}
+			} else {
+				_global.flamingo.raiseEvent(thisObj, "onIdentifyComplete", thisObj, identifytime);
+			}
 		}
 	};
+		
 	var args:Object = new Object();
 	args.BBOX = this.extent2String(map.getMapExtent());
 	args.WIDTH = Math.ceil(map.__width);
 	args.HEIGHT = Math.ceil(map.__height);
-	args.LAYERS = querylayerstring;
-	args.QUERY_LAYERS = querylayerstring;
 	args.INFO_FORMAT = this.info_format;
 	args.FORMAT = this.format;
 	args.EXCEPTIONS = this.exceptions;
@@ -925,9 +948,29 @@ function identify(extent:Object) {
 	args.X = String(Math.round(rect.x+(rect.width/2)));
 	args.Y = String(Math.round(rect.y+(rect.height/2)));
 	args.FEATURE_COUNT = String(feature_count);
-  
-  args = handleSLDarg(args);
-  
+	args = handleSLDarg(args);
+  	if(identPerLayer){
+  		identifyPerLayer(args,lConn);
+  	} else {
+	  	args.LAYERS = querylayerstring;
+		args.QUERY_LAYERS = querylayerstring;
+		sendIdentifyRequest(args,lConn);
+  	}	
+}
+
+function identifyPerLayer(args:Object,lConn:Object) {
+		var querylayerstring = _getLayerlist(query_layers, "identify");
+		var qlayers:Array = querylayerstring.split(",");
+		for (var i:Number=0; i<qlayers.length;i++){
+			args.LAYERS = qlayers[i];
+			args.QUERY_LAYERS = qlayers[i];
+			identsSent++; 
+	  		sendIdentifyRequest(args,lConn);
+		}
+}
+
+
+function sendIdentifyRequest(args:Object,lConn:Object){
 	var cogwms:OGWMSConnector = new OGWMSConnector();
 	cogwms.addListener(lConn);
 	_global.flamingo.raiseEvent(thisObj, "onIdentify", thisObj, thisObj.identifyextent);
@@ -1105,7 +1148,10 @@ function _getLayerlist(list:String, field:String):String {
 	var a:Array = _global.flamingo.asArray(list);
 	for (var i = 0; i<a.length; i++) {
 		var id = a[i];
-		if (layers[id].visible == false) {
+		//if (layers[id].visible == false) {
+			//continue;
+		//}
+		if (getVisible(id) <> 1) {
 			continue;
 		}
 		if (layers[id].queryable == false) {

@@ -6,6 +6,7 @@
 	private var events:Object;
 	var requestid:Number = 0;
 	var url:String;
+	var queryLayers:String; 
 	var requesttype:String;
 	var responsetime:Number;
 	var response:String
@@ -76,6 +77,7 @@
 		if (args == undefined) {
 			var args:Object = new Object();
 		}
+		queryLayers = args.QUERY_LAYERS;
 		args.REQUEST = "GetFeatureInfo";
 		return (this._request(url, args, obj));
 	}
@@ -157,7 +159,7 @@
 		case "featureinforesponse" :			
 			//bah :( :
 			//is with seperate field objects in fields tag?
-			if (xml.firstChild.firstChild.firstChild.localName.toLowerCase()=="field"){
+			if (xml.firstChild.firstChild.localName.toLowerCase()=="fields"){
 				_process_featureInfoResponseWithSeperateFields(xml, obj, reqid);
 			}else{
 				_process_featureInfoResponse(xml, obj, reqid);
@@ -181,11 +183,22 @@
 		var features:Object = new Object();
 		var layer:String;
 		var val:String;
-		var featureObjects:Array = xml.firstChild.childNodes;
+		var featureObjects:Array = xml.firstChild.childNodes;	
 		for (var i:Number = 0; i<featureObjects.length; i++) {
 			var feature:Object = new Object();
 			var layer = "?";
-			var attributeObjects= featureObjects[i].childNodes;
+			var attributeObjects:Array = featureObjects[i].childNodes;
+			if(attributeObjects.length == 0){
+				for (attr in featureObjects[i].attributes) {
+					var ob:Object = new Object;
+					var attributes:Object = new Object;
+					attributes.name = attr;
+					attributes.value = featureObjects[i].attributes[attr];
+					ob.attributes = attributes;
+					attributeObjects.push(ob);
+				}
+			}
+			
 			for (var a:Number = 0; a < attributeObjects.length; a++) {
 				var attributeName:String=attributeObjects[a].attributes.name;
 				var attributeValue:String=attributeObjects[a].attributes.value;
@@ -202,6 +215,11 @@
 							layer+=tokens[t];
 						}
 					}
+					//if still "?" take the first querylayer
+					if (layer=="?"){
+						var qLayers:String = queryLayers;
+						layer = qLayers.split(",")[0];
+					}	
 				}																								  
 			}
 			if (features[layer] == undefined) {
