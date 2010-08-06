@@ -15,7 +15,7 @@
 
 /** @tag <fmc:URL> 
 * This tag defines an url instance. When the url should also contain the map extent or the current theme as parameter
-* the url should listen to the map component.
+* the url (or the urlselector in which this url is used) should listen to the map component.
 * @class gui.URL extends AbstractComponent 
 * @hierarchy child node of URLSelector or Flamingo or a Container component
 * @example (use of URL in an URLSelector Component)
@@ -108,7 +108,6 @@ class gui.URL extends AbstractComponent  {
     
     function init(){
     	super.init();
-
 		if(showAsLink){
 			addLink();
 		}
@@ -176,6 +175,7 @@ class gui.URL extends AbstractComponent  {
     }  
     	
 	function getUrl():String {
+		var resultUrl:String = "";
 		if(url==null){
 			var arg:String = _global.flamingo.getArgument(this, "url");
 			if(arg!=null){
@@ -186,13 +186,13 @@ class gui.URL extends AbstractComponent  {
 		var params:Array = new Array();
 		if (url.indexOf("?")!=-1){
 			params = url.substr(url.indexOf("?")+1).split("&");
-			url = url.substr(0,url.indexOf("?"));
+			resultUrl = url.substr(0,url.indexOf("?"));
 		}	
 		for(var i:Number=0;i<params.length;i++){			
 			if(params[i].indexOf("ext")==-1&&params[i].indexOf("thema")==-1){
 				paramStr += params[i] + "&";
 			}
-		} 			
+		} 		
 		if(map!=null && addExt){
 			var extent:Object = map.getCurrentExtent();
 			if(extent!=null){
@@ -205,7 +205,7 @@ class gui.URL extends AbstractComponent  {
 				paramStr += "thema="+ themeSelector.getCurrentTheme().getName() + "&";
 			}
 		}
-		return url + paramStr.substr(0,paramStr.length-1);	
+		return resultUrl + paramStr.substr(0,paramStr.length-1);
 	}
 	
 	function getTarget():String {

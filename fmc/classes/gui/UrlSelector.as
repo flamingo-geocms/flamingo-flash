@@ -9,6 +9,7 @@
 * An URL defines a url that can be opened from within flamingo. When for the URL components the group attribute
 * is filled a second comboBox will be drawn above the URLSelector combobox. By selecting a group the choices 
 * in de URLSelector combobox will be limited. 
+* When the current extent should be passed the URLSelector should listen to the map component
 * @file flamingo/fmc/classes/flamingo/gui/URLSelector.as  (sourcefile)
 * @file flamingo/fmc/URLSelector.fla (sourcefile)
 * @file flamingo/fmc/URLSelector.swf (compiled component, needed for publication on internet)
