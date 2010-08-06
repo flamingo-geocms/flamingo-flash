@@ -167,13 +167,31 @@ dynamic class Map extends MovieClip {
 		//flamingo
 		var lFlamingo:Object = new Object();
 		lFlamingo.onLoadComponent = function(mc:MovieClip) {
+			//deal with argument extent
+			if(mc._name == _global.flamingo.getId(thisObj)){
+				var val = flamingo.getArgument(thisObj, "extent");
+				if (val != undefined && configObjId==null) {
+					if (val.toLowerCase() == "cookie") {
+						var e = flamingo.getCookie(flamingo.getId(thisObj)+".mapextent");
+					} else {
+						var e = thisObj.string2Extent(val);
+					}
+					//trace("cookie"+e.minx)
+					thisObj.correctExtent(e);
+					thisObj.moveToExtent(e, 0);
+				}
+				flamingo.deleteArgument(this, "extent");
+			}	
 			if (thisObj.mLayers[mc._name] == mc) {
 				flamingo.raiseEvent(thisObj, "onAddLayer", thisObj, mc);
 			}
 		};
-		lFlamingo.onConfigComplete = function() { 
+		lFlamingo.onConfigComplete = function() {
+			//If you do it just in onConfigComplete the map gets loaded twice 
+			//once with initial extent and once with the extent in the argument
+			//moved this code to onLoadComponent 
 			//deal with arguments
-			var val = flamingo.getArgument(thisObj, "extent");
+			/*var val = flamingo.getArgument(thisObj, "extent");
 			if (val != undefined && configObjId==null) {
 				if (val.toLowerCase() == "cookie") {
 					var e = flamingo.getCookie(flamingo.getId(thisObj)+".mapextent");
@@ -184,7 +202,7 @@ dynamic class Map extends MovieClip {
 				thisObj.correctExtent(e);
 				thisObj.moveToExtent(e, 0);
 			}
-			flamingo.deleteArgument(this, "extent");
+			flamingo.deleteArgument(this, "extent");*/
 		};
 		flamingo.addListener(lFlamingo, "flamingo", this);
 		//
