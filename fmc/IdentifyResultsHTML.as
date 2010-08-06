@@ -55,7 +55,8 @@ var htmlfield:String = null;
 var seperatedfields:Array = null;
 var seperator:String = ",";
 var emptyWhenNotFound:Boolean = false;
-
+var infoStrings:Object;
+var showInOrder:Boolean = false;
 //---------------------------------
 var lMap:Object = new Object();
 lMap.onIdentify = function(map:MovieClip, extent:Object) {
@@ -66,6 +67,7 @@ lMap.onIdentify = function(map:MovieClip, extent:Object) {
 	txtHeader.htmlText = "<span class='status'>"+s+"</span>";
 	txtInfo.htmlText = "";
 	textinfo = "";
+	infoStrings = new Object();
 };
 lMap.onIdentifyProgress = function(map:MovieClip, layersindentified:Number, layerstotal:Number, sublayersindentified:Number, sublayerstotal:Number) {
 	var p:String="0";
@@ -95,12 +97,14 @@ lMap.onIdentifyData = function(map:MovieClip, maplayer:MovieClip, data:Object, e
 		// get string from language object
 		var stringid = id+"."+layerid;
 		var infostring = flamingo.getString(thisObj, stringid);
+		var lyrInfo:String = "";
 		if (infostring != undefined) {
 			//this layer is defined so convert infostring
 			var stripdatabase = flamingo.getString(thisObj, stringid, "", "stripdatabase");
 			for (var record in data[layerid]) {
-				textinfo += convertInfo(infostring, data[layerid][record]);
-				textinfo += "";
+				var tInfo:String = convertInfo(infostring, data[layerid][record]);
+				textinfo += tInfo;
+				lyrInfo += tInfo;
 			}
 		} else {
 			//for this layer no infostring is defined
@@ -110,13 +114,19 @@ lMap.onIdentifyData = function(map:MovieClip, maplayer:MovieClip, data:Object, e
 					for (var field in data[layerid][record]) {
 						var a = field.split(".");
 						var fieldname = "["+a[a.length-1]+"]";
-						textinfo += newline+fieldname+"="+data[layerid][record][field];
+						var tInfo:String = newline+fieldname+"="+data[layerid][record][field];
+						textinfo += tInfo;
+						lyrInfo += tInfo;
 					}
 				}
 			}
 		}
+		//Store in Object for later display (showInOrder=="true"); 
+		infoStrings[stringid] = lyrInfo;
 	}
-	txtInfo.htmlText = textinfo;
+	if(!showInOrder){
+		txtInfo.htmlText = textinfo;
+	}
 };
 function convertInfo(infostring:String, record:Object):String {
 	var t:String;
@@ -172,7 +182,7 @@ function convertInfo(infostring:String, record:Object):String {
 
 function makeEmptyWhenNotFound(str:String):String {
 	var tStr = str;
-	global.flamingo.tracer(tStr.indexOf("["));
+	//global.flamingo.tracer(tStr.indexOf("["));
 	while(tStr.indexOf("[") != -1){
 		var begin:Number = tStr.indexOf("[");
 		var end:Number =  tStr.indexOf("]") + 1;
@@ -198,10 +208,46 @@ lMap.onIdentifyComplete = function(map:MovieClip) {
 	var s = flamingo.getString(thisObj, "identify", "identify progress [progress]%");
 	s = s.split("[progress]").join("100");
 	txtHeader.htmlText = "<span class='status'>"+s+"</span>";
-	_global['setTimeout'](finish, 500);
+	if(showInOrder){
+		showOrderedText(map);
+	}
+	_global['setTimeout'](finish, 500);	
 };
+
 function finish() {
 	txtHeader.htmlText = "<span class='status'>"+flamingo.getString(thisObj, "finishidentify", "identify progress 100%")+"</span>";
+
+	
+}
+
+function showOrderedText(map:MovieClip):Void{
+		var orderedText:String = "";
+		var lyrs:Array = map.getLayers();
+		var mapid = flamingo.getId(map);
+		for(var i:Number = 0; i< lyrs.length; i++){
+			var id = lyrs[i].substring(mapid.length+1, lyrs[i].length);
+			var lyr:Object = _global.flamingo.getComponent(lyrs[i]);
+			var querylayerstring:String = lyr.identifyids;
+			if(querylayerstring!=undefined){
+				var queryLyrs:Array = querylayerstring.split(",");
+				for(var j:Number = 0; j< queryLyrs.length; j++){
+					var qLyr:String = queryLyrs[j];
+					//remove prefixes form layer
+					var index:Number = qLyr.indexOf(":");
+					if (index > 0){
+						qLyr = queryLyrs[j].substring(index + 1, queryLyrs[j].length);
+					}
+					if(infoStrings[id +"."+qLyr]!=undefined){
+						orderedText += infoStrings[id +"."+qLyr];
+					}
+				}
+			}
+		} 
+		if(orderedText.length == 0){
+			txtInfo.htmlText = _global.flamingo.getString(this, "noresults", "no results");
+		} else {
+			txtInfo.htmlText = orderedText;
+		}
 }
 //---------------------------------------
 var lParent:Object = new Object();
@@ -402,8 +448,13 @@ function setConfig(xml:Object) {
 			if (val.toLowerCase() == "true") {
 				emptyWhenNotFound=true;
 			}	
+			break;		
+		case "showinorder":
+			if (val.toLowerCase() == "true") {
+				showInOrder=true;
+			}	
 			break;
-		}				
+		}			
 
 	}
 	//    
