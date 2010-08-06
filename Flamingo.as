@@ -245,8 +245,11 @@ class Flamingo {
 		//the dimensions (__width and __height) are stored at the flamingo movie
 		clearInterval(this.resizeid);
 		var mFlamingo = this.getComponent("flamingo");
-		var h:Number = this.getAbs(mFlamingo.height, Stage.height-1);
-		var w:Number = this.getAbs(mFlamingo.width, Stage.width-1);
+		//why Stage.height-1 ??? This gives problems when checking if resize is needed in resize()
+		//var h:Number = this.getAbs(mFlamingo.height, Stage.height-1);
+		//var w:Number = this.getAbs(mFlamingo.width, Stage.width-1);
+		var h:Number = this.getAbs(mFlamingo.height, Stage.height);
+		var w:Number = this.getAbs(mFlamingo.width, Stage.width);
 		if (mFlamingo.minheight>0) {
 			h = Math.max(mFlamingo.minheight, h);
 		}
@@ -259,31 +262,36 @@ class Flamingo {
 		if (mFlamingo.minwidth>0) {
 			w = Math.max(mFlamingo.minwidth, w);
 		}
-		mFlamingo.__height = h;
-		mFlamingo.__width = w;
-		//log
-		if (mFlamingo.mError != undefined) {
-			mFlamingo.mError._x = (Stage.width/2);
-			mFlamingo.mError._y = (Stage.height/2);
+		if(mFlamingo.__height == h && mFlamingo.__width == w){
+			//return when size has not changed
+			return;
+		} else {	
+			mFlamingo.__height = h;
+			mFlamingo.__width = w;
+			//log
+			if (mFlamingo.mError != undefined) {
+				mFlamingo.mError._x = (Stage.width/2);
+				mFlamingo.mError._y = (Stage.height/2);
+			}
+			//                                                                    
+			mFlamingo.clear();
+			mFlamingo.beginFill(this.backgroundcolor, this.backgroundalpha);
+			mFlamingo.moveTo(0, 0);
+			mFlamingo.lineTo(mFlamingo.__width, 0);
+			mFlamingo.lineTo(mFlamingo.__width, mFlamingo.__height);
+			mFlamingo.lineTo(0, mFlamingo.__height);
+			mFlamingo.lineTo(0, 0);
+			mFlamingo.endFill();
+			mFlamingo.flamingoBorder.clear();
+			mFlamingo.flamingoBorder.lineStyle(this.borderwidth, this.bordercolor, this.borderalpha);
+			mFlamingo.flamingoBorder.moveTo(0, 0);
+			mFlamingo.flamingoBorder.lineTo(mFlamingo.__width, 0);
+			mFlamingo.flamingoBorder.lineTo(mFlamingo.__width, mFlamingo.__height);
+			mFlamingo.flamingoBorder.lineTo(0, mFlamingo.__height);
+			mFlamingo.flamingoBorder.lineTo(0, 0);
+			this.raiseEvent(this, "onResize", mFlamingo);
+			//this.components.flamingo.broadcastMessage("onResize");
 		}
-		//                                                                    
-		mFlamingo.clear();
-		mFlamingo.beginFill(this.backgroundcolor, this.backgroundalpha);
-		mFlamingo.moveTo(0, 0);
-		mFlamingo.lineTo(mFlamingo.__width, 0);
-		mFlamingo.lineTo(mFlamingo.__width, mFlamingo.__height);
-		mFlamingo.lineTo(0, mFlamingo.__height);
-		mFlamingo.lineTo(0, 0);
-		mFlamingo.endFill();
-		mFlamingo.flamingoBorder.clear();
-		mFlamingo.flamingoBorder.lineStyle(this.borderwidth, this.bordercolor, this.borderalpha);
-		mFlamingo.flamingoBorder.moveTo(0, 0);
-		mFlamingo.flamingoBorder.lineTo(mFlamingo.__width, 0);
-		mFlamingo.flamingoBorder.lineTo(mFlamingo.__width, mFlamingo.__height);
-		mFlamingo.flamingoBorder.lineTo(0, mFlamingo.__height);
-		mFlamingo.flamingoBorder.lineTo(0, 0);
-		this.raiseEvent(this, "onResize", mFlamingo);
-		//this.components.flamingo.broadcastMessage("onResize");
 	}
 	/**
 	* Checks if a configuration file is being loaded.
