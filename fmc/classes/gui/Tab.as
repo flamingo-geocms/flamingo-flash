@@ -84,7 +84,11 @@ class gui.Tab extends AbstractContainer {
 	function getLabel():String {
 		return label;
 	}
-
+	
+	function setBounds(x:Number, y:Number, width:Number, height:Number):Void {
+		super.setBounds(x, y , width, height -30);
+    }
+	
 	function setVisible(visible:Boolean){
 		super.setVisible(visible);
 		if (visible){
