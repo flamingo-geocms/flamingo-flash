@@ -40,11 +40,12 @@
 * @class gui.Print extends AbstractContainer
 * @hierarchy child node of Flamingo or a container component. 
 * @attr scales (optional) default: "500000,250000,100000,50000,20000,10000,5000,2000" comma seperated scale list.
+* @attr defaulttemplate (optional) no default id of the defaultTemplate (is shown in the combobox when print window becomes visible).
 * @example
 	<fmc:Window id="printWindow" top="60" left="60" width="585" height="680" visible="false" skin="g"
         canresize="true" canclose="true">
         <string id="title" en="Print Settings and Preview" nl="Printinstellingen en printvoorbeeld"/>
-        <fmc:Print id="print" width="100%" height="100%" visible="false"  borderwidth="0" listento="map">
+        <fmc:Print id="print" width="100%" height="100%" visible="false"  borderwidth="0" listento="map" defaulttemplate="printTemplate1">
 			<string id="previewSize" en="Preview at Original Size" nl="Printvoorbeeld op ware grootte"/>
             <string id="toPrinter" en="Send to Printer" nl="Afdrukken"/>
             <string id="choseTemplate" en="--Chose Template--" nl="-- Kies Template --"/>
@@ -98,8 +99,9 @@ class gui.Print extends AbstractContainer {
     private var intervalID:Number = null;
     private var availPreviewWidth:Number = 0;
 	private var availPreviewHeight:Number = 0;
-    
-    function init():Void {
+	private var defaultTemplate : String = null;
+
+	function init():Void {
         map = _global.flamingo.getComponent(listento[0]);
         var componentIDs:Array = getComponents();
         var component:MovieClip = null;
@@ -132,23 +134,38 @@ class gui.Print extends AbstractContainer {
         //addIdentifyButton();
         addCheckBox();
         addPrintButton();
-
-        templateComboBox.selectedIndex = 0;
-
-
-    }
+		resetTemplateComboBox();  
+	}
+	
+	private function resetTemplateComboBox(){
+		templateComboBox.selectedIndex = 0;
+		setCurrentPrintTemplate(null);
+		if(defaultTemplate != null){
+			var templates:Array = templateComboBox.getDataProvider();
+			for (var j:Number = 0; j < templates.length; j++) {
+	            if(templates[j].data == _global.flamingo.getComponent(defaultTemplate)){
+	        		templateComboBox.selectedIndex = j;
+	        		setCurrentPrintTemplate(templates[j].data);    	
+	            }
+			}
+		}
+		
+	}
 	
 	function setAttribute(name:String, value:String):Void {
 		if (name.toLowerCase()=="scales"){
 			scales=value.split(",");
 		}
+		else if(name.toLowerCase()=="defaulttemplate"){
+			defaultTemplate=value;
+		}
+		
 	}
 	
 	function setVisible(vis:Boolean):Void{
 		super.setVisible(vis);
 		if(printTemplates.length>1){
-			setCurrentPrintTemplate(null);
-			templateComboBox.selectedIndex = 0;
+			resetTemplateComboBox();
 		} else {	
 				currentPrintTemplate.setVisible(vis);
 		}
@@ -164,7 +181,7 @@ class gui.Print extends AbstractContainer {
     }
     
     private function addTemplateSelector():Void {
-		var comboBoxContainer:MovieClip = createEmptyMovieClip("mTemplateComboBoxContainer", 9);
+		var comboBoxContainer:MovieClip = createEmptyMovieClip("mBoxContainer", 9);
     	var initObject:Object = new Object();
 	    initObject["_width"] = 200;
         if(printTemplates.length>1){
