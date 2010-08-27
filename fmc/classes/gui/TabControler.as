@@ -17,7 +17,7 @@
 * @class gui.TabControler extends AbstractContainer
 * @hierarchy child node of Flamingo 
 * @example
-* <fmc:TabControler left="left" width="300" top="top" bottom="bottom" borderalpha="0">
+* <fmc:TabControler left="left" width="300" top="top" bottom="bottom" borderalpha="0" startuptab="1">
   		<fmc:Tab width="100%" height="100%">
    			<string id="buttonlabel" nl="Kaartlagen"/>
    			<fmc:Legend id="kaartlagen" left="20" top="20"  right="right -5" bottom="bottom" listento="map" visible="false"/>
@@ -33,6 +33,7 @@
     		</fmc:IdentifyResultsHTML>
    		</fmc:Tab>
  	</fmc:TabControler>
+ * @attr startuptab default:0 The tab number(0 is the first tab, 1 is the second tab etc.) of the tab that should be opened at startup 
  **/
 
 import gui.Tab;
@@ -46,12 +47,19 @@ class gui.TabControler extends AbstractContainer {
 	
 	private var tabs : Array;
 	private var numTabs : Number;
+	private var startuptab: Number = 0;
 	var buttons:MovieClip = null;
 	
 	function onLoad(){
 		super.onLoad();
 		this.setVisible(false);
 	}
+	
+	function setAttribute(name:String, value:String):Void {
+        if (name == "startuptab") {
+            startuptab = Number(value);
+        }
+    }
 		
 	function init():Void {	
 	    var tabIDs:Array = getComponents();
@@ -75,6 +83,7 @@ class gui.TabControler extends AbstractContainer {
         drawTabButtons();
 		_global.flamingo.addListener(this,"flamingo",this);	
 		this.setVisible(true);
+		tabs[startuptab].show();
 	}
 
 	private function drawTabButtons() : Void {
