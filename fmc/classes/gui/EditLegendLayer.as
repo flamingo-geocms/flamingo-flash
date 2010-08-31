@@ -152,6 +152,7 @@ class gui.EditLegendLayer extends MovieClip implements StateEventListener, Actio
                 buttonConfigs.push(new ButtonConfig("AddCurveButton", "lijn toevoegen", this, null, null));
             } else if (geometryType == "Polygon") {
                 buttonConfigs.push(new ButtonConfig("AddSurfaceButton", "vlak toevoegen", this, null, null));
+            } else if (geometryType == "MultiPolygon"){//don't draw buttons when MultiPolygon geometry (not implemented yet)				
             } else { // Circle
                 buttonConfigs.push(new ButtonConfig("AddCircleButton", "cirkel toevoegen", this, null, null));
             }
