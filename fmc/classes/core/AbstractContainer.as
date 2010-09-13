@@ -41,16 +41,17 @@ class core.AbstractContainer extends AbstractComponent {
         if (_global.flamingo == null) {
             return;
         }
-        
         background = createEmptyMovieClip("mBackground", 0);
         contentPane = createEmptyMovieClip("mContentPane", 1);
         border = createEmptyMovieClip("mBorder", 2);
-        
-        setBaseConfig();
+        setConfig();
         contentPane.guides = guides;
         
+    }
+    
+    function setConfig(){
+    	setBaseConfig();
         setCompoConfig();
-        listento = listento.concat(getComponents()); // Makes the container wait for its child components to be ready.
         setCustomConfig();
         wait();
     }
@@ -60,7 +61,6 @@ class core.AbstractContainer extends AbstractComponent {
     }
     
     function setCompoConfig():Void {
-        
         // Retrieves the default configuration for the component, in order to set the "compo" properties.
         var defaultConfig:XMLNode = new XML(defaultXML);
         setCompoProperties(defaultConfig);
@@ -70,6 +70,7 @@ class core.AbstractContainer extends AbstractComponent {
         for (var i = 0; i < appConfigs.length; i++) {
             setCompoProperties(XMLNode(appConfigs[i]));
         }
+        listento = listento.concat(getComponents()); // Makes the container wait for its child components to be ready.
     }
     
     // Parses the xml child nodes to components. A container has no other composites than components.

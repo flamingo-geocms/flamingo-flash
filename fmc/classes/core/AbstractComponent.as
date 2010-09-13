@@ -60,7 +60,6 @@ class core.AbstractComponent extends MovieClip {
             
             return;
         }
-        
         _global.flamingo.correctTarget(_parent, this);
     }
     
@@ -68,18 +67,21 @@ class core.AbstractComponent extends MovieClip {
         if (_parent._parent == null) {
             return;
         }
-        setBaseConfig();
+        setConfig();
+    }
+    
+    
+    function setConfig():Void {
+    	setBaseConfig();
         setCustomConfig();
         wait();
     }
-    
+    	  	
     /**
     * Sets the component's base configuration, which comprises of the 19 base properties.
     */
     function setBaseConfig():Void {
-
 		var xml:XMLNode = new XML(defaultXML).firstChild;        
-
         _global.flamingo.parseXML(this, xml);
         
         // Retrieves the application configurations for the component, in order to set the base properties.
@@ -87,7 +89,11 @@ class core.AbstractComponent extends MovieClip {
         for (var i = 0; i < appConfigs.length; i++) {
             _global.flamingo.parseXML(this, XMLNode(appConfigs[i]));
         }
-        
+        //some base properties may be reloaded in another xml so f.i. the bounds change
+        //TODO: check other base properties  
+        //setBounds  
+        var bounds:Object = _global.flamingo.getPosition(this);
+        setBounds(bounds.x, bounds.y, bounds.width, bounds.height);
         if (listento == null) {
             listento = new Array();
         }
