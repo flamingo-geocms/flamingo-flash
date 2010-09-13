@@ -96,8 +96,13 @@ class coremodel.service.wfs.WFSConnector extends ServiceConnector {
                 var whereClause:WhereClause = null;
                 for (var i:String in whereClauses) {
                     whereClause = WhereClause(whereClauses[i]);
-                    if (whereClause.getOperator() == WhereClause.EQUALS) {
-                        requestString += "        <ogc:PropertyIsLike wildCard=\"*\" singleChar=\"#\" escapeChar=\"!\">\n";
+                    if (whereClause.getOperator() == WhereClause.EQUALS){
+                    	//matchCase wordks only for deegree WFS
+                    	if(whereClause.isCaseSensitive()) { 
+                        	requestString += "        <ogc:PropertyIsLike wildCard=\"*\" singleChar=\"#\" escapeChar=\"!\" matchCase=\"true\">\n";
+                    	} else {
+                    		requestString += "        <ogc:PropertyIsLike wildCard=\"*\" singleChar=\"#\" escapeChar=\"!\" matchCase=\"false\">\n";
+                    	}	
                         requestString += "          <ogc:PropertyName>" + whereClause.getPropertyName() + "</ogc:PropertyName>\n";
                         requestString += "          <ogc:Literal>" + whereClause.getValue() + "</ogc:Literal>\n";
                         requestString += "        </ogc:PropertyIsLike>\n";
