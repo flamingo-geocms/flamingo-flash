@@ -734,7 +734,7 @@ function _getLayerlist(list:String, field:String):Array {
 				if (field == "identify" and layers[id].forceidentify == true) {
 					layerlist.push(id);
 				} else {
-					if (layers[id].visible == false) {
+					if (getVisible(id) <> 1) {
 						continue;
 					}
 					if (layers[id].minscale != undefined) {
@@ -914,6 +914,8 @@ function _identifylayer(_identifyextent:Object, starttime:Date) {
 			query = searchAndReplace(query, "<", "&lt;");
 			query = searchAndReplace(query, ">", "&gt;");			
 		}
+		//No geometry needed for identify
+		conn.includeGeometry = false;
 		conn.getFeatures(mapservice, layerid, real_identifyextent, subfields, query, map.copyExtent(_identifyextent));
 		break;
 	case "image" :
@@ -1076,6 +1078,7 @@ function _hotlinklayer(_identifyextent:Object, starttime:Date)
 			query = searchAndReplace(query, "<", "&lt;");
 			query = searchAndReplace(query, ">", "&gt;");			
 		}
+		conn.includeGeometry = false;
 		conn.getFeatures(mapservice, layerid, real_identifyextent, subfields, query, map.copyExtent(_identifyextent));
 		break;
 	case "image" :
@@ -1469,7 +1472,8 @@ function _maptip() {
 		query = searchAndReplace(query, "<", "&lt;");
 		query = searchAndReplace(query, ">", "&gt;");
 	}
-	
+	//No geometry needed for maptip
+	conn.includeGeometry = false;
 	conn.getFeatures(mapservice, layerid, maptipextent, maptipfields, query, this.map.copyExtent(this.maptipextent));
 }
 //custom functions 
@@ -1658,6 +1662,8 @@ function _maptip(x:Number, y:Number) {
 			query = searchAndReplace(query, "<", "&lt;");
 			query = searchAndReplace(query, ">", "&gt;");
 		}
+		//No geometry needed for maptip
+		conn.includeGeometry = false;
 		conn.getFeatures(mapservice, layerid, _maptipextent, flds, query, {x:x, y:y});
 		break;
 	case "image" :
