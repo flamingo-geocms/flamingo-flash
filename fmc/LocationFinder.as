@@ -66,7 +66,8 @@ var thisObj = this;
 var locationdata:Array = new Array();
 var foundlocations:Array;
 var currentlocation:Object;
-var file:String;
+var filesstr:String;
+var files:Array;
 var beginrecord = 1;
 var nrlines:Number;
 var controls:Boolean = true;
@@ -75,6 +76,7 @@ var entersDone:Number=0;
 var currentExtentSelector:Object;
 var resultViewerId:String;
 var resultViewer:Object;
+var showSearchButton:Boolean = false;
 
 var tFeaturesDelta:Number = 0;
 var locationPin:MovieClip = null;
@@ -160,7 +162,11 @@ init();
 <LOCATION label="Bolsward" extent="161979,562086,166404,566091" />
 </LOCATIONS>
 </fmc:LocationFinder>
-* @attr include External file in which locations can be stored.
+* @attr resultviewer id of a resultviewer in which the results will be shown
+* @attr showsearchbutton deafult:false When set to true a simple search button will be shown when the
+* inputtext field is is visible. The search can be triggered either by doing an enter in the textfield 
+* or by pressing the search button
+* @attr include External files in which locations can be stored (comma seperated).
 */
 function init():Void {
 	mHolder._visible = false;
@@ -202,7 +208,7 @@ function setConfig(xml:Object) {
 		var val:String = xml.attributes[attr];
 		switch (attr.toLowerCase()) {
 		case "include" :
-			file = val;
+			filesstr = val;
 			break;
 		case "controls" :
 			if (val.toLowerCase() == "true") {
@@ -214,11 +220,18 @@ function setConfig(xml:Object) {
 		case "resultviewer" :
 			resultViewerId = val;
 			break;	
+		case "showsearchbutton" :
+			if (val.toLowerCase() == "true") {
+				showSearchButton = true;
+			} else {
+				showSearchButton = false;
+			}	
+			break;
 		}
 	}
 	initControls();
 	addLocation(xml);
-	if (file == undefined) {
+	if (filesstr == undefined) {
 		refresh();
 		flamingo.raiseEvent(thisObj, "onData", thisObj);
 		var arg = flamingo.getArgument(thisObj, "find");
@@ -227,7 +240,10 @@ function setConfig(xml:Object) {
 			this.moveToLocation(a[0], a[1]);
 		}
 	} else {
-		loadXML(file);
+		files = filesstr.split(",");
+		for(var a:Number = 0; a < files.length; a++){ 
+			loadXML(files[a]);
+		}
 	}
 }
 function loadXML(file:String) {
@@ -274,7 +290,8 @@ function loadXML(file:String) {
     extentselector ="extentSelector"
     outputfields="app:naamOverheid,app:identificatie,app:naam"
     highlightlayer="highlightlayer" highlightwmsurl="http://afnemers.ruimtelijkeplannen.nl/afnemers/services?service=WMS" highlightsldservleturl="http://support.idgis.eu/sldtest"  
-    highlightfeaturetypename="app:Bestemmingsplangebied" highlightpropertyname="app:identificatie"/>
+    highlightfeaturetypename="app:Bestemmingsplangebied" highlightpropertyname="app:identificatie"
+    highlightmaxscale="10" matchcase="false"/>
     <string id="output" nl="[app:naamOverheid]: [app:naam]" />
     <string id="label" nl="Zoek op RO-online naam overheid" />
     <string id="hint" nl="Type een (deel van de) naam overheid  in het tekstvak hierboven..." />
@@ -301,12 +318,16 @@ function loadXML(file:String) {
 * @attr namespaces the namespaces that are needed to do a wfs request
 * @attr extentSelector id of an extentSelector component
 * @attr pinlocation default:false If true a found location will be pinned on the map 
-* 
-* @attr highlightlayer id of an highlightlayer component 
+* @attr matchcase default:false Only for deegree WFS. When false the searchstring is caseinsensitive.
+* @attr highlightlayer id of an highlightlayer component. When a hightlightlayer is configured a found feature
+* will get highlighted when an user moves the mouse over the the feature in the resultviewer. 
 * @attr highlightwmsurl
 * @attr highlightsldservleturl
 * @attr highlightfeaturetypename
 * @attr highlightpropertyname
+* @attr highlightmaxscale Scale to prevent highlighting of features when the mapscale is too large. 
+* If the currentmapscale is larger than the highlightmaxscale the Locationfinder will not send a GetMap request 
+* to the highlightwms but the BBox of found feature will be shown instead.
 */
 //
 /** @tag <location>  
@@ -418,6 +439,9 @@ function addLocation(xml:Object) {
     				case "highlightpropertyname":
     					location.propertyName = String(val);
     					break;
+    				case "highlightmaxscale":
+    					location.highlightmaxscale = Number(val);
+    					break;		
     				case "pinlocation":
 						if(val=="true"){
 							location.pinLocation = true;
@@ -426,12 +450,19 @@ function addLocation(xml:Object) {
 						}						
 						break;	
 					case "closepin":
-						location.closePin = value;					
+						location.closePin = val;					
 						break;		
 					case "extentselector":
 						location.extentSelector=_global.flamingo.getComponent(val);
 						flamingo.addListener(this, location.extentSelector, this);
 						break;	
+					case "matchcase":
+						if(val=="true"){
+							location.matchCase = true;
+						} else {
+							location.matchCase = false;
+						}
+						break;		
 				    default: 
 						flamingo.tracer("unknown attribute in confige file for LocationFinder: "+attr);
 					}
@@ -543,6 +574,19 @@ function findLocation(locationfinderid:String, search:String, nr:Number, zoom:Bo
 		}
 	}
 }
+
+//function is called when pressing the searchbutton or onEnter the tSearch field
+function find():Void {
+	if (mHolder.tSearch.text.length>0) {
+		beginrecord = 1;
+		var index = mHolder.cbChoice.selectedItem.data;
+		locationdata[index].searchstring = mHolder.tSearch.text;
+		entersDone++;				
+		setTimeout(function(){_findLocation(locationdata[index], mHolder.tSearch.text, nrlines, true);}, 100 );
+	}
+}
+
+
 function _findLocation(locationdata:Object, search:String, nr:Number, updatefeatures:Boolean, zoom:Boolean) {	
 	entersDone--;
 	//when a location is entered via the url the entersDone will be smaller than zero
@@ -666,7 +710,7 @@ function _findLocationWFS(locationdata:Object, search:String, nr:Number, updatef
 	if(locationdata.serverVersion!=undefined){
 		conn.setServiceVersion(locationdata.serverVersion);
 	}
-	var map = flamingo.getComponent(this.listento[0]);
+	map = flamingo.getComponent(this.listento[0]);
 	//Get extent
 	var extent:Object = null;
 	if (currentExtentSelector!=null){
@@ -674,10 +718,9 @@ function _findLocationWFS(locationdata:Object, search:String, nr:Number, updatef
 	} else {
 		extent = map.getFullExtent();
 	}
-	conn.performDescribeFeatureType(layerid, lConn)
-
+	conn.performDescribeFeatureType(layerid, lConn);
 	var whereClause:WhereClause = new WhereClause(searchfield,locationdata.fieldtype.toLowerCase() == "n" ? search : '*'+search+'*',
-										WhereClause.EQUALS,false);
+										WhereClause.EQUALS,locationdata.matchCase != undefined ? locationdata.matchCase : false );
 	if (updatefeatures) {
 		var str:String = "<span class='busy'>"+flamingo.getString(thisObj, "busy")+"</span>";
 		if(resultViewerId!=null){
@@ -689,7 +732,7 @@ function _findLocationWFS(locationdata:Object, search:String, nr:Number, updatef
 }
 function _findLocationARC(locationdata:Object, search:String, nr:Number, updatefeatures:Boolean, zoom:Boolean) {
 	//Get extent
-	var map = flamingo.getComponent(this.listento[0]);
+	map = flamingo.getComponent(this.listento[0]);
 	var extent:Object = null;
 	if (currentExtentSelector!=null){
 		extent = currentExtentSelector.getCurrentExtent().getExtent();
@@ -786,6 +829,7 @@ function _findLocationARC(locationdata:Object, search:String, nr:Number, updatef
 		}
 		for (var i = thisObj.beginrecord-1; i<len; i++) {
 			var r = new Object();
+			r.locationdata = locationdata;
 			delete data[i]["#SHAPE#"];
 			for (var field in data[i]) {				
 				if (field == "SHAPE.ENVELOPE") {
@@ -851,6 +895,7 @@ function _findLocationARC(locationdata:Object, search:String, nr:Number, updatef
 		foundlocations = new Array();
 		for (var i = 0; i<data.length; i++) {
 			var r = new Object();
+			r.locationdata = locationdata;
 			delete data[i]["#SHAPE#"];
 			for (var field in data[i]) {
 				if (field == "SHAPE.ENVELOPE") {
@@ -937,7 +982,7 @@ function _findLocationARC(locationdata:Object, search:String, nr:Number, updatef
 		} else {
 			connArcServer.beginrecord = 1;
 		}
-		var map = flamingo.getComponent(this.listento[0]);			
+		map = flamingo.getComponent(this.listento[0]);			
 		connArcServer.dataframe = locationdata.dataframe;
 
 		connArcServer.getFeatures(service, layerid, extent, outputfields, query);
@@ -993,7 +1038,7 @@ function _updateFeatures(hasmore:Boolean) {
 		mHolder.tFeatures.wordWrap = false;
 		mHolder.tFeatures.htmlText = str;
 	} else {
-		mHolder.tFeatures.htmlText = "";
+		mHolder.tFeatures.htmlText = "";	
 		if(foundlocations.length>0 && foundlocations[0].locationdata.hllayerid != null){
 			resultViewer.setLocations(foundlocations);
 		} else {
@@ -1102,6 +1147,7 @@ function initControls() {
 		locationindex = evt_obj.target.selectedItem.data;
 		mHolder.tFeatures._visible = false;
 		mHolder.tSearch._visible = false;
+		mHolder.tFind._visible = false;
 		mHolder.cbFeature._visible = false;
 		if (locationindex == -1) {
 			return;
@@ -1127,6 +1173,9 @@ function initControls() {
 			mHolder.cbFeature._visible = false;
 			mHolder.cbFeature.removeAll();
 			mHolder.tSearch._visible = true;
+			if(showSearchButton){
+				mHolder.tFind._visible = true;
+			}
 			if (inputPrefix.length>0) {
 				mHolder.tSearch.text = inputPrefix;
 			} else {
@@ -1195,13 +1244,7 @@ function initControls() {
 	tListener.handleEvent = function(evt_obj:Object) {
 		switch (evt_obj.type) {
 		case "enter" :
-			if (mHolder.tSearch.text.length>0) {
-				thisObj.beginrecord = 1;
-				var index = mHolder.cbChoice.selectedItem.data;
-				locationdata[index].searchstring = mHolder.tSearch.text;
-				thisObj.entersDone++;				
-				setTimeout(function(){_findLocation(locationdata[index], mHolder.tSearch.text, nrlines, true);}, 100 );
-			}
+			thisObj.find();
 			break;
 		case "change" :
 			var index = mHolder.cbChoice.selectedItem.data;
@@ -1231,7 +1274,9 @@ function initControls() {
 	//
 	mHolder.tFeatures._visible = false;
 	mHolder.tSearch._visible = false;
+	mHolder.tFind._visible = false;
 	mHolder.cbFeature._visible = false;
+	mHolder.btnSearch._visible = false;
 	resize();
 }
 function resize() {
@@ -1244,19 +1289,33 @@ function resize() {
 	var y = r.y;
 	var w = r.width;
 	var h = r.height;
+
+	mHolder._y = y;
+	mHolder.setSize(w,10);
+	
 	//
 	mHolder.cbChoice._x = x;
-	mHolder.cbChoice._y = y;
 	mHolder.cbChoice.setSize(w, 22);
 	//
 	mHolder.cbFeature._x = x;
-	mHolder.cbFeature._y = y+24;
+	mHolder.cbFeature._y = 24;
 	mHolder.cbFeature.setSize(w, 22);
 	//
 	mHolder.tSearch._x = x;
-	mHolder.tSearch._y = y+24;
-	mHolder.tSearch.setSize(w, 22);
-	//
+	mHolder.tSearch._y = 24;
+	mHolder.tSearch.setSize(w , 22);
+	if(showSearchButton){
+		mHolder.tSearch.setSize(w - 22 , 22);
+		mHolder.tFind._x = w - 13;
+		mHolder.tFind._y = 24;
+		mHolder.tFind.setSize(22, 22);
+		mHolder.tFind.editable = false;
+		mHolder.tFind.background = true;
+		mHolder.tFind.backgroundColor = 0xcccccc;
+		mHolder.tFind.html = true;
+		mHolder.tFind.text="<a href='asfunction:_parent._parent.find'><b>>></b></a>";
+	}
+	
 	//if(tFeaturesDelta!=null){
 		y += tFeaturesDelta;
 		h -= tFeaturesDelta;
@@ -1273,7 +1332,7 @@ function resize() {
 		nrlines = Math.floor((mHolder.tFeatures._height-(th*2))/th)-2;
 	} else {
 		var resultViewer:Object = _global.flamingo.getComponent(resultViewerId);
-		nrlines = Math.floor((resultViewer.__height-(th*3))/th)-2;
+		nrlines = Math.floor((0.8*resultViewer.__height)/th)-2;
 	}
 	var nritems = Math.floor((h-48)/22);
 	mHolder.tFeatures.htmlText = "";
@@ -1296,10 +1355,10 @@ function getString(item:Object, stringid:String):String {
 }
 
 function showTextInResultViewer(text:String):Void{
-			resultViewer = _global.flamingo.getComponent(resultViewerId);
-			resultViewer.setLocationFinder(this);
-			resultViewer.setVisible(true);
-			resultViewer.setText(text);
+	resultViewer = _global.flamingo.getComponent(resultViewerId);
+	resultViewer.setLocationFinder(this);
+	resultViewer.setVisible(true);
+	resultViewer.setText(text);
 }
 /**
 * Dispatched when 'findLocation' or 'moveToLocation' is called or when a location is set by using the controls.
