@@ -47,6 +47,7 @@ class ArcServerConnector {
 	var featureNumber:Number = 0;
 	var imageurl:String;
 	var selectedFID:Array = new Array();
+	var includeGeometry:Boolean = false;
 	//-----------------------
 	private var busy:Boolean = false;
 	private var layerid:String;
@@ -502,9 +503,16 @@ class ArcServerConnector {
 			{
 				str +="<DefinitionExpression>"+query+"</DefinitionExpression>\n";				
 			}
-			str +="</LayerDescription>";
+			if(!includeGeometry){
+				str +="<LayerResultOptions>\n";
+				str +="<IncludeGeometry>";
+				str +="false";
+				str +="</IncludeGeometry>\n";
+				str +="</LayerResultOptions>\n";
+			}	
+			str +="</LayerDescription>\n";
 		}
-		str +="</LayerDescriptions>\n</MapDescription>/n";
+		str +="</LayerDescriptions>\n</MapDescription>\n";
 		
 		str +="<MapImageDisplay>\n<ImageHeight>0</ImageHeight>\n";
 		str +="<ImageWidth>0</ImageWidth>\n<ImageDPI>96</ImageDPI>\n</MapImageDisplay>\n";
