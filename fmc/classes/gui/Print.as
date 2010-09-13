@@ -140,7 +140,7 @@ class gui.Print extends AbstractContainer {
 	private function resetTemplateComboBox(){
 		templateComboBox.selectedIndex = 0;
 		setCurrentPrintTemplate(null);
-		if(defaultTemplate != null){
+		if(defaultTemplate != null && this._visible){
 			var templates:Array = templateComboBox.getDataProvider();
 			for (var j:Number = 0; j < templates.length; j++) {
 	            if(templates[j].data == _global.flamingo.getComponent(defaultTemplate)){
