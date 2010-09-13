@@ -101,7 +101,8 @@ class coregui.js.JsButton extends AbstractComponent {
 	
     function init():Void {
 		super.init();
-		
+		//make the button invisible untill all images are loaded
+		this._visible = false; 
         useHandCursor = false;
 		
 		//if value not set by init object overrule it
@@ -137,8 +138,8 @@ class coregui.js.JsButton extends AbstractComponent {
 		mIcon_dis = this.createEmptyMovieClip("mIcon_dis", this.getNextHighestDepth());
 		mIcon_dis.attachMovie("_dis", "mIcon_default", mIcon_dis.getNextHighestDepth(), initObj);
 		mIcon_dis.createEmptyMovieClip("mIcon_img", mIcon_dis.getNextHighestDepth(), initObj);
-		loadGraph(mIcon_dis.mIcon_img, iconurl_dis);
-    }
+		loadGraph(mIcon_dis.mIcon_img, iconurl_dis);		
+	}
 	
 	private function loadGraph(mcGraph:MovieClip, iconurl:String):Void {
 		if (iconurl == "") {
@@ -187,6 +188,7 @@ class coregui.js.JsButton extends AbstractComponent {
 		}
 		if (allLoaded) {
 			onAllSkinsLoaded();
+			this._visible = true;
 		}
 	}
 	
