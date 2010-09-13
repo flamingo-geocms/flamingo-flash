@@ -57,6 +57,7 @@ var seperator:String = ",";
 var emptyWhenNotFound:Boolean = false;
 var infoStrings:Object;
 var showInOrder:Boolean = false;
+var order:Array = null;
 //---------------------------------
 var lMap:Object = new Object();
 lMap.onIdentify = function(map:MovieClip, extent:Object) {
@@ -222,27 +223,31 @@ function finish() {
 
 function showOrderedText(map:MovieClip):Void{
 		var orderedText:String = "";
-		var lyrs:Array = map.getLayers();
-		var mapid = flamingo.getId(map);
-		for(var i:Number = 0; i< lyrs.length; i++){
-			var id = lyrs[i].substring(mapid.length+1, lyrs[i].length);
-			var lyr:Object = _global.flamingo.getComponent(lyrs[i]);
-			var querylayerstring:String = lyr.identifyids;
-			if(querylayerstring!=undefined){
-				var queryLyrs:Array = querylayerstring.split(",");
-				for(var j:Number = 0; j< queryLyrs.length; j++){
-					var qLyr:String = queryLyrs[j];
-					//remove prefixes form layer
-					var index:Number = qLyr.indexOf(":");
-					if (index > 0){
-						qLyr = queryLyrs[j].substring(index + 1, queryLyrs[j].length);
-					}
-					if(infoStrings[id +"."+qLyr]!=undefined){
-						orderedText += infoStrings[id +"."+qLyr];
-					}
+		if(order!=null){
+			for(var i:Number = 0; i< order.length; i++){
+				if(infoStrings[tools.Utils.trim(order[i])]!=undefined){
+		
+					orderedText += infoStrings[tools.Utils.trim(order[i])];
 				}
 			}
-		} 
+		} else {
+			var lyrs:Array = map.getLayers();
+			var mapid = flamingo.getId(map);
+			for(var i:Number = 0; i< lyrs.length; i++){
+				var id = lyrs[i].substring(mapid.length+1, lyrs[i].length);
+				var lyr:Object = _global.flamingo.getComponent(lyrs[i]);
+				var querylayerstring:String = lyr.identifyids;
+				if(querylayerstring!=undefined){
+					var queryLyrs:Array = querylayerstring.split(",");
+					for(var j:Number = 0; j< queryLyrs.length; j++){
+						var qLyr:String = queryLyrs[j];
+						if(infoStrings[id +"."+qLyr]!=undefined){
+							orderedText += infoStrings[id +"."+qLyr];
+						}
+					}
+				}
+			} 
+		}
 		if(orderedText.length == 0){
 			txtInfo.htmlText = _global.flamingo.getString(this, "noresults", "no results");
 		} else {
@@ -351,7 +356,35 @@ function show() {
 * \tplanteksten:#sep#\t<a href="http://www.ruimtelijkeplannen.nl/documents/[identificatie]/[verwijzingNaarTekst]" target="_blank"><u>[verwijzingNaarTekst]</u></a>#sep#       
 * @attr seperator (defaultvalue = ",") Indicates the seperator character(s) for the seperatedfields.
 * @attr emptywhennotfound (defaultvalue = false) Shows the output value as an empty string when the response doesnot contain the requested field.  
+* @attr showinorder (defaultvalue = false) When true the identify output will be shown in the order as configured in the attribute stringorder or 
+* in case the stringorder attribute is not present as configured in the map configuration (layer order) and layer configuration (identifyIds or query_layers attribute). 
+* Ordering using layer and identifyIds/query_layers configuration is only possible for LayerArcIMS, LayerArcServer and for LayerOGWMS layers when the WMS layername (as configured in the LayerOGWMS) 
+* corresponds with the WFS Featuretype name (as configured in the IdentifyResultsHTML).   
+* @attr stringorder A commaseperated string of stringids indicating the order in wich the identify results will be shown.
+* The results will only be shown when all the results are received from the server.
+* @example 
+* <fmc:IdentifyResultsHTML id="identifyResults" wordwrap="false" showinorder="true"
+*    stringorder="bpVoorontwerp.Bestemmingsplangebied
+*    ,bpVoorontwerp.Enkelbestemming
+*    ,bpVoorontwerp.Dubbelbestemming
+*    ,bpVoorontwerp.Bouwvlak
+*    ,bpVoorontwerp.Gebiedsaanduiding
+*    ,bpVoorontwerp.Lettertekenaanduiding
+*    ,bpVoorontwerp.Bouwaanduiding
+*    ,bpVoorontwerp.Functieaanduiding
+*    ,bpVoorontwerp.Maatvoering
+*    ,bpVoorontwerp.Figuur">
+* 
+* 	<string id="bpVoorontwerp.Enkelbestemming" stripdatabase="true">
+*    	....
+* 	</string>  
+* 	...
+*	<string id="bpVoorontwerp.Bestemmingsplangebied" stripdatabase="true">
+*    	....
+* 	</string>  
+* </fmc:IdentifyResultsHTML>
 */
+
 function init():Void {
 	if (flamingo == undefined) {
 		var t:TextField = this.createTextField("readme", 0, 0, 0, 550, 400);
@@ -454,6 +487,8 @@ function setConfig(xml:Object) {
 				showInOrder=true;
 			}	
 			break;
+		case "stringorder":
+			order = val.split(",");
 		}			
 
 	}
