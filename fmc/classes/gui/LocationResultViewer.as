@@ -41,6 +41,7 @@ import core.AbstractContainer;
 
 import mx.utils.Delegate;
 
+import geometrymodel.Point;
 
 class gui.LocationResultViewer extends AbstractComponent {
     
@@ -48,7 +49,7 @@ class gui.LocationResultViewer extends AbstractComponent {
     private var textArea:TextArea = null;
     private var locationFinder:Object = null;
     private var locations:Array = null;
-
+ 	private var locationlayer:MovieClip = null;
 	private var mask : Boolean = true;
 	private var intervalId: Number;
 	private var scrollPane : ScrollPane; 
@@ -79,6 +80,46 @@ class gui.LocationResultViewer extends AbstractComponent {
 	function getString(item:Object, stringid:String):String {
 		return locationFinder.getString(item,stringid);
 	}
+	
+	function showLocation(index:Number) {
+		var map:Map = locationFinder.map;
+		if(locationlayer == null){
+			locationlayer = map.createEmptyMovieClip("mLocation", map.getNextHighestDepth());
+		} else {
+			locationlayer.clear();
+		}
+		var ext:Object = locations[index].extent;
+		var min:Object = new Object;
+		min.x = ext.minx;
+		min.y = ext.miny;
+		var pmin:Object = map.coordinate2Point(min);
+		var max:Object = new Object;
+		max.x = ext.maxx;
+		max.y = ext.maxy;
+		var pmax:Object = map.coordinate2Point(max);
+		locationlayer.lineStyle(2, 0x00ff00, 100);	
+		locationlayer.moveTo(pmin.x,pmin.y);
+		locationlayer.lineTo(pmin.x,pmax.y);
+		locationlayer.lineTo(pmax.x,pmax.y);
+		locationlayer.lineTo(pmax.x,pmin.y);
+		locationlayer.lineTo(pmin.x,pmin.y);
+	}
+	
+	function isHighlightScale():Boolean {
+		var map:Map = locationFinder.map;
+		var currentLocation:Object = locations[0].locationdata;
+		if(map.getCurrentScale() >= currentLocation.highlightmaxscale){
+			return false;
+		} else {
+			return true;
+		}
+	} 
+	
+	function clearLocation(){
+		locationlayer.clear();
+		
+	}
+	
 	function _zoom(index:Number) {
 	 	locationFinder._zoom(index);	
 	}
@@ -96,10 +137,11 @@ class gui.LocationResultViewer extends AbstractComponent {
 			addTextArea();
 		} 
 		if(scrollPane != null){
+		 	//scrollPane.removeMovieClip();
 		 	scrollPane._visible = false;
 		}
 		textArea._visible = true; 
-        textArea.setText(text);
+		textArea.setText(text);
     }
 
     
@@ -108,6 +150,7 @@ class gui.LocationResultViewer extends AbstractComponent {
     	textArea.setSize(width,height); 
     	scrollPane.setSize(width,height);
     }
+    
     function setLocationFinder(locationFinder:Object):Void{
     	this.locationFinder = locationFinder;
     }
@@ -116,10 +159,9 @@ class gui.LocationResultViewer extends AbstractComponent {
     private function addTextArea():Void {
         var initObject:Object = new Object();
         initObject["html"] = true;
-        textArea = TextArea(this.attachMovie("TextArea", "mTextArea" +this.getNextHighestDepth(), this.getNextHighestDepth(), initObject));
+        textArea = TextArea(this.attachMovie("TextArea", "mTextArea" +this.getNextHighestDepth(), this.getNextHighestDepth(), initObject));    
         textArea.setSize(this.__width,this.__height);
         textArea.styleSheet = _global.flamingo.getStyleSheet(locationFinder);
-
 	}
 	
   

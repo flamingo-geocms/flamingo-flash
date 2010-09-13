@@ -4,6 +4,7 @@
 * IDgis bv
 * Part of the LocationResultViewer component
  -----------------------------------------------------------------------------*/
+import flash.external.ExternalInterface;
 
 import mx.utils.Delegate;
 import gui.LocationResultViewer;
@@ -39,39 +40,56 @@ class gui.LocationResult extends MovieClip {
 			_global.flamingo.showTooltip(tooltip, this);
 		}
 		viewer.doClearInterval();
-		this.over = true;
+		this.over = true;	
 		TextField(this["text"]).textColor = 0x00ff00;
-		viewer.doSetIntervalId(_global.setTimeout(Delegate.create({loc:this.location, thisObject: this},
-					function (){	
-						if(this.loc.locationdata.highlightLayer == null && this.loc.locationdata.hllayerid != null){
-							this.loc.locationdata.highlightLayer =  _global.flamingo.getComponent(this.loc.locationdata.hllayerid);
-						}
-						this.loc.locationdata.highlightLayer.highlightFeature(this.loc.locationdata.wmsUrl, this.loc.locationdata.sldServletUrl, this.loc.locationdata.featureTypeName, this.loc.locationdata.propertyName, this.loc.propertyvalue, null, null)
-						TextField(this.thisObject["text"]).textColor = 0xff0000;
-						this.thisObject.requestsent = true;
-					})
-			,400));
-		}
-
-		function onRollOut():Void {
-			clearHighlight();
-		}
-		function onReleaseOutside():Void{
-			clearHighlight();
-		}
-		function onMouseUp():Void {
-			if(this.over){
-				viewer._zoom(index);
-			}	
+		if( !viewer.isHighlightScale()){
+			showLocation();
+		} else {
+			hightlightLocation();
 		}
 		
-		private function clearHighlight(){
-			viewer.doClearInterval();
-			if(requestsent){
-				this.location.locationdata.highlightLayer.resetFeature();
-			}
-			this.over = false;
-			this.requestsent = false;
-			TextField(this["text"]).textColor = 0x0000ff;
-		}			
+	}
+		
+	private function showLocation():Void{
+		viewer.showLocation(index);
+	}
+		
+		
+	function hightlightLocation(){
+		viewer.doSetIntervalId(_global.setTimeout(Delegate.create({loc:this.location, thisObject: this},
+				function (){	
+					if(this.loc.locationdata.highlightLayer == null && this.loc.locationdata.hllayerid != null){
+						this.loc.locationdata.highlightLayer =  _global.flamingo.getComponent(this.loc.locationdata.hllayerid);
+					}
+					this.loc.locationdata.highlightLayer.highlightFeature(this.loc.locationdata.wmsUrl, this.loc.locationdata.sldServletUrl, this.loc.locationdata.featureTypeName, this.loc.locationdata.propertyName, this.loc.propertyvalue, null, null)
+					TextField(this.thisObject["text"]).textColor = 0xff0000;
+					this.thisObject.requestsent = true;
+				})
+		,400));
+	}
+
+	function onRollOut():Void {
+		clearHighlight();
+	}
+	function onReleaseOutside():Void{
+		clearHighlight();
+	}
+	function onMouseUp():Void {
+		if(this.over){
+			ExternalInterface.call("setROLayersVisible",this.location["app:planstatus"],this.location["app:typePlan"]);
+			viewer._zoom(index);
+		}	
+	}
+	
+	private function clearHighlight(){
+		viewer.clearLocation();
+		viewer.doClearInterval();
+		if(requestsent){
+			this.location.locationdata.highlightLayer.resetFeature();
+		}
+		this.requestsent = false;
+		this.over = false;
+		TextField(this["text"]).textColor = 0x0000ff;
+	}
+	
 }
