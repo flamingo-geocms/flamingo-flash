@@ -1254,9 +1254,6 @@ function _getLayerlist(list:String, field:String):Array {
 				if (field == "identify" and layers[id].forceidentify == true) {
 					layerlist.push(id);
 				} else {
-					//if (layers[id].visible == false) {
-						//continue;
-					//}
 					if (getVisible(id) <> 1) {
 						continue;
 					}
