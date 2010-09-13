@@ -275,7 +275,23 @@ function parseCustomAttr(xml:Object){
 	addItem(xml);
 	//delete legenditems;
 	refresh();
-
+	//open or close groups when arguments groupsopen/groupsclosed exists in flamingo  
+	var groupsopen:Array = _global.flamingo.getArgument(this, "groupsopen").split(",");
+	var groupsclosed:Array = _global.flamingo.getArgument(this, "groupsclosed").split(",");
+	for (var a in groupsopen){
+		if(groupsopen[a] == "ALL"){
+			setAllCollapsed(legenditems,false);
+		} else {	
+			setGroupCollapsed(groupsopen[a],legenditems,false)
+		}	
+	}
+	for (var a in groupsclosed){
+		if(groupsclosed[a] == "ALL"){
+			setAllCollapsed(legenditems,true);
+		} else {
+			setGroupCollapsed(groupsclosed[a],legenditems,true)
+		}
+	}
 	drawLegend(legenditems, mScrollPane.content, 0);
 	refresh();
 
@@ -1502,6 +1518,26 @@ function getString(item:Object, stringid:String):String {
 	//option D
 	return "";
 }
+
+/**
+ * Set the collapsed property of a group 
+ * @param id:groupid, collapsed (true or false)
+ */	
+function setGroupCollapsed(groupid:String,items:Array,collapsed:Boolean):Void{
+	var group:Object = itemById(groupid, items, null);
+	group.collapsed = collapsed;
+}
+
+function setAllCollapsed(list:Array, collapsed:Boolean) {
+	for (var i = 0; i<list.length; i++) {
+		var item = list[i];
+		if(item.type == "group"){
+			item.collapsed = collapsed;
+			setAllCollapsed(item.items, collapsed);
+		}
+	}
+}
+
 /** 
  * Dispatched when a component is up and ready to run.
  * @param comp:MovieClip a reference to the component.
