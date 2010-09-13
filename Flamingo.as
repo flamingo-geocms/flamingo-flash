@@ -906,10 +906,18 @@ class Flamingo {
 		if (this.components[targetid].target != undefined) {
 			//mc = eval(this.components[targetid].target);
 		}
-		if (this.components[targetid].type == type and mc.setConfig != undefined) {
+		if (this.components[targetid].type == type && (mc.setConfig != undefined||mc["mKid"].setBaseConfig!=undefined)) {
 			//component already exists and it can be configurated
+			if(this.components[targetid].xmls == undefined){
+				this.components[targetid].xmls = new Array();
+			}
 			this.components[targetid].xmls.push(xml);
-			mc.setConfig(xml);
+			
+			if(mc["mKid"] != undefined){
+				mc["mKid"].setConfig();
+			} else {
+				mc.setConfig(xml);
+			}
 			this.doneLoading();
 			//this.loadNextComponent();
 		} else {
