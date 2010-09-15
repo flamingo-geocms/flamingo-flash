@@ -44,8 +44,12 @@ class gui.EditMapGeometry extends GeometryPane implements GeometryListener {
     private var isChild:Boolean = false; // Set by init object.
 	private var editMapEditable:Boolean = false; // Set by init object.
 	private var alwaysDrawPoints:Boolean = false; // Set by init object.
-	private var labelDepth:Number = 1000;
+	private var labelDepth:Number = 11000;
     private var label:Label = null;
+    
+    private var showMeasures:Boolean = false; // Set by init object.
+    private var measureLabel:Label = null;
+    
     
     function onLoad():Void {
         super.onLoad();
@@ -151,7 +155,7 @@ class gui.EditMapGeometry extends GeometryPane implements GeometryListener {
         clear();
         doDraw();
         setLabel();
-		
+       	setMeasureLabel();
 		if (this.type == ACTIVE && _geometry.getFirstAncestor() == _geometry) { //surpress updating for child geometries. Saves cpu resources.
 			//raise event onGeometryDrawDragUpdate via editMap through gis
 			gis.geometryDragUpdate();
@@ -202,6 +206,41 @@ class gui.EditMapGeometry extends GeometryPane implements GeometryListener {
 		var pixel:Pixel = point2Pixel(_geometry.getCenterPoint());
 		label._x = pixel.getX() - (label.width / 2);
         label._y = pixel.getY();
+
+    }
+    
+     private function setMeasureLabel():Void {
+        /*if (type == ACTIVE) {
+            label.setStyle("fontWeight", "bold");
+        } else {
+            label.setStyle("fontWeight", "none");
+        }*/
+        var measureString:String = "";
+        if (_geometry instanceof Polygon){
+        	var area:Number = Math.abs(Polygon(_geometry).getArea());
+        	if (area > 10000){
+        		measureString = Math.round(area/10000)/100 + " km2";
+        	} else {
+       			measureString = Math.round(area) + " m2";
+        	}
+       } else if (_geometry instanceof LineString && _geometry.getParent()==null){
+       		var length:Number = LineString(_geometry).getLength();
+        	if (length > 1000){
+        		measureString = Math.round(length/10)/100 + " km";
+        	} else {
+       			measureString = Math.round(length) + " m";
+        	}
+       } 
+       measureLabel.text = "";
+  		if(measureString != "" && type==ACTIVE ){
+  			if (measureLabel == null) {
+            	measureLabel = Label(attachMovie("Label", "mLabel2", 12000, {autoSize: "center"}));
+        	}
+  			measureLabel.text = measureString;
+			var pixel:Pixel = point2Pixel(_geometry.getCenterPoint());
+			measureLabel._x = pixel.getX() - (measureLabel.width / 2);
+        	measureLabel._y = pixel.getY() - 10;
+  		}
 
     }
     

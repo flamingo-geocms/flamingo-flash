@@ -83,6 +83,7 @@
 * If the current user has none of these roles, the layer will not be loaded in the feature model, 
 * which means that it will not be visible in the map legend and the layer's features will not be visible in the edit map. 
 * If no roles at all are configured for the layer, the layer is considered unprotected by authorization and will be loaded in the feature model regardless of the user's roles.
+* @attr showmeasures default=false If showmeasures=true the length of a line, the area of a polygon and the radius of a circle will be shown for the active feature
 */
 
 /** @tag <fmc:Property>

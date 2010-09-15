@@ -26,6 +26,7 @@ class gui.GeometryPane extends MovieClip {
     private var height:Number = -1; // Set by init object.
     private var editMapGeometries:Array = null;
 	private var log:Logger=null;
+	private var showMeasures:Boolean= false; // Set by init object.
     
     function onLoad():Void {
 		this.log = new Logger("gui.GeometryPane",_global.flamingo.getLogLevel(),_global.flamingo.getScreenLogLevel());
@@ -55,6 +56,7 @@ class gui.GeometryPane extends MovieClip {
         initObject["isChild"] = isChild;
 		initObject["editMapEditable"] = gis.getEditMapEditable();
 		initObject["alwaysDrawPoints"] = gis.getAlwaysDrawPoints();
+		initObject["showMeasures"] = showMeasures;
 		if (geometry instanceof Point) {
             editMapGeometries.push(this.attachMovie("EditMapPoint", "mEditMapPoint" + depth, depth, initObject));
         } else if (geometry instanceof LineString) {

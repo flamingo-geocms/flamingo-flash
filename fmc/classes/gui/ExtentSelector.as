@@ -67,11 +67,11 @@ class gui.ExtentSelector extends AbstractContainer {
 			numExtents++;
         }
         if (extents.length == 0) {
-            _global.flamingo.tracer("Exception in gui.ExtentSelector.<<init>>()\nNo extent configured.");
+            //_global.flamingo.tracer("Exception in gui.ExtentSelector.<<init>>()\nNo extent configured.");
             return;
         }
  	}
- 	
+
  	function setAttribute(name:String, value:String):Void {		     
         if(name=="default"){
         	defaultExtentId = value;
@@ -81,7 +81,7 @@ class gui.ExtentSelector extends AbstractContainer {
  	function extentReady():Void{
 		numExtents--;
 		if(numExtents==0){
-			drawExtentSelector();		
+			layout();		
 		}	
 	}
  	    
@@ -109,28 +109,31 @@ class gui.ExtentSelector extends AbstractContainer {
 		} 
 	}
 	
-    private function drawExtentSelector():Void {
-    	var radioContainer:MovieClip = this.createEmptyMovieClip("mRadio", this.getNextHighestDepth());
-    	componentIDs.reverse();
-    	for(var i:Number=0;i<extents.length;i++){
-    		var nr:Number =radioContainer.getNextHighestDepth();
-    	 	var extent:RadioButton = RadioButton(radioContainer.attachMovie("RadioButton", "mInAreaRadioButton" + nr, nr));
-    	 	extent.move(5,5 + i*20);
-			extent.data = extents[i];
-			extent.groupName = "inExtent";
-			extent.label = Extent(extents[i]).getLabel();
-			extent.setSize(this.__width - 5 , 20);		
-			if(defaultExtentId != null){
-				if(componentIDs[i] == defaultExtentId){
+    function layout():Void {
+    	if(numExtents==0){
+	    	super.layout();
+	     	var radioContainer:MovieClip = this.createEmptyMovieClip("mRadio", this.getNextHighestDepth());
+	    	componentIDs.reverse();
+	    	for(var i:Number=0;i<extents.length;i++){
+	    		var nr:Number =radioContainer.getNextHighestDepth();
+	    	 	var extent:RadioButton = RadioButton(radioContainer.attachMovie("RadioButton", "mInAreaRadioButton" + nr, nr));
+	    	 	extent.move(5,5 + i*20);
+				extent.data = extents[i];
+				extent.groupName = "inExtent";
+				extent.label = Extent(extents[i]).getLabel();
+				extent.setSize(this.__width - 5 , 20);		
+				if(defaultExtentId != null){
+					if(componentIDs[i] == defaultExtentId){
+						extent.selected = true;
+						currentExtent = extents[i];
+					}
+				} else if(i==0){
 					extent.selected = true;
 					currentExtent = extents[i];
 				}
-			} else if(i==0){
-				extent.selected = true;
-				currentExtent = extents[i];
-			}
-		}  
-    	radioContainer["inExtent"].addEventListener("click", Delegate.create(this, onClickRadioButton)); 
+			}  
+	    	radioContainer["inExtent"].addEventListener("click", Delegate.create(this, onClickRadioButton)); 
+    	}
 	}
 	
 	function onClickRadioButton(evtObj:Object):Void {
@@ -138,4 +141,6 @@ class gui.ExtentSelector extends AbstractContainer {
 		_global.flamingo.raiseEvent(this, "onChangeSearchExtent", this);
 		
 	}
+	
+
 }

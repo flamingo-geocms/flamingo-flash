@@ -88,10 +88,12 @@ class gui.EditMapLayer extends MovieClip implements StateEventListener {
         var initObject:Object = new Object();
         initObject["gis"] = gis;
 		initObject["map"] = map;
+		initObject["height"] = height;
         initObject["feature"] = feature;
         initObject["style"] = layer.getStyle();
         initObject["width"] = width;
-        initObject["height"] = height;
+        initObject["showMeasures"] = layer.showMeasure();
+        
         editMapFeatures.push(attachMovie("EditMapFeature", "mEditMapFeature" + depth, depth, initObject)); // Adds the feature to the collection of gui features.
     }
     

@@ -35,6 +35,7 @@ class gismodel.Layer extends AbstractComposite implements ActionEventListener {
     private var features:Array = null;
     private var transaction:Transaction = null;
     private var serverReady:Boolean = false;
+    private var showMeasures:Boolean = false;
     
     private var stateEventDispatcher:StateEventDispatcher = null;
     
@@ -66,6 +67,12 @@ class gismodel.Layer extends AbstractComposite implements ActionEventListener {
             } else {
                 visible = false;
             }
+         } else if (name == "showmeasures") {
+            if (value.toLowerCase() == "true") {
+            	showMeasures = true;
+            } else {
+            	showMeasures = false;
+            }       
 		} else if (name== "loadfeaturesonstart"){
 			if (value.toLowerCase() == "true") {
                 loadFeaturesOnStart = true;
@@ -522,6 +529,10 @@ class gismodel.Layer extends AbstractComposite implements ActionEventListener {
         }
         
         stateEventDispatcher.removeEventListener(stateEventListener, sourceClassName, actionType, propertyName);
+    }
+     
+    function showMeasure():Boolean{
+    	return showMeasures;
     }
     
     function toString():String {
