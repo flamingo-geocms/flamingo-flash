@@ -29,7 +29,6 @@ class coregui.ContainerInspector extends MovieClip {
         for (var i:Number = 0; i < componentIDs.length; i++) {
             component = _global.flamingo.getComponent(componentIDs[i]);
             name = component.name;
-            
             initObject["_x"] = level * 20;
             initObject["_y"] = depth * 25;
             initObject["_width"] = 170;
@@ -42,7 +41,16 @@ class coregui.ContainerInspector extends MovieClip {
             initObject["component"] = component;
             checkBox = CheckBox(attachMovie("CheckBox", "mCheckBox" + depth, depth, initObject));
             checkBox.addEventListener("click", Delegate.create(this, onClickCheckBox));
-            
+             _global.flamingo.addListener(checkBox, component, this);
+			checkBox["onSetVisible"] = function(component:Object, visible:Boolean) {
+				this.selected = visible;
+			};
+			checkBox["onShow"] = function(component:Object) {
+				this.selected = true;
+			};
+			checkBox["onHide"] = function(component:Object) {
+				this.selected = false;	
+			};
             depth++;
             if (component.getComponents != undefined) { // Instance of container.
                 addCheckBoxes(component, level + 1);
