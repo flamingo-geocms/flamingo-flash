@@ -234,9 +234,9 @@ class gui.EditMapGeometry extends GeometryPane implements GeometryListener {
        measureLabel.text = "";
   		if(measureString != "" && type==ACTIVE ){
   			if (measureLabel == null) {
-            	measureLabel = Label(attachMovie("Label", "mLabel2", 12000, {autoSize: "center"}));
+            	measureLabel = Label(attachMovie("Label", "mLabel2", 12000, {autoSize: "center", html: true}));
         	}
-  			measureLabel.text = measureString;
+  			measureLabel.text = "<b>" + measureString + "</b>";
 			var pixel:Pixel = point2Pixel(_geometry.getCenterPoint());
 			measureLabel._x = pixel.getX() - (measureLabel.width / 2);
         	measureLabel._y = pixel.getY() - 10;
@@ -246,7 +246,6 @@ class gui.EditMapGeometry extends GeometryPane implements GeometryListener {
     
     private function addChildGeometries():Void {
         var childGeometries:Array = _geometry.getChildGeometries();
-		
 		if (childGeometries.length >0) {
 			for (var i:Number = 0; i < childGeometries.length; i++) {
 				
