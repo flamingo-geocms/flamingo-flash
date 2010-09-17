@@ -516,7 +516,7 @@ function trim(str:String):String	{
 * @param sldParamNew: String value to be appended to the sld attribute, must be url encoded
 */
 function setSLDparam(sldParamNew:String) {
-  this.sldParam = sldParamNew;
+  this.sldParam = tools.Utils.trim(sldParamNew);
   update();
 }
 
@@ -987,10 +987,12 @@ function sendIdentifyRequest(args:Object,lConn:Object){
 */
 
 function handleSLDarg(argsLocal:Object):Object {
+	
 	for (var attr in this.attributes) {
   	  argsLocal[attr.toUpperCase()] = this.attributes[attr];
 	}
 	if ((argsLocal["SLD"] != null) && (argsLocal["SLD"] != "")) {
+		argsLocal["SLD"] = tools.Utils.trim(argsLocal["SLD"]);
 		argsLocal["SLD"] += escape(sldParam.split(" ").join("+")); //replace spaces with "+" and url encode (spaces must be 'double encoded')
 		if (this.filterLayerLayerOGWMSAdapter != undefined) {
 		     argsLocal["SLD"] += this.filterLayerLayerOGWMSAdapter.getUrlFilter();
