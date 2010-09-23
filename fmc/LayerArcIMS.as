@@ -19,7 +19,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 -----------------------------------------------------------------------------*/
 /** @component LayerArcIMS
 * ESRI arcims layer.
-* @version 2.0.3
+* @version 2.0.4
 * @file ArcIMSConnector.as (sourcefile)
 * @file LayerArcIMS.fla (sourcefile)
 * @file LayerArcIMS.swf (compiled layer, needed for publication on internet)
@@ -39,8 +39,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 * @change 2007-11-12 NEW - 3 new functions to add, remove and get custom data to a layer > addMydata(...)  getMydata(...)  removeMydata(...)
 * @change 2007-11-12 NEW - new function to make a ValueMapRender string, based on a layer, some custom data and a couple of classes > getValueMapRenderer(...)
 * @change 2008-03-06 NEW - Visualisation selected: Selected can be colored
+* @change 2008-11-27 NEW - Initservice parameter added
 */
-var version:String = "2.0.3";
+var version:String = "2.0.4";
 //---------------------------------
 var defaultXML:String = "";
 //properties which can be set in ini
@@ -95,6 +96,9 @@ var serviceInfoRequestSent = false;
 var extent:Object;
 var nrlayersqueried:Number;
 var layerliststring:String;
+//***
+var initService:Boolean=true;
+//***
 //-------------------------------------------
 var DEBUG:Boolean = false;
 var colorIds:String;
@@ -187,11 +191,12 @@ init();
 * @attr forceidentifyids Comma seperated list of layerid's (same as in axl) Id's in this list will be identified regardless if they are visible in the order of the list. Use keyword "#ALL#" to identify all layers.
 * @attr maptipids Comma seperated list of layerid's (same as in axl) Id's in this list will be queried during a maptip event. Use keyword "#ALL#" to query all layers.
 * @attr visible  (defaultvalue "true") true or false
-* @attr alpha (defaultvalue = "100") Transparency of the layer. 
+* @attr alpha (defaultvalue = "100") Transparency of the layer.
 * @attr colorids Comma seperated list of the layers that need to be colored after a identify
 * @attr colorIdsKey comma seperated list of the keys that colors the objects.
 * @attr record if true the component let the clicked items colored (click 2 times to uncolor)
 * @attr autorefreshdelay  (optional; no defaultvalue) Time in miliseconds (1000 = 1 second) at which rate the layer automatically refreshes. If not given, the layer will not refresh automatically, unless at map level an automatic refresh delay is given.
+* @attr initService (default="true") if set to false the service won't do a getCap request to init the service. If set to false all parameters must be filled, and no #ALL# can be used.
 */
 /** @tag <layer>  
 * This defines a sublayer of an ArcIMS mapservice
@@ -409,6 +414,7 @@ function setConfig(xml:Object) {
 			break;
 		case "visibleids" :
 			setLayerProperty(val, "visible", true);
+			setLayerProperty(val, "id", true);
 			this.visibleids = val;
 			break;
 		case "hiddenids" :
@@ -423,6 +429,15 @@ function setConfig(xml:Object) {
 			setLayerProperty(val, "forceidentify", true);
 			this.forceidentifyids = val;
 			break;
+		//***
+		case "initservice" :			
+			if (val.toLowerCase() == "false") {
+				this.initService  = false;
+			}else {
+				this.initService  = true;
+			}
+			break;
+			//***
 		case "maptipids" :
 			this.canmaptip = true;
 			setLayerProperty(val, "maptipable", true);
@@ -447,7 +462,7 @@ function setConfig(xml:Object) {
 		case "id" :
 			id = val;
 			break;
-		}		
+		}
 	}
 	var xlayers:Array = xml.childNodes;
 	if (xlayers.length>0) {
@@ -526,15 +541,15 @@ function setConfig(xml:Object) {
 						case "visualisationselected" :
 							if (visualisationSelected[id]==undefined){
 								this.visualisationSelected[id]=new Object();
-							}					
+						}
 							for (var attr in xmydatas[j].attributes) {
 								var val:String = xmydatas[j].attributes[attr];
 								this.visualisationSelected[id][attr.toLowerCase()] = val;							
-							}
-						}						
 					}
 				}
 			}
+		}
+	}
 		}
 	}
 	//                                                                                                                                                                           
@@ -587,7 +602,7 @@ function setConfig(xml:Object) {
 				layers[id] = new Object();
 			}
 			for (var attr in servicelayers[id]) {
-				if (layers[id][attr] == undefined) {				
+				if (layers[id][attr] == undefined) {
 					layers[id][attr] = servicelayers[id][attr];
 				}
 			}
@@ -628,19 +643,29 @@ function setConfig(xml:Object) {
 		
 		flamingo.raiseEvent(thisObj, "onGetServiceInfo", thisObj);
 		
-	};
-	var conn:ArcIMSConnector = new ArcIMSConnector(server);
-	//_global.flamingo.tracer(" LayerArcIMS addInfoReponseListener" + _global.flamingo.getId(this));
-	ArcIMSConnector.addInfoReponseListener(lConn,server,mapservice);
-	if (servlet.length>0) {
-		conn.servlet = servlet;
-	} 
-	//_global.flamingo.tracer(_global.flamingo.getId(this) + " naar getServiceInfo " + mapservice);
-	if(!serviceInfoRequestSent){
-		serviceInfoRequestSent = true;
+	};//***
+	if (this.initService==true){
+		var conn:ArcIMSConnector = new ArcIMSConnector(server);
+		//_global.flamingo.tracer(" LayerArcIMS addInfoReponseListener" + _global.flamingo.getId(this));
+		ArcIMSConnector.addInfoReponseListener(lConn,server,mapservice);
+		if (servlet.length>0) {
+			conn.servlet = servlet;
+		}	
 		//_global.flamingo.tracer(_global.flamingo.getId(this) + " naar getServiceInfo " + mapservice);
-		conn.getServiceInfo(mapservice,lConn);
+		if(!serviceInfoRequestSent){
+			serviceInfoRequestSent = true;
+			//_global.flamingo.tracer(_global.flamingo.getId(this) + " naar getServiceInfo " + mapservice);
+			conn.getServiceInfo(mapservice,lConn);
+		}
 	}
+	//***
+	else{
+		setLayersQueryAbleFeatureclass(this.maptipids,true);
+		setLayersQueryAbleFeatureclass(this.identifyids,true);
+		initialized = true;		
+		update();		
+	}
+	//***
 }
 /**
 * Remove custom data from a layer.
@@ -971,16 +996,21 @@ function getAlpha(){
 */
 function hide():Void {
 	if(visible!=false){
-		visible = false;
-		update();
-		flamingo.raiseEvent(thisObj, "onHide", thisObj);
-	}	
+	visible = false;
+	update();
+	flamingo.raiseEvent(thisObj, "onHide", thisObj);
+}
 }
 /**
 * Shows a layer.
 */
 function show():Void {
-	if(visible!=true){
+	if (visible!=true){
+		if (!initService){
+			for (var l in layers){
+				layers[l].visible=true;
+			}
+		}
 		visible = true;
 		updateCaches();
 		update();
@@ -1003,8 +1033,8 @@ function refresh():Void {
 */
 function update():Void {
 	if(initialized){
-		_update(1);
-	}	
+	_update(1);
+}
 }
 
 /*function noLayersVisible():Boolean {
@@ -1023,7 +1053,7 @@ function update():Void {
 
 function _update(nrtry:Number):Void {
 	
-	if (not visible || not map.visible)  {	
+	if (not visible || not map.visible) {
 		_visible = false;
 		return;
 	}
@@ -1097,7 +1127,7 @@ function _update(nrtry:Number):Void {
 			flamingo.raiseEvent(thisObj, "onError", thisObj, "update", error);
 		}
 	};
-	lConn.onGetImage = function(ext:Object, imageurl:String, legurl:String, objecttag:Object, requestid:String) {	
+	lConn.onGetImage = function(ext:Object, imageurl:String, legurl:String, objecttag:Object, requestid:String) {
 		if (legurl.length>0) {
 			legendurl = legurl;
 			flamingo.raiseEvent(thisObj, "onGetLegend", thisObj, legendurl);
@@ -1384,7 +1414,7 @@ function _identifylayer(_identifyextent:Object, starttime:Date) {
 			}
 			if (data.length > 0 && thisObj.colorIds.length> 0){
 				thisObj.update();
-			}
+		}
 		}
 	};
 	lConn.onRecord= function(layerid:String, recordedValues:Object){
@@ -1392,7 +1422,7 @@ function _identifylayer(_identifyextent:Object, starttime:Date) {
 		
 	};
 	var layerid:String = String(_identifylayers.pop());
-	var conn:ArcIMSConnector = new ArcIMSConnector(server);	
+	var conn:ArcIMSConnector = new ArcIMSConnector(server);
 	conn.setIdentifyColorLayer(this.colorIds);
 	conn.setIdentifyColorLayerKey(this.colorIdsKey);
 	conn.setVisualisationSelected(this.visualisationSelected);
@@ -1550,7 +1580,7 @@ function _hotlinklayer(_identifyextent:Object, starttime:Date) {
 	};
 	lConn.onRecord= function(layerid:String, recordedValues:Object){
 		flamingo.raiseEvent(thisObj, "onRecord", thisObj, layerid, recordedValues);			
-		
+
 	};
 	var layerid:String = String(_hotlinklayers.pop());
 	var conn:ArcIMSConnector = new ArcIMSConnector(server);	
@@ -1598,7 +1628,19 @@ function _hotlinklayer(_identifyextent:Object, starttime:Date) {
 		break;
 	}
 }
-/**
+
+function setLayersQueryAbleFeatureclass(ids:String,val:Boolean){
+	var a_ids = flamingo.asArray(ids);
+	for (var i = 0; i<a_ids.length; i++) {
+		var id = a_ids[i];
+		if (layers[id] == undefined) {
+			layers[id] = new Object();
+		}
+		layers[id].queryable=val;
+		layers[id].type='featureclass';
+	}
+}
+/** 
 * Selects from a layer.
 * @param selectExtent:Object extent of the selection
 * @param selectLayer:String Layerid
@@ -1687,7 +1729,7 @@ function _selectlayer(_selectExtent:Object, _selectLayer:Object, _beginrecord:Nu
 * @example mylayer.setLayerProperty("39,BRZO","visible",true)
 * mylayer.setLayerProperty("#ALL#","identify",false)
 */
-function setLayerProperty(ids:String, field:String, value:Object) {
+function setLayerProperty(ids:String, field:String, value:Object) {	
 	if (ids.toUpperCase() == "#ALL#") {
 		for (var id in layers) {
 			layers[id][field] = value;
