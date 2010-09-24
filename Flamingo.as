@@ -40,7 +40,7 @@ import flash.filters.DropShadowFilter;
 import tools.Logger;
 
 class Flamingo {
-	private var version:String = "3.2.0";
+	private var version:String = "3.2.1";
 	//reference to main movie from which this class is loaded
 	//at the main movie the components are loaded at 'moviedepth'--  ;moviedepth starts by 10000
 	//at the main movie a cursor movie is loaded at depth 50005
