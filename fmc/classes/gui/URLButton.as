@@ -24,7 +24,8 @@
 	..
 	<fmc:URL id="experturl" url="http://tapserver.test.local/loket/html/atlas.html?type=standard&atlas=roo" target="_self"/>    
      ..
-* @attr listento, The URLButton component should listen to a map and to an URL component (the order in listento string is important)  	
+* @attr listento, The URLButton component should listen to a map 	
+* @attr url, The id of the correspondig URL Component 
  */
  
 import coregui.GradientFill;
@@ -35,20 +36,17 @@ import mx.controls.Label;
 import gui.URL;
 
 class gui.URLButton extends GradientButton {
-
+	
 	private var urlId:String = null;
 	private var url:URL = null;
+
 	
 	
 	function setAttribute(name:String, value:String):Void {
 	   if (name.toLowerCase() == "url") {
             urlId = value;    
-	   }	 		
-	   
+	   }			   
 	}
-
-	
-
 
     function onPress():Void {
     	if(url==null){
