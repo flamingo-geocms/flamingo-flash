@@ -167,8 +167,10 @@ dynamic class Map extends MovieClip {
 		//flamingo
 		var lFlamingo:Object = new Object();
 		lFlamingo.onLoadComponent = function(mc:MovieClip) {
-			//deal with argument extent
-			if(mc._name == _global.flamingo.getId(thisObj)){
+			if (thisObj.mLayers[mc._name] == mc) {
+				flamingo.raiseEvent(thisObj, "onAddLayer", thisObj, mc);
+				
+				//deal with argument extent, wait untill at least one layer is loaded 
 				var val = flamingo.getArgument(thisObj, "extent");
 				if (val != undefined && configObjId==null) {
 					if (val.toLowerCase() == "cookie") {
@@ -181,9 +183,6 @@ dynamic class Map extends MovieClip {
 					thisObj.moveToExtent(e, 0);
 				}
 				flamingo.deleteArgument(this, "extent");
-			}	
-			if (thisObj.mLayers[mc._name] == mc) {
-				flamingo.raiseEvent(thisObj, "onAddLayer", thisObj, mc);
 			}
 		};
 		lFlamingo.onConfigComplete = function() {
@@ -1458,6 +1457,7 @@ dynamic class Map extends MovieClip {
 	* @param delay:Number [optional] if omitted the onUpdate event will raise immediatelly, otherwhise after the delay time (milliseconds)
 	*/
 	public function update(delay:Number, forceupdate:Boolean):Void {
+		
 		if (this.holdonupdate&& this.updating) {
 			return;
 		}
