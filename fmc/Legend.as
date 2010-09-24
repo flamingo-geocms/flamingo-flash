@@ -122,6 +122,8 @@ init();
 /** @tag <fmc:Legend>  
 * This tag defines a legend. The legend (tag) itself listens to a map. 
 * Items (tags) listen to maplayers. And with a dot notation sublayers can be configured. See example.
+* the groups open attribute can also be set from the url example(http://www.bla.nl/flamingo?groupsopen=group1,group2 or 
+* http://www.bla.nl/flamingo?groupsclosed=all)
 * @hierarchy childnode of <flamingo> or a container component. e.g. <fmc:Window>
 * @example 
 <fmc:Window left="10" top="10" width="200" height="200" canresize="true" title="identify" visible="true" skin="g">
@@ -279,7 +281,7 @@ function parseCustomAttr(xml:Object){
 	var groupsopen:Array = _global.flamingo.getArgument(this, "groupsopen").split(",");
 	var groupsclosed:Array = _global.flamingo.getArgument(this, "groupsclosed").split(",");
 	for (var a in groupsopen){
-		if(groupsopen[a] == "ALL"){
+		if(groupsopen[a].toUpperCase() == "ALL"){
 			setAllCollapsed(legenditems,false);
 		} else {	
 			setGroupCollapsed(groupsopen[a],legenditems,false)
@@ -1537,6 +1539,35 @@ function setAllCollapsed(list:Array, collapsed:Boolean) {
 		}
 	}
 }
+
+function getGroups(collapsed:Boolean):Array {
+	var groupsClosed:Array = new Array();
+	var groupsOpened:Array = new Array();
+	fillGroupArrays(legenditems);
+	function fillGroupArrays(list:Array) {
+		for (var i = 0; i<list.length; i++) {
+			var item = list[i];
+			if(item.type == "group"){
+				if(item.id != undefined){
+					if(item.collapsed){
+						groupsClosed.push(item.id);
+					} else {
+						groupsOpened.push(item.id);
+					}
+				}
+				fillGroupArrays(item.items);
+			}
+		}
+		  
+	}
+	if(collapsed){
+		return groupsClosed;
+	} else {
+		return groupsOpened;
+	}
+}
+
+
 
 /** 
  * Dispatched when a component is up and ready to run.
