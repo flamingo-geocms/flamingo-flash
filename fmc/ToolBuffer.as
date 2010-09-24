@@ -308,6 +308,7 @@ function initWindow(){
 }
 
 function initControls() {
+	window.content._lockroot = true;	
 	//Initialize controls
 	window.content.lbl_error.visible = false;
 	window.content.btn_clear.visible = false;
@@ -320,11 +321,8 @@ function initControls() {
 	window.content.cmb_layers.drawFocus = "";
 	window.content.cmb_layers.getDropdown().drawFocus = "";
 	window.content.cmb_layers.onKillFocus = function(newFocus:Object) {
-			super.onKillFocus();
 	};
-	
-	window.content._lockroot = true;	
-	
+
 	//Set control events	
 	var Listener_cmbLayers:Object = new Object();
 	Listener_cmbLayers.change = function(evt_obj:Object) {
