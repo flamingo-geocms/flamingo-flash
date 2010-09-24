@@ -19,10 +19,10 @@
 * @class gui.URL extends AbstractComponent 
 * @hierarchy child node of URLSelector or Flamingo or a Container component
 * @example (use of URL in an URLSelector Component)
-* <fmc:UrlSelector left="10" top="20" right="right -10" height="50"  borderalpha="0">
+* <fmc:UrlSelector left="10" top="20" right="right -10" height="50"  borderalpha="0" listento="map">
      <string id="groupsellabel" nl="Selecteer een thema..."/>
      <string id="urlsellabel" nl="Kies een atlas..."/>
-     <fmc:URL   url="http://..." group="algemeen" listento="map" target="_blank">
+     <fmc:URL url="http://..." group="algemeen"  target="_blank">
       	<string id="grouplabel" nl="Algemeen"/>	
       	<string id="label" nl="Kaart en luchtfoto"/>	
      </fmc:URL>
@@ -72,8 +72,14 @@ class gui.URL extends AbstractComponent  {
 	private var group:String;
 	private var addExt:Boolean = true;
 	private var addTheme:Boolean = true;
+	private var addLayerVisibility = false;
+	private var addLegendState = false;
+	private var mapId:String;
 	private var map:Object;
+	private var legendId:String;
+	private var legend:Object;
 	private var showAsLink:Boolean = false;
+	private var warningLength:String=null;
 	private var link_txt:TextField=null;
     
     
@@ -96,21 +102,43 @@ class gui.URL extends AbstractComponent  {
         	} else {
         		addTheme = true;
         	}
-        } else if (name.toLowerCase()=="showaslink"){
+        }
+        else if (name.toLowerCase()=="addlayervisibility"){
+        	if(value.toLowerCase()=="false"){
+        		addLayerVisibility = false;
+        	} else {
+        		addLayerVisibility = true;
+        	}	
+        } else if (name.toLowerCase()=="addlegendstate"){
+        	if(value.toLowerCase()=="false"){
+        		addLegendState = false;
+        	} else {
+        		addLegendState = true;
+        	}
+        }	
+        else if (name.toLowerCase()=="legendid"){
+	        legendId = value;
+        }
+        else if (name.toLowerCase()=="showaslink"){
         	if(value.toLowerCase()=="false"){
         		showAsLink = false;
         	} else {
         		showAsLink = true;
         	}
-        }
+        }  
     }
     
     
     function init(){
     	super.init();
+    	if(listento[0]!=undefined){
+    		mapId = listento[0];
+    		map = _global.flamingo.getComponent(listento[0]);
+    	}
 		if(showAsLink){
 			addLink();
 		}
+		
     }
     
     
@@ -122,12 +150,8 @@ class gui.URL extends AbstractComponent  {
     			link_txt._width = parent._width-20;
     			link_txt._height = parent._height-20;
     		}
-    		
-	    	var linkLabel:String = getLabel();
-			if(linkLabel == null){
-				linkLabel = this.getUrl();
-			}
-			link_txt.htmlText = '<span class="text"><a href="asfunction:openUrl">' + linkLabel + '</a></span>';	
+			updateLink();
+		
     	}
     }
     
@@ -138,18 +162,29 @@ class gui.URL extends AbstractComponent  {
     }
     
     function addLink():Void{
-    	this.map = _global.flamingo.getComponent(listento[0]);
     	link_txt = this.createTextField("link_txt", this.getNextHighestDepth(), 0, 0, 100, 50);
     	link_txt.wordWrap = true;
 		link_txt.autoSize = true;
 		link_txt.html = true;
 		link_txt.styleSheet = _global.flamingo.getStyleSheet(this);   
-		var linkLabel:String = getLabel();
+		warningLength = _global.flamingo.getString(this,"label");
+		if(warningLength == null){
+			warningLength = "Letop: een url van deze lengte kan niet zonder problemen worden geopend in Internet Explorer";
+		}
+		updateLink();
+    }
+    
+    private function updateLink(){
+    	var linkLabel:String = getLabel();
 		if(linkLabel == null){
 			linkLabel = this.getUrl();
 		}
-		link_txt.htmlText = '<span class="text"><a href="asfunction:openUrl">' + linkLabel + '</a></span>';
-
+    	if(linkLabel.length < 2048){
+				link_txt.htmlText = '<span class="text"><a href="asfunction:openUrl">' + linkLabel + '</a></span>';	
+			} else {
+				link_txt.htmlText = '<span><warn>' + warningLength +  '</warn><br>' + 
+										'<span class="text"><a href="asfunction:openUrl">' + linkLabel + '</a></span>';	
+			}	
     }
     
     function openUrl():Void{
@@ -163,6 +198,7 @@ class gui.URL extends AbstractComponent  {
     }
     	
     function setMap(map:Object):Void {
+    	mapId = _global.flamingo.getId(map);
     	this.map = map;
     }
     
@@ -187,9 +223,13 @@ class gui.URL extends AbstractComponent  {
 		if (url.indexOf("?")!=-1){
 			params = url.substr(url.indexOf("?")+1).split("&");
 			resultUrl = url.substr(0,url.indexOf("?"));
+		} else {
+			resultUrl = url;
 		}	
 		for(var i:Number=0;i<params.length;i++){			
-			if(params[i].indexOf("ext")==-1&&params[i].indexOf("thema")==-1){
+			if(params[i].indexOf("ext")==-1&&params[i].indexOf("thema")==-1&&
+				params[i].indexOf("groupsopen")==-1&&params[i].indexOf("groupsclosed")==-1&&
+				params[i].indexOf("layersVisible")==-1&&params[i].indexOf("layersInvisible")==-1){
 				paramStr += params[i] + "&";
 			}
 		} 		
@@ -205,6 +245,15 @@ class gui.URL extends AbstractComponent  {
 				paramStr += "thema="+ themeSelector.getCurrentTheme().getName() + "&";
 			}
 		}
+		if(map!=null && addLayerVisibility){
+			paramStr += buildVisibilityParams() + "&";
+		}
+		if(legend==undefined){
+			legend = _global.flamingo.getComponent(legendId);	
+		} 
+		if(legend!=null && addLegendState){
+			paramStr += buildLegendGroupParams() + "&";
+		}
 		return resultUrl + paramStr.substr(0,paramStr.length-1);
 	}
 	
@@ -215,6 +264,54 @@ class gui.URL extends AbstractComponent  {
 	function getGroup():String {
 		return group;
 	}
+    
+    private function buildVisibilityParams():String {
+    	var params:String = "";
+    	var lyrs:Array = map.getLayers();
+    	var lyrsinvis:String = ""; 
+    	var lyrsvis:String = ""; 
+    	//do not list all invisible layers in url, otherwise the url will become too long
+    	//so first make all layers invisible and than make the visible layers visible again
+    	for(var i:Number = 0; i< lyrs.length; i++){
+    		var lyrId:String =  lyrs[i].substring(mapId.length + 1);
+    		lyrsinvis += lyrId + ",";
+    		var lyr:Object = _global.flamingo.getComponent(lyrs[i]);
+    		if(lyr._getVisLayers().indexOf("1")!=-1 && lyr.getVisible() > 0){
+		    		var slyrs:Object = lyr.getLayers();
+		    		var allVis:Boolean = true;
+		    		var slyrsVis:String = "{"; 
+		    		for(var a in slyrs){
+		    			if(slyrs[a].visible){
+		    				slyrsVis += a + ","; 
+		    				//lyrsvis += lyrId + "." + a + ",";
+		    			} else {
+		    				allVis = false;
+		    			}	
+		    		}
+		    		if(!allVis){
+		  				lyrsvis +=  lyrId + slyrsVis.substring(0,slyrsVis.length -1) + "},";
+		    		} else {
+		    			lyrsvis += lyrId + "},";
+		    		}		 
+    		}
+    	}	
+    	params +=  "layersInvisible=" + lyrsinvis.substr(0, lyrsinvis.length -1);
+    	params += "&layersVisible=" + lyrsvis.substr(0, lyrsvis.length -1);
+    	return params;
+    }
+    
+    private function buildLegendGroupParams():String {
+    	var params:String = "";
+    	//do not list all groupclosed in url, otherwise the url will become too long
+    	//so first close allgroups and than open the opengroups
+    	params+="groupsclosed=all&"
+    	var groupsOpen:Array = legend.getGroups(false);
+    	//var groupsClosed:Array = legend.getGroups(true);
+    	if(groupsOpen.length > 0){
+    		params+="groupsopen=" + groupsOpen.toString();;
+    	}
+    	return params;
+    }
     
     
 }
