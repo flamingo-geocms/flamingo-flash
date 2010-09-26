@@ -39,3 +39,20 @@ Change log 3.1.0 > 3.2.0
 - Improved: IdentifyResultsHTML: added the attribute emptywhennotfound Reason: When field values are null on the database the GetFetureInfo response main not contain the requested fields, leading to unwanted output (i.e. "[fieldname]" in the output). 
 - Added: Location pin that can be used with locationfinder
 - Improved: LocationFinder, added tooltip
+
+Change log 3.2.0 > 3.2.1
+- Bug #68 fixed
+- Improved: Styling for edit geometries, Its possible to set a style.
+- Added: Deny and Allow ExternalInterface for component and functions of component. You now can set the allowance of a javascript call in detail
+- Improved: GetFeatureInfo show for ARCGIS 9.3
+- Added: Support for ArcGisServer WMS getfeatureinfo
+- Added: A alpha slider
+- Improved: Multi geometries can now be drawn by the edit component. (not fully implemented yet)
+- Improved: Speed of getFeature request (no geometry)
+- Added: IdentifyResultHTML: added 'showinorder' and 'stringorder' options
+- Improved: Search 
+- Added: Show measures option for Arc Layers
+- Added: InitService option for arcims layer
+- Added Groupsopen and groupclosed parameters to legend group
+
+
