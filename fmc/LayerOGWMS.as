@@ -726,6 +726,8 @@ function _update(nrtry:Number, forceupdate:Boolean){
 			_global.flamingo.raiseEvent(thisObj, "onUpdateProgress", thisObj, bytesLoaded, bytesTotal);
 		};
 		cachemovie.mHolder.onLoad=listener.onLoadInit = function(mc:MovieClip) {
+			var correctedExtent=map.copyExtent(extent);
+			map.correctExtent(correctedExtent);
 			thisObj._stoptimeout();
 			var loadtime = (new Date()-starttime)/1000;
 			thisObj.updateCache(cachemovie);
@@ -742,7 +744,7 @@ function _update(nrtry:Number, forceupdate:Boolean){
 						_global.flamingo.raiseEvent(thisObj, "onUpdateComplete", thisObj, requesttime, loadtime, mc.getBytesTotal());
 						this.updating = false;
 						this._clearCache();
-						if (not map.isEqualExtent(extent) or _getVisLayers() != vislayers or
+						if (not map.isEqualExtent(correctedExtent) or _getVisLayers() != vislayers or
 							("|" + currentFiltersFingerprint + "|") !=  ("|" + lastFiltersFingerprint + "|")) {
 							//_global.flamingo.tracer("re-update, fadesteps>0");
 							this.update();
@@ -754,7 +756,7 @@ function _update(nrtry:Number, forceupdate:Boolean){
 				_global.flamingo.raiseEvent(thisObj, "onUpdateComplete", thisObj, requesttime, loadtime, mc.getBytesTotal());
 				thisObj.updating = false;
 				thisObj._clearCache();
-				if (not map.isEqualExtent(extent) or _getVisLayers() != vislayers or
+				if (not map.isEqualExtent(correctedExtent) or _getVisLayers() != vislayers or
 					("|" + currentFiltersFingerprint + "|") !=  ("|" + lastFiltersFingerprint + "|")) {
 					//_global.flamingo.tracer("re-update, fadesteps<=0");
 					thisObj.update();
