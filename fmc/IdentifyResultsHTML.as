@@ -190,7 +190,13 @@ function makeEmptyWhenNotFound(str:String):String {
 		if(end == -1 || end<begin){
 			return tStr;
 		}
-		tStr = tStr.split(tStr.substring(begin,end)).join(""); 
+		//replace the [] that belong to tabstops with #tab# and #/tab# 
+		if(tStr.indexOf("tabstops") != -1 && (tStr.indexOf("[") - tStr.indexOf("tabstops"))<15){
+			var tabs:String  = tStr.substring(begin + 1, end -1); 
+			tStr = tStr.split(tStr.substring(begin,end)).join("#tab#" + tabs + "#/tab#");
+		} else {
+			tStr = tStr.split(tStr.substring(begin,end)).join("");
+		} 
 	}
 	while(tStr.indexOf("#sep#") != -1){
 		var begin:Number = tStr.indexOf("#sep#");
@@ -199,6 +205,21 @@ function makeEmptyWhenNotFound(str:String):String {
 			return tStr;
 		}
 		tStr = tStr.split(tStr.substring(begin,end)).join(""); 
+	}
+	//put the [] that belong to tabstops back
+	while(tStr.indexOf("#tab#") != -1){
+		var begin:Number = tStr.indexOf("#tab#");
+		var end:Number =  tStr.indexOf("#tab#") + 5;
+		if(end == -1 || end<begin){
+			return tStr;
+		}
+		tStr = tStr.split(tStr.substring(begin,end)).join("["); 
+		var begin:Number = tStr.indexOf("#/tab#");
+		var end:Number =  tStr.indexOf("#/tab#") + 6;
+		if(end == -1 || end<begin){
+			return tStr;
+		}
+		tStr = tStr.split(tStr.substring(begin,end)).join("]"); 
 	}
 	return tStr;
 	
