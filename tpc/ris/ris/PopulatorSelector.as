@@ -4,7 +4,7 @@
 * IDgis bv
  -----------------------------------------------------------------------------*/
  
-/** @component PopulationDataSelector
+/** @component PopulatorSelector
 * This component is shown in the Window component of Flamingo and offers an user 
 * interface for querying population data.  
 * @file flamingo/fmc/classes/flamingo/gui/populationdata/PopulationDataSelector.as  (sourcefile)
@@ -101,18 +101,17 @@ import mx.controls.TextInput;
 import gui.dde.TraceLayer;
 
 import ris.PopDataConnectorListener;
-import ris.PopulationdataConnector;
+import ris.PopulatorConnector;
 
 
 import flash.external.ExternalInterface;
 
 import ris.AbstractSelector;
 
-class ris.PopulationDataSelector extends AbstractSelector {
+class ris.PopulatorSelector extends AbstractSelector {
     var defaultXML:String = "<?xml version='1.0' encoding='UTF-8'?>" +
-							"<PopulationDataSelector>" + 
+							"<PopulatorSelector>" + 
 							"<string id='layers' en='Layers' nl='Kaartlagen'/>" +
-						      "<string id='inArea' en='Within Area' nl='Binnen gebied'/>" +
 						      "<string id='inGeometry' en='Within Geometry' nl='Binnen geometrie'/>"+
 						      "<string id='inBox' en='Within Box' nl='Binnen rechthoek'/>" +
 						      "<string id='inAll' en='Whole file' nl='Gehele bestand'/>" +
@@ -125,12 +124,12 @@ class ris.PopulationDataSelector extends AbstractSelector {
 
 	
 	function onLoad():Void {
-		areaSelector = true;
+		areaSelector = false;
    		boxSelector = true;
    		geometrySelector = true;
-		dataConnector = new PopulationdataConnector();
+		dataConnector = new PopulatorConnector();
 		dataConnector.addListener(this);
-		this.setAreaSelectionType("inArea");
+		this.setAreaSelectionType("inBox");
 		super.onLoad();
 	}
 	
@@ -143,20 +142,14 @@ class ris.PopulationDataSelector extends AbstractSelector {
 	function resetControls(){
 		if(this._visible){
 			removeStatusText();
-			//ddeConnector.setAreaSelectionType("inArea");
-			RadioButton(this["mInAreaRadioButton"]).selected = true;
-			RadioButton(this["mInAreaRadioButton"]).setFocus();
-			this.setAreaSelectionType("inArea");
-			inAreaChoser.enabled = true;
-			enableInBox(false);
+			enableInBox(true);
 		}
 	}
-	   
 	
 	private function onClickRequestButton():Void{
 		var busyText:String = _global.flamingo.getString(this,"busy");
 		if(busyText==null||busyText==""){
-			busyText="Ophalen populatie gegevens....";
+			busyText="Ophalen gegevens....";
 		}
 		setStatusText(busyText,"info",true);
 		this["mSendRequestButton"].enabled = false;
@@ -168,31 +161,10 @@ class ris.PopulationDataSelector extends AbstractSelector {
 			var crds:Array = coords.split(",");
 			area =(crds[2]-crds[0]) * (crds[3]-crds[1]); 	
 		}
-		if(areaSelectionType!="inArea"){
-			if(area < 1000000){
-				dataConnector.getReport(areaSelectionType,inArea, coords);
-			} else {
-				if(area > 20000000){
-					setStatusText("Gebied te groot, selecteer een kleiner gebied (max. 20km2).", "warning", true);
-					this["mSendRequestButton"].enabled = true;
-				} else {
-					dataConnector.getReport(areaSelectionType + "_pc",inArea, coords);
-				}
-			}
-		} else {
-			dataConnector.getReport(areaSelectionType,inArea, coords);
-		}	
+		dataConnector.getReport(areaSelectionType,inArea, coords);
 	}
 	
 
-	function onChangeGeometry(geometry:Geometry):Void{
-		var crds:Array = geometry.getCoords();
-		coords = "";
-		for (var n:Number = 0; n<crds.length; n++){
-			this.coords += crds[n].getX() + "," + crds[n].getY() + ",";
-		}
-		coords = coords.substr(0,coords.length-2);	
-	}
 	
 	
     function setAttribute(name:String, value:String):Void {	

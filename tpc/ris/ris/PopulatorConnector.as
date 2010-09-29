@@ -7,14 +7,15 @@ import mx.utils.Delegate;
 
 import ris.PopDataConnectorListener;
 
-class ris.PopulationdataConnector{
+class ris.PopulatorConnector{
 	private var xmlResponse:XML = null;
 	private var reportUrl:String = "";
 	private var areasUrl:String = "";
 	private var popdataConnectorListeners:Array = new Array();
+	var xmlheader:String = "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>";
 
 	
-	function PopulationdataConnector(){
+	function PopulatorConnector(){
 		var thisobj = this;
 		xmlResponse = new XML();
 		xmlResponse.ignoreWhite = true;
@@ -47,17 +48,18 @@ class ris.PopulationdataConnector{
 	}
 	
 	function getReport(areaSelectionType:String,inArea:Object, coords:String){
-		var url:String = reportUrl;
-		var send_lv:LoadVars = new LoadVars();
-		send_lv.request = "getReport";
-		send_lv.areaSelectionType = areaSelectionType;
-		if (areaSelectionType == "inArea"){
-			send_lv.areaType = inArea.type;
-			send_lv.areaValue = inArea.data;
-		} else {
-			send_lv.coords = coords;
-		}
-		send_lv.sendAndLoad(url, xmlResponse, "POST");
+		 var send_lv:LoadVars = new LoadVars();
+    	send_lv.suser = "";
+    	send_lv.spassword = "";
+    	send_lv.sWKTArea = "POLYGON("  + coords + ")";
+    	send_lv.eAnalyseType = "MAXIMUM";
+    	send_lv.sActivityList = "";
+    	send_lv.sendAndLoad(reportUrl, xmlResponse, "POST");
+		_global.flamingo.tracer("url " + reportUrl);
+		_global.flamingo.tracer("sWKTArea " + send_lv.sWKTArea);
+		
+	
+
 	}
 
 	
