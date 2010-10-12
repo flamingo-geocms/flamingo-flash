@@ -210,19 +210,17 @@ class gui.EditMapGeometry extends GeometryPane implements GeometryListener {
     }
     
      private function setMeasureLabel():Void {
-        /*if (type == ACTIVE) {
-            label.setStyle("fontWeight", "bold");
-        } else {
-            label.setStyle("fontWeight", "none");
-        }*/
         var measureString:String = "";
-        if (_geometry instanceof Polygon){
-        	var area:Number = Math.abs(Polygon(_geometry).getArea());
-        	if (area > 10000){
-        		measureString = Math.round(area/10000)/100 + " km2";
-        	} else {
-       			measureString = Math.round(area) + " m2";
-        	}
+	        if (_geometry instanceof Polygon){
+	        	var area:Number = Math.abs(Polygon(_geometry).getArea());
+	    	if (area > 10000000){
+	    		measureString = Math.round(area/10000)/100 + " km2";
+	    	}
+	    	else if (area > 10000 && area <= 10000000){
+				measureString = Math.round(area/100)/100 + " ha";	
+	    	} else {
+	   			measureString = Math.round(area) + " m2";
+	    	}
        } else if (_geometry instanceof LineString && _geometry.getParent()==null){
        		var length:Number = LineString(_geometry).getLength();
         	if (length > 1000){
@@ -232,14 +230,14 @@ class gui.EditMapGeometry extends GeometryPane implements GeometryListener {
         	}
        } 
        measureLabel.text = "";
-  		if(measureString != "" && type==ACTIVE ){
+  		if(measureString != ""  ){
   			if (measureLabel == null) {
             	measureLabel = Label(attachMovie("Label", "mLabel2", 12000, {autoSize: "center", html: true}));
         	}
-  			measureLabel.text = "<b>" + measureString + "</b>";
+  			measureLabel.text = measureString;
 			var pixel:Pixel = point2Pixel(_geometry.getCenterPoint());
 			measureLabel._x = pixel.getX() - (measureLabel.width / 2);
-        	measureLabel._y = pixel.getY() - 10;
+        	measureLabel._y = pixel.getY() - 15;
   		}
 
     }
