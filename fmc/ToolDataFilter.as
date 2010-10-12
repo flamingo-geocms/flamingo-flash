@@ -16,7 +16,7 @@ var version:String = "3.0";
 //-------------------------------------------
 var defaultXML:String = "<?xml version='1.0' encoding='UTF-8'?>" +
 						"<ToolDataFilter>" +
-						"<string id='tooltip' nl='selecteren' en='Select'/>" +
+						"<string id='tooltip' nl='Selecteren' en='Select'/>" +
 						  "<cursor id='busy' url='fmc/CursorsMap.swf' linkageid='busy'/>" +
 						  "<string id='alertWindowTitle' nl='Melding' en='Message'/>" +
 						  "<string id='alertMessage' nl='De vorige selectie wordt verwijderd. Weet u zeker of u door wilt gaan?' en='The previous selection will be removed, do you want to continue?'/>" +
@@ -41,16 +41,14 @@ var zoomscroll:Boolean = true;
 var skin = "_datafilter";
 var enabled = true;
 var layers:Array = new Array();
-var noSelection:Boolean;
-var selectedID:String;
 var query:String;
 var queryLabel:String;
 var layerLabel:String;
-var prev_selectedID:String;
 var mapServiceId:String;
 var valueString:String = "";
 var addedText = "\n\n";
 var bufferToolid:String;
+var between:Boolean = false;
 //hide windows
 window.visible = false;
 alert_window.visible = false;
@@ -116,14 +114,17 @@ init();
 *
 * @tag <layer>  
 * This defines the layer where the buffer is applied to
-* @attr id  layerid, same as in the mxd.
+* @attr id  layerid, same as in the mxd. layerid can also be configered as [mapServiceId].[layerId] than the mapServiceId is ommited. 
+* In this way layerids from different services can be combined in one tooldatafilter. 
 * @attr label label of the layer that will be shown in the selection window
 *
 * @tag <field>  
 * This defines the layer where the buffer is applied to
 * @attr id  id of the field as defined in the database.
 * @attr label label of the field that will be shown in the selection window
-* @attr operations the operations that can be applied to the field.
+* @attr operations A comma seperated list of the operations that can be applied to the field 
+* (possible values "=","&gt;","&lt;") When both "&gt" and "&lt" are present a between operation can be issued
+* by filling in a second constraint. 
 * @attr includeValues the path to the field where the attribute values are defined.
 */
 function init() {
@@ -133,8 +134,8 @@ function init() {
 		t.htmlText = "<P ALIGN='CENTER'><FONT FACE='Helvetica, Arial' SIZE='12' COLOR='#000000' LETTERSPACING='0' KERNING='0'><B>ToolDataFilter "+this.version+"</B> - www.flamingo-mc.org</FONT></P>";
 		return;
 	}
+	
 	this._visible = false;
-
 	//defaults
 	this.setConfig(defaultXML);
 	//custom
@@ -147,7 +148,7 @@ function init() {
 	flamingo.deleteXML(this);
 	this._visible = visible;
 	flamingo.raiseEvent(this,"onInit",this);
-	this.noSelection = true;
+	//this.noSelection = true;
 }
 /**
 * Configurates a component by setting a xml.
@@ -214,8 +215,14 @@ function setConfig(xml:Object) {
 					layers[i].layerName = val;
 					break;
 				case "id" :
-					layers[i].layerID = val;
-					break;
+					if(val.indexOf(".")!=-1){
+						layers[i].mapServiceID = val.substring(0,val.indexOf("."));
+						layers[i].layerID =val.substring(val.indexOf(".") + 1);
+					} else {
+						layers[i].mapServiceID = mapServiceID;	
+						layers[i].layerID =val;
+					}
+				break;		
 				default :
 					break;
 			}
@@ -237,6 +244,11 @@ function setConfig(xml:Object) {
 						break;
 					case "operations" :
 						field.operations = val;
+						if(val.indexOf("<")!=-1&&val.indexOf(">")!=-1){
+							field.between = true;
+						} else {
+							field.between = false;
+						}	 
 						break;
 					case "includevalues" :
 						field.valuesFile = val;
@@ -297,28 +309,32 @@ function loadXML(file:String, fieldIndex:Number, layerIndex:Number) {
 }
 //-------------------------------
 function initWindow() {
-	if (noSelection) {
+	//if (noSelection) {
 		window.content.cmb_layers.removeAll();
 		window.content.btn_clear.visible = false;
 		window.content.cmb_layers.addItem("",-1);
 		for (var i = 0; i<this.layers.length; i++) {
 			//show only visible layers!
-			if (isVisible(this.layers[i].layerID)) {
+			if (isVisible(i)) {
 				window.content.cmb_layers.addItem(this.layers[i].layerName,i);
 				window.content.cmb_fields.removeAll();
 				window.content.cmb_operations.removeAll();
 				window.content.cmb_values.removeAll();
 			}
 		}
-	} else {
-		window.content.btn_clear.visible = true;
-	}
+	//} else {
+		//window.content.btn_clear.visible = true;
+	//}
+	//LV
+	window.content.cmb_fields.removeAll();
+	
 	window.content.lbl_error.visible = false;
 	setWindowLabels();	
 	initControls();
 }
 
 function initControls() {
+	window.content._lockroot = true;
 	//Initialize controls
 	window.content.lbl_error.visible = false;
 
@@ -331,6 +347,7 @@ function initControls() {
 	window.content.cmb_layers.getDropdown().drawFocus = "";
 	window.content.cmb_layers.onKillFocus = function() {
 	};
+	window.content.cmb_layers.setFocus();
 
 	//set style cmb_fields
 	window.content.cmb_fields.themeColor = 0x999999;
@@ -362,10 +379,25 @@ function initControls() {
 	window.content.cmb_values.onKillFocus = function() {
 	};
 
-	window.content._lockroot = true;
+	window.content.btn_plus.visible = false;
+	between = false; 
+	
+	//set style cmb_operations2
+	window.content.lbl_operations._visible = false;
+	window.content.btn_min.visible = false;
+
+	//set style cmb_values2
+	window.content.cmb_values2.visible = false;
+	window.content.cmb_values2.themeColor = 0x999999;
+	window.content.cmb_values2.rollOverColor = 0xE6E6E6;
+	window.content.cmb_values2.selectionColor = 0xCCCCCC;
+	window.content.cmb_values2.textSelectedColor = 0x000000;
+	window.content.cmb_values2.drawFocus = "";
+	window.content.cmb_values2.getDropdown().drawFocus = "";
+	window.content.cmb_values2.onKillFocus = function() {
+	};
 
 	//Set control events
-
 	var Listener_cmbLayers:Object = new Object();
 	Listener_cmbLayers.change = function(evt_obj:Object) {
 		updateFields(window.content.cmb_layers.value);
@@ -378,12 +410,52 @@ function initControls() {
 	};
 	window.content.cmb_fields.addEventListener("change",Listener_cmbFields);
 
+
+	
+
 	var Listener_cmbOperations:Object = new Object();
-	Listener_cmbOperations.change = function(evt_obj:Object) {
+	Listener_cmbOperations.change = function(evt_obj:Object) {	
+		if((window.content.cmb_operations.value == "&lt;" || window.content.cmb_operations.value == "&gt;") && layers[window.content.cmb_layers.value].field[window.content.cmb_fields.value].between){
+			window.content.btn_plus.visible = true;	
+		} else {
+			window.content.btn_plus.visible = false;
+		}
+		between=false;
+		window.content.lbl_operations.visible = false;
+		window.content.cmb_values2.visible = false;	
 		updateValues(window.content.cmb_layers.value,window.content.cmb_fields.value);
 	};
 	window.content.cmb_operations.addEventListener("change",Listener_cmbOperations);
 
+	var Listener_cmbValues:Object = new Object();
+	Listener_cmbValues.change = function(evt_obj:Object) {
+		if(between){
+			updateValues2(window.content.cmb_layers.value,window.content.cmb_fields.value);
+		}
+	};
+	window.content.cmb_values.addEventListener("change",Listener_cmbValues);
+
+
+	window.content.btn_plus.onRelease = function() {
+		if(window.content.cmb_operations.value == "&lt;"){
+			window.content.lbl_operations.text = ">";
+		} else {
+			window.content.lbl_operations.text = "<";
+		}
+		updateValues2(window.content.cmb_layers.value,window.content.cmb_fields.value);
+		between = true;	 
+		window.content.btn_min.visible = true;
+		window.content.lbl_operations.visible = true;
+		window.content.cmb_values2.visible = true;
+	};
+	
+	window.content.btn_min.onRelease = function() {		
+		between = false;	 
+		window.content.btn_min.visible = false;
+		window.content.lbl_operations.visible = false;
+		window.content.cmb_values2.visible = false;
+		
+	};
 
 	window.content.btn_clear.onRelease = function() {
 		removeSelectQuery(window.content.cmb_layers.value);
@@ -407,12 +479,23 @@ function initControls() {
 			query = layers[this._parent.cmb_layers.value].field[window.content.cmb_fields.value].fieldID;
 			query += window.content.cmb_operations.value;
 			query += "&apos;"+window.content.cmb_values.value+"&apos;";
-
+			if(between){
+				query += " AND "
+				query += layers[this._parent.cmb_layers.value].field[window.content.cmb_fields.value].fieldID;
+				query += (window.content.lbl_operations.text == "<") ? "&lt;" : "&gt;" ;
+				query += "&apos;"+window.content.cmb_values2.value+"&apos;";
+			}	
+			//nothing is done with this querylabel
 			var queryLabel:String;
 			queryLabel = layers[this._parent.cmb_layers.value].field[window.content.cmb_fields.value].fieldName;
 			queryLabel += window.content.cmb_operations.value;
 			queryLabel += "&apos;"+window.content.cmb_values.value+"&apos;";
-
+			if(between){
+				queryLabel += " AND ";
+				queryLabel += layers[this._parent.cmb_layers.value].field[window.content.cmb_fields.value].fieldName;
+				queryLabel += (window.content.lbl_operations.text == "<") ? "&lt;" : "&gt;" ;
+				queryLabel += "&apos;"+window.content.cmb_values2.value+"&apos;";
+			}	
 			setSelectQuery(window.content.cmb_layers.value,query,queryLabel);
 		}
 	};
@@ -420,14 +503,15 @@ function initControls() {
 	alert_window.content.btn_yes.onRelease = function() {
 		alert_window.visible = false;
 		window.visible = false;
-		removeSelectQuery();
-		selectQuery();
+		//removeSelectQuery(window.content.cmb_layers.value);
+		selectQuery(window.content.cmb_layers.value);
 	};
 
 	alert_window.content.btn_no.onRelease = function() {
 		alert_window.visible = false;
 	};
 }
+
 function setWindowLabels()
 {
 	alert_window.title = flamingo.getString(this, "alertWindowTitle", "Melding");
@@ -445,19 +529,23 @@ function setWindowLabels()
 }
 function isVisible(layerIndex:String):Boolean {
 	//get the mapserver from the layer
-	var layerComponent:String = this._parent.listento[0]+"_"+mapServiceID;
+	var layerComponent:String = this._parent.listento[0]+"_"+this.layers[layerIndex].mapServiceID;
 	var mapService = flamingo.getComponent(layerComponent);
-
 	if (mapService == undefined) {
 		trace("map service is undefined");
 	}
-	if (mapService.getVisible(layerIndex)<0) {
+	if (mapService.getVisible(this.layers[layerIndex].layerID)<0) {
 		return false;
-	} else if (mapService.getVisible(layerIndex)>0) {
+	} else if (mapService.getVisible(this.layers[layerIndex].layerID)>0) {
 		return true;
 	}
 }
 function updateFields(layerIndex:String) {
+	var layerComponent:String = this._parent.listento[0]+"_"+this.layers[layerIndex].mapServiceID;
+	var mapService = flamingo.getComponent(layerComponent);
+	if (mapService.getLayerProperty(this.layers[layerIndex].layerID,"query")!="") {
+		window.content.btn_clear.visible = true;
+	}	
 	window.content.cmb_fields.removeAll();
 	window.content.cmb_operations.removeAll();
 	var fields:Array = this.layers[layerIndex].field;
@@ -484,74 +572,80 @@ function updateOperations(layerIndex:String, fieldIndex:String) {
 	}
 }
 function updateValues(layerIndex:String, fieldIndex:String) {
-
 	window.content.cmb_values.removeAll();
 	var fields:Array = this.layers[layerIndex].field;
 	var valueArray:Array = fields[fieldIndex].values.split(",");
 	window.content.cmb_values.addItem("");
 	for (var i = 0; i<valueArray.length; i++) {
 		window.content.cmb_values.addItem(valueArray[i]);
+	}		
+}
+
+function updateValues2(layerIndex:String, fieldIndex:String) {
+	window.content.cmb_values2.removeAll();
+	var fields:Array = this.layers[layerIndex].field;
+	var valueArray:Array = fields[fieldIndex].values.split(",");
+	window.content.cmb_values.addItem("");
+	for (var i = 0; i<valueArray.length; i++) {
+		if((window.content.cmb_operations.value == "&lt;" && Number(valueArray[i]) < Number(window.content.cmb_values.value)) ||
+			(window.content.cmb_operations.value == "&gt;" && Number(valueArray[i]) > Number(window.content.cmb_values.value))){
+			window.content.cmb_values2.addItem(valueArray[i]);
+		}
 	}
 }
 
 function setSelectQuery(layerIndex:String, query:String, queryLabel:String) {
-	//save previous selection id
-	if (this.selectedID == undefined) {
-		this.selectedID = this.layers[layerIndex].layerID;
-	}
-	this.prev_selectedID = this.selectedID;
-	this.selectedID = this.layers[layerIndex].layerID;
-
 	this.query = query;
 	this.queryLabel = queryLabel;
-	if (noSelection) {
+	var layerComponent:String = this._parent.listento[0]+"_"+this.layers[layerIndex].mapServiceID;
+	var mapService = flamingo.getComponent(layerComponent);
+	if (mapService.getLayerProperty(this.layers[layerIndex].layerID,"query")=="") {
 		window.visible = false;
-		selectQuery();
+		selectQuery(layerIndex);
 	} else {
 		alert_window.visible = true;
 	}
-	noSelection = false;
 }
 
-function selectQuery() {
+function selectQuery(layerIndex:String) {
 	//get the mapserver from the layer
-	var layerComponent:String = this._parent.listento[0]+"_"+mapServiceID;
+	var layerComponent:String = this._parent.listento[0]+"_"+this.layers[layerIndex].mapServiceID;
 	var mapService = flamingo.getComponent(layerComponent);
 
 	if (mapService == undefined) {
 		trace("map service is undefined");
 	}
-	mapService.setLayerProperty(this.selectedID,"queryable",true);
-	mapService.setLayerProperty(this.selectedID,"query",this.query);
+	mapService.setLayerProperty(this.layers[layerIndex].layerID,"queryable",true);
+	mapService.setLayerProperty(this.layers[layerIndex].layerID,"query",this.query);
 	flamingo.getComponent(this._parent.listento[0]).refresh();
-	noSelection = false;
 }
 function removeSelectQuery(layerIndex:String) {
-	if (layerIndex != undefined) {
-		this.prev_selectedID = this.layers[layerIndex].layerID;
-	}
 	//get the mapserver from the layer       
-	var layerComponent:String = this._parent.listento[0]+"_"+mapServiceID;
+	var layerComponent:String = this._parent.listento[0]+"_"+this.layers[layerIndex].mapServiceID;
 	var mapService = flamingo.getComponent(layerComponent);
 
 	if (mapService == undefined) {
 		trace("map service is undefined");
 	}
-	mapService.setLayerProperty(this.prev_selectedID,"query","");
-	mapService.setLayerProperty(this.prev_selectedID,"queryable",false);
-
-	noSelection = true;
-	if (layerIndex != undefined && mapService.type == "LayerArcIMS") {
-		flamingo.getComponent(this._parent.listento[0]).refresh();
-	}	
+	mapService.setLayerProperty(this.layers[layerIndex].layerID,"query","");
+	mapService.setLayerProperty(this.layers[layerIndex].layerID,"queryable",true);
+	flamingo.getComponent(this._parent.listento[0]).refresh();
 }
+
+
 //shows the window in the center of the map
 function showWindow(screenWidth:Number, screenHeight:Number) {
 	var oldX = window._x;
 	var oldY = window._y;
+	
+	var oldX_alert = alert_window._x;
+	var oldY_alert = alert_window._y;
 
-	window._x = (screenWidth/2-window._width);
+	window._x = ((screenWidth/2 - window._width))-screenWidth/(1+3/4);
 	window._y = (screenHeight/2-window._height/4);
+	
+	alert_window._x = ((screenWidth/2 - alert_window._width))-screenWidth/(1+1/2);
+	alert_window._y = (screenHeight/2-alert_window._height/4);
 
 	window.visible = true;
 }
