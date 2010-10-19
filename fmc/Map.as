@@ -45,6 +45,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 * hideTooltip()
 * Author:Linda Vels,IDgis bv
 */
+import tools.Logger;
 
 dynamic class Map extends MovieClip {
 	//
@@ -109,9 +110,10 @@ dynamic class Map extends MovieClip {
 	private var markerIDnr:Number = 0;
 	
 	public var nrOfServiceLayers:Number = 0;
-	
+	public var log=null;
 	
 	function Map() {
+		this.log = new Logger("Map",_global.flamingo.getLogLevel(),_global.flamingo.getScreenLogLevel());
 		if (flamingo == undefined) {
 			var t:TextField = this.createTextField("readme", 0, 0, 0, 550, 400);
 			t.html = true;
@@ -629,7 +631,7 @@ dynamic class Map extends MovieClip {
 				thisObj.layersidentifying[layer._name].identifycomplete = true;
 				thisObj.checkIdentify();
 			};
-			lLayer.onError = function(layer:MovieClip, type:String, error:String) {
+			lLayer.onError = function(layer:MovieClip, type:String, error:String) {				
 				type = type.toLowerCase();
 				if (type == "identify") {
 					flamingo.raiseEvent(thisObj, "onError", thisObj, "identify", error, layer);

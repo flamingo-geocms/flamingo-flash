@@ -28,6 +28,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 * @configstring waiting String shown when map is waiting for response from the server. The string "[percentage]" is replaced by actual percentage number. The string "[map" is replaced by the map's name.
 * @configstyle .text Fontstyle of load and wait strings.
 */
+import tools.Logger;
+var log=new Logger("MonitorMap",_global.flamingo.getLogLevel(),_global.flamingo.getScreenLogLevel());;
 var version:String = "2.0";
 
 
@@ -42,7 +44,6 @@ var skin:String = "";
 //---------------------------------
 var lMap:Object = new Object();
 lMap.onAddLayer = function(map:MovieClip) {
-	monitor(0, map);
 };
 //Added onRemoveLayer handler, IDgis/HHA
 lMap.onRemoveLayer = function(map:MovieClip) {
