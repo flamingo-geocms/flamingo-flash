@@ -589,8 +589,7 @@ dynamic class Map extends MovieClip {
 			//this.removeLayer(layerid);
 		} else {
 			// add new movie 
-			var mc:MovieClip = this.mLayers.createEmptyMovieClip(layerid, depth);
-			flamingo.loadComponent(xml, mc, layerid);
+			var mc:MovieClip = this.mLayers.createEmptyMovieClip(layerid, depth);			
 			var thisObj = this;
 			var lLayer:Object = new Object();
 			lLayer.onUpdate = function(layer:MovieClip, nrtry:Number) {
@@ -671,6 +670,8 @@ dynamic class Map extends MovieClip {
 					themeSelector.setCurrentTheme();
 				} 				
 			};
+			flamingo.addListener(lLayer, layerid, this);
+			flamingo.loadComponent(xml, mc, layerid);
 			//_global.flamingo.tracer("Map " + _global.flamingo.getId(this)+ " addLayer "  + layerid + " url " + _global.flamingo.getUrl(layerid) + _global.flamingo.getUrl(layerid).indexOf("LayerArcIMS"));
 			//count the number of serviceLayers
 			if(_global.flamingo.getUrl(layerid).indexOf("LayerArcIMS")>0 || 
@@ -678,7 +679,6 @@ dynamic class Map extends MovieClip {
 					_global.flamingo.getUrl(layerid).indexOf("LayerOGWMS")>0){
 				nrOfServiceLayers++;
 			} 
-			flamingo.addListener(lLayer, layerid, this);
 			return id;
 		}
 	}

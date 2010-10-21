@@ -44,6 +44,7 @@ var skin:String = "";
 //---------------------------------
 var lMap:Object = new Object();
 lMap.onAddLayer = function(map:MovieClip) {
+	monitor(0, map);
 };
 //Added onRemoveLayer handler, IDgis/HHA
 lMap.onRemoveLayer = function(map:MovieClip) {
