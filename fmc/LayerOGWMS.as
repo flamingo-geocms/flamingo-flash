@@ -1302,12 +1302,22 @@ function updateCache(cache:MovieClip) {
 			if (ms<=minscale) {
 				_visible = false;
 				return;
+			}else{
+				/*If in a previous updateCache the movie could be set to _visible=false
+				then also set the _visible = true if this movie must be visible (according the scale)
+				*/
+				_visible =true;
 			}
 		}
 		if (maxscale != undefined) {
 			if (ms>maxscale) {
 				_visible = false;
 				return;
+			}else{
+				/*If in a previous updateCache the movie could be set to _visible=false
+				then also set the _visible = true if this movie must be visible (according the scale)
+				*/
+				_visible =true;
 			}
 		}
 		/*Why do a _visible=true????? 
