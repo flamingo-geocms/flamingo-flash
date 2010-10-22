@@ -13,7 +13,7 @@
     <property name="build" location="build"/>
     <property name="dist" location="../dist"/>
     <property name="flapath" location="."/>
-    <property name="flash8path" location="C:\Program Files (x86)\Adobe\Adobe Flash CS3"/>  
+    <property name="flash8path" location="C:\Program Files\Macromedia\Flash 8"/>
     <target name="init">
         <mkdir dir="${build}"/>
         <mkdir dir="${build}/dist"/>
