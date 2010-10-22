@@ -188,7 +188,8 @@ class coregui.js.JsButton extends AbstractComponent {
 		}
 		if (allLoaded) {
 			onAllSkinsLoaded();
-			this._visible = true;
+			if (this.visible)
+				this._visible = true;
 		}
 	}
 	
