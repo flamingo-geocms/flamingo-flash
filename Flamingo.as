@@ -608,9 +608,9 @@ class Flamingo {
 	* @attr width  (defaultvalue "100%") The width of the application. By default the application fills the available space of the flamingo.swf. This space is controled in the html page.
 	* @attr height (defaultvalue "100%") The height of the application. By default the application fills the available space of the flamingo.swf. This space is controled in the html page.
 	* @attr useexternalinterface (defaultvalue "true") If set to "true" flamingo will pass all events to the browser. And with javascript you can talk with Flamingo.
-	* @attr allowexternalinterface (defaultvalue null) A comma seperated list with "[Component ID].[Event]" (case insensitive). The ".[Event]" part is optional. For example "mapid.onmousemove,editmap". If no denyExternalInterfaces are set only these external calls are done to the browser.
+	* @attr allowexternalinterface (defaultvalue null) A comma seperated list with "[Component ID].[Event]" (case insensitive). Both the "[Component]" and ".[Event]" part are optional. For example "mapid.onmousemove,editmap,.onrequest". If no denyExternalInterfaces are set only these external calls are done to the browser.
 	* see also denyExternalInterface.
-	* @attr denyexternalinterface (defaultvalue null) A comma seperated list with "[Component ID].[Event]" (case insensitive). The ".[Event]" part is optional. For example "mapid.onmousemove,editmap". If no allowExternalInterfaces are set only these external calls are not done to the browser.
+	* @attr denyexternalinterface (defaultvalue null) A comma seperated list with "[Component ID].[Event]" (case insensitive). Both the "[Component]" and ".[Event]" part are optional. For example "mapid.onmousemove,editmap,.onrequest". If no allowExternalInterfaces are set only these external calls are not done to the browser.
 	* The deny setting overwrites the allow setting. But the allow param "[Component ID].[Event]" overwrites the deny "[Component ID]". For example deny..="mapid" allow..="mapid.onIdentify". All calls from the component with id 'mapid' are denied, except the event 'onIdentify'
 	* @attr bordercolor  Color of a border arround the application in a hexadecimal notation. e.g. bordercolor="#00ff33" 
 	* @attr borderwidth  Width of the border in pixels. If set to "0" (meaning 'hairline') or greater Flamingo will draw a border.
@@ -2187,7 +2187,8 @@ class Flamingo {
 			//deny is set for only the id. Otherwise the deny overwrites the allow
 			var allowedByEvent:Boolean= false;
 			var lowerId=id.toLowerCase();
-			var lowerIdEvent=lowerId+"."+event.toLowerCase();
+			var lowerEvent="."+event.toLowerCase();
+			var lowerIdEvent=lowerId+lowerEvent;
 			if (this.allowExternalInterface!=null){
 				//if no deny is set all are denied accept the allowed;
 				if (this.denyExternalInterface==null){
@@ -2200,7 +2201,11 @@ class Flamingo {
 					if (this.allowExternalInterface[i].toLowerCase()==lowerIdEvent){
 						fire=true;
 						allowedByEvent=true;
-					}						
+					}else if (this.allowExternalInterface[i].toLowerCase()==lowerEvent){
+						fire=true;
+						allowedByEvent=true;						
+					}
+					
 				}
 			}
 			if (fire==true && this.denyExternalInterface!=null){
@@ -2212,6 +2217,9 @@ class Flamingo {
 					}else if (this.denyExternalInterface[i].toLowerCase()==lowerIdEvent){
 						fire=false;
 					}						
+					else if (this.denyExternalInterface[i].toLowerCase()==lowerEvent){
+						fire=true;
+					}
 				}
 			}
 		}

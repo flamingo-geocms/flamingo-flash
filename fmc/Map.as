@@ -171,7 +171,7 @@ dynamic class Map extends MovieClip {
 		lFlamingo.onLoadComponent = function(mc:MovieClip) {
 			if (thisObj.mLayers[mc._name] == mc) {
 				flamingo.raiseEvent(thisObj, "onAddLayer", thisObj, mc);
-				
+				thisObj.checkUpdate()
 				//deal with argument extent, wait untill at least one layer is loaded 
 				var val = flamingo.getArgument(thisObj, "extent");
 				if (val != undefined && configObjId==null) {
