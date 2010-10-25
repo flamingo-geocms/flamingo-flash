@@ -20,7 +20,7 @@ import ris.PopDataConnectorListener;
 import flash.external.ExternalInterface;
 
 class ris.AbstractSelector  extends AbstractComponent implements GeometryListener,PopDataConnectorListener{
-    
+
     private var areaSelector:Boolean;
     private var boxSelector:Boolean;
    	private var geometrySelector:Boolean;
@@ -28,8 +28,6 @@ class ris.AbstractSelector  extends AbstractComponent implements GeometryListene
     
     private var map:Object = null;
     private var thisObj:Object = null;
-    private var depth:Number = 0;
-
 	private var textFormatUrl:TextFormat;
 	
 	private var textFormatWarning:TextFormat;
@@ -39,10 +37,11 @@ class ris.AbstractSelector  extends AbstractComponent implements GeometryListene
 	private var textFormat:TextFormat;
 	
     private var statusDelayIntervalID:Number = 0;
-		
+	
 	private var sendRequestButton:Button;
 	private var infoButton:Button;
 	private var closeButton:Button;
+	
 	
 	private var geometry:Geometry;
 	
@@ -82,9 +81,7 @@ class ris.AbstractSelector  extends AbstractComponent implements GeometryListene
 		textFormatInfo.underline = false;
 		textFormatInfo.font = "_sans";
 		textFormatInfo.color = 0x0000ff;
-		addControls();
-		resetControls();
-		dataConnector.getAreas();
+
 	}
 
 
@@ -102,12 +99,11 @@ class ris.AbstractSelector  extends AbstractComponent implements GeometryListene
     }
 
 	
-    private function addControls():Void {
-		this.createEmptyMovieClip("mHolder",100);
-		this["mHolder"]._lockroot = true; 
-		var currentY:Number = 0;  
+	
+    private function addAreaControls(x:Number,y:Number):Void {   	
+		var currentY:Number = y;  
 		if(areaSelector){     
-	        var inArea:RadioButton = RadioButton(attachMovie("RadioButton", "mInAreaRadioButton", depth++));
+	        var inArea:RadioButton = RadioButton(attachMovie("RadioButton", "mInAreaRadioButton", this.getNextHighestDepth()));
 			inArea.move(20,currentY);
 			currentY += 20;
 			inArea.data = "inArea";
@@ -115,6 +111,8 @@ class ris.AbstractSelector  extends AbstractComponent implements GeometryListene
 			inArea.label =_global.flamingo.getString(this,"inArea");
 			inArea.selected = true;
 			inArea.setSize(200,20);
+			this.createEmptyMovieClip("mHolder",100);
+			this["mHolder"]._lockroot = true; 
 			inAreaChoser = ComboBox(this["mHolder"].attachMovie("ComboBox", "cmbInAreaChoser", 1));
 			inAreaChoser.addEventListener("close", Delegate.create(this, onChangeInArea));
 	        inAreaChoser.drawFocus = function() {
@@ -128,58 +126,55 @@ class ris.AbstractSelector  extends AbstractComponent implements GeometryListene
 			currentY += 40;
 			inAreaChoser.setSize(170,25);
 		}
-		
-		
 		if(boxSelector){
-	        var inBox:RadioButton = RadioButton(attachMovie("RadioButton", "mInBoxRadioButton", depth++));
+	        var inBox:RadioButton = RadioButton(attachMovie("RadioButton", "mInBoxRadioButton", this.getNextHighestDepth()));
 			inBox.move(20,currentY);
-			currentY+=15;
+			currentY+=20;
 			inBox.data = "inBox";
 			inBox.groupName = "inWhat";
 			inBox.label = _global.flamingo.getString(this,"inBox");
 			inBox.setSize(200,20);
-			var bBox:MovieClip = this.createEmptyMovieClip("mbBox", depth++);
+			var bBox:MovieClip = this.createEmptyMovieClip("mbBox", this.getNextHighestDepth());
 			bBox._x = 20;
 			bBox._y = currentY;
 			currentY += 115;
-			var xLabel:TextField = bBox.createTextField("tXLabel",depth++,25,0, 90,20);
+			var xLabel:TextField = bBox.createTextField("tXLabel",1,25,0, 90,20);
 			xLabel.setNewTextFormat(textFormat);
 			xLabel.text = "X:";
-		 	var yLabel:TextField = bBox.createTextField("tYLabel",depth++,110,0,90, 20);
+		 	var yLabel:TextField = bBox.createTextField("tYLabel",2,110,0,90, 20);
 			yLabel.setNewTextFormat(textFormat);
 			yLabel.text = "Y:";
-			var llLabel:TextField = bBox.createTextField("tLlLabel",depth++,0,20,25,20);
+			var llLabel:TextField = bBox.createTextField("tLlLabel",3,0,20,25,20);
 			llLabel.setNewTextFormat(textFormat);
 			llLabel.text = "LL:";
-			var urLabel:TextField = bBox.createTextField("tUrLabel",depth++,0,50,25,20);
+			var urLabel:TextField = bBox.createTextField("tUrLabel",4,0,50,25,20);
 			urLabel.setNewTextFormat(textFormat);
 			urLabel.text = "UR:";
-			llX = TextInput(bBox.attachMovie("TextInput","llX",depth++));
+			llX = TextInput(bBox.attachMovie("TextInput","llX",5));
 			llX.setSize(80,25);
 			llX.move(25,20);
 			llX.restrict = "0-9";
 			llX.addEventListener("change", Delegate.create(this, onChangeBox));
 			llX.enabled = false;
-			llY = TextInput(bBox.attachMovie("TextInput","llY",depth++));
+			llY = TextInput(bBox.attachMovie("TextInput","llY",6));
 			llY.setSize(80,25);
 			llY.move(110,20);
 			llY.restrict = "0-9";
 			llY.addEventListener("change", Delegate.create(this, onChangeBox));
 			llY.enabled = false;
-			urX = TextInput(bBox.attachMovie("TextInput","urX",depth++));
+			urX = TextInput(bBox.attachMovie("TextInput","urX",7));
 			urX.setSize(80,25);
 			urX.move(25,50);
 			urX.restrict = "0-9";
 			urX.addEventListener("change", Delegate.create(this, onChangeBox));
 			urX.enabled = false;
-			urY = TextInput(bBox.attachMovie("TextInput","urY",depth++));
+			urY = TextInput(bBox.attachMovie("TextInput","urY",8));
 			urY.setSize(80,25);
 			urY.move(110,50);
 			urY.restrict = "0-9";
 			urY.addEventListener("change", Delegate.create(this, onChangeBox));
 			urY.enabled = false;
-	
-			setExtentButton = bBox.createClassObject(mx.controls.Button, "mSetExtentButton", depth++);
+			setExtentButton = bBox.createClassObject(mx.controls.Button, "mSetExtentButton", 9);
 			setExtentButton.move(25,80); 
 			setExtentButton.label = _global.flamingo.getString(this,"extentButtonLabel");
 			setExtentButton.enabled = false;
@@ -187,72 +182,80 @@ class ris.AbstractSelector  extends AbstractComponent implements GeometryListene
 			setExtent();
 		}
 		if(geometrySelector){
-			var inGeometryLabel:TextField = createTextField("mInGeometryLabel",depth++,20,currentY,200,20);
+			var inGeometryLabel:TextField = createTextField("mInGeometryLabel",this.getNextHighestDepth(),20,currentY,200,20);
 			currentY += 20;
 			inGeometryLabel.setNewTextFormat(textFormat);
 			inGeometryLabel.text = _global.flamingo.getString(this,"inGeometry");
 			
-	        var inGeometryPoly:RadioButton  = RadioButton(attachMovie("RadioButton", "mInGeometryPolyRadioButton", depth++));
+	        var inGeometryPoly:RadioButton  = RadioButton(attachMovie("RadioButton", "mInGeometryPolyRadioButton", this.getNextHighestDepth()));
 			inGeometryPoly.move(20,currentY);
 			inGeometryPoly.data = "inGeometryPoly";
 			inGeometryPoly.groupName = "inWhat";
-			var poly:MovieClip  = attachMovie("DrawPolyImage", "mDrawPolyImage", depth++); 
+			var poly:MovieClip  = attachMovie("DrawPolyImage", "mDrawPolyImage", this.getNextHighestDepth()); 
 			poly._x = 10;
 			poly._y = currentY + 20;
 			
-	        var inGeometryBox:RadioButton = RadioButton(attachMovie("RadioButton", "mInGeometryBoxRadioButton", depth++));
+	        var inGeometryBox:RadioButton = RadioButton(attachMovie("RadioButton", "mInGeometryBoxRadioButton", this.getNextHighestDepth()));
 			inGeometryBox.move(90,currentY);
 			inGeometryBox.data = "inGeometryBox";
 			inGeometryBox.groupName = "inWhat";
-			var box:MovieClip = attachMovie("DrawBoxImage", "mDrawBoxImage", depth++);
+			var box:MovieClip = attachMovie("DrawBoxImage", "mDrawBoxImage", this.getNextHighestDepth());
 			box._x = 80; 
 			box._y = currentY + 20;
 			
-	        var inGeometryCircle:RadioButton = RadioButton(attachMovie("RadioButton", "mInGeometryCircleRadioButton", depth++));
+	        var inGeometryCircle:RadioButton = RadioButton(attachMovie("RadioButton", "mInGeometryCircleRadioButton", this.getNextHighestDepth()));
 			inGeometryCircle.move(160,currentY);
 			inGeometryCircle.data = "inGeometryCircle";
 			inGeometryCircle.groupName = "inWhat";
-			var circle:MovieClip = attachMovie("DrawCircleImage", "mDrawCircleImage", depth++); 
+			var circle:MovieClip = attachMovie("DrawCircleImage", "mDrawCircleImage", this.getNextHighestDepth()); 
 			circle._x = 155;
 			circle._y = currentY + 20;
 			currentY += 70;
 		}
 		
-		sendRequestButton = Button(attachMovie("Button", "mSendRequestButton", depth++));
-	    this["mSendRequestButton"].onRelease = function(){_parent.onClickRequestButton();};
-		this["mSendRequestButton"].move(20,currentY);
-		this["mSendRequestButton"].setSize(180,20);
-		var label:String = _global.flamingo.getString(this,"requestButtonLabel");
-		if(label == undefined){
-			label = "OK";
-		}	
-		currentY += 25;
-		this["mSendRequestButton"].label = label;
-		infoButton = Button(attachMovie("Button", "mInfoButton", depth++));
-	  	this["mInfoButton"].onRelease = function(){_parent.onClickInfoButton();};
-		this["mInfoButton"].move(20,currentY);
-		this["mInfoButton"].setSize(180,20);
-		label = _global.flamingo.getString(this,"infoButtonLabel");
-		if(label == undefined){
-			label = "Information";
-		}
-		this["mInfoButton"].label = label;
-		currentY += 25;
-		closeButton = Button(attachMovie("Button", "mCloseButton", depth++));
-	  	this["mCloseButton"].onRelease = function(){_parent.onClickCloseButton();};
-		this["mCloseButton"].move(20,currentY);
-		this["mCloseButton"].setSize(180,20);
-		label = _global.flamingo.getString(this,"closeButtonLabel");
-		if(label == undefined){
-			label = "Close";
-		}
-		this["mCloseButton"].label = label;
-		currentY += 30;
-		statusLine = createTextField("mCommandLine",depth++,0,currentY,this._width,60);
-		statusLine.multiline = true;
-		statusLine.wordWrap = true;
-		this["inWhat"].addEventListener("click", Delegate.create(this, onClickRadioButton));
+	
+		
+    }
+
+	private function addButtons(x:Number, y:Number){	
+			sendRequestButton = Button(attachMovie("Button", "mSendRequestButton", this.getNextHighestDepth()));
+	    		this["mSendRequestButton"].onRelease = function(){_parent.onClickRequestButton();};
+				this["mSendRequestButton"].move(x,y);
+				this["mSendRequestButton"].setSize(180,20);
+				var label:String = _global.flamingo.getString(this,"requestButtonLabel");
+			if(label == undefined){
+				label = "OK";
+			}	
+			y += 25;
+			this["mSendRequestButton"].label = label;
+			infoButton = Button(attachMovie("Button", "mInfoButton", this.getNextHighestDepth()));
+		  	this["mInfoButton"].onRelease = function(){_parent.onClickInfoButton();};
+			this["mInfoButton"].move(x,y);
+			this["mInfoButton"].setSize(180,20);
+			label = _global.flamingo.getString(this,"infoButtonLabel");
+			if(label == undefined){
+				label = "Information";
+			}
+			this["mInfoButton"].label = label;
+			y += 25;
+			closeButton = Button(attachMovie("Button", "mCloseButton", this.getNextHighestDepth()));
+		  	this["mCloseButton"].onRelease = function(){_parent.onClickCloseButton();};
+			this["mCloseButton"].move(x,y);
+			this["mCloseButton"].setSize(180,20);
+			label = _global.flamingo.getString(this,"closeButtonLabel");
+			if(label == undefined){
+				label = "Close";
+			}
+			this["mCloseButton"].label = label;
 	}
+	
+	function addStatusLine(x:Number, y:Number){
+			statusLine = createTextField("mCommandLine",this.getNextHighestDepth(),x,y,this._width,60);
+			statusLine.multiline = true;
+			statusLine.wordWrap = true;
+			this["inWhat"].addEventListener("click", Delegate.create(this, onClickRadioButton));
+	}
+	
 	
 	private function onChangeInArea(evtObj:Object) : Void {
 		inArea = evtObj.target.selectedItem;
@@ -266,8 +269,9 @@ class ris.AbstractSelector  extends AbstractComponent implements GeometryListene
 	
 	private function enableInBox(enable:Boolean){
 			RadioButton(this["mInBoxRadioButton"]).selected = enable;
+			onChangeBox();
 			if(enable){
-				RadioButton(this["mInBoxRadioButton"]).setFocus();
+				//RadioButton(this["mInBoxRadioButton"]).setFocus();
 				this.setAreaSelectionType("inBox");
 			}	
 			llX.enabled = enable;
@@ -325,13 +329,7 @@ class ris.AbstractSelector  extends AbstractComponent implements GeometryListene
 				this.setAreaSelectionType("inArea");
 				break;
 			case "inBox" :
-				llX.enabled = true;
-				llY.enabled = true;
-				urX.enabled = true;
-				urY.enabled = true;
-				setExtentButton.enabled = true;
-				this.setAreaSelectionType("inBox");
-				onChangeBox();
+				enableInBox(true);
 				break;	
 			case "inGeometryPoly" :
 				this.setAreaSelectionType("inGeometry");
@@ -397,7 +395,7 @@ class ris.AbstractSelector  extends AbstractComponent implements GeometryListene
     	ExternalInterface.call("popWin",url);  
 	}
 	
-	private function onChangeBox(evtObj:Object):Void{
+	function onChangeBox(evtObj:Object):Void{
 		coords = llX.text + "," + llY.text + "," +  urX.text + "," + urY.text;
 		if(areaSelectionType=="inBox"){
 			var crds:Array = coords.split(",");
@@ -406,6 +404,12 @@ class ris.AbstractSelector  extends AbstractComponent implements GeometryListene
 	}
 	
 	function onChangeGeometry(geometry:Geometry):Void{
+		var crds:Array = geometry.getCoords();
+		coords = "";
+		for (var n:Number = 0; n<crds.length; n++){
+			this.coords += crds[n].getX() + "," + crds[n].getY() + ",";
+		}
+		coords = coords.substr(0,coords.length-2);	
 	}
 	
 	function onFinishGeometry(geometry:Geometry):Void{
@@ -453,18 +457,18 @@ class ris.AbstractSelector  extends AbstractComponent implements GeometryListene
 	
 
 	public function onReportLoad(result : XML) : Void {
+	}
+	
+	private function showReport(text:String){
 		removeStatusText();
 		this["mSendRequestButton"].enabled = true;
 		var resultComp:Object =_global.flamingo.getComponent(this.resultCompId);
 		resultComp.ta.border_mc.setStyle("borderStyle", "none");
-		var txt:String = result.toString().split("\\t").join("\t");
-		txt = txt.split("\\n").join("\n");
-		resultComp.setText( txt);
+		resultComp.setText( text);
 		resultComp._visible =true;
 		if (resultComp._parent._parent._name == "mWindow") {
             resultComp._parent._parent._parent.setVisible(true);
         }
-		
 	}
 	
 	function onLoadFail(result : XML) : Void {

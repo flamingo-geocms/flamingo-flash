@@ -89,7 +89,9 @@
 	  <fmc:inArea label="Hulst" coords="55018+362197+74859+362197+74859+380617+55018+380617+55018+362197"/>* @attr label a name shown to the user
 * @attr label a name shown to the user
 * @attr data value used in the url, an coördinate string of x and y values seperated by a + sign	
-*/	
+ */
+
+import mx.controls.CheckBox;	
 
 import geometrymodel.dde.*;
 import mx.utils.Delegate;
@@ -107,6 +109,7 @@ import ris.PopulatorConnector;
 import flash.external.ExternalInterface;
 
 import ris.AbstractSelector;
+import ris.PopulationData;
 
 class ris.PopulatorSelector extends AbstractSelector {
     var defaultXML:String = "<?xml version='1.0' encoding='UTF-8'?>" +
@@ -121,6 +124,15 @@ class ris.PopulatorSelector extends AbstractSelector {
 						      "</PopulationDataSelector>";
 
     
+	private var maxPop:CheckBox = null;
+	private var werkdag:CheckBox = null;
+	private var werknacht:CheckBox = null;
+	private var weekenddag:CheckBox = null;
+	private var weekendnacht:CheckBox = null;
+	var perPopType:CheckBox = null;
+	private var buttonsX:Number = 250;
+	private var popData:PopulationData = null;
+	private var wktCoords:String = "";
 
 	
 	function onLoad():Void {
@@ -130,16 +142,58 @@ class ris.PopulatorSelector extends AbstractSelector {
 		dataConnector = new PopulatorConnector();
 		dataConnector.addListener(this);
 		this.setAreaSelectionType("inBox");
+		
 		super.onLoad();
 	}
 	
 	function init():Void{
 		super.init();
-		dataConnector.getAreas();
+		addAreaControls(0,0);
+		addReportSettingsControls(250,0);
+		addButtons(240,200);
+		addStatusLine(0,250);
+		resetControls();
+		popData = new PopulationData(this);
+	}
+	
+	private function addAreaControls(x:Number, y:Number):Void {
+		super.addAreaControls(0,25);	
+		var reportAreaTitle:TextField = createTextField("mReportAreaTitle",this.getNextHighestDepth(),0,y,this._width,20);
+		reportAreaTitle.text = _global.flamingo.getString(this,"titleReportArea");
+		reportAreaTitle.setTextFormat(textFormat);	
+		reportAreaTitle.selectable = false;
 	}
 
+	private function addReportSettingsControls(x:Number, y:Number):Void {
+		var reportSettingsTitle:TextField = createTextField("mReportSettingsTitle",this.getNextHighestDepth(),x,y,this._width,20);
+		reportSettingsTitle.text = _global.flamingo.getString(this,"titleReportSettings");
+		reportSettingsTitle.setTextFormat(textFormat);
+		reportSettingsTitle.selectable = false;
+		var initObject:Object = new Object();
+		initObject["_x"] = x;
+		initObject["_width"] = 250;
+		initObject["_y"] = y + 25;
+		initObject["selected"] = false;
+		initObject["label"] = " " + _global.flamingo.getString(this,"maxpop");
+		maxPop = CheckBox(attachMovie("CheckBox", "mMaxPop", this.getNextHighestDepth(),initObject));
+		initObject["_y"] += 25;
+		initObject["label"] = " " + _global.flamingo.getString(this,"werkdag");
+		werkdag = CheckBox(attachMovie("CheckBox", "mDag", this.getNextHighestDepth(),initObject));
+		initObject["_y"] += 25;
+		initObject["label"] = " " + _global.flamingo.getString(this,"werknacht");
+		werknacht = CheckBox(attachMovie("CheckBox", "mNacht", this.getNextHighestDepth(),initObject));
+		initObject["_y"] += 25;
+		initObject["label"] = " " + _global.flamingo.getString(this,"weekenddag");
+		weekenddag = CheckBox(attachMovie("CheckBox", "mWeekenddag", this.getNextHighestDepth(),initObject));
+		initObject["_y"] += 25;
+		initObject["label"] = " " + _global.flamingo.getString(this,"weekendnacht");
+		weekendnacht = CheckBox(attachMovie("CheckBox", "mWeekendnacht", this.getNextHighestDepth(),initObject));
+		initObject["_y"] += 25;
+		initObject["label"] = " " +  _global.flamingo.getString(this,"perpoptype");
+		perPopType = CheckBox(attachMovie("CheckBox", "mPerPopType", this.getNextHighestDepth(),initObject));	
+	}
 
-	function resetControls(){
+	function resetControls():Void{
 		if(this._visible){
 			removeStatusText();
 			enableInBox(true);
@@ -153,44 +207,64 @@ class ris.PopulatorSelector extends AbstractSelector {
 		}
 		setStatusText(busyText,"info",true);
 		this["mSendRequestButton"].enabled = false;
-		var area:Number = null;
-		if(areaSelectionType=="inGeometry"){
-			area = getArea(coords);
-		}  
-		if(areaSelectionType=="inBox"){
-			var crds:Array = coords.split(",");
-			area =(crds[2]-crds[0]) * (crds[3]-crds[1]); 	
+		var activities:String = ""; 
+		if(perPopType.selected){
+			activities = popData.getPopActivities();
+		} else {
+			activities = popData.getTotalActivities();
 		}
-		dataConnector.getReport(areaSelectionType,inArea, coords);
+			
+		PopulatorConnector(dataConnector).getReport(areaSelectionType, wktCoords, getAnalyzeTypes(),activities);
 	}
 	
 
+	private function getAnalyzeTypes():String {
+		var analyzeTypes:String="";
+		if (maxPop.selected){
+			analyzeTypes += "&eAnalyzeTypes=MAXIMUM";
+		}
+		if(werkdag.selected){
+			analyzeTypes += "&eAnalyzeTypes=WEEKDAG";
+		}
+		if(werknacht.selected){
+			analyzeTypes += "&eAnalyzeTypes=WEEKNACHT";
+		}
+		if(weekenddag.selected){
+			analyzeTypes += "&eAnalyzeTypes=EINDDAG";
+		}
+		if(weekendnacht.selected){
+			analyzeTypes += "&eAnalyzeTypes=EINDNACHT";
+		}
+		return analyzeTypes;	
+	}
 	
-	
-    function setAttribute(name:String, value:String):Void {	
-    	super.setAttribute(name,value);
-        switch (name) {
-			case "areasurl":
-				dataConnector.setAreasUrl(value);
-				break;	
-        }
-    }
 	
 	function onUpdate(map:MovieClip):Void{
 	}
 	
-	public function onAreaLoad(result : XML) : Void {
-			var areas:Array = new Array();
-		 	var list:Array = result.firstChild.childNodes;
-			for (var i = 0; i<list.length; i++) {	
-				if(list[i].nodeName == "Gebied"){
-					areas.push({label:list[i].attributes["label"],data:list[i].attributes["name"],type:list[i].attributes["type"]});
-				}
-			}
-			inAreaChoser.dataProvider = areas;
-			inAreaChoser.open();
-			inAreaChoser.close();
+	function onChangeBox(evtObj:Object):Void{
+		super.onChangeBox(evtObj);coords = llX.text + "," + llY.text + "," +  urX.text + "," + urY.text;
+		wktCoords = llX.text + " " + llY.text + "," +  llX.text + " " + urY.text + "," +  urX.text + " " + urY.text + "," +  urX.text + " " + llY.text + "," + llX.text + " " + llY.text;
 	}
+	
+	function onChangeGeometry(geometry:Geometry):Void{
+		super.onChangeGeometry(geometry);
+		var crds:Array = geometry.getCoords();
+		wktCoords = "";
+		for (var n:Number = 0; n<crds.length; n++){
+			this.wktCoords += crds[n].getX() + " " + crds[n].getY() + ",";
+		}
+		wktCoords = wktCoords.substr(0,wktCoords.length-1);	
+	}
+	
+	
+
+	public function onReportLoad(result : XML):Void {
+		var txt:String = popData.getReportString(result);
+		showReport(txt);
+	}	
+	
+	
 		
 
 }

@@ -136,6 +136,10 @@ class ris.PopulationDataSelector extends AbstractSelector {
 	
 	function init():Void{
 		super.init();
+		addAreaControls(0,0);
+		addButtons(20,280);
+		addStatusLine(0,350);
+		resetControls();
 		dataConnector.getAreas();
 	}
 
@@ -185,14 +189,7 @@ class ris.PopulationDataSelector extends AbstractSelector {
 	}
 	
 
-	function onChangeGeometry(geometry:Geometry):Void{
-		var crds:Array = geometry.getCoords();
-		coords = "";
-		for (var n:Number = 0; n<crds.length; n++){
-			this.coords += crds[n].getX() + "," + crds[n].getY() + ",";
-		}
-		coords = coords.substr(0,coords.length-2);	
-	}
+
 	
 	
     function setAttribute(name:String, value:String):Void {	
@@ -219,6 +216,13 @@ class ris.PopulationDataSelector extends AbstractSelector {
 			inAreaChoser.open();
 			inAreaChoser.close();
 	}
+	
+	public function onReportLoad(result : XML) : Void {
+		var txt:String = result.toString().split("\\t").join("\t");
+		txt = txt.split("\\n").join("\n");
+		showReport(txt);
+	}
+	
 		
 
 }
