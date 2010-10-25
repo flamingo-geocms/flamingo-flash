@@ -44,8 +44,6 @@ class ris.PopulatorConnector{
 	function getReport(areaSelectionType:String, coords:String, analyzeTypes:String, activities:String){
 	    var send_lv:LoadVars = new LoadVars();
     	//send_lv.sWKTArea = "POLYGON("  + coords + ")";
-    	//send_lv.sUser = "ipo";
-    	//send_lv.sPassword = "ipo2010";
     	//reportUrl = "http://services.bridgis.nl/geowebservice/populatoranalyze.asmx/RetrieveWKT"
     	send_lv.sendAndLoad(reportUrl + "?sUser=&sPassword=&sWKTArea=POLYGON((" + coords + "))" + analyzeTypes + activities, xmlResponse, "GET");
 	}
