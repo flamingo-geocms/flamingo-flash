@@ -32,7 +32,6 @@ class coremodel.service.tiling.factory.WMScTileFactory extends AbstractTileFacto
 		url+="&";
 		url+="BBOX="+tile.getBbox().getMinX()+","+tile.getBbox().getMinY()+","+tile.getBbox().getMaxX()+","+tile.getBbox().getMaxY();
 		url+="&";
-		
 		tile.setImageUrl(url);
 		tile=setTileScreenLocation(tile);
 		
