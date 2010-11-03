@@ -74,6 +74,7 @@ import geometrymodel.Envelope;
 import tools.Logger;
 import tools.Utils;
 
+import coremodel.service.tiling.connector.WMScConnector;
 
 class gui.layers.TilingLayer extends AbstractLayer{	
 	/*Statics*/
@@ -116,6 +117,8 @@ class gui.layers.TilingLayer extends AbstractLayer{
 	private var tileFactoryOptions:Object= new Object();
 	//this object will find the correct tilefactory
 	private var tileFactoryFinder:TileFactoryFinder;
+	
+	private var wmscConnector:WMScConnector;
 	
 	function TilingLayer(){
 		this.log = new Logger("gui.layers.TilingLayer",_global.flamingo.getLogLevel(),_global.flamingo.getScreenLogLevel());
@@ -267,9 +270,60 @@ class gui.layers.TilingLayer extends AbstractLayer{
 			}	
 		}
 	}
+	
 	function identify(identifyextent:Object):Void{
-		//log.debug("identify called");
+		if (getVisible() == false ) {
+			return;
+		}
+		var thisObj:Object = this;
+		var lConn:Object = new Object();
+		var starttime:Date = new Date();
+		lConn.onResponse = function(connector:WMScConnector) {
+			_global.flamingo.raiseEvent(thisObj, "onResponse", thisObj, "identify", connector);
+		};
+		lConn.onRequest = function(connector:WMScConnector) {
+			_global.flamingo.raiseEvent(thisObj, "onRequest", thisObj, "identify", connector);
+		};
+		lConn.onError = function(error:String, obj:Object, requestid:String) {
+			_global.flamingo.raiseEvent(thisObj, "onError", thisObj, "identify", error);
+		};
+		lConn.onGetFeatureInfo = function(features:Object, obj:Object, requestid:String) {
+			if (thisObj.map.isEqualExtent(thisObj.identifyextent, obj)) {
+				var identifytime = (new Date()-starttime)/1000;
+				for (var layer in features) {
+					var realname = thisObj.aka[layer];
+					if (realname != undefined) {
+						features[realname] = features[layer];
+						delete features[layer];
+					}
+				}
+				_global.flamingo.raiseEvent(thisObj, "onIdentifyData", thisObj, features, obj);
+				_global.flamingo.raiseEvent(thisObj, "onIdentifyComplete", thisObj, identifytime);
+			}
+		};
+		var args:Object = new Object();
+		args.WIDTH = Math.ceil(map.__width);
+		args.HEIGHT = Math.ceil(map.__height);
+		var ext:Object = map.getMapExtent();
+		args.BBOX = ext.minx+","+ext.miny+","+ext.maxx+","+ext.maxy;
+		for (var a in tileFactoryOptions){
+			if(a!=AbstractTileFactory.BBOX_KEY){
+				args[a] = tileFactoryOptions[a];
+			}
+		}
+		var rect = map.extent2Rect(identifyextent);
+		args.X = String(Math.round(rect.x+(rect.width/2)));
+		args.Y = String(Math.round(rect.y+(rect.height/2)));
+		if(wmscConnector == null){
+			wmscConnector = new WMScConnector();
+		}
+		wmscConnector.addListener(lConn);
+		_global.flamingo.raiseEvent(thisObj, "onIdentify", thisObj, identifyextent);
+		wmscConnector.getFeatureInfo(this.serviceUrl, args, this.map.copyExtent(identifyextent));
+
+		//log.debug("identify called");															
 	}
+	
 	function cancelIdentify():Void{
 		//log.debug("cancelIdentify called");
 	}
@@ -288,7 +342,7 @@ class gui.layers.TilingLayer extends AbstractLayer{
 		this.visible=true;
 	}
 	
-	function loadNewTiles(extent:Object,zoomLevel:Number){		
+	function loadNewTiles(extent:Object,zoomLevel:Number){	
 		this.newTiles = createNewTiles(extent,zoomLevel);
 		log.debug("number of new tiles created: "+newTiles.length);
 		//if new tiles needs to be loaded start the interval for loading tiles.
@@ -408,17 +462,18 @@ class gui.layers.TilingLayer extends AbstractLayer{
 		}
 	}
 	/*This function loads the image and creates the movieclip*/
-	private function loadTiles(){
+	private function loadTiles(){	
 		if (newTiles.length==0){			
 			clearInterval(this.intervalId);
 			return;
 		}
-		var tile:Tile=Tile(this.newTiles.pop());					
+		var tile:Tile=Tile(this.newTiles.pop());	
+						
 		var mcTile= this.tileStage.createEmptyMovieClip(tile.getTileId()+"("+this.processId+")",this.tileDepth++);
 		mcTile.tile=tile;
 		mcTile.processId=this.processId;
 		mcTile.finishedLoading=false;
-		var holder=mcTile.createEmptyMovieClip("holder",0);
+		var holder=mcTile.createEmptyMovieClip("holder" ,0);
 		mcTiles.push(mcTile);
 		this.tileLoader.loadClip(tile.getImageUrl(),holder);		
 	}
