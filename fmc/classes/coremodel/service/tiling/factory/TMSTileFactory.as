@@ -16,7 +16,7 @@ class coremodel.service.tiling.factory.TMSTileFactory extends AbstractTileFactor
 	*/
 	public function createTile(xIndex:Number, yIndex:Number, zoomLevel:Number):Tile{		
 		var tile = super.createTile(xIndex,yIndex,zoomLevel);
-		var url=serviceUrl+zoomLevel+"/"+xIndex+"/"+yIndex + ".png";	
+		var url=serviceUrl+zoomLevel+"/"+xIndex+"/"+yIndex;	
 		if (this.getExtraParams()!=null){
 			url+=url.indexOf("?")>=0 ? "&" : "?";		
 			for (var paramName in extraUrlParams){

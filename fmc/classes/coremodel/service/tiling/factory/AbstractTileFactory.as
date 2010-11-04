@@ -16,8 +16,8 @@ class coremodel.service.tiling.factory.AbstractTileFactory{
 	
 	private var resolutions:Array=null;
 	
-	private var tileWidth:Number=512;
-	private var tileHeight:Number=512;
+	private var tileWidth:Number=256;
+	private var tileHeight:Number=256;
 		
 	private var serviceBBox:Envelope=null;
 	
@@ -134,7 +134,7 @@ class coremodel.service.tiling.factory.AbstractTileFactory{
 	/*Get the fixed zoomlevel of the given Resolution from this service: 'res'
 	@param res The resolution resolution
 	*/
-	/*public function getZoomLevel(res:Number):Number{
+	public function getZoomLevel(res:Number):Number{
 		for (var i:Number =0; i < this.resolutions.length; i++){
 			//if the map res is larger then the service resolution or equal to (almost equal to, to fix the double inaccuracy problem)
 			if (res > this.resolutions[i] || ((res-this.resolutions[i] < 0.0000000001) && (res-this.resolutions[i] > -0.0000000001))){
@@ -143,17 +143,7 @@ class coremodel.service.tiling.factory.AbstractTileFactory{
 		}
 		log.debug("found none, return last zoomlevel (smallest)");
 		return (this.resolutions.length-1);
-	}*/
-	
-	public function getZoomLevel(res:Number):Number{		
-		var level : Number = 0;
-		while(level < this.resolutions.length - 1 && res < (this.resolutions[level] + this.resolutions[level + 1]) / 2) {
-			level++;
-		}
-		return level;
 	}
-	
-	
 	/*
 	Calculates the given worldExtent to the current mapRect Object (.x,.y,.width and .height)
 	*/
