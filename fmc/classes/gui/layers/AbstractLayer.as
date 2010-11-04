@@ -93,9 +93,7 @@ class gui.layers.AbstractLayer extends core.AbstractComponent{
 	}
 	
 	function setVisible(visible){
-		
 		this._visible=visible;
-		this.update();
 	}
 	function getVisible(){
 		return this._visible;
