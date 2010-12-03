@@ -196,9 +196,12 @@
 					attributes.value = featureObjects[i].attributes[attr];
 					ob.attributes = attributes;
 					attributeObjects.push(ob);
+					//iff _LAYERID_ is a child of the fields set the value as the layer name.
+					if (attributes.name=='_LAYERID_'){
+						layer=attributes.value;
+					}
 				}
 			}
-			
 			for (var a:Number = 0; a < attributeObjects.length; a++) {
 				var attributeName:String=attributeObjects[a].attributes.name;
 				var attributeValue:String=attributeObjects[a].attributes.value;
