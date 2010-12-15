@@ -1474,8 +1474,8 @@ function setVisible(vis:Boolean, id:String) {
 *  3 = layer is visible and maplayer is not visible
 */
 function getVisible(id:String):Number {
-	var ms:Number = map.getScaleHint(map.getMapExtent());
-	if (id.length == 0 or id == undefined) {
+	var ms:Number = map.getScaleHint(map.getMapExtent());	
+	if (id == undefined or id.length == 0) {
 		//examine whole layer
 		if (visible) {
 			if (minscale != undefined) {

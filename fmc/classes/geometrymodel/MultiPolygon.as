@@ -76,6 +76,9 @@ class geometrymodel.MultiPolygon extends Geometry {
 		var wktGeom:String="";
 		wktGeom+="MULTIPOLYGON(";		
 		for (var i=0; i < polygons.length; i++){
+			if (i!=0){
+				wktGeom+=",";
+			}
 			wktGeom+="("+Polygon(polygons[i]).toWKTPart()+")";
 		}
 		wktGeom+=")";
