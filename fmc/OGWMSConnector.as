@@ -205,7 +205,17 @@
 			for (var a:Number = 0; a < attributeObjects.length; a++) {
 				var attributeName:String=attributeObjects[a].attributes.name;
 				var attributeValue:String=attributeObjects[a].attributes.value;
+				//_global.flamingo.tracer(attributeName + "==" + attributeValue);
 				feature[attributeName] = attributeValue;
+				//if still "?" and there is only one querylayer (identifyperlayer in LayerOGWMS)
+				//layer equals querylayer
+				if (layer=="?"){
+						var qLayers:String = queryLayers;
+						var ql:Array = qLayers.split(",");
+						if(ql.length == 1){
+							layer = ql[0];
+						}
+				}
 				//try to solve the layer name....
 				if (layer=="?"){
 					if (attributeName.indexOf(".")>0 && attributeName.toLowerCase().indexOf("geometry")!=0){
@@ -217,12 +227,7 @@
 							}
 							layer+=tokens[t];
 						}
-					}
-					//if still "?" take the first querylayer
-					if (layer=="?"){
-						var qLayers:String = queryLayers;
-						layer = qLayers.split(",")[0];
-					}	
+					}			
 				}																								  
 			}
 			if (features[layer] == undefined) {
