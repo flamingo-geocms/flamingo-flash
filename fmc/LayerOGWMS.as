@@ -33,7 +33,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 * @file LayerOGWMS.swf (compiled layer, needed for publication on internet)
 * @file LayerOGWMS.xml (configurationfile for layer, needed for publication on internet)
 */
-//import roo.FilterLayerLayerOGWMSAdapter;
+import roo.FilterLayerLayerOGWMSAdapter;
 
 var version:String = "2.0";
 //---------------------------------
@@ -85,6 +85,10 @@ var noCache:Boolean = false;
 var visible_layers=null;
 var initialized:Boolean = false;
 
+//When true, an identify request will be sent for each sublayer seperately
+//when sending the identify request per sublayer you know the sublayer name when handling 
+//the response. The FeatureInfo response of ArcGisServer WMS often doesn't contain the 
+//faeturetype (or sublayer) name.  
 var identPerLayer:Boolean = false;
 var identsSent:Number = 0;
 
@@ -98,6 +102,7 @@ lMap.onChangeExtent = function(map:MovieClip) {
 	updateCaches();
 };
 lMap.onIdentify = function(map:MovieClip, identifyextent:Object):Void  {
+	//_global.flamingo.tracer("lMap.onIdentify");
 	identify(identifyextent);
 };
 lMap.onIdentifyCancel = function(map:MovieClip):Void  {
@@ -157,7 +162,7 @@ init();
 * @attr visible_layers Comma seperated list of layers that must be visible. If omitted all layers are visible.
 * @attr updateWhenEmpty deafult:true If set to false the layer will not get updated when the layerstring is empty(no sublayers), although the sld parameter may be set. The layer will be set invisible instead. 
 * @attr identPerLayer When true, an identify request will be sent for each sublayer seperately when sending the identify request per sublayer you know the sublayer name when handling the response. The FeatureInfo response of ArcGisServer WMS often doesn't contain the 
-faeturetype (or sublayer) name.  
+* faeturetype (or sublayer) name.  
 */
 /** @tag <layer>  
 * This defines a sublayer of an OG-WMS service.
@@ -646,7 +651,7 @@ function _update(nrtry:Number, forceupdate:Boolean){
 		}
 	}
 	var layerstring = getLayersString();
-	//_global.flamingo.tracer("_Update " + _global.flamingo.getId(this) + " layerstring==" + layerstring);
+	//_global.flamingo.tracer("_Update " + _global.flamingo.getId(this) + " layerstring==" + layerstring + "!updateWhenEmpty" + !updateWhenEmpty);
 	if (layerstring.length<=0 && ((this.attributes["sld"] == undefined)||!updateWhenEmpty)) {
 		_global.flamingo.raiseEvent(thisObj, "onUpdate", thisObj, nrtry);
 		_global.flamingo.raiseEvent(thisObj, "onUpdateComplete", thisObj, 0, 0, 0);
@@ -994,6 +999,7 @@ function handleSLDarg(argsLocal:Object):Object {
 	if ((argsLocal["SLD"] != null) && (argsLocal["SLD"] != "")) {
 		argsLocal["SLD"] = tools.Utils.trim(argsLocal["SLD"]);
 		argsLocal["SLD"] += escape(sldParam.split(" ").join("+")); //replace spaces with "+" and url encode (spaces must be 'double encoded')
+		//_global.flamingo.tracer(this + "this.filterLayerLayerOGWMSAdapter == " + this.filterLayerLayerOGWMSAdapter);
 		if (this.filterLayerLayerOGWMSAdapter != undefined) {
 		     argsLocal["SLD"] += this.filterLayerLayerOGWMSAdapter.getUrlFilter();
 		}
@@ -1508,7 +1514,7 @@ function getVisible(id:String):Number {
 		if (sublayer == undefined) {
 			return 0;
 		} else {
-			if (sublayer.visible) {
+			if (sublayer.visible==true||sublayer.visible==undefined) {
 				if (visible) {
 					if (sublayer.minscale != undefined) {
 						if (ms<sublayer.minscale) {
