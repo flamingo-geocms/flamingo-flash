@@ -1056,6 +1056,10 @@ function _refreshItem(mc:MovieClip, animate:Boolean) {
 			//mc.mSymbol._x+mc.mSymbol._width;
 			//mc.mLabel._y =Math.max(0, ((mc.mSymbol._height/2)-(mc.mLabel._height/2)));;
 		}
+		if (mc.mSymbol == undefined && mc.item.url != undefined && _getVisible(mc._parent._parent.item.listento)==1) {
+				loadSymbol(mc);
+				break;
+		}		
 		if (mc.mSymbol != undefined) {
 			mc.mSymbol._x = 0;
 			mc.mSymbol._y = 0;
@@ -1128,6 +1132,7 @@ function _getScale(listento:Object):Number {
 	return scale;
 }
 function _getVisible(listento:Object):Number {
+	//_global.flamingo.tracer("in _getVisible " + listento);
 	if (listento == undefined) {
 		return;
 	}
@@ -1168,6 +1173,7 @@ function _getVisible(listento:Object):Number {
 			//return vis;
 		}
 	}
+	//_global.flamingo.tracer("in _getVisible return " + vis);
 	return vis;
 }
 function _drawGroupLabel(mc:MovieClip, mouseover:Boolean) {
@@ -1344,47 +1350,54 @@ function drawLegend(list:Array, parent:MovieClip, _indent:Number) {
 				mc.mLabel.multiline = true;
 				mc.mLabel.selectable = false;
 			}
-			//symbol                                                                                
-			if (item.url != undefined) {
-				mc.createEmptyMovieClip("mSymbol", 2);
-				var listener:Object = new Object();
-				listener.onLoadError = function(mc:MovieClip, error:String, httpStatus:Number) {
-				};
-				listener.onLoadProgress = function(mc:MovieClip, bytesLoaded:Number, bytesTotal:Number) {
-				};
-				listener.onLoadInit = function(mcsymbol:MovieClip) {
-					//mc.init();
-					for (var attr in mcsymbol._parent.item) {
-						switch (attr) {
-						case "mSymbol" :
-						case "mLabel" :
-						case "url" :
-						case "indent" :
-						case "type" :
-						case "minscale" :
-						case "maxscale" :
-						case "dx" :
-						case "dy" :
-							break;
-						default :
-							mcsymbol[attr] = mcsymbol._parent.item[attr];
-						}	
-					}
-					if(mcsymbol["linkage"] != null){
-							mcsymbol.attachSymbol(mcsymbol["linkage"],1);
-						
-					}
-					mcsymbol.init();
-					_refreshItems(mcsymbol._parent);
-				};
-				var mcl:MovieClipLoader = new MovieClipLoader();
-				mcl.addListener(listener);
-				mcl.loadClip(flamingo.correctUrl(symbolpath+item.url), mc.mSymbol);
+			//symbol   
+                                          
+			if (item.url != undefined && _getVisible(mc._parent._parent.item.listento)==1) {
+				loadSymbol(mc);
 			}
 			break;
 		}
 	}
 }
+
+function loadSymbol(mc:MovieClip):Void{
+		mc.createEmptyMovieClip("mSymbol", 2);
+		var listener:Object = new Object();
+		listener.onLoadError = function(mc:MovieClip, error:String, httpStatus:Number) {
+		};
+		listener.onLoadProgress = function(mc:MovieClip, bytesLoaded:Number, bytesTotal:Number) {
+		};
+		listener.onLoadInit = function(mcsymbol:MovieClip) {
+			//mc.init();
+			for (var attr in mcsymbol._parent.item) {
+				switch (attr) {
+				case "mSymbol" :
+				case "mLabel" :
+				case "url" :
+				case "indent" :
+				case "type" :
+				case "minscale" :
+				case "maxscale" :
+				case "dx" :
+				case "dy" :
+					break;
+				default :
+					mcsymbol[attr] = mcsymbol._parent.item[attr];
+				}	
+			}
+			if(mcsymbol["linkage"] != null){
+					mcsymbol.attachSymbol(mcsymbol["linkage"],1);
+				
+			}
+			mcsymbol.init();
+			_refreshItems(mcsymbol._parent);
+		};
+		var mcl:MovieClipLoader = new MovieClipLoader();
+		mcl.addListener(listener);
+		mcl.loadClip(flamingo.correctUrl(symbolpath+ mc.item.url), mc.mSymbol);
+}
+		
+
 function _checkChildrenOf(mc:MovieClip, checked:Boolean) {
 	for (var item in mc.mItems) {
 		if (mc.mItems[item].chkButton != undefined) {
