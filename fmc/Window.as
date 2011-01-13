@@ -485,6 +485,14 @@ function setVisible(vis:Boolean):Void {
 	}
 	flamingo.raiseEvent(this, "onSetVisible", this, vis);
 }
+/**
+* returns the visibility of this object
+* @return boolean True if visible false if not visible
+*/
+function getVisible():Boolean{
+	return this.visible;
+}
+	
 function hide() {
 	visible = false;
 	flamingo.raiseEvent(this, "onHide", this);
