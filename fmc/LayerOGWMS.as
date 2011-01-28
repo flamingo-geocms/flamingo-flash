@@ -32,6 +32,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 * @file LayerOGWMS.fla (sourcefile)
 * @file LayerOGWMS.swf (compiled layer, needed for publication on internet)
 * @file LayerOGWMS.xml (configurationfile for layer, needed for publication on internet)
+* @change 2010-01-28 Added attribute InitService
 */
 var version:String = "2.0";
 //---------------------------------
@@ -82,6 +83,7 @@ var maxHttpGetUrlLength:Number=0;
 var noCache:Boolean = false;
 var visible_layers=null;
 var initialized:Boolean = false;
+var initService:Boolean= true;
 
 //When true, an identify request will be sent for each sublayer seperately
 //when sending the identify request per sublayer you know the sublayer name when handling 
@@ -161,6 +163,7 @@ init();
 * @attr updateWhenEmpty deafult:true If set to false the layer will not get updated when the layerstring is empty(no sublayers), although the sld parameter may be set. The layer will be set invisible instead. 
 * @attr identPerLayer When true, an identify request will be sent for each sublayer seperately when sending the identify request per sublayer you know the sublayer name when handling the response. The FeatureInfo response of ArcGisServer WMS often doesn't contain the 
 * faeturetype (or sublayer) name.  
+* @attr initService (default="true") if set to false the service won't do a getCap request to init the service. If set to false all parameters must be filled, and no #ALL# can be used.
 */
 /** @tag <layer>  
 * This defines a sublayer of an OG-WMS service.
@@ -366,7 +369,14 @@ function setConfig(xml:Object,dontGetCap:Boolean) {
 			} else {	
 				this.identPerLayer = false;
 			}
-			break;	
+			break;
+		case "initservice" :			
+			if (val.toLowerCase() == "false") {
+				this.initService  = false;
+			}else {
+				this.initService  = true;
+			}
+			break;			
 		default :
 			if (attr.toLowerCase().indexOf("xmlns:", 0) == -1) {
 				this.attributes[attr] = val;
@@ -502,8 +512,10 @@ function setConfig(xml:Object,dontGetCap:Boolean) {
 	if (args.SERVICE==undefined){
 		args.SERVICE="WMS";
 	}
-	if(!dontGetCap){
+	if(this.initService==true && !dontGetCap){
 		cogwms.getCapabilities(this.getcapabilitiesurl, args, lConn);
+	}else{
+		update();
 	}
 }
 
