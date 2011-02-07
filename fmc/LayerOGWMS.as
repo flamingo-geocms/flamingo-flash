@@ -967,7 +967,7 @@ function identify(extent:Object) {
   	if(identPerLayer){
   		identifyPerLayer(args,lConn);
   	} else {
-	  	args.LAYERS = querylayerstring;
+	  	args.LAYERS = getLayersString();
 		args.QUERY_LAYERS = querylayerstring;
 		sendIdentifyRequest(args,lConn);
   	}	
@@ -1002,7 +1002,6 @@ function sendIdentifyRequest(args:Object,lConn:Object){
 */
 
 function handleSLDarg(argsLocal:Object):Object {
-	
 	for (var attr in this.attributes) {
   	  argsLocal[attr.toUpperCase()] = this.attributes[attr];
 	}
