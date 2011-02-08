@@ -1,4 +1,4 @@
-/*-----------------------------------------------------------------------------
+﻿/*-----------------------------------------------------------------------------
 Copyright (C) 2006  Menko Kroeske
 
 This file is part of Flamingo MapComponents.
@@ -293,13 +293,16 @@ lFlamingo.onSetLanguage = function(fw:MovieClip, lang:String) {
 flamingo.addListener(lFlamingo, "flamingo", this);
 //---------------------------------------
 init();
+
+/*Show this element by setting all its parents (and grand parents etc.) to visible*/
 function show() {
 	//make sure that this component is visible
 	_visible = true;
-	var parent = flamingo.getParent(this);
+	var parent = this;
 	while (not flamingo.isVisible(parent) and parent != undefined) {
+		parent = flamingo.getParent(parent);
 		parent.show();
-		parent._visible = true;
+		parent._visible = true;		
 	}
 }
 /** @tag <fmc:IdentifyResultsHTML>  
