@@ -1265,7 +1265,7 @@ function drawLegend(list:Array, parent:MovieClip, _indent:Number) {
 									comp.setVisible(true);
 								}else{
 									//do not use comp.show() to avoid double updating								
-									comp.visible = true;
+									comp.setVisible(true);
 									comp.updateCaches();
 								}
 								_global.flamingo.raiseEvent(comp, "onShow", comp);
@@ -1273,7 +1273,7 @@ function drawLegend(list:Array, parent:MovieClip, _indent:Number) {
 								if (comp instanceof gui.layers.AbstractLayer){
 									comp.setVisible(false);
 								}else{
-									comp.visible = false;
+									comp.setVisible(false);
 								}
 								flamingo.raiseEvent(comp, "onHide", comp);
 							}
