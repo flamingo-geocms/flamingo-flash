@@ -1306,14 +1306,19 @@ dynamic class Map extends MovieClip {
 	* @param updatedelay:Number [optional] Delay in milliseconds. If updatedelay is undefined or -1 there will be no onUpdate event.
 	* @param movetime:Number [optional] Total time of move-animation. If movetime is 0, there wil be no animation. The Extent is set immediately. If movetime is undefined, the default movetime of the map will be used.  
 	* @param isNotCorrectedExtent:Boolean [optional] (Default:true). This indicates if the given extent is already CORRECTED with the aspect ratio of the screen.
+	* @param finishedChanging:Boolean [optional] (Default:true). This indicates if this function is called when the changing of the extent is finished (true) 
+	*	or if it's busy changing the extent and this is not the final exent (false)
 	*/
-	public function moveToExtent(extent:Object, updatedelay:Number, movetime:Number, isNotCorrectedExtent:Boolean):Void {
+	public function moveToExtent(extent:Object, updatedelay:Number, movetime:Number, isNotCorrectedExtent:Boolean, finishedChanging:Boolean):Void {
 		if (!this.isValidExtent(extent)) {
 			return;
 		}
 		if (isNotCorrectedExtent==undefined){
 			isNotCorrectedExtent=true;
 		}
+		if (finishedChanging==undefined){
+			finishedChanging=true;
+		}	
 		this.clearDrawings();
 		flamingo.raiseEvent(this, "onMaptipCancel", this);
 		// remember the original uncorrected extent
@@ -1335,7 +1340,8 @@ dynamic class Map extends MovieClip {
 			} else {
 			    eventType = 3;
 			}
-			flamingo.raiseEvent(this, "onReallyChangedExtent", this, this.copyExtent(extent), eventType);
+			if (finishedChanging)
+				flamingo.raiseEvent(this, "onReallyChangedExtent", this, this.copyExtent(extent), eventType);
 		}
 		//trace("----"+flamingo.getId(this));
 		//trace(this.__width+";"+this.__height);

@@ -92,10 +92,14 @@ lMap.onMouseDown = function(map:MovieClip, xmouse:Number, ymouse:Number, coord:O
 		lMap.onMouseMove = function(map:MovieClip, xmouse:Number, ymouse:Number, coord:Object) {
 			var dx = (x-xmouse)*msx;
 			var dy = (ymouse-y)*msy;
-			map.moveToExtent({minx:e.minx+dx, miny:e.miny+dy, maxx:e.maxx+dx, maxy:e.maxy+dy}, -1, 0);
+			map.moveToExtent({minx:e.minx+dx, miny:e.miny+dy, maxx:e.maxx+dx, maxy:e.maxy+dy}, -1, 0,true,false);
 			updateAfterEvent();
 		};
 		lMap.onMouseUp = function(map:MovieClip, xmouse:Number, ymouse:Number, coord:Object) {
+			var extent={minx:e.minx+dx, miny:e.miny+dy, maxx:e.maxx+dx, maxy:e.maxy+dy};
+			if (!map.isEqualExtent(e, extent)) {
+				flamingo.raiseEvent(map, "onReallyChangedExtent", map, map.copyExtent(extent), 1);
+			}			
 			//_parent._cursorid = "cursor";
 			var delay = pandelay;
 			var dx:Number = Math.abs(xmouse-x);
