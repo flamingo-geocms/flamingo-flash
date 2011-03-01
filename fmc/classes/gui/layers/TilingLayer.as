@@ -36,7 +36,7 @@
 * @attr serviceUrl the url of the server that is serving tiles. 
 * For example for a TMS server http://host/tileservice/1.0.0/tilemapname/ (include the version and tileMap Name)
 * @attr resolutions the different resolutions with tiles that are served.
-* @attr tilingType (optional,default: TMS) the type of tiling service. Possible values(for now): WMSc, TMS
+* @attr tilingType (optional,default: TMS) the type of tiling service. Possible values(for now): WMSc, TMS, ArcGisRest
 * @attr serviceenvelope the envelope/bbox from the server. For example: "12000,304000,280000,620000"
 * @attr extratiles (optional, default: 1) the number of extra tiles that are loaded when a user start panning (changing the extent)
 * A circle of x tiles wil be loaded around the visible extent. This is not done when zooming! only when panning.
@@ -81,15 +81,20 @@ class gui.layers.TilingLayer extends AbstractLayer{
 	private static var TILINGTYPE_ATTRNAME:String="type";
 	private static var SERVICEENVELOPE_ATTRNAME:String="serviceenvelope";
 	private static var EXTRATILES_ATTRNAME:String="extratiles";
+	private static var TILEWIDTH:String="tilewidth";
+	private static var TILEHEIGHT:String="tileheight";	
 	
-	private static var TMS_TILINGTYPE:String="TMS";
-	private static var WMSC_TILINGTYPE:String="WMSc";
+	public static var TMS_TILINGTYPE:String="TMS";
+	public static var WMSC_TILINGTYPE:String="WMSc";
+	public static var ARCGISREST_TILINGTYPE:String="ArcGisRest";
 	/*attributes*/
 	private var resolutions:Array=null;
 	private var tilingType:String=TMS_TILINGTYPE;
 	private var tileFactory:TileFactoryInterface=null;
 	private var serviceEnvelope:Envelope=null;
 	private var extraTiles:Number=1;
+	private var tileHeight:Number=256;
+	private var tileWidth:Number=256;
 	
 	private var newTiles:Array=new Array();
 	
@@ -139,6 +144,8 @@ class gui.layers.TilingLayer extends AbstractLayer{
 			this.tilingType=TMS_TILINGTYPE;			
 		}else if (tt.toLowerCase()==WMSC_TILINGTYPE.toLowerCase()){
 			this.tilingType=WMSC_TILINGTYPE;
+		}else if (tt.toLowerCase()==ARCGISREST_TILINGTYPE.toLowerCase()){
+			this.tilingType=ARCGISREST_TILINGTYPE;
 		}else{				
 			this.tilingType=TMS_TILINGTYPE;
 			log.error("TilingType value not supported: "+tt+" the default: "+TMS_TILINGTYPE+" is used");
@@ -151,6 +158,19 @@ class gui.layers.TilingLayer extends AbstractLayer{
 		if (!isNaN(extraTiles)){
 			this.extraTiles=extraTiles;
 		}
+	}
+	
+	public function getTileHeight():Number{
+		return this.tileHeight;
+	}
+	public function setTileHeight(tileHeight:Number):Void{
+		this.tileHeight=tileHeight;
+	}
+	public function getTileWidth():Number{
+		return this.tileWidth;
+	}
+	public function setTileWidth(tileWidth:Number):Void{
+		this.tileWidth=tileWidth;
 	}
 	
 	/**
@@ -170,6 +190,10 @@ class gui.layers.TilingLayer extends AbstractLayer{
 		//find the correct tileFactory.
 		this.tileFactory=tileFactoryFinder.findFactory(tileFactoryOptions);
 
+		//set tile height en width
+		this.tileFactory.setTileWidth(this.getTileWidth());
+		this.tileFactory.setTileHeight(this.getTileHeight());
+		
 		this.layerDepth=map.getNextDepth();
 		this.tileDepth=layerDepth;
 		this.tileStage = this.createEmptyMovieClip("tileStage", layerDepth);
@@ -202,6 +226,10 @@ class gui.layers.TilingLayer extends AbstractLayer{
 			}
 		}else if (lowerName==EXTRATILES_ATTRNAME){			
 			setExtraTiles(Number(value));
+		}else if (lowerName==TILEWIDTH){
+			setTileWidth(Number(value));
+		}else if (lowerName==TILEHEIGHT){
+			setTileHeight(Number(value));
 		}else{
 			return false;
 		}
@@ -299,7 +327,25 @@ class gui.layers.TilingLayer extends AbstractLayer{
 		}
 	}
 	/*Create the new tile objects. Tiles that already exist won't be created again.*/
-	private function createNewTiles(extent:Object,zoomLevel:Number):Array{		
+	private function createNewTiles(viewExtent:Object,zoomLevel:Number):Array{		
+		log.debug("CreateTiles with extent: "+viewExtent.minx +","+ viewExtent.miny +","+ viewExtent.maxx +","+ viewExtent.maxy);
+		var extent=copyExtent(viewExtent);
+		//make sure the extent is in the serviceEnvelope.
+		if (serviceEnvelope!=null){
+			if (extent.minx < serviceEnvelope.getMinX()){
+				extent.minx=serviceEnvelope.getMinX();
+			}
+			if (extent.maxx > serviceEnvelope.getMaxX()){
+				extent.maxx = serviceEnvelope.getMaxX();
+			}
+			if (extent.miny < serviceEnvelope.getMinY()){
+				extent.miny=serviceEnvelope.getMinY();
+			}
+			if (extent.maxy > serviceEnvelope.getMaxY()){
+				extent.maxy = serviceEnvelope.getMaxY();
+			}
+			log.debug("Correct extent with serviceEnvelope: "+extent.minx +","+ extent.miny +","+ extent.maxx +","+ extent.maxy);
+		}
 		var minXIndex:Number=tileFactory.getTileIndexX(extent.minx,zoomLevel);
 		var minYIndex:Number=tileFactory.getTileIndexY(extent.miny,zoomLevel);
 		var maxXIndex:Number=tileFactory.getTileIndexX(extent.maxx,zoomLevel);
@@ -308,6 +354,17 @@ class gui.layers.TilingLayer extends AbstractLayer{
 		if (isNaN(minXIndex) || isNaN(minYIndex) || isNaN(maxXIndex) || isNaN(maxYIndex)){
 			log.error("one of the tileindexes is not a number: \n MinxIndex: "+minXIndex+"\n MinYIndex: "+minYIndex+"\n MaxXIndex: "+maxXIndex+"\n MaxYIndex: "+maxYIndex);
 			return new Array();
+		}
+		//Make sure max is bigger then min
+		if (minXIndex > maxXIndex){
+			var temp=minXIndex;
+			minXIndex=maxXIndex;
+			maxXIndex=temp;
+		}
+		if (minYIndex > maxYIndex){
+			var temp= minYIndex;
+			minYIndex=maxYIndex;
+			maxYIndex=temp
 		}
 		log.debug("create tiles with zoomlevel "+zoomLevel+" from: "+minXIndex+" "+minYIndex+" to "+maxXIndex+" "+maxYIndex);
 		var tiles:Array = new Array();		
@@ -333,7 +390,6 @@ class gui.layers.TilingLayer extends AbstractLayer{
 				}else{
 					//make sure this movie clip stays in this process.
 					movieTile.processId=this.processId;
-					//TODO: check for resize! If needed, do a resize.
 				}
 				
 			}
@@ -441,7 +497,7 @@ class gui.layers.TilingLayer extends AbstractLayer{
 		tileMc._height=tile.getScreenHeight();
 		this.tilesToProcess--;
 		if (error!=undefined){
-			log.error("Error loading tile: "+error);
+			log.debug("Error loading tile: "+error);
 		}
 		//if there are no tiles to process, clear al the old tiles.
 		if (this.tilesToProcess==0){
@@ -480,5 +536,17 @@ class gui.layers.TilingLayer extends AbstractLayer{
 	/*Log the extent:Object*/
 	private function logExt(ext:Object){
 		log.debug("minx: "+ext.minx+" miny "+ext.miny+" maxx "+ext.maxx+" maxy "+ext.maxy);
+	}
+	/*Copy the extent*/
+	private function copyExtent(obj:Object):Object {
+		var extent = new Object();
+		for (var attr in obj) {
+			extent[attr] = obj[attr];
+		}
+		extent.minx = Number(extent.minx);
+		extent.miny = Number(extent.miny);
+		extent.maxx = Number(extent.maxx);
+		extent.maxy = Number(extent.maxy);
+		return extent;
 	}
 }

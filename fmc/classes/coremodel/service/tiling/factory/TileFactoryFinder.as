@@ -38,6 +38,12 @@ class coremodel.service.tiling.factory.TileFactoryFinder{
 														,options[AbstractTileFactory.SERVICEURL_KEY]
 														,options[AbstractTileFactory.MAP_KEY]);
 			
+		}else if (options[AbstractTileFactory.TILINGTYPE_KEY]==TilingLayer.ARCGISREST_TILINGTYPE){			
+			factory= new ArcGisRestTileFactory(options[AbstractTileFactory.RESOLUTIONS_KEY]
+														,options[AbstractTileFactory.BBOX_KEY]
+														,options[AbstractTileFactory.SERVICEURL_KEY]
+														,options[AbstractTileFactory.MAP_KEY]);
+						
 		}
 		var extraParams:Object = new Object();
 		for (var optionsKey in options){
