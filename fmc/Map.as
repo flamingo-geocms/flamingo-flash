@@ -63,6 +63,7 @@ dynamic class Map extends MovieClip {
 	public var maxscale:Number;
 	public var minscale:Number;
 	public var zoomScaleFactor:Number;
+	private var resolutions:Array;
 	public var movetime:Number;
 	public var movesteps:Number;
 	public var movequality:String;
@@ -340,6 +341,7 @@ dynamic class Map extends MovieClip {
 	* @attr minscale  A map cannot zoom further in than this scale (defined in mapunits per pixel).
 	* @attr maxscale  A map cannot zoom further out than this scale (defined in mapunits per pixel).
 	* @attr zoomscalefactor  The map zooms in steps with this factor starting with the minScale (minscale is required) and ending with the initialextent (when configured);
+	* @attr resolutions A comma seperated list of resolutions this map must use. From big to small. Can't be used in combination with 'zoomscalefactor'
 	* @attr initextenttoscale (defaultvalue "true") if set to false the init extent will not respect the zoomscale levels set with zoomscalefactor.
 	* @attr holdonupdate  (defaultvalue "false") True or false. True: the map cannot update until the previous update is completed.
 	* @attr holdonidentify (defaultvalue "false") True or false. True: the map cannot perform an identify until the previous identify is completed.
@@ -435,7 +437,20 @@ dynamic class Map extends MovieClip {
 				this.maxscale = Number(val);
 				break;
 			case "zoomscalefactor" :
+				if (this.resolutions!=undefined){
+					log.error("Resolutions and ZoomScaleFactor can't be used at the same time");
+				}
 				this.zoomScaleFactor = Number(val);
+				break;				
+			case "resolutions" :
+				if (this.zoomScaleFactor!=undefined){
+					log.error("Resolutions and ZoomScaleFactor can't be used at the same time");
+				}
+				var stringRes:Array = val.split(",");
+				this.resolutions= new Array();
+				for (var i=0; i < stringRes.length; i++){
+					this.resolutions[i]=Number(stringRes[i]);
+				}
 				break;				
 			case "initextenttoscale" :
 				if (val.toLowerCase() == "true") {
@@ -469,6 +484,13 @@ dynamic class Map extends MovieClip {
 			default :
 				break;
 			}
+		}
+		if (this.resolutions!=undefined && this.resolutions.length>1){
+			log.debug("set minscale and maxscale");
+			this.minscale=Number(resolutions[resolutions.length-1]);
+			this.maxscale=Number(resolutions[0]);
+			log.debug("new minscale: "+this.minscale);
+			log.debug("new maxscale: "+this.maxscale);
 		}
 		//
 		if (clearlayers) {
@@ -1212,6 +1234,27 @@ dynamic class Map extends MovieClip {
 				moveToScale(newScale,coord,updatedelay,movetime);
 				return;
 			}
+		}else if (this.resolutions!=undefined){
+			var currentResolutionIndex=0;
+			var curScale:Number = (this._currentextent.maxx-this._currentextent.minx)/this.__width;
+			//while the curScale is smaller then the resolutions in the list.
+			while (this.resolutions[currentResolutionIndex] > curScale+0.00000000001){
+				currentResolutionIndex++;
+			}
+			var newScale=curScale;
+			if(percentage>100){
+				newScale=this.resolutions[currentResolutionIndex+1];
+			} 
+			if(percentage<100){
+				newScale=this.resolutions[currentResolutionIndex-1];
+			}	
+			var intExtent:Object = copyExtent(_initialextent);
+			correctExtent(intExtent);
+			var initialScale:Number = ((intExtent.maxx-intExtent.minx)/this.__width);
+			if(newScale<initialScale){
+				moveToScale(newScale,coord,updatedelay,movetime);
+				return;
+			}
 		}
 		
 		//var ratio = 1
@@ -1329,7 +1372,7 @@ dynamic class Map extends MovieClip {
 			}
 			this._mapextent = this.copyExtent(extent);
 			this.correctExtent(this._mapextent);
-			if(zoomScaleFactor!=undefined){
+			if(zoomScaleFactor!=undefined || this.resolutions!=undefined){
 				//Zooming in steps, get the nearest zoomstep extent
 				this._mapextent = getNearestExtent(this._mapextent);
 			}
@@ -1402,8 +1445,19 @@ dynamic class Map extends MovieClip {
 		var curScale:Number = (extent.maxx-extent.minx)/this.__width;
 		var calcScale:Number = minscale;
 		//do while the calcScale is smaller then or les smaller then a small number (fix for double inaccuracy)
-		while(curScale > calcScale+0.00000000001){
-			calcScale = calcScale * zoomScaleFactor;
+		if (zoomScaleFactor!=undefined){
+			while(curScale > calcScale+0.00000000001){
+				calcScale = calcScale * zoomScaleFactor;
+			}
+		}else if (this.resolutions!=undefined){
+			var counter:Number=this.resolutions.length-1;
+			while(curScale > calcScale+0.00000000001){
+				if (counter < 0){
+					break;
+				}
+				calcScale = this.resolutions[counter];
+				counter--;
+			} 
 		}
 		
 		var intExtent:Object = copyExtent(_initialextent);
@@ -1422,6 +1476,7 @@ dynamic class Map extends MovieClip {
 		extent.maxy = extent.miny+nh;
 		
 		return extent;
+		
 	}
 	
 	//
