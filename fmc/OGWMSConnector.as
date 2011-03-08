@@ -543,9 +543,10 @@
 					switch (xstyle.childNodes[k].nodeName.toLowerCase()) {
 					case "name" :
 						style.name = xstyle.childNodes[k].firstChild.nodeValue;
+						/* Don't set the style with a random style of the getCap.... Empty style is default.
 						if (layer.style == undefined) {
 							layer.style = style.name;
-						}
+						}*/
 					case "title" :
 						style.title = xstyle.childNodes[k].firstChild.nodeValue;
 					case "legendurl" :
