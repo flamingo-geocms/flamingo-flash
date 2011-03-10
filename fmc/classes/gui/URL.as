@@ -236,7 +236,7 @@ class gui.URL extends AbstractComponent  {
 		if(map!=null && addExt){
 			var extent:Object = map.getCurrentExtent();
 			if(extent!=null){
-				paramStr += "ext=" + extent.minx + "," + extent.miny + "," + extent.maxx + "," + extent.maxy + "&" ;
+				paramStr += "ext=" + Math.round(extent.minx) + "," +  Math.round(extent.miny) + "," +  Math.round(extent.maxx) + "," +  Math.round(extent.maxy) + "&" ;
 			}		
 		} 
 		if(map!=null && addTheme){
@@ -246,7 +246,7 @@ class gui.URL extends AbstractComponent  {
 			}
 		}
 		if(map!=null && addLayerVisibility){
-			paramStr += buildVisibilityParams() + "&";
+			paramStr += buildVisibilityParam() + "&";
 		}
 		if(legend==undefined){
 			legend = _global.flamingo.getComponent(legendId);	
@@ -265,38 +265,33 @@ class gui.URL extends AbstractComponent  {
 		return group;
 	}
     
-    private function buildVisibilityParams():String {
+    private function buildVisibilityParam():String {
     	var params:String = "";
     	var lyrs:Array = map.getLayers();
     	var lyrsinvis:String = ""; 
     	var lyrsvis:String = ""; 
     	//do not list all invisible layers in url, otherwise the url will become too long
-    	//so first make all layers invisible and than make the visible layers visible again
+    	//so first make all layers and sublayers invisible (in js) 
+    	//and than make the visible layers visible again
     	for(var i:Number = 0; i< lyrs.length; i++){
     		var lyrId:String =  lyrs[i].substring(mapId.length + 1);
-    		lyrsinvis += lyrId + ",";
     		var lyr:Object = _global.flamingo.getComponent(lyrs[i]);
-    		if(lyr._getVisLayers().indexOf("1")!=-1 && lyr.getVisible() > 0){
-		    		var slyrs:Object = lyr.getLayers();
-		    		var allVis:Boolean = true;
-		    		var slyrsVis:String = "{"; 
-		    		for(var a in slyrs){
-		    			if(slyrs[a].visible){
-		    				slyrsVis += a + ","; 
-		    				//lyrsvis += lyrId + "." + a + ",";
-		    			} else {
-		    				allVis = false;
-		    			}	
-		    		}
-		    		if(!allVis){
-		  				lyrsvis +=  lyrId + slyrsVis.substring(0,slyrsVis.length -1) + "},";
-		    		} else {
-		    			lyrsvis += lyrId + "},";
-		    		}		 
+    		var slyrs:Object = lyr.getLayers();
+    		var slyrsVis:String = "{"; 
+    		//add the visibility of the layer ("f" = false and "t" = true)
+    		if(lyr.getVisible() <= 0){
+    			slyrsVis += "f,";
+    		} else {
+    			slyrsVis += "t,";
     		}
+    		for(var a in slyrs){
+    			if(slyrs[a].visible){
+    				slyrsVis += a + ","; 
+    			}	
+    		}
+   			lyrsvis +=  lyrId + slyrsVis.substring(0,slyrsVis.length -1) + "},";
     	}	
-    	params +=  "layersInvisible=" + lyrsinvis.substr(0, lyrsinvis.length -1);
-    	params += "&layersVisible=" + lyrsvis.substr(0, lyrsvis.length -1);
+    	params += "layersVisible=" + lyrsvis.substr(0, lyrsvis.length -1);
     	return params;
     }
     
@@ -304,11 +299,11 @@ class gui.URL extends AbstractComponent  {
     	var params:String = "";
     	//do not list all groupclosed in url, otherwise the url will become too long
     	//so first close allgroups and than open the opengroups
-    	params+="groupsclosed=all&"
+    	params+="groupsclosed=all&";
     	var groupsOpen:Array = legend.getGroups(false);
     	//var groupsClosed:Array = legend.getGroups(true);
     	if(groupsOpen.length > 0){
-    		params+="groupsopen=" + groupsOpen.toString();;
+    		params+="groupsopen=" + groupsOpen.toString();
     	}
     	return params;
     }
