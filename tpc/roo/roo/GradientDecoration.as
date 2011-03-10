@@ -1,4 +1,4 @@
-/*-----------------------------------------------------------------------------
+﻿/*-----------------------------------------------------------------------------
 * This file is part of Flamingo MapComponents.
 * Author: Linda Vels.
 * IDgis bv
@@ -59,7 +59,11 @@ class roo.GradientDecoration extends AbstractComponent {
 	 		} 	
 	 	} else if (name == "linecolor") {
 	 		linecolor = Number(value);
-	 	} 
+	 	} else if (name == "alpha1") {
+            alpha1 = Number(value);
+        } else if (name == "alpha2") {
+            alpha2 = Number(value);
+	 	}
 	}
 	
 	
