@@ -184,7 +184,8 @@ class gui.PrintTemplate extends ScalableContainer {
 
     }
     
-    private function showMap(){
+    function showMap(){
+    	
     	synchronizeLayers();
 		addLayerListeners();
 		maps[0].moveToExtent(map.getCurrentExtent(), 0, 0);
