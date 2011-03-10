@@ -84,7 +84,12 @@ class gui.dde.DownloadLegend extends MovieClip implements DDEConnectorListener{
 			}	
 			if(itemclips==undefined || itemclips.length == 0){
 				itemclips = new Array();
-				drawLegend(legend.legenditems, this, 0);
+				if(legend.allLegenditems == undefined){
+					legenditems = legend.legenditems;
+				} else {
+					legenditems = legend.allLegenditems;
+				}
+				drawLegend(legenditems, this, 0);
 				refresh();
 			}		
 		} 
