@@ -1233,8 +1233,8 @@ function initControls() {
 		var ext = evt_obj.target.selectedItem.data;
 		foundlocations = new Array();
 		foundlocations.push({label:label, extent:ext});
-		flamingo.raiseEvent(thisObj, "onFindLocation", thisObj, foundlocations, true);
 		_zoom(0);
+		flamingo.raiseEvent(thisObj, "onFindLocation", thisObj, foundlocations, true);	
 	};
 	mHolder.cbFeature.addEventListener("change", cbListener2);
 	//
