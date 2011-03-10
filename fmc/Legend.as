@@ -59,6 +59,7 @@ var backgroundalpha:Number = 100;
 var backgroundcolor:Number = 0x55dd00;
 var indent:Number = 14;
 var legenditems:Array;
+var allLegenditems:Array;
 var itemclips:Array;
 var scales:Object = new Object();
 var hit:Boolean = false;
@@ -181,8 +182,10 @@ function init():Void {
 	mScrollPane.setStyle("borderColor", "none");
 	mScrollPane.drawFocus = "";
 	
-	//LV:initialize itemclips in init()
+	//initialize itemclips in init()
 	itemclips = new Array();
+	//allLegendItems keeps the model of the legend for later reference by the DDEDownloadLegend 
+	allLegenditems = new Array();
 	
 	//defaults
 	this.setConfig(defaultXML);
@@ -293,6 +296,9 @@ function parseCustomAttr(xml:Object){
 		} else {
 			setGroupCollapsed(groupsclosed[a],legenditems,true)
 		}
+	}
+	for(var i:Number = 0;i<legenditems.length; i++){
+		 allLegenditems.push(legenditems[i]);
 	}
 	drawLegend(legenditems, mScrollPane.content, 0);
 	refresh();
@@ -1141,7 +1147,7 @@ function _getVisible(listento:Object):Number {
 		//if one is visible (vis == 1) return
 		var mc:MovieClip = flamingo.getComponent(maplayer);	
 		if (listento[maplayer].length == 0) {
-			if(mc.getVisible(lyrs[i])==1){
+			if(mc.getVisible(lyrs[i])==1 || mc.getVisible()==true){
 				return 1;
 			}
 			if(mc.getVisible(lyrs[i]) > vis){
@@ -1265,7 +1271,7 @@ function drawLegend(list:Array, parent:MovieClip, _indent:Number) {
 									comp.setVisible(true);
 								}else{
 									//do not use comp.show() to avoid double updating								
-									comp.setVisible(true);
+									comp.visible = true;
 									comp.updateCaches();
 								}
 								_global.flamingo.raiseEvent(comp, "onShow", comp);
@@ -1273,7 +1279,7 @@ function drawLegend(list:Array, parent:MovieClip, _indent:Number) {
 								if (comp instanceof gui.layers.AbstractLayer){
 									comp.setVisible(false);
 								}else{
-									comp.setVisible(false);
+									comp.visible = false;
 								}
 								flamingo.raiseEvent(comp, "onHide", comp);
 							}
