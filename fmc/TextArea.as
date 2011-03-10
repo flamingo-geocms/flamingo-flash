@@ -33,6 +33,7 @@ var defaultXML:String= "<?xml version='1.0' encoding='UTF-8'?>" +
   					   "<style id='.text' font-family='verdana' font-size='13px' color='#666666' display='block' font-weight='bold'/>" +
   					   "</TextArea>";
 var usetextarea:Boolean = true;
+var wordwrap:Boolean = true;
 //true
 var lParent:Object = new Object();
 lParent.onResize = function(mc:MovieClip) {
@@ -93,6 +94,19 @@ function setConfig(xml:Object) {
 	//load default attributes, strings, styles and cursors 
 	flamingo.parseXML(this, xml);
 	//parse custom attributes
+	for (var attr in xml.attributes) {
+		var val:String = xml.attributes[attr];
+		switch (attr.toLowerCase()) {
+		case "wordwrap" :
+			if (val.toLowerCase() == "true") {
+				this.wordwrap = true;
+			} else {
+				this.wordwrap = false;
+			}
+			break;
+		}
+	}
+	
 	if (usetextarea) {
 		var mc = this.createClassObject(mx.controls.TextArea, "ta", 1);
 		mc.html = true;
@@ -101,14 +115,14 @@ function setConfig(xml:Object) {
 		mc.hScrollPolicy = "auto";
 		//on, auto
 		mc.vScrollPolicy = "auto";
-		mc.wordWrap = true;
+		mc.wordWrap = wordwrap;
 		_global.styles.TextArea.backgroundColor = undefined;
 		mc.setStyle("backgroundColor", "");
 	} else {
 		var mc:TextField = this.createTextField("ta", 0, 0, 0, 10, 10);
 		mc.selectable = false;
 		mc.multiline = true;
-		mc.wordWrap = true;
+		mc.wordWrap = wordwrap;
 		mc.condenseWhite = true;
 		mc.html = true;
 		mc.styleSheet = flamingo.getStyleSheet(this);
