@@ -83,8 +83,10 @@ lMap.onIdentifyProgress = function(map:MovieClip, layersindentified:Number, laye
 	txtHeader.htmlText = "<span class='status'>"+s+"</span>";
 };
 lMap.onIdentifyData = function(map:MovieClip, maplayer:MovieClip, data:Object, extent:Object) {
+
 	flamingo.raiseEvent(map, "onCorrectIdentifyIcon", map, extent);
 	var layerid = flamingo.getId(maplayer);
+	
 	var mapid = flamingo.getId(map);
 	var id = layerid.substring(mapid.length+1, layerid.length);
 	//store info 
@@ -96,17 +98,38 @@ lMap.onIdentifyData = function(map:MovieClip, maplayer:MovieClip, data:Object, e
 		//info[id][layerid] = data[layerid];
 		//
 		// get string from language object
-		var stringid = id+"."+layerid;
+		var stringid = id.toLowerCase()+"."+layerid.toLowerCase();
 		var infostring = flamingo.getString(thisObj, stringid);
 		var lyrInfo:String = "";
 		if (infostring != undefined) {
 			//this layer is defined so convert infostring
-			var stripdatabase = flamingo.getString(thisObj, stringid, "", "stripdatabase");
+			var stripdatabase = flamingo.getString(thisObj, stringid, "", "stripdatabase");	
+			var records:Array = new Array();
 			for (var record in data[layerid]) {
 				var tInfo:String = convertInfo(infostring, data[layerid][record]);
+				var rec:Object = new Object();
+				rec.info = tInfo;
+				if(thisObj.strings[stringid]["childstrings"]!=undefined){
+					var children:Array = thisObj.strings[stringid]["childstrings"].split(",");	
+					var parentidfield:String = 	thisObj.strings[stringid]["parentidfield"];
+					var parentid:String = data[layerid][record][parentidfield];
+				}	
+				if(parentid!=undefined){
+					rec.children = children;
+					rec.parentid = parentid;
+				}
+				if(thisObj.strings[stringid]["childidfield"]!=undefined){
+					var childidfield:String = 	thisObj.strings[stringid]["childidfield"];
+					var childid:String = data[layerid][record][childidfield];
+					rec.childid = childid;
+				}
+				records.push(rec);
 				textinfo += tInfo;
 				lyrInfo += tInfo;
+				
 			}
+			infoStrings[stringid] = new Object();
+			infoStrings[stringid].recordStrings = records;
 		} else {
 			//for this layer no infostring is defined
 			if (not denystrangers) {
@@ -121,14 +144,23 @@ lMap.onIdentifyData = function(map:MovieClip, maplayer:MovieClip, data:Object, e
 					}
 				}
 			}
+			infoStrings[stringid] = lyrInfo;
 		}
+
+		
 		//Store in Object for later display (showInOrder=="true"); 
-		infoStrings[stringid] = lyrInfo;
+		
+		
+		
+		
+		
 	}
 	if(!showInOrder){
 		txtInfo.htmlText = textinfo;
 	}
 };
+
+
 function convertInfo(infostring:String, record:Object):String {
 	var t:String;
 	t = infostring;
@@ -167,7 +199,7 @@ function convertInfo(infostring:String, record:Object):String {
 			}
 			var totalStr = + t.substr(0,from) + "\r";
 			for (var i:Number=0;i<valArray.length;i++){
-				totalStr += t.substring(from + 5,to).split(fieldname).join(valArray[i])+ "\r"; 	
+				totalStr += t.substring(from + 5,to).split(fieldname).join(tools.Utils.trim(valArray[i]))+ "\r"; 	
 			}	
 			totalStr += t.substr(to + 5);
 			t=totalStr;
@@ -246,10 +278,15 @@ function showOrderedText(map:MovieClip):Void{
 		var orderedText:String = "";
 		if(order!=null){
 			for(var i:Number = 0; i< order.length; i++){
-				if(infoStrings[tools.Utils.trim(order[i])]!=undefined){
-		
-					orderedText += infoStrings[tools.Utils.trim(order[i])];
-				}
+				var infoid:String = tools.Utils.trim(order[i]).toLowerCase();			
+				var recordStrings:Array = infoStrings[infoid].recordStrings;
+				for(var l:Number = 0; l< recordStrings.length; l++){
+					orderedText += recordStrings[l].info;
+					var children:Array = recordStrings[l].children; 
+					for(var j:Number=0;j<children.length;j++){
+						orderedText += getChildString(children[j],recordStrings[l]["parentid"]);
+					}
+				}	
 			}
 		} else {
 			var lyrs:Array = map.getLayers();
@@ -275,6 +312,20 @@ function showOrderedText(map:MovieClip):Void{
 			txtInfo.htmlText = orderedText;
 		}
 }
+
+function getChildString(stringid:String,parentid:String):String{
+	var childStrings:Array = infoStrings[stringid].recordStrings;
+	var childText:String = "";
+	for(var k:Number = 0; k< childStrings.length; k++){
+		if(childStrings[k].childid == parentid){
+			childText +=  childStrings[k].info;
+		}
+	}
+	return childText;
+		
+	
+	
+}
 //---------------------------------------
 var lParent:Object = new Object();
 lParent.onResize = function(mc:MovieClip) {
@@ -293,16 +344,13 @@ lFlamingo.onSetLanguage = function(fw:MovieClip, lang:String) {
 flamingo.addListener(lFlamingo, "flamingo", this);
 //---------------------------------------
 init();
-
-/*Show this element by setting all its parents (and grand parents etc.) to visible*/
 function show() {
 	//make sure that this component is visible
 	_visible = true;
-	var parent = this;
+	var parent = flamingo.getParent(this);
 	while (not flamingo.isVisible(parent) and parent != undefined) {
-		parent = flamingo.getParent(parent);
 		parent.show();
-		parent._visible = true;		
+		parent._visible = true;
 	}
 }
 /** @tag <fmc:IdentifyResultsHTML>  
@@ -499,7 +547,7 @@ function setConfig(xml:Object) {
 			seperatedfields=val.split(","); 
 			break;
 		case "seperator":	
-			seperator=val; 
+			seperator=tools.Utils.trim(val); 
 			break;
 		case "emptywhennotfound":
 			if (val.toLowerCase() == "true") {
@@ -546,6 +594,19 @@ function removeStringObject(stringid:String):Boolean {
 		return false;
 	}
 }
+/**
+* Removes all string objects for one layer.
+* @param layerid String id of the layer object.
+*/	
+function removeStringObjectsForLayer(layerid):Void {
+	for (var id in this.strings) {
+		if(id.indexOf(layerid + ".") != -1){  
+			delete this.strings[id];
+		}
+	} 
+}
+
+
 /**
 * Removes all string objects.
 * @return Boolean True or false. Indicates succes or failure. 
