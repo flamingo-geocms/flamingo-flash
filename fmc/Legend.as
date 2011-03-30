@@ -515,7 +515,7 @@ function addItem(xml:Object, items:Array, insertIndex:Number):Void {
 								var sublayer = "";
 							} else {
 								var layer = thisObj.listento[0]+"_"+a[j].split(".")[0];
-								var sublayer = a[j].split(".")[1];
+								var sublayer = a[j].substring(a[j].split(".")[0].length+1);								
 							}
 							if (item.listento[layer] == undefined) {
 								item.listento[layer] = sublayer;
@@ -1291,6 +1291,7 @@ function drawLegend(list:Array, parent:MovieClip, _indent:Number) {
 								comp.updateCaches();
 								_global.flamingo.raiseEvent(comp, "onShow", comp);
 							}
+							trace("The layers to set visible: "+layers.concat(","));
 							comp.setLayerProperty(layers, "visible", checked);
 						}
 						//do update here to make sure that show/hide and setLayerProperty is done before update.
