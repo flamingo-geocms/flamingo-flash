@@ -517,7 +517,6 @@ class gui.layers.TilingLayer extends AbstractLayer{
 	* @param alpha, number between 0 and 100, 0=transparent, 100=opaque
 	*/
 	public function setAlpha(alpha:Number){
-		log.debug("setAlpha: "+alpha);
 		if (this.tileStage!=null){
 			this.tileStage._alpha=alpha;
 			_global.flamingo.raiseEvent(this, "onSetValue", "setAlpha", alpha, this);
