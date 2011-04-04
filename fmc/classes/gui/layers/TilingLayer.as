@@ -43,6 +43,7 @@
 * A floating number is posible. For example: 0.5 when you want the next tile to be loaded when the user is halfway a previous tile.
 * @attr minscale the minscale of visibility of this layer.
 * @attr maxscale the maxscale of visibility of this layer.
+* @attr alpha (defaultvalue = "100") Transparency of the layer.
 **/
 /** @tag <TilingParam>
 * With this tag you can define extra parameters for the tilingFactory
@@ -95,6 +96,9 @@ class gui.layers.TilingLayer extends AbstractLayer{
 	private var extraTiles:Number=1;
 	private var tileHeight:Number=256;
 	private var tileWidth:Number=256;
+	
+	/*The init alpha (setAlpha is called before the making of the tileStage*/
+	private var initAlpha=null;
 	
 	private var newTiles:Array=new Array();
 	
@@ -197,6 +201,9 @@ class gui.layers.TilingLayer extends AbstractLayer{
 		this.layerDepth=map.getNextDepth();
 		this.tileDepth=layerDepth;
 		this.tileStage = this.createEmptyMovieClip("tileStage", layerDepth);
+		if (this.initAlpha!=null){
+			setAlpha(this.initAlpha);
+		}
 		//start with the mapExtent as the loadedTileExtent (later it will be made greater anyways)
 		this.loadedTileExtent=map.getMapExtent();
 		//do the first update.
@@ -504,6 +511,30 @@ class gui.layers.TilingLayer extends AbstractLayer{
 			_global.flamingo.raiseEvent(this, "onUpdateComplete", this, 0, 0, 0);
 			removeAllButProcessId(this.processId);
 		}			
+	}
+	/**
+	* Set the alpha for this layer.
+	* @param alpha, number between 0 and 100, 0=transparent, 100=opaque
+	*/
+	public function setAlpha(alpha:Number){
+		log.debug("setAlpha: "+alpha);
+		if (this.tileStage!=null){
+			this.tileStage._alpha=alpha;
+			_global.flamingo.raiseEvent(this, "onSetValue", "setAlpha", alpha, this);
+		}else{
+			this.initAlpha=alpha;
+		}
+	}
+	/**
+	* Gets the transparancy of this layer.
+	* @return alpha, number between 0 and 100, 0=transparent, 100=opaque
+	*/
+	function getAlpha(){
+		if (this.tileStage!=null){
+			return this.tileStage._alpha;
+		}else{
+			return this.initAlpha;
+		}
 	}
 		
 	/*DEBUG functions:*/

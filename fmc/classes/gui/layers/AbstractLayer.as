@@ -8,6 +8,7 @@ class gui.layers.AbstractLayer extends core.AbstractComponent{
 	private static var ID_ATTRNAME:String="id";
 	private static var MINSCALE_ATTRNAME:String="minscale";
 	private static var MAXSCALE_ATTRNAME:String="maxscale";
+	private static var ALPHA_ATTRNAME:String="alpha";
 	
 	/*attributes*/
 	private var map:Object = null;
@@ -41,6 +42,8 @@ class gui.layers.AbstractLayer extends core.AbstractComponent{
 			this.setMinScale(Number(value));			
 		}else if(lowerName==MAXSCALE_ATTRNAME){
 			this.setMaxScale(Number(value));
+		}else if(lowerName==ALPHA_ATTRNAME){
+			this.setAlpha(Number(value));
 		}else{
 			if(!setLayerAttribute(name,value)){
 				log.warn("Attribute with name: "+name+" is not available for this component");
@@ -164,4 +167,5 @@ class gui.layers.AbstractLayer extends core.AbstractComponent{
 	function doHide():Void{}
 	function doShow():Void{}
 	function setLayerAttribute(name:String, value:String):Boolean{return false;}
+	function setAlpha(alpha:Number):Void{}
 }
