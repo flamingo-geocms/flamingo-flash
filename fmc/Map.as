@@ -46,6 +46,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 * Author:Linda Vels,IDgis bv
 */
 import tools.Logger;
+import gui.marker.DefaultMarker;
+import gui.marker.FOVMarker;
 
 dynamic class Map extends MovieClip {
 	//
@@ -109,7 +111,7 @@ dynamic class Map extends MovieClip {
 	private var nextDepth:Number=0
 	private var markers:Array=null;
 	private var markerIDnr:Number = 0;
-	
+	private var fovMarker=null;
 	public var nrOfServiceLayers:Number = 0;
 	public var log=null;
 	
@@ -2308,13 +2310,11 @@ dynamic class Map extends MovieClip {
 			for (var i:Number=0; i<markers.length; i++) {
 				if (markers[i].getId() == id){
 					//update the existing marker
-					markers[i].setXY(x,y);
-					markers[i].setType(type);
+					markers[i].setX(x);
+					markers[i].setY(y);
 					markers[i].setWidth(width);
-					markers[i].setHeight(height);
-					markers[i].setHTMLText(htmlText);
-					
-					markers[i].redraw(this._currentextent,this.__width,this.__height);
+					markers[i].setHeight(height);					
+					markers[i].redraw();
 					existingMarker = true;
 				}
 			}
@@ -2344,46 +2344,39 @@ dynamic class Map extends MovieClip {
 	*/
 	public function removeAllMarkers():Void {
 		for (var i:Number=0; i<markers.length; i++) {
-			var lMap:Object = new Object();
-			_global.flamingo.removeListener(lMap,this, markers[i]);
 			markers[i].removeMovieClip();
 		}
 		markers = null;
 	}
 	private function createMarker(id:String,type:String,x:Number,y:Number,width:Number,height:Number,htmlText:String):Object {
-		var coordinate:Object = new Object();
-		coordinate.x = x;
-		coordinate.y = y;
-		var p:Object = this.coordinate2Point(coordinate, this._currentextent);
-		
-		//create new marker		
-		var initObject:Object = new Object();
-		initObject["x"] = x;
-		initObject["y"] = y;
-		initObject["_x"] = p.x;
-		initObject["_y"] = p.y;
-		initObject["id"] = id;
-		initObject["markerIDnr"] = markerIDnr;
-		initObject["type"] = type;
-		initObject["width"] = width;
-		initObject["height"] = height;
-		initObject["htmlText"] = htmlText;
-				
-		var depth:Number = this.getNextDepth() + markerIDnr;	//note the default as2 method getNextDepth() is overruled in this class to ensure the Marker is on top.
-		var mcMarker:Object = this.attachMovie("Marker", "mcMarker"+markerIDnr, depth, initObject);
-		mcMarker.init();
-		markerIDnr++;
-				
-		//addListener for redrawing
-		var thisObj:Object = this;
-		var lMap:Object = new Object();
-		lMap.onChangeExtent = function(map:MovieClip) {
-			mcMarker.redraw(thisObj._currentextent,thisObj.__width,thisObj.__height);
-		};
-		_global.flamingo.addListener(lMap,this, mcMarker);
-		
+		//create new marker				
+		var mcMarker= new DefaultMarker();
+		mcMarker.setId(id);
+		mcMarker.setMap(this);
+		mcMarker.setX(x);
+		mcMarker.setY(y);
+		mcMarker.setWidth(width);
+		mcMarker.setHeight(height);
+		mcMarker.draw();
 		return mcMarker;
 	}
+	/*New fov*/
+	public function setFov(x,y,url){
+		markerIDnr++;
+		log.debug("setMarker");
+		if (this.fovMarker==null){
+			log.debug("create new fovMarker");
+			this.fovMarker= new FOVMarker();
+			this.fovMarker.setId(markerIDnr);
+			this.fovMarker.setMap(this);
+			this.fovMarker.setX(x);
+			this.fovMarker.setY(y);
+			//this.fovMarker.setMarkerUrl(_global.flamingo.correctUrl(url));
+			this.fovMarker.draw();
+		}
+			
+	}
+	
 	/*give a extent and return as string*/
 	public function extentToString(extent):String{
 		var str="";
