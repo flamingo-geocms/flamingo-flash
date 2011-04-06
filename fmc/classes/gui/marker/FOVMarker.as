@@ -21,12 +21,20 @@ class gui.marker.FOVMarker extends AbstractMarker {
 		
 		//end point line 1(left fov)
 		var angleLine1=this.directionAngle-(this.viewAngle/2);
+		//make sure the angle is a correct angle
+		while(angleLine1 < 0){
+			angleLine1+=360;
+		}
 		angleLine1=angleLine1/180*Math.PI;
 		var leftLineX=Math.sin(angleLine1)*this.size;
 		var leftLineY=Math.cos(angleLine1)*-this.size;
 		
 		//end point line 2 (right of fov)
-		var angleLine2=this.directionAngle+(this.viewAngle/2);
+		var angleLine2=Number(this.directionAngle)+(this.viewAngle/2);
+		//make sure the angle is a correct angle
+		while(angleLine2 < 0){
+			angleLine2+=360;
+		}
 		angleLine2=angleLine2/180*Math.PI;
 		var rightLineX=Math.sin(angleLine2)*this.size;
 		var rightLineY=Math.cos(angleLine2)*-this.size;

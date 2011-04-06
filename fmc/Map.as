@@ -2300,30 +2300,26 @@ dynamic class Map extends MovieClip {
 		}
 		
 		if (markers == null){
-			markers = new Array();
+			markers = new Array();			
+		}
+		var existingMarker:Boolean = false;
+		for (var i:Number=0; i<markers.length; i++) {
+			if (markers[i].getId() == id){
+				//update the existing marker
+				markers[i].setX(x);
+				markers[i].setY(y);
+				markers[i].setWidth(width);
+				markers[i].setHeight(height);					
+				markers[i].redraw();
+				existingMarker = true;
+			}
+		}
+		if (!existingMarker) {
 			//create new marker
 			var mcMarker:Object = createMarker(id,type,x,y,width,height,htmlText);
 			markers.push(mcMarker);
 		}
-		else{
-			var existingMarker:Boolean = false;
-			for (var i:Number=0; i<markers.length; i++) {
-				if (markers[i].getId() == id){
-					//update the existing marker
-					markers[i].setX(x);
-					markers[i].setY(y);
-					markers[i].setWidth(width);
-					markers[i].setHeight(height);					
-					markers[i].redraw();
-					existingMarker = true;
-				}
-			}
-			if (!existingMarker) {
-				//create new marker
-				var mcMarker:Object = createMarker(id,type,x,y,width,height,htmlText);
-				markers.push(mcMarker);
-			}
-		}
+		
 	}
 	/**
 	* Remove Marker from the map
