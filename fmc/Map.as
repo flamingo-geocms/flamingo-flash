@@ -2331,9 +2331,7 @@ dynamic class Map extends MovieClip {
 	*/
 	public function removeMarker(id:String):Void {
 		for (var i:Number=0; i<markers.length; i++) {
-			if (markers[i].getId() == id){
-				var lMap:Object = new Object();
-				_global.flamingo.removeListener(lMap,this, markers[i]);
+			if (markers[i].getId() == id){				
 				markers[i].removeMovieClip();
 				markers.splice(i,1);
 			}
@@ -2360,21 +2358,26 @@ dynamic class Map extends MovieClip {
 		mcMarker.draw();
 		return mcMarker;
 	}
-	/*New fov*/
-	public function setFov(x,y,url){
+	/*Set a Field of View marker.
+	* @param x The x coord of this field of view
+	* @param y The y coord of this field of view
+	* @param directionAngle The direction where this FOV is in (in degrees)
+	* @param fovAngle The angle of the view.
+	*/
+	public function setFovMarker(x,y,directionAngle,fovAngle){
 		markerIDnr++;
-		log.debug("setMarker");
-		if (this.fovMarker==null){
-			log.debug("create new fovMarker");
-			this.fovMarker= new FOVMarker();
-			this.fovMarker.setId(markerIDnr);
-			this.fovMarker.setMap(this);
-			this.fovMarker.setX(x);
-			this.fovMarker.setY(y);
-			//this.fovMarker.setMarkerUrl(_global.flamingo.correctUrl(url));
-			this.fovMarker.draw();
+		if (this.fovMarker!=null){
+			this.fovMarker.removeMovieClip();
 		}
-			
+		this.fovMarker= new FOVMarker();
+		this.fovMarker.setId(markerIDnr);
+		this.fovMarker.setMap(this);
+		this.fovMarker.setX(x);
+		this.fovMarker.setY(y);
+		this.fovMarker.setDirectionAngle(directionAngle);
+		this.fovMarker.setViewAngle(fovAngle);
+		this.fovMarker.draw();
+		markers.push(fovMarker);
 	}
 	
 	/*give a extent and return as string*/

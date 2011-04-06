@@ -1,8 +1,8 @@
 ﻿// This file is part of Flamingo MapComponents.
 // Author: Roy Braam
-
 import tools.Logger;
-
+/**A abstarct marker class. Implement bij all markers
+*/
 class gui.marker.AbstractMarker extends MovieClip {
 	//logging:
 	private var log:Logger=null;
@@ -14,8 +14,8 @@ class gui.marker.AbstractMarker extends MovieClip {
 	private var markerUrl:String=null;
 	private var id:String=null;
 	private var visible=true;
-	private var offsetX:Number;
-	private var offsetY:Number;	
+	private var offsetX:Number=0;
+	private var offsetY:Number=0;	
 	private var height:Number;
 	private var width:Number;
 	
@@ -67,7 +67,6 @@ class gui.marker.AbstractMarker extends MovieClip {
 	Create the movieclip that contains the marker
 	*/
 	public function createMarker(){
-		log.debug("create new Marker");		
 		var depth:Number = this.map.getNextDepth()
 		this.mcMarker = this.map.createEmptyMovieClip(this.mcPrefix+this.id, depth);
 		//set init values
@@ -78,9 +77,10 @@ class gui.marker.AbstractMarker extends MovieClip {
 			this.mcMarker._width=this.width;
 		}
 		//load icon from markerUrl		
-		var mcloader=new MovieClipLoader();		
-		log.debug("url: "+this.getMarkerUrl());
-		mcloader.loadClip(_global.flamingo.correctUrl(this.getMarkerUrl()),this.mcMarker);				
+		if (this.getMarkerUrl()!=null){			
+			var mcloader=new MovieClipLoader();		;
+			mcloader.loadClip(_global.flamingo.correctUrl(this.getMarkerUrl()),this.mcMarker);				
+		}
 	}
 	
 	//getters & setters
@@ -178,7 +178,6 @@ class gui.marker.AbstractMarker extends MovieClip {
 	Destroy this marker and the listeners
 	*/
 	public function destroy(){
-		log.debug("Destroy abstractMarker");
 		_global.flamingo.removeListener(this.mapListener,this.map, this);
 		if (this.mcMarker!=null){
 			this.mcMarker.removeMovieClip();
