@@ -917,9 +917,11 @@ function identify(extent:Object) {
 	this.identifyextent = extent;
 	var lConn:Object = new Object();
 	lConn.onResponse = function(connector:OGWMSConnector) {
+		identsSent--; 
 		_global.flamingo.raiseEvent(thisObj, "onResponse", thisObj, "identify", connector);
 	};
 	lConn.onRequest = function(connector:OGWMSConnector) {
+		identsSent++; 
 		_global.flamingo.raiseEvent(thisObj, "onRequest", thisObj, "identify", connector);
 	};
 	lConn.onError = function(error:String, obj:Object, requestid:String) {
@@ -940,7 +942,6 @@ function identify(extent:Object) {
 			}
 			_global.flamingo.raiseEvent(thisObj, "onIdentifyData", thisObj, features, obj, nrlayersqueried, nrlayersqueried);
 			if(identPerLayer){
-				identsSent--;
 				if(identsSent == 0){
 				 	_global.flamingo.raiseEvent(thisObj, "onIdentifyComplete", thisObj, identifytime);
 				}
@@ -979,7 +980,7 @@ function identifyPerLayer(args:Object,lConn:Object) {
 		for (var i:Number=0; i<qlayers.length;i++){
 			args.LAYERS = qlayers[i];
 			args.QUERY_LAYERS = qlayers[i];
-			identsSent++; 
+			
 	  		sendIdentifyRequest(args,lConn);
 		}
 }
