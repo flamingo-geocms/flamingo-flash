@@ -1370,10 +1370,14 @@ function drawLegend(list:Array, parent:MovieClip, _indent:Number) {
 function loadSymbol(mc:MovieClip):Void{
 		mc.createEmptyMovieClip("mSymbol", 2);
 		var listener:Object = new Object();
+		var thisObject = this;
 		listener.onLoadError = function(mc:MovieClip, error:String, httpStatus:Number) {
 		};
 		listener.onLoadProgress = function(mc:MovieClip, bytesLoaded:Number, bytesTotal:Number) {
 		};
+		listener.onLoadComplete =function(mcsymbol:MovieClip) {
+			thisObject._refreshItems(mcsymbol._parent);
+		}; 
 		listener.onLoadInit = function(mcsymbol:MovieClip) {
 			//mc.init();
 			for (var attr in mcsymbol._parent.item) {
@@ -1397,7 +1401,7 @@ function loadSymbol(mc:MovieClip):Void{
 				
 			}
 			mcsymbol.init();
-			_refreshItems(mcsymbol._parent);
+			
 		};
 		var mcl:MovieClipLoader = new MovieClipLoader();
 		mcl.addListener(listener);
@@ -1586,6 +1590,11 @@ function getGroups(collapsed:Boolean):Array {
 		return groupsOpened;
 	}
 }
+
+	
+
+
+
 
 
 
