@@ -1163,6 +1163,7 @@ function initControls() {
 			tFeaturesDelta = 0;
 		}
 		currentExtentSelector = locationdata[locationindex].extentSelector;
+		
 		if(currentExtentSelector!=null){
 			currentExtentSelector.setVisible(true,"locationFinder");
 			tFeaturesDelta = 10 + currentExtentSelector.getExtents().length * 20;
@@ -1316,14 +1317,10 @@ function resize() {
 		mHolder.tFind.text="<a href='asfunction:_parent._parent.find'><b>>></b></a>";
 	}
 	
-	//if(tFeaturesDelta!=null){
-		y += tFeaturesDelta;
-		h -= tFeaturesDelta;
-	//}
 	mHolder.tFeatures._x = x;
-	mHolder.tFeatures._y = y+48;
+	mHolder.tFeatures._y = tFeaturesDelta+48;
 	mHolder.tFeatures._width = w;
-	mHolder.tFeatures._height = h-48;
+	mHolder.tFeatures._height = h-tFeaturesDelta-48;
 	//-mHolder.tFeatures._y;
 	// calculate number of lines
 	mHolder.tFeatures.htmlText = "<span class='feature'>XXXYYYgggg</span>";
