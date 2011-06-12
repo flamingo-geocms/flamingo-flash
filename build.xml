@@ -19,6 +19,11 @@
         <mkdir dir="${build}/dist"/>
         <mkdir dir="${build}/bin"/>
         <mkdir dir="${dist}"/>
+        <mkdir dir="${build}/dist/assets"/>
+        <mkdir dir="${build}/dist/assets/img"/>
+	<copy todir="${build}/dist/assets/img">
+		<fileset dir="assets/img" includes="*.*"/>
+    	</copy>
         <echo file="${build}/compileProject.jsfl" append="false">var flaURI="file:///${flapath}";${line.separator}</echo>
         <echo file="${build}/compileProject.jsfl" append="true">var swfURI="file:///${build}/dist/flamingo";${line.separator}</echo>
         <echo file="${build}/compileProject.jsfl" append="true">var buildURI="file:///${build}";${line.separator}</echo>
