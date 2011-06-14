@@ -9,7 +9,7 @@
 	  <format property="date" pattern="dd/MM/yyyy hh:mm aa"/>
 	</tstamp>
 
-	<property name="version" value="3.1.0"/>
+	<property name="version" value="3.3"/>
     <property name="build" location="build"/>
     <property name="dist" location="../dist"/>
     <property name="flapath" location="."/>
@@ -18,12 +18,7 @@
         <mkdir dir="${build}"/>
         <mkdir dir="${build}/dist"/>
         <mkdir dir="${build}/bin"/>
-        <mkdir dir="${dist}"/>
-        <mkdir dir="${build}/dist/assets"/>
-        <mkdir dir="${build}/dist/assets/img"/>
-	<copy todir="${build}/dist/assets/img">
-		<fileset dir="assets/img" includes="*.*"/>
-    	</copy>
+        <mkdir dir="${dist}"/>	
         <echo file="${build}/compileProject.jsfl" append="false">var flaURI="file:///${flapath}";${line.separator}</echo>
         <echo file="${build}/compileProject.jsfl" append="true">var swfURI="file:///${build}/dist/flamingo";${line.separator}</echo>
         <echo file="${build}/compileProject.jsfl" append="true">var buildURI="file:///${build}";${line.separator}</echo>
@@ -103,6 +98,9 @@
    	    <copy todir="${build}/dist/js">
     	  <fileset dir="js" includes="*.js"/>
     	</copy>
+    	<copy todir="${build}/dist/flamingo/assets/img">
+		<fileset dir="assets/img" includes="*.*"/>
+    	</copy>
    	    <move todir="${build}/dist/assets">
     	  <fileset dir="${build}/dist/flamingo/assets"/>
     	</move>
@@ -110,6 +108,25 @@
     	<echo file="${build}/dist/flamingo/version.txt" append="false">version: ${version} date: ${date}</echo>
     	
         <zip destfile="${dist}/flamingo_client.zip" basedir="${build}/dist"/>
+    </target>
+    
+     <target name="release" depends="compile">
+		 <delete dir="${build}/release"/>
+		 <mkdir dir="${build}/release"/>
+		 <copy todir="${build}/release">
+			 <fileset dir="${build}/dist"/>
+		 </copy>
+   	    <copy todir="${build}/release/js">
+    	  <fileset dir="js" includes="*.js"/>
+    	</copy>
+    	<copy todir="${build}/release/flamingo/assets/img">
+		<fileset dir="assets/img" includes="*.*"/>
+    	</copy>   	    
+    	<copy file="changelog.txt" todir="${build}/dist"/>
+    	<delete dir="${build}/release/flamingo/tpc"/>
+    	<echo file="${build}/release/flamingo/version.txt" append="false">version: ${version} date: ${date}</echo>
+    	
+        <zip destfile="${build}/release/flamingo_${version}.zip" basedir="${build}/release"/>
     </target>
     
     <target name="clean">
