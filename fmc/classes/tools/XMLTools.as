@@ -7,7 +7,7 @@
 import tools.*;
 
 class tools.XMLTools {
-    
+     
     static function getChild(name:String, _xmlNode:XMLNode):XMLNode {
         for (var i:Number = 0; _xmlNode.childNodes[i] != null; i++) {
             if (_xmlNode.childNodes[i].nodeName.toUpperCase() == name.toUpperCase()) {
@@ -26,6 +26,23 @@ class tools.XMLTools {
         }
         return _array;
     }
+    
+  static function getElementsByTagName(tagName:String, _xmlNode:XMLNode):Array	{
+		var fringe: Array = [ _xmlNode ];
+		var results: Array = [ ];
+		while (fringe.length > 0) {
+			var currentNode: XMLNode = XMLNode(fringe.shift ());
+			if (currentNode.nodeName == tagName) {
+				results.push (currentNode);
+			}	
+			var nodeCount:Number = currentNode.childNodes.length;
+			for (var nodeIndex:Number = 0; nodeIndex < nodeCount; nodeIndex++) {
+				fringe.push (currentNode.childNodes[nodeIndex]);				
+			}
+		}
+	return results;	
+}
+     
     
     static function getStringValue(name:String, _xmlNode:XMLNode):String {
         var valueNode:XMLNode = getChild(name, _xmlNode);
