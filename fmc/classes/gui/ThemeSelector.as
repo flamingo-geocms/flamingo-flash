@@ -42,6 +42,7 @@
 * @attr persistentlayerids A coma seperated list of layer ids that is not influenced by the selection of a theme. 
 * These are for instance topographical baselayers that should always be visible.   
 * @attr listlength The length of the combobox list.
+* @attr legendid The id of the legend which groups should collapse or open depending on the chosen Theme  
 */
 
 
@@ -65,7 +66,8 @@ class gui.ThemeSelector extends AbstractContainer {
 	private var listlength:Number = 5;
 	//currentTheme can be set by flamingo setArgument
     private var currentTheme:Theme = null;
-    private var firstTimeSet:Boolean = false;
+    private var legendId:String = null;
+    private var legendItemFound:Boolean = false;
     
  	function init():Void {
         this.map =_global.flamingo.getComponent(listento[0]);
@@ -98,17 +100,18 @@ class gui.ThemeSelector extends AbstractContainer {
  	}
  	
  	public function onConfigComplete():Void {
- 		//_global.flamingo.tracer("configComplete currentTheme= " + currentTheme);
 		if(currentTheme!=null){
 			//this to prevent double setting of currentSelectedTheme
 	    	for(var i:Number=0;i<themeComboBox.dataProvider.length;i++){
 	    		if(themeComboBox.dataProvider[i].data == currentTheme){
 	    			themeComboBox.setSelectedIndex(i);
-	    			//setCurrentTheme(currentTheme);
+	    			//setCurrentTheme();
 	    			return;
 	    		}
-	    	}	
+	    	}
+
 		}
+		
 	}
  	    	    
    function setAttribute(name:String, value:String):Void { 
@@ -135,6 +138,9 @@ class gui.ThemeSelector extends AbstractContainer {
         if(name=="listlength"){
         	this.listlength = Number(value);
         } 	
+        if(name=="legendid"){
+         	legendId = value
+        } 
         //if(name=="mapid"){
         	//this.mapId =value;
         //} 	
@@ -237,9 +243,13 @@ class gui.ThemeSelector extends AbstractContainer {
 					}	
 				}	
 			}
-			//_global.flamingo.tracer("ThemeSelector current Theme=" + currentTheme.name + " layer="+ mapLayers[i] + " naar update()"); 
 			mapLayer.update();	
 		}
+		if(legendId != null) {
+			adaptLegend();
+		}
+
+		
 	}
 	
 	private function showLayer(layer:Object,sublayer:String):Void {
@@ -248,8 +258,55 @@ class gui.ThemeSelector extends AbstractContainer {
 		} else {
 			layer.setLayerProperty(sublayer, "visible", true);
 		}	
+
 	}
 	
+	private function adaptLegend(){
+		var legend:Object = _global.flamingo.getComponent(legendId);
+		legend.setAllCollapsed(legend.legenditems, true);
+		var mapLayers:Array = map.getLayers();
+		for(var i:Number=0;i<mapLayers.length;i++){ 
+			var mapLayer:MovieClip = _global.flamingo.getComponent( mapLayers[i].toString());
+			var layers:Array = mapLayer.getLayers();
+			var themeLayers:Array = currentTheme.getThemelayers();
+			for (var sublayer in layers) {
+				if(persistentLayers[mapLayers[i]+ "."+ sublayer] != null){
+					//do nothing
+				} else if (themeLayers[mapLayers[i]+ "."+ sublayer] != null) {
+					openLegendGroups(mapLayers[i]+ "."+ sublayer,legend.allLegenditems, false);	
+				}	
+			}
+		}
+	}
+		
+	private function openLegendGroups(lyr:String, items:Array){
+		for(var i:Number=0;i<items.length;i++){ 
+			if(items[i].items != null){
+				openLegendGroups(lyr, items[i].items);
+			}
+			if(items[i].type == "group" && legendItemFound){			
+				items[i].collapsed = false;
+				var legend:Object = _global.flamingo.getComponent(legendId);
+				for(var l:Number=0;l<legend.allLegenditems.length;l++){
+					if(legend.allLegenditems[l]==items[i]){
+						legendItemFound = false;
+					}
+				}
+			} 
+			if(items[i].listentoLayers != null){	
+				for(var j:Number=0;j<items[i].listentoLayers[j].length;j++){
+					var listento:Array =  _global.flamingo.asArray(items[i].listento[items[i].listentoLayers[j]]);
+					for(var k:Number=0;k<listento.length;k++){
+					 	if(items[i].listentoLayers[j]+ "." + listento[k] == lyr){
+					 		var legend:Object = _global.flamingo.getComponent(legendId);
+					 		legendItemFound = true;	
+					 	}
+					}
+				}
+			} 	
+		}
+	}
+		
 	private function hideLayer(layer:Object,sublayer:String):Void {
 		if(sublayer==""){
 			layer.hide();
