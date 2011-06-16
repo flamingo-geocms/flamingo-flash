@@ -61,7 +61,7 @@ class coremodel.service.ServiceConnector {
     
     function performTransaction(transaction:Transaction, actionEventListener:ActionEventListener):Void { }
     
-    function request(url:String, requestString:String, processMethod:Function, serviceLayer:ServiceLayer, actionEventListener:ActionEventListener):Void {
+    function request(url:String, requestString:String, processMethod:Function, serviceLayer:ServiceLayer, actionEventListener:ActionEventListener, contextObject:Object):Void {
         //_global.flamingo.tracer(url + "\n" + requestString);
 		
 		var env:ServiceConnector = this;
@@ -101,7 +101,7 @@ class coremodel.service.ServiceConnector {
                 
             if (actionEventListener != null) {
                 if (exceptionMessage == null) {
-                    processMethod.call(env, this, serviceLayer, actionEventListener);
+                    processMethod.call(env, this, serviceLayer, actionEventListener, contextObject);
                 } else {
                     var actionEvent:ActionEvent = new ActionEvent(this, "ServiceConnector", ActionEvent.LOAD);
                     actionEvent["exceptionMessage"] = exceptionMessage;
@@ -124,9 +124,9 @@ class coremodel.service.ServiceConnector {
         }
     }
     
-    function processDescribeFeatureType(responseXML:XML, serviceLayer:ServiceLayer, actionEventListener:ActionEventListener):Void { }
+    function processDescribeFeatureType(responseXML:XML, serviceLayer:ServiceLayer, actionEventListener:ActionEventListener, contextObject:Object):Void { }
     
-    function processGetFeature(responseXML:XML, serviceLayer:ServiceLayer, actionEventListener:ActionEventListener):Void { }
+    function processGetFeature(responseXML:XML, serviceLayer:ServiceLayer, actionEventListener:ActionEventListener, contextObject:Object):Void { }
     
     function processTransaction(responseXML:XML, serviceLayer:ServiceLayer, actionEventListener:ActionEventListener):Void { }
     

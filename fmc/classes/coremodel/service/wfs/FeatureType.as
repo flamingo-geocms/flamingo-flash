@@ -16,7 +16,7 @@ class coremodel.service.wfs.FeatureType extends ServiceLayer {
 	private var ftNamespacePrefix:String = null;
     private var xmlSchema:XMLSchema = null;
 	
-    function FeatureType(rootNode:XMLNode) {
+    function FeatureType(rootNode:XMLNode, contextObject:Object) {
 		xmlSchema = new XMLSchema(rootNode);
 		namespacePrefix = xmlSchema.getTargetNamespacePrefix(); 
 		//_global.flamingo.tracer("FeatureType namespacePrefix==" + namespacePrefix);
@@ -70,8 +70,14 @@ class coremodel.service.wfs.FeatureType extends ServiceLayer {
         	//_global.flamingo.tracer("FeatureType property.getType()" + property.getType());
             property = new WFSProperty(XMLNode(propertyNodes[i]), namespacePrefix);
             serviceProperties.push(property);
-            if (property.getType() == "gml:GeometryPropertyType" 
-            	|| property.getType() == "gml:MultiSurfacePropertyType") {
+            //TODO: include more possible types
+            var preFix:String = XMLNode(propertyNodes[i]).getPrefixForNamespace("http://www.opengis.net/gml");
+            if (property.getType() == preFix + ":GeometryPropertyType" 
+            	|| property.getType() == preFix + ":MultiSurfacePropertyType"
+            	||property.getType() == preFix + ":MultiGeometryPropertyType"
+            	||property.getType() == preFix + ":MultiPolygonPropertyType "
+            	||property.getType() == preFix + ":MultiLineStringPropertyType"
+            	||property.getType() == preFix + ":MultiPointPropertyType") {
                 geometryProperties.push(property);
             }
         }
@@ -80,7 +86,7 @@ class coremodel.service.wfs.FeatureType extends ServiceLayer {
             _global.flamingo.tracer("Exception in coremodel.FeatureType.<<init>>: The featuretype \"" + name + "\" has no properties.");
             return;
         }
-        if (geometryProperties.length == 0) {
+        if (geometryProperties.length == 0 && contextObject.parseGeometry != false) {
             _global.flamingo.tracer("Exception in coremodel.FeatureType.<<init>>: The featuretype \"" + name + "\" has no geometry property.");
             return;
         }

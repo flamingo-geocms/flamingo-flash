@@ -15,10 +15,22 @@ class coremodel.service.wfs.WFSProperty extends ServiceProperty {
         if (name == null) {
             _global.flamingo.tracer("Exception in coremodel.WFSProperty.<<init>>: The property has no name.\n" + rootNode);
         }
-        type = rootNode.attributes["type"];
+    	type = rootNode.attributes["type"];
+    	//TODO: parsing of simpletype in childnode like:
+    	/**   <xs:element minOccurs="0" name="GEMNAAM">
+                    <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                            <xs:maxLength value="40"/>
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:element>
+    	**/
+    	//if no type than make type = string
         if (type == null) {
-            _global.flamingo.tracer("Exception in coremodel.WFSProperty.<<init>>: The property has no type.\n" + rootNode);
+        	type="string"
+			//_global.flamingo.tracer("Exception in coremodel.WFSProperty.<<init>>: The property has no type.\n" + rootNode);
         }
+        
         if ((rootNode.attributes["minOccurs"] != null) && (rootNode.attributes["minOccurs"] == 0)) {
             optional = true;
         }

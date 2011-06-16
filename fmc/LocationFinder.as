@@ -82,6 +82,7 @@ var tFeaturesDelta:Number = 0;
 var locationPin:MovieClip = null;
 var map:Object = null;
 var coord:Object = null;
+var contextObject:Object = null;
 
 //---------------------------------------
 import mx.controls.ComboBox;
@@ -602,7 +603,10 @@ function _findLocation(locationdata:Object, search:String, nr:Number, updatefeat
 }
 
 function _findLocationWFS(locationdata:Object, search:String, nr:Number, updatefeatures:Boolean, zoom:Boolean) {	
-	//var lConn = new Object();
+	//No need to parse the geometry
+	contextObject = new Object();
+	contextObject.parseGeometry = false;
+	contextObject.parseEnvelope = true;
 	var lConn = new ActionEventListener();
 	lConn.onActionEvent= function(actionEvent:ActionEvent){
 		var sourceClassName:String = actionEvent.getSourceClassName();
@@ -620,18 +624,17 @@ function _findLocationWFS(locationdata:Object, search:String, nr:Number, updatef
 				var env:Envelope = null;
 				var reqprops:Array = locationdata.outputfields.split(" ");
 				if(extent instanceof Geometry){
-					conn.performGetFeature(serviceLayer, Geometry(extent), whereClauses, null, false, this, reqprops);
+					conn.performGetFeature(serviceLayer, Geometry(extent), whereClauses, null, false, this, reqprops, thisObj.contextObject);
 				} else {
-					var env:Envelope = new Envelope(extent.minx, extent.miny, extent.maxx, extent.maxy) ;
-                	conn.performGetFeature(serviceLayer, env, whereClauses, null, false, this, reqprops);
+					env = new Envelope(extent.minx, extent.miny, extent.maxx, extent.maxy) ;
+                	conn.performGetFeature(serviceLayer, env, whereClauses, null, false, this, reqprops, contextObject);
 				}
-                	
 			} else if (serviceFeatures != null) {
 				foundlocations = new Array();
             	var label = getString(locationdata, "output");	
             	for(var i:Number = 0;i < serviceFeatures.length;i++ ){
 					var loc:Object = new Object();
-					var env:Envelope = serviceFeatures[i].getEnvelope()
+					var env:Envelope = serviceFeatures[i].getEnvelope();
 					var ext:Object = new Object();
 					ext.minx = env.getMinX();
 					ext.miny = env.getMinY();
@@ -668,7 +671,10 @@ function _findLocationWFS(locationdata:Object, search:String, nr:Number, updatef
 										lbl.substr(n + (props[l].getName()).length + 2);
 	            			}
 	            			if(serviceFeatures[i].getValue(props[l].getName())!=undefined){
-	            				loc[props[l].getName()] = serviceFeatures[i].getValue(props[l].getName()); 
+	            				//Do not add the geometry value (causes prolems while raising the event width serializing in js)  
+	            				if(!serviceFeatures[i].getServiceLayer().getDefaultGeometryProperty()==props[l].getName()){
+	            					loc[props[l].getName()] = serviceFeatures[i].getValue(props[l].getName());
+	            				}	 
 	            			}          			
 	            			
 	            		}
@@ -686,9 +692,10 @@ function _findLocationWFS(locationdata:Object, search:String, nr:Number, updatef
 				}	*/
 				loc.label = lbl;
 				foundlocations.push(loc);
-				
 				}
-            	flamingo.raiseEvent(thisObj, "onFindLocation", thisObj, foundlocations, updatefeatures);
+								 
+				
+				flamingo.raiseEvent(thisObj, "onFindLocation", thisObj, foundlocations, updatefeatures);
 				if (updatefeatures) {
 					_updateFeatures(hasmore);
 				}		
@@ -718,7 +725,9 @@ function _findLocationWFS(locationdata:Object, search:String, nr:Number, updatef
 	} else {
 		extent = map.getFullExtent();
 	}
-	conn.performDescribeFeatureType(layerid, lConn);
+
+
+	conn.performDescribeFeatureType(layerid, lConn, contextObject);
 	var whereClause:WhereClause = new WhereClause(searchfield,locationdata.fieldtype.toLowerCase() == "n" ? search : '*'+search+'*',
 										WhereClause.EQUALS,locationdata.matchCase != undefined ? locationdata.matchCase : false );
 	if (updatefeatures) {

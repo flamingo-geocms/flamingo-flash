@@ -33,9 +33,8 @@ class coremodel.service.wfs.WFSConnector extends ServiceConnector {
 		this.srsName=srsName;
 	}
     
-    function performDescribeFeatureType(featureTypeName:String, actionEventListener:ActionEventListener):Void {
+    function performDescribeFeatureType(featureTypeName:String, actionEventListener:ActionEventListener, contextObject:Object):Void {
         var requestString:String = "";
-        
         //requestString += "<wfs:DescribeFeatureType service=\"WFS\" version=\"1.1.0\"\n";
         requestString += "<wfs:DescribeFeatureType service=\"WFS\" version=\""+this.serviceVersion+"\"\n";
         requestString += "    xmlns:wfs=\"http://www.opengis.net/wfs\"\n";
@@ -44,15 +43,14 @@ class coremodel.service.wfs.WFSConnector extends ServiceConnector {
         requestString += "    xmlns:app=\"http://www.deegree.org/app\">\n";
         requestString += "    <wfs:TypeName>" + featureTypeName + "</wfs:TypeName>\n";
         requestString += "</wfs:DescribeFeatureType>\n";
-        request(url, requestString, processDescribeFeatureType, null, actionEventListener, 0);
+        request(url, requestString, processDescribeFeatureType, null, actionEventListener, contextObject);
     }
     
     function performGetFeature(serviceLayer:ServiceLayer, extent:Geometry, whereClauses:Array, notWhereClause:WhereClause, hitsOnly:Boolean, 
-    							actionEventListener:ActionEventListener, requestProperties:Array):Void {
+    							actionEventListener:ActionEventListener, requestProperties:Array, contextObject:Object):Void {
 		var numFilterElements:Number = ((extent == null)? 0: 1) + ((whereClauses == null)? 0: whereClauses.length) + ((notWhereClause == null)? 0: 1);
         var featureTypeName:String = serviceLayer.getName();
         var requestString:String = "";
-        
 		//requestString += "<wfs:GetFeature service=\"WFS\" version=\"1.1.0\"";
 		requestString += "<wfs:GetFeature service=\"WFS\" version=\""+this.serviceVersion+"\"";
         
@@ -125,7 +123,7 @@ class coremodel.service.wfs.WFSConnector extends ServiceConnector {
         requestString += "  </wfs:Query>\n";
         requestString += "</wfs:GetFeature>\n";
         //_global.flamingo.tracer(url + "\n" + requestString);
-        request(url, requestString, processGetFeature, serviceLayer, actionEventListener, 0);
+        request(url, requestString, processGetFeature, serviceLayer, actionEventListener, contextObject);
     }
     
     function performTransaction(transaction:Transaction, actionEventListener:ActionEventListener):Void {
@@ -154,8 +152,8 @@ class coremodel.service.wfs.WFSConnector extends ServiceConnector {
         request(url, requestString, processTransaction, null, actionEventListener, 0);
     }
     
-    function processDescribeFeatureType(responseXML:XML, serviceLayer:ServiceLayer, actionEventListener:ActionEventListener):Void {
-		var serviceLayer:ServiceLayer = new FeatureType(responseXML.firstChild);
+    function processDescribeFeatureType(responseXML:XML, serviceLayer:ServiceLayer, actionEventListener:ActionEventListener, contextObject:Object):Void {
+		var serviceLayer:ServiceLayer = new FeatureType(responseXML.firstChild, contextObject);
         var actionEvent:ActionEvent = new ActionEvent(this, "ServiceConnector", ActionEvent.LOAD);
         actionEvent["serviceLayer"] = serviceLayer;
         actionEventListener.onActionEvent(actionEvent);
@@ -165,16 +163,15 @@ class coremodel.service.wfs.WFSConnector extends ServiceConnector {
             }
     }
     
-    function processGetFeature(responseXML:XML, serviceLayer:ServiceLayer, actionEventListener:ActionEventListener):Void {
+    function processGetFeature(responseXML:XML, serviceLayer:ServiceLayer, actionEventListener:ActionEventListener, contextObject:Object):Void {
 		_global.flamingo.raiseEvent("WFSConnector processGetFeature ");
 		var numFeatures:Number = Number(responseXML.firstChild.attributes["numberOfFeatures"]);
         
         var featureNodes:Array = XMLTools.getChildNodes("gml:featureMember", responseXML.firstChild);
         var features:Array = new Array();
         for (var i:Number = 0; i < featureNodes.length; i++) {
-            features.push(new WFSFeature(XMLNode(featureNodes[i]).firstChild, null, null, serviceLayer));
+            features.push(new WFSFeature(XMLNode(featureNodes[i]).firstChild, null, null, serviceLayer, contextObject));
         }
-        
         var actionEvent:ActionEvent = new ActionEvent(this, "ServiceConnector", ActionEvent.LOAD);
         actionEvent["numFeatures"] = numFeatures;
         actionEvent["features"] = features;
