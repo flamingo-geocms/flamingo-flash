@@ -63,6 +63,10 @@ class geometrymodel.Circle extends Geometry {
         return Math.sqrt((dx * dx) + (dy * dy));
     }
     
+    function getArea():Number {
+    	return Math.PI * (getRadius()* getRadius());
+	}
+    
     function toGMLString(srsName:String):String {
         var gmlString:String = "";
         gmlString += "<gml:Circle>\n";
