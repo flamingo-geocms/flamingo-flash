@@ -46,17 +46,21 @@ class gui.EditMapCircle extends EditMapGeometry {
         if(radiusText==null){
         	radiusText= Label(this.attachMovie("Label", "mLabel", 1));
         }
-        radiusText.move(x-20,y - 20);
+        if(showMeasures){
+        	radiusText.move(circleX ,circleY);
+        } else {
+        	radiusText.move(x-20 ,y-20);
+        }
         radiusText.text = Math.round(circle.getRadius()).toString() +  " m";
 
         	
         moveTo(x, y - r);
-        if (type == ACTIVE) {
+        if (type == ACTIVE ) {
             lineStyle(strokeWidth * 2, strokeColor, strokeOpacity);
             radiusText.visible = true;
         } else {
             lineStyle(strokeWidth, strokeColor, strokeOpacity);
-            radiusText.visible = false;
+            radiusText.visible = showMeasures;
         }
         if (style.getFillOpacity() > 0) {
             beginFill(fillColor, fillOpacity);
@@ -70,7 +74,7 @@ class gui.EditMapCircle extends EditMapGeometry {
         curveTo(x - r, y - p8r, x - p4r,y - p4r);
         curveTo(x - p8r, y - r, x, y - r);
         
-        if (type == ACTIVE) {
+        if (type == ACTIVE || showMeasures) {
             moveTo(x, y);
             lineStyle(strokeWidth, strokeColor, strokeOpacity);
             lineTo(circleX, circleY);            
