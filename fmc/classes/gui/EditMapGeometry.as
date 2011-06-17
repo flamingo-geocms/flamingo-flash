@@ -62,7 +62,6 @@ class gui.EditMapGeometry extends GeometryPane implements GeometryListener {
 		
         _global.flamingo.addListener(this,map,this);
         addChildGeometries();
-	
 		draw();
     }
     
@@ -155,7 +154,9 @@ class gui.EditMapGeometry extends GeometryPane implements GeometryListener {
         clear();
         doDraw();
         setLabel();
-       	setMeasureLabel();
+        if(showMeasures){
+       		setMeasureLabel();
+        }
 		if (this.type == ACTIVE && _geometry.getFirstAncestor() == _geometry) { //surpress updating for child geometries. Saves cpu resources.
 			//raise event onGeometryDrawDragUpdate via editMap through gis
 			gis.geometryDragUpdate();
@@ -211,8 +212,13 @@ class gui.EditMapGeometry extends GeometryPane implements GeometryListener {
     
      private function setMeasureLabel():Void {
         var measureString:String = "";
-	        if (_geometry instanceof Polygon){
-	        	var area:Number = Math.abs(Polygon(_geometry).getArea());
+	        if (_geometry instanceof Polygon||_geometry instanceof Circle){
+	        	var area:Number;
+	        	if (_geometry instanceof Polygon){
+	        		area = Math.abs(Polygon(_geometry).getArea());
+	        	} else {
+	        		area = Math.abs(Circle(_geometry).getArea());
+	        	}
 	    	if (area > 10000000){
 	    		measureString = Math.round(area/10000)/100 + " km2";
 	    	}
