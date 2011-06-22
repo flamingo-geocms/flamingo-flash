@@ -1376,7 +1376,6 @@ function loadSymbol(mc:MovieClip):Void{
 		listener.onLoadProgress = function(mc:MovieClip, bytesLoaded:Number, bytesTotal:Number) {
 		};
 		listener.onLoadComplete =function(mcsymbol:MovieClip) {
-			thisObject._refreshItems(mcsymbol._parent);
 		}; 
 		listener.onLoadInit = function(mcsymbol:MovieClip) {
 			//mc.init();
@@ -1400,6 +1399,7 @@ function loadSymbol(mc:MovieClip):Void{
 					mcsymbol.attachSymbol(mcsymbol["linkage"],1);
 				
 			}
+			thisObject._refreshItems(mcsymbol._parent);
 			mcsymbol.init();
 			
 		};
