@@ -292,7 +292,7 @@ function loadXML(file:String) {
     outputfields="app:naamOverheid,app:identificatie,app:naam"
     highlightlayer="highlightlayer" highlightwmsurl="http://afnemers.ruimtelijkeplannen.nl/afnemers/services?service=WMS" highlightsldservleturl="http://support.idgis.eu/sldtest"  
     highlightfeaturetypename="app:Bestemmingsplangebied" highlightpropertyname="app:identificatie"
-    highlightmaxscale="10" matchcase="false"/>
+    highlightmaxscale="10" matchcase="false">
     <string id="output" nl="[app:naamOverheid]: [app:naam]" />
     <string id="label" nl="Zoek op RO-online naam overheid" />
     <string id="hint" nl="Type een (deel van de) naam overheid  in het tekstvak hierboven..." />
