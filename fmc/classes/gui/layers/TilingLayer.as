@@ -601,7 +601,6 @@ class gui.layers.TilingLayer extends AbstractLayer{
 
     function doHide():Void{     
         log.debug("doHide called");
-        _global.flamingo.tracer("doHide called");
         this.visible=false;
     }
     function doShow():Void{     
