@@ -1,8 +1,3 @@
-/*-----------------------------------------------------------------------------
-* This file is part of Flamingo MapComponents.
-* Author: Erik Orbons
-* IDgis bv
- -----------------------------------------------------------------------------*/
 /** @component QueryComponent
  * Component for searching in WFS and generic XML datasources, and formatting the search results. This
  * component is typically used in combination with the LocationResultViewer component, which displays the
@@ -264,9 +259,13 @@ import mx.core.View;
 import mx.controls.TextArea;
 import mx.utils.Delegate;
 
+/**
+ * @author Herman
+ */
 class gui.QueryComponent extends AbstractComponent implements PersistableComponent {
 	
-	private var container: FilterContainer;
+	private var container: FilterContainer = null;
+	private var guiCreated: Boolean = false;
 	
 	/**
 	 * A list of query builder UI components that have been created as children of this component.
@@ -291,6 +290,7 @@ class gui.QueryComponent extends AbstractComponent implements PersistableCompone
 	private var _layerListeners: Object = { };
 	
 	private var startupIndex = 0;
+	private var method: String = 'accordion';
 	
 	private var activeFilters: Object;
 	
@@ -312,14 +312,18 @@ class gui.QueryComponent extends AbstractComponent implements PersistableCompone
 	
 	function init (): Void {
 		
-		this.createUI ();
-		this.bindUI ();
-		this.syncUI ();
+		if (!guiCreated) {
+			this.createUI ();
+			this.bindUI ();
+			
+			guiCreated = true;
+		}
 		
 		// Add all query builders whose layers are currently available:
 		for (var i: Number = 0; i < _serviceDescriptions.length; ++ i) {
 			addQuery (_serviceDescriptions[i]);
 		}
+		_serviceDescriptions = [ ];
 
 		// Select the initial query builder (if any):		
 		var index:Number = startupIndex;
@@ -327,6 +331,8 @@ class gui.QueryComponent extends AbstractComponent implements PersistableCompone
 			index = queryBuilders.length - 1;
 		}
 		container.selectedIndex = index;
+		
+		this.syncUI ();
 	}
 	
 	/**
@@ -806,12 +812,7 @@ class gui.QueryComponent extends AbstractComponent implements PersistableCompone
 	 * Creates user interface components that are a part of this component.
 	 */
 	private function createUI (): Void {
-		var builder: QueryBuilder;
-		
-		container = FilterContainer (attachMovie ("FilterContainer", "container", this.getNextHighestDepth ()));
-		container.blankSelectionLabel = _global.flamingo.getString (this, 'selectServiceBlank', 'Select a service ...');
-		container.selectLabel = _global.flamingo.getString (this, 'selectServiceLabel', 'Service: ');
-		container.selectCaption = _global.flamingo.getString (this, 'selectServiceCaption', 'Filters:');
+		container = FilterContainer (attachMovie ("FilterContainer", "container", this.getNextHighestDepth (), { useAccordion: this.method == 'accordion' }));
 	}
 	
 	/**
@@ -830,6 +831,10 @@ class gui.QueryComponent extends AbstractComponent implements PersistableCompone
 	 */
 	private function syncUI (): Void {
 		resize ();
+		
+		container.blankSelectionLabel = _global.flamingo.getString (this, 'selectServiceBlank', 'Select a service ...');
+		container.selectLabel = _global.flamingo.getString (this, 'selectServiceLabel', 'Service: ');
+		container.selectCaption = _global.flamingo.getString (this, 'selectServiceCaption', 'Filters:');
 	}
 	
 	
@@ -1496,6 +1501,12 @@ class gui.QueryComponent extends AbstractComponent implements PersistableCompone
 			 case 'startupindex':
 	    		this.startupIndex = Number(value);
 	    	break;
+			case 'method':
+				this.method = value.toLowerCase ();
+				if (this.method != 'accordion' && method != 'combo') {
+					this.method = 'accordion';
+				}
+				break;
 		}
 		
 		
