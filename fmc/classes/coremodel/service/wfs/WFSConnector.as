@@ -169,7 +169,6 @@ class coremodel.service.wfs.WFSConnector extends ServiceConnector {
     }
     
     function processGetFeature(responseXML:XML, serviceLayer:ServiceLayer, actionEventListener:ActionEventListener, contextObject:Object):Void {
-		_global.flamingo.raiseEvent("WFSConnector processGetFeature ");
 		var numFeatures:Number = Number(responseXML.firstChild.attributes["numberOfFeatures"]);
         
         var featureNodes:Array = XMLTools.getChildNodes("gml:featureMember", responseXML.firstChild);

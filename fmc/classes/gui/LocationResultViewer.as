@@ -52,7 +52,55 @@ class gui.LocationResultViewer extends AbstractComponent {
  	private var locationlayer:MovieClip = null;
 	private var mask : Boolean = true;
 	private var intervalId: Number;
-	private var scrollPane : ScrollPane; 
+	private var scrollPane : ScrollPane;
+	private var	useLocationFinder: Boolean = true;
+
+	public function getMap (): Map {
+		if (useLocationFinder) {
+			return locationFinder.map;
+		}
+		
+		for (var i: Number = 0; i < listento.length; ++ i) {
+			var component: Object = _global.flamingo.getComponent (listento[i]);
+			if (component.moveToExtent) {
+				return Map (component);
+			}
+		}
+		
+		return null;
+	}
+	
+	function init (): Void {
+		super.init ();
+		
+		// Listen to components that provide locations to display:
+		for (var i: Number = 0; i < listento.length; ++ i) {
+			var component: MovieClip = _global.flamingo.getComponent (listento[i]);
+			if (!component) {
+				continue; 
+			}
+			
+			_global.flamingo.addListener (this, component, this);
+		}
+	}
+	
+	function onFindLocation (source: MovieClip, locations: Array, updateFeatures: Boolean): Void {
+		
+		var i: Number;
+		for (i = 0; i < locations.length; ++ i) {
+			locations[i].str = "<span class='feature'><a href='asfunction:_parent._zoom,"+i+"'>"+locations[i].label+"</a></span>";
+		}
+		
+		setLocations (locations);
+		useLocationFinder = false;
+		
+		// Zoom to the first location if only a single result is found:
+		if (locations.length == 1) {
+			_zoom (0);
+		} else if (locations.length == 0) {
+			setText (_global.flamingo.getString (this, 'noresults', 'No results have been found'));
+		}
+	}
 
 	function setLocations(locations:Array){
 		this.locations = locations;
@@ -66,7 +114,9 @@ class gui.LocationResultViewer extends AbstractComponent {
 		scrollPane.contentPath = "LocationResults";
     	scrollPane.content.viewer = this;
     	scrollPane.setSize(__width, __height);
-        scrollPane.content.drawLocations(locations); 
+        scrollPane.content.drawLocations(locations);
+        
+        useLocationFinder = true;
 	}
 	
 	function doClearInterval():Void{
@@ -82,7 +132,7 @@ class gui.LocationResultViewer extends AbstractComponent {
 	}
 	
 	function showLocation(index:Number) {
-		var map:Map = locationFinder.map;
+		var map:Map = getMap ();
 		if(locationlayer == null){
 			locationlayer = map.createEmptyMovieClip("mLocation", map.getNextHighestDepth());
 		} else {
@@ -106,7 +156,7 @@ class gui.LocationResultViewer extends AbstractComponent {
 	}
 	
 	function isHighlightScale():Boolean {
-		var map:Map = locationFinder.map;
+		var map:Map = getMap ();
 		var currentLocation:Object = locations[0].locationdata;
 		if(map.getCurrentScale() >= currentLocation.highlightmaxscale){
 			return false;
@@ -120,8 +170,33 @@ class gui.LocationResultViewer extends AbstractComponent {
 		
 	}
 	
+	function _moveToLocation (index: Number): Void {
+		
+		var location: Object = locations[index],
+			i: Number,
+			map: Object;
+		
+		if (!location) {
+			return;
+		}
+		
+		// Zoom on all maps this component listens to:
+		for (i = 0; i < listento.length; ++ i) {
+			map = _global.flamingo.getComponent (listento[i]);
+			if (!map || !map.moveToExtent) {
+				continue;
+			}
+			
+			map.moveToExtent (location.extent, 0);
+		}
+	}
+	
 	function _zoom(index:Number) {
-	 	locationFinder._zoom(index);	
+		if (!useLocationFinder) {
+			_moveToLocation (index);
+		} else {
+	 		locationFinder._zoom(index);	
+		}
 	}
 	 
 	function _next() {

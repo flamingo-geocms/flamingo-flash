@@ -67,7 +67,7 @@ class gui.querybuilder.Filter extends View {
 	private var _mandatory: Boolean = false;
 	private var _disabled: Boolean = false;
 	private var _autocomplete: Boolean = false;
-	private var _allowOperatorSelection: Boolean = true;
+	private var _allowOperatorSelection: Boolean = false;
 	
 	/**
 	 * Returns the list of available fields for this filter. Each element in the array is an object

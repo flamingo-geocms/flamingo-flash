@@ -28,7 +28,7 @@ class gui.LocationResult extends MovieClip {
 	}
 	
 	function onRollOver():Void{
-		var tooltip:String = viewer.getString(location.locationdata,"locationtip");
+		var tooltip:String = location.tooltip || viewer.getString(location.locationdata,"locationtip");
 		for (var a in location){ 
 			var n:Number =tooltip.indexOf("["+a+"]", 0);
 			if (n >= 0) {
