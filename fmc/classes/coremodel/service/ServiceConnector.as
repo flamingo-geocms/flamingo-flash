@@ -8,6 +8,7 @@
 import coremodel.service.*;
 
 import coremodel.service.wfs.WFSConnector;
+import coremodel.service.xml.XMLConnector;
 import event.ActionEvent;
 import event.ActionEventListener;
 import geometrymodel.Geometry;
@@ -28,7 +29,7 @@ class coremodel.service.ServiceConnector {
         }
         
         var connectorType:String = url.split("::")[0];
-        if (connectorType != "wfs") {
+        if (connectorType != "wfs" && connectorType != 'xml') {
             _global.flamingo.tracer("Exception in ServiceConnector.getInstance()\nThe given connector type \"" + connectorType + "\" is not supported.");
             return;
         }
@@ -37,6 +38,8 @@ class coremodel.service.ServiceConnector {
         if (instances[url] == null) {
             if (connectorType == "wfs") {
                 instances[url] = new WFSConnector(url);
+            } else if (connectorType == "xml") {
+            	instances[url] = new XMLConnector (url);
             }
         }
         return instances[url];
