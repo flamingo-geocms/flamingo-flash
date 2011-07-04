@@ -108,7 +108,9 @@ class coremodel.search.Request {
 	 * are returned.
 	 */
 	public function getFeatures (extent: Geometry, whereClauses: Array, serviceLayer: ServiceLayer, outputFields: Array): Void {
-		
+		var contextObject = new Object();
+		contextObject.parseGeometry = false;
+		contextObject.parseEnvelope = true;
 		//_global.flamingo.tracer ("Request::getFeatures");
 		
 		if (!outputFields) {
@@ -120,7 +122,7 @@ class coremodel.search.Request {
 			var listener: ActionEventListener = new ActionEventListener ();
 			listener.onActionEvent = Delegate.create (this, this.getFeaturesComplete);
 			
-			this.connector.performGetFeature(serviceLayer, extent, whereClauses, null, false, listener, outputFields);
+			this.connector.performGetFeature(serviceLayer, extent, whereClauses, null, false, listener, outputFields,contextObject);
 		});
 		
 		// If a serviceLayer object is not present, a describeFeatures request must first be performed:
