@@ -674,7 +674,7 @@ function _findLocationWFS(locationdata:Object, search:String, nr:Number, updatef
 	            			}
 	            			if(serviceFeatures[i].getValue(props[l].getName())!=undefined){
 	            				//Do not add the geometry value (causes prolems while raising the event width serializing in js)  
-	            				if(!serviceFeatures[i].getServiceLayer().getDefaultGeometryProperty()==props[l].getName()){
+	            				if(serviceFeatures[i].getServiceLayer().getDefaultGeometryProperty()==props[l].getName() == false){
 	            					loc[props[l].getName()] = serviceFeatures[i].getValue(props[l].getName());
 	            				}	 
 	            			}          			
@@ -731,7 +731,7 @@ function _findLocationWFS(locationdata:Object, search:String, nr:Number, updatef
 
 	conn.performDescribeFeatureType(layerid, lConn, contextObject);
 	var whereClause:WhereClause = new WhereClause(searchfield,locationdata.fieldtype.toLowerCase() == "n" ? search : '*'+search+'*',
-										WhereClause.EQUALS,locationdata.matchCase != undefined ? locationdata.matchCase : false );
+										WhereClause.LIKE,locationdata.matchCase != undefined ? locationdata.matchCase : false );
 	if (updatefeatures) {
 		var str:String = "<span class='busy'>"+flamingo.getString(thisObj, "busy")+"</span>";
 		if(resultViewerId!=null){
