@@ -1368,7 +1368,7 @@ class Flamingo {
 	* @return Boolean True if a string is found, False if not.
 	*/
 	public function setString(xml:Object, language:Object):Boolean {
-		//posibilities
+//posibilities
 		//<string id="label" en="a label" nl="een label" de="ein label"/>
 		//or
 		//<string id="label">
@@ -1397,11 +1397,23 @@ class Flamingo {
 		if (xml.nodeName.toLowerCase() == "string") {
 			var obj:Object = new Object();
 			var id:String;
+			var childstrings:String;
+			var parentidfield:String;
+			var childidfield:String;
 			for (var attr in xml.attributes) {
 				var val:String = xml.attributes[attr];
 				switch (attr.toLowerCase()) {
 				case "id" :
 					id = val.toLowerCase();
+					break;
+				case "childstrings" :
+					obj.childstrings = val.toLowerCase();
+					break;
+				case "parentidfield" :	
+					obj.parentidfield = val.toLowerCase();
+					break;
+				case "childidfield" :	
+					obj.childidfield = val.toLowerCase();
 					break;
 				default :
 					if (this.languages.length>0) {
