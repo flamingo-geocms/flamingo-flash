@@ -76,7 +76,7 @@ class gui.LocationResult extends MovieClip {
 	}
 	function onMouseUp():Void {
 		if(this.over){
-			ExternalInterface.call("setROLayersVisible",this.location["app:planstatus"],this.location["app:typePlan"]);
+			//ExternalInterface.call("setROLayersVisible",this.location["app:planstatus"],this.location["app:typePlan"]);
 			viewer._zoom(index);
 			_global.flamingo.raiseEvent(this.viewer,"onClickLocation", this.location);
 		}	
