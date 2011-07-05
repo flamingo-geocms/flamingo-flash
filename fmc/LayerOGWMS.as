@@ -34,6 +34,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 * @file LayerOGWMS.xml (configurationfile for layer, needed for publication on internet)
 * @change 2010-01-28 Added attribute InitService
 */
+
+import roo.FilterLayerLayerOGWMSAdapter;
+
 var version:String = "2.0";
 //---------------------------------
 var defaultXML:String = "";
@@ -193,7 +196,6 @@ function init():Void {
 	if (listento.length > 0) {
 		this.filterLayerLayerOGWMSAdapter = new FilterLayerLayerOGWMSAdapter(this);
 		_global.flamingo.addListener(this.filterLayerLayerOGWMSAdapter, listento[0], this);
-	    //_global.flamingo.tracer("this.filterLayerLayerOGWMSAdapter = " + this.filterLayerLayerOGWMSAdapter + " listento[0] = " + listento[0]);
 	}
 	
 	this._visible = visible;
@@ -1009,7 +1011,6 @@ function handleSLDarg(argsLocal:Object):Object {
 	if ((argsLocal["SLD"] != null) && (argsLocal["SLD"] != "")) {
 		argsLocal["SLD"] = tools.Utils.trim(argsLocal["SLD"]);
 		argsLocal["SLD"] += escape(sldParam.split(" ").join("+")); //replace spaces with "+" and url encode (spaces must be 'double encoded')
-		//_global.flamingo.tracer(this + "this.filterLayerLayerOGWMSAdapter == " + this.filterLayerLayerOGWMSAdapter);
 		if (this.filterLayerLayerOGWMSAdapter != undefined) {
 		     argsLocal["SLD"] += this.filterLayerLayerOGWMSAdapter.getUrlFilter();
 		}
