@@ -18,7 +18,7 @@ class roo.FilterLayerLayerOGWMSAdapter {
     }
     
     function getUrlFilter():String {
-        var filterconditions:Object = this.filterLayer.getFilterconditions();
+       var filterconditions:Object = this.filterLayer.getFilterconditions();
         
         var urlFilter:String = "";
         for (var filtername:String in filterconditions) {
@@ -28,8 +28,8 @@ class roo.FilterLayerLayerOGWMSAdapter {
             urlFilter += "&" + filtercondition ;
 		    }
 
-		    return escape(urlFilter);
-
+		    return escape(urlFilter).split("%20").join("%2520");//spaces must be double encoded
+		    
     }
     
     function getFiltersFingerprint():String {
