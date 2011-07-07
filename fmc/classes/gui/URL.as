@@ -44,7 +44,14 @@
         <fmc:URL id="risurl"  width="95%" height="95%" showaslink="true" listento="map" visible="false">
           <style id="a" font-family="arial,verdana" font-size="12px" color="#0033cc" display="block" font-weight="normal" text-decoration="underline"/>
         </fmc:URL>
-  </fmc:Window>  
+  </fmc:Window>
+* @example (use of URL with a persistency service)
+  <fmc:URL id="url"  width="95%" height="95%" showaslink="false" listento="map" persistencyservice="http://.../persistency-service/" appid="apo">\
+	<string id="buttonlabel" nl="Genereer link"/>
+	<string id="linkidentifierlabel" nl="Code"/>
+	<string id="linkidentifierhelp" nl="Vul optioneel een code in, toegestane karakters zijn A-Z, a-z, 0-9, - en _"/>
+	<string id="linkidentifiererror" nl="De gegeven code bestaat al"/>
+  </fmc:URL>
    
 * @attr url no default Defines the url to open in the browser when selecting an url instance from the combobox 
 * in the URLSelector.
@@ -57,12 +64,21 @@
 * @attr addTheme default: true. When true and applicable the current theme of the map will be added as parameter to the resulting url.  
 * @attr showAsLink default: false. When true the URL will be shown in a textfield as a link, only when the URL is not
 * in an URLSelector.
+* @attr persistencyService no default. URL of a persistency service to use for serializing viewer state
+* @attr persistComponents no default. List of component ids whose states must be persisted, use in combination with the persistencyService parameter.
+* @attr appid default: flamingo. Passed to the persistency service as application identifier.
 */
 
 
 
 import core.AbstractComponent;
 
+import mx.controls.Button;
+import mx.controls.TextInput;
+import mx.controls.Label;
+import mx.utils.Delegate;
+
+import coremodel.service.persistency.PersistencyServiceConnector;
 
 class gui.URL extends AbstractComponent  {
     private var componentID:String = "URL";
@@ -74,13 +90,26 @@ class gui.URL extends AbstractComponent  {
 	private var addTheme:Boolean = true;
 	private var addLayerVisibility = false;
 	private var addLegendState = false;
+	private var addBufferState: Boolean = false;
 	private var mapId:String;
 	private var map:Object;
 	private var legendId:String;
+	private var bufferId:String;
 	private var legend:Object;
+	private var buffer:Object;
 	private var showAsLink:Boolean = false;
 	private var warningLength:String=null;
 	private var link_txt:TextField=null;
+	private var persistencyService: String;
+	private var applicationIdentifier: String = "flamingo";
+	private var persistComponents: Array;
+	private var linkIdentifierLabel: Label;
+	private var linkIdentifierInput: TextInput;
+	private var linkIdentifierHelp: Label;
+	private var linkError: Label;
+	private var linkButton: Button;
+	private var currentURL: String;
+	private var lastDocument: XML;
     
     
     function setAttribute(name:String, value:String):Void {     
@@ -119,13 +148,29 @@ class gui.URL extends AbstractComponent  {
         else if (name.toLowerCase()=="legendid"){
 	        legendId = value;
         }
+        else if (name.toLowerCase()=="addbufferstate") {
+			addBufferState = value.toLowerCase () != "false";
+		}
+		else if (name.toLowerCase()=="bufferid") {
+			bufferId = value;
+		}
         else if (name.toLowerCase()=="showaslink"){
-        	if(value.toLowerCase()=="false"){
+        	if(value.toLowerCase()=="false" || persistencyService){
         		showAsLink = false;
         	} else {
         		showAsLink = true;
         	}
-        }  
+        }
+        else if (name.toLowerCase()=="persistencyservice") {
+        	persistencyService = value;
+        	showAsLink = false;
+        }
+        else if (name.toLowerCase()=="persistcomponents") {
+        	persistComponents = _global.flamingo.asArray (value);
+        }
+        else if (name.toLowerCase()=="appid") {
+			applicationIdentifier = value;
+		}
     }
     
     
@@ -135,23 +180,30 @@ class gui.URL extends AbstractComponent  {
     		mapId = listento[0];
     		map = _global.flamingo.getComponent(listento[0]);
     	}
-		if(showAsLink){
+		if(showAsLink || persistencyService){
 			addLink();
+			if (persistencyService) {
+				addLinkIdentifierControls ();
+			} else {
+				updateLink ();				
+			}
 		}
 		
+		var viewerStateCode: String = _global.flamingo.getArgument (this, 'viewerStateCode');
+		if (viewerStateCode && viewerStateCode.length > 0 && persistencyService) {
+			retrieveViewerState (viewerStateCode);
+		}
     }
-    
     
     function setVisible(visible:Boolean):Void {
         super.setVisible(visible);
+		var parent:Object = _global.flamingo.getParent(this);
+		if(_global.flamingo.getUrl(parent).indexOf("Window") > 0){
+			link_txt._width = parent._width-20;
+			link_txt._height = parent._height-20;
+		}
     	if(showAsLink){
-    		var parent:Object = _global.flamingo.getParent(this);
-    		if(_global.flamingo.getUrl(parent).indexOf("Window") > 0){
-    			link_txt._width = parent._width-20;
-    			link_txt._height = parent._height-20;
-    		}
 			updateLink();
-		
     	}
     }
     
@@ -171,7 +223,63 @@ class gui.URL extends AbstractComponent  {
 		if(warningLength == null){
 			warningLength = "Letop: een url van deze lengte kan niet zonder problemen worden geopend in Internet Explorer";
 		}
-		updateLink();
+    }
+    
+    public function addLinkIdentifierControls (): Void {
+		linkIdentifierLabel = Label (attachMovie ('Label', 'linkIdentifierLabel', getNextHighestDepth (), {
+			text: _global.flamingo.getString (this, "linkidentifierlabel"),
+			autoSize: 'left'
+		}));
+		linkIdentifierInput = TextInput (attachMovie ('TextInput', 'linkIdentifierInput', getNextHighestDepth (), {
+			width: 60,
+			maxChars: 64,
+			restrict: "A-Za-z0-9_\\-"
+		}));
+		linkButton = Button (attachMovie ('Button', 'linkButton', getNextHighestDepth(), {
+    		label: _global.flamingo.getString (this, "buttonlabel")
+    	}));
+		linkIdentifierHelp = Label (attachMovie ('Label', 'linkIdentifierHelp', getNextHighestDepth (), {
+			text: _global.flamingo.getString (this, 'linkidentifierhelp'),
+			autoSize: 'left'
+		}));
+		linkError = Label (attachMovie ('Label', 'linkError', getNextHighestDepth (), {
+			text: '',
+			autoSize: 'left'
+		}));
+		
+		linkButton.addEventListener ('click', Delegate.create (this, onClickLinkButton));
+    }
+    
+    private function onClickLinkButton (): Void {
+    	persistViewerState ();
+    }
+    
+    public function layout (): Void {
+    	super.layout ();
+    	
+    	if (persistencyService) {
+    		var width: Number = __width,
+    			height: Number = __height,
+    			x: Number = 4,
+    			y: Number = 4;
+    			
+    		linkIdentifierLabel.move (x, y);
+    		x += linkIdentifierLabel.width + 10; 
+    		linkIdentifierInput.move (x, y);
+    		x += linkIdentifierInput.width + 10;
+    		linkButton.move (x, y);
+    		y += Math.max (Math.max (linkIdentifierInput.height, linkIdentifierLabel.height), linkButton.height) + 4;
+    		x = 4;
+    		
+			linkIdentifierHelp.move (x, y);
+			y += linkIdentifierHelp.height + 4;
+			linkError.move (x, y);
+			y += linkError.height + 10;
+			
+			link_txt._x = x;
+			link_txt._y = y;
+			link_txt._width = __width - 20;
+		}
     }
     
     private function updateLink(){
@@ -211,6 +319,11 @@ class gui.URL extends AbstractComponent  {
     }  
     	
 	function getUrl():String {
+		
+		if (persistencyService) {
+			return currentURL;
+		}
+		
 		var resultUrl:String = "";
 		if(url==null){
 			var arg:String = _global.flamingo.getArgument(this, "url");
@@ -254,6 +367,14 @@ class gui.URL extends AbstractComponent  {
 		if(legend!=null && addLegendState){
 			paramStr += buildLegendGroupParams() + "&";
 		}
+		
+		if (!buffer && bufferId) {
+			buffer = _global.flamingo.getComponent (bufferId);
+		}
+		if (buffer && addBufferState) {
+			paramStr += buildBufferParams() + "&";
+		}
+		
 		return resultUrl + paramStr.substr(0,paramStr.length-1);
 	}
 	
@@ -308,5 +429,147 @@ class gui.URL extends AbstractComponent  {
     	return params;
     }
     
+    private function buildBufferParams(): String {
+    	var buffers: Object = buffer.getBuffers (),
+    		params: String = '';
+    		
+    	for (var layerId: String in buffers) {
+    		var bufferSize: Number = buffers[layerId];
+
+			if (params != '') {
+				params += ',';
+			}
+			
+			params += layerId + '-' + bufferSize;    		
+    	}
+    	
+    	return 'buffers=' + params;
+    }
     
+    private function getPersistComponentIDs (): Array {
+    	var componentIDs: Array = persistComponents ? persistComponents.concat () : [ ];
+    	
+    	if (mapId) {
+    		componentIDs.push (mapId);
+    	}
+    	if (legendId) {
+    		componentIDs.push (legendId);
+    	}
+    	if (bufferId) {
+    		componentIDs.push (bufferId);
+    	}
+    	
+    	return componentIDs;
+    }
+    private function persistViewerState (): Void {
+    	var components: Array =  [ ],
+    		i: Number,
+    		component: MovieClip;
+    	
+    	// Collect all components whose viewer state must be persisted:
+    	var componentIDs: Array = getPersistComponentIDs ();
+    	for (i = 0; i < componentIDs.length; ++ i) {
+    		if ((component = _global.flamingo.getComponent (componentIDs[i])) && component.persistState) {
+    			components.push (component);
+    		}
+    	}
+    	
+    	// Create a viewer state document:
+    	var document: XML = new XML ('<ViewerState></ViewerState>'),
+    		documentElement: XMLNode = document.firstChild;
+    		
+    	for (i = 0; i < components.length; ++ i) {
+    		var componentNode: XMLNode = document.createElement ('Component');
+    		
+    		component = components[i];
+    		componentNode.attributes['id'] = _global.flamingo.getId (component);
+    		component.persistState (document, componentNode);
+    		
+    		documentElement.appendChild (componentNode);
+    	}
+
+		// If the viewer state does not differ from the last viewer state there is no need to re-submit the state again to the service:    	
+    	if (linkIdentifierInput.text == "" && lastDocument && document.toString () == lastDocument.toString ()) {
+    		return;
+    	}
+    	lastDocument = document;
+    	
+    	// Submit the viewer state to the service:
+    	linkButton.enabled = false;
+    	var connector:PersistencyServiceConnector = new PersistencyServiceConnector(persistencyService, applicationIdentifier);
+    	connector.persistDocument (document, linkIdentifierInput.text, Delegate.create (this, onPersistComplete));
+    }
+    
+    private function onPersistComplete (status: Number, code: String): Void {
+    	
+    	linkButton.enabled = true;
+    	
+    	if (status == PersistencyServiceConnector.STATUS_INVALID_CODE) {
+    		linkError.text = _global.flamingo.getString (this, "linkidentifiererror");
+			link_txt.htmlText = "";
+			currentURL = "";
+			return;
+		} else {
+    		linkError.text = "";
+    	}
+    	
+    	// Build the URL:
+    	var url: String = this.url || _global.flamingo.getArgument (this, 'url'),
+    		offset: Number;
+    	if ((offset = url.indexOf ('?')) >= 0) {
+    		url = url.substr (0, offset);
+    	}
+    	url += '?s=' + code;
+
+		currentURL = url;
+		updateLink ();    	
+    }
+    
+    private function retrieveViewerState (viewerStateCode: String): Void {
+		// Createa a connector and request the viewer state from the service:
+		_global.setTimeout (Delegate.create (this, function (): Void {    	
+    		var connector: PersistencyServiceConnector = new PersistencyServiceConnector(this.persistencyService, this.applicationIdentifier);
+    		connector.getDocument (viewerStateCode, Delegate.create (this, this.onRetrieveViewerStateComplete));
+		}), 10);
+    	
+    }
+    
+    private function onRetrieveViewerStateComplete (status: Number, document: XML): Void {
+    	
+    	// Ignore invalid codes or failures in the service:
+    	if (status != PersistencyServiceConnector.STATUS_SUCCESS) {
+    		return;
+    	}
+    	
+    	var documentNode: XMLNode = document.firstChild;
+    	for (var i: Number = 0; i < documentNode.childNodes.length; ++ i) {
+    		var componentNode: XMLNode = documentNode.childNodes[i];
+    		
+    		if (componentNode.localName != "Component" || !componentNode.attributes["id"]) {
+    			continue;
+    		}
+    		
+    		setComponentState (componentNode.attributes["id"], componentNode);
+    	}
+    }
+    
+    private function setComponentState (componentId: String, node: XMLNode): Void {
+
+		var callback: Function = function (component: MovieClip): Void {
+			if (!component.restoreState) {
+				return;
+			}
+			
+			component.restoreState (node);
+		};
+		
+		var component: MovieClip = _global.flamingo.getComponent (componentId);
+		if (component && (!(component instanceof AbstractComponent) || component.inited)) {
+			callback (component);
+		}
+		
+		_global.flamingo.addListener ({
+			onInit: callback
+		}, componentId, this);
+    }
 }

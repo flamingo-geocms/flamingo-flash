@@ -11,6 +11,16 @@ import mx.events.EventDispatcher;
 import mx.containers.ScrollPane;
 import mx.controls.CheckBox;
 
+import gui.legend.LegendContainer;
+import gui.legend.AbstractLegendItem;
+import gui.legend.GroupLegendItem;
+import gui.legend.AbstractGroupLegendItem;
+import gui.legend.LegendItem;
+import gui.legend.AbstractLabelLegendItem;
+import gui.legend.RulerLegendItem;
+import gui.legend.SymbolLegendItem;
+import gui.legend.TextLegendItem;
+
 import gui.dde.DownloadSelector;
 
 class gui.dde.DownloadLegend extends MovieClip implements DDEConnectorListener{
@@ -84,13 +94,12 @@ class gui.dde.DownloadLegend extends MovieClip implements DDEConnectorListener{
 			}	
 			if(itemclips==undefined || itemclips.length == 0){
 				itemclips = new Array();
-				if(legend.allLegenditems == undefined){
-					legenditems = legend.legenditems;
-				} else {
-					legenditems = legend.allLegenditems;
-				}
-				drawLegend(legenditems, this, 0);
-				refresh();
+				
+				getOriginalLegendItems (Delegate.create (this, function (items: Array): Void {
+					legenditems = items;
+					this.drawLegend(legenditems, this, 0);
+					this.refresh();
+				}));
 			}		
 		} 
 		
@@ -446,4 +455,93 @@ class gui.dde.DownloadLegend extends MovieClip implements DDEConnectorListener{
 		return mapService;
 	}
 
+    // =========================================================================
+    // Compatibility with the new legend component:
+    // =========================================================================
+    public function getOriginalLegendItems (callback: Function): Void {
+    	if (!(legend instanceof LegendTNG)) {
+            if(legend.allLegenditems == undefined){
+            	callback (legend.legenditems);
+                return;
+            } else {
+                callback (legend.allLegenditems);
+                return;
+            }
+    	}
+    	
+    	var legendContainer: LegendContainer = LegendTNG (legend).legendContainer;
+    	
+    	// Force the legend to parse and render all groups:
+    	legendContainer.getAllItemsFiltered(
+            null, // No filter, we're not interested in the result.
+            true, // Force the legend container to parse groups that haven't been expanded yet.
+            Delegate.create (this, function (): Void {
+            	// Return the converted array of children from the legend container:
+            	var convertedLegendContainer: Object = this.recursiveConvertItem (legendContainer);
+            	callback (convertedLegendContainer['items']);
+            }),
+            function (item: AbstractLegendItem): Boolean {      // Policy for expanding groups.
+            	return (item instanceof GroupLegendItem) || (item instanceof LegendContainer);
+            }
+        );
+    }
+    
+    private function recursiveConvertItem (item: AbstractLegendItem): Object {
+    	var result: Object = { };
+
+		// Set item type:
+		if (item instanceof GroupLegendItem) {
+			result['type'] = 'group';
+		} else if (item instanceof LegendContainer) {
+			result['type'] = 'legend';
+		} else if (item instanceof LegendItem) {
+			result['type'] = 'item';
+		} else if (item instanceof RulerLegendItem) {
+			result['type'] = 'hr';
+		} else if (item instanceof SymbolLegendItem) {
+			result['type'] = 'symbol';
+		} else if (item instanceof TextLegendItem) {
+			result['type'] = 'text';
+		}
+		
+		// Copy properties:
+		if (item instanceof AbstractLabelLegendItem) {
+			result['label'] = AbstractLabelLegendItem (item).label;
+		}
+		if (item instanceof GroupLegendItem) {
+			result['collapsed'] = GroupLegendItem (item).collapsed;		
+		}
+		if (item instanceof LegendItem) {
+			result['listento'] = convertListenTo (LegendItem (item).listenTo);
+		}
+		result['legItem'] = item;
+		result['vis'] = true;
+
+		// Copy children:
+		if (item instanceof AbstractGroupLegendItem) {
+			var i: Number = 0,
+            	children: Array = AbstractGroupLegendItem (item).getItems (),
+            	items: Array = [ ];
+            	
+			for (i = 0; i < children.length; ++ i) {
+				items.push (recursiveConvertItem (children[i]));
+			}
+			
+			result['items'] = items;
+		}
+		
+		return result;
+    }
+    
+    private static function convertListenTo (listenTo: Object): Object {
+    	var result: Object = { };
+    	
+    	for (var i: String in listenTo) {
+    		result[i] = listenTo[i].join (',');
+    	}
+    	
+    	return result;
+    }
+    
+    
 }

@@ -227,7 +227,7 @@ class gismodel.Feature {
 	object["fmc_layername"]= the layername from which the feature is given
 	object["<propertyname without prefix and ':'>"]= the property value
 	*/
-    function toObject():Object{
+    function toObject(includePrefix: Boolean):Object{
     	var returnValue:Object = new Object();
     		returnValue["id"]=getID();
     	if (getGeometry()!=null){    	
@@ -241,7 +241,7 @@ class gismodel.Feature {
     		var property:Property = Property(properties[i]);
     		//var propertyIndex:Number = layer.getPropertyIndex(property.getName());
 			var nameWithoutPrefix:String=property.getName();
-			if (nameWithoutPrefix.indexOf(":")>=0){
+			if (nameWithoutPrefix.indexOf(":")>=0 && !includePrefix){
 				nameWithoutPrefix=nameWithoutPrefix.substr(nameWithoutPrefix.indexOf(":")+1);
 			}
     		returnValue[nameWithoutPrefix]=getValue(property.getName());		

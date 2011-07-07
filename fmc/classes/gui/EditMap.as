@@ -71,7 +71,7 @@ import tools.Logger;
 
 import core.AbstractComponent;
 
-class gui.EditMap extends AbstractComponent implements StateEventListener {
+class gui.EditMap extends AbstractComponent implements StateEventListener, core.PersistableComponent {
     
     private var mask:MovieClip = null;
     private var gis:GIS = null;
@@ -527,14 +527,14 @@ class gui.EditMap extends AbstractComponent implements StateEventListener {
 	/**
 	Get all features of all the layers in this EditMap as objects(usable objects for javascript, see Feature.toObject() for details of the object)
 	*/
-	public function getAllFeaturesAsObject():Array{
+	public function getAllFeaturesAsObject(includePrefix: Boolean):Array{
 		var returnValue:Array=new Array();
 		var layers:Array=gis.getLayers();
 		for (var i=0; i < layers.length; i++){
 			var layer=Layer(layers[i]);
 			var lFeatures:Array=layer.getFeatures();
 			for (var l=0; l < lFeatures.length; l++){
-				var oFeature:Object=Feature(lFeatures[l]).toObject();
+				var oFeature:Object=Feature(lFeatures[l]).toObject(includePrefix);
 				if (oFeature!=undefined && oFeature!=null){					
 					oFeature["flamingoLayerName"]=layer.getName();
 					returnValue.push(oFeature);
@@ -603,6 +603,54 @@ class gui.EditMap extends AbstractComponent implements StateEventListener {
 	
 	public function moveToExtent(extendedExtent:Object):Void{
 		_global.flamingo.getComponent(listento[0]).moveToExtent(extendedExtent);
+	}
+	
+	/**
+	 * Provide the state of EditMap to the component responsible for storing the viewer state
+	 * @param document:XML object to execute createElement calls, do not change it
+	 * @param node:XMLNode node to be filled with the state of EditMap
+	 */
+	public function persistState (document: XML, rootnode: XMLNode): Void {
+		var features:Array;
+		features = getAllFeaturesAsObject(true);
+		for (var i:Number=0; i < features.length; i++){
+			var fNode:XMLNode = document.createElement("feature_" + i.toString());
+			var feature:Object = features[i];
+			for (var prop:String in feature) {
+				var propNode:XMLNode = document.createElement("Property");
+				propNode.attributes.name = prop;
+				propNode.attributes.isnull = "false";
+				if (feature[prop] == undefined) {
+					propNode.attributes.isnull = "true";
+				}
+				var propText:XMLNode = document.createTextNode(feature[prop]);				
+				propNode.appendChild(propText);
+				fNode.appendChild(propNode);
+			}
+			rootnode.appendChild(fNode);
+		}
+	}
+	
+	/**
+	 * Restore the state of EditMap as saved with persistState()
+	 * @param node:XMLNode node containing the saved state
+	 */
+	public function restoreState (node: XMLNode): Void {
+		var features:Array = node.childNodes;
+		for (var i:Number=0; i < features.length; i++) {
+			var feature:Object = new Object();
+			var props:Array = features[i].childNodes;
+			for (var j:Number=0; j < props.length; j++) {
+				var propNode:XMLNode = props[j],
+					propName:String = propNode.attributes.name;
+				if (propNode.attributes.isnull == "true") {
+					feature[propName] = undefined;
+				} else {
+					feature[propName] = propNode.firstChild.nodeValue;
+				}
+			}
+			this.addFeature(feature["flamingoLayerName"], feature);
+		}
 	}
 	
 	/**

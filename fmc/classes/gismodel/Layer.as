@@ -295,7 +295,6 @@ class gismodel.Layer extends AbstractComposite implements ActionEventListener {
     }
     
     function addFeature(_object:Object):Void {
-		log.debug("AddFeature is called");
         if (_object == null) {
             _global.flamingo.tracer("Exception in gismodel.Layer.addFeature()\No service feature or geometry given.");
             return;

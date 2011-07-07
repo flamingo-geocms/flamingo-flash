@@ -140,10 +140,16 @@ class gui.PrintTemplate extends ScalableContainer {
             	if((_global.flamingo.getUrl(component)).indexOf("Legend") > 0){
 	            	if(component.configObjId!=null && !legendConfigLoaded){
 	            		var legendConfigObj:Object = _global.flamingo.getComponent(component.configObjId);
-		            	var xmls:Array= _global.flamingo.getXMLs(legendConfigObj);
-						for (var i = 0; i < xmls.length; i++){
-							component.parseCustomAttr(xmls[i]);
-						}
+		            	var xmls:Array= _global.flamingo.getXMLs(component.configObjId);
+		            	if (xmls) {
+    						for (var i = 0; i < xmls.length; i++){
+    							component.parseCustomAttr(xmls[i]);
+    						}
+		            	} else {
+		            		_global.setTimeout (function (): Void {
+		            		    component.processConfig (legendConfigObj.getConfig ());
+		            		}, 100);
+		            	}
 						legendConfigLoaded = true;
 	            	}
 	            }

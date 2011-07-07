@@ -258,12 +258,51 @@ function setConfig2(xml:Object) {
 		}
 		
 	}
+	
+	// Get buffer arguments:
+	var buffers: String = _global.flamingo.getArgument(this, "buffers");
+	if (buffers && buffers.length > 0) {
+		var parts: Array = buffers.split (','),
+			self = this;
+		for (var i: Number = 0; i < parts.length; ++ i) {
+			var p: String = parts[i].split ('-'),
+				layerId: String = p[0],
+				bufferSize: Number = Number (p[1]);
+				
+			onLayerAvailable (layerId, function (args: Object): Void {
+				self.generateBuffer (args.layerId, args.bufferSize);
+			}, {layerId: layerId, bufferSize: bufferSize });
+		}
+	}
+	
 	//
 	_parent.initTool(this,skin+"_up",skin+"_over",skin+"_down",skin+"_up",lMap,"pan","tooltip");
 	this.setEnabled(enabled);
 	this.setVisible(visible);
 	flamingo.position(this);
 }
+
+function onLayerAvailable (layerId: String, callback: Function, args: Object): Void {
+	var layerComponentId: String = this._parent.listento[0] + '_' + this.layers[layerId].mapServiceID,
+		mapService: MovieClip = _global.flamingo.getComponent (layerComponentId);
+		
+	if (mapService && mapService.initialized && !mapService.updating) {
+		callback (args);
+	} else {
+		var self = this;
+		var op: Function = function (target: MovieClip): Void {
+				_global.flamingo.removeListener (listener, layerComponentId, self) 
+				callback (args); 
+			};
+			
+		var listener: Object = {
+			onUpdateComplete: op
+		};
+		
+		_global.flamingo.addListener (listener, layerComponentId, this);
+	}
+}
+
 function generateBuffer(layerIndex:String, radius:Number){
 	var layerComponent:String = this._parent.listento[0]+"_"+this.layers[layerIndex].mapServiceID;
 	var mapService = flamingo.getComponent(layerComponent);
@@ -277,8 +316,10 @@ function generateBuffer(layerIndex:String, radius:Number){
 
 	mapService.setLayerProperty(this.layers[layerIndex].layerID ,"buffer",this.layers[layerIndex].buffer);
 
-	//refresh map
-	mapService.refresh();
+	//refresh map after a timeout since the layer can't be refreshed from a onUpdateComplete handler:
+	_global.setTimeout (function (): Void {
+		mapService.refresh();
+	}, 1);
 	flamingo.getComponent(this._parent.listento[0]).refresh();
 }
 
@@ -292,6 +333,20 @@ function removeBuffer(layerIndex:String){
 	mapService.setLayerProperty(this.layers[layerIndex].layerID ,"buffer");
 	flamingo.getComponent(this._parent.listento[0]).refresh();	
 }
+
+function getBuffers (): Object {
+	var result: Object = { };
+	
+	for (var i: Number = 0; i < this.layers.length; ++ i) {
+		var layerIndex: String = this.layers[i].layerID;
+		if (this.layers[layerIndex].hasBuffer) {
+			result[layerIndex] = this.layers[layerIndex].buffer.radius;
+		}
+	}
+	
+	return result;
+}
+
 function initWindow(){
 	window.content.cmb_layers.removeAll();
 	window.content.ta_radius.text =" ";
@@ -396,6 +451,48 @@ function setWindowLabels()
 	window.content.btn_ok.label = flamingo.getString(this, "okLabel");
 	window.content.lbl_error.text = flamingo.getString(this, "notvalidLabel");	
 	window.title = flamingo.getString(this, "title", title);
+}
+function persistState (document: XML, node: XMLNode): Void {
+	var buffers: Object = getBuffers (),
+		buffersNode: XMLNode = document.createElement ('Buffers');
+		
+	for (var i: String in buffers) {
+		var bufferNode: XMLNode = document.createElement ('B');
+		
+		bufferNode.attributes['id'] = i;
+		bufferNode.attributes['s'] = buffers[i];
+		
+		buffersNode.appendChild (bufferNode);
+	}
+	
+	node.appendChild (buffersNode);
+}
+function restoreState (node: XMLNode): Void {
+	var buffersNode: XMLNode = node.firstChild,
+		doUpdate: Boolean = false,
+		self = this;
+	
+	if (buffersNode && buffersNode.nodeName == 'Buffers') {
+		for (var i: Number = 0; i < buffersNode.childNodes.length; ++ i) {
+			var bufferNode: XMLNode = buffersNode.childNodes[i],
+				bufferId: String = bufferNode.attributes['id'],
+				bufferSize: Number = Number (bufferNode.attributes['s']);
+				
+			if (bufferId && bufferSize && this.layers[bufferId]) {
+				this.layers[bufferId].hasBuffer = true;
+				this.layers[bufferId].buffer.radius = bufferSize;
+				doUpdate = true;
+				
+				onLayerAvailable (bufferId, function (args: Object): Void {
+					self.generateBuffer (args.layerId, args.bufferSize);
+				}, {layerId: bufferId, bufferSize: bufferSize });
+			}
+		}
+	}
+	
+	if (doUpdate) {
+		
+	}
 }
 //default functions-------------------------------
 function startIdentifying() {

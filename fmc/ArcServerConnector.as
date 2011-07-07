@@ -53,6 +53,7 @@ class ArcServerConnector {
 	private var layerid:String;
 	private var events:Object;
 	private var requestid:Number = 0;
+	private var bufferInfoCache:Object;
 	//-----------------------
 	function addListener(listener:Object) {
 		events.addListener(listener);
@@ -63,6 +64,7 @@ class ArcServerConnector {
 	function ArcServerConnector(server:String) {
 		this.server = server;
 		events = new Object();
+		bufferInfoCache = { };
 		AsBroadcaster.initialize(events);
 	}
 	private function _getUrl():String {
@@ -89,7 +91,7 @@ class ArcServerConnector {
 		var service:String = "";
 		return (_server+_servlet+_service+"/MapServer");
 	}
-	private function _sendrequest(sxml:String, requesttype:String, objecttag:Object):Number {
+	private function _sendrequest(sxml:String, requesttype:String, objecttag:Object, callback: Function):Number {
 		if (this.busy) {
 			this.error = "busy processing request...";
 			this.events.broadcastMessage("onError", this.error, objecttag, this.requestid);
@@ -127,23 +129,29 @@ class ArcServerConnector {
 					thisObj.events.broadcastMessage("onResponse", thisObj);
 					thisObj.events.broadcastMessage("onError", thisObj.error, objecttag, thisObj.requestid);
 				} else {
-					thisObj.events.broadcastMessage("onResponse", thisObj);
-					switch (requesttype) {
-					case "getServices" :
-						thisObj._processServices(this, objecttag, thisObj.requestid);
-						break;
-					case "getImage" :
-						thisObj._processImage(this, objecttag, thisObj.requestid);
-						break;
-					case "getQueryFeatureIDs" :
-						thisObj._processQueryFeatureIDs(this, objecttag, thisObj.requestid);
-						break;
-					case "getServiceInfo" :
-						thisObj._processServiceInfo(this, objecttag, thisObj.requestid);
-						break;
-					case "getFeatures" :
-						thisObj._processFeatures(this, objecttag, thisObj.requestid);
-						break;
+                    thisObj.events.broadcastMessage("onResponse", thisObj);
+					if (callback) {
+						thisObj.busy = false;
+						callback (this, objecttag);
+						delete this;
+					} else {
+    					switch (requesttype) {
+    					case "getServices" :
+    						thisObj._processServices(this, objecttag, thisObj.requestid);
+    						break;
+    					case "getImage" :
+    						thisObj._processImage(this, objecttag, thisObj.requestid);
+    						break;
+    					case "getQueryFeatureIDs" :
+    						thisObj._processQueryFeatureIDs(this, objecttag, thisObj.requestid);
+    						break;
+    					case "getServiceInfo" :
+    						thisObj._processServiceInfo(this, objecttag, thisObj.requestid);
+    						break;
+    					case "getFeatures" :
+    						thisObj._processFeatures(this, objecttag, thisObj.requestid);
+    						break;
+    					}
 					}
 				}
 			} else {
@@ -336,63 +344,220 @@ class ArcServerConnector {
 		}
 		this.events.broadcastMessage("onGetServiceInfo", extent, layers, objecttag, requestid);
 	}
+	
 	function getImage(service:String, extent:Object, size:Object, layers:Object, objecttag:Object):Number {
-		if (service != undefined) {
-			this.service = service;
-		}
-		var str:String = this.xmlheader+"\n";
-		var rgb1:Object = _getRGB(this.backgroundcolor);
 		
-		str += "<SOAP-ENV:Envelope xmlns:SOAP-ENV=\"http://schemas.xmlsoap.org/soap/envelope/\" ";
+        var bufferLayers: Array = [ ];
+		
+		// Check whether one or more layers have a buffer. If none of the layers have a buffer the image can be requested
+		// without querying the selected features first:
+		for (var i: String in layers) {
+			if (layers[i].buffer) {
+                bufferLayers.push ({ layer: layers[i], features: [ ] });
+            }
+		}
+		if (bufferLayers.length == 0) {
+			return getImageWithBuffers (service, extent, size, layers, objecttag, { });
+		}
+		
+		// Request a list of visible features for each layer:
+		var currentBufferLayer: Number = 0,
+            self: ArcServerConnector = this;
+		var doGetFeatures: Function = function (): Number {
+			if (currentBufferLayer >= bufferLayers.length) {
+				doGetImageWithBuffers ();
+				return;
+			}
+			
+			var layer: Object = bufferLayers[currentBufferLayer].layer,
+                features: Array = bufferLayers[currentBufferLayer].features,
+                query: String = layer.query ? layer.query.toString () : "";
+
+            // Use buffered results from a previous extent if the new extent is within the previous extent and the feature count
+            // is < 50:
+            if (self.bufferInfoCache[layer.id] && self.extentContains (self.bufferInfoCache[layer.id].extent, extent) && self.bufferInfoCache[layer.id].features.length < 50) {
+            	features = bufferInfoCache[layer.id].features;
+            	return doGetFeatures ();
+            }
+            
+            var processResponse: Function = function (xml: XML): Void {
+                var xnQuery:Array = xml.firstChild.firstChild.firstChild.childNodes;
+                var fid:Array = xnQuery[0].childNodes[0].childNodes;
+                for (var i:Number = 0; i<fid.length; i++)
+                {
+                    if(fid[i].nodeName == "Int"){
+                    	features.push (fid[i].firstChild.nodeValue);
+                    }
+                }
+                
+                self.bufferInfoCache[layer.id] = {
+                	extent: extent,
+                	features: features
+                };
+                
+                doGetFeatures ();
+            };
+            
+            currentBufferLayer = currentBufferLayer + 1;
+            
+            var radius: Number = Number (layer.buffer.radius) + 10;
+            var bufferLayerExtent: Object = {
+            	minx: extent.minx - radius,
+            	maxx: extent.maxx + radius,
+            	miny: extent.miny - radius,
+            	maxy: extent.maxy + radius
+            };
+            return self.getQueryFeatureIDsByExtent (service, layer.id, bufferLayerExtent, objecttag, processResponse);
+		};
+		var doGetImageWithBuffers: Function = function (): Void {
+			var bufferInfo: Object = { };
+			for (var i: Number = 0; i < bufferLayers.length; ++ i) {
+				bufferInfo[bufferLayers[i].layer.id] = bufferLayers[i].features;
+			}
+			self.getImageWithBuffers (service, extent, size, layers, objecttag, bufferInfo);
+		};
+		
+		return doGetFeatures ();
+	}
+	
+    /**
+     * Requests a map image for the given layers for a given extent with an optional buffer for each layer. If one of more layers
+     * have a buffer this method is invoked after the IDs of the visible features have become available.
+     * 
+     * @param service
+     * @param extent        The extent of the map image (minx, maxx, miny, maxy).
+     * @param size          The size of the resulting image (width, height).
+     * @param layers        A map containing all layers to include in the map image. Keys in the map correspond with layer IDs.
+     * @param objecttag     Passed on to the event handler after the request completes.
+     * @param bufferInfo    A map containing an array of selected feature IDs for each layer that has a buffer. A buffer can only be
+     *                      applied to selected features. Therefore a layer can only have a buffer if corresponding bufferInfo is available.
+     * @return              The request ID.
+     */
+    private function getImageWithBuffers (service:String, extent:Object, size:Object, layers:Object, objecttag:Object, bufferInfo: Object): Number {
+        if (service != undefined) {
+            this.service = service;
+        }
+        var str:String = this.xmlheader+"\n";
+        var rgb1:Object = _getRGB(this.backgroundcolor);
+        
+        str += "<SOAP-ENV:Envelope xmlns:SOAP-ENV=\"http://schemas.xmlsoap.org/soap/envelope/\" ";
         str +="xmlns:SOAP-ENC=\" http://schemas.xmlsoap.org/soap/encoding/\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" ";
         
-		if(esriArcServerVersion == "9.2")
-		{
-			str += "xmlns:xsd=\" http://www.w3.org/2001/XMLSchema\" xmlns:m0=\"http://www.esri.com/schemas/ArcGIS/9.2\">\n<SOAP-ENV:Body>\n";			
-			str += "<m:ExportMapImage xmlns:m=\"http://www.esri.com/schemas/ArcGIS/9.2\">\n<MapDescription>\n";
-		}
-		else if (esriArcServerVersion == "9.3")
-		{
-			str += "xmlns:xsd=\" http://www.w3.org/2001/XMLSchema\" xmlns:m0=\"http://www.esri.com/schemas/ArcGIS/9.3\">\n<SOAP-ENV:Body>\n";		
-			str += "<m:ExportMapImage xmlns:m=\"http://www.esri.com/schemas/ArcGIS/9.3\">\n<MapDescription>\n";
-		}
-		
+        if(esriArcServerVersion == "9.2")
+        {
+            str += "xmlns:xsd=\" http://www.w3.org/2001/XMLSchema\" xmlns:m0=\"http://www.esri.com/schemas/ArcGIS/9.2\">\n<SOAP-ENV:Body>\n";           
+            str += "<m:ExportMapImage xmlns:m=\"http://www.esri.com/schemas/ArcGIS/9.2\">\n<MapDescription>\n";
+        }
+        else if (esriArcServerVersion == "9.3")
+        {
+            str += "xmlns:xsd=\" http://www.w3.org/2001/XMLSchema\" xmlns:m0=\"http://www.esri.com/schemas/ArcGIS/9.3\">\n<SOAP-ENV:Body>\n";       
+            str += "<m:ExportMapImage xmlns:m=\"http://www.esri.com/schemas/ArcGIS/9.3\">\n<MapDescription>\n";
+        }
+        
         str +="<Name>"+dataframe+"</Name>\n<MapArea xsi:type=\"m0:MapExtent\">\n<Extent xsi:type=\"m0:EnvelopeN\">\n";
-		str += "<XMin>"+extent.minx+"</XMin>\n";
-		str += "<YMin>"+extent.miny+"</YMin>\n";
-		str += "<XMax>"+extent.maxx+"</XMax>\n";
-		str += "<YMax>"+extent.maxy+"</YMax>\n";
-		str +="</Extent>\n</MapArea>\n<LayerDescriptions>";
+        str += "<XMin>"+extent.minx+"</XMin>\n";
+        str += "<YMin>"+extent.miny+"</YMin>\n";
+        str += "<XMax>"+extent.maxx+"</XMax>\n";
+        str += "<YMax>"+extent.maxy+"</YMax>\n";
+        str +="</Extent>\n</MapArea>\n<LayerDescriptions>";
 
-		for(var i in layers){
-			if(layers[i].id != undefined && layers[i].visible != undefined){
-				str +="<LayerDescription>\n<LayerID>"+layers[i].id+"</LayerID>\n";
-				str +="<Visible>"+layers[i].visible+"</Visible>\n<ShowLabels>true</ShowLabels>\n";
-				if(layers[i].query != undefined) {
-					str +="<ScaleSymbols>true</ScaleSymbols>\n<SelectionFeatures>\n";
-					for(var j:Number = 0; j< selectedFID.length; j++){
-						str += "<Int>"+selectedFID[j]+"</Int>\n";		
-					}
-					str +="</SelectionFeatures>\n<SetSelectionSymbol>true</SetSelectionSymbol>";
-					
-					if(layers[i].query != undefined && layers[i].query != "") {
-						var q:String = layers[i].query.toString();
-						str +="<DefinitionExpression>"+q+"</DefinitionExpression>\n";				
-					}
-				}
-				str +="</LayerDescription>";
-			}
-		}
-		str +="</LayerDescriptions>\n<TransparentColor xsi:type=\"m:RgbColor\">\n<Red>255</Red>\n<Green>255</Green>\n<Blue>255</Blue>\n";
-		str +="<UseWindowsDithering>true</UseWindowsDithering>\n<AlphaValue>50</AlphaValue>\n</TransparentColor>\n";
-		str +="</MapDescription>\n<ImageDescription>\n<ImageType>\n<ImageFormat>esriImagePNG24</ImageFormat>\n"; 
-		str +="<ImageReturnType>esriImageReturnURL</ImageReturnType>\n</ImageType>\n<ImageDisplay>\n<ImageHeight>"+size.height+"</ImageHeight>\n";
+        for(var i in layers){
+            if(layers[i].id != undefined && layers[i].visible != undefined){
+                str +="<LayerDescription>\n<LayerID>"+layers[i].id+"</LayerID>\n";
+                str +="<Visible>"+layers[i].visible+"</Visible>\n<ShowLabels>true</ShowLabels>\n";
+                
+                // Include query info:
+                if(layers[i].query != undefined) {
+                    str += "<ScaleSymbols>true</ScaleSymbols>";
+                    if (selectedFID.length > 0) {
+                        str += "<SelectionFeatures>\n";
+                        for(var j:Number = 0; j< selectedFID.length; j++){
+                            str += "<Int>"+selectedFID[j]+"</Int>\n";       
+                        }
+                        str += "</SelectionFeatures>";
+                    }
+                    str += "<SetSelectionSymbol>true</SetSelectionSymbol>";
+                    
+                    if(layers[i].query != undefined && layers[i].query != "") {
+                        var q:String = layers[i].query.toString();
+                        str +="<DefinitionExpression>"+q+"</DefinitionExpression>\n";               
+                    }
+                }
+                
+                // Include buffer info:
+                if(layers[i].buffer && bufferInfo[i]) {
+                	str += getBufferXML (layers[i].buffer, bufferInfo[i]);
+                }
+                
+                str += "</LayerDescription>";
+            }
+        }
+        str +="</LayerDescriptions>\n<TransparentColor xsi:type=\"m:RgbColor\">\n<Red>255</Red>\n<Green>255</Green>\n<Blue>255</Blue>\n";
+        str +="<UseWindowsDithering>true</UseWindowsDithering>\n<AlphaValue>50</AlphaValue>\n</TransparentColor>\n";
+        str +="</MapDescription>\n<ImageDescription>\n<ImageType>\n<ImageFormat>esriImagePNG24</ImageFormat>\n"; 
+        str +="<ImageReturnType>esriImageReturnURL</ImageReturnType>\n</ImageType>\n<ImageDisplay>\n<ImageHeight>"+size.height+"</ImageHeight>\n";
         str +="<ImageWidth>"+size.width+"</ImageWidth>\n<ImageDPI>"+size.dpi+"</ImageDPI>\n</ImageDisplay>\n</ImageDescription>\n";
         str +="</m:ExportMapImage>\n</SOAP-ENV:Body>\n</SOAP-ENV:Envelope>"; 
-		//trace(str);
-		return (this._sendrequest(str, "getImage", objecttag));
-	}
+        //trace(str);
+        return (this._sendrequest(str, "getImage", objecttag));
+    }
+    
+    /**
+     * Returns the part of the SOAP request that enables a buffer specific features of a layer.
+     * 
+     * @param buffer            The buffer object containing the following keys: radius, fillcolor, filltransparency, boundarycolor, boundarywidth
+     * @param bufferFeatures    An array containing the IDs of all features to buffer.
+     * @return                  An XML snippet to include as a part of a LayerDescription.
+     */
+    private function getBufferXML (buffer: Object, bufferFeatures: Array): String {
+        var str: String = "";
+            
+        // Buffering only works on selected features, add a list of ID's:
+        str += "<SelectionFeatures>";
+        for (var i: Number = 0; i < bufferFeatures.length; ++ i) {
+            str += "<Int>" + bufferFeatures[i] + "</Int>";
+        }
+        str += "</SelectionFeatures>";
 
+        var radius: Number = Number (buffer.radius),
+            boundaryWidth: Number = buffer.boundarywidth ? Number (buffer.boundarywidth) : 1,
+            boundaryColor: Array = parseColor (buffer.boundarycolor),
+            fillColor: Array = parseColor (buffer.fillcolor),
+            fillTransparency: Number = parseAlpha (buffer.filltransparency) * 255;
+        
+        str += "<ShowSelectionBuffer>true</ShowSelectionBuffer>"
+            + "<SelectionBufferDistance>" + String (radius) + "</SelectionBufferDistance>"        
+            + "<SelectionBufferSymbol xsi:type=\"m:SimpleFillSymbol\">";
+            
+        if (fillTransparency < 250) {
+        	str += "<Style>esriSFSDiagonalCross</Style>";
+        }
+        
+        str +=    "<Color xsi:type=\"m:RgbColor\">"
+                    + "<Red>" + fillColor[0] + "</Red>"
+                    + "<Green>" + fillColor[1] + "</Green>"
+                    + "<Blue>" + fillColor[2] + "</Blue>"
+                    + "<AlphaValue>" + (fillTransparency == 0 ? 0 : 255) + "</AlphaValue>"
+                + "</Color>"
+                + "<Outline xsi:type=\"m:SimpleLineSymbol\">"
+                    + "<Color xsi:type=\"m:RgbColor\">"
+                        + "<Red>" + boundaryColor[0] + "</Red>"
+                        + "<Green>" + boundaryColor[1] + "</Green>"
+                        + "<Blue>" + boundaryColor[2] + "</Blue>"
+                    + "</Color>"
+                    + "<Width>" + boundaryWidth + "</Width>"
+                + "</Outline>"
+            + "</SelectionBufferSymbol>"
+            + "<SelectionColor xsi:type=\"m:RgbColor\">"
+                    + "<Red>255</Red>"
+                    + "<Green>0</Green>"
+                    + "<Blue>0</Blue>"
+                    + "<AlphaValue>0</AlphaValue>"
+            + "</SelectionColor>";
+                        
+        return str;
+    }
+    
 	private function _processImage(xml:XML, objecttag:Object, requestid:Number):Void {
 //		trace(xml);
 		var extent = new Object();
@@ -419,7 +584,7 @@ class ArcServerConnector {
 		this.events.broadcastMessage("onGetImage", extent, imageurl , legendurl, objecttag, requestid);
 	}
 	//gets the id of features in a layer.
-	function getQueryFeatureIDs(service:String, layerid:String, query:String, objecttag:Object){
+	function getQueryFeatureIDs(service:String, layerid:String, query:String, objecttag:Object, extent: Object, callback: Function){
 		if (service != undefined) {
 			this.service = service;
 		}
@@ -445,9 +610,63 @@ class ArcServerConnector {
 		str +="<MapName>"+dataframe+"</MapName>\n";
 		str +="<LayerID>"+layerid+"</LayerID>\n";
 		str +="<QueryFilter><WhereClause>"+query+"</WhereClause>\n</QueryFilter>";
-		str +="</m:QueryFeatureIDs>\n</SOAP-ENV:Body>\n</SOAP-ENV:Envelope>";
-		return (this._sendrequest(str, "getQueryFeatureIDs", objecttag));
+		
+		if (extent) {
+			str += "<SpatialFilter>"
+                    + "<SpatialRel>7</SpatialRel>"
+                    + "<FilterGeometry>"
+                        + "<EnvelopeN>"
+                            + "<XMin>" + extent.minx + "</XMin>"
+                            + "<XMax>" + extent.maxx + "</XMax>"
+                            + "<YMin>" + extent.miny + "</YMin>"
+                            + "<YMax>" + extent.maxy + "</XMax>"
+                        + "</EnvelopeN>"
+                    + "</FilterGeometry>"
+                + "</SpatialFilter>";
+		}
+		
+		str +="</m:QueryFeatureIDs></SOAP-ENV:Body>\n</SOAP-ENV:Envelope>";
+		return (this._sendrequest(str, "getQueryFeatureIDs", objecttag, callback));
 	}
+	
+	private function getQueryFeatureIDsByExtent (service:String, layerid:String, extent: Object, objecttag:Object, callback: Function): Number {
+        if (service != undefined) {
+            this.service = service;
+        }
+        if(layerid == "undefined"){
+            return;
+        }
+        this.layerid = layerid;
+        var str:String = this.xmlheader+"\n";
+        str +="<SOAP-ENV:Envelope xmlns:SOAP-ENV=\"http://schemas.xmlsoap.org/soap/envelope/\" ";
+        str +="xmlns:SOAP-ENC=\"http://schemas.xmlsoap.org/soap/encoding/\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" ";
+        str +="xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\n<SOAP-ENV:Body>\n";
+        if(esriArcServerVersion == "9.2")
+        {
+            str +="<m:QueryFeatureIDs xmlns:m=\"http://www.esri.com/schemas/ArcGIS/9.2\">";
+        }
+        else if(esriArcServerVersion == "9.3")
+        {
+            str +="<m:QueryFeatureIDs xmlns:m=\"http://www.esri.com/schemas/ArcGIS/9.3\">";
+        }
+        
+        str +="<MapName>"+dataframe+"</MapName>\n";
+        str +="<LayerID>"+layerid+"</LayerID>\n";
+        
+        str +="<QueryFilter xsi:type=\"m:SpatialFilter\">"
+            + "<SpatialRel>esriSpatialRelIntersects</SpatialRel>"
+            + "<FilterGeometry xsi:type=\"m:EnvelopeN\">"
+                + "<XMin>" + extent.minx + "</XMin>"
+                + "<XMax>" + extent.maxx + "</XMax>"
+                + "<YMin>" + extent.miny + "</YMin>"
+                + "<YMax>" + extent.maxy + "</XMax>"
+            + "</FilterGeometry>"
+            + "</QueryFilter>";
+        
+        str +="</m:QueryFeatureIDs></SOAP-ENV:Body>\n</SOAP-ENV:Envelope>";
+        return (this._sendrequest(str, "getQueryFeatureIDs", objecttag, callback));
+	}
+	
 	private function _processQueryFeatureIDs(xml:XML, objecttag:Object, requestid:Number):Void {
 		var xnQuery:Array = xml.firstChild.firstChild.firstChild.childNodes;
 		var fid:Array = xnQuery[0].childNodes[0].childNodes;
@@ -620,5 +839,26 @@ class ArcServerConnector {
 	}
 	private function _getRGB(hex:Number):Object {
 		return ({r:hex >> 16, g:(hex & 0x00FF00) >> 8, b:hex & 0x0000FF});
+	}
+	private function parseColor (color: String): Array {
+        if (color && color != "") {
+            var parts: Array = color.split (',');
+            return [
+                    parts[0] ? Number (_global.flamingo.trim (parts[0])) : 0,
+                    parts[1] ? Number (_global.flamingo.trim (parts[1])) : 0,
+                    parts[2] ? Number (_global.flamingo.trim (parts[2])) : 0
+                ];
+        }
+        
+        return [0, 0, 0];
+	}
+	private function parseAlpha (alpha: String, defaultAlpha: Number): Number {
+		if (!alpha || alpha == "") {
+			return defaultAlpha || 1
+		}
+		return Number (alpha.split (',').join ('.'));
+	}
+	private function extentContains (a: Object, b: Object): Boolean {
+		return b.minx >= a.minx && b.maxx <= a.maxx && b.miny >= a.miny && b.maxy <= a.maxy;
 	}
 }

@@ -48,8 +48,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 import tools.Logger;
 import gui.marker.DefaultMarker;
 import gui.marker.FOVMarker;
+import core.PersistableComponent
+import tools.XMLTools;
 
-dynamic class Map extends MovieClip {
+dynamic class Map extends MovieClip implements PersistableComponent {
 	//
 	public var version:String = "2.0.1";
 	var defaultXML:String = "";
@@ -2386,6 +2388,134 @@ dynamic class Map extends MovieClip {
 		return str;		
 	}
 		
+	public function persistState (document: XML, node: XMLNode): Void {
+			
+		// Current theme:
+		var themeSelector: Object = getThemeSelector ();
+		if (themeSelector && themeSelector.getCurrentTheme () != null) {
+			var themeNode: XMLNode = document.createElement ('Theme');
+			themeNode.appendChild (document.createTextNode (themeSelector.getCurrentTheme ().getName ()));
+			node.appendChild (themeNode);
+		}
+		
+		// Extent:
+		var extent: Object = getCurrentExtent ();
+		if (extent != null) {
+			var extentNode: XMLNode = document.createElement ('Extent');
+			extentNode.attributes['minx'] = Math.round (extent.minx);
+			extentNode.attributes['miny'] = Math.round (extent.miny);
+			extentNode.attributes['maxx'] = Math.round (extent.maxx);
+			extentNode.attributes['maxy'] = Math.round (extent.maxy);
+			node.appendChild (extentNode);
+		}
+		
+		// Visible layers:
+		var layersNode: XMLNode = document.createElement ('LayerVisibility'),
+			lyrs: Array = getLayers (),
+			mapId: String = _global.flamingo.getId (this);
+			
+		for (var i: Number = 0; i < lyrs.length; ++ i) {
+			var lyrId: String = lyrs[i].substring(mapId.length + 1),
+				lyr: Object = _global.flamingo.getComponent (lyrs[i]),
+				slyrs: Object = lyr.getLayers (),
+				layerNode: XMLNode = document.createElement ('S');
+				
+			layerNode.attributes['id'] = lyrId;
+			layerNode.attributes['visible'] = lyr.getVisible () <= 0 ? "false" : "true";
+			
+			// Sublayer visibility:
+			for (var a: String in slyrs) {
+				if (slyrs[a].visible) {
+					var subLayerNode: XMLNode = document.createElement ('L');
+					subLayerNode.attributes['id'] = a;
+					layerNode.appendChild (subLayerNode);					
+				}
+			}
+			
+			layersNode.appendChild (layerNode);
+		}
+		
+		node.appendChild (layersNode);
+	}
+	
+	public function restoreState (node: XMLNode): Void {
+		
+		var extentNode: XMLNode = XMLTools.getChild ("Extent", node),
+			themeNode: XMLNode = XMLTools.getChild ("Theme", node),
+			layerVisibilityNode: XMLNode = XMLTools.getChild ("LayerVisibility", node);
+			
+		if (extentNode) {
+			var extent: Object = {
+				minx: Number (extentNode.attributes["minx"]),
+				miny: Number (extentNode.attributes["miny"]),
+				maxx: Number (extentNode.attributes["maxx"]),
+				maxy: Number (extentNode.attributes["maxy"])
+			};
+			
+			// If no layers have been loaded yet the extent can't be changed and the moveToExtent call has no effect, in that 
+			// case the map component will load the extent argument as soon as a layer becomes available.
+			moveToExtent (extent);
+			_global.flamingo.setArgument (this, "extent", this.extent2String (extent));
+		}
+		
+		if (themeNode) {
+			var theme: String = themeNode.firstChild.nodeValue,
+				themeSelector: Object = this.getThemeSelector ();
+				
+			if (themeSelector) {
+				_global.flamingo.setArgument (themeSelector, "theme", theme);
+			}
+		}
+		
+		if (layerVisibilityNode) {
+			for (var i: Number = 0; i < layerVisibilityNode.childNodes.length; ++ i) {
+				var node: XMLNode = layerVisibilityNode.childNodes[i],
+					layerId: String = node.attributes["id"],
+					layerVisible: Boolean = node.attributes["visible"].toLowerCase () == "true",
+					visibleSubLayers: Array = [ ];
+					
+				if (!layerId) {
+					continue;
+				}
+				
+				for (var j: Number = 0; j < node.childNodes.length; ++ j) {
+					var subLayerId: String = node.childNodes[j].attributes["id"];
+					if (subLayerId) {
+						visibleSubLayers.push (subLayerId);
+					}
+				}
+				
+				setLayerVisibility (layerId, layerVisible, visibleSubLayers);
+			}
+		}
+	}
+	
+	private function setLayerVisibility (layerId: String, layerVisible: Boolean, visibleSubLayers: Array): Void {
+		var componentId: String = _global.flamingo.getId (this) + "_" + layerId,
+			layerComponent: MovieClip = _global.flamingo.getComponent (componentId),
+			listener: Object;
+		
+		var callback: Function = function (layerComponent: MovieClip): Void {
+			layerComponent.setVisible (layerVisible);
+			layerComponent.setLayerProperty ("#ALL#", "visible", false);
+			for (var i: Number = 0; i < visibleSubLayers.length; ++ i) {
+				layerComponent.setLayerProperty (visibleSubLayers[i], "visible", true);
+			}
+			layerComponent.update ();
+		};
+		
+		listener = {
+			onGetCapabilities: callback,
+			onGetServiceInfo: callback
+		};
+		
+		if (layerComponent && layerComponent.initialized) {
+			callback (layerComponent);
+		} else {
+			_global.flamingo.addListener (listener, componentId, this);
+		}
+	}
+	
 	/** 
 	 * Dispatched when a map is up and ready to run.
 	 * @param map:MovieClip a reference to the map.
