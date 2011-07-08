@@ -1643,7 +1643,8 @@ class Flamingo {
 			}
 			var t:TextField = mc.mText;
 			t._width = 1000;
-			t.htmlText = "<span class='tooltip'>"+this.tiptext+"</span>";
+			var encodedTipTekst=new XMLNode(3, this.tiptext).toString();
+			t.htmlText = "<span class='tooltip'>"+encodedTipTekst+"</span>";
 			var w = t.textWidth+5;
 			var h = t.textHeight+5;
 			t._width = w;
@@ -1709,7 +1710,8 @@ class Flamingo {
 			}
 			var t:TextField = mc.mText;
 			t._width = 1000;
-			t.htmlText = "<span class='tooltip'>"+this.tiptext+"</span>";
+			var encodedTipTekst=new XMLNode(3, this.tiptext).toString();
+			t.htmlText = "<span class='tooltip'>"+encodedTipTekst+"</span>";
 			var w = t.textWidth+5;
 			var h = t.textHeight+5;
 			t._width = w;
