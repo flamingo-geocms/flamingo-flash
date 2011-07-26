@@ -10,16 +10,12 @@ import mx.utils.Delegate;
 
 class gui.legend.LegendItem extends AbstractGroupLegendItem {
 	
-	public static var IV_VISIBLE: Number = 1;
-	public static var IV_INSCALE: Number = 2;
-	
 	private var _symbolPosition: String;
 	private var _listenTo: Object;
 	private var _canHide: Boolean;
 	private var _stickyLabel: Boolean;
 	private var _infoURL: String;
 	private var _linkStyleId: String;
-	private var _visible: Number = 0;
 	
 	public function get symbolPosition (): String {
 		return _symbolPosition;
@@ -69,14 +65,6 @@ class gui.legend.LegendItem extends AbstractGroupLegendItem {
 		_linkStyleId = linkStyleId;
 	}
 
-    public function get visible (): Boolean {
-    	return (_visible & IV_VISIBLE) != 0;
-    }
-    
-    public function get outOfScale (): Boolean {
-    	return (_visible & IV_INSCALE) == 0;
-	}
-    
     public function get isGroupOpen (): Boolean {
         return visible;
     }
@@ -87,35 +75,6 @@ class gui.legend.LegendItem extends AbstractGroupLegendItem {
 	
 	public function visit (visitor: LegendVisitor, context: Object): Void {
 		visitor.visitItem (this, context);
-	}
-	
-	public function show (visible: Boolean, outOfScale: Boolean): Void {
-		if (this.visible == visible && this.outOfScale == outOfScale) {
-			return;
-		}
-		
-		this._visible = 0;
-		if (visible) {
-			this._visible |= IV_VISIBLE;
-		}
-		if (!outOfScale) {
-			this._visible |= IV_INSCALE;
-		}
-		
-		if (visible) {
-    		getItems (Delegate.create (this, function (): Void {
-    			this.invalidate ();
-    		}));
-		} else {
-			invalidate ();
-		}
-		
-		// Locate the legend container and invoke the item visibility change handler:
-		var parent: Object = this.parent;
-		while (parent.parent) {
-			parent = parent.parent;
-		}
-		parent._onLegendItemVisbilityChanged (this);
 	}
 	
 	public function _onPress (newCheckboxState: Boolean): Void {

@@ -237,4 +237,14 @@ class gui.legend.AbstractGroupLegendItem extends AbstractLabelLegendItem {
 			LegendContainer (parent)._onItemsAdded (this, newItems);
 		}
 	}
+	
+	public function _invalidateRecursive (): Void {
+		if (visible) {
+    		getItems (Delegate.create (this, function (): Void {
+    			this.invalidate ();
+    		}));
+		} else {
+			invalidate ();
+		}
+	}
 }

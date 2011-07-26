@@ -8,6 +8,10 @@ import gui.legend.AbstractGroupLegendItem;
 
 class gui.legend.AbstractLegendItem {
 	
+	public static var IV_VISIBLE: Number = 1;		// The corresponding layer is visible.
+	public static var IV_INSCALE: Number = 2;		// The corresponding layer is in scale.
+	public static var IV_ITEMINSCALE: Number = 4;	// The legend item is in scale.
+	
 	private var _index: Number;
 	private var _parent: AbstractGroupLegendItem;
 	private var _dx: Number;
@@ -17,6 +21,7 @@ class gui.legend.AbstractLegendItem {
 	private var _maxScale: Number;
 	private var _movieClip: MovieClip = null;
 	private var _invalid: Boolean = false;
+	private var _visible: Number = 0;
 	
 	public function get index (): Number {
 		return _index;
@@ -77,11 +82,24 @@ class gui.legend.AbstractLegendItem {
 		return _invalid;
 	}
 	
-	public function AbstractLegendItem (parent: AbstractGroupLegendItem) {
-		this._parent = parent;
+    public function get visible (): Boolean {
+    	return (_visible & IV_VISIBLE) != 0;
+    }
+    
+    public function get outOfScale (): Boolean {
+    	return (_visible & IV_INSCALE) == 0;
 	}
 	
-    public function _setIndex (index: Number): Void {
+	public function get itemInScale (): Boolean {
+		return (_visible & IV_ITEMINSCALE) != 0;
+	}
+
+	public function AbstractLegendItem (parent: AbstractGroupLegendItem) {
+		this._parent = parent;
+		this._visible = IV_INSCALE | IV_ITEMINSCALE;
+	}
+
+	public function _setIndex (index: Number): Void {
         _index = index;
     }
     
@@ -105,6 +123,10 @@ class gui.legend.AbstractLegendItem {
 		}
 	}
 	
+	public function _invalidateRecursive (): Void {
+		this.invalidate ();
+	}
+	
 	public function validate (): Void {
 		_invalid = false;
 	}
@@ -120,5 +142,31 @@ class gui.legend.AbstractLegendItem {
      */
 	public function visit (visitor: Object, context: Object): Void {
 		_global.flamingo.tracer ("Visiting unknown legend item");
+	}
+	
+	public function show (visible: Boolean, outOfScale: Boolean, itemInScale: Boolean): Void {
+		if (this.visible == visible && this.outOfScale == outOfScale && this.itemInScale == itemInScale) {
+			return;
+		}
+		
+		this._visible = 0;
+		if (visible) {
+			this._visible |= IV_VISIBLE;
+		}
+		if (!outOfScale) {
+			this._visible |= IV_INSCALE;
+		}
+		if (itemInScale) {
+			this._visible |= IV_ITEMINSCALE;
+		}
+		
+		_invalidateRecursive ();
+		
+		// Locate the legend container and invoke the item visibility change handler:
+		var parent: Object = this.parent;
+		while (parent.parent) {
+			parent = parent.parent;
+		}
+		parent._onLegendItemVisbilityChanged (this);
 	}
 }

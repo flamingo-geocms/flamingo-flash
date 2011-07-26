@@ -60,7 +60,7 @@ class gui.legend.Renderer implements LegendVisitor {
 		
         // Register a listener that renders newly added items:
         legendContainer.addEventListener ('onItemsAdded', Delegate.create (this, onItemsAdded));
-        legendContainer.addEventListener ('onLegendItemVisibilityChanged', Delegate.create (this, onLegendItemVisibilityChanged));
+        legendContainer.addEventListener ('onLegendItemVisibilityChanged', Delegate.create (this, onItemVisibilityChanged));
 	}
 	
 	private function onItemsAdded (e: Object): Void {
@@ -221,6 +221,7 @@ class gui.legend.Renderer implements LegendVisitor {
 		if (item.canHide && item.listenTo) {
             container.chkButton = new FlamingoCheckButton(container.createEmptyMovieClip("mCheck", 1), skin+"_checked", skin+"_checkeddown", skin+"_checkedover", skin+"_unchecked", skin+"_uncheckeddown", skin+"_uncheckedover", skin+"_checked", container, false);
             container.chkButton.onPress = itemDelegates.onPress;
+			container.chkButton.setChecked (item.visible);
         }
         if (item.label) {
             container.createTextField("mLabel", 2, 0, 0, 1000, 1000);
@@ -243,9 +244,22 @@ class gui.legend.Renderer implements LegendVisitor {
         container.mScale.selectable = false;
 	}
 	
-    private function onLegendItemVisibilityChanged (e: Object): Void {
-        var item: LegendItem = e.item,
-            movieClip: MovieClip = item.movieClip;
+	private function onItemVisibilityChanged (e: Object): Void {
+		var item: AbstractLegendItem = AbstractLegendItem (e.item);
+		
+		if (item instanceof LegendItem) {
+			onLegendItemVisibilityChanged (LegendItem (item));	
+		} else if (item instanceof SymbolLegendItem) {
+			onSymbolVisibilityChanged (SymbolLegendItem (item));
+		}
+	}
+	
+	private function onSymbolVisibilityChanged (item: SymbolLegendItem): Void {
+		
+	}
+	
+    private function onLegendItemVisibilityChanged (item: LegendItem): Void {
+		var movieClip: MovieClip = item.movieClip;
         
         // Set the out of scale text if the item has gone out of scale:
         if (item.outOfScale) {

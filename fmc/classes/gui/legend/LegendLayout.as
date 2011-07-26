@@ -175,6 +175,15 @@ class gui.legend.LegendLayout implements LegendVisitor {
     public function visitItem (item: LegendItem, context: Object): Void {
         var movieClip: MovieClip = item.movieClip;
         
+		if (!item.itemInScale) {
+			movieClip.padding = 0;
+			movieClip.itemHeight = 0;
+			movieClip._visible = false;
+			return;       
+		}
+		
+		movieClip._visible = true;
+		
         movieClip._x = context.x + item.dx + legendContainer.defaultDelta['item'][0];
         movieClip.padding = item.dy += legendContainer.defaultDelta['item'][1];
 
@@ -201,7 +210,7 @@ class gui.legend.LegendLayout implements LegendVisitor {
     		movieClip.mItems._visible = false;
     	}
     	
-    	if (item.outOfScale) {
+    	if (item.outOfScale && item.listenTo) {
     		movieClip.mScale._x = x;
     		movieClip.mScale._y = height;
     		movieClip.mScale._visible = true;
@@ -215,7 +224,16 @@ class gui.legend.LegendLayout implements LegendVisitor {
     
     public function visitSymbol (item: SymbolLegendItem, context: Object): Void {
         var movieClip: MovieClip = item.movieClip;
-        
+
+		if (!item.itemInScale) {
+			movieClip.padding = 0;
+			movieClip.itemHeight = 0;
+			movieClip._visible = false;
+			return;       
+		}
+		
+		movieClip._visible = true;
+		
         movieClip._x = context.x + item.dx + legendContainer.defaultDelta['symbol'][0];
         movieClip.padding = item.dy += legendContainer.defaultDelta['symbol'][1];
     	

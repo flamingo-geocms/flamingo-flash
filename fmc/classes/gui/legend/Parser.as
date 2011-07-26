@@ -277,8 +277,8 @@ class gui.legend.Parser {
     	item.id = [acceptAttribute (configuration, 'id', asString, null)][0];
     	item.dx = Number (acceptAttribute (configuration, 'dx', asNumber, 0));
     	item.dy = Number (acceptAttribute (configuration, 'dy', asNumber, 0));
-    	item.minScale = Number (acceptAttribute (configuration, 'minscale', asNumber, 0));
-    	item.maxScale = Number (acceptAttribute (configuration, 'maxscale', asNumber, 0));
+    	item.minScale = [acceptAttribute (configuration, 'minscale', asNumber, undefined)][0];
+    	item.maxScale = [acceptAttribute (configuration, 'maxscale', asNumber, undefined)][0];
     }
     
     private function acceptAttribute (configuration: XMLNode, name: String, conversion: Function, defaultValue: Object): Object {
@@ -334,7 +334,7 @@ class gui.legend.Parser {
     }
     
     private static function asNumber (value: String): Number {
-    	return Number (value);
+   		return Number (value);
     }
     
 }

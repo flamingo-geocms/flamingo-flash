@@ -10,6 +10,7 @@ import gui.legend.AbstractGroupLegendItem;
 import gui.legend.LegendItem;
 import gui.legend.Parser;
 import gui.legend.LegendVisitor;
+import gui.legend.SymbolLegendItem;
 
 import mx.events.EventDispatcher;
 
@@ -135,7 +136,7 @@ class gui.legend.LegendContainer extends AbstractGroupLegendItem {
 	// =========================================================================
 	// Events:
     // =========================================================================
-	public function addLayerListener (layerId: String, legendItem: LegendItem, layers: Array): Void {
+	public function addLayerListener (layerId: String, legendItem: AbstractLegendItem, layers: Array): Void {
 		 if (!_layerListeners[layerId]) {
             _layerListeners[layerId] = [ ];
             _global.flamingo.addListener (_layerListener, layerId, this);
@@ -146,14 +147,14 @@ class gui.legend.LegendContainer extends AbstractGroupLegendItem {
 		 if (!_layerVisibility[layerId]) {
 		 	_layerVisibility[layerId] = {
 		 		scale: 0,
-		 		visibility: 0,
+		 		visibility: AbstractLegendItem.IV_INSCALE, 
 		 		subLayerVisibility: { }
 		 	};
 		 }
 		 
 		 for (var i: Number = 0; i < layers.length; ++ i) {
 		 	if (!_layerVisibility[layerId].subLayerVisibility[layers[i]]) {
-		 	    _layerVisibility[layerId].subLayerVisibility[layers[i]] = 0;
+		 	    _layerVisibility[layerId].subLayerVisibility[layers[i]] = AbstractLegendItem.IV_INSCALE;
 		 	}
 		 }
 		 
@@ -215,6 +216,8 @@ class gui.legend.LegendContainer extends AbstractGroupLegendItem {
     			if (item.listenTo) {
     				registerItemListeners (item);
     			}
+			} else if (items[i] instanceof SymbolLegendItem && (items[i].minScale != undefined || items[i].maxScale != undefined) && items[i].parent instanceof LegendItem) {
+				registerSymbolListeners (SymbolLegendItem (items[i]));
 			}
 			
 			if (items[i] instanceof AbstractGroupLegendItem && AbstractGroupLegendItem (items[i]).isGroupOpen) {
@@ -242,11 +245,29 @@ class gui.legend.LegendContainer extends AbstractGroupLegendItem {
 		}
 	}
 	
+	private function registerSymbolListeners (symbol: SymbolLegendItem): Void {
+		if (!(symbol.parent instanceof LegendItem)) {
+			return;
+		}
+		
+		var parent: LegendItem = LegendItem (symbol.parent);
+		if (!parent.listenTo) {
+			return;
+		}
+		
+		for (var layerId: String in parent.listenTo) {
+			addLayerListener (layerId, symbol, parent.listenTo[layerId]);
+		}
+	}
+	
 	private function initLayerVisibility (): Void {
 		for (var layerId: String in _dirtyLayers) {
 			var component: MovieClip = _global.flamingo.getComponent (layerId);
 			if (component) {
 				updateLayerVisibility (component);
+				if (_layerListeners[layerId]) {
+					updateItemsVisibility (component);
+				}
 			}
 		}
 		
@@ -274,7 +295,7 @@ class gui.legend.LegendContainer extends AbstractGroupLegendItem {
 		}
         
         _layerVisibility[layerId].scale = layer.getScale ();
-
+        
         for (var subLayerId: String in _layerVisibility[layerId].subLayerVisibility) {
         	var subLayerVisibility: Number = layer.getVisible (subLayerId);
         	
@@ -297,16 +318,25 @@ class gui.legend.LegendContainer extends AbstractGroupLegendItem {
         }
         
         for (var i: Number = 0; i < items.length; ++ i) {
-        	var item: LegendItem = items[i].item;
+        	var item: AbstractLegendItem = items[i].item;
         	updateItemVisibility (item);
         }
 	}
 	
-	private function updateItemVisibility (item: LegendItem): Void {
-		var itemVisibility: Number = 0;
+	private function updateItemVisibility (item: AbstractLegendItem): Void {
+		var itemVisibility: Number = 0,
+			listenTo: Object = { };
+			
+		if (item instanceof LegendItem) {
+			listenTo = LegendItem (item).listenTo;
+		} else {
+			listenTo = LegendItem (item.parent).listenTo;
+		}
 		
-		for (var mapLayerId: String in item.listenTo) {
-			var subLayers: Array = item.listenTo[mapLayerId];
+		
+		var scale: Number = undefined;
+		for (var mapLayerId: String in listenTo) {
+			var subLayers: Array = listenTo[mapLayerId];
 			
 			if (subLayers.length > 0) {
     			for (var i: Number = 0; i < subLayers.length; ++ i) {
@@ -317,8 +347,19 @@ class gui.legend.LegendContainer extends AbstractGroupLegendItem {
 			} else {
 				itemVisibility |= _layerVisibility[mapLayerId].visibility;
 			}
+			
+			if (scale == undefined || _layerVisibility[mapLayerId].scale < scale) {
+				scale = _layerVisibility[mapLayerId].scale;
+			}
 		}
 		
-		item.show ((itemVisibility & LegendItem.IV_VISIBLE) != 0, (itemVisibility & LegendItem.IV_INSCALE) == 0);
+		var itemInScale: Boolean = true;
+		if (scale != undefined) {
+			if ((item.minScale != undefined && scale < item.minScale) || (item.maxScale != undefined && scale > item.maxScale)) {
+				itemInScale = false;
+			}
+		}
+		
+		item.show ((itemVisibility & LegendItem.IV_VISIBLE) != 0, (itemVisibility & LegendItem.IV_INSCALE) == 0, itemInScale);
 	}
 }
