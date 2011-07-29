@@ -1,4 +1,4 @@
-/*-----------------------------------------------------------------------------
+﻿/*-----------------------------------------------------------------------------
 * This file is part of Flamingo MapComponents.
 * Author: Michiel J. van Heek.
 * IDgis bv
@@ -351,7 +351,7 @@ class gui.Print extends AbstractContainer {
         if (this.currentPrintTemplate == currentPrintTemplate) {
             return;
         }
-        
+        _global.flamingo.raiseEvent(this, "onTemplateChange", this, currentPrintTemplate);
         if (this.currentPrintTemplate != null) {
             var maps:Array = this.currentPrintTemplate.getMaps();
             this.currentPrintTemplate.hide();
