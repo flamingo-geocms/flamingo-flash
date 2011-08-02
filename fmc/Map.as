@@ -1255,10 +1255,10 @@ dynamic class Map extends MovieClip implements PersistableComponent {
 			var intExtent:Object = copyExtent(_initialextent);
 			correctExtent(intExtent);
 			var initialScale:Number = ((intExtent.maxx-intExtent.minx)/this.__width);
-			if(newScale<initialScale){
+			//if(newScale<initialScale){
 				moveToScale(newScale,coord,updatedelay,movetime);
 				return;
-			}
+			//}
 		}
 		
 		//var ratio = 1
