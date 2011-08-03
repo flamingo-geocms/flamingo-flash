@@ -38,7 +38,7 @@
 * @attr serviceUrl the url of the server that is serving tiles. 
 * For example for a TMS server http://host/tileservice/1.0.0/tilemapname/ (include the version and tileMap Name)
 * @attr resolutions the different resolutions with tiles that are served.
-* @attr tilingType (optional,default: TMS) the type of tiling service. Possible values(for now): WMSc, TMS
+* @attr tilingType (optional,default: TMS) the type of tiling service. Possible values(for now): WMSc, TMS, OSM
 * @attr serviceenvelope the envelope/bbox from the server. For example: "12000,304000,280000,620000"
 * @attr extratiles (optional, default: 1) the number of extra tiles that are loaded when a user start panning (changing the extent)
 * A circle of x tiles wil be loaded around the visible extent. This is not done when zooming! only when panning.
@@ -97,6 +97,7 @@ class gui.layers.TilingLayer extends AbstractLayer{
     public static var TMS_TILINGTYPE:String="TMS";
     public static var WMSC_TILINGTYPE:String="WMSc";
 	public static var ARCGISREST_TILINGTYPE:String="ArcGisRest";
+	public static var OSM_TILINGTYPE:String="OSM";
 
     private static var SHOWMAPTIPS_ATTRNAME:String="showmaptips";
     private static var MAXRESFACTOR_ATTRNAME:String="maxresfactor";
@@ -188,7 +189,9 @@ class gui.layers.TilingLayer extends AbstractLayer{
             this.tilingType=WMSC_TILINGTYPE;
 		}else if (tt.toLowerCase()==ARCGISREST_TILINGTYPE.toLowerCase()){
 			this.tilingType=ARCGISREST_TILINGTYPE;
-        }else{              
+        }else if (tt.toLowerCase()==OSM_TILINGTYPE.toLowerCase()){
+			this.tilingType=OSM_TILINGTYPE;
+		}else{              
             this.tilingType=TMS_TILINGTYPE;
             log.error("TilingType value not supported: "+tt+" the default: "+TMS_TILINGTYPE+" is used");
         }       

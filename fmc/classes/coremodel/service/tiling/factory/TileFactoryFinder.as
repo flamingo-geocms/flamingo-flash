@@ -1,4 +1,4 @@
-import coremodel.service.tiling.factory.*;
+﻿import coremodel.service.tiling.factory.*;
 import gui.layers.TilingLayer;
 import tools.Logger;
 class coremodel.service.tiling.factory.TileFactoryFinder{
@@ -40,6 +40,12 @@ class coremodel.service.tiling.factory.TileFactoryFinder{
             
 		}else if (options[AbstractTileFactory.TILINGTYPE_KEY]==TilingLayer.ARCGISREST_TILINGTYPE){			
 			factory= new ArcGisRestTileFactory(options[AbstractTileFactory.RESOLUTIONS_KEY]
+														,options[AbstractTileFactory.BBOX_KEY]
+														,options[AbstractTileFactory.SERVICEURL_KEY]
+														,options[AbstractTileFactory.MAP_KEY]);
+						
+        }else if (options[AbstractTileFactory.TILINGTYPE_KEY]==TilingLayer.OSM_TILINGTYPE){			
+			factory= new OSMTileFactory(options[AbstractTileFactory.RESOLUTIONS_KEY]
 														,options[AbstractTileFactory.BBOX_KEY]
 														,options[AbstractTileFactory.SERVICEURL_KEY]
 														,options[AbstractTileFactory.MAP_KEY]);
