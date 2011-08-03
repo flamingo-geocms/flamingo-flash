@@ -48,6 +48,9 @@
 * @attr showmaptips: if the maptips should be retrieved, only applicable with WMSc
 * @attr maxresfactor: threshold to determine zoomlevel of tiles for given resolution, default 1.4142135623=sqrt(2)
 * @attr intervalfactor: is resolution[level] / resolution[level+1], default 2 (maxscalefactor = intervalfactor / maxresfactor)
+* @attr extension: the extension of the tiles.
+* @attr tileheight: the height of the tiles in pixels (default 256)
+* @attr tilewidth: the width of the tiles in pixels (default 256)
 **/
 /** @tag <TilingParam>
 * With this tag you can define extra parameters for the tilingFactory
