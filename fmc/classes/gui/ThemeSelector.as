@@ -39,7 +39,8 @@
             </fmc:Theme>
 			....
 		</fmc:ThemeSelector>
-* @attr persistentlayerids A coma seperated list of layer ids that is not influenced by the selection of a theme. 
+* @attr persistentlayerids A coma seperated list of layer ids that is not influenced by the selection of a theme. If not configuerd all layers 
+* that are not included in a Theme will act as a persistentlayer.
 * These are for instance topographical baselayers that should always be visible.   
 * @attr listlength The length of the combobox list.
 * @attr legendid The id of the legend which groups should collapse or open depending on the chosen Theme  
@@ -62,6 +63,7 @@ class gui.ThemeSelector extends AbstractContainer {
 	private var numThemes:Number = 0;
 	private var textFormat:TextFormat; 
 	private var themeComboBox:ComboBox; 
+	private var persistentLayersIds:String;
 	private var persistentLayers:Array;
 	private var listlength:Number = 5;
 	//currentTheme can be set by flamingo setArgument
@@ -116,24 +118,7 @@ class gui.ThemeSelector extends AbstractContainer {
  	    	    
    function setAttribute(name:String, value:String):Void { 
         if(name=="persistentlayerids"){
-        	persistentLayers = new Array();
-        	var mapStr:String = listento[0]; 
-        	var a:Array =_global.flamingo.asArray(value);
-        	for (var j:Number = 0; j<a.length; j++) {
-				var layername:String = null;
-				var sublayer:String = null;
-				if (a[j].indexOf(".", 0) == -1) {
-					layername = mapStr+"_"+a[j];
-					sublayer = "";
-				} else {	
-					layername  = mapStr+"_"+a[j].split(".")[0];
-					sublayer = a[j].split(".")[1];
-				}
-				var item:Object = new Object();
-				item["layername"] = layername;
-				item["sublayer"] = sublayer;
-				persistentLayers[layername + "." + sublayer] = item;
-        	}  
+        	persistentLayersIds = value;
         }   
         if(name=="listlength"){
         	this.listlength = Number(value);
@@ -145,6 +130,7 @@ class gui.ThemeSelector extends AbstractContainer {
         	//this.mapId =value;
         //} 	
     }
+    
     
     function getMap(){
     	return map;
@@ -160,6 +146,54 @@ class gui.ThemeSelector extends AbstractContainer {
 			resetDataProvider();		
 		}	
 	}
+	
+	private function setPersistentLayers():Void{
+		    persistentLayers = new Array();
+		    
+        	if(persistentLayersIds!=undefined){
+        		var a:Array =_global.flamingo.asArray(persistentLayersIds);
+        		var mapStr:String = listento[0]; 
+	        	for (var j:Number = 0; j<a.length; j++) {
+					var layername:String = null;
+					var sublayer:String = null;
+					if (a[j].indexOf(".", 0) == -1) {
+						layername = mapStr+"_"+a[j];
+						sublayer = "";
+					} else {	
+						layername  = mapStr+"_"+a[j].split(".")[0];
+						sublayer = a[j].split(".")[1];
+					}
+					var item:Object = new Object();
+					item["layername"] = layername;
+					item["sublayer"] = sublayer;
+					persistentLayers[layername + "." + sublayer] = item;
+	        	}
+	        } else {
+	        	
+	        		
+	        	//No persistentLayers configured, than include all Layers that are not in one of the themes (incl default)
+	        	var mapLayers:Array = map.getLayers();
+	        	for(var i:Number=0;i<mapLayers.length;i++){ 
+					var mapLayer:MovieClip = _global.flamingo.getComponent( mapLayers[i].toString());
+					var layers:Array = mapLayer.getLayers();
+					for (var sublayer in layers) {
+ 						var isIn:Boolean = false;
+	        			for (var l:Number = 0; l<themes.length; l++) {
+	        				if(themes[l].isIn(mapLayers[i]+ "."+ sublayer)){
+	        					isIn = true;
+	        					break;	
+	        				}   
+	        			}
+	        			if(!isIn){
+		        			var item:Object = new Object();
+							item["layername"] = mapLayers[i];
+							item["sublayer"] = sublayer;
+	    					persistentLayers[mapLayers[i]+ "."+ sublayer] = item;
+	        			}        			
+	        		}	
+	        	}
+	        }
+       }
 	
 	private function resetDataProvider(){
 		var item:Object=null;
@@ -206,6 +240,9 @@ class gui.ThemeSelector extends AbstractContainer {
 	}	
 	
 	private function setCurrentTheme() : Void{
+		if(persistentLayers == undefined){
+			setPersistentLayers();
+		} 
 		//if(map==undefined){
 			//map = _global.flamingo.getComponent(mapId);
 		//}

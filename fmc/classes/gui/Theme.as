@@ -99,6 +99,15 @@ class gui.Theme extends AbstractComponent  {
     function getThemelayers():Array {
         return themeLayers;
     }
+    
+    function isIn(lyr:String):Boolean {
+    	if(themeLayers[lyr] != null){
+    		return true;
+    	} else {
+    		return false;
+    	}	
+    }
+    	 
     	
     
     
