@@ -151,7 +151,7 @@ class ris.PopulatorSelector extends AbstractSelector {
 		addAreaControls(0,0);
 		addReportSettingsControls(250,0);
 		addButtons(240,200);
-		addStatusLine(0,250);
+		addStatusLine(0,275);
 		resetControls();
 		popData = new PopulationData(this);
 	}
@@ -200,21 +200,30 @@ class ris.PopulatorSelector extends AbstractSelector {
 		}
 	}
 	
+
+	
 	private function onClickRequestButton():Void{
 		var busyText:String = _global.flamingo.getString(this,"busy");
-		if(busyText==null||busyText==""){
-			busyText="Ophalen gegevens....";
-		}
-		setStatusText(busyText,"info",true);
-		this["mSendRequestButton"].enabled = false;
-		var activities:String = ""; 
-		if(perPopType.selected){
-			activities = popData.getPopActivities();
+		if(maxPop.selected||werkdag.selected||werknacht.selected||weekendnacht.selected){
+			if(busyText==null||busyText==""){
+				busyText="Ophalen gegevens....";
+			}
+			setStatusText(busyText,"info",true);
+			this["mSendRequestButton"].enabled = false;
+			var activities:String = ""; 
+			if(perPopType.selected){
+				activities = popData.getPopActivities();
+			} else {
+				activities = popData.getTotalActivities();
+			}
+			PopulatorConnector(dataConnector).getReport(areaSelectionType, wktCoords, getAnalyzeTypes(),activities);
 		} else {
-			activities = popData.getTotalActivities();
+			var warning:String = _global.flamingo.getString(this,"warning");
+			if(busyText==null||busyText==""){
+				busyText="Foutieve request....";
+			}
+			setStatusText(warning,"warning",false);
 		}
-			
-		PopulatorConnector(dataConnector).getReport(areaSelectionType, wktCoords, getAnalyzeTypes(),activities);
 	}
 	
 

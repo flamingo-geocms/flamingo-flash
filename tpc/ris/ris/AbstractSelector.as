@@ -112,8 +112,9 @@ class ris.AbstractSelector  extends AbstractComponent implements GeometryListene
 			inArea.selected = true;
 			inArea.setSize(200,20);
 			this.createEmptyMovieClip("mHolder",100);
-			this["mHolder"]._lockroot = true; 
+			//this["mHolder"]._lockroot = true; 
 			inAreaChoser = ComboBox(this["mHolder"].attachMovie("ComboBox", "cmbInAreaChoser", 1));
+			//inAreaChoser.setStyle("alternatingRowColors", [0xFFFFFF, 0xBFBFBF]);
 			inAreaChoser.addEventListener("close", Delegate.create(this, onChangeInArea));
 	        inAreaChoser.drawFocus = function() {
 				};
