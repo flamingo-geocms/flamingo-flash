@@ -103,148 +103,200 @@ import mx.controls.TextInput;
 import gui.dde.TraceLayer;
 
 import ris.PopDataConnectorListener;
-import ris.PopulatorConnector;
+import ris.ValuatorConnector;
 
 
 import flash.external.ExternalInterface;
 
 import ris.AbstractSelector;
-import ris.PopulationData;
+import ris.ValuatorData;
 
 import tools.XMLTools;
 
-class ris.PopulatorSelector extends AbstractSelector {
+class ris.ValuatorSelector extends AbstractSelector {
     var defaultXML:String = "<?xml version='1.0' encoding='UTF-8'?>" +
-							"<PopulatorSelector>" + 
-							"<string id='layers' en='Layers' nl='Kaartlagen'/>" +
+							"<ValuatorSelector>" + 
+							  "<string id='layers' en='Layers' nl='Kaartlagen'/>" +
 						      "<string id='inGeometry' en='Within Geometry' nl='Binnen geometrie'/>"+
 						      "<string id='inBox' en='Within Box' nl='Binnen rechthoek'/>" +
 						      "<string id='inAll' en='Whole file' nl='Gehele bestand'/>" +
 						      "<string id='warningOutOfExtent' en='Requested extent outside the fullextent of the map' nl='Ingevulde coördinaten vallen buiten bereik van de kaart'/>" +
 						      "<string id='warningErrorInBox' en='Error in box coördinates' nl='Fouten in coördinaten van rechthoek'/>" +
 						      "<string id='extentButtonLabel' en='from map' nl='van kaart'/>" + 
-						      "</PopulationDataSelector>";
+						      "</ValuatorSelector>";   
 
-    
-	private var maxPop:CheckBox = null;
-	private var werkdag:CheckBox = null;
-	private var werknacht:CheckBox = null;
-	private var weekenddag:CheckBox = null;
-	private var weekendnacht:CheckBox = null;
-	var perPopType:CheckBox = null;
-	private var buttonsX:Number = 250;
-	private var popData:PopulationData = null;
+	private var wTWLP:CheckBox = null;
+	private var wTWCP:CheckBox = null;
+	private var wPWLP:CheckBox = null;
+	private var wPWCP:CheckBox = null;
+	
+	private var pTotaal:RadioButton = null;
+	private var pBedrijfstak:RadioButton = null;
+	private var pBedrijfsklasse:RadioButton = null;
+	
+	private var valData:ValuatorData = null;
+
+	private var mWorths:Array;
+	private var mPeriods:Array;
+	private var mPublications:Array;
+
 
 	
 	function onLoad():Void {
 		areaSelector = false;
    		boxSelector = true;
    		geometrySelector = true;
-		dataConnector = new PopulatorConnector();
+		dataConnector = new ValuatorConnector();
 		dataConnector.addListener(this);
 		this.setAreaSelectionType("inBox");
-		
 		super.onLoad();
 	}
 	
 	function init():Void{
 		super.init();
-		addAreaControls(0,25);
+		this.valData = new ValuatorData(this);
+		addAreaControls(0,0);
 		addReportSettingsControls(250,0);
-		addButtons(240,200);
+		addButtons(500,210);
 		addStatusLine(0,275);
-		resetControls();
-		popData = new PopulationData(this);
+		resetControls();	
 	}
 	
-
+	function getConnector():ValuatorConnector{
+		return ValuatorConnector(this.dataConnector);
+	}
+	
 	private function addReportSettingsControls(x:Number, y:Number):Void {
-		var reportSettingsTitle:TextField = createTextField("mReportSettingsTitle",this.getNextHighestDepth(),x,y,this._width,20);
-		reportSettingsTitle.text = _global.flamingo.getString(this,"titleReportSettings");
-		reportSettingsTitle.setTextFormat(textFormat);
-		reportSettingsTitle.selectable = false;
+		var infoTitle:TextField = createTextField("mInformationTitle",this.getNextHighestDepth(),x,y,this._width,20);
+		infoTitle.text = _global.flamingo.getString(this,"titleInformation");
+		infoTitle.setTextFormat(textFormat);
+		infoTitle.selectable = false;
+		y += 20;
+
+		mWorths = new Array();
 		var initObject:Object = new Object();
 		initObject["_x"] = x;
 		initObject["_width"] = 250;
-		initObject["_y"] = y + 25;
+		initObject["_y"] = y;
 		initObject["selected"] = false;
-		initObject["label"] = " " + _global.flamingo.getString(this,"maxpop");
-		maxPop = CheckBox(attachMovie("CheckBox", "mMaxPop", this.getNextHighestDepth(),initObject));
+		initObject["label"] = "Toegevoegde waarde: Lopende prijzen";
+		initObject["worth"] = "TWLP";
+		wTWLP= CheckBox(attachMovie("CheckBox", "mTWLP", this.getNextHighestDepth(),initObject));
+		mWorths.push(wTWLP);
 		initObject["_y"] += 25;
-		initObject["label"] = " " + _global.flamingo.getString(this,"werkdag");
-		werkdag = CheckBox(attachMovie("CheckBox", "mDag", this.getNextHighestDepth(),initObject));
+		initObject["label"] = "Toegevoegde waarde: Constante prijzen";
+		initObject["worth"] = "TWCP";
+		wTWCP= CheckBox(attachMovie("CheckBox", "mTWCP", this.getNextHighestDepth(),initObject));
+		mWorths.push(wTWCP);
+		initObject["label"] = "Productie waarde: Lopende prijzen";
 		initObject["_y"] += 25;
-		initObject["label"] = " " + _global.flamingo.getString(this,"werknacht");
-		werknacht = CheckBox(attachMovie("CheckBox", "mNacht", this.getNextHighestDepth(),initObject));
+		initObject["worth"] = "PWLP";
+		wPWLP= CheckBox(attachMovie("CheckBox", "mPWLP", this.getNextHighestDepth(),initObject));
+		mWorths.push(wPWLP);
+		initObject["label"] = "Productie waarde: Constante prijzen";
 		initObject["_y"] += 25;
-		initObject["label"] = " " + _global.flamingo.getString(this,"weekenddag");
-		weekenddag = CheckBox(attachMovie("CheckBox", "mWeekenddag", this.getNextHighestDepth(),initObject));
-		initObject["_y"] += 25;
-		initObject["label"] = " " + _global.flamingo.getString(this,"weekendnacht");
-		weekendnacht = CheckBox(attachMovie("CheckBox", "mWeekendnacht", this.getNextHighestDepth(),initObject));
-		initObject["_y"] += 25;
-		initObject["label"] = " " +  _global.flamingo.getString(this,"perpoptype");
-		perPopType = CheckBox(attachMovie("CheckBox", "mPerPopType", this.getNextHighestDepth(),initObject));	
+		initObject["worth"] = "PWCP";
+		wPWCP= CheckBox(attachMovie("CheckBox", "mPWCP", this.getNextHighestDepth(),initObject));
+		mWorths.push(wPWCP);
+		y += 110;
+		
+		mPublications = new Array();
+		var pubTitle:TextField = createTextField("mPubLevelTitle",this.getNextHighestDepth(),x,y,this._width,20);
+		pubTitle.text = _global.flamingo.getString(this,"titlePubLevel");
+		pubTitle.setTextFormat(textFormat);
+		pubTitle.selectable = false;
+		y += 20;
+		initObject["groupName"]="pubLevel"
+		initObject["_y"] = y;
+		initObject["label"] = "Totaal van het gebied";
+		initObject["publication"]="TOTAAL";
+		pTotaal = RadioButton(attachMovie("RadioButton", "mTotaal", this.getNextHighestDepth(),initObject));
+		mPublications.push(pTotaal);
+		initObject["_y"] += 20;
+		initObject["label"] = "Per CBS Bedrijfstak";
+		initObject["publication"]="BEDRIJFSTAKKEN";
+		pBedrijfstak = RadioButton(attachMovie("RadioButton", "mBedrijfstak", this.getNextHighestDepth(),initObject));
+		mPublications.push(pBedrijfstak);
+		initObject["_y"] += 20;
+		initObject["label"] = "Per CBS bedrijfsklasse";
+		initObject["publication"]="BEDRIJFSKLASSEN";
+		pBedrijfsklasse = RadioButton(attachMovie("RadioButton", "mBedrijfsklasse", this.getNextHighestDepth(),initObject));
+		mPublications.push(pBedrijfsklasse);
+	}
+	
+	function addPeriodControls(x:Number, y:Number):Void {
+		var periodTitle:TextField = createTextField("mPeriodTitle",this.getNextHighestDepth(),x,y,this._width,20);
+		periodTitle.text = _global.flamingo.getString(this,"titlePeriod");
+		periodTitle.setTextFormat(textFormat);
+		periodTitle.selectable = false;
+		y+=20;
+		var periods:Array = valData.getYears();
+		 mPeriods =  new Array();
+		var initObject:Object = new Object();
+		initObject["_x"] = x;
+		initObject["_width"] = 250;
+		initObject["_y"] = y;
+		initObject["selected"] = false;
+		for (var i:Number = 0; i<periods.length; i++){
+			initObject["label"] = periods[i];
+			var period:CheckBox = CheckBox(attachMovie("CheckBox", "mPeriod" + i, this.getNextHighestDepth(),initObject));
+			initObject["_y"] += 18;
+			mPeriods.push(period);
+		}
+		
 	}
 
-	
 
-	
 	private function onClickRequestButton():Void{
+		var sWorths:Array =  getSelectedValues(mWorths,"worth");
+		if(sWorths.length == 0){
+			setStatusText(_global.flamingo.getString(this,"warningInformation"),"warning",false);
+			return;
+		}	
+		var sPublications:Array = getSelectedValues(mPublications,"publication");
+		if(sPublications.length == 0){
+			setStatusText(_global.flamingo.getString(this,"warningPubLevel"),"warning",false);
+			return;
+		}	
+		var iYears:Array = getSelectedValues(mPeriods,"label");
+		if(iYears.length == 0){
+			setStatusText(_global.flamingo.getString(this,"warningPeriod"),"warning",false);
+			return;
+		}
 		var busyText:String = _global.flamingo.getString(this,"busy");
-		if(maxPop.selected||werkdag.selected||werknacht.selected||weekendnacht.selected){
-			if(busyText==null||busyText==""){
-				busyText="Ophalen gegevens....";
+		if(busyText==null||busyText==""){
+			busyText="Ophalen gegevens....";
+		}
+		setStatusText(busyText,"info",true);
+		this["mSendRequestButton"].enabled = false;
+		var sWKTArea:String = "POLYGON(("  + wktCoords + "))";
+
+		dataConnector.retrieveWKT(sWKTArea,sWorths,iYears,sPublications);			
+
+	}
+	
+	private function getSelectedValues(movieArray:Array, valueField:String):Array{
+		var sValues:Array = new Array();
+		for (var i:Number = 0; i< movieArray.length; i++) {
+			if(movieArray[i].selected){
+				sValues.push(movieArray[i][valueField]);
 			}
-			setStatusText(busyText,"info",true);
-			this["mSendRequestButton"].enabled = false;
-			var activities:String = ""; 
-			if(perPopType.selected){
-				activities = popData.getPopActivities();
-			} else {
-				activities = popData.getTotalActivities();
-			}
-			PopulatorConnector(dataConnector).getReport(areaSelectionType, wktCoords, getAnalyzeTypes(),activities);
-		} else {
-			var warning:String = _global.flamingo.getString(this,"warning");
-			if(busyText==null||busyText==""){
-				busyText="Foutieve request....";
-			}
-			setStatusText(warning,"warning",false);
+		}
+		return sValues;
+	}
+	
+
+	
+	function showResults(result: XML):Void{
+		var yearWorthPublications:Array = XMLTools.getElementsByTagName("YearWorthPublication", result.firstChild);
+		if(yearWorthPublications.length > 0) {
+			valData.setValues(yearWorthPublications);
+			_global.flamingo.tracer("naar getHtmlString()");
+			showReport(valData.getHtmlString());
 		}
 	}
 	
 
-	private function getAnalyzeTypes():String {
-		var analyzeTypes:String="";
-		if (maxPop.selected){
-			analyzeTypes += "&eAnalyzeTypes=MAXIMUM";
-		}
-		if(werkdag.selected){
-			analyzeTypes += "&eAnalyzeTypes=WEEKDAG";
-		}
-		if(werknacht.selected){
-			analyzeTypes += "&eAnalyzeTypes=WEEKNACHT";
-		}
-		if(weekenddag.selected){
-			analyzeTypes += "&eAnalyzeTypes=EINDDAG";
-		}
-		if(weekendnacht.selected){
-			analyzeTypes += "&eAnalyzeTypes=EINDNACHT";
-		}
-		return analyzeTypes;	
-	}
-	
-	
-	function showResults(result:XML){
-		var popNodes:Array = XMLTools.getElementsByTagName("listPopulationPerActivity", result);
-		if(popNodes.length > 0){
-			var txt:String = popData.getReportString(result);
-			showReport(txt);
-		}
-	}
-	
-	
 		
 
 }

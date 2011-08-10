@@ -13,38 +13,35 @@ import core.AbstractComponent;
 
 import gui.dde.TraceLayer;
 
-import ris.PopDataConnectorListener;
+import ris.BridgisConnectorListener;
+
+import tools.XMLTools;
 
 
 
 import flash.external.ExternalInterface;
 
-class ris.AbstractSelector  extends AbstractComponent implements GeometryListener,PopDataConnectorListener{
+class ris.AbstractSelector  extends AbstractComponent implements GeometryListener,BridgisConnectorListener{
 
     private var areaSelector:Boolean;
     private var boxSelector:Boolean;
    	private var geometrySelector:Boolean;
     private var dataConnector : Object;
-    
     private var map:Object = null;
     private var thisObj:Object = null;
 	private var textFormatUrl:TextFormat;
-	
 	private var textFormatWarning:TextFormat;
-	
 	private var textFormatInfo:TextFormat;
-	
 	private var textFormat:TextFormat;
-	
     private var statusDelayIntervalID:Number = 0;
-	
 	private var sendRequestButton:Button;
 	private var infoButton:Button;
 	private var closeButton:Button;
 	
 	
 	private var geometry:Geometry;
-	
+	private var wktCoords:String = "";
+	private var coords:String = null;
 	private var inAreaChoser; 
 	private var llX:TextInput;
 	private var llY:TextInput;
@@ -55,7 +52,7 @@ class ris.AbstractSelector  extends AbstractComponent implements GeometryListene
 
 	private var areaSelectionType : String;
 	private var inArea:Object = new Object;
-	private var coords:String = null;
+
 	private var resultCompId = "populationresults";
 
 	
@@ -100,8 +97,18 @@ class ris.AbstractSelector  extends AbstractComponent implements GeometryListene
 
 	
 	
-    private function addAreaControls(x:Number,y:Number):Void {   	
-		var currentY:Number = y;  
+    private function addAreaControls(x:Number,y:Number):Void { 
+    	var currentY:Number = y;    	
+    	var title:String = _global.flamingo.getString(this,"titleReportArea");
+		if(title != undefined){
+			var reportAreaTitle:TextField = createTextField("mReportAreaTitle",this.getNextHighestDepth(),0,currentY,this._width,20);
+			reportAreaTitle.text = title;
+			reportAreaTitle.setTextFormat(textFormat);	
+			reportAreaTitle.selectable = false;
+			_global.flamingo.tracer("reportAreaTitle " + reportAreaTitle.text);
+			currentY+=25;
+		}	
+		
 		if(areaSelector){     
 	        var inArea:RadioButton = RadioButton(attachMovie("RadioButton", "mInAreaRadioButton", this.getNextHighestDepth()));
 			inArea.move(20,currentY);
@@ -112,12 +119,9 @@ class ris.AbstractSelector  extends AbstractComponent implements GeometryListene
 			inArea.selected = true;
 			inArea.setSize(200,20);
 			this.createEmptyMovieClip("mHolder",100);
-			//this["mHolder"]._lockroot = true; 
 			inAreaChoser = ComboBox(this["mHolder"].attachMovie("ComboBox", "cmbInAreaChoser", 1));
-			//inAreaChoser.setStyle("alternatingRowColors", [0xFFFFFF, 0xBFBFBF]);
 			inAreaChoser.addEventListener("close", Delegate.create(this, onChangeInArea));
-	        inAreaChoser.drawFocus = function() {
-				};
+	        inAreaChoser.drawFocus = function() {};
 			inAreaChoser.getDropdown().drawFocus = "";
 			// to prevent the list to close after scrolling
 			inAreaChoser.onKillFocus = function(newFocus:Object) {
@@ -213,7 +217,7 @@ class ris.AbstractSelector  extends AbstractComponent implements GeometryListene
 			circle._y = currentY + 20;
 			currentY += 70;
 		}
-		
+	
 	
 		
     }
@@ -262,9 +266,10 @@ class ris.AbstractSelector  extends AbstractComponent implements GeometryListene
 		inArea = evtObj.target.selectedItem;
 	}
 
-	function resetControls(){
+	function resetControls():Void{
 		if(this._visible){
 			removeStatusText();
+			enableInBox(true);
 		}
 	}
 	
@@ -398,6 +403,7 @@ class ris.AbstractSelector  extends AbstractComponent implements GeometryListene
 	
 	function onChangeBox(evtObj:Object):Void{
 		coords = llX.text + "," + llY.text + "," +  urX.text + "," + urY.text;
+		wktCoords = llX.text + " " + llY.text + "," +  llX.text + " " + urY.text + "," +  urX.text + " " + urY.text + "," +  urX.text + " " + llY.text + "," + llX.text + " " + llY.text;
 		if(areaSelectionType=="inBox"){
 			var crds:Array = coords.split(",");
 			setStatusText("Opp.van de rechthoek: " + Math.round((crds[2]-crds[0]) * (crds[3]-crds[1])/10000)/100 + " km2", "info", true);
@@ -406,10 +412,13 @@ class ris.AbstractSelector  extends AbstractComponent implements GeometryListene
 	
 	function onChangeGeometry(geometry:Geometry):Void{
 		var crds:Array = geometry.getCoords();
+		wktCoords = "";
 		coords = "";
 		for (var n:Number = 0; n<crds.length; n++){
+			this.wktCoords += crds[n].getX() + " " + crds[n].getY() + ",";
 			this.coords += crds[n].getX() + "," + crds[n].getY() + ",";
 		}
+		wktCoords = wktCoords.substr(0,wktCoords.length-1);
 		coords = coords.substr(0,coords.length-2);	
 	}
 	
@@ -438,6 +447,9 @@ class ris.AbstractSelector  extends AbstractComponent implements GeometryListene
 	
     function setAttribute(name:String, value:String):Void {	
         switch (name) {
+        	case "url":
+				dataConnector.setUrl(value);
+				break;
 			case "reporturl":
 				dataConnector.setReportUrl(value);
 				break;
@@ -455,7 +467,6 @@ class ris.AbstractSelector  extends AbstractComponent implements GeometryListene
 	
 	public function onAreaLoad(result : XML) : Void {
 	}
-	
 
 	public function onReportLoad(result : XML) : Void {
 	}
@@ -470,6 +481,18 @@ class ris.AbstractSelector  extends AbstractComponent implements GeometryListene
 		if (resultComp._parent._parent._name == "mWindow") {
             resultComp._parent._parent._parent.setVisible(true);
         }
+	}
+	
+	function showResults(result: XML){
+	}
+	
+	function onLoadResult(result :XML):Void {
+		var statusNodes:Array =  XMLTools.getElementsByTagName("Status", result);
+		if(statusNodes[0].firstChild.nodeValue == "FAILED"){
+			onLoadFail(result);
+		} else {
+			showResults(result);
+		}			
 	}
 	
 	function onLoadFail(result : XML) : Void {

@@ -108,7 +108,9 @@ import flash.external.ExternalInterface;
 
 import ris.AbstractSelector;
 
-class ris.PopulationDataSelector extends AbstractSelector {
+class ris.PopulationDataSelector extends AbstractSelector implements PopDataConnectorListener
+{
+	
     var defaultXML:String = "<?xml version='1.0' encoding='UTF-8'?>" +
 							"<PopulationDataSelector>" + 
 							"<string id='layers' en='Layers' nl='Kaartlagen'/>" +
@@ -121,7 +123,7 @@ class ris.PopulationDataSelector extends AbstractSelector {
 						      "<string id='extentButtonLabel' en='from map' nl='van kaart'/>" + 
 						      "</PopulationDataSelector>";
 
-    
+    	
 
 	
 	function onLoad():Void {
@@ -188,9 +190,6 @@ class ris.PopulationDataSelector extends AbstractSelector {
 		}	
 	}
 	
-
-
-	
 	
     function setAttribute(name:String, value:String):Void {	
     	super.setAttribute(name,value);
@@ -221,6 +220,27 @@ class ris.PopulationDataSelector extends AbstractSelector {
 		var txt:String = result.toString().split("\\t").join("\t");
 		txt = txt.split("\\n").join("\n");
 		showReport(txt);
+	}
+	
+	function onChangeBox(evtObj:Object):Void{
+		coords = llX.text + "," + llY.text + "," +  urX.text + "," + urY.text;
+		if(areaSelectionType=="inBox"){
+			var crds:Array = coords.split(",");
+			setStatusText("Opp.van de rechthoek: " + Math.round((crds[2]-crds[0]) * (crds[3]-crds[1])/10000)/100 + " km2", "info", true);
+		}
+	}
+	
+	function onChangeGeometry(geometry:Geometry):Void{
+		var crds:Array = geometry.getCoords();
+		coords = "";
+		for (var n:Number = 0; n<crds.length; n++){
+			this.coords += crds[n].getX() + "," + crds[n].getY() + ",";
+		}
+		coords = coords.substr(0,coords.length-2);	
+	}
+	
+	function onFinishGeometry(geometry:Geometry):Void{
+		setStatusText("Opp.van de geometrie: " + Math.round(getArea(coords)/10000)/100 + " km2", "info", true);
 	}
 	
 		
