@@ -135,10 +135,13 @@ class ris.ValuatorSelector extends AbstractSelector {
 	private var pBedrijfsklasse:RadioButton = null;
 	
 	private var valData:ValuatorData = null;
-
+	
+	//
 	private var mWorths:Array;
 	private var mPeriods:Array;
 	private var mPublications:Array;
+	
+
 
 
 	
@@ -147,7 +150,6 @@ class ris.ValuatorSelector extends AbstractSelector {
    		boxSelector = true;
    		geometrySelector = true;
 		dataConnector = new ValuatorConnector();
-		dataConnector.addListener(this);
 		this.setAreaSelectionType("inBox");
 		super.onLoad();
 	}
@@ -287,14 +289,7 @@ class ris.ValuatorSelector extends AbstractSelector {
 	
 
 	
-	function showResults(result: XML):Void{
-		var yearWorthPublications:Array = XMLTools.getElementsByTagName("YearWorthPublication", result.firstChild);
-		if(yearWorthPublications.length > 0) {
-			valData.setValues(yearWorthPublications);
-			_global.flamingo.tracer("naar getHtmlString()");
-			showReport(valData.getHtmlString());
-		}
-	}
+	
 	
 
 		

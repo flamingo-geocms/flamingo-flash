@@ -15,7 +15,6 @@ class ris.ValuatorConnector extends BridgisConnector{
 	var xmlheader:String = "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>";
 	
 	function getAvailableYears(){
-_global.flamingo.tracer("getAvailableYears");
 		var soapReqStr:String = '<geow:GetAvailableYears>';
       	soapReqStr += getSoapUserString();
      	soapReqStr+='</geow:GetAvailableYears>';
@@ -23,7 +22,6 @@ _global.flamingo.tracer("getAvailableYears");
 	}
 	
 	function getAvailablePublications(){
-		_global.flamingo.tracer("getAvailablePublications");
 		var soapReqStr:String = '<geow:GetAvailablePublications>';
       	soapReqStr += getSoapUserString();
      	soapReqStr+='</geow:GetAvailablePublications>';

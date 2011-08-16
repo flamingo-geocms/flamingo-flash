@@ -101,11 +101,10 @@ class ris.AbstractSelector  extends AbstractComponent implements GeometryListene
     	var currentY:Number = y;    	
     	var title:String = _global.flamingo.getString(this,"titleReportArea");
 		if(title != undefined){
-			var reportAreaTitle:TextField = createTextField("mReportAreaTitle",this.getNextHighestDepth(),0,currentY,this._width,20);
+			var reportAreaTitle:TextField = createTextField("mReportAreaTitle",this.getNextHighestDepth(),0,currentY,150,20);
 			reportAreaTitle.text = title;
 			reportAreaTitle.setTextFormat(textFormat);	
 			reportAreaTitle.selectable = false;
-			_global.flamingo.tracer("reportAreaTitle " + reportAreaTitle.text);
 			currentY+=25;
 		}	
 		
@@ -137,6 +136,7 @@ class ris.AbstractSelector  extends AbstractComponent implements GeometryListene
 			currentY+=20;
 			inBox.data = "inBox";
 			inBox.groupName = "inWhat";
+			inBox.selected = true;
 			inBox.label = _global.flamingo.getString(this,"inBox");
 			inBox.setSize(200,20);
 			var bBox:MovieClip = this.createEmptyMovieClip("mbBox", this.getNextHighestDepth());
@@ -217,9 +217,6 @@ class ris.AbstractSelector  extends AbstractComponent implements GeometryListene
 			circle._y = currentY + 20;
 			currentY += 70;
 		}
-	
-	
-		
     }
 
 	private function addButtons(x:Number, y:Number){	
@@ -471,7 +468,7 @@ class ris.AbstractSelector  extends AbstractComponent implements GeometryListene
 	public function onReportLoad(result : XML) : Void {
 	}
 	
-	private function showReport(text:String){
+	function showReport(text:String){
 		removeStatusText();
 		this["mSendRequestButton"].enabled = true;
 		var resultComp:Object =_global.flamingo.getComponent(this.resultCompId);
@@ -487,12 +484,12 @@ class ris.AbstractSelector  extends AbstractComponent implements GeometryListene
 	}
 	
 	function onLoadResult(result :XML):Void {
-		var statusNodes:Array =  XMLTools.getElementsByTagName("Status", result);
-		if(statusNodes[0].firstChild.nodeValue == "FAILED"){
-			onLoadFail(result);
-		} else {
+		//var statusNodes:Array =  XMLTools.getElementsByTagName("Status", result);
+		//if(statusNodes[0].firstChild.nodeValue == "FAILED"){
+			//onLoadFail(result);
+		//} else {
 			showResults(result);
-		}			
+		//}			
 	}
 	
 	function onLoadFail(result : XML) : Void {

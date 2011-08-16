@@ -237,7 +237,7 @@ class ris.PopulatorSelector extends AbstractSelector {
 	
 	
 	function showResults(result:XML){
-		var popNodes:Array = XMLTools.getElementsByTagName("listPopulationPerActivity", result);
+		var popNodes:Array = XMLTools.getChildNodes("PopulationPerActivity", result.firstChild.firstChild)//XMLTools.getElementsByTagName("listPopulationPerActivity", result);
 		if(popNodes.length > 0){
 			var txt:String = popData.getReportString(result);
 			showReport(txt);
