@@ -60,7 +60,7 @@ class gui.EditMapCreateGeometry extends MovieClip {
 			beginFill(style.getFillColor(), style.getFillOpacity());
 		}else{
 			lineStyle(0, 0x000000, 100);
-	        beginFill(0xFF0000, 30);
+	        beginFill(0xDDAA50, 30);
 		}
         lineTo(width, 0);
         lineTo(width, height);

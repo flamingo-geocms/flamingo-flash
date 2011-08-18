@@ -46,7 +46,7 @@ class gui.EditMapCircle extends EditMapGeometry {
         if(radiusText==null){
         	radiusText= Label(this.attachMovie("Label", "mLabel", 1));
         }
-        if(showMeasures){
+        if(type == ACTIVE && showMeasures){
         	radiusText.move(circleX ,circleY);
         } else {
         	radiusText.move(x-20 ,y-20);
@@ -60,7 +60,7 @@ class gui.EditMapCircle extends EditMapGeometry {
             radiusText.visible = true;
         } else {
             lineStyle(strokeWidth, strokeColor, strokeOpacity);
-            radiusText.visible = showMeasures;
+            //radiusText.visible = showMeasures;
         }
         if (style.getFillOpacity() > 0) {
             beginFill(fillColor, fillOpacity);
