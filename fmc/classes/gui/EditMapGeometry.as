@@ -154,7 +154,7 @@ class gui.EditMapGeometry extends GeometryPane implements GeometryListener {
         clear();
         doDraw();
         setLabel();
-        if(showMeasures){
+        if(this.type == ACTIVE && showMeasures){
        		setMeasureLabel();
         }
 		if (this.type == ACTIVE && _geometry.getFirstAncestor() == _geometry) { //surpress updating for child geometries. Saves cpu resources.
