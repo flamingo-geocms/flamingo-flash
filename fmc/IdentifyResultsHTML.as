@@ -55,6 +55,7 @@ var htmlfield:String = null;
 var seperatedfields:Array = null;
 var seperator:String = ",";
 var emptyWhenNotFound:Boolean = false;
+var trimUrlLabel:Boolean = false;
 var infoStrings:Object;
 var showInOrder:Boolean = false;
 var order:Array = null;
@@ -210,6 +211,9 @@ function convertInfo(infostring:String, record:Object):String {
 	if(emptyWhenNotFound){
 		t = makeEmptyWhenNotFound(t);	
 	}
+	if(trimUrlLabel){
+		t = doTrimUrlLabel(t);
+	}
 	return t;
 }
 
@@ -257,6 +261,25 @@ function makeEmptyWhenNotFound(str:String):String {
 	
 }
 
+function doTrimUrlLabel(str:String):String{
+	var tStr:String = str;
+	while(tStr.indexOf("#trimurllabel#") != -1){
+		var beginlink:Number = tStr.indexOf("#trimurllabel#");
+		var endlink:Number =  tStr.substr(beginlink + 14).indexOf("#trimurllabel#") + beginlink + 28;
+		if(endlink == -1 || endlink<beginlink){
+			return tStr;
+		}
+		var urlLink:String = tStr.substring(beginlink,endlink);
+		if(urlLink.substr(urlLink.lastIndexOf("/")) == -1){
+			urlLink.substr(14,urlLink.length - 14);	
+		} else {
+			urlLink = urlLink.substr(urlLink.lastIndexOf("/") + 1);
+			urlLink = urlLink.substr(0,urlLink.length - 14);
+		}
+		tStr = tStr.split(tStr.substring(beginlink,endlink)).join(urlLink); 
+	}
+	return tStr;
+}
 
 lMap.onIdentifyComplete = function(map:MovieClip) {
 	var s = flamingo.getString(thisObj, "identify", "identify progress [progress]%");
@@ -552,6 +575,11 @@ function setConfig(xml:Object) {
 		case "emptywhennotfound":
 			if (val.toLowerCase() == "true") {
 				emptyWhenNotFound=true;
+			}	
+			break;	
+		case "trimurllabel":
+			if (val.toLowerCase() == "true") {
+				trimUrlLabel=true;
 			}	
 			break;		
 		case "showinorder":
