@@ -22,11 +22,13 @@ class coremodel.search.SearchField extends AbstractComposite {
 	private var _staticFieldValues: Array = null;
 	private var _featureType: String;
 	private var _searchField: String;
+	private var _autoNavigateField: String;
 	private var _pattern: String;
 	private var _minInput: Number = 3;
 	private var _maxInput: Number = 0;
 	private var _displayFields: Array;
 	private var _autocomplete: Boolean = false;
+	private var _autonavigate: Boolean = false;
 	private var _displayFieldSeparator: String;
 	private var _valueStore: FieldValueStore;
 	private var _defaultValue: String;
@@ -72,6 +74,10 @@ class coremodel.search.SearchField extends AbstractComposite {
 		return _searchField;
 	}
 	
+	public function get autoNavigateFieldName (): String {
+		return _autoNavigateField;
+	}
+	
 	public function get displayFieldNames (): Array {
 		return _displayFields ? _displayFields : [ searchFieldName ];
 	}
@@ -98,6 +104,10 @@ class coremodel.search.SearchField extends AbstractComposite {
 	
 	public function get autocomplete (): Boolean {
 		return _autocomplete;
+	}
+	
+	public function get autonavigate(): Boolean {
+		return _autonavigate;
 	}
 
 	public function get defaultValue (): String {
@@ -136,6 +146,9 @@ class coremodel.search.SearchField extends AbstractComposite {
     	case 'searchfield':
     		_searchField = value;
     		break;
+    	case 'autonavigatefield':
+    		_autoNavigateField = value;
+    		break;	
     	case 'pattern':
     		_pattern = value;
     		break;
@@ -157,6 +170,9 @@ class coremodel.search.SearchField extends AbstractComposite {
 		case 'autocomplete':
 			_autocomplete = value.toLowerCase() == 'true';
 			break;
+		case 'autonavigate':
+    		_autonavigate = value.toLowerCase () == 'true';
+    		break;	
 		case "default":
 		case "defaultValue":
 			_defaultValue = value;

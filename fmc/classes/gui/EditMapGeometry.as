@@ -221,12 +221,13 @@ class gui.EditMapGeometry extends GeometryPane implements GeometryListener {
 	        	} else {
 	        		area = Math.abs(Circle(_geometry).getArea());
 	        	}
-	    	if (area > 10000000){
+	    	if (area > 1000000){
 	    		measureString = Math.round(area/10000)/100 + " km2";
 	    	}
-	    	else if (area > 10000 && area <= 10000000){
-				measureString = Math.round(area/100)/100 + " ha";	
-	    	} else {
+	    	//else if (area > 10000 && area <= 10000000){
+				//measureString = Math.round(area/100)/100 + " ha";	
+	    	//} 
+	    	else {
 	   			measureString = Math.round(area) + " m2";
 	    	}
        } else if (_geometry instanceof LineString && _geometry.getParent()==null){

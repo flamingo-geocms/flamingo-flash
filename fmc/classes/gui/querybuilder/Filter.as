@@ -59,7 +59,8 @@ class gui.querybuilder.Filter extends View {
 	private var _canDelete: Boolean = true;
 	private var _possibleValues: Array = null;
 	private var _selectedField: Object = null;
-	private var _value: String = '';
+	//value as Object may contain besides a value also a bounding box for autonavigate
+	private var _value: Object = '';
 	private var _operator: String = '=';
 	private var _selectFieldLabel: String = 'Select a field ...';
 	private var _selectValueLabel: String = 'Select a value ...';
@@ -173,12 +174,12 @@ class gui.querybuilder.Filter extends View {
 		populateValues ();
 	}
 	
-	public function get value (): String {
+	public function get value (): Object{
 		return _value;
 	}
 	
-	public function set value (v: String): Void {
-		var oldValue: String = _value;
+	public function set value (v: Object): Void {
+		var oldValue: Object = _value;
 		
 		_value = v;
 		
@@ -293,7 +294,6 @@ class gui.querybuilder.Filter extends View {
 
 	public function init (): Void {
 		super.init ();
-		
 		_fields = [ ];
 	}
 	
@@ -459,7 +459,6 @@ class gui.querybuilder.Filter extends View {
 	 * Populates the values combobox with possible values.
 	 */
 	private function populateValues (): Void {
-		
 		if (!valueComboBox || !valueTextInput || !valueAutocomplete) {
 			return;
 		}
@@ -482,7 +481,7 @@ class gui.querybuilder.Filter extends View {
 		// Show either a combobox or a text input:
 		operatorComboBox.visible = allowOperatorSelection;
 		if (possibleValues !== null && !autocomplete) {
-			var oldSelection: String = value;
+			var oldSelection: Object = value;
 			var keepOldSelection: Boolean = false;
 			var oldSelectionIndex: Number;
 			var enabled: Boolean = valueComboBox.enabled;
@@ -497,10 +496,14 @@ class gui.querybuilder.Filter extends View {
 		
 			valueComboBox.enabled = true;
 			for (var i: Number = 0; i < possibleValues.length; ++ i) {
-				if (possibleValues[i].value == value) {
+				if (possibleValues[i] == value) {
 					keepOldSelection = true;
 					oldSelectionIndex = i;
 				}
+				//for (var a in possibleValues[i].data){
+					
+				//_global.flamingo.tracer(a + "== " + possibleValues[i].data[a]);
+				//}
 				valueComboBox.addItem (possibleValues[i]);
 			}
 			
@@ -508,7 +511,7 @@ class gui.querybuilder.Filter extends View {
 				valueComboBox.setSelectedIndex (oldSelectionIndex);
 			} else {
 				valueComboBox.setSelectedIndex (0);
-				value = '';
+				value = null;
 			}
 			valueComboBox.enabled = enabled;
 		} else if (possibleValues !== null && autocomplete) {
@@ -522,7 +525,7 @@ class gui.querybuilder.Filter extends View {
 			valueTextInput.visible = true;
 			valueAutocomplete.visible = false;
 			
-			valueTextInput.text = value;
+			valueTextInput.text = String(value);
 		}
 	}
 	
@@ -555,8 +558,8 @@ class gui.querybuilder.Filter extends View {
 		if (!selectedValue.value) {
 			selectedValue = null;
 		}
-		
-		value = selectedValue === null ? '' : selectedValue.value;
+		//_global.flamingo.tracer("Filter onValueSelect " + selectedValue["label"] + selectedValue["data"]["boundedBy"]);
+		value = selectedValue === null ? '' : selectedValue;
 	}
 	
 	public function onAutocompleteSelect (): Void {
@@ -571,7 +574,7 @@ class gui.querybuilder.Filter extends View {
 			selectedValue = null;
 		}
 		
-		value = selectedValue === null ? '' : selectedValue.value;
+		value = selectedValue === null ? '' : selectedValue;
 	}
 	
 	public function onOperatorSelect (): Void {
@@ -605,16 +608,16 @@ class gui.querybuilder.Filter extends View {
 		dispatchEvent ({ type: 'enter' });
 	}
 	
-	private function setValue (v: String): Void {
+	private function setValue (v: Object): Void {
 		
 		if (possibleValues !== null) {
 			// Select an item from the value combobox:
 			var selectedValue: Object = valueComboBox.selectedItem,
 				found: Boolean = false;
-			if (selectedValue && selectedValue.value && selectedValue.value != v) {
+			if (selectedValue && selectedValue.value && selectedValue != v) {
 				for (var i: Number; i < valueComboBox.getLength (); ++ i) {
 					var item: Object = valueComboBox.getItemAt (i);
-					if (item.value && item.value == v) {
+					if (item && item == v) {
 						valueComboBox.setSelectedIndex (i);
 						found = true;
 						break;
@@ -628,7 +631,7 @@ class gui.querybuilder.Filter extends View {
 			}
 		} else if (v != valueTextInput.text) {
 			// Set the value of the text input:
-			valueTextInput.text = v;
+			valueTextInput.text = String(v);
 		}
 	}
 	

@@ -147,10 +147,10 @@ class coremodel.search.QueryFilter {
 				return;
 			}
 		}
-		
 		var resultFeatureType: FeatureType = searchField.featureType,
 			whereClauses: Array = query.getFilterWhereClauses (resultFeatureType, previous),
 			valueFieldName: String = searchField.searchFieldName,
+			autoNavigateFieldName: String = searchField.autoNavigateFieldName,
 			displayFieldNames: Array = searchField.displayFieldNames,
 			displayFieldSeparator: String = searchField.displayFieldSeparator,
 			i: Number;
@@ -174,7 +174,8 @@ class coremodel.search.QueryFilter {
 				var feature: ServiceFeature = features[i];
 				values.push ({
 					value: String (feature.getValue (valueFieldName)),
-					label: this.makeLabel (displayFieldNames, displayFieldSeparator, feature)
+					label: this.makeLabel (displayFieldNames, displayFieldSeparator, feature),
+					boundedBy: (feature.getValue (autoNavigateFieldName))
 				});
 			}
 			

@@ -39,6 +39,7 @@ class gui.querybuilder.QueryBuilder extends View {
 	private var _searchLabel: String = 'Search';
 	private var _clearLabel: String = 'Clear';
 	private var _canSearch: Boolean = false;
+	private var _autoNavigate: Boolean = false;
 	private var _showProgress: Boolean = false;
 	private var _infoLabel: String = '';
 	
@@ -100,6 +101,20 @@ class gui.querybuilder.QueryBuilder extends View {
 		}
 	}
 	
+	public function get autoNavigate (): Boolean {
+		return _autoNavigate;
+	}
+	
+	public function set autoNavigate(an: Boolean): Void {
+		_autoNavigate = an;
+		if (button) {
+			button.visible = !an;
+			clearButton.visible = !an;
+		}
+		
+	}
+	
+	
 	public function get showProgress (): Boolean {
 		return _showProgress;
 	}
@@ -140,8 +155,7 @@ class gui.querybuilder.QueryBuilder extends View {
 		
 		var instanceName:String = 'filter' + (filterIndex ++);
 		var filter:Filter = Filter (this.createChild (gui.querybuilder.Filter, instanceName, { }));
-		
-		
+
 		this.filterComponents.push (filter);
 		
 		// Bind the enter event and dispatch a search event when enter is pressed in a filter only if
@@ -151,6 +165,7 @@ class gui.querybuilder.QueryBuilder extends View {
 				this.dispatchEvent ({ type: 'search' });
 			}
 		}));
+		
 
 		// Update the layout, possibly adding scrollbars:		
 		layoutFilters (true);
@@ -283,11 +298,11 @@ class gui.querybuilder.QueryBuilder extends View {
 	}
 
 	private function syncUI (): Void {
-		
+		button.visible = !autoNavigate;
 		button.enabled = canSearch;
 		button.label = searchLabel;
 		clearButton.label = clearLabel;
-		
+		clearButton.visible = !autoNavigate;
 		button.visible = !showProgress;
 		infoLabelControl.visible = !showProgress;
 		progressBar.visible = showProgress;

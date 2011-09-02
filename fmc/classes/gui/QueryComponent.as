@@ -181,6 +181,9 @@
  * 								is used to separate the display fields.
  * @attr autocomplete			If set to "true", the value entered by the user is autocompleted. Autocomplete works similar
  * 								to the "enumerate" functionality, other search fields can be used as filters.
+ * @attr autonavigate 			If set to "true", the map navigates to the chosen location when a choice is made in a combobox (only when enumerate = "true"
+ * 								and an autoNavigateField, containing a bounding box, is configured 	
+ * @attr autoNavigateField		Name of field that contains a bounding box for autonavigate 						
  * @attr default				The default value, defaults to an empty string.
  * @attr defaultvalue			The default value, defaults to an empty string.
  * @attr operator				The operator to use for comparison. If no operator is given, the user can select an operator.
@@ -190,6 +193,7 @@
  * <SearchField featureType="ft_woonplaatsen" id="sf_woonplaats" label="Woonplaats" searchField="app:geographicidentifier" pattern="[app:geographicidentifier]*" enumerate="true" minInput="2" autocomplete="true" />
  * <SearchField featureType="ft_straten" id="sf_straat" label="Straat" searchField="app:geographicidentifier" displayField="app:straatnaam_nen" enumerate="true" minInput="2" autocomplete="true" />
  * <SearchField featureType="ft_adressen" id="sf_adres" label="Huisnummer" searchField="app:geographicidentifier" displayFields="app:huisnummer,app:toevoeging" displayFieldSeparator="-" enumerate="true" minInput="1" autocomplete="true" />
+ * <SearchField featureType="regio" id="sf_regio" label="Regio" searchField="REGIO" pattern="*[REGIO]*"  minInput="1" operator="="  enumerate="true" autonavigate="true" autoNavigateField="boundedBy"/>
  */
 /**
  * @tag <FieldValue>
@@ -414,6 +418,13 @@ class gui.QueryComponent extends AbstractComponent implements PersistableCompone
 		// Set a description label if any mandatory fields are in the form:
 		if (mandatoryFields.length > 0) {
 			builder.infoLabel = _global.flamingo.getString (this, 'mandatoryFieldsLabel', '* mandatory field');
+		}	
+		
+		for(var i:Number=0;i<fixedFields.length;i++){
+			if(fixedFields[i].autonavigate){
+				builder.autoNavigate = true;
+				break;
+			}
 		}
 		
 		// Add an event listener to the search button:
@@ -1068,13 +1079,30 @@ class gui.QueryComponent extends AbstractComponent implements PersistableCompone
 		}
 	}
 	
-	private function onValueChanged (query: Object, filter: Filter, queryFilter: QueryFilter, newValue: String, oldValue: String): Void {
+	private function onValueChanged (query: Object, filter: Filter, queryFilter: QueryFilter, newValue: Object, oldValue: Object): Void {
 		//_global.flamingo.tracer ("Value changed: " + newValue + " (" + queryFilter.searchField.id + ")");
 		
 		var oldComplete: Boolean = queryFilter.complete;
 		
 		// Assign the new value to the query filter:
-		queryFilter.value = newValue;
+		if(newValue.value == null){
+			queryFilter.value = newValue==null ? '' : String(newValue);
+		} else {
+			queryFilter.value = newValue.value==null ? '' : newValue.value;
+		}
+		
+		//if autoNavigate zoom directly to Extent 
+		if(queryFilter.searchField.autonavigate){
+			var map:Object = _global.flamingo.getComponent(listento[0]);
+			var ex:Object = new Object();
+			ex.minx = Envelope(filter.value["data"]["boundedBy"]).getMinX();
+			ex.maxx = Envelope(filter.value["data"]["boundedBy"]).getMaxX();
+			ex.maxy = Envelope(filter.value["data"]["boundedBy"]).getMaxY();
+			ex.miny = Envelope(filter.value["data"]["boundedBy"]).getMinY();
+			map.moveToExtent (ex, 0);
+			return;
+		}
+		
 		
 		// Invoke the general change handler for the filter:
 		onFilterChanged (query, filter, queryFilter, oldComplete);
