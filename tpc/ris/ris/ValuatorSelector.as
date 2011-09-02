@@ -140,6 +140,7 @@ class ris.ValuatorSelector extends AbstractSelector {
 	private var mWorths:Array;
 	private var mPeriods:Array;
 	private var mPublications:Array;
+	private var userName:String
 	
 
 
@@ -156,16 +157,22 @@ class ris.ValuatorSelector extends AbstractSelector {
 	
 	function init():Void{
 		super.init();
+		userName = _global.flamingo.getArgument(this, "username");
 		this.valData = new ValuatorData(this);
 		addAreaControls(0,0);
 		addReportSettingsControls(250,0);
 		addButtons(500,210);
 		addStatusLine(0,275);
+		addUsageText(0,310);
 		resetControls();	
 	}
 	
 	function getConnector():ValuatorConnector{
 		return ValuatorConnector(this.dataConnector);
+	}
+	
+	function getUserName():String{
+		return userName;
 	}
 	
 	private function addReportSettingsControls(x:Number, y:Number):Void {
@@ -265,6 +272,7 @@ class ris.ValuatorSelector extends AbstractSelector {
 			setStatusText(_global.flamingo.getString(this,"warningPeriod"),"warning",false);
 			return;
 		}
+		var sUsage:String = usageText.text;
 		var busyText:String = _global.flamingo.getString(this,"busy");
 		if(busyText==null||busyText==""){
 			busyText="Ophalen gegevens....";
@@ -272,8 +280,8 @@ class ris.ValuatorSelector extends AbstractSelector {
 		setStatusText(busyText,"info",true);
 		this["mSendRequestButton"].enabled = false;
 		var sWKTArea:String = "POLYGON(("  + wktCoords + "))";
-
-		dataConnector.retrieveWKT(sWKTArea,sWorths,iYears,sPublications);			
+		
+		dataConnector.retrieveWKT(sWKTArea,sWorths,iYears,sPublications,userName,sUsage);			
 
 	}
 	

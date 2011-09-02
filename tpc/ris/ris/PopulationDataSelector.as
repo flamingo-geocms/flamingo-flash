@@ -222,6 +222,11 @@ class ris.PopulationDataSelector extends AbstractSelector implements PopDataConn
 		showReport(txt);
 	}
 	
+	function onLoadFail(result : XML) : Void {
+		this["mSendRequestButton"].enabled = true;
+		setStatusText("Er is een fout opgetreden.", "warning", true);
+	}
+	
 	function onChangeBox(evtObj:Object):Void{
 		coords = llX.text + "," + llY.text + "," +  urX.text + "," + urY.text;
 		if(areaSelectionType=="inBox"){

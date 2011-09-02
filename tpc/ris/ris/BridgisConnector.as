@@ -65,6 +65,13 @@ class ris.BridgisConnector{
 		return soapString;
 	}
 		
+	private function getAdditionalInformation(asmx:String,sUserName:String,sUsage:String): String {
+		var infoStr:String = '<requester>' + sUserName + '</requester>';
+		infoStr += '<usage>' + sUsage + '</usage>';
+		infoStr += '<asmx>'+ asmx + '</asmx>';
+		return infoStr;
+	} 	
+	
 	private function getSoapUserString():String{
 		var userStr:String = '<geow:sUser>' + account.getUserName() +  '</geow:sUser>';
 		userStr += '<geow:sPassword>' + account.getPassword() + '</geow:sPassword>';
@@ -86,7 +93,7 @@ class ris.BridgisConnector{
 	
 	function onLoadSucces():Void{	
 		var result:XML = xmlResponse;
-		for (var i:Number = 0; i < connectorListeners.length; i++) { 
+		for (var i:Number = 0; i < connectorListeners.length; i++) {
 		 	BridgisConnectorListener(connectorListeners[i]).onLoadResult(result);	 	
         }
 	}

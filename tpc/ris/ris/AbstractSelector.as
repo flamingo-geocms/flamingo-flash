@@ -13,7 +13,7 @@ import core.AbstractComponent;
 
 import gui.dde.TraceLayer;
 
-import ris.BridgisConnectorListener;
+
 
 import tools.XMLTools;
 
@@ -21,7 +21,7 @@ import tools.XMLTools;
 
 import flash.external.ExternalInterface;
 
-class ris.AbstractSelector  extends AbstractComponent implements GeometryListener,BridgisConnectorListener{
+class ris.AbstractSelector  extends AbstractComponent implements GeometryListener {
 
     private var areaSelector:Boolean;
     private var boxSelector:Boolean;
@@ -49,11 +49,15 @@ class ris.AbstractSelector  extends AbstractComponent implements GeometryListene
 	private var urY:TextInput;
 	private var setExtentButton;
 	private var statusLine:TextField;
+	private var usageText:TextInput;
+	private var usageLabel:TextField;
 
 	private var areaSelectionType : String;
 	private var inArea:Object = new Object;
 
 	private var resultCompId = "populationresults";
+	
+	private var userName:String = "";
 
 	
 	function onLoad():Void {
@@ -78,6 +82,7 @@ class ris.AbstractSelector  extends AbstractComponent implements GeometryListene
 		textFormatInfo.underline = false;
 		textFormatInfo.font = "_sans";
 		textFormatInfo.color = 0x0000ff;
+		
 
 	}
 
@@ -217,6 +222,7 @@ class ris.AbstractSelector  extends AbstractComponent implements GeometryListene
 			circle._y = currentY + 20;
 			currentY += 70;
 		}
+		this["inWhat"].addEventListener("click", Delegate.create(this, onClickRadioButton));
     }
 
 	private function addButtons(x:Number, y:Number){	
@@ -255,9 +261,16 @@ class ris.AbstractSelector  extends AbstractComponent implements GeometryListene
 			statusLine = createTextField("mCommandLine",this.getNextHighestDepth(),x,y,this._width,60);
 			statusLine.multiline = true;
 			statusLine.wordWrap = true;
-			this["inWhat"].addEventListener("click", Delegate.create(this, onClickRadioButton));
 	}
 	
+	private function addUsageText(x:Number, y:Number){
+		usageLabel = createTextField("mUsageLabel",this.getNextHighestDepth(),x,y,this._width,20);
+		usageLabel.text = _global.flamingo.getString(this,"userInfoLabel");
+		usageLabel.setTextFormat(textFormat);	
+		usageText = TextInput(this.attachMovie("TextInput","mUsage",this.getNextHighestDepth()));
+		usageText.setSize(this._width,60);
+		usageText.move(x,y + 20);
+	}
 	
 	private function onChangeInArea(evtObj:Object) : Void {
 		inArea = evtObj.target.selectedItem;
@@ -480,22 +493,7 @@ class ris.AbstractSelector  extends AbstractComponent implements GeometryListene
         }
 	}
 	
-	function showResults(result: XML){
-	}
-	
-	function onLoadResult(result :XML):Void {
-		//var statusNodes:Array =  XMLTools.getElementsByTagName("Status", result);
-		//if(statusNodes[0].firstChild.nodeValue == "FAILED"){
-			//onLoadFail(result);
-		//} else {
-			showResults(result);
-		//}			
-	}
-	
-	function onLoadFail(result : XML) : Void {
-		this["mSendRequestButton"].enabled = true;
-		setStatusText("Er is een fout opgetreden.", "warning", true);
-	}
+
 	
 	private function setAreaSelectionType(areaSelectionType : String) : Void {
 		this.areaSelectionType = areaSelectionType;

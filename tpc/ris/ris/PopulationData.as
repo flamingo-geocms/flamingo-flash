@@ -44,20 +44,34 @@ class ris.PopulationData {
     	analyzeTypes["MAXIMUM"] =  createTypeObject(_global.flamingo.getString(populatorSelector,"maxpop"));  	
 	}
 	
-	public function getPopActivities():String{
+	/*public function getPopActivities():String{
 		var popActStr:String = "";
 		for (var a in popActivities){
 			popActStr += "&sActivityList=" + popActivities[a].getId(); 
 		} 
 		return popActStr;
+	}*/
+	
+	public function getPopActivityArray():Array {
+		var popArray:Array = new Array();
+		for (var a in popActivities){
+			popArray.push(a)
+		}
+		return popArray;
 	}
+			
+	public function getTotalActivityArray():Array {
+		var popArray:Array = new Array();
+		popArray.push("totstr");
+		popArray.push("tottyd");
+		return popArray;
+	}		
 		
-		
-	public function getTotalActivities():String{
+	/*public function getTotalActivities():String{
 		var totActStr:String = "";
 		totActStr += "&sActivityList=totstr&sActivityList=tottyd";
 		return totActStr; 
-	}	
+	}*/	
 	
 	private function resetAnalyseTypes(){	
     	analyzeTypes["EINDNACHT"].requested = false;
@@ -82,7 +96,7 @@ class ris.PopulationData {
 		}
 		resetAnalyseTypes();
 		
-		var populationPerActivityNodes:Array = result.firstChild.firstChild.childNodes;
+		var populationPerActivityNodes:Array = result.firstChild.firstChild.firstChild.firstChild.firstChild.childNodes;
 		for(var i:Number=0;i< populationPerActivityNodes.length;i++){
 			var populationPerActivityNode:XMLNode = populationPerActivityNodes[i];
 			var dataNodes:Array = populationPerActivityNode.childNodes;

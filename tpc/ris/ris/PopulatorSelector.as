@@ -102,7 +102,7 @@ import mx.controls.TextInput;
 
 import gui.dde.TraceLayer;
 
-import ris.PopDataConnectorListener;
+import ris.BridgisConnectorListener;
 import ris.PopulatorConnector;
 
 
@@ -113,7 +113,7 @@ import ris.PopulationData;
 
 import tools.XMLTools;
 
-class ris.PopulatorSelector extends AbstractSelector {
+class ris.PopulatorSelector extends AbstractSelector implements BridgisConnectorListener {
     var defaultXML:String = "<?xml version='1.0' encoding='UTF-8'?>" +
 							"<PopulatorSelector>" + 
 							"<string id='layers' en='Layers' nl='Kaartlagen'/>" +
@@ -153,6 +153,8 @@ class ris.PopulatorSelector extends AbstractSelector {
 		addReportSettingsControls(250,0);
 		addButtons(240,200);
 		addStatusLine(0,275);
+		addUsageText(0,310);
+		userName = _global.flamingo.getArgument(this, "username");
 		resetControls();
 		popData = new PopulationData(this);
 	}
@@ -191,20 +193,24 @@ class ris.PopulatorSelector extends AbstractSelector {
 
 	
 	private function onClickRequestButton():Void{
+		
 		var busyText:String = _global.flamingo.getString(this,"busy");
+		
 		if(maxPop.selected||werkdag.selected||werknacht.selected||weekendnacht.selected){
 			if(busyText==null||busyText==""){
 				busyText="Ophalen gegevens....";
 			}
 			setStatusText(busyText,"info",true);
 			this["mSendRequestButton"].enabled = false;
-			var activities:String = ""; 
+			var sActivityList:Array;
 			if(perPopType.selected){
-				activities = popData.getPopActivities();
+				sActivityList = popData.getPopActivityArray();
 			} else {
-				activities = popData.getTotalActivities();
+				sActivityList = popData.getTotalActivityArray();
 			}
-			PopulatorConnector(dataConnector).getReport(areaSelectionType, wktCoords, getAnalyzeTypes(),activities);
+			var sWKTArea:String = "POLYGON(("  + wktCoords + "))";
+			//PopulatorConnector(dataConnector).getReport(areaSelectionType, wktCoords, getAnalyzeTypes(),activities,userName);
+			PopulatorConnector(dataConnector).retrieveWKT(sWKTArea,getAnalyzeTypeArray(),sActivityList,userName,usageText.text);
 		} else {
 			var warning:String = _global.flamingo.getString(this,"warning");
 			if(busyText==null||busyText==""){
@@ -214,8 +220,11 @@ class ris.PopulatorSelector extends AbstractSelector {
 		}
 	}
 	
+		
+	
+	
 
-	private function getAnalyzeTypes():String {
+	/*private function getAnalyzeTypes():String {
 		var analyzeTypes:String="";
 		if (maxPop.selected){
 			analyzeTypes += "&eAnalyzeTypes=MAXIMUM";
@@ -233,11 +242,39 @@ class ris.PopulatorSelector extends AbstractSelector {
 			analyzeTypes += "&eAnalyzeTypes=EINDNACHT";
 		}
 		return analyzeTypes;	
+	}*/
+	
+	private function getAnalyzeTypeArray():Array {
+		var analyzeTypes:Array=new Array();
+		if (maxPop.selected){
+			analyzeTypes.push("MAXIMUM");
+		}
+		if(werkdag.selected){
+			analyzeTypes.push("WEEKDAG");
+		}
+		if(werknacht.selected){
+			analyzeTypes.push("WEEKNACHT");
+		}
+		if(weekenddag.selected){
+			analyzeTypes.push("EINDDAG");
+		}
+		if(weekendnacht.selected){
+			analyzeTypes.push("EINDNACHT");
+		}
+		return analyzeTypes;	
+	}
+	
+	function onLoadResult(result :XML):Void {
+		showResults(result);
+	}
+	function onLoadFail(result : XML) : Void {
+		this["mSendRequestButton"].enabled = true;
+		setStatusText("Er is een fout opgetreden.", "warning", true);
 	}
 	
 	
-	function showResults(result:XML){
-		var popNodes:Array = XMLTools.getChildNodes("PopulationPerActivity", result.firstChild.firstChild)//XMLTools.getElementsByTagName("listPopulationPerActivity", result);
+	private function showResults(result:XML){
+		var popNodes:Array = XMLTools.getChildNodes("PopulationPerActivity", XMLNode(result.firstChild.firstChild.firstChild.firstChild.firstChild));
 		if(popNodes.length > 0){
 			var txt:String = popData.getReportString(result);
 			showReport(txt);

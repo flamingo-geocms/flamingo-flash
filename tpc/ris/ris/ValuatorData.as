@@ -27,11 +27,10 @@ class ris.ValuatorData implements BridgisConnectorListener{
 			
 	private function createValArrays():Void{
 		valuatorSelector.getConnector().addListener(this);
-		valuatorSelector.getConnector().getAvailableYears();
+		valuatorSelector.getConnector().getAvailableYears(valuatorSelector.getUserName(),"");
 	
 		publications=new Array();
 
-		//TODO: Get publications from service GetAvailablePublications	
 		publications[-1] = new Publication(-1,"totaal",null);
 		for (var i:Number=1;i<6;i++){
 			publications[i] = new Publication(i,"tak",null);
@@ -134,7 +133,7 @@ class ris.ValuatorData implements BridgisConnectorListener{
 			years.push(XMLNode(yearNodes[i]).firstChild.nodeValue);
 		}
 		valuatorSelector.addPeriodControls(500,0);
-		valuatorSelector.getConnector().getAvailablePublications();		
+		valuatorSelector.getConnector().getAvailablePublications(valuatorSelector.getUserName(),"");		
 	}
 	
 	private function setPubLabels(availablePubNodes : XMLNode): Void{

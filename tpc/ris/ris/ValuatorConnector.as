@@ -14,23 +14,26 @@ class ris.ValuatorConnector extends BridgisConnector{
 	
 	var xmlheader:String = "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>";
 	
-	function getAvailableYears(){
+	function getAvailableYears(sUserName:String,sUsage:String){
 		var soapReqStr:String = '<geow:GetAvailableYears>';
+		soapReqStr += getAdditionalInformation("valuatoranalyze.asmx",sUserName,sUsage);
       	soapReqStr += getSoapUserString();
      	soapReqStr+='</geow:GetAvailableYears>';
 		request(soapReqStr);
 	}
 	
-	function getAvailablePublications(){
+	function getAvailablePublications(sUserName:String,sUsage:String){
 		var soapReqStr:String = '<geow:GetAvailablePublications>';
+		soapReqStr += getAdditionalInformation("valuatoranalyze.asmx",sUserName,sUsage);
       	soapReqStr += getSoapUserString();
      	soapReqStr+='</geow:GetAvailablePublications>';
 		request(soapReqStr);
 	}
 	
 
-	function retrieveWKT(sWKTArea:String,sWorths:Array,iYears:Array,sPublications:Array){
+	function retrieveWKT(sWKTArea:String,sWorths:Array,iYears:Array,sPublications:Array,sUserName:String,sUsage:String){
 		var soapReqStr:String = '<geow:RetrieveWKT>';
+		soapReqStr += getAdditionalInformation("valuatoranalyze.asmx",sUserName,sUsage);
 		soapReqStr += getSoapUserString();
 		soapReqStr += '<geow:sWKTArea>' + sWKTArea + '</geow:sWKTArea>';
 		soapReqStr += getNodesString('geow','iYears', iYears, 'int');
@@ -39,4 +42,6 @@ class ris.ValuatorConnector extends BridgisConnector{
 		request(soapReqStr);
 	}
 
+
+		
 }
