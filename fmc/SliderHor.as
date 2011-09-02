@@ -195,16 +195,18 @@ function setConfig(xml:Object) {
 	//
 	this.attachMovie(skin+"_slider_bar", "mSliderbar", 3);
 	//
-	createTextField("mLabel", this.getNextHighestDepth(), 0, 0, 100, 25);
-	mLabel.multiline = false;
-	mLabel.wordWrap = false;
-	mLabel.html = true;
-	mLabel.selectable = false;
-	mLabel.styleSheet = flamingo.getStyleSheet(this);
-  mLabel.text = "<p class='text'>" + flamingo.getString(this, "label") + "</p>";
-	mLabel._width = mLabel.textWidth+5;
-	mLabel._height = mLabel.textHeight+5;
-
+	if (flamingo.getString(this, "label") != undefined && flamingo.getString(this, "label") != "") {
+  	createTextField("mLabel", this.getNextHighestDepth(), 0, 0, 100, 25);
+  	mLabel.multiline = false;
+  	mLabel.wordWrap = false;
+  	mLabel.html = true;
+  	mLabel.selectable = false;
+  	mLabel.styleSheet = flamingo.getStyleSheet(this);
+    mLabel.text = "<p class='text'>" + flamingo.getString(this, "label") + "</p>";
+  	mLabel._width = mLabel.textWidth+5;
+  	mLabel._height = mLabel.textHeight+5;
+  }
+  
 	currentValue = initial;
 	resize();
 	refresh();
@@ -217,18 +219,30 @@ function stepSlider(increase:Boolean) {
     else {
       currentValue += -slidestep;
     }
-    if (currentValue < minimum) {
-      currentValue = minimum;
-    }
-    if (currentValue > maximum) {
-      currentValue = maximum;
-    }
+
+    if (minimum < maximum) {
+	    if (currentValue < minimum) {
+	      currentValue = minimum;
+	    }
+	    if (currentValue > maximum) {
+	      currentValue = maximum;
+	    }
+	  }
+	  else {
+	    if (currentValue > minimum) {
+	      currentValue = minimum;
+	    }
+	    if (currentValue < maximum) {
+	      currentValue = maximum;
+	    }
+	  }
+
 	  updateListeners();    
 }
 
 function slide() {
 
-	currentValue = (mSlider._x-mSliderbar._x)/mSliderbar._width*100;
+	currentValue = minimum + ((mSlider._x-mSliderbar._x) / mSliderbar._width) * (maximum - minimum);
 	updateListeners();
 
 }
@@ -237,7 +251,7 @@ function refresh() {
 	if (bSlide) {
 		return;
 	}
-	mSlider._x = mSliderbar._x+(mSliderbar._width*currentValue/(maximum - minimum));
+	mSlider._x = mSliderbar._x + (mSliderbar._width * Math.abs(minimum - currentValue) / Math.abs(maximum - minimum));
 }
 
 function resize() {
@@ -251,8 +265,10 @@ function resize() {
 	mSliderbar._width = r.width - mDecrease._width - mIncrease._width  - mSlider._width;
 	mSlider._x = mSliderbar._x;
 	mSlider._y = mSliderbar._y;
-	mLabel._x = r.x + + mDecrease._width;
-	mLabel._y = r.y + 5;
+	if (mLabel != undefined) {
+  	mLabel._x = r.x + + mDecrease._width;
+  	mLabel._y = r.y + 5;
+	}
 	refresh();
 }
 
