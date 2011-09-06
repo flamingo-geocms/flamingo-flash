@@ -176,7 +176,11 @@ function convertInfo(infostring:String, record:Object):String {
 				sep=true
 			}
 		}
+		//remove null values
 		var value:String = record[field];
+		if(value.toLowerCase()=="null"){
+			value = "";
+		}
 		//replace < with &lt; < causes problems in a htmlTextField
 		var valArray:Array = value.split("<");
 		if(valArray.length>1){
@@ -265,18 +269,15 @@ function doTrimUrlLabel(str:String):String{
 	var tStr:String = str;
 	while(tStr.indexOf("#trimurllabel#") != -1){
 		var beginlink:Number = tStr.indexOf("#trimurllabel#");
-		var endlink:Number =  tStr.substr(beginlink + 14).indexOf("#trimurllabel#") + beginlink + 28;
-		if(endlink == -1 || endlink<beginlink){
+		var endlink:Number =  tStr.substr(beginlink + 14).indexOf("#trimurllabel#") + beginlink + 14;
+		if(endlink == -1 || endlink<=beginlink){
 			return tStr;
 		}
-		var urlLink:String = tStr.substring(beginlink,endlink);
-		if(urlLink.substr(urlLink.lastIndexOf("/")) == -1){
-			urlLink.substr(14,urlLink.length - 14);	
-		} else {
+		var urlLink:String = tStr.substring(beginlink + 14,endlink);
+		if(urlLink.substr(urlLink.lastIndexOf("/")) != -1){
 			urlLink = urlLink.substr(urlLink.lastIndexOf("/") + 1);
-			urlLink = urlLink.substr(0,urlLink.length - 14);
 		}
-		tStr = tStr.split(tStr.substring(beginlink,endlink)).join(urlLink); 
+		tStr = tStr.split(tStr.substring(beginlink,endlink + 14)).join(urlLink); 
 	}
 	return tStr;
 }
