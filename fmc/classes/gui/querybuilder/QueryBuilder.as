@@ -398,10 +398,11 @@ class gui.querybuilder.QueryBuilder extends View {
 			clearButton.move (buttonX + button.width + PADDING, buttonY);
 		}
 		
+		//progressbar.height doesn't seem to be correct take a fixed height (20)
 		// Place the progress bar at the same height as the search button:
-		progressBar.move (PADDING, buttonY + (button.height / 2 - progressBar.height / 2));
+		progressBar.move (PADDING, buttonY + (button.height / 2) - 10);
 		if (updateSize) {
-			progressBar.setSize (childWidth, progressBar.height);
+			progressBar.setSize (childWidth, 20);
 		}
 		
 		// Place the info label next to the button:
