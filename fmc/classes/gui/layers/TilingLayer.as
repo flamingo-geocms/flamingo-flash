@@ -738,6 +738,12 @@ class gui.layers.TilingLayer extends AbstractLayer{
         return null;
     }
     
+     /*Get a already existing movieTiles (an Array of MovieClips from a tile)*/
+     public function getMovieTiles():Array{
+     	return this.mcTiles;
+     }
+     
+    
     /*Remove all tiles and clear the tilestage.*/
     public function clearAllTiles():Void{
         log.debug("clearAllTiles is called");
