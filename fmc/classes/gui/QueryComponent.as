@@ -1146,10 +1146,10 @@ class gui.QueryComponent extends AbstractComponent implements PersistableCompone
 	
 		// Activate or deactivate the search button depending on whether the mandatory fields have a value:
 		var complete: Boolean = queryFilter.query.complete;
-		if (complete != query.builder.canSearch) {
+		//check also if the queryFilter itself is complete (minInput/maxInput) 
+		if (complete != query.builder.canSearch && queryFilter.complete != query.builder.canSearch) {
 			query.builder.canSearch = complete;
 		}
-		
 		// Add a new optional filter after the current one if this is the last filter and it has
 		// both a field and a value. Extra filters are only added if search fields exist in the
 		// service description that are not associated with a filter yet.
