@@ -4,7 +4,7 @@
 * IDgis bv
  -----------------------------------------------------------------------------*/
 
-import tools.*;
+
 
 class tools.XMLTools {
      
@@ -107,6 +107,10 @@ class tools.XMLTools {
             return false;
         }
         return null;
+    }
+    
+     static function xmlDecode(str:String):String {
+        return str.split("&amp;").join("&").split("&lt;").join("<").split("&gt;").join(">").split("&quot;").join("\"").split("&apos;").join("\'");
     }
     
 }
