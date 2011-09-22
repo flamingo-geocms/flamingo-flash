@@ -6,8 +6,8 @@
 
  
 class ris.BridgisAccount {
-	private var userName:String = "**";
-	private var passWord:String = "**";
+	private var userName:String = "ipo";
+	private var passWord:String = "ipo2010";
 	
 	public function getUserName():String{
 		return userName;

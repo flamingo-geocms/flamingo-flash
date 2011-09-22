@@ -197,12 +197,12 @@ class ris.ValuatorSelector extends AbstractSelector {
 		initObject["worth"] = "TWCP";
 		wTWCP= CheckBox(attachMovie("CheckBox", "mTWCP", this.getNextHighestDepth(),initObject));
 		mWorths.push(wTWCP);
-		initObject["label"] = "Productie waarde: Lopende prijzen";
+		initObject["label"] = "Productiewaarde: Lopende prijzen";
 		initObject["_y"] += 25;
 		initObject["worth"] = "PWLP";
 		wPWLP= CheckBox(attachMovie("CheckBox", "mPWLP", this.getNextHighestDepth(),initObject));
 		mWorths.push(wPWLP);
-		initObject["label"] = "Productie waarde: Constante prijzen";
+		initObject["label"] = "Productiewaarde: Constante prijzen";
 		initObject["_y"] += 25;
 		initObject["worth"] = "PWCP";
 		wPWCP= CheckBox(attachMovie("CheckBox", "mPWCP", this.getNextHighestDepth(),initObject));

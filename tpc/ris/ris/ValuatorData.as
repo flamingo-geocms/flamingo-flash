@@ -199,26 +199,28 @@ class ris.ValuatorData implements BridgisConnectorListener{
 		var htmlStr:String = getDateString();
 		switch (sPublication) {
 		 	case "TOTAAL" :
-		 		htmlStr += "<span class='small'><textformat tabstops='[1,230,300,370,440,510,580,650,720,790,860,930]'>";
+		 		htmlStr += "<span class='small'><textformat tabstops='[1,210,320,430,540,650,760,870,980,1090,1200,1310]'>";
 				htmlStr += getTotaalStr();
 				break;	
 			case "BEDRIJFSTAKKEN" :
-				htmlStr += "<span class='small'><textformat tabstops='[1,240,315,390,465,540,615,690,765,840,915,990,1065,1140,1215,1290,1365,1440,1515,1590,1665,1740,1815,1890,1965,2040]'>";
+				htmlStr += "<span class='small'><textformat tabstops='[1,250,350,450,550,650,750,850,950,1050,1150,1250,1350,1450,1550,1650,1750,1850,1950,2050,2150,2250,2350,2450,2550,2650]'>";
 				htmlStr += getTakStr();
 				break;
 			case "BEDRIJFSKLASSEN" :
-				htmlStr += "<span class='small'><textformat tabstops='[1,240,315,390,465,540,615,690,765,840,915,990,1065,1140,1215,1290,1365,1440,1515,1590,1665,1740,1815,1890,1965,2040]'>";				htmlStr += getKlasseStr();
+				htmlStr += "<span class='small'><textformat tabstops='[1,250,350,450,550,650,750,850,950,1050,1150,1250,1350,1450,1550,1650,1750,1850,1950,2050,2150,2250,2350,2450,2550,2650]'>";
+				htmlStr += getKlasseStr();
 				break;
 		 }	
+		 htmlStr += "<br><br><span class='Uitleg'>" + _global.flamingo.getString(valuatorSelector,"toelichting") + "</span>";
 		 return htmlStr;	
 	}
 	
 
 	private function getDateString():String {
-		var text:String = "<span class='normal'><textformat tabstops='[1,250]'>";
+		var text:String = "<span class='normal'><textformat tabstops='[1]'>";
 		var curDate:Date = new Date(); 
 		var curDateStr:String = format(String(curDate.getDate())) + "-" + format(String(curDate.getMonth() + 1)) + "-"+ curDate.getFullYear() + " " + format(String(curDate.getHours())) + ":" + format(String(curDate.getMinutes()));
-		text += "\r\tDatum/tijd aanvraag \t" + curDateStr + "\r\r";
+		text += "\r\tDatum/tijd aanvraag: " + curDateStr + "\r\r";
 		text += "</textformat></span>";
 		return text;
 	}
@@ -228,20 +230,20 @@ class ris.ValuatorData implements BridgisConnectorListener{
 		if(sWorths["TWLP"]!= undefined ||sWorths["PWLP"]!= undefined){
 			str += "\t<i>Lopende prijzen</i> " + getYearsStr("");
 			if(sWorths["TWLP"]!= undefined){
-				str += "<br>\tTotaal Toegevoegde Waarde" +  getValueStr(-1,"TWLP") + "<br>";
+				str += "<br>\tTotaal Toegevoegde Waarde" +  getValueStr(-1,"TWLP");
 			}
 			if(sWorths["PWLP"]!= undefined){
-				str += "\tTotaal Productiewaarde" +  getValueStr(-1,"PWLP") + "<br>";
+				str += "<br>\tTotaal Productiewaarde" +  getValueStr(-1,"PWLP") + "<br>";
 			}	
 			str += "<br>";	 
 		}
 		if(sWorths["TWCP"]!= undefined ||sWorths["PWCP"]!= undefined){
 			str += "\t<i>Constante prijzen</i> " + getYearsStr("");
 			if(sWorths["TWCP"]!= undefined){
-				str += "<br>\tTotaal Toegevoegde Waarde" +  getValueStr(-1,"TWCP") + "<br>";
+				str += "<br>\tTotaal Toegevoegde Waarde" +  getValueStr(-1,"TWCP") ;
 			}
 			if(sWorths["PWCP"]!= undefined){
-				str += "\tTotaal Productiewaarde" +  getValueStr(-1,"PWCP");
+				str += "<br>\tTotaal Productiewaarde" +  getValueStr(-1,"PWCP");
 			}		 
 		}
 		return str;	
@@ -258,22 +260,28 @@ class ris.ValuatorData implements BridgisConnectorListener{
 			if(sWorths["TWCP"] == undefined){
 				str += getYearsStr("LP") + "<br>";
 				for (var i:Number = 1;i<13 ;i++){
-					str+="\t" + publications[i].getLabel();
-					str+= getValueStr(i,"TWLP") + "<br>";
+					if(publications[i]){
+						str+="\t" + publications[i].getLabel();
+						str+= getValueStr(i,"TWLP") + "<br>";
+					}
 				}
 			} 
 			if(sWorths["TWLP"]== undefined ){
 				str += getYearsStr("CP")+ "<br>";
 				for (var i:Number = 1;i<13 ;i++){
-					str+="\t" + publications[i].getLabel();
-					str+= getValueStr(i,"TWCP") + "<br>";;
+					if(publications[i]){
+						str+="\t" + publications[i].getLabel();
+						str+= getValueStr(i,"TWCP") + "<br>";
+					}
 				}
 			}
 			if(sWorths["TWCP"]!= undefined && (sWorths["TWLP"] != undefined)){
 				str += getYearsStr("LPCP")+ "<br>";
 				for (var i:Number = 1;i<13 ;i++){
-					str+="\t" + publications[i].getLabel();
-					str+= getValueStr(i,"TWLP,TWCP") + "<br>";;
+					if(publications[i]){
+						str+="\t" + publications[i].getLabel();
+						str+= getValueStr(i,"TWLP,TWCP") + "<br>";
+					}
 				}
 			}
 			str += "<br/>";
@@ -282,26 +290,32 @@ class ris.ValuatorData implements BridgisConnectorListener{
 		//values
 		//Produktie waarden
 		if(sWorths["PWLP"]!= undefined||sWorths["PWCP"]!= undefined){
-			str += "\t<i>Produktie Waarde per CBS Bedrijfstak:</i>";	
+			str += "\t<i>Productiewaarde per CBS Bedrijfstak:</i>";	
 			if(sWorths["PWCP"] == undefined){
 				str += getYearsStr("LP") + "<br>";
 				for (var i:Number = 1;i<13 ;i++){
-					str+="\t" + publications[i].getLabel();
-					str+= getValueStr(i,"PWLP") + "<br>";;
+					if(publications[i]){
+						str+="\t" + publications[i].getLabel();
+						str+= getValueStr(i,"PWLP") + "<br>";
+					}
 				}
 			} 
 			if(sWorths["PWLP"]== undefined ){
 				str += getYearsStr("CP")+ "<br>";
 				for (var i:Number = 1;i<13 ;i++){
-					str+="\t" + publications[i].getLabel();
-					str+= getValueStr(i,"PWCP") + "<br>";;
+					if(publications[i]){
+						str+="\t" + publications[i].getLabel();
+						str+= getValueStr(i,"PWCP") + "<br>";
+					}
 				}
 			}
 			if(sWorths["PWCP"]!= undefined && (sWorths["PWLP"] != undefined)){
 				str += getYearsStr("LPCP")+ "<br>";
 				for (var i:Number = 1;i<13 ;i++){
-					str+="\t" + publications[i].getLabel();
-					str+= getValueStr(i,"PWLP,PWCP") + "<br>";;
+					if(publications[i]){
+						str+="\t" + publications[i].getLabel();
+						str+= getValueStr(i,"PWLP,PWCP") + "<br>";
+					}
 				}
 			}
 		}
@@ -315,7 +329,7 @@ class ris.ValuatorData implements BridgisConnectorListener{
 		var str:String = "";
 		//Lopende waarden
 		if(sWorths["TWLP"]!= undefined||sWorths["TWCP"]!= undefined){
-			str += "\t<i>Toegevoegde Waarde per CBS Bedrijfsklasse:</i>";	
+			str += "\t<i>Toegevoegde waarde per CBS Bedrijfsklasse:</i>";	
 			var takId:Number = 0;
 			if(sWorths["TWCP"] == undefined){
 				str += getYearsStr("LP") + "<br>";	
@@ -357,7 +371,7 @@ class ris.ValuatorData implements BridgisConnectorListener{
 		//values
 		//Produktie waarden
 		if(sWorths["PWLP"]!= undefined||sWorths["PWCP"]!= undefined){
-			str += "\t<i>Produktie Waarde per CBS Bedrijfsklasse:</i>";	
+			str += "\t<i>Productiewaarde per CBS Bedrijfsklasse:</i>";	
 			var takId:Number = 0;
 			if(sWorths["PWCP"] == undefined){
 				str += getYearsStr("LP") + "<br>";
@@ -418,7 +432,7 @@ class ris.ValuatorData implements BridgisConnectorListener{
 		for(var k:Number=maxYear;k>=minYear;k--){
 			for(var j:Number=0;j<w.length;j++){
 				if(results[id+w[j]+k]!=undefined){
-					str+="\t" + results[id+w[j]+k];
+					str+="\t" + formatNumber(String(results[id+w[j]+k]));
 				}
 			}
 		}
@@ -435,6 +449,30 @@ class ris.ValuatorData implements BridgisConnectorListener{
     	}	
 	}
 	
+	private function formatNumber(my_number:String):String {
+		var strFirstPart:String = my_number;
+		var parts:Array;
+		if(my_number.indexOf(".") > -1){
+			parts = my_number.split(".");
+			strFirstPart= parts[0];
+		} 
+		var format_array:Array = new Array();
+		var start:Number;
+		var end:Number = strFirstPart.length;
+		
+		while (end > 0) {
+		start = Math.max(end - 3, 0);
+		format_array.unshift(strFirstPart.slice(start, end));
+		end = start;
+		}
+		var result:String = "";
+		if(my_number.indexOf(".") > -1){
+			result = format_array.join(".") + "," + parts[1];
+		} else {
+			result = format_array.join(".");
+		}	
+		return result;
+	}
  
     /*
     private function calcTotalStruct(analyseType:String):Number {
