@@ -100,7 +100,10 @@ class coremodel.search.XmlFieldValueStore extends FieldValueStore {
 			result.push ({ label: getNodeValue (labels[i], labelAttribute), value: getNodeValue (values[i], valueAttribute) });
 			// _global.flamingo.tracer (" - " + getNodeValue (labels[i]) + " = " + getNodeValue (values[i]));
 		}
-		
+		if(_sort){
+			result.sortOn("label",[Array.CASEINSENSITIVE]);
+
+		}
 		this.dispatchEvent ({ type: 'valuesAvailable', values: result });
 	}
 	
