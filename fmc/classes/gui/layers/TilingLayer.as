@@ -283,8 +283,8 @@ class gui.layers.TilingLayer extends AbstractLayer{
     	
         var oldVisible: Boolean = this.visible;
         super.setVisible(visible);
-        
         if (oldVisible != visible) {
+
         	_global.flamingo.raiseEvent (this, visible ? "onShow" : "onHide", this);
         }
     }
@@ -554,15 +554,15 @@ class gui.layers.TilingLayer extends AbstractLayer{
         if(tilingType!=WMSC_TILINGTYPE){
             return;
         }
-        if (not this.canmaptip || not maptipEnabled) {
+        if (!this.canmaptip || !maptipEnabled) {
             return;
         }
         
-        if (not getVisible()) {
+        if (!getVisible()) {
             return;
         }
 
-        var r = new Object();
+        var r:Object = new Object();
         r.x = x;
         r.y = y;
         r.width = 0;
@@ -572,7 +572,7 @@ class gui.layers.TilingLayer extends AbstractLayer{
             this.serviceExtent = this.map.string2Extent(this.serviceExtentStr);
         }
         if (this.serviceExtent != undefined) {
-            if (not this.map.isHit(this.serviceExtent, this.maptipextent)) {
+            if (!this.map.isHit(this.serviceExtent, this.maptipextent)) {
                 return;
             }
         }
@@ -606,8 +606,10 @@ class gui.layers.TilingLayer extends AbstractLayer{
     }
 
     function doHide():Void{     
+    	_global.flamingo.tracer("doHide");
         log.debug("doHide called");
         this.visible=false;
+        _global.flamingo.raiseEvent(this, "onHide", this);
     }
     function doShow():Void{     
         log.debug("doShow called");
@@ -739,8 +741,22 @@ class gui.layers.TilingLayer extends AbstractLayer{
     }
     
      /*Get a already existing movieTiles (an Array of MovieClips from a tile)*/
-     public function getMovieTiles():Array{
-     	return this.mcTiles;
+     public function getTilesArray():Array{
+     	var tiles:Array = new Array();
+     	for (var m in this.tileStage){
+     		var tile:Tile= Tile(this.tileStage[m].tile); 
+     		if(tile.getImageUrl()!=null){
+     			var tileObj:Object = new Object();
+	     		tileObj.url = tile.getImageUrl();
+	     		tileObj.screenX = tile.getScreenX();
+	     		tileObj.screenY = tile.getScreenY();
+	     		tileObj.screenWidth = tile.getScreenWidth();
+	     		tileObj.screenHeight = tile.getScreenHeight();
+     			tiles.push(tileObj);
+     		}
+     	}
+     	return tiles;
+     	
      }
      
     
@@ -859,8 +875,8 @@ class gui.layers.TilingLayer extends AbstractLayer{
         //_global.flamingo.tracer("layer = " + this._name + " finishedLoadingTile: " + tile.getTileId() + " tilesToProcess = " + this.tilesToProcess);
         if (this.tilesToProcess==0){
             clearProgressMonitor ();            
-            _global.flamingo.raiseEvent(this, "onUpdateComplete", this, 0, 0, 0);
             removeAllButZoomLevel(this.currentZoomLevel);
+            _global.flamingo.raiseEvent(this, "onUpdateComplete", this, 0, 0, 0);
         }           
     }
     
@@ -879,6 +895,7 @@ class gui.layers.TilingLayer extends AbstractLayer{
                 holder._x = tile.getScreenX();
                 holder._y = tile.getScreenY();
                 holder._width  = tile.getScreenWidth();
+               
                 holder._height = tile.getScreenHeight();              
                 mcTiles[m].finishedLoading=true;
             }
