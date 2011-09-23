@@ -962,6 +962,7 @@ function identify(extent:Object) {
 	args.EXCEPTIONS = this.exceptions;
 	args.VERSION = this.wmsversion;
 	args.SRS = this.srs;
+	args.STYLES = getStylesString();
 	var rect = map.extent2Rect(this.identifyextent);
 	args.X = String(Math.round(rect.x+(rect.width/2)));
 	args.Y = String(Math.round(rect.y+(rect.height/2)));
@@ -1088,7 +1089,7 @@ function startMaptip(x:Number, y:Number) {
 	args.VERSION = this.wmsversion;
 	args.SRS = this.srs;
 	args.X = x;
-	args.Y = y;
+	args.Y = y;	
 	args.FEATURE_COUNT = maptipFeatureCount;
 	for (var attr in this.attributes) {
 		args[attr.toUpperCase()] = this.attributes[attr];
