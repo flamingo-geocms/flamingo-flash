@@ -151,6 +151,7 @@ class ris.ValuatorSelector extends AbstractSelector {
    		boxSelector = true;
    		geometrySelector = true;
 		dataConnector = new ValuatorConnector();
+		dataConnector.setCredentials();
 		this.setAreaSelectionType("inBox");
 		super.onLoad();
 	}

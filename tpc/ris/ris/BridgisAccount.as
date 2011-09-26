@@ -6,8 +6,8 @@
 
  
 class ris.BridgisAccount {
-	private var userName:String = "ipo";
-	private var passWord:String = "ipo2010";
+	private var userName:String = "";
+	private var passWord:String = "";
 	
 	public function getUserName():String{
 		return userName;
@@ -15,5 +15,13 @@ class ris.BridgisAccount {
 	
 	public function getPassword():String{
 		return passWord;
+	}
+	
+	public function setUserName(userName:String):Void{
+		this.userName = userName;
+	}
+	
+	public function setPassWord(passWord:String):Void{
+		this.passWord = passWord;
 	}
 }

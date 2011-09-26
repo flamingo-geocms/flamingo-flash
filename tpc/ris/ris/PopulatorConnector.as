@@ -17,6 +17,11 @@ class ris.PopulatorConnector extends BridgisConnector{
 	
 	var xmlheader:String = "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>";
 
+
+	function setCredentials(){
+		account.setUserName();
+		account.setPassWord();
+	}
 		
 
     

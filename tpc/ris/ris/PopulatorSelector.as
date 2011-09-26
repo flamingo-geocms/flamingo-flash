@@ -142,6 +142,7 @@ class ris.PopulatorSelector extends AbstractSelector implements BridgisConnector
    		geometrySelector = true;
 		dataConnector = new PopulatorConnector();
 		dataConnector.addListener(this);
+		dataConnector.setCredentials();
 		this.setAreaSelectionType("inBox");
 		
 		super.onLoad();

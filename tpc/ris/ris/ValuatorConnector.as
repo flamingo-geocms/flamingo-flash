@@ -14,6 +14,11 @@ class ris.ValuatorConnector extends BridgisConnector{
 	
 	var xmlheader:String = "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>";
 	
+	function setCredentials(){
+		account.setUserName();
+		account.setPassWord();
+	}
+	
 	function getAvailableYears(sUserName:String,sUsage:String){
 		var soapReqStr:String = '<geow:GetAvailableYears>';
 		soapReqStr += getAdditionalInformation("valuatoranalyze.asmx",sUserName,sUsage);
