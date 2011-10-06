@@ -284,7 +284,6 @@ class gui.layers.TilingLayer extends AbstractLayer{
         var oldVisible: Boolean = this.visible;
         super.setVisible(visible);
         if (oldVisible != visible) {
-
         	_global.flamingo.raiseEvent (this, visible ? "onShow" : "onHide", this);
         }
     }
@@ -605,8 +604,7 @@ class gui.layers.TilingLayer extends AbstractLayer{
         wmscConnector.getFeatureInfo(this.serviceUrl, args, this.map.copyExtent(maptipextent));
     }
 
-    function doHide():Void{     
-    	_global.flamingo.tracer("doHide");
+    function doHide():Void{ 
         log.debug("doHide called");
         this.visible=false;
         _global.flamingo.raiseEvent(this, "onHide", this);
