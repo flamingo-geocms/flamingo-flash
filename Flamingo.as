@@ -19,8 +19,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 -----------------------------------------------------------------------------*/
 /** @component Flamingo Framework
 * This class is the framework of Flamingo MapComponents.
-* It provides several methods to load, manage && control the (map)components.
-* A configuration file determines which components have to be loaded && how they interact with eachother.
+* It provides several methods to load, manage and control the (map)components.
+* A configuration file determines which components have to be loaded and how they interact with eachother.
 * @file flamingo.as  (sourcefile)
 * @file flamingo.fla (sourcefile)
 * @file flamingo.swf (compiled framework, needed for publication on internet)
@@ -129,7 +129,7 @@ class Flamingo {
 		this.configpool = new Object();
 		this.components = new Object();
 		this.components_per_url = new Object();
-		//add the flamingo object to the components list && components per url list
+		//add the flamingo object to the components list and components per url list
 		this.components.flamingo = new Object();
 		this.components.flamingo.target = mc._target;
 		this.components.flamingo.url = "flamingo";
@@ -239,11 +239,11 @@ class Flamingo {
 		getURL("http://flamingo.gbo-provincies.nl", "_blank");
 	}
 	/**
-	* Resizes the application && fires the 'onResize' event.
+	* Resizes the application and fires the 'onResize' event.
 	* This function is triggered by a resize of the stage.
 	*/
 	public function resize():Void {
-		//the dimensions (__width && __height) are stored at the flamingo movie
+		//the dimensions (__width and __height) are stored at the flamingo movie
 		clearInterval(this.resizeid);
 		var mFlamingo = this.getComponent("flamingo");
 		//why Stage.height-1 ??? This gives problems when checking if resize is needed in resize()
@@ -302,7 +302,7 @@ class Flamingo {
 		return (this.loading);
 	}
 	/**
-	* Removes all loaded components && initilizes Flamingo for a fresh start.
+	* Removes all loaded components and initilizes Flamingo for a fresh start.
 	*/
 	public function clear():Void {
 		for (var id in this.components) {
@@ -464,7 +464,7 @@ class Flamingo {
 	}
 	private function processConfig():Void {
 		if (this.loading) {
-			// an other config is in the progress of loading, wait && return later
+			// an other config is in the progress of loading, wait and return later
 			return;
 		}
 		if (this.mFlamingo.mLoadLock == undefined) {
@@ -600,7 +600,7 @@ class Flamingo {
 	* child tags
 	* ...
 	* </flamingo>
-	* @attr tooltipdelay (defaultvalue "500") Time in milliseconds (1000 = 1 second) between showing a tooltip && moving the mouse over a component.
+	* @attr tooltipdelay (defaultvalue "500") Time in milliseconds (1000 = 1 second) between showing a tooltip and moving the mouse over a component.
 	* @attr lang  (defaultvalue "en") The language of the application.
 	* @attr languages (defaultvalue "en") Comma seperated list of 'lang' abbreviations. e.g. languages="en,nl,de" Flamingo will load these language strings. By default only english strings are loaded. When languages="" flamingo will load all available language strings. 
 	* @attr minwidth  The minimum width of the application in pixels.
@@ -609,10 +609,10 @@ class Flamingo {
 	* @attr minheight  The minimum height of the application in pixels.
 	* @attr width  (defaultvalue "100%") The width of the application. By default the application fills the available space of the flamingo.swf. This space is controled in the html page.
 	* @attr height (defaultvalue "100%") The height of the application. By default the application fills the available space of the flamingo.swf. This space is controled in the html page.
-	* @attr useexternalinterface (defaultvalue "true") If set to "true" flamingo will pass all events to the browser. && with javascript you can talk with Flamingo.
-	* @attr allowexternalinterface (defaultvalue null) A comma seperated list with "[Component ID].[Event]" (case insensitive). Both the "[Component]" && ".[Event]" part are optional. For example "mapid.onmousemove,editmap,.onrequest". If no denyExternalInterfaces are set only these external calls are done to the browser.
+	* @attr useexternalinterface (defaultvalue "true") If set to "true" flamingo will pass all events to the browser. and with javascript you can talk with Flamingo.
+	* @attr allowexternalinterface (defaultvalue null) A comma seperated list with "[Component ID].[Event]" (case insensitive). Both the "[Component]" and ".[Event]" part are optional. For example "mapid.onmousemove,editmap,.onrequest". If no denyExternalInterfaces are set only these external calls are done to the browser.
 	* see also denyExternalInterface.
-	* @attr denyexternalinterface (defaultvalue null) A comma seperated list with "[Component ID].[Event]" (case insensitive). Both the "[Component]" && ".[Event]" part are optional. For example "mapid.onmousemove,editmap,.onrequest". If no allowExternalInterfaces are set only these external calls are not done to the browser.
+	* @attr denyexternalinterface (defaultvalue null) A comma seperated list with "[Component ID].[Event]" (case insensitive). Both the "[Component]" and ".[Event]" part are optional. For example "mapid.onmousemove,editmap,.onrequest". If no allowExternalInterfaces are set only these external calls are not done to the browser.
 	* The deny setting overwrites the allow setting. But the allow param "[Component ID].[Event]" overwrites the deny "[Component ID]". For example deny..="mapid" allow..="mapid.onIdentify". All calls from the component with id 'mapid' are denied, except the event 'onIdentify'
 	* @attr bordercolor  Color of a border arround the application in a hexadecimal notation. e.g. bordercolor="#00ff33" 
 	* @attr borderwidth  Width of the border in pixels. If set to "0" (meaning 'hairline') or greater Flamingo will draw a border.
@@ -633,7 +633,7 @@ class Flamingo {
 		var mFlamingo = this.getComponent("flamingo");
 		if (xml.firstChild.nodeName.toLowerCase() == "flamingo") {
 			//defaults
-			//retreive && convert the attributes 
+			//retreive and convert the attributes 
 			for (var attr in xml.firstChild.attributes) {
 				var val:String = xml.firstChild.attributes[attr];
 				switch (attr.toLowerCase()) {
@@ -866,14 +866,14 @@ class Flamingo {
 		}
 	}
 	/**
-	* Loads a component && register it at the flamingo framework. This function should be used by components which can load other components.
+	* Loads a component and register it at the flamingo framework. This function should be used by components which can load other components.
 	* A component has always a prefix.
 	* @param xml:Object Xml-node describing the component.
 	* @param mc:Movieclip movieclip at which the component will be loaded
 	* @param targetid:String Id at which the component will be registered. 
 	*/
 	public function loadComponent(xml:Object, mc:MovieClip, targetid:String):Void {
-		//rule1: a component has a prefix && an id 
+		//rule1: a component has a prefix and an id 
 		//rule2: a component can register only once, double ids are not allowed
 		if (xml == undefined) {
 			return;
@@ -911,7 +911,7 @@ class Flamingo {
 			//mc = eval(this.components[targetid].target);
 		}
 		if (this.components[targetid].type == type && (mc.setConfig != undefined||mc["mKid"].setBaseConfig!=undefined)) {
-			//component already exists && it can be configurated
+			//component already exists and it can be configurated
 			if(this.components[targetid].xmls == undefined){
 				this.components[targetid].xmls = new Array();
 			}
@@ -931,8 +931,8 @@ class Flamingo {
 			}
 			//component new or existing component has no setConfig, so treat as new component   
 			//add a reference for a component to the components object    
-			//save xml, target, url && parent in components object
-			//if a component is loaded, its target should be known && registered > see loadComponent_source
+			//save xml, target, url and parent in components object
+			//if a component is loaded, its target should be known and registered > see loadComponent_source
 			if (this.components[targetid] == undefined) {
 				this.components[targetid] = new Object();
 			}
@@ -943,7 +943,7 @@ class Flamingo {
 			this.components[targetid].type = type;
 			this.components[targetid].xmls = new Array();
 			this.components[targetid].xmls.push(xml);
-			//climb in the tree && search a good parent  
+			//climb in the tree and search a good parent  
 			//find component parent
 			//component parent is the first parent movie that is registered in components
 			//can be differ from the flash _parent!!
@@ -961,14 +961,14 @@ class Flamingo {
 			}
 			//this.loadComponent_defaults(url);
 			this.loadComponent_source(url, targetid, mc);
-			//get custom language, style && cursor definitions
+			//get custom language, style and cursor definitions
 			//this.theloadlist.push({url:url, targetid:targetid, mc:mc});
 			//this.loadNextComponent();
 			//this.loadComponent_defaults(url, targetid, mc);
 		}
 	}
 	private function loadComponent_defaults(url:String) {
-		//load xml belonging to the component && retreive strings,styles && cursors
+		//load xml belonging to the component and retreive strings,styles and cursors
 		//load defaults once per component
 		if (this.components_per_url[url] == undefined) {
 			this.components_per_url[url] = new Object();
@@ -988,8 +988,8 @@ class Flamingo {
 		//};
 		lLoader.onLoadComplete = function(lMc:MovieClip) {
 			//At this point we can set variables of a movieclip but scripts of the clip are not yet executed yet
-			//So we can set basic flamingo properties && store them at the movieclip itself
-			//retreive the basic attributes from the xml && store them at the componentmovie 
+			//So we can set basic flamingo properties and store them at the movieclip itself
+			//retreive the basic attributes from the xml and store them at the componentmovie 
 			//thisObj.parseComponentXML(thisObj.components[id].xml, mc);
 			//thisObj.parseGuide(thisObj.components[id].xml, mc);
 			// tell flamingo where this component can be found
@@ -1047,21 +1047,21 @@ class Flamingo {
 	  * @attr name  Name
 	  * @attr width  Width of a component. In pixels or percentage. e.g. width="100"  or width="100%"
 	  * @attr height  Height of a component. In pixels or percentage. e.g. height="100"  or height="100%"
-	  * @attr left  Left position of a component, can be a number (left="50"), a percentage (left="50%") or a guideid (left="mx"). There are four intrinsic guides: "left", "right" && "top", "bottom". The value can be followed by a space && an offset number. Examples: left="50" , right="50%", xcenter="mx", left="mx -2", xcenter="50% 10". 
+	  * @attr left  Left position of a component, can be a number (left="50"), a percentage (left="50%") or a guideid (left="mx"). There are four intrinsic guides: "left", "right" and "top", "bottom". The value can be followed by a space and an offset number. Examples: left="50" , right="50%", xcenter="mx", left="mx -2", xcenter="50% 10". 
 	  * @attr right  Right position of a component. See left.
 	  * @attr top  Top position of a component. See left.
 	  * @attr bottom Bottom position of a component. See left.
 	  * @attr xcenter Vertical center position of a component. See left.
 	  * @attr ycenter  Horizontal center position of a component. See left.
-	  * @attr listento  Comma seperated list of component id's. See the component documentation if this attribute is supported && to which components a component can listen.
-	  * @attr visible  Visiblity of the component. Reconized values: "true" && "false"
+	  * @attr listento  Comma seperated list of component id's. See the component documentation if this attribute is supported and to which components a component can listen.
+	  * @attr visible  Visiblity of the component. Reconized values: "true" and "false"
 	  * @attr maxwidth  Maximum width of a component in pixels.
 	  * @attr minwidth  Minimum width of a component in pixels.
 	  * @attr maxheight  Maximum height of a component in pixels.
 	  * @attr minheight Minimum height of a component in pixels.
 	  */
 	/**
-	* Parses the default flamingo attributes && stores them at the components movieclip.
+	* Parses the default flamingo attributes and stores them at the components movieclip.
 	* @param comp:Object  Id or MovieClip representing the component.
 	* @param xml:XML Xml which have to be parsed.
 	*/
@@ -1174,7 +1174,7 @@ class Flamingo {
 		}
 	}
 	/**
-	* Gets cursor information from a xml && stores it at an object.
+	* Gets cursor information from a xml and stores it at an object.
 	* @param xml:XML Xml which have to be parsed.
 	* @param cursors:Object Object at which the cursors are stored.
 	* @return Boolean True if a cursor is found, False if there are no cursors.
@@ -1200,7 +1200,7 @@ class Flamingo {
 		return b;
 	}
 	/**
-	* Gets stylesheet information from a xml && stores it at an object.
+	* Gets stylesheet information from a xml and stores it at an object.
 	* @param xml:XML Xml which have to be parsed.
 	* @param styles:Object A TextField.StyleSheet Object at which the stylesheets are stored.
 	* @return Boolean True if a stylesheet is found, False if not.
@@ -1226,7 +1226,7 @@ class Flamingo {
 		return b;
 	}
 	/**
-	* Gets string information from a xml && stores it at an object.
+	* Gets string information from a xml and stores it at an object.
 	* @param xml:XML Xml which have to be parsed.
 	* @param strings:Object Object at which the strings are stored.
 	* @return Boolean True if a string is found, False if not.
@@ -1252,7 +1252,7 @@ class Flamingo {
 		return b;
 	}
 	/**
-	* Gets guide information from a xml && stores it at an object.
+	* Gets guide information from a xml and stores it at an object.
 	* @param xml:XML Xml which have to be parsed.
 	* @param guides:Object Object at which the guides are stored.
 	* @return Boolean True if a guide is found, False if not.
@@ -1287,7 +1287,7 @@ class Flamingo {
 	* @attr linkageid  The linkageid of the cursor when it is situated in the library.
 	*/
 	/**
-	* Gets cursor information from a xml-node && stores it at an object.
+	* Gets cursor information from a xml-node and stores it at an object.
 	* @param xml:XML Xml which have to be parsed.
 	* @param cursors:Object Object at which the cursors are stored.
 	* @return Boolean True if a cursor is found, False if there are no cursors.
@@ -1371,7 +1371,7 @@ class Flamingo {
 	* @attr {lang} You can define your own 'lang' attributes, followed by the correct string. See example.
 	*/
 	/**
-	* Gets string information from a xml-node && stores it at a language-object.
+	* Gets string information from a xml-node and stores it at a language-object.
 	* @param xml:XML Xml which have to be parsed.
 	* @param language:Object Object at which the strings are stored.
 	* @return Boolean True if a string is found, False if not.
@@ -1386,7 +1386,7 @@ class Flamingo {
 		//<de>ein label</de>
 		//</string>
 		// or a combination of both
-		//searches for language nodes && store them in a language object
+		//searches for language nodes and store them in a language object
 		// make helperobject for loading only languages  in languagesstring
 		if (typeof (xml) == "string") {
 			xml = new XML(String(xml));
@@ -1472,21 +1472,21 @@ class Flamingo {
 	* </flamingo>
 	* @attr id Unique identifier. See the components documentation for supported id's.
 	* @attr color Only hexadecimal color values are supported. Named colors (such as blue) are not supported. Colors are written in the following format: #FF0000.
-	* @attr display  Supported values are inline, block, && none.
-	* @attr font-family  A comma-separated list of fonts to use, in descending order of desirability. Any font family name can be used. If you specify a generic font name, it is converted to an appropriate device font. The following font conversions are available: mono is converted to _typewriter, sans-serif is converted to _sans, && serif is converted to _serif.
-	* @attr font-size  Only the numeric part of the value is used. Units (px, pt) are not parsed; pixels && points are equivalent.
-	* @attr font-style Recognized values are normal && italic.
-	* @attr font-weight  Recognized values are normal && bold. 
-	* @attr kerning  Recognized values are true && false. Kerning is supported for embedded fonts only. Certain fonts, such as Courier New, do not support kerning. The kerning property is only supported in SWF files created in Windows, not in SWF files created on the Macintosh. However, these SWF files can be played in non-Windows versions of Flash Player && the kerning still applies.
-	* @attr letter-spacing The amount of space that is uniformly distributed between characters. The value specifies the number of pixels that are added to the advance after each character. A negative value condenses the space between characters. Only the numeric part of the value is used. Units (px, pt) are not parsed; pixels && points are equivalent.
-	* @attr margin-left  Only the numeric part of the value is used. Units (px, pt) are not parsed; pixels && points are equivalent.
-	* @attr margin-right Only the numeric part of the value is used. Units (px, pt) are not parsed; pixels && points are equivalent.
-	* @attr text-align Recognized values are left, center, right, && justify.
-	* @attr text-decoration Recognized values are none && underline.
-	* @attr text-indent  Only the numeric part of the value is used. Units (px, pt) are not parsed; pixels && points are equivalent.
+	* @attr display  Supported values are inline, block, and none.
+	* @attr font-family  A comma-separated list of fonts to use, in descending order of desirability. Any font family name can be used. If you specify a generic font name, it is converted to an appropriate device font. The following font conversions are available: mono is converted to _typewriter, sans-serif is converted to _sans, and serif is converted to _serif.
+	* @attr font-size  Only the numeric part of the value is used. Units (px, pt) are not parsed; pixels and points are equivalent.
+	* @attr font-style Recognized values are normal and italic.
+	* @attr font-weight  Recognized values are normal and bold. 
+	* @attr kerning  Recognized values are true and false. Kerning is supported for embedded fonts only. Certain fonts, such as Courier New, do not support kerning. The kerning property is only supported in SWF files created in Windows, not in SWF files created on the Macintosh. However, these SWF files can be played in non-Windows versions of Flash Player and the kerning still applies.
+	* @attr letter-spacing The amount of space that is uniformly distributed between characters. The value specifies the number of pixels that are added to the advance after each character. A negative value condenses the space between characters. Only the numeric part of the value is used. Units (px, pt) are not parsed; pixels and points are equivalent.
+	* @attr margin-left  Only the numeric part of the value is used. Units (px, pt) are not parsed; pixels and points are equivalent.
+	* @attr margin-right Only the numeric part of the value is used. Units (px, pt) are not parsed; pixels and points are equivalent.
+	* @attr text-align Recognized values are left, center, right, and justify.
+	* @attr text-decoration Recognized values are none and underline.
+	* @attr text-indent  Only the numeric part of the value is used. Units (px, pt) are not parsed; pixels and points are equivalent.
 	*/
 	/**
-	* Gets stylesheet information from a xml-node && stores it at an object.
+	* Gets stylesheet information from a xml-node and stores it at an object.
 	* @param xml:XML Xml which have to be parsed.
 	* @param stylesheet:Object A TextField.StyleSheet Object at which the stylesheets are stored..
 	* @return Boolean True if a stylesheet is found, False if not.
@@ -1499,7 +1499,7 @@ class Flamingo {
 		if (xml == undefined) {
 			return null;
 		}
-		//searches for stylenodes && stores them in the stylesheet objects                               
+		//searches for stylenodes and stores them in the stylesheet objects                               
 		var b:Boolean = false;
 		if (xml.nodeName.toLowerCase() == "style") {
 			var obj:Object = new Object();
@@ -1560,7 +1560,7 @@ class Flamingo {
 		return (b);
 	}
 	/** @tag <xguide> 
-	  * With xguide you can add invisible vertical lines to flamingo at which components can be aligned. This tag is situated in the configuration file of an application. There are two default yguides: "left" && "right", referering to the outer bounds of the movie.
+	  * With xguide you can add invisible vertical lines to flamingo at which components can be aligned. This tag is situated in the configuration file of an application. There are two default yguides: "left" and "right", referering to the outer bounds of the movie.
 	  * @hierarchy child-node of <flamingo> or child-node of <fmc:{component}>
 	  * @example 
 	  * <flamingo  lang="nl" languages="en,nl">
@@ -1572,7 +1572,7 @@ class Flamingo {
 	  * @attr x  position, absolute (in pixels) or percentage (%). e.g.  x="50" or x="50%"
 	  */
 	/** @tag <yguide> 
-	  * With yguide you can add invisible horizontal lines to flamingo at which components can be aligned. This tag is situated in the configuration file of an application. There are two default yguides: "top" && "bottom", referering to the outer bounds of the movie.
+	  * With yguide you can add invisible horizontal lines to flamingo at which components can be aligned. This tag is situated in the configuration file of an application. There are two default yguides: "top" and "bottom", referering to the outer bounds of the movie.
 	  * @hierarchy child-node of <flamingo> or child-node of <fmc:{component}>
 	  * @example 
 	  * <flamingo  lang="nl" languages="en,nl">
@@ -1584,13 +1584,13 @@ class Flamingo {
 	  * @attr y  position, absolute (in pixels) or percentage (%). e.g.  y="50" or y="50%"
 	  */
 	/**
-	* Gets guide information from a xml-node && stores it at an object.
+	* Gets guide information from a xml-node and stores it at an object.
 	* @param xml:XML Xml which have to be parsed.
 	* @param guides:Object Object at which the guides are stored.
 	* @return Boolean True if a guide is found, False if not.
 	*/
 	private function setGuide(xml:Object, guides:Object):Boolean {
-		//this function searches for xguide && yguide, makes a collection if not extist
+		//this function searches for xguide and yguide, makes a collection if not extist
 		if (typeof (xml) == "string") {
 			xml = new XML(String(xml));
 			xml = xml.firstChild;
@@ -1626,7 +1626,7 @@ class Flamingo {
 	* Tooltip disappear automatic when cursor is moved of the object.
 	* @param tiptext:String Text to be shown.
 	* @param object:Object Movieclip to which the tiptext belongs.
-	* @param delay:Number [optional] Time between hoovering over object && showing tip.
+	* @param delay:Number [optional] Time between hoovering over object and showing tip.
 	* @param reset:Boolean [optional]  default = true. False=tiptext will be added to existing tiptext.
 	*/
 	public function showTooltip(tiptext:String, object:Object, delay:Number, reset:Boolean):Void {
@@ -1744,12 +1744,12 @@ class Flamingo {
 			if (_root._xmouse+mc._width>Stage.width) {
 				mc._x = Stage.width-mc._width-5;
 			} else {
-				mc._x = MovieClip(this)._xmouse+8;
+				mc._x = _root._xmouse+8;
 			}
 			if (_root._ymouse+mc._height+20>Stage.height) {
 				mc._y = Stage.height-mc._height-5;
 			} else {
-				mc._y = MovieClip(this)._ymouse+20;
+				mc._y =  _root._ymouse+20;
 			}
 		}
 	}
@@ -1774,7 +1774,7 @@ class Flamingo {
 	/**
 	* Shows custom cursor.
 	* A cursor is a flash movie which will be preloaded when the configuration file is loaded.
-	* It belongs to a component && is identified by an internal id. This id can be obtained by 'getCursor'.
+	* It belongs to a component and is identified by an internal id. This id can be obtained by 'getCursor'.
 	* @param cursor:Object cursorobject.
 	*/
 	public function showCursor(cursor:Object):Void {
@@ -1809,12 +1809,12 @@ class Flamingo {
 				Mouse.hide();
 			};
 			this.mFlamingo.flamingoCursors.onMouseMove = function():Void  {
-				this._x = MovieClip(this)._xmouse;
-				this._y = MovieClip(this)._ymouse;
+				this._x =  _root._xmouse;
+				this._y = _root._ymouse;
 				updateAfterEvent();
 			};
-			this.mFlamingo.flamingoCursors._x = MovieClip(this)._xmouse;
-			this.mFlamingo.flamingoCursors._y = MovieClip(this)._ymouse;
+			this.mFlamingo.flamingoCursors._x  = _root._xmouse;
+			this.mFlamingo.flamingoCursors._y =  _root._ymouse;
 			mc.swapDepths(0);
 			mc._visible = true;
 			this.mFlamingo.flamingoCursors._visible = true;
@@ -1885,7 +1885,7 @@ class Flamingo {
 		return (getComponent(id));
 	}
 	/**
-	* Removes a component && the childcomponents && delete all their data in the repository.
+	* Removes a component and the childcomponents and delete all their data in the repository.
 	* @param comp:Object  Id or MovieClip representing the component.
 	*/
 	public function killComponent(comp:Object):Void {
@@ -1915,7 +1915,7 @@ class Flamingo {
 			}
 		}
 		//check  if there are other components with same url
-		// if not remove reference from components_per_url && remove cursors
+		// if not remove reference from components_per_url and remove cursors
 		var lastcomp:Boolean = true;
 		var url = this.getUrl(id);
 		for (var c_id in this.components) {
@@ -2208,7 +2208,7 @@ class Flamingo {
 		//all events of the framework will be fired to the outer world
 		//all events of other components will be fires to the outer world if useexternalinterface = true
 		var fire:Boolean = this.useexternalinterface;		
-		//check if the allowExternalInterface && denyExternalInterface
+		//check if the allowExternalInterface and denyExternalInterface
 		if (this.useexternalinterface){
 			//if the call is allowed by a setting of the id+.+event then it is allowed if the
 			//deny is set for only the id. Otherwise the deny overwrites the allow
@@ -2259,7 +2259,7 @@ class Flamingo {
 			for (var i = 0; i<arguments.length; i++) {
 				arguments[i] = this.objects2Javascript(arguments[i]);
 			}
-			//get eventname && put the componentname before it
+			//get eventname and put the componentname before it
 			var event_to_fire = arguments.shift();
 			var prefix = "";
 			//callbacktype != id
@@ -2347,7 +2347,7 @@ class Flamingo {
 	* @param sameparent:Boolean  [optional]  default=false See example.
 	* @return  Object List of same components.
 	* @example flamingo.getSameComponents(this) > Get all the components in the application with the same url.
-	* flamingo.getSameComponents(this,true,true) > Get all the components with the same url && the same component parent.
+	* flamingo.getSameComponents(this,true,true) > Get all the components with the same url and the same component parent.
 	* flamingo.getSameComponents(this,false,true) > Get all components with the same component parent.
 	* flamingo.getSameComponents(this,false,false) > returns nothing.
 	*/
@@ -2390,7 +2390,7 @@ class Flamingo {
 	* @param stringid:String  Identifier in the configuration files, see component documentation for supported id's
 	* @param defaultstring:String [optional] defaultstring if no match is found.
 	* @param lang:String  [optional] language setting.
-	* @return String String belonging to language setting && the stringid.
+	* @return String String belonging to language setting and the stringid.
 	*/
 	public function getString(comp:Object, stringid:String, defaultstring:String, lang:String):String {
 		// this function gets a language string (if exists) from the language objects in the flamingo-core
@@ -2421,7 +2421,7 @@ class Flamingo {
 	//--------------------------------------------------------
 	//the following functions are functions for positioning a movie clip
 	//--------------------------------------------------------
-	// these functions helps positioning a movie based on some extra custom position- && size-properties
+	// these functions helps positioning a movie based on some extra custom position- and size-properties
 	// the position properties are:
 	// left, right, xcenter, top, bottom, ycenter
 	// a position property is a string with syntax: "{guideid} position" 
@@ -2431,22 +2431,22 @@ class Flamingo {
 	// width, height
 	// a size property is a string.
 	// examples: width="20" width="50%"
-	// calculation of the position && size is based on the size of the parentmovie
-	// && the availability of the extra poperties
+	// calculation of the position and size is based on the size of the parentmovie
+	// and the availability of the extra poperties
 	// the parent movie is the flash _parent!!!!
 	// the folowing rules are aplied:
 	// when available:
-	// 1. left && width -> _x = left, _width = width
-	// 2. right && width -> _x = right-width, _width = width
-	// 3. xcenter && width -> _x = xcenter - (width/2), _width = width
-	// 4. left && right  -> _x = _left, _width = right-left
-	// 5. left && xcenter -> _x = left,  _width = (xcenter-left)* 2
-	// 6. xcenter && right -> _width = (right-center) *2, _x = right - (_width/2)
+	// 1. left and width -> _x = left, _width = width
+	// 2. right and width -> _x = right-width, _width = width
+	// 3. xcenter and width -> _x = xcenter - (width/2), _width = width
+	// 4. left and right  -> _x = _left, _width = right-left
+	// 5. left and xcenter -> _x = left,  _width = (xcenter-left)* 2
+	// 6. xcenter and right -> _width = (right-center) *2, _x = right - (_width/2)
 	// 7 left -> _x = left, _width = _width
 	// 8 right -> _x = right -_width, _width = _width
 	// 9 xcenter ->  _x = xcenter - (_width/2) , _width = _width
 	// 10 width ->  _x = _x, _width = width
-	//  same rules are applied to top, bottom, ycenter && height
+	//  same rules are applied to top, bottom, ycenter and height
 	/**
 	* Gets a position of a component.
 	* @param comp:Object MovieClip or componentid.
@@ -2755,7 +2755,7 @@ class Flamingo {
 	* Component are movieclips that are loaded by flamingo with the loadMovie method.
 	* By default flamingo assumes that the loaded movieclip is actually the component.
 	* When you make components by using subclasses of MovieClips than things are a bit different.
-	* In that case the component movieclip can be situated one or more levels deeper && a correction is necesarry.
+	* In that case the component movieclip can be situated one or more levels deeper and a correction is necesarry.
 	* @param from:Object MovieClip or componentid representing the default location at which flamingo assumes the component is loaded.
 	* @param to:Movieclip MovieClip representing the correct location of the component.
 	* @example 
@@ -2769,7 +2769,7 @@ class Flamingo {
 		this.components[id].target = to._target;
 	}
 	/** 
-	* Gets every property of loaded components by using the component-id && propertyname.
+	* Gets every property of loaded components by using the component-id and propertyname.
 	* This function can be accessed by Javascript when the 'useexternalinterface' attribute is set to true.
 	* For javascript this method is aliased as 'get'.
 	* @param id:String Id of a component.
@@ -2796,7 +2796,7 @@ class Flamingo {
 		}
 	}
 	/** 
-	* Sets every property of loaded components by using the component-id && propertyname.
+	* Sets every property of loaded components by using the component-id and propertyname.
 	* This function can be accessed by Javascript when the 'useexternalinterface' attribute is set to true.
 	* For javascript this method is aliased as 'set'. 
 	* @param id:String Id of a component.
@@ -2846,7 +2846,7 @@ class Flamingo {
 		return a;
 	}
 	/**
-	* Trims leading && trailing spaces, returns, tabs, && line feeds from a string.
+	* Trims leading and trailing spaces, returns, tabs, and line feeds from a string.
 	* @param s:String
 	* @return String
 	*/
@@ -2854,7 +2854,7 @@ class Flamingo {
 		return lTrim(rTrim(s));
 	}
 	/**
-	* Trims leading spaces, returns, tabs, && line feeds  from a string.
+	* Trims leading spaces, returns, tabs, and line feeds  from a string.
 	* @param s:String
 	* @return String
 	*/
@@ -2870,7 +2870,7 @@ class Flamingo {
 		return s.substring(i, s.length);
 	}
 	/**
-	* Trims trailing spaces, returns, tabs, && line feeds from a string.
+	* Trims trailing spaces, returns, tabs, and line feeds from a string.
 	* @param s:String
 	* @return String
 	*/
@@ -2886,7 +2886,7 @@ class Flamingo {
 		return s.substring(0, i+1);
 	}
 	/** 
-	* Calls every method of the loaded components by using the component-id && methodname.
+	* Calls every method of the loaded components by using the component-id and methodname.
 	* This function can be accessed by Javascript when the 'useexternalinterface' attribute is set to true.
 	* For javascript this method is aliased as 'call'. 
 	* @param id:String Id of a component.
@@ -3067,7 +3067,7 @@ class Flamingo {
 			this.mFlamingo._yscale = yscale;
 			// send pages from the spooler to the printer, but only if one or more   
 			// calls to addPage() was successful. You should always check for successful 
-			// calls to start() && addPage() before calling send().
+			// calls to start() and addPage() before calling send().
 			if (pagesToPrint>0) {
 				my_pj.send();
 				// print page(s)
@@ -3086,7 +3086,7 @@ class Flamingo {
 		return this.components[this.getId(comp)].url != undefined;
 	}
 	/**
-	* Returns the type of a component. This is actually the filename without the path && the ".swf"
+	* Returns the type of a component. This is actually the filename without the path and the ".swf"
 	* @param comp:Object  MovieClip or componentid.
 	* @return String Component's type.
 	*/
@@ -3278,7 +3278,7 @@ class Flamingo {
 		mc.filters = filterArray;
 	}
 	
-	/*Getters && setters for logging.*/
+	/*Getters and setters for logging.*/
 	public function getLogLevel():Number{
 		return this.logLevel;
 	}

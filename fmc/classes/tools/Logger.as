@@ -62,7 +62,7 @@
 	/*The actual trace function*/
 	private function traceMessage(logMessage:Object, type:Number):Void{
 		if (type<=this.logLevel){
-			trace(logLevelToString(type)+" "+new Date()+
+			trace(logLevelToString(type)+" "+String(new Date())+
 							"("+className +
 							"):"+logMessage);
 		}
