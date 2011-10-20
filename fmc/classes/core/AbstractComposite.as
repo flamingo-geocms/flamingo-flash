@@ -7,7 +7,7 @@
 class core.AbstractComposite {
 
 	private var name:String = null;
-    
+	
     function parseConfig(xmlNode:XMLNode):Void {
         this.name = xmlNode.attributes["name"];
         
@@ -37,5 +37,7 @@ class core.AbstractComposite {
     function setAttribute(name:String, value:String):Void { }
     
     function addComposite(name:String, xmlNode:XMLNode):Void { }
-    
+	
+	
+	    
 }

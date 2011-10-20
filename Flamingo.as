@@ -35,9 +35,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 * ExternalInterface.call("dispatchEventJS",event_to_fire, arguments);
 * Author:Linda Vels,IDgis bv
 */
+import core.AbstractPositionable;
 import flash.external.ExternalInterface;
 import flash.filters.DropShadowFilter;
-import gui.tools.ToolZoomin;
+import gui.tools.ToolGroup;
+import gui.tools.ToolZoomout;
 import tools.Logger;
 
 class Flamingo {
@@ -100,6 +102,8 @@ class Flamingo {
 	private var callbacktype:String;
 	private var nrconfigs:Number;
 	private var tools:Array = new Array();
+	//toolgroups
+	private var toolGroups:Array = new Array();
 	//log levels
 	//All log messages with this loglevel or higher wil be logged in the flash_log (possible values: Logger.DEBUG,Logger.INFO,Logger.WARN,Logger.ERROR,Logger.CRITICAL)
 	private var logLevel:Number=Logger.ERROR;
@@ -926,51 +930,94 @@ class Flamingo {
 			}
 			this.doneLoading();
 			//this.loadNextComponent();
+			//todo: nog oplossen.
 		} else {
 			var url:String = this.correctUrl(xml.namespaceURI+"/"+file);
 			if (url.length == 0) {
 				return;
 			}
-			//component new or existing component has no setConfig, so treat as new component   
-			//add a reference for a component to the components object    
-			//save xml, target, url and parent in components object
-			//if a component is loaded, its target should be known and registered > see loadComponent_source
-			if (this.components[targetid] == undefined) {
-				this.components[targetid] = new Object();
-			}
-			this.components[targetid].target = "";
-			this.components[targetid].url = url;
-			this.components[targetid].loaded = false;
-			this.components[targetid].loader = new MovieClipLoader();
-			this.components[targetid].type = type;
-			this.components[targetid].xmls = new Array();
-			this.components[targetid].xmls.push(xml);
-			//climb in the tree and search a good parent  
-			//find component parent
-			//component parent is the first parent movie that is registered in components
-			//can be differ from the flash _parent!!
-			var parentmc:MovieClip = mc._parent;
-			while (parentmc != undefined) {
-				if (parentmc._target == this.components.flamingo.target) {
-					this.components[targetid].parent = "flamingo";
-					break;
-				}
-				if (this.components[parentmc._name].target != undefined) {
-					this.components[targetid].parent = parentmc._name;
-					break;
-				}
-				parentmc = parentmc._parent;
-			}
-			//this.loadComponent_defaults(url);
 			
-			if (file == "ToolZoomout") {
-				var toolZoomin:ToolZoomin = new ToolZoomin(targetid,mc);
-				this.tools.push(toolZoomin);						
-				this.components[targetid].loaded = true;
-				delete this.components[targetid].loader;
-				this.raiseEvent(this, "onLoadComponent", toolZoomin.getContainer());
-				this.doneLoading();
-			}else{
+			//this.loadComponent_defaults(url);
+			//new loading:
+			/*
+			if (file == "ToolGroup") {
+				var toolGroup:ToolGroup = new ToolGroup(targetid,mc);				
+				Logger.console("add toolgroup");
+				this.toolGroups.push(toolGroup);
+				toolGroup.parseConfig(xmlNode);
+				Logger.console("Length toolgroups" , toolGroups.length);				
+				//this.components[targetid].target = toolGroup;
+				doneNewLoading(toolGroup);
+			}else if (file == "ToolZoomout") {
+				var toolZoomout:ToolZoomout = new ToolZoomout(targetid,mc);
+				toolZoomout.parseConfig(xmlNode);
+				Logger.console("Length toolgroups" , toolGroups.length, this.toolGroups[this.toolGroups.length - 1]);
+				var toolGroup:ToolGroup = this.toolGroups[this.toolGroups.length - 1];
+				//this.tools.push(toolZoomin);						
+				toolGroup.addTool(toolZoomout);
+				//this.components[targetid].target = toolZoomout;
+				doneNewLoading(toolZoomout);
+				
+			}*/
+			var xmlNode:XMLNode = XMLNode(xml);
+			if (this.isEmbeddedComponents(file)){
+				//newtypeobjectaanmaken
+				if (this.components[targetid] != undefined && this.components[targetid] instanceof AbstractPositionable) {
+					AbstractPositionable(this.components[targetid]).parseConfig(xmlNode);
+				}else {
+					if (file == "ToolGroup") {
+						var toolGroup:ToolGroup = new ToolGroup(targetid,mc);				
+						Logger.console("add toolgroup");
+						this.toolGroups.push(toolGroup);
+						toolGroup.parseConfig(xmlNode);
+						this.components[targetid] = toolGroup;
+					}else if (file == "ToolZoomout") {
+						var toolZoomout:ToolZoomout = new ToolZoomout(targetid,mc);
+						toolZoomout.parseConfig(xmlNode);
+						var toolGroup:ToolGroup = this.toolGroups[this.toolGroups.length - 1];
+						//this.tools.push(toolZoomin);						
+						toolGroup.addTool(toolZoomout);
+						this.components[targetid] = toolZoomout;
+					}
+					this.components[targetid].type = type;
+										
+					this.raiseEvent(this, "onLoadComponent", this.components[targetid]);
+					this.doneLoading();
+					
+				}
+				
+				//this.components onzin zetten
+			}else {
+				//component new or existing component has no setConfig, so treat as new component   
+				//add a reference for a component to the components object    
+				//save xml, target, url and parent in components object
+				//if a component is loaded, its target should be known and registered > see loadComponent_source
+				if (this.components[targetid] == undefined) {
+					this.components[targetid] = new Object();
+				}
+				this.components[targetid].target = "";
+				this.components[targetid].url = url;
+				this.components[targetid].loaded = false;
+				this.components[targetid].loader = new MovieClipLoader();
+				this.components[targetid].type = type;
+				this.components[targetid].xmls = new Array();
+				this.components[targetid].xmls.push(xml);
+				//climb in the tree and search a good parent  
+				//find component parent
+				//component parent is the first parent movie that is registered in components
+				//can be differ from the flash _parent!!
+				var parentmc:MovieClip = mc._parent;
+				while (parentmc != undefined) {
+					if (parentmc._target == this.components.flamingo.target) {
+						this.components[targetid].parent = "flamingo";
+						break;
+					}
+					if (this.components[parentmc._name].target != undefined) {
+						this.components[targetid].parent = parentmc._name;
+						break;
+					}
+					parentmc = parentmc._parent;
+				}				
 				this.loadComponent_source(url, targetid, mc);
 			}
 			//get custom language, style and cursor definitions
@@ -979,6 +1026,21 @@ class Flamingo {
 			//this.loadComponent_defaults(url, targetid, mc);
 		}
 	}
+	
+	
+	
+	private function isEmbeddedComponents(file:String):Boolean {
+		switch(file) {
+			case "ToolZoomout":
+			case "ToolGroup":
+				return true;
+				break;
+			default:
+				return false;
+		}
+		
+	}
+	
 	private function loadComponent_defaults(url:String) {
 		//load xml belonging to the component and retreive strings,styles and cursors
 		//load defaults once per component
@@ -1910,6 +1972,7 @@ class Flamingo {
 		if (this.components[id].killtarget != undefined) {
 			mc = eval(this.components[id].killtarget);
 		} else {
+			//TODO: target omsmurfen
 			mc = eval(this.components[id].target);
 		}
 		//give a change for components to clean things up 
@@ -1952,7 +2015,14 @@ class Flamingo {
 	* @return MovieClip The component.
 	*/
 	public function getComponent(id:String):MovieClip {
-		return eval(this.components[id].target);
+		Logger.console("GetComponent: ",id, this.components[id]);
+		if (this.components[id] instanceof AbstractPositionable) {
+			Logger.console(">>>>>>getComponent typeof AbstractPositionable = ", typeof(this.components[id]));
+			return this.components[id];
+		}else{
+			return eval(this.components[id].target);
+		}
+		
 	}
 	/** 
 	* Gets the url of a component. 
@@ -1977,12 +2047,14 @@ class Flamingo {
 			return String(comp);
 			break;
 		case "movieclip" :
+		//TODO: target omsmurfen
 			for (var id in this.components) {
 				if (this.components[id].target == comp._target) {
 					return (id);
 				}
 			}
 			for (var id in this.components) {
+				//TODO: target omsmurfen
 				if (this.components[id].killtarget == comp._target) {
 					return (id);
 				}
@@ -2381,14 +2453,17 @@ class Flamingo {
 			if (id!=compid) {
 				if (sameurl && sameparent) {
 					if (this.components[id].url == url && this.components[id].parent == parent) {
+						//TODO: target omsmurfen
 						a[id] = eval(this.components[id].target);
 					}
 				} else if (sameurl) {
 					if (this.components[id].url == url) {
+						//TODO: target omsmurfen
 						a[id] = eval(this.components[id].target);
 					}
 				} else {
 					if (this.components[id].parent == parent) {
+						//TODO: target omsmurfen
 						a[id] = eval(this.components[id].target);
 					}
 				}
@@ -2479,6 +2554,7 @@ class Flamingo {
 		if (parent == undefined) {
 			parent = mc._parent;
 			if (this.components[id].killtarget != undefined) {
+				//TODO: target omsmurfen
 				var c = this.components[id].target.split("/").length-this.components[id].killtarget.split("/").length;
 				for (var i = 0; i<c; i++) {
 					parent = parent._parent;

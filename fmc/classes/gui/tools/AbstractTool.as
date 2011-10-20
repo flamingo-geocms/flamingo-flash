@@ -2,14 +2,12 @@
  * ...
  * @author Roy Braam
  */
+import core.AbstractPositionable;
 import tools.Logger;
-class gui.tools.AbstractTool 
+class gui.tools.AbstractTool extends AbstractPositionable
 {
-	
-	private var container:MovieClip;
 	private var holder:MovieClip;
 	private var intervalId;
-	private var id = "";
 	
 	private var active:Boolean = false;
 	
@@ -22,8 +20,7 @@ class gui.tools.AbstractTool
 	private var toolOverLink:String = null;
 	
 	public function AbstractTool(id, container) {
-		this.id = id;
-		this.container = container;
+		super(id, container);
 		
 		this.holder = this.container.createEmptyMovieClip("tool_" + id + "_holder", this.container.getNextHighestDepth());
 		
@@ -32,9 +29,9 @@ class gui.tools.AbstractTool
 		this.mcUp = this.holder.createEmptyMovieClip("tool" + id+"_up", this.holder.getNextHighestDepth());
 								
 		var mcloader = new MovieClipLoader();	
-		mcloader.loadClip(_global.flamingo.correctUrl(this.toolDownLink), this.mcDown);
-		mcloader.loadClip(_global.flamingo.correctUrl(this.toolOverLink), this.mcOver);
-		mcloader.loadClip(_global.flamingo.correctUrl(this.toolUpLink), this.mcUp);
+		mcloader.loadClip(_global.flamingo.correctUrl(this.toolDownLink), this.mcDown.createEmptyMovieClip("container",0));
+		mcloader.loadClip(_global.flamingo.correctUrl(this.toolOverLink), this.mcOver.createEmptyMovieClip("container",0));
+		mcloader.loadClip(_global.flamingo.correctUrl(this.toolUpLink), this.mcUp.createEmptyMovieClip("container",0));
 				
 		this.mcDown._visible = false;
 		this.mcOver._visible = false;
@@ -64,7 +61,6 @@ class gui.tools.AbstractTool
 			Logger.console("onRelease "+thisObj.active);
 			if (!thisObj.active) {
 				thisObj.active = true;
-				Logger.console("Yeh, active!");
 				thisObj.mcOver._visible = false;
 				thisObj.mcDown._visible = true;
 			}else {
@@ -98,9 +94,7 @@ class gui.tools.AbstractTool
 	public function getId():String {
 		return this.id;
 	}
-	public function getContainer():MovieClip {
-		return this.container;
-	}
+	
 	public function getHolder():MovieClip {
 		return this.holder;
 	}	

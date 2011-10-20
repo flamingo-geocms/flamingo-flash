@@ -61,8 +61,9 @@ class tools.Logger{
 		traceMessage(logMessage,CRITICAL);
 	}
 	
-	public static function console(logMessage:Object):Void {
-		ExternalInterface.call( "console.log" , logMessage.toString() );
+	public static function console():Void {
+		var str:String = arguments.join(', ');
+		ExternalInterface.call( "console.log" , str );
 	}
 	
 	/*The actual trace function*/
