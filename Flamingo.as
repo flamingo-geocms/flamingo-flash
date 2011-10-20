@@ -37,6 +37,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 import flash.external.ExternalInterface;
 import flash.filters.DropShadowFilter;
+import gui.tools.ToolZoomin;
 import tools.Logger;
 
 class Flamingo {
@@ -98,6 +99,7 @@ class Flamingo {
 	private var isloadingcomponent:Boolean;
 	private var callbacktype:String;
 	private var nrconfigs:Number;
+	private var tools:Array = new Array();
 	//log levels
 	//All log messages with this loglevel or higher wil be logged in the flash_log (possible values: Logger.DEBUG,Logger.INFO,Logger.WARN,Logger.ERROR,Logger.CRITICAL)
 	private var logLevel:Number=Logger.ERROR;
@@ -105,7 +107,7 @@ class Flamingo {
 	private var screenLogLevel:Number=Logger.ERROR;
 	//Flamingo class constructor
 	//@param mc MovieClip 
-	public function Flamingo(mc:MovieClip) {
+	public function Flamingo(mc:MovieClip) {		
 		System.security.allowDomain("*");
 		//save base url of flamingo.swf
 		var url = mc._url.split("?")[0];
@@ -874,7 +876,7 @@ class Flamingo {
 	*/
 	public function loadComponent(xml:Object, mc:MovieClip, targetid:String):Void {
 		//rule1: a component has a prefix and an id 
-		//rule2: a component can register only once, double ids are not allowed
+		//rule2: a component can register only once, double ids are not allowed		
 		if (xml == undefined) {
 			return;
 		}
@@ -960,7 +962,17 @@ class Flamingo {
 				parentmc = parentmc._parent;
 			}
 			//this.loadComponent_defaults(url);
-			this.loadComponent_source(url, targetid, mc);
+			
+			if (file == "ToolZoomout") {
+				var toolZoomin:ToolZoomin = new ToolZoomin(targetid,mc);
+				this.tools.push(toolZoomin);						
+				this.components[targetid].loaded = true;
+				delete this.components[targetid].loader;
+				this.raiseEvent(this, "onLoadComponent", toolZoomin.getContainer());
+				this.doneLoading();
+			}else{
+				this.loadComponent_source(url, targetid, mc);
+			}
 			//get custom language, style and cursor definitions
 			//this.theloadlist.push({url:url, targetid:targetid, mc:mc});
 			//this.loadNextComponent();

@@ -3,7 +3,9 @@
 * Author: Roy Braam
 * B3partners bv
  -----------------------------------------------------------------------------*/
- class tools.Logger{
+import flash.external.ExternalInterface;
+
+class tools.Logger{
 	private var className="";
 	public static var DEBUG:Number=10;
 	public static var INFO:Number=8;
@@ -57,6 +59,10 @@
 	
 	public function critical(logMessage:Object):Void{
 		traceMessage(logMessage,CRITICAL);
+	}
+	
+	public static function console(logMessage:Object):Void {
+		ExternalInterface.call( "console.log" , logMessage.toString() );
 	}
 	
 	/*The actual trace function*/
