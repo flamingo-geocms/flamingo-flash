@@ -3,11 +3,12 @@
  * @author Roy Braam
  */
 import core.AbstractPositionable;
+import gui.tools.ToolGroup;
 import tools.Logger;
 class gui.tools.AbstractTool extends AbstractPositionable
 {
 	private var holder:MovieClip;
-	private var intervalId;
+	private var _toolGroup:ToolGroup;
 	
 	private var active:Boolean = false;
 	
@@ -19,8 +20,9 @@ class gui.tools.AbstractTool extends AbstractPositionable
 	private var toolUpLink:String = null;
 	private var toolOverLink:String = null;
 	
-	public function AbstractTool(id, container) {
+	public function AbstractTool(id, toolGroup:ToolGroup, container) {		
 		super(id, container);
+		this.toolGroup = toolGroup;
 		
 		this.holder = this.container.createEmptyMovieClip("tool_" + id + "_holder", this.container.getNextHighestDepth());
 		
@@ -104,5 +106,15 @@ class gui.tools.AbstractTool extends AbstractPositionable
 	}
 	public function isActive():Boolean {
 		return this.active;
+	}
+	
+	public function get toolGroup():ToolGroup 
+	{
+		return _toolGroup;
+	}
+	
+	public function set toolGroup(value:ToolGroup):Void 
+	{
+		_toolGroup = value;
 	}
 }

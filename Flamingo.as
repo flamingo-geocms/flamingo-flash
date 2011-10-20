@@ -36,6 +36,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 * Author:Linda Vels,IDgis bv
 */
 import core.AbstractPositionable;
+import core.ComponentInterface;
 import flash.external.ExternalInterface;
 import flash.filters.DropShadowFilter;
 import gui.tools.ToolGroup;
@@ -963,7 +964,7 @@ class Flamingo {
 			if (this.isEmbeddedComponents(file)){
 				//newtypeobjectaanmaken
 				if (this.components[targetid] != undefined && this.components[targetid] instanceof AbstractPositionable) {
-					AbstractPositionable(this.components[targetid]).parseConfig(xmlNode);
+					ComponentInterface(this.components[targetid]).setConfig(XML(xmlNode));
 				}else {
 					if (file == "ToolGroup") {
 						var toolGroup:ToolGroup = new ToolGroup(targetid,mc);				
@@ -972,9 +973,9 @@ class Flamingo {
 						toolGroup.parseConfig(xmlNode);
 						this.components[targetid] = toolGroup;
 					}else if (file == "ToolZoomout") {
-						var toolZoomout:ToolZoomout = new ToolZoomout(targetid,mc);
-						toolZoomout.parseConfig(xmlNode);
 						var toolGroup:ToolGroup = this.toolGroups[this.toolGroups.length - 1];
+						var toolZoomout:ToolZoomout = new ToolZoomout(targetid,toolGroup,mc);
+						toolZoomout.setConfig(XML(xmlNode));						
 						//this.tools.push(toolZoomin);						
 						toolGroup.addTool(toolZoomout);
 						this.components[targetid] = toolZoomout;
@@ -2596,8 +2597,15 @@ class Flamingo {
 	* @see getPosition
 	*/
 	public function position(comp:Object, parent:MovieClip):Void {
-		var id = this.getId(comp);
-		var mc:MovieClip = this.getComponent(id);
+		var id:String ;
+		var mc:MovieClip;
+		if (comp instanceof AbstractPositionable) {
+			id = AbstractPositionable(comp).id;
+			mc = AbstractPositionable(comp).container;
+		}else{
+			id = this.getId(comp);
+			mc = this.getComponent(id);
+		}			
 		if (parent == undefined) {
 			parent = mc._parent;
 			if (this.components[id].killtarget != undefined) {
@@ -2615,7 +2623,9 @@ class Flamingo {
 		mc._y = r.y;
 		mc._width = r.width;
 		mc._height = r.height;
-	}
+		
+	}	
+	
 	private function getXPS(mc:MovieClip, parent:MovieClip):Object {
 		if (parent == undefined) {
 			parent = mc._parent;

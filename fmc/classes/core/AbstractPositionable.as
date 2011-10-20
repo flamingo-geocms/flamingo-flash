@@ -4,13 +4,8 @@ import tools.Logger;
  * ...
  * @author Roy Braam
  */
-class core.AbstractPositionable extends AbstractComposite
-{
-	private var _width:String;
-	private var _height:String;
-	private var _left:String;
-	private var _top:String;
-	
+class core.AbstractPositionable
+{	
 	private var _loaded:Boolean = true;
     private var _type:String = null;
 	
@@ -22,38 +17,6 @@ class core.AbstractPositionable extends AbstractComposite
 		this.id = id;
 		this.container = container;
 	}
-	
-	function parseConfig(xmlNode:XMLNode):Void {
-        this.name = xmlNode.attributes["name"];
-        
-        // Parses the attributes from the config.
-        for (var name:String in xmlNode.attributes) {
-            var value:String = xmlNode.attributes[name];
-			var nametoLower = name.toLowerCase();
-			switch(nametoLower) {
-				case "width":
-				case "height":
-				case "left":
-				case "top":				
-					this[nametoLower] = value;
-					break;
-				default:
-					setAttribute(name, value);
-			}
-        }
-        
-        // Parses the child nodes from the config.
-        var childNode:XMLNode = null;
-        var name:String = null;
-        for (var i:Number = 0; i < xmlNode.childNodes.length; i++) {
-            childNode = xmlNode.childNodes[i];
-            name = childNode.nodeName;
-            if (name.indexOf(":") > -1) {
-                name = name.substr(name.indexOf(":") + 1);
-            }
-            addComposite(name, childNode);
-        }
-    }
 	
 	public function get target():String {
 		return this.container._target;
@@ -67,49 +30,10 @@ class core.AbstractPositionable extends AbstractComposite
 	public function get parent():MovieClip {
 		return this.container._parent;
 	}
-	
+		
 	/**
 	 * todo implement movieclip interface en toepassen op container
 	 */
-	public function get width():String 
-	{
-		return _width;
-	}
-	
-	public function set width(value:String):Void 
-	{
-		_width = value;
-	}
-	
-	public function get height():String 
-	{
-		return _height;
-	}
-	
-	public function set height(value:String):Void 
-	{
-		_height = value;
-	}
-	
-	public function get left():String 
-	{
-		return _left;
-	}
-	
-	public function set left(value:String):Void 
-	{
-		_left = value;
-	}
-	
-	public function get top():String 
-	{
-		return _top;
-	}
-	
-	public function set top(value:String):Void 
-	{
-		_top = value;
-	}
 	
 	public function get id():String 
 	{
@@ -148,6 +72,10 @@ class core.AbstractPositionable extends AbstractComposite
 	public function set type(value:String):Void 
 	{
 		_type = value;
+	}
+	
+	public function get flamingo():Flamingo {
+		return _global.flamingo;
 	}
 	
 }
