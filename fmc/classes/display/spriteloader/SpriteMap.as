@@ -41,12 +41,12 @@ class display.spriteloader.SpriteMap extends Object
 		loadSpriteMap();
 	}
 	
-	public function attachSprite(target:MovieClip,spriteSettings:SpriteSettings,spriteName:String, depth:Number):Sprite 
+	public function attachSpriteTo(attachTarget:MovieClip,spriteSettings:SpriteSettings,depth:Number, spriteName:String):Sprite 
 	{
 		if (spriteName == undefined) {
 			spriteName = "sprite_" +  createNameFromUrl() + '_' + _spriteIndex;
 		}
-		var sprite:Sprite = Sprite.create(this, target, spriteName, spriteSettings, depth);
+		var sprite:Sprite = Sprite.create(this, attachTarget, spriteName, spriteSettings, depth);
 		_spriteIndex++;
 		return sprite;
 	}

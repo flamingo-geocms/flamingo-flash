@@ -37,7 +37,7 @@ class display.spriteloader.SpriteMapFactory
 	}
 	
 	
-	public function getSpriteMap(spriteMapUrl:String):SpriteMap
+	public function obtainSpriteMap(spriteMapUrl:String):SpriteMap
 	{
 		var map:SpriteMap = _mapDictionary[spriteMapUrl];
 		if ( ! (map instanceof SpriteMap) ) 

@@ -20,7 +20,7 @@ class display.spriteloader.SpriteSettings extends Object
 	 * @param	_x (optional) position attached sprite vertically to _x position
 	 * @param	_y (optional)position attached sprite horizontally to _y position
 	 * @param	_visible (optional) set sprite's visible state
-	 * @param	_alpha set sprite's _alpha
+	 * @param	_alpha (optional) set sprite's _alpha
 	 */
 	public function SpriteSettings(mapOffsetX:Number,mapOffsetY:Number,mapAreaWidth:Number,mapAreaHeight:Number,_x:Number,_y:Number,_visible:Boolean, _alpha:Number) 
 	{
@@ -31,7 +31,7 @@ class display.spriteloader.SpriteSettings extends Object
 			
 			if (arguments[argIndex] != undefined) {
 				this[props[argIndex]] = arguments[argIndex];
-				trace(props[argIndex]+':'+arguments[argIndex])
+				//trace(props[argIndex]+':'+arguments[argIndex])
 			}
 			argIndex--;
 		}
