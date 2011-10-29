@@ -17,16 +17,16 @@ class SpriteMapDemo extends MovieClip
 		
 		
 		super();
-		//grab the factory 
+		//grab the factory (singleton)
 		var spriteMapFactory:SpriteMapFactory = SpriteMapFactory.getInstance();
 		
 		var toolSpritesUrl:String = "iconMapTest_1.png";
-		//let the factory provice you with a new spritemap by calling obtainSpriteMap() on it with a url
-		//if u call obtainSpriteMap anywhere else with the same image url, it won't spoil bandwith requests and will only load it once..
+		//let the factory provide you with a new spritemap by calling obtainSpriteMap() on it with a url
+		//if you call obtainSpriteMap anywhere else with the same image url, it won't spoil bandwith requests and will only load it once..
 		var spriteMap:SpriteMap = spriteMapFactory.obtainSpriteMap(toolSpritesUrl);
-		//use the spritemap to create a sprite by calling attachSpriteTo() on it with a target MovieClip and SpriteSettings ( see SprieSettings class for documentation)
-		//here we grab six 14x14 icons from the spritemap, and project them on our target mc, and spread the on the _y axis every 20 pixels.
-		// they are all visible (true) we alter the alpha within the 30 - 100 range.
+		//Use the spritemap to create a sprite by calling attachSpriteTo() on it with a target MovieClip and SpriteSettings ( see SpriteSettings class for documentation)
+		//Here we grab six 14x14 icons from the spritemap, and project them on our target mc, and spread the on the _y axis every 20 pixels.
+		//They are all visible (true) we alter the alpha within the 30 - 100 range.
 		spriteMap.attachSpriteTo(mc, new SpriteSettings(138, 69 , 14, 14, 0, 0, true, 30));
 		spriteMap.attachSpriteTo(mc, new SpriteSettings(153, 69, 14, 14, 20, 7, true, 40));
 		spriteMap.attachSpriteTo(mc, new SpriteSettings(138, 84, 14, 14, 40, 14, true, 50));
