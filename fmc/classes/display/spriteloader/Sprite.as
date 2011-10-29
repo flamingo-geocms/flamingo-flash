@@ -46,15 +46,6 @@ class display.spriteloader.Sprite extends MovieClip {
 	
 	private function invalidate()
 	{
-		//trace("draw!")
-		//this.attachBitmap(spriteMap.bitmapData, _root.getNextHighestDepth());// make area
-		/*this.clear();
-		this.lineStyle(2, 0xFF0000, 100, true);
-		this.moveTo(0, 0);
-		this.lineTo(0, size);
-		this.lineTo(size, size);
-		this.lineTo(size, 0);
-		this.lineTo(0, 0);*/
 		var bmpArea:BitmapData = new BitmapData(_mapAreaWidth,_mapAreaHeight,true,0xffffffff);
 		bmpArea.copyPixels(spriteMap.bitmapData, new Rectangle(_mapOffsetX, _mapOffsetY, _mapAreaWidth, _mapAreaHeight), new Point(0, 0));
 		this.attachBitmap(bmpArea,0);
