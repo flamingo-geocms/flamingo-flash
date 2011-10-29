@@ -61,9 +61,9 @@ class SpriteMapDemo extends MovieClip
 		{
 			var xoffset:Number = hIndex * 20;
 			var yoffset:Number = vIndex * 20 +132;
-			//icons are 20 px wide and high, the projected clip willbe painted on 50x and 50y of our mc.
+			//on the 'map' icons are 20 px wide and high, the projected sprite will be positioned on 50 x and 50 y of our target mc.
 			var settings:SpriteSettings = new SpriteSettings(xoffset, yoffset, 20, 20, 50, 50);
-			////the magic, we apply settings fter the spritecreation and updae it:
+			////the magic, we apply (different) settings after the sprite was long done and keep updating it with new graphics:
 			repaintableSprite.applyNewSettings(settings);
 			
 			hIndex++;
