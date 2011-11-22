@@ -438,7 +438,7 @@ class Flamingo {
 			this.configs = new Array();
 		}
 		this.nrconfigs++;
-		this.configs.push({xml:xml, id:id, targetid:targetid, allowstrangers:allowstrangers});
+		this.configs.push( { xml:xml, id:id, targetid:targetid, allowstrangers:allowstrangers } );		
 		this.processConfig();
 	}
 	/**
@@ -461,7 +461,7 @@ class Flamingo {
 			this.nrconfigs++;
 			this.configs.push({file:this.correctUrl(files[i]), id:id, targetid:targetid, allowstrangers:allowstrangers});
 		}
-		//this.configs.push({file:this.correctUrl(file), id:id, targetid:targetid});
+		//this.configs.push({file:this.correctUrl(file), id:id, targetid:targetid});		
 		this.processConfig();
 	}
 	private function deleteDefaults() {
@@ -471,7 +471,7 @@ class Flamingo {
 	}
 	private function processConfig():Void {
 		if (this.loading) {
-			// an other config is in the progress of loading, wait and return later
+			// an other config is in the progress of loading, wait and return later		
 			return;
 		}
 		if (this.mFlamingo.mLoadLock == undefined) {
@@ -485,7 +485,7 @@ class Flamingo {
 			//all configs are loaded
 			//_global['setTimeout'](this, 'raiseEvent', 500, this,"deleteDefaults");
 			this.mFlamingo.mLoadLock.removeMovieClip();
-			this.raiseEvent(this, "onConfigComplete");
+			this.raiseEvent(this, "onConfigComplete","flamingo");
 			for (var id in this.configpool) {
 				delete this.configpool[id];
 			}
@@ -963,28 +963,28 @@ class Flamingo {
 			var xmlNode:XMLNode = XMLNode(xml);
 			if (this.isEmbeddedComponents(file)){
 				//newtypeobjectaanmaken
-				if (this.components[targetid] != undefined && this.components[targetid] instanceof AbstractPositionable) {
+				if (this.components[targetid] != undefined && this.components[targetid] instanceof AbstractPositionable) {				
 					ComponentInterface(this.components[targetid]).setConfig(XML(xmlNode));
 				}else {
+					Logger.console("Add: " + file);
+					Logger.console("Config: ", xmlNode);
 					if (file == "ToolGroup") {
-						var toolGroup:ToolGroup = new ToolGroup(targetid,mc);				
-						Logger.console("add toolgroup");
+						var toolGroup:ToolGroup = new ToolGroup(targetid,mc);										
 						this.toolGroups.push(toolGroup);
-						toolGroup.parseConfig(xmlNode);
+						toolGroup.setConfig(xmlNode);						
 						this.components[targetid] = toolGroup;
-					}else if (file == "ToolZoomout") {
+					}else if (file == "ToolZoomout") {						
 						var toolGroup:ToolGroup = this.toolGroups[this.toolGroups.length - 1];
-						var toolZoomout:ToolZoomout = new ToolZoomout(targetid,toolGroup,mc);
-						toolZoomout.setConfig(XML(xmlNode));						
+						var toolZoomout:ToolZoomout = new ToolZoomout(targetid, toolGroup, mc);
+						toolZoomout.setConfig(xmlNode);						
 						//this.tools.push(toolZoomin);						
-						toolGroup.addTool(toolZoomout);
+						//toolGroup.addTool(toolZoomout);
 						this.components[targetid] = toolZoomout;
 					}
-					this.components[targetid].type = type;
-										
-					this.raiseEvent(this, "onLoadComponent", this.components[targetid]);
-					this.doneLoading();
-					
+					this.components[targetid].type = type;			
+					this.raiseEvent(this, "onLoadComponent", targetid);	
+					Logger.console("Done Loading: "+targetid);	
+					this.doneLoading();				
 				}
 				
 				//this.components onzin zetten
@@ -1140,25 +1140,32 @@ class Flamingo {
 	* @param comp:Object  Id or MovieClip representing the component.
 	* @param xml:XML Xml which have to be parsed.
 	*/
-	public function parseXML(comp:Object, xml:XML):Void {
+	public function parseXML(comp:Object, xml:Object):Void {
 		if (xml == undefined) {
+			Logger.console("!!!!! Flamingo.parseXML() No XML!");
 			return;
 		}
 		var id:String = this.getId(comp);
 		if (id == undefined) {
+			Logger.console("!!!!! Flamingo ParseXML no Id, stop loading defaults.");
 			return;
 		}
-		var mc = this.getComponent(id);
+		var mc = null;
+		if (comp instanceof AbstractPositionable) {			
+			mc = comp;
+		}else{
+			mc = this.getComponent(id);
+		}
 		//default flamingo attributes
 		if (mc.visible == undefined) {
 			mc.visible = true;
-		}
+		}		
 		for (var attr in xml.attributes) {
 			attr = attr.toLowerCase();
 			var val:String = xml.attributes[attr];
 			switch (attr) {
 			case "name" :
-				mc.name = val;
+				mc.name = val;				
 				break;
 			case "width" :
 				mc.width = val;
@@ -1212,6 +1219,7 @@ class Flamingo {
 				break;
 			}
 		}
+		Logger.console("Set defaults: " + mc.id);
 		//parse strings,cursors, styles, guides
 		if (mc.strings == undefined) {
 			mc.strings = new Object();
@@ -1231,6 +1239,7 @@ class Flamingo {
 			var node = nodes[i];
 			switch (node.nodeName.toLowerCase()) {
 			case "string" :
+				Logger.console("String: " + node);
 				this.setString(node, mc.strings);
 				break;
 			case "style" :
@@ -1470,6 +1479,7 @@ class Flamingo {
 		if (xml == undefined) {
 			return null;
 		}
+		Logger.console("Flamingo.setString(): " + xml);
 		var a_languages:Array = this.asArray(this.languages.toLowerCase());
 		var langs:Object;
 		if (this.languages.length>0) {
@@ -1531,8 +1541,10 @@ class Flamingo {
 						b = true;
 					}
 				}
+				Logger.console("Language: "+language);
 				language[id] = new Object();
 				language[id] = obj;
+			Logger.console("Strings found: " + obj.nl);
 			}
 			delete obj;
 		}
@@ -1706,6 +1718,7 @@ class Flamingo {
 	*/
 	public function showTooltip(tiptext:String, object:Object, delay:Number, reset:Boolean):Void {
 		if (tiptext.length == 0 || tiptext == undefined) {
+			Logger.console("flamingo.showToolTip() no text");
 			return;
 		}
 		if (delay == undefined) {
@@ -1722,7 +1735,9 @@ class Flamingo {
 			obj.flamingo = this;
 			obj.mflamingo = this.mFlamingo;
 			_global['setTimeout'](this, '_showTooltip', delay, obj);
+			Logger.console("flamingo.showToolTip() make new tooltip");
 		} else {
+			Logger.console("flamingo.showToolTip() use existing");
 			if (reset) {
 				this.tiptext = tiptext;
 			} else {
@@ -1762,6 +1777,7 @@ class Flamingo {
 		}
 	}
 	private function _showTooltip(obj):Void {
+		Logger.console("flamingo._showTooltip() jey, tooltip delay passed.");
 		// interval: checks if object is hit, of not so let tooltip dissapear
 		var object = obj.object;
 		var flamingo = obj.flamingo;
@@ -2016,9 +2032,7 @@ class Flamingo {
 	* @return MovieClip The component.
 	*/
 	public function getComponent(id:String):MovieClip {
-		Logger.console("GetComponent: ",id, this.components[id]);
 		if (this.components[id] instanceof AbstractPositionable) {
-			Logger.console(">>>>>>getComponent typeof AbstractPositionable = ", typeof(this.components[id]));
 			return this.components[id];
 		}else{
 			return eval(this.components[id].target);
@@ -2044,27 +2058,35 @@ class Flamingo {
 			return ("flamingo");
 		}
 		switch (typeof (comp)) {
-		case "string" :
-			return String(comp);
-			break;
-		case "movieclip" :
-		//TODO: target omsmurfen
-			for (var id in this.components) {
-				if (this.components[id].target == comp._target) {
-					return (id);
+			case "string" :
+				return String(comp);
+				break;
+			case "movieclip" :
+			//TODO: target omsmurfen
+				for (var id in this.components) {
+					if (this.components[id].target == comp._target) {
+						return (id);
+					}
 				}
-			}
-			for (var id in this.components) {
-				//TODO: target omsmurfen
-				if (this.components[id].killtarget == comp._target) {
-					return (id);
+				for (var id in this.components) {
+					//TODO: target omsmurfen
+					if (this.components[id].killtarget == comp._target) {
+						return (id);
+					}
 				}
-			}
-			return null;
-			break;
-		default :
-			return null;
-			break;
+				return null;
+				break;
+			case "object" :				
+				var id = null;
+				if (comp instanceof AbstractPositionable) {
+					id = AbstractPositionable(comp).id;	
+				}
+				
+				return id;
+				break;
+			default :
+				return null;
+				break;
 		}
 	}
 	/** 
@@ -2370,6 +2392,7 @@ class Flamingo {
 					prefix = this.getType(id);
 				}
 			}
+			//Logger.console("****Arg lenght: "+arguments.length+" dispatche event: ", event_to_fire, arguments );
 			ExternalInterface.call("dispatchEventJS",event_to_fire, arguments);
 			
 			
@@ -2402,20 +2425,26 @@ class Flamingo {
 		if (typeof (obj) == "movieclip") {
 			new_obj = this.getId(obj);
 		} else if (typeof (obj) == "object") {
-			for (var attr in obj) {
-				if (new_obj == undefined) {
-					if (obj.length && obj.splice && obj.sort) {
-						//probably an array
-						new_obj = new Array();
-					} else {
-						new_obj = new Object();
+			//if obj is a AbstractPositionable only add the id;
+			if (obj instanceof AbstractPositionable) {
+				//Logger.console("objects2Javascript instance of AbstractPositionable");
+				return AbstractPositionable(obj).id;
+			}else{			
+				for (var attr in obj) {
+					if (new_obj == undefined) {
+						if (obj.length && obj.splice && obj.sort) {
+							//probably an array
+							new_obj = new Array();
+						} else {
+							new_obj = new Object();
+						}
 					}
-				}
-				//turn all attributenames (that are not numeric) into quoted attributenames                                                                                                                                                                                                       
-				if (isNaN(attr)) {
-					new_obj["'"+attr+"'"] = objects2Javascript(obj[attr]);
-				} else {
-					new_obj[attr] = objects2Javascript(obj[attr]);
+					//turn all attributenames (that are not numeric) into quoted attributenames                                                                                                                                                                                                       
+					if (isNaN(attr)) {
+						new_obj["'"+attr+"'"] = objects2Javascript(obj[attr]);
+					} else {
+						new_obj[attr] = objects2Javascript(obj[attr]);
+					}
 				}
 			}
 		}
@@ -2490,6 +2519,9 @@ class Flamingo {
 		}
 		//1 search in langauge object of component                                                                                                                                                                                                                                                                                                          
 		var strings:Object = mc.strings;
+		if (id == "zoomout") {
+			Logger.console("The strings " + strings);
+		}
 		if (strings != undefined) {
 			s =  strings[stringid.toLowerCase()][lang.toLowerCase()];
 			if (s == undefined) {

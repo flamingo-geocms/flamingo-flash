@@ -10,16 +10,12 @@ import tools.Logger;
 
 dynamic class gui.tools.ToolZoomout extends AbstractTool implements ComponentInterface
 {	
-	private var toolDownLink:String = "assets/img/ToolZoomout_down.png";
-	private var toolUpLink:String = "assets/img/ToolZoomout_up.png";
-	private var toolOverLink:String = "assets/img/ToolZoomout_over.png";
-	
 	//-----------------------------------------
 	var defaultXML:String = "<?xml version='1.0' encoding='UTF-8'?>" +
 							"<ToolZoomout>" +
 							"<string id='tooltip' nl='uitzoomen' en='zoom out'/>" +
 							"<cursor id='cursor' url='fmc/CursorsMap.swf' linkageid='zoomout'/>" +
-							"cursor id='busy' url='fmc/CursorsMap.swf' linkageid='busy'/>" +
+							"<cursor id='busy' url='fmc/CursorsMap.swf' linkageid='busy'/>" +
 							"</ToolZoomout>";
 	var zoomfactor:Number = 50;
 	var zoomdelay:Number = 0;
@@ -29,13 +25,14 @@ dynamic class gui.tools.ToolZoomout extends AbstractTool implements ComponentInt
 	var enabled = true
 	var rect:Object = new Object()
 	var thisObj = this
-	var lMap:Object = new Object();
 	
-	public function ToolZoomout(id:String, toolGroup:ToolGroup ,container:MovieClip) {
-		super(id, toolGroup,container);		
-		Logger.console("Test tool constructor");	
-		Logger.console(typeof(this));
-		
+	public function ToolZoomout(id:String, toolGroup:ToolGroup ,container:MovieClip) {		
+		this.toolDownLink = "assets/img/ToolZoomout_down.png";
+		this.toolUpLink = "assets/img/ToolZoomout_up.png";
+		this.toolOverLink = "assets/img/ToolZoomout_over.png";
+		this.tooltipId = "tooltip";
+		super(id, toolGroup, container);		
+		Logger.console("ToolZoomout constructor");	
 		init();
 	}	
 	
@@ -52,7 +49,7 @@ dynamic class gui.tools.ToolZoomout extends AbstractTool implements ComponentInt
 	*/
 	function init() {
 		var thisObj = this;
-		lMap.onMouseWheel = function(map:MovieClip, delta:Number, xmouse:Number, ymouse:Number, coord:Object) {
+		this.lMap.onMouseWheel = function(map:MovieClip, delta:Number, xmouse:Number, ymouse:Number, coord:Object) {
 			if (thisObj.zoomscroll) {
 				if (! thisObj._parent.updating) {
 					thisObj._parent.cancelAll();
@@ -79,40 +76,39 @@ dynamic class gui.tools.ToolZoomout extends AbstractTool implements ComponentInt
 				}
 			}
 		};
-		lMap.onMouseDown = function(map:MovieClip, xmouse:Number, ymouse:Number, coord:Object) {
+		lMap.onMouseDown = function(mapOnMouseMove:MovieClip, xmouseOnMouseMove:Number, ymouseOnMouseMove:Number, coordOnMouseMove:Object) {
 			var x:Number;
 			var y:Number;
 			if (! thisObj._parent.updating) {
 				thisObj._parent.cancelAll();
-				x = xmouse;
-				y = ymouse;
+				x = xmouseOnMouseMove;
+				y = ymouseOnMouseMove;
 				thisObj.lMap.onMouseMove = function(map:MovieClip, xmouse:Number, ymouse:Number, coord:Object) {
 					thisObj.rect.x  = Math.min(x, xmouse)
 					thisObj.rect.y  = Math.min(y, ymouse)
 					thisObj.rect.width  = Math.abs(xmouse-x)
 					thisObj.rect.height = Math.abs(ymouse-y)
-				map.drawRect("zoomrect", thisObj.rect ,{color:0x000000,alpha:10},{color:0xffffff,alpha:60,width:0});
-
+					map.drawRect("zoomrect", thisObj.rect ,{color:0x000000,alpha:10},{color:0xffffff,alpha:60,width:0});
 				};
-				lMap.onMouseUp = function(map:MovieClip, xmouse:Number, ymouse:Number, coord:Object) {
+				thisObj.lMap.onMouseUp = function(map:MovieClip, xmouse:Number, ymouse:Number, coord:Object) {
 					var dx:Number = Math.abs(xmouse-x);
 					var dy:Number = Math.abs(ymouse-y);
 					if (dx<5 and dy<5) {
-						map.moveToPercentage(zoomfactor, coord, clickdelay);
+						map.moveToPercentage(thisObj.zoomfactor, coord, thisObj.clickdelay);
 					} else {
 						var center:Object = new Object();
 						center.x = thisObj.rect.x+thisObj.rect.width/2;
 						center.y = thisObj.rect.y+thisObj.rect.height/2;
-						var coord = map.point2Coordinate(center);
+						var coordUp = map.point2Coordinate(center);
 						var ext = map.getCurrentExtent();
 						var zf = Math.max(thisObj.rect.width/map.__width*100, 20);
-						map.moveToPercentage(zf, coord, zoomdelay);
+						map.moveToPercentage(zf, coordUp, thisObj.zoomdelay);
 					}
-					thisObj._parent.updateOther(map, zoomdelay);
+					thisObj._parent.updateOther(map, thisObj.zoomdelay);
 					//puin ruimen                                
 					//map.clearDrawings();
-					delete lMap.onMouseMove;
-					delete lMap.onMouseUp;
+					delete thisObj.lMap.onMouseMove;
+					delete thisObj.lMap.onMouseUp;
 				};
 			}
 		};
@@ -127,15 +123,15 @@ dynamic class gui.tools.ToolZoomout extends AbstractTool implements ComponentInt
 		//defaults
 		this.setConfig(defaultXML);
 		//custom
-		var xmls:Array= flamingo.getXMLs(this);
+		var xmls:Array = _global.flamingo.getXMLs(this);
 		for (var i = 0; i < xmls.length; i++){
 			this.setConfig(xmls[i]);
 		}
 		delete xmls;
 		//remove xml from repository
 		flamingo.deleteXML(this);
-		this._visible = visible;
-		flamingo.raiseEvent(this, "onInit", this);		
+		this._visible = this.visible;
+		flamingo.raiseEvent(this, "onInit", this.id);			
 	}
 		
 	/**
@@ -143,14 +139,16 @@ dynamic class gui.tools.ToolZoomout extends AbstractTool implements ComponentInt
 	* @attr xml:Object Xml or string representation of a xml.
 	*/
 	function setConfig(xml:Object) {
+		Logger.console("Toolzoomout.setConfig()",xml);
 		if (typeof (xml) == "string") {
-			xml = new XML(String(xml)).firstChild;
+			xml = new XML(String(xml));
+			xml = xml.firstChild;
 		}
 		//load default attributes, strings, styles and cursors
 		flamingo.parseXML(this, xml);
 		//parse custom attributes
-		for (var attr in xml.attributes) {
-			var attr:String = attr.toLowerCase();
+		for (var a in xml.attributes) {
+			var attr:String = a.toLowerCase();
 			var val:String = xml.attributes[attr];
 			switch (attr) {
 			case "zoomfactor" :
@@ -185,8 +183,8 @@ dynamic class gui.tools.ToolZoomout extends AbstractTool implements ComponentInt
 		}
 		_parent.initTool(this, skin+"_up", skin+"_over", skin+"_down", skin+"_up", lMap, "cursor", "tooltip");
 		this.setEnabled(enabled);
-		this.setVisible(visible);
-		flamingo.position(this.container);
+		this.setVisible(this.visible);
+		_global.flamingo.position(this.container);
 	}
 	//default functions-------------------------------
 	function startIdentifying() {

@@ -30,8 +30,7 @@ dynamic class gui.tools.ToolGroup extends AbstractPositionable implements Compon
 	
 	public function ToolGroup(id:String, container:MovieClip){
 		super(id, container);
-		tools = new Array();	
-		
+		tools = new Array();		
 		init();
 	}
 			
@@ -65,9 +64,7 @@ dynamic class gui.tools.ToolGroup extends AbstractPositionable implements Compon
 			var mc:MovieClip = this.container.createEmptyMovieClip(toolid, this.container.getNextHighestDepth());
 			flamingo.loadComponent(xmlNode, mc, toolid);
 		}
-	}
-	
-	
+	}	
 	//old functions
 	
 	function init() {
@@ -116,12 +113,12 @@ dynamic class gui.tools.ToolGroup extends AbstractPositionable implements Compon
 			}
 		};
 		if (flamingo == undefined) {
-			var t:TextField = this.createTextField("readme", 0, 0, 0, 550, 400);
+			var t:TextField = this.container.createTextField("readme", 0, 0, 0, 550, 400);
 			t.html = true;
 			t.htmlText = "<P ALIGN='CENTER'><FONT FACE='Helvetica, Arial' SIZE='12' COLOR='#000000' LETTERSPACING='0' KERNING='0'><B>ToolGroup "+this.version+"</B> - www.flamingo-mc.org</FONT></P>";
 			return;
 		}
-		this._visible = false;
+		this.container._visible = false;
 
 		//defaults
 		this.setConfig(defaultXML);
@@ -133,8 +130,8 @@ dynamic class gui.tools.ToolGroup extends AbstractPositionable implements Compon
 		delete xmls;
 		//remove xml from repository
 		flamingo.deleteXML(this);
-		this._visible = this["visible"];
-		flamingo.raiseEvent(this, "onInit", this);
+		this.container._visible = this.visible;
+		flamingo.raiseEvent(this, "onInit", this.id);		
 	}
 		
 	/**
@@ -143,6 +140,7 @@ dynamic class gui.tools.ToolGroup extends AbstractPositionable implements Compon
 	* @attr xml:Object Xml or string representation of a xml.
 	*/
 	function setConfig(xml:Object) {
+		Logger.console("SetConfig", xml);
 		if (typeof (xml) == "string") {
 			xml = new XML(String(xml));
 			xml = xml.firstChild;
@@ -177,6 +175,16 @@ dynamic class gui.tools.ToolGroup extends AbstractPositionable implements Compon
 		}
 		flamingo.addListener(lMap, listento, this);
 		resize();
+		
+		/*this.container._width = 100;
+		this.container._height = 100;		
+		this.container._x = 0;
+		this.container._x = 0; */
+		/*Logger.console("Width: "+this.container._width);
+		Logger.console("Height: "+this.container._height);
+		Logger.console("x: "+this.container._x);
+		Logger.console("y: "+this.container._y);*/
+		
 	}
 	function resize() {
 		var p = flamingo.getPosition(this);
@@ -254,6 +262,7 @@ dynamic class gui.tools.ToolGroup extends AbstractPositionable implements Compon
 	* @param xml:Object Xml or string representation of xml, describing tool.
 	*/
 	function addTool(xml:Object):Void {
+		Logger.console("AddTool: ", xml);
 		if (typeof (xml) == "string") {
 			xml = new XML(String(xml));
 			xml= xml.firstChild;
