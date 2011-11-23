@@ -15,12 +15,16 @@ class core.AbstractPositionable
 	private var _id:String;
 	//the movieclip that contains the visible part of the component.
 	private var _container:MovieClip;
-	
+	//version of component.
+	private var _version:String;	
 	//visible
 	private var _visible:Boolean = true;
 	//The strings that are used in this component
 	private var _strings:Object = new Object();
-	
+	//The cursors for the object
+	private var _cursors:Object = new Object();
+	//Styles for the object
+	private var _styles:TextField.StyleSheet= new TextField.StyleSheet();
 	/**
 	 * Constructor 
 	 * @param	id the id
@@ -106,7 +110,7 @@ class core.AbstractPositionable
 		return _global.flamingo;
 	}
 	
-	public function get visible():Boolean { 
+	public function get visible():Boolean { 		
 		return _visible;
 	}
 	
@@ -122,6 +126,30 @@ class core.AbstractPositionable
 	public function set strings(value:Object):Void 
 	{
 		_strings = value;
+	}
+	
+	public function get version():String {
+		return _version;
+	}
+	
+	public function set version(value:String):Void {
+		_version = value;
+	}
+	
+	public function get cursors():Object {
+		return _cursors;
+	}
+	
+	public function set cursors(value:Object):Void {
+		_cursors = value;
+	}
+	
+	public function get styles():TextField.StyleSheet {
+		return _styles;
+	}
+	
+	public function set styles(value:TextField.StyleSheet):Void {
+		_styles = value;
 	}
 	
 	

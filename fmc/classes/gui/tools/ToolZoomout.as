@@ -8,7 +8,7 @@ import gui.tools.AbstractTool;
 import gui.tools.ToolGroup;
 import tools.Logger;
 
-dynamic class gui.tools.ToolZoomout extends AbstractTool implements ComponentInterface
+class gui.tools.ToolZoomout extends AbstractTool implements ComponentInterface
 {	
 	//-----------------------------------------
 	var defaultXML:String = "<?xml version='1.0' encoding='UTF-8'?>" +
@@ -118,7 +118,7 @@ dynamic class gui.tools.ToolZoomout extends AbstractTool implements ComponentInt
 			}
 		};
 		if (flamingo == undefined) {
-			var t:TextField = this.createTextField("readme", 0, 0, 0, 550, 400);
+			var t:TextField = this.container.createTextField("readme", 0, 0, 0, 550, 400);
 			t.html = true;
 			t.htmlText = "<P ALIGN='CENTER'><FONT FACE='Helvetica, Arial' SIZE='12' COLOR='#000000' LETTERSPACING='0' KERNING='0'><B>ToolZoomout "+this.version+"</B> - www.flamingo-mc.org</FONT></P>";
 			return;
@@ -189,7 +189,7 @@ dynamic class gui.tools.ToolZoomout extends AbstractTool implements ComponentInt
 			}
 		}
 		this.setEnabled(enabled);
-		this.setVisible(this.visible);
+		//this.setVisible(this.visible);
 		_global.flamingo.position(this.container);
 	}
 	//default functions-------------------------------
