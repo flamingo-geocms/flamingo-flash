@@ -25,7 +25,13 @@ dynamic class gui.tools.ToolZoomout extends AbstractTool implements ComponentInt
 	var enabled = true
 	var rect:Object = new Object()
 	var thisObj = this
-	
+	/**
+	 * Constructor for creating a toolzoomout
+	 * @param	id the id of the tool
+	 * @param	toolGroup the toolgroup where this tool is added
+	 * @param	container the visible part of this tool (movieclip)
+	 * @see AbstractTool
+	 */
 	public function ToolZoomout(id:String, toolGroup:ToolGroup ,container:MovieClip) {		
 		this.toolDownLink = "assets/img/ToolZoomout_down.png";
 		this.toolUpLink = "assets/img/ToolZoomout_up.png";
@@ -134,6 +140,9 @@ dynamic class gui.tools.ToolZoomout extends AbstractTool implements ComponentInt
 		flamingo.raiseEvent(this, "onInit", this.id);			
 	}
 		
+	/*****************************************************************************
+	 * config/parse functions
+	 */
 	/**
 	* Configurates a component by setting a xml.
 	* @attr xml:Object Xml or string representation of a xml.
@@ -181,7 +190,6 @@ dynamic class gui.tools.ToolZoomout extends AbstractTool implements ComponentInt
 				break;
 			}
 		}
-		_parent.initTool(this, skin+"_up", skin+"_over", skin+"_down", skin+"_up", lMap, "cursor", "tooltip");
 		this.setEnabled(enabled);
 		this.setVisible(this.visible);
 		_global.flamingo.position(this.container);
@@ -192,37 +200,14 @@ dynamic class gui.tools.ToolZoomout extends AbstractTool implements ComponentInt
 	function stopIdentifying() {
 	}
 	function startUpdating() {
-
 		_parent.setCursor(this.cursors["busy"]);
 	}
 	function stopUpdating() {
 		
 		_parent.setCursor(this.cursors["cursor"]);
 	}
-	function releaseTool() {
-	}
-	function pressTool() {
-		//the toolgroup sets default a cursor
-		//override this default if a map is busy
-		if (_parent.updating) {
-			_parent.setCursor(this.cursors["busy"]);
-		}
-	}
-
 
 	//---------------------------------
-	/**
-	* Disable or enable a tool.
-	* @param enable:Boolean true or false
-	*/
-	//public function setEnabled(enable:Boolean):Void {
-	//}
-	/**
-	* Shows or hides a tool.
-	* @param visible:Boolean true or false
-	*/
-	//public function setVisible(visible:Boolean):Void {
-	//}
 	/** 
 	 * Dispatched when a component is up and ready to run.
 	 * @param comp:MovieClip a reference to the component.

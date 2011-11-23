@@ -7,7 +7,7 @@ import gui.tools.ToolGroup;
 import tools.Logger;
 class gui.tools.AbstractTool extends AbstractPositionable
 {
-	private var holder:MovieClip;
+	private var _holder:MovieClip;
 	private var _toolGroup:ToolGroup;
 	
 	//Is the tool active (used at the moment)
@@ -15,16 +15,19 @@ class gui.tools.AbstractTool extends AbstractPositionable
 	//Is the tool available to use?
 	private var _enabled:Boolean = true;
 	
-	private var mcUp:MovieClip;
-	private var mcOver:MovieClip;
-	private var mcDown:MovieClip;	
-	
+	//the movieclips that are shown.
+	private var _mcUp:MovieClip;
+	private var _mcOver:MovieClip;
+	private var _mcDown:MovieClip;	
+	//the links to the images.
 	private var _toolDownLink:String = null;
 	private var _toolUpLink:String = null;
 	private var _toolOverLink:String = null;
 	
+	//the id of the tooltip
 	private var _tooltipId:String = null;
 	
+	//the map listener. If this tool is active this object will listen to the actions done by the user.
 	private var _lMap:Object = new Object();
 	
 	public function AbstractTool(id, toolGroup:ToolGroup, container) {			
@@ -45,8 +48,7 @@ class gui.tools.AbstractTool extends AbstractPositionable
 				
 		this.mcDown._visible = false;
 		this.mcOver._visible = false;
-		this.mcUp._visible = true;
-		
+		this.mcUp._visible = true;		
 		
 		this.setPosition();
 		this.setEvents();		
@@ -84,34 +86,39 @@ class gui.tools.AbstractTool extends AbstractPositionable
 		this.container._x = 30;
 	}
 	
-	//getters and setters.
-	public function getMcUp():MovieClip {
-		return this.mcUp;
-	}
-	public function setMcUp(mcUp:MovieClip):Void {
-		this.mcUp = mcUp;
-	}
-	public function getMcOver():MovieClip {
-		return this.mcOver;
-	}
-	public function setMcOver(mcOver:MovieClip):Void {
-		this.mcOver = mcOver;
-	}
-	public function getMcDown():MovieClip {
-		return this.mcDown;
-	}
-	public function setMcDown(mcDown:MovieClip) {
-		this.mcDown = mcDown;
-	}	
 	
-	public function getId():String {
-		return this.id;
+	
+	/***********************************************************
+	 * Special getters / setters.... TODO: Still needed or implement in the other setters and getters?
+	 */ 
+	
+	/**
+	 * Get the listento. Default its the listento of the toolgroup
+	 */
+	public function get listento():String 
+	{
+		return this.toolGroup.listento;
 	}
-	
-	public function getHolder():MovieClip {
-		return this.holder;
-	}	
-	
+	/**
+	 * Enable/disable (grayout) the tool
+	 * @param	b true(enable) or false(disable
+	 */
+	public function setEnabled(b:Boolean):Void{
+		if (b) {
+			this.container._alpha = 100;
+		} else {
+			this.container._alpha = 20;
+			if (this.active) {
+				this.toolGroup.setCursor(undefined);				
+				this.setActive(false);
+			}
+		}
+		this._enabled = b;
+	}
+	/**
+	 * Active/deactivate the tool
+	 * @param	active true (Active) or false(deactivate)
+	 */ 
 	public function setActive(active:Boolean):Void {
 		//turn off
 		if (this.active && !active) {
@@ -140,8 +147,14 @@ class gui.tools.AbstractTool extends AbstractPositionable
 		};
 		 */
 	}
+	/***********************************************************
+	 * Getters and Setters.
+	 */ 
 	public function get active():Boolean {
 		return this._active;
+	}
+	public function set active(value:Boolean) {
+		this._active = value;
 	}
 	
 	public function get toolGroup():ToolGroup 
@@ -158,6 +171,9 @@ class gui.tools.AbstractTool extends AbstractPositionable
 		return _enabled;
 	}
 	
+	public function set enabled(value:Boolean) {
+		this._enabled = value;
+	}
 	public function get lMap():Object 
 	{
 		return _lMap;
@@ -167,13 +183,7 @@ class gui.tools.AbstractTool extends AbstractPositionable
 	{
 		_lMap = value;
 	}
-	/**
-	 * Get the listento. Default its the listento of the toolgroup
-	 */
-	public function get listento():String 
-	{
-		return this.toolGroup.listento;
-	}
+	
 	
 	public function get toolDownLink():String 
 	{
@@ -215,16 +225,45 @@ class gui.tools.AbstractTool extends AbstractPositionable
 		_tooltipId = value;
 	}
 	
-	public function setEnabled(b:Boolean):Void{
-		if (b) {
-			this.container._alpha = 100;
-		} else {
-			this.container._alpha = 20;
-			if (this.active) {
-				this.toolGroup.setCursor(undefined);				
-				this.setActive(false);
-			}
-		}
-		this._enabled = b;
+	public function get holder():MovieClip 
+	{
+		return _holder;
 	}
+	
+	public function set holder(value:MovieClip):Void 
+	{
+		_holder = value;
+	}
+	
+	public function get mcUp():MovieClip 
+	{
+		return _mcUp;
+	}
+	
+	public function set mcUp(value:MovieClip):Void 
+	{
+		_mcUp = value;
+	}
+	
+	public function get mcOver():MovieClip 
+	{
+		return _mcOver;
+	}
+	
+	public function set mcOver(value:MovieClip):Void 
+	{
+		_mcOver = value;
+	}
+	
+	public function get mcDown():MovieClip 
+	{
+		return _mcDown;
+	}
+	
+	public function set mcDown(value:MovieClip):Void 
+	{
+		_mcDown = value;
+	}
+	
+	
 }

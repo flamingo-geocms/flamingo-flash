@@ -976,11 +976,11 @@ class Flamingo {
 						toolGroup.setConfig(xmlNode);						
 						this.components[targetid] = toolGroup;
 					}else if (file == "ToolZoomout") {						
+						//get the last added toolgroup
 						var toolGroup:ToolGroup = this.toolGroups[this.toolGroups.length - 1];
 						var toolZoomout:ToolZoomout = new ToolZoomout(targetid, toolGroup, mc);
 						toolZoomout.setConfig(xmlNode);						
-						//this.tools.push(toolZoomin);						
-						//toolGroup.addTool(toolZoomout);
+						toolGroup.addTool(toolZoomout);
 						this.components[targetid] = toolZoomout;
 					}
 					this.components[targetid].type = type;			
@@ -2193,8 +2193,8 @@ class Flamingo {
 	/** 
 	* Adds a listener to (a) component(s).
 	* @param listener:Object Listener object.
-	* @param listento:Object MovieClip or componentid or array of componentids.
-	* @param caller:Object MovieClip or componentid which listens.
+	* @param listento:Object(a string with the id is adviced) MovieClip or componentid or array of componentids. 
+	* @param caller:Object(a AbstractListenerRegister is adviced) MovieClip or componentid which listens. 
 	* @see removeListener
 	*/
 	public function addListener(listener:Object, listento:Object, caller:Object):Void {

@@ -7,16 +7,25 @@ import tools.Logger;
  */
 class core.AbstractPositionable
 {	
+	//loaded ??
 	private var _loaded:Boolean = true;
+	//type of object
     private var _type:String = null;
-	
+	//the id of this object
 	private var _id:String;
+	//the movieclip that contains the visible part of the component.
 	private var _container:MovieClip;
 	
+	//visible
 	private var _visible:Boolean = true;
-	
+	//The strings that are used in this component
 	private var _strings:Object = new Object();
 	
+	/**
+	 * Constructor 
+	 * @param	id the id
+	 * @param	container the visible container.
+	 */
 	public function AbstractPositionable (id:String, container:MovieClip) {
 		Logger.console("Positionable with id: " , id);
 		this.id = id;
@@ -33,6 +42,9 @@ class core.AbstractPositionable
 		return this.container.hitTest(x, y, shapeFlag);
 	}
 	
+	/***********************************************************************
+	*functions that are needed to work with old (not OO) flamingo code
+	*/
 	public function get target():String {
 		return this.container._target;
 	}
@@ -45,11 +57,12 @@ class core.AbstractPositionable
 	public function get parent():MovieClip {
 		return this.container._parent;
 	}
-		
-	/**
-	 * todo implement movieclip interface en toepassen op container
+	/***********************************************************************/	
+	/***********************************************************************
+	 * Getters and Setters.
 	 */
 	
+		
 	public function get id():String 
 	{
 		return _id;
@@ -102,7 +115,7 @@ class core.AbstractPositionable
 		Logger.console("*** AbstractPositionable.setVisible");
 		_visible = value;
 	}
-	
+		
 	public function get strings():Object 
 	{
 		Logger.console("*** AbstractPositionable.getStrings");
@@ -114,23 +127,6 @@ class core.AbstractPositionable
 		Logger.console("*** AbstractPositionable.setStrings");
 		_strings = value;
 	}
-	/*
-	public function get widht():Number {
-		Logger.console("**** get width");
-		return this.container._width;
-	}
-	public function set width(width:Number) {
-		Logger.console("**** set width");
-		this.container._width = width;
-	}
-	public function get height():Number {
-		Logger.console("**** get height");
-		return this.container._height;
-	}
-	public function set height(height:Number) {
-		Logger.console("**** set height");
-		this._container._height = height;
-	}*/
 	
 	
 }
