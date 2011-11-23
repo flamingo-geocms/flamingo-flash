@@ -38,7 +38,6 @@ dynamic class gui.tools.ToolZoomout extends AbstractTool implements ComponentInt
 		this.toolOverLink = "assets/img/ToolZoomout_over.png";
 		this.tooltipId = "tooltip";
 		super(id, toolGroup, container);		
-		Logger.console("ToolZoomout constructor");	
 		init();
 	}	
 	
@@ -148,7 +147,6 @@ dynamic class gui.tools.ToolZoomout extends AbstractTool implements ComponentInt
 	* @attr xml:Object Xml or string representation of a xml.
 	*/
 	function setConfig(xml:Object) {
-		Logger.console("Toolzoomout.setConfig()",xml);
 		if (typeof (xml) == "string") {
 			xml = new XML(String(xml));
 			xml = xml.firstChild;
@@ -200,14 +198,15 @@ dynamic class gui.tools.ToolZoomout extends AbstractTool implements ComponentInt
 	function stopIdentifying() {
 	}
 	function startUpdating() {
-		_parent.setCursor(this.cursors["busy"]);
+		this._parent.setCursor(this.cursors["busy"]);
 	}
-	function stopUpdating() {
-		
-		_parent.setCursor(this.cursors["cursor"]);
+	function stopUpdating() {		
+		this._parent.setCursor(this.cursors["cursor"]);
 	}
 
-	//---------------------------------
+	/**
+	 * Events
+	 */
 	/** 
 	 * Dispatched when a component is up and ready to run.
 	 * @param comp:MovieClip a reference to the component.
@@ -215,8 +214,5 @@ dynamic class gui.tools.ToolZoomout extends AbstractTool implements ComponentInt
 	//public function onInit(comp:MovieClip):Void {
 	//}
 	
-	public function get _parent():ToolGroup {
-		return toolGroup;
-	}
 	
 }

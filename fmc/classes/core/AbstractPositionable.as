@@ -107,24 +107,20 @@ class core.AbstractPositionable
 	}
 	
 	public function get visible():Boolean { 
-		Logger.console("*** AbstractPositionable.getVisible");
 		return _visible;
 	}
 	
 	public function set visible(value:Boolean):Void{
-		Logger.console("*** AbstractPositionable.setVisible");
 		_visible = value;
 	}
 		
 	public function get strings():Object 
 	{
-		Logger.console("*** AbstractPositionable.getStrings");
 		return _strings;
 	}
 	
 	public function set strings(value:Object):Void 
 	{
-		Logger.console("*** AbstractPositionable.setStrings");
 		_strings = value;
 	}
 	

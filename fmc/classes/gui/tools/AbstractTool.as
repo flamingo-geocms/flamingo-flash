@@ -85,8 +85,10 @@ class gui.tools.AbstractTool extends AbstractPositionable
 	public function setPosition():Void {
 		this.container._x = 30;
 	}
-	
-	
+		
+	public function get _parent():ToolGroup {
+		return this.toolGroup;
+	}
 	
 	/***********************************************************
 	 * Special getters / setters.... TODO: Still needed or implement in the other setters and getters?
@@ -125,11 +127,15 @@ class gui.tools.AbstractTool extends AbstractPositionable
 			Logger.console("Turn off button: "+this.id);
 			flamingo.removeListener(this.lMap, this.listento, this.toolGroup);			
 			this.mcDown._visible = false;
+			this.mcOver._visible = false;
+			this.mcUp._visible = true;
 			//TODO: Set correct cursor this.setCursor(mc.cursors[cursorid]);
 		}//turn on
 		else if (!this.active && active) {
 			Logger.console("Turn on button: " + this.id);			
-			flamingo.addListener(this.lMap, this.listento, this.toolGroup);			
+			flamingo.addListener(this.lMap, this.listento, this.toolGroup);	
+			this.mcUp._visible = false;
+			this.mcOver._visible = false;
 			this.mcDown._visible = true;		
 			//TODO: Set correct cursor this.setCursor(mc.cursors[cursorid]);
 			//see toolgroup initTool

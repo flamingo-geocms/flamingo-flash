@@ -9,7 +9,7 @@ import tools.Logger;
  * @author Roy Braam
  */
 dynamic class gui.tools.ToolGroup extends AbstractListenerRegister implements ComponentInterface
-{	
+{		
 	//Old vars
 	private var _tool:String;
 	private var _defaulttool:String;	
@@ -50,7 +50,7 @@ dynamic class gui.tools.ToolGroup extends AbstractListenerRegister implements Co
 	 * Init function
 	 */
 	function init() {
-		var thisObj = this;
+		var thisObj:ToolGroup = this;
 		//----listener objects---------		
 		lFlamingo.onConfigComplete = function() {
 			thisObj.checkFinishUpdate();
@@ -129,7 +129,6 @@ dynamic class gui.tools.ToolGroup extends AbstractListenerRegister implements Co
 			xml = xml.firstChild;
 		}
 		//load default attributes, strings, styles and cursors 
-		Logger.console("Setconfig after check: "+xml);
 		flamingo.parseXML(this, xml);
 		//parse custom attributes
 		for (var attr in xml.attributes) {
@@ -142,7 +141,7 @@ dynamic class gui.tools.ToolGroup extends AbstractListenerRegister implements Co
 				}
 				break;
 			case "tool" :
-				tool = val.toLowerCase();
+				this.tool = val.toLowerCase();
 				break;
 			case "defaulttool" :
 				defaulttool = val.toLowerCase();
@@ -205,7 +204,7 @@ dynamic class gui.tools.ToolGroup extends AbstractListenerRegister implements Co
 	 * @return	The tool
 	 */
 	function getTool(toolId:String):AbstractTool {
-		for (var i = 0; i < this.tools; i++) {
+		for (var i = 0; i < this.tools.length; i++) {
 			var t:AbstractTool = AbstractTool(this.tools[i]);
 			if (t.id == toolId) {
 				return t;
@@ -315,9 +314,10 @@ dynamic class gui.tools.ToolGroup extends AbstractListenerRegister implements Co
 		if (toolid == undefined) {
 			return;
 		}
-		flamingo.raiseEvent(this, "onReleaseTool", this, tool);
-		this.getTool(this.tool).setActive(false);
-		//flamingo.getComponent(tool)._releaseTool();		
+		if(this.tool!=undefined){
+			flamingo.raiseEvent(this, "onReleaseTool", this, tool);
+			this.getTool(this.tool).setActive(false);
+		}
 		this.tool = toolid;
 		this.getTool(this.tool).setActive(true);
 		flamingo.raiseEvent(this, "onSetTool", this, tool);
@@ -459,7 +459,4 @@ dynamic class gui.tools.ToolGroup extends AbstractListenerRegister implements Co
 	{
 		_defaultXML = value;
 	}
-	
-	
-	
 }
