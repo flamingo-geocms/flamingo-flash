@@ -1,12 +1,14 @@
+import core.AbstractListenerRegister;
 import core.AbstractPositionable;
 import core.ComponentInterface;
+import core.ListenerCreator;
 import gui.tools.AbstractTool;
 import tools.Logger;
 /**
  * ...
  * @author Roy Braam
  */
-dynamic class gui.tools.ToolGroup extends AbstractPositionable implements ComponentInterface
+dynamic class gui.tools.ToolGroup extends AbstractListenerRegister implements ComponentInterface
 {	
 	private var _tool:String;
 	
@@ -33,7 +35,7 @@ dynamic class gui.tools.ToolGroup extends AbstractPositionable implements Compon
 		tools = new Array();		
 		init();
 	}
-			
+	
 	function setAttribute(name:String, value:String):Void { 
 		var nametoLower = name.toLowerCase();
 		switch(nametoLower) {
@@ -146,7 +148,8 @@ dynamic class gui.tools.ToolGroup extends AbstractPositionable implements Compon
 			xml = xml.firstChild;
 		}
 		//load default attributes, strings, styles and cursors 
-		flamingo.parseXML(this, XML(xml));
+		Logger.console("Setconfig after check: "+xml);
+		flamingo.parseXML(this, xml);
 		//parse custom attributes
 		for (var attr in xml.attributes) {
 			attr = attr.toLowerCase();
@@ -175,15 +178,6 @@ dynamic class gui.tools.ToolGroup extends AbstractPositionable implements Compon
 		}
 		flamingo.addListener(lMap, listento, this);
 		resize();
-		
-		/*this.container._width = 100;
-		this.container._height = 100;		
-		this.container._x = 0;
-		this.container._x = 0; */
-		/*Logger.console("Width: "+this.container._width);
-		Logger.console("Height: "+this.container._height);
-		Logger.console("x: "+this.container._x);
-		Logger.console("y: "+this.container._y);*/
 		
 	}
 	function resize() {

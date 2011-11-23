@@ -35,6 +35,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 * ExternalInterface.call("dispatchEventJS",event_to_fire, arguments);
 * Author:Linda Vels,IDgis bv
 */
+import core.AbstractComponent;
+import core.AbstractListenerRegister;
 import core.AbstractPositionable;
 import core.ComponentInterface;
 import flash.external.ExternalInterface;
@@ -1219,7 +1221,6 @@ class Flamingo {
 				break;
 			}
 		}
-		Logger.console("Set defaults: " + mc.id);
 		//parse strings,cursors, styles, guides
 		if (mc.strings == undefined) {
 			mc.strings = new Object();
@@ -1239,7 +1240,6 @@ class Flamingo {
 			var node = nodes[i];
 			switch (node.nodeName.toLowerCase()) {
 			case "string" :
-				Logger.console("String: " + node);
 				this.setString(node, mc.strings);
 				break;
 			case "style" :
@@ -1479,7 +1479,6 @@ class Flamingo {
 		if (xml == undefined) {
 			return null;
 		}
-		Logger.console("Flamingo.setString(): " + xml);
 		var a_languages:Array = this.asArray(this.languages.toLowerCase());
 		var langs:Object;
 		if (this.languages.length>0) {
@@ -1541,10 +1540,8 @@ class Flamingo {
 						b = true;
 					}
 				}
-				Logger.console("Language: "+language);
 				language[id] = new Object();
 				language[id] = obj;
-			Logger.console("Strings found: " + obj.nl);
 			}
 			delete obj;
 		}
@@ -1718,7 +1715,6 @@ class Flamingo {
 	*/
 	public function showTooltip(tiptext:String, object:Object, delay:Number, reset:Boolean):Void {
 		if (tiptext.length == 0 || tiptext == undefined) {
-			Logger.console("flamingo.showToolTip() no text");
 			return;
 		}
 		if (delay == undefined) {
@@ -1735,9 +1731,7 @@ class Flamingo {
 			obj.flamingo = this;
 			obj.mflamingo = this.mFlamingo;
 			_global['setTimeout'](this, '_showTooltip', delay, obj);
-			Logger.console("flamingo.showToolTip() make new tooltip");
 		} else {
-			Logger.console("flamingo.showToolTip() use existing");
 			if (reset) {
 				this.tiptext = tiptext;
 			} else {
@@ -1777,7 +1771,6 @@ class Flamingo {
 		}
 	}
 	private function _showTooltip(obj):Void {
-		Logger.console("flamingo._showTooltip() jey, tooltip delay passed.");
 		// interval: checks if object is hit, of not so let tooltip dissapear
 		var object = obj.object;
 		var flamingo = obj.flamingo;
@@ -1999,11 +1992,21 @@ class Flamingo {
 			if (this.components[c_id].parent == id) {
 				this.killComponent(c_id);
 			}
+		}		
+		//remove listeners from AbstractListenerRegister's
+		if (comp instanceof AbstractListenerRegister) {
+			var component:AbstractListenerRegister = AbstractListenerRegister(comp);
+			var listeners = component.registerdListeners;
+			for (var listenerid in listeners) {
+				for (var i = 0; i < listeners[listenerid].length; i++) {
+					this.removeListener(listeners[listenerid][i], listenerid,comp);
+				}
+			}
 		}
 		//removelisteners
 		for (var listenerid in this.components[id]._addedlisteners) {
 			for (var i = 0; i<this.components[id]._addedlisteners[listenerid].length; i++) {
-				this.removeListener(this.components[id]._addedlisteners[listenerid][i], listenerid);
+				this.removeListener(this.components[id]._addedlisteners[listenerid][i], listenerid,comp);
 			}
 		}
 		//check  if there are other components with same url
@@ -2133,11 +2136,11 @@ class Flamingo {
 	* @see addListener
 	*/
 	public function removeListener(listener:Object, listento:Object, caller:Object):Void {
-		var id:String;
+		var listentoId:String;
 		if (listento == this) {
-			id = "flamingo";
+			listentoId = "flamingo";
 		} else if (listento == undefined) {
-			id = "flamingo";
+			listentoId = "flamingo";
 		} else {
 			switch (typeof (listento)) {
 			case "object" :
@@ -2147,13 +2150,13 @@ class Flamingo {
 				return;
 				break;
 			case "string" :
-				id = String(listento);
+				listentoId= String(listento);
 				break;
 			case "movieclip" :
 				if (listento == this.mFlamingo) {
-					id = "flamingo";
+					listentoId = "flamingo";
 				} else {
-					id = getId(listento);
+					listentoId = getId(listento);
 					//search for the main movie of the parent
 					//the main movie always extists in components
 					//while (this.components[id] == undefined) {
@@ -2167,17 +2170,21 @@ class Flamingo {
 				break;
 			}
 		}
-		if (id == undefined) {
+		if (listentoId == undefined) {
 			return;
 		}
-		this.components[id].removeListener(listener);
-		if (caller != undefined) {
+		this.components[listentoId].removeListener(listener);
+		
+		if (caller!=undefined && caller instanceof AbstractListenerRegister) {
+			var listenerRegister:AbstractListenerRegister = AbstractListenerRegister(caller);
+			listenerRegister.removeAddedListener(listentoId, listener);
+		}else if (caller != undefined) {
 			//remove a reference of the functions at the component repository
 			//if component get killed  the listeners first based on this list
 			var callerid = getId(caller);
-			for (var i = 0; i<this.components[callerid]._addedlisteners[id].length; i++) {
-				if (this.components[callerid]._addedlisteners[id][i] == listener) {
-					this.components[callerid]._addedlisteners[id].splice(i);
+			for (var i = 0; i<this.components[callerid]._addedlisteners[listentoId].length; i++) {
+				if (this.components[callerid]._addedlisteners[listentoId][i] == listener) {
+					this.components[callerid]._addedlisteners[listentoId].splice(i);
 					break;
 				}
 			}
@@ -2191,14 +2198,14 @@ class Flamingo {
 	* @see removeListener
 	*/
 	public function addListener(listener:Object, listento:Object, caller:Object):Void {
-		var id:String;
+		var listentoId:String;
 		if (listento == undefined) {
 			return;
 		}
 		if (listento == this) {
-			id = "flamingo";
+			listentoId = "flamingo";
 		} else if (listento.toLowerCase() == "flamingo") {
-			id = "flamingo";
+			listentoId = "flamingo";
 		} else {
 			switch (typeof (listento)) {
 			case "object" :
@@ -2208,18 +2215,18 @@ class Flamingo {
 				return;
 				break;
 			case "string" :
-				id = String(listento);
+				listentoId = String(listento);
 				break;
 			case "movieclip" :
 				if (listento == this.mFlamingo) {
-					id = "flamingo";
+					listentoId = "flamingo";
 				} else {
-					id = getId(listento);
+					listentoId = getId(listento);
 					//search for the main movie of the parent
 					//the main movie always extists in components
-					//while (this.components[id] == undefined) {
+					//while (this.components[listentoId] == undefined) {
 					//listento = listento._parent;
-					//id = listento._name;
+					//listentoId = listento._name;
 					//if (listento == undefined) {
 					//break;
 					//}
@@ -2228,32 +2235,36 @@ class Flamingo {
 				break;
 			}
 		}
-		if (id == undefined) {
+		if (listentoId == undefined) {
 			return;
 		}
-		if (this.components[id] == undefined) {
+		if (this.components[listentoId] == undefined) {
 			//Just make a reference 
-			this.components[id] = new Object();
+			this.components[listentoId] = new Object();
 			//trace(">"+listento+"<");
-			//trace(id);
-			//this.showError("Warning", "a component wants to listen to <b>'"+id+"'</b>"+newline+"Unfortunaly <b>"+id+"</b> doesn't exist"+newline+"Please check your ini.xml...");
+			//trace(listentoId);
+			//this.showError("Warning", "a component wants to listen to <b>'"+listentoId+"'</b>"+newline+"Unfortunaly <b>"+listentoId+"</b> doesn't exist"+newline+"Please check your ini.xml...");
 			//return;
 		}
-		if (this.components[id].addListener == undefined) {
-			AsBroadcaster.initialize(this.components[id]);
+		if (this.components[listentoId].addListener == undefined) {
+			AsBroadcaster.initialize(this.components[listentoId]);
 		}
-		this.components[id].addListener(listener);
-		if (caller != undefined) {
+		this.components[listentoId].addListener(listener);
+		
+		if (caller!=undefined && caller instanceof AbstractListenerRegister) {
+			var listenerRegister:AbstractListenerRegister = AbstractListenerRegister(caller);
+			listenerRegister.addAddedListener(listentoId, listener);
+		}else if (caller != undefined) {
 			//store a reference of the functions at the component repository
 			//if component get killed  the listeners first based on this list
 			var callerid = getId(caller);
 			if (this.components[callerid]._addedlisteners == undefined) {
 				this.components[callerid]._addedlisteners = new Object();
 			}
-			if (this.components[callerid]._addedlisteners[id] == undefined) {
-				this.components[callerid]._addedlisteners[id] = new Array();
+			if (this.components[callerid]._addedlisteners[listentoId] == undefined) {
+				this.components[callerid]._addedlisteners[listentoId] = new Array();
 			}
-			this.components[callerid]._addedlisteners[id].push(listener);
+			this.components[callerid]._addedlisteners[listentoId].push(listener);
 		}
 	}
 	/**
@@ -2519,9 +2530,6 @@ class Flamingo {
 		}
 		//1 search in langauge object of component                                                                                                                                                                                                                                                                                                          
 		var strings:Object = mc.strings;
-		if (id == "zoomout") {
-			Logger.console("The strings " + strings);
-		}
 		if (strings != undefined) {
 			s =  strings[stringid.toLowerCase()][lang.toLowerCase()];
 			if (s == undefined) {

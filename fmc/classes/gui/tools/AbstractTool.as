@@ -50,11 +50,6 @@ class gui.tools.AbstractTool extends AbstractPositionable
 		
 		this.setPosition();
 		this.setEvents();		
-		
-		Logger.console("Width: "+this.mcUp._width);
-		Logger.console("Height: "+this.mcUp._height);
-		Logger.console("x: "+this.mcUp._x);
-		Logger.console("y: "+this.mcUp._y);
 	}
 		
 	public function setEvents():Void {		
@@ -126,7 +121,7 @@ class gui.tools.AbstractTool extends AbstractPositionable
 			//TODO: Set correct cursor this.setCursor(mc.cursors[cursorid]);
 		}//turn on
 		else if (!this.active && active) {
-			Logger.console("Turn on button: "+this.id);
+			Logger.console("Turn on button: " + this.id);			
 			flamingo.addListener(this.lMap, this.listento, this.toolGroup);			
 			this.mcDown._visible = true;		
 			//TODO: Set correct cursor this.setCursor(mc.cursors[cursorid]);
