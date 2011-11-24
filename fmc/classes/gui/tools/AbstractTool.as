@@ -11,21 +11,21 @@ class gui.tools.AbstractTool extends AbstractPositionable
 	private var _toolGroup:ToolGroup;
 	
 	//Is the tool active (used at the moment)
-	private var _active:Boolean = false;
+	private var _active:Boolean;
 	//Is the tool available to use?
-	private var _enabled:Boolean = true;
+	private var _enabled:Boolean;
 	
 	//the movieclips that are shown.
 	private var _mcUp:MovieClip;
 	private var _mcOver:MovieClip;
 	private var _mcDown:MovieClip;	
 	//the links to the images.
-	private var _toolDownLink:String = null;
-	private var _toolUpLink:String = null;
-	private var _toolOverLink:String = null;
+	private var _toolDownLink:String;
+	private var _toolUpLink:String;
+	private var _toolOverLink:String;
 	
 	//the id of the tooltip
-	private var _tooltipId:String = null;
+	private var _tooltipId:String;
 	
 	//the map listener. If this tool is active this object will listen to the actions done by the user.
 	private var _lMap:Object;
@@ -33,8 +33,13 @@ class gui.tools.AbstractTool extends AbstractPositionable
 	public function AbstractTool(id, toolGroup:ToolGroup, container) {			
 		super(id, container);
 		Logger.console("AbstractTool Construct");
-		this.lMap = new Object();
 		this.toolGroup = toolGroup;
+		
+		
+		//init vars
+		this.lMap = new Object();
+		this.active = false;
+		this.enabled = true;
 		
 		this.holder = this.container.createEmptyMovieClip("tool_" + id + "_holder", this.container.getNextHighestDepth());
 		

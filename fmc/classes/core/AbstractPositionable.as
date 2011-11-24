@@ -8,9 +8,9 @@ import tools.Logger;
 class core.AbstractPositionable
 {	
 	//loaded ??
-	private var _loaded:Boolean = true;
+	private var _loaded:Boolean;
 	//type of object
-    private var _type:String = null;
+    private var _type:String;
 	//the id of this object
 	private var _id:String;
 	//the movieclip that contains the visible part of the component.
@@ -18,13 +18,13 @@ class core.AbstractPositionable
 	//version of component.
 	private var _version:String;	
 	//visible
-	private var _visible:Boolean = true;
+	private var _visible:Boolean;
 	//The strings that are used in this component
-	private var _strings:Object = new Object();
+	private var _strings:Object;
 	//The cursors for the object
-	private var _cursors:Object = new Object();
+	private var _cursors:Object;
 	//Styles for the object
-	private var _styles:TextField.StyleSheet= new TextField.StyleSheet();
+	private var _styles:TextField.StyleSheet;
 	/**
 	 * Constructor 
 	 * @param	id the id
@@ -34,6 +34,13 @@ class core.AbstractPositionable
 		Logger.console("Positionable with id: " , id);
 		this.id = id;
 		this.container = container;
+		
+		//init vars
+		loaded = true;
+		visible = true;
+		this.strings = new Object();
+		this.cursors = new Object();
+		this.styles = new TextField.StyleSheet();
 	}
 	/**
 	 * Pass the hittest to the movieclip
