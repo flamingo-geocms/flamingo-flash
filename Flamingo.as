@@ -42,6 +42,7 @@ import core.ComponentInterface;
 import flash.external.ExternalInterface;
 import flash.filters.DropShadowFilter;
 import gui.tools.ToolGroup;
+import gui.tools.ToolZoomin;
 import gui.tools.ToolZoomout;
 import tools.Logger;
 
@@ -982,6 +983,13 @@ class Flamingo {
 						toolZoomout.setConfig(xmlNode);						
 						toolGroup.addTool(toolZoomout);
 						this.components[targetid] = toolZoomout;
+					}else if (file == "ToolZoomin") {						
+						//get the last added toolgroup
+						var toolGroup:ToolGroup = this.toolGroups[this.toolGroups.length - 1];
+						var toolZoomin:ToolZoomin = new ToolZoomin(targetid, toolGroup, mc);
+						toolZoomin.setConfig(xmlNode);						
+						toolGroup.addTool(toolZoomin);
+						this.components[targetid] = toolZoomin;
 					}
 					this.components[targetid].type = type;			
 					this.raiseEvent(this, "onLoadComponent", targetid);	
@@ -1034,6 +1042,7 @@ class Flamingo {
 	
 	private function isEmbeddedComponents(file:String):Boolean {
 		switch(file) {
+			case "ToolZoomin":
 			case "ToolZoomout":
 			case "ToolGroup":
 				return true;
@@ -2035,7 +2044,7 @@ class Flamingo {
 	* @return MovieClip The component.
 	*/
 	public function getComponent(id:String):MovieClip {
-		if (this.components[id] instanceof AbstractPositionable) {
+		if (this.components[id] instanceof AbstractPositionable) {					
 			return this.components[id];
 		}else{
 			return eval(this.components[id].target);

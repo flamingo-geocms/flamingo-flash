@@ -61,6 +61,9 @@ class core.AbstractPositionable
 	public function get parent():MovieClip {
 		return this.container._parent;
 	}
+	public function get flamingo():Flamingo {
+		return _global.flamingo;
+	}
 	/***********************************************************************/	
 	/***********************************************************************
 	 * Getters and Setters.
@@ -68,7 +71,7 @@ class core.AbstractPositionable
 	
 		
 	public function get id():String 
-	{
+	{		
 		return _id;
 	}
 	
@@ -105,11 +108,7 @@ class core.AbstractPositionable
 	{
 		_type = value;
 	}
-	
-	public function get flamingo():Flamingo {
-		return _global.flamingo;
-	}
-	
+		
 	public function get visible():Boolean { 		
 		return _visible;
 	}

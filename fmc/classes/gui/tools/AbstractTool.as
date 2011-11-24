@@ -28,11 +28,12 @@ class gui.tools.AbstractTool extends AbstractPositionable
 	private var _tooltipId:String = null;
 	
 	//the map listener. If this tool is active this object will listen to the actions done by the user.
-	private var _lMap:Object = new Object();
+	private var _lMap:Object;
 	
 	public function AbstractTool(id, toolGroup:ToolGroup, container) {			
 		super(id, container);
 		Logger.console("AbstractTool Construct");
+		this.lMap = new Object();
 		this.toolGroup = toolGroup;
 		
 		this.holder = this.container.createEmptyMovieClip("tool_" + id + "_holder", this.container.getNextHighestDepth());
@@ -75,10 +76,11 @@ class gui.tools.AbstractTool extends AbstractPositionable
 		this.holder.onRelease = function() {
 			Logger.console("onRelease "+thisObj.active);
 			if (!thisObj.active) {
-				thisObj.setActive(true);
+				thisObj.toolGroup.setTool(thisObj.id);
+				//thisObj.setActive(true);
 				thisObj.mcOver._visible = false;
 			}else {
-				thisObj.setActive(false);				
+				//thisObj.setActive(false);				
 			}
 		}
 	}
@@ -124,7 +126,7 @@ class gui.tools.AbstractTool extends AbstractPositionable
 	public function setActive(active:Boolean):Void {
 		//turn off
 		if (this.active && !active) {
-			Logger.console("Turn off button: "+this.id);
+			Logger.console("Turn off button: " + this.id);
 			flamingo.removeListener(this.lMap, this.listento, this.toolGroup);			
 			this.mcDown._visible = false;
 			this.mcOver._visible = false;
@@ -132,7 +134,7 @@ class gui.tools.AbstractTool extends AbstractPositionable
 			//TODO: Set correct cursor this.setCursor(mc.cursors[cursorid]);
 		}//turn on
 		else if (!this.active && active) {
-			Logger.console("Turn on button: " + this.id);			
+			Logger.console("Turn on button: " + this.id);		
 			flamingo.addListener(this.lMap, this.listento, this.toolGroup);	
 			this.mcUp._visible = false;
 			this.mcOver._visible = false;
