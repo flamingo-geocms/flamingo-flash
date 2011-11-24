@@ -56,7 +56,6 @@ class gui.tools.ToolZoomout extends AbstractTool implements ComponentInterface
 		this.toolDownLink = "assets/img/ToolZoomout_down.png";
 		this.toolUpLink = "assets/img/ToolZoomout_up.png";
 		this.toolOverLink = "assets/img/ToolZoomout_over.png";
-		this.tooltipId = "tooltip";
 		super(id, toolGroup, container);		
 		init();
 	}	

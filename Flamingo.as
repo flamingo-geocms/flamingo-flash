@@ -993,7 +993,7 @@ class Flamingo {
 					}
 					this.components[targetid].type = type;			
 					this.raiseEvent(this, "onLoadComponent", targetid);	
-					Logger.console("Done Loading: "+targetid);	
+					Logger.console("Done Loading: " + targetid);
 					this.doneLoading();				
 				}
 				

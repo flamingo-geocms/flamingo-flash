@@ -57,7 +57,6 @@ class gui.tools.ToolZoomin extends AbstractTool implements ComponentInterface{
 		this.toolDownLink = "assets/img/ToolZoomin_down.png";
 		this.toolUpLink = "assets/img/ToolZoomin_up.png";
 		this.toolOverLink = "assets/img/ToolZoomin_over.png";
-		this.tooltipId = "tooltip";
 		super(id, toolGroup, container);		
 		init();
 	}	

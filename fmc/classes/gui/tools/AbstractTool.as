@@ -24,7 +24,7 @@ class gui.tools.AbstractTool extends AbstractPositionable
 	private var _toolUpLink:String;
 	private var _toolOverLink:String;
 	
-	//the id of the tooltip
+	//the id of the tooltip (default: 'tooltip');
 	private var _tooltipId:String;
 	
 	//the map listener. If this tool is active this object will listen to the actions done by the user.
@@ -35,11 +35,12 @@ class gui.tools.AbstractTool extends AbstractPositionable
 		Logger.console("AbstractTool Construct");
 		this.toolGroup = toolGroup;
 		
-		
 		//init vars
 		this.lMap = new Object();
 		this.active = false;
 		this.enabled = true;
+		
+		this.tooltipId = "tooltip";
 		
 		this.holder = this.container.createEmptyMovieClip("tool_" + id + "_holder", this.container.getNextHighestDepth());
 		
@@ -63,29 +64,35 @@ class gui.tools.AbstractTool extends AbstractPositionable
 	public function setEvents():Void {		
 		var thisObj:AbstractTool = this;
 		this.holder.onRollOver = function() {
-			Logger.console("onRollOver " + thisObj.active);			
-			var id = thisObj.flamingo.getId(thisObj);
-			thisObj.flamingo.showTooltip(thisObj.flamingo.getString(thisObj, thisObj.tooltipId), thisObj);
-			if (!thisObj.active) {
-				thisObj.mcOver._visible = true;
-				thisObj.mcUp._visible = false;				
+			Logger.console("onRollOver " + thisObj.active);		
+			if (thisObj.enabled){
+				var id = thisObj.flamingo.getId(thisObj);
+				thisObj.flamingo.showTooltip(thisObj.flamingo.getString(thisObj, thisObj.tooltipId), thisObj);
+				if (!thisObj.active) {
+					thisObj.mcOver._visible = true;
+					thisObj.mcUp._visible = false;				
+				}
 			}
 		}
 		this.holder.onRollOut = function() {
 			Logger.console("onRollOut "+thisObj.active);			
-			if (!thisObj.active) {
-				thisObj.mcOver._visible = false;
-				thisObj.mcUp._visible = true;				
+			if (thisObj.enabled) {
+				if (!thisObj.active) {
+					thisObj.mcOver._visible = false;
+					thisObj.mcUp._visible = true;				
+				}
 			}
 		}
 		this.holder.onRelease = function() {
 			Logger.console("onRelease "+thisObj.active);
-			if (!thisObj.active) {
-				thisObj.toolGroup.setTool(thisObj.id);
-				//thisObj.setActive(true);
-				thisObj.mcOver._visible = false;
-			}else {
-				//thisObj.setActive(false);				
+			if (thisObj.enabled) {
+				if (!thisObj.active) {
+					thisObj.toolGroup.setTool(thisObj.id);
+					//thisObj.setActive(true);
+					thisObj.mcOver._visible = false;				
+				}else {
+					//thisObj.setActive(false);				
+				}
 			}
 		}
 	}
@@ -104,7 +111,7 @@ class gui.tools.AbstractTool extends AbstractPositionable
 	/**
 	 * Get the listento. Default its the listento of the toolgroup
 	 */
-	public function get listento():String 
+	public function get listento():Array 
 	{
 		return this.toolGroup.listento;
 	}
@@ -132,7 +139,8 @@ class gui.tools.AbstractTool extends AbstractPositionable
 		//turn off
 		if (this.active && !active) {
 			Logger.console("Turn off button: " + this.id);
-			flamingo.removeListener(this.lMap, this.listento, this.toolGroup);			
+			flamingo.removeListener(this.lMap, this.listento, this.toolGroup);		
+			this.toolGroup.setCursor(undefined);
 			this.mcDown._visible = false;
 			this.mcOver._visible = false;
 			this.mcUp._visible = true;
@@ -140,7 +148,8 @@ class gui.tools.AbstractTool extends AbstractPositionable
 		}//turn on
 		else if (!this.active && active) {
 			Logger.console("Turn on button: " + this.id);		
-			flamingo.addListener(this.lMap, this.listento, this.toolGroup);	
+			flamingo.addListener(this.lMap, this.listento, this.toolGroup);
+			this.toolGroup.setCursor(this.cursors[this.cursorId]);
 			this.mcUp._visible = false;
 			this.mcOver._visible = false;
 			this.mcDown._visible = true;		
@@ -277,6 +286,5 @@ class gui.tools.AbstractTool extends AbstractPositionable
 	{
 		_mcDown = value;
 	}
-	
 	
 }

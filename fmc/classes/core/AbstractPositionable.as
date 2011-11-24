@@ -25,6 +25,12 @@ class core.AbstractPositionable
 	private var _cursors:Object;
 	//Styles for the object
 	private var _styles:TextField.StyleSheet;
+	
+	//the id of the cursor (default: 'cursor');
+	private var _cursorId:String;
+	//a array of id's to listen to
+	private var _listento:Array;
+	
 	/**
 	 * Constructor 
 	 * @param	id the id
@@ -36,8 +42,9 @@ class core.AbstractPositionable
 		this.container = container;
 		
 		//init vars
-		loaded = true;
-		visible = true;
+		this.cursorId = "cursor";
+		this.loaded = true;
+		this.visible = true;
 		this.strings = new Object();
 		this.cursors = new Object();
 		this.styles = new TextField.StyleSheet();
@@ -52,6 +59,10 @@ class core.AbstractPositionable
 	public function hitTest(x:Number, y:Number, shapeFlag:Boolean):Boolean {
 		return this.container.hitTest(x, y, shapeFlag);
 	}
+	
+	/*public function setCursor(cursor:String):Void {			
+		flamingo.showCursor(cursor);		
+	}*/
 	
 	/***********************************************************************
 	*functions that are needed to work with old (not OO) flamingo code
@@ -157,6 +168,24 @@ class core.AbstractPositionable
 	public function set styles(value:TextField.StyleSheet):Void {
 		_styles = value;
 	}
+		
+	public function get cursorId():String {
+		return _cursorId;
+	}
 	
+	public function set cursorId(value:String):Void {
+		_cursorId = value;
+	}
+	
+	
+	public function get listento():Array 
+	{
+		return _listento;
+	}
+	
+	public function set listento(value:Array):Void 
+	{
+		_listento = value;
+	}
 	
 }

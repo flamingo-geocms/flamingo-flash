@@ -26,7 +26,6 @@ dynamic class gui.tools.ToolGroup extends AbstractListenerRegister implements Co
 							"</Toolgroup>";
 	
 	private var _tools:Array;
-	private var _listento:String;
 	
 	public function ToolGroup(id:String, container:MovieClip){
 		super(id, container);
@@ -359,17 +358,7 @@ dynamic class gui.tools.ToolGroup extends AbstractListenerRegister implements Co
 	{
 		_tools = value;
 	}
-	
-	public function get listento():String 
-	{
-		return _listento;
-	}
-	
-	public function set listento(value:String):Void 
-	{
-		_listento = value;
-	}
-	
+		
 	public function get tool():String 
 	{
 		return _tool;
