@@ -30,17 +30,11 @@ import tools.Logger;
 */
 class gui.tools.ToolZoomout extends AbstractTool implements ComponentInterface
 {	
-	//-----------------------------------------
-	var defaultXML:String = "<?xml version='1.0' encoding='UTF-8'?>" +
-							"<ToolZoomout>" +
-							"<string id='tooltip' nl='uitzoomen' en='zoom out'/>" +
-							"<cursor id='cursor' url='fmc/CursorsMap.swf' linkageid='zoomout'/>" +
-							"<cursor id='busy' url='fmc/CursorsMap.swf' linkageid='busy'/>" +
-							"</ToolZoomout>";
+	//-----------------------------------------	
 	var zoomfactor:Number = 50;
 	var zoomdelay:Number = 0;
 	var clickdelay:Number = 1000;
-	var zoomscroll:Boolean = true;
+	
 	var skin="_zoomout"
 	var enabled = true
 	var rect:Object = new Object()
@@ -56,6 +50,14 @@ class gui.tools.ToolZoomout extends AbstractTool implements ComponentInterface
 		this.toolDownLink = "assets/img/ToolZoomout_down.png";
 		this.toolUpLink = "assets/img/ToolZoomout_up.png";
 		this.toolOverLink = "assets/img/ToolZoomout_over.png";
+		
+		this.defaultXML = "<?xml version='1.0' encoding='UTF-8'?>" +
+							"<ToolZoomout>" +
+							"<string id='tooltip' nl='uitzoomen' en='zoom out'/>" +
+							"<cursor id='cursor' url='fmc/CursorsMap.swf' linkageid='zoomout'/>" +
+							"<cursor id='busy' url='fmc/CursorsMap.swf' linkageid='busy'/>" +
+							"</ToolZoomout>";
+		
 		super(id, toolGroup, container);		
 		init();
 	}	
@@ -64,34 +66,9 @@ class gui.tools.ToolZoomout extends AbstractTool implements ComponentInterface
 	private function init() {
 		Logger.console("INIT: " + this.id);
 		Logger.console("Old listener name :" +this.lMap.name);
+		
 		var thisObj:ToolZoomout = this;
-		this.lMap.onMouseWheel = function(map:MovieClip, delta:Number, xmouse:Number, ymouse:Number, coord:Object) {
-			if (thisObj.zoomscroll) {
-				if (! thisObj._parent.updating) {
-					thisObj._parent.cancelAll();
-					var zoom;
-					if (delta<=0) {
-						zoom = 80;
-					} else {
-						zoom = 120;
-					}
-					
-					
-					var w = map.getWidth();
-					var h = map.getHeight();
-					var c = map.getCenter();
-					var cx = (w/2)-((w/2)/(zoom/100));
-					var cy = (h/2)-((h/2)/(zoom/100));
-					var px = (coord.x-c.x)/(w/2);
-					var py = (coord.y-c.y)/(h/2);
-					coord.x = c.x+(px*cx);
-					coord.y = c.y+(py*cy);
-					map.moveToPercentage(zoom, coord, 500, 0);
-					
-					thisObj._parent.updateOther(map, 500);
-				}
-			}
-		};
+		//onmouse down
 		this.lMap.onMouseDown = function(mapOnMouseMove:MovieClip, xmouseOnMouseMove:Number, ymouseOnMouseMove:Number, coordOnMouseMove:Object) {
 			var x:Number;
 			var y:Number;

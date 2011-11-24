@@ -29,15 +29,6 @@ import tools.Logger;
 * @attr skin (defaultvalue="") Available skins: "", "f2"
 */
 class gui.tools.ToolZoomin extends AbstractTool implements ComponentInterface{
-	var version:String = "2.0";
-
-	//----------------------------
-	var defaultXML:String = "<?xml version='1.0' encoding='UTF-8'?>" +
-							"<ToolZoomin>" +
-							"<string id='tooltip' nl='inzoomen' en='zoom in'/>" +
-							"<cursor id='cursor' url='fmc/CursorsMap.swf' linkageid='zoomin'/>" +
-							"<cursor id='busy' url='fmc/CursorsMap.swf' linkageid='busy'/>" +
-							"</ToolZoomin>";
 	var zoomfactor:Number = 200;
 	var zoomdelay:Number = 0;
 	var clickdelay:Number = 1000;
@@ -57,6 +48,12 @@ class gui.tools.ToolZoomin extends AbstractTool implements ComponentInterface{
 		this.toolDownLink = "assets/img/ToolZoomin_down.png";
 		this.toolUpLink = "assets/img/ToolZoomin_up.png";
 		this.toolOverLink = "assets/img/ToolZoomin_over.png";
+		this.defaultXML = "<?xml version='1.0' encoding='UTF-8'?>" +
+							"<ToolZoomin>" +
+							"<string id='tooltip' nl='inzoomen' en='zoom in'/>" +
+							"<cursor id='cursor' url='fmc/CursorsMap.swf' linkageid='zoomin'/>" +
+							"<cursor id='busy' url='fmc/CursorsMap.swf' linkageid='busy'/>" +
+							"</ToolZoomin>";
 		super(id, toolGroup, container);		
 		init();
 	}	
@@ -65,30 +62,7 @@ class gui.tools.ToolZoomin extends AbstractTool implements ComponentInterface{
 		Logger.console("INIT: " + this.id);
 		Logger.console("Old listener name :" +this.lMap.name);
 		var thisObj:ToolZoomin = this;
-		this.lMap.onMouseWheel = function(map:MovieClip, delta:Number, xmouse:Number, ymouse:Number, coord:Object) {
-			if (thisObj.zoomscroll) {
-				if (!thisObj._parent.updating) {
-					thisObj._parent.cancelAll();
-					var zoom;
-					if (delta<=0) {
-						zoom = 80;
-					} else {
-						zoom = 120;
-					}
-					var w = map.getWidth();
-					var h = map.getHeight();
-					var c = map.getCenter();
-					var cx = (w/2)-((w/2)/(zoom/100));
-					var cy = (h/2)-((h/2)/(zoom/100));
-					var px = (coord.x-c.x)/(w/2);
-					var py = (coord.y-c.y)/(h/2);
-					coord.x = c.x+(px*cx);
-					coord.y = c.y+(py*cy);
-					map.moveToPercentage(zoom, coord, 500, 0);
-					thisObj._parent.updateOther(map, 500);
-				}
-			}
-		};
+		//on mouse down.
 		this.lMap.onMouseDown = function(mapOnMouseDown:MovieClip, xmouseOnMouseDown:Number, ymouseOnMouseDown:Number, coordOnMouseDown:Object) {
 			var x:Number;
 			var y:Number;

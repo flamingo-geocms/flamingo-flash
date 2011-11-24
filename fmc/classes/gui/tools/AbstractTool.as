@@ -30,16 +30,19 @@ class gui.tools.AbstractTool extends AbstractPositionable
 	//the map listener. If this tool is active this object will listen to the actions done by the user.
 	private var _lMap:Object;
 	
+	//scroll properties:
+	private var _zoomscroll:Boolean;
+	
 	public function AbstractTool(id, toolGroup:ToolGroup, container) {			
 		super(id, container);
 		Logger.console("AbstractTool Construct");
 		this.toolGroup = toolGroup;
 		
 		//init vars
-		this.lMap = new Object();
+		this.lMap = new Object();		
 		this.active = false;
 		this.enabled = true;
-		
+		this.zoomscroll = true;
 		this.tooltipId = "tooltip";
 		
 		this.holder = this.container.createEmptyMovieClip("tool_" + id + "_holder", this.container.getNextHighestDepth());
@@ -56,6 +59,33 @@ class gui.tools.AbstractTool extends AbstractPositionable
 		this.mcDown._visible = false;
 		this.mcOver._visible = false;
 		this.mcUp._visible = true;		
+		
+		var thisObj:AbstractTool = this;
+		//add mousewheel event to tool:
+		this.lMap.onMouseWheel = function(map:MovieClip, delta:Number, xmouse:Number, ymouse:Number, coord:Object) {
+			if (thisObj.zoomscroll) {
+				if (!thisObj._parent.updating) {
+					thisObj._parent.cancelAll();
+					var zoom;
+					if (delta<=0) {
+						zoom = 80;
+					} else {
+						zoom = 120;
+					}
+					var w = map.getWidth();
+					var h = map.getHeight();
+					var c = map.getCenter();
+					var cx = (w/2)-((w/2)/(zoom/100));
+					var cy = (h/2)-((h/2)/(zoom/100));
+					var px = (coord.x-c.x)/(w/2);
+					var py = (coord.y-c.y)/(h/2);
+					coord.x = c.x+(px*cx);
+					coord.y = c.y+(py*cy);
+					map.moveToPercentage(zoom, coord, 500, 0);
+					thisObj._parent.updateOther(map, 500);
+				}
+			}
+		};
 		
 		this.setPosition();
 		this.setEvents();		
@@ -285,6 +315,14 @@ class gui.tools.AbstractTool extends AbstractPositionable
 	public function set mcDown(value:MovieClip):Void 
 	{
 		_mcDown = value;
+	}
+	
+	public function get zoomscroll():Boolean {
+		return _zoomscroll;
+	}
+	
+	public function set zoomscroll(value:Boolean):Void {
+		_zoomscroll = value;
 	}
 	
 }

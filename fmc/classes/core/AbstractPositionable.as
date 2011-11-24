@@ -30,6 +30,8 @@ class core.AbstractPositionable
 	private var _cursorId:String;
 	//a array of id's to listen to
 	private var _listento:Array;
+	//
+	private var _defaultXML:String;
 	
 	/**
 	 * Constructor 
@@ -186,6 +188,14 @@ class core.AbstractPositionable
 	public function set listento(value:Array):Void 
 	{
 		_listento = value;
+	}
+	
+	public function get defaultXML():String {
+		return _defaultXML;
+	}
+	
+	public function set defaultXML(value:String):Void {
+		_defaultXML = value;
 	}
 	
 }
