@@ -939,28 +939,6 @@ class Flamingo {
 				return;
 			}
 			
-			//this.loadComponent_defaults(url);
-			//new loading:
-			/*
-			if (file == "ToolGroup") {
-				var toolGroup:ToolGroup = new ToolGroup(targetid,mc);				
-				Logger.console("add toolgroup");
-				this.toolGroups.push(toolGroup);
-				toolGroup.parseConfig(xmlNode);
-				Logger.console("Length toolgroups" , toolGroups.length);				
-				//this.components[targetid].target = toolGroup;
-				doneNewLoading(toolGroup);
-			}else if (file == "ToolZoomout") {
-				var toolZoomout:ToolZoomout = new ToolZoomout(targetid,mc);
-				toolZoomout.parseConfig(xmlNode);
-				Logger.console("Length toolgroups" , toolGroups.length, this.toolGroups[this.toolGroups.length - 1]);
-				var toolGroup:ToolGroup = this.toolGroups[this.toolGroups.length - 1];
-				//this.tools.push(toolZoomin);						
-				toolGroup.addTool(toolZoomout);
-				//this.components[targetid].target = toolZoomout;
-				doneNewLoading(toolZoomout);
-				
-			}*/
 			var xmlNode:XMLNode = XMLNode(xml);
 			if (this.isEmbeddedComponents(file)){
 				//newtypeobjectaanmaken
@@ -986,6 +964,8 @@ class Flamingo {
 							tool = new ToolMeasure(targetid, toolGroup, mc);							
 						}else if (file == "ToolPan") {						
 							tool = new ToolPan(targetid, toolGroup, mc);							
+						}else if (file == "ToolSuperPan") {						
+							tool = new ToolSuperPan(targetid, toolGroup, mc);							
 						}
 						tool.setConfig(xmlNode);						
 						toolGroup.addTool(tool);
@@ -1045,6 +1025,7 @@ class Flamingo {
 	 */
 	private function isEmbeddedComponents(file:String):Boolean {
 		switch(file) {
+			case "ToolSuperPan":
 			case "ToolPan":
 			case "ToolMeasure":
 			case "ToolZoomin":
@@ -1062,6 +1043,7 @@ class Flamingo {
 			case "ToolZoomin":
 			case "ToolZoomout":
 			case "ToolPan":
+			case "ToolSuperPan":
 				return true;
 				break;
 			default:
