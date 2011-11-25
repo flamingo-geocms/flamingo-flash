@@ -157,7 +157,7 @@ dynamic class gui.tools.ToolGroup extends AbstractListenerRegister implements Co
 		}
 		flamingo.addListener(lMap, listento, this);
 		resize();
-		
+		flamingo.position(this.container);
 	}
 	/** 
 	* Load the part of the xml in flamingo

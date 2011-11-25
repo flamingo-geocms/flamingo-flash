@@ -87,7 +87,7 @@ class gui.tools.AbstractTool extends AbstractPositionable
 			}
 		};
 		
-		this.setPosition();
+		//this.setPosition();
 		this.setEvents();		
 	}
 		

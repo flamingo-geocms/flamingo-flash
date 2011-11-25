@@ -33,12 +33,12 @@ class gui.tools.ToolZoomin extends AbstractTool implements ComponentInterface{
 	var zoomdelay:Number = 0;
 	var clickdelay:Number = 1000;
 	var zoomscroll:Boolean = true;
-	var skin = "_zoomin";
+	var skin:String = "_zoomin";
 	var enabled = true;
 	var rect:Object = new Object();
 //----------------------------
 	/**
-	 * Constructor for creating a toolzoomout
+	 * Constructor for creating a toolzoomin
 	 * @param	id the id of the tool
 	 * @param	toolGroup the toolgroup where this tool is added
 	 * @param	container the visible part of this tool (movieclip)
@@ -62,7 +62,7 @@ class gui.tools.ToolZoomin extends AbstractTool implements ComponentInterface{
 		Logger.console("INIT: " + this.id);
 		Logger.console("Old listener name :" +this.lMap.name);
 		var thisObj:ToolZoomin = this;
-		//on mouse down.
+		//onmousedown event when this tool is active
 		this.lMap.onMouseDown = function(mapOnMouseDown:MovieClip, xmouseOnMouseDown:Number, ymouseOnMouseDown:Number, coordOnMouseDown:Object) {
 			var x:Number;
 			var y:Number;
@@ -172,9 +172,7 @@ class gui.tools.ToolZoomin extends AbstractTool implements ComponentInterface{
 		//this.setVisible(visible);
 		flamingo.position(this);
 	}
-	public function setPosition():Void {
-		this.container._x = 60;
-	}
+	
 	//default functions-------------------------------
 	function startIdentifying() {
 	}

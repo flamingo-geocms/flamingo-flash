@@ -41,9 +41,7 @@ import core.AbstractPositionable;
 import core.ComponentInterface;
 import flash.external.ExternalInterface;
 import flash.filters.DropShadowFilter;
-import gui.tools.ToolGroup;
-import gui.tools.ToolZoomin;
-import gui.tools.ToolZoomout;
+import gui.tools.*;
 import tools.Logger;
 
 class Flamingo {
@@ -990,6 +988,13 @@ class Flamingo {
 						toolZoomin.setConfig(xmlNode);						
 						toolGroup.addTool(toolZoomin);
 						this.components[targetid] = toolZoomin;
+					}else if (file == "ToolMeasure") {						
+						//get the last added toolgroup
+						var toolGroup:ToolGroup = this.toolGroups[this.toolGroups.length - 1];
+						var toolMeasure:ToolMeasure = new ToolMeasure(targetid, toolGroup, mc);
+						toolMeasure.setConfig(xmlNode);						
+						toolGroup.addTool(toolMeasure);
+						this.components[targetid] = toolMeasure;
 					}
 					this.components[targetid].type = type;			
 					this.raiseEvent(this, "onLoadComponent", targetid);	
@@ -1042,6 +1047,7 @@ class Flamingo {
 	
 	private function isEmbeddedComponents(file:String):Boolean {
 		switch(file) {
+			case "ToolMeasure":
 			case "ToolZoomin":
 			case "ToolZoomout":
 			case "ToolGroup":
@@ -2600,7 +2606,13 @@ class Flamingo {
 	*/
 	public function getPosition(comp:Object, parent:MovieClip):Object {
 		var id = this.getId(comp);
-		var mc:MovieClip = this.getComponent(id);
+		var mc:Object;
+		if (comp instanceof AbstractPositionable) {
+			mc = AbstractPositionable(comp);		
+			Logger.console("****** It's a AbstractPositionable with id: "+mc.id);
+		}else {
+			mc = this.getComponent(id);
+		}
 		if (parent == undefined) {
 			parent = mc._parent;
 			if (this.components[id].killtarget != undefined) {
@@ -2647,16 +2659,15 @@ class Flamingo {
 	*/
 	public function position(comp:Object, parent:MovieClip):Void {
 		var id:String ;
-		var mc:MovieClip;
 		if (comp instanceof AbstractPositionable) {
 			id = AbstractPositionable(comp).id;
-			mc = AbstractPositionable(comp).container;
+			comp = AbstractPositionable(comp);
 		}else{
 			id = this.getId(comp);
-			mc = this.getComponent(id);
+			comp = this.getComponent(id);
 		}			
 		if (parent == undefined) {
-			parent = mc._parent;
+			parent = comp._parent;
 			if (this.components[id].killtarget != undefined) {
 				var c = this.components[id].target.split("/").length-this.components[id].killtarget.split("/").length;
 				for (var i = 0; i<c; i++) {
@@ -2667,15 +2678,26 @@ class Flamingo {
 		//if (parent == undefined) {    
 		//parent = this.getParent(id);
 		//}
-		var r:Object = this.getPosition(mc, parent);
+		var mc:MovieClip;
+		var r:Object;
+		if (comp instanceof AbstractPositionable) {
+			r = this.getPosition(comp, parent);
+			mc = AbstractPositionable(comp).container;
+			Logger.console("****** r.x = " + r.x);
+			Logger.console("****** r.y = " + r.y);			
+		}else {			
+			r = this.getPosition(comp, parent);			
+			mc = MovieClip(comp);
+		}
 		mc._x = r.x;
 		mc._y = r.y;
 		mc._width = r.width;
 		mc._height = r.height;
 		
+		
 	}	
 	
-	private function getXPS(mc:MovieClip, parent:MovieClip):Object {
+	private function getXPS(mc:Object, parent:MovieClip):Object {
 		if (parent == undefined) {
 			parent = mc._parent;
 		}
@@ -2686,8 +2708,7 @@ class Flamingo {
 		if (pw == undefined) {
 			pw = Stage.width;
 		}
-		var pt:Object = new Object();
-		
+		var pt:Object = new Object();		
 		
 		var id = this.getId(mc);
 		if (mc.left.length>0 && mc.width.length>0) {
@@ -2756,7 +2777,7 @@ class Flamingo {
 		pt.width = mc._width;
 		return (pt);
 	}
-	private function getYPS(mc:MovieClip, parent:MovieClip):Object {
+	private function getYPS(mc:Object, parent:MovieClip):Object {
 		if (parent == undefined) {
 			parent = mc._parent;
 		}

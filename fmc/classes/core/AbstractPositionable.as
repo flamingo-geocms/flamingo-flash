@@ -7,6 +7,21 @@ import tools.Logger;
  */
 class core.AbstractPositionable
 {	
+	/*Defaults set by flamingo shit*/
+	private var _name:String;
+	private var _widthSetting:String;
+	private var _heightSetting:String;
+	private var _left:String;
+	private var _right:String;
+	private var _top:String;
+	private var _bottom:String;
+	private var _xcenter:String;
+	private var _ycenter:String;
+	private var _maxwidth:Number;
+	private var _minwidth:Number;
+	private var _maxheight:Number;
+	private var _minheight:Number;
+	
 	//loaded ??
 	private var _loaded:Boolean;
 	//type of object
@@ -84,6 +99,30 @@ class core.AbstractPositionable
 	public function get flamingo():Flamingo {
 		return _global.flamingo;
 	}
+	/*public function get _x():Number {
+		return this.container._x;
+	}
+	public function set _x(value:Number):Void {
+		this.container._x = value;
+	}
+	public function get _y():Number {
+		return this.container._y;
+	}
+	public function set _y(value:Number):Void {
+		this.container._y=value;
+	}
+	public function get _width():Number {
+		return this.container._width;
+	}
+	public function set _width(value:Number):Void {
+		this.container._width = value;
+	}
+	public function get _height():Number {
+		return this.container._height;
+	}
+	public function set _height(value:Number):Void {
+		this.container._height=value;
+	}*/
 	/***********************************************************************/	
 	/***********************************************************************
 	 * Getters and Setters.
@@ -197,5 +236,110 @@ class core.AbstractPositionable
 	public function set defaultXML(value:String):Void {
 		_defaultXML = value;
 	}
+	
+	public function get minheight():Number {
+		return _minheight;
+	}
+	
+	public function set minheight(value:Number):Void {
+		_minheight = value;
+	}
+	
+	public function get maxheight():Number {
+		return _maxheight;
+	}
+	
+	public function set maxheight(value:Number):Void {
+		_maxheight = value;
+	}
+	
+	public function get minwidth():Number {
+		return _minwidth;
+	}
+	
+	public function set minwidth(value:Number):Void {
+		_minwidth = value;
+	}
+	
+	public function get maxwidth():Number {
+		return _maxwidth;
+	}
+	
+	public function set maxwidth(value:Number):Void {
+		_maxwidth = value;
+	}
+	
+	public function get ycenter():String {
+		return _ycenter;
+	}
+	
+	public function set ycenter(value:String):Void {
+		_ycenter = value;
+	}
+	
+	public function get xcenter():String {
+		return _xcenter;
+	}
+	
+	public function set xcenter(value:String):Void {
+		_xcenter = value;
+	}
+	
+	public function get bottom():String {
+		return _bottom;
+	}
+	
+	public function set bottom(value:String):Void {
+		_bottom = value;
+	}
+	
+	public function get top():String {
+		return _top;
+	}
+	
+	public function set top(value:String):Void {
+		_top = value;
+	}
+	
+	public function get right():String {
+		return _right;
+	}
+	
+	public function set right(value:String):Void {
+		_right = value;
+	}
+	
+	public function get left():String {
+		return _left;
+	}
+	
+	public function set left(value:String):Void {
+		_left = value;
+	}
+	
+	public function get height():String {
+		return _heightSetting;
+	}
+	
+	public function set height(value:String):Void {
+		_heightSetting = value;
+	}
+	
+	public function get width():String {
+		return _widthSetting;
+	}
+	
+	public function set width(value:String):Void {
+		_widthSetting = value;
+	}
+	
+	public function get name():String {
+		return _name;
+	}
+	
+	public function set name(value:String):Void {
+		_name = value;
+	}
+	
 	
 }

@@ -34,8 +34,7 @@ class gui.tools.ToolZoomout extends AbstractTool implements ComponentInterface
 	var zoomfactor:Number = 50;
 	var zoomdelay:Number = 0;
 	var clickdelay:Number = 1000;
-	
-	var skin="_zoomout"
+	var skin:String = "_zoomout";
 	var enabled = true
 	var rect:Object = new Object()
 	var thisObj = this
@@ -68,7 +67,7 @@ class gui.tools.ToolZoomout extends AbstractTool implements ComponentInterface
 		Logger.console("Old listener name :" +this.lMap.name);
 		
 		var thisObj:ToolZoomout = this;
-		//onmouse down
+		//onmousedown event when this tool is active
 		this.lMap.onMouseDown = function(mapOnMouseMove:MovieClip, xmouseOnMouseMove:Number, ymouseOnMouseMove:Number, coordOnMouseMove:Object) {
 			var x:Number;
 			var y:Number;
@@ -179,7 +178,7 @@ class gui.tools.ToolZoomout extends AbstractTool implements ComponentInterface
 		}
 		this.setEnabled(enabled);
 		//this.setVisible(this.visible);
-		_global.flamingo.position(this.container);
+		flamingo.position(this);
 	}
 	//default functions-------------------------------
 	function startIdentifying() {
