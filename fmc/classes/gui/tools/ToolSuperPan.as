@@ -58,7 +58,9 @@ class gui.tools.ToolSuperPan extends AbstractTool implements ComponentInterface{
 		super(id, toolGroup, container);		
 		init();
 	}
-	
+	/**
+	 * init function
+	 */
 	private function init() {
 		var thisObj:ToolSuperPan = this;
 		this.lMap.onRollOut = function(map:MovieClip ){
@@ -84,6 +86,7 @@ class gui.tools.ToolSuperPan extends AbstractTool implements ComponentInterface{
 				var y = ymouseOnMouseDown;
 				thisObj.xold = xmouseOnMouseDown;
 				thisObj.yold = ymouseOnMouseDown;
+				//call interval to calculate the speed of dragging.
 				thisObj.velocityid = setInterval(thisObj,"velocity", 100, mapOnMouseDown);
 				thisObj.lMap.onMouseMove = function(map:MovieClip, xmouse:Number, ymouse:Number, coord:Object) {
 					var dx = (x-xmouse)*msx;
@@ -108,7 +111,6 @@ class gui.tools.ToolSuperPan extends AbstractTool implements ComponentInterface{
 						thisObj.vy = Math.round(thisObj.vy/10);
 						clearInterval(thisObj.autopanid);
 						thisObj.panmap = map
-						Logger.console("Do AutoPan");
 						thisObj.autopanid = setInterval(thisObj,"autoPan", 100, map);
 						
 					} else {
@@ -150,6 +152,9 @@ class gui.tools.ToolSuperPan extends AbstractTool implements ComponentInterface{
 		flamingo.raiseEvent(this, "onInit", this);
 	}
 	/**
+	 * Config functions
+	 */ 
+	/**
 	* Configurates a component by setting a xml.
 	* @attr xml:Object Xml or string representation of a xml.
 	*/
@@ -190,16 +195,24 @@ class gui.tools.ToolSuperPan extends AbstractTool implements ComponentInterface{
 		flamingo.position(this);
 
 	}
+	/**
+	 * Auto pan functions
+	 */
+	/**
+	 * Calculates the speed of dragging between 2 calls.
+	 * @param	map the movie clip that contains the map
+	 */
 	function velocity(map:MovieClip) {		
-		Logger.console(this);
 		this.vx = this.xold-map._xmouse;
 		this.vy = this.yold-map._ymouse;
 		this.xold = map._xmouse;
 		this.yold = map._ymouse;
-		Logger.console("!Velocity vx: "+this.vx+" vy: "+this.vy+" xold: "+this.xold+" yold: "+this.yold);
 	}
+	/**
+	 * Auto pan
+	 * @param	map the movie clip that contains the map
+	 */
 	function autoPan(map:MovieClip) {
-		Logger.console("AutoPan!!");
 		panning = true;
 		var e = map.getCurrentExtent();
 		var msx = (e.maxx-e.minx)/map.__width;
@@ -209,6 +222,9 @@ class gui.tools.ToolSuperPan extends AbstractTool implements ComponentInterface{
 		map.moveToExtent({minx:e.minx+dx, miny:e.miny+dy, maxx:e.maxx+dx, maxy:e.maxy+dy}, -1, 0);
 		updateAfterEvent();
 	}
+	/**
+	 * Cancel the panning and dragging speed interval
+	 */
 	function cancel() {
 		//trace("CANCEL");
 		if (panning) {
