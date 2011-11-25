@@ -966,6 +966,8 @@ class Flamingo {
 							tool = new ToolPan(targetid, toolGroup, mc);							
 						}else if (file == "ToolSuperPan") {						
 							tool = new ToolSuperPan(targetid, toolGroup, mc);							
+						}else if (file == "ToolIdentify") {						
+							tool = new ToolIdentify(targetid, toolGroup, mc);							
 						}
 						tool.setConfig(xmlNode);						
 						toolGroup.addTool(tool);
@@ -975,9 +977,7 @@ class Flamingo {
 					this.raiseEvent(this, "onLoadComponent", targetid);	
 					Logger.console("Done Loading: " + targetid);
 					this.doneLoading();				
-				}
-				
-				//this.components onzin zetten
+				}				
 			}else {
 				//component new or existing component has no setConfig, so treat as new component   
 				//add a reference for a component to the components object    
@@ -1025,6 +1025,7 @@ class Flamingo {
 	 */
 	private function isEmbeddedComponents(file:String):Boolean {
 		switch(file) {
+			case "ToolIdentify":
 			case "ToolSuperPan":
 			case "ToolPan":
 			case "ToolMeasure":
@@ -1039,6 +1040,7 @@ class Flamingo {
 	}
 	private function isTool(file:String):Boolean {
 		switch(file) {
+			case "ToolIdentify":
 			case "ToolMeasure":
 			case "ToolZoomin":
 			case "ToolZoomout":
