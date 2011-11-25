@@ -974,27 +974,22 @@ class Flamingo {
 						this.toolGroups.push(toolGroup);
 						toolGroup.setConfig(xmlNode);						
 						this.components[targetid] = toolGroup;
-					}else if (file == "ToolZoomout") {						
+					}else if (isTool(file)) {
 						//get the last added toolgroup
 						var toolGroup:ToolGroup = this.toolGroups[this.toolGroups.length - 1];
-						var toolZoomout:ToolZoomout = new ToolZoomout(targetid, toolGroup, mc);
-						toolZoomout.setConfig(xmlNode);						
-						toolGroup.addTool(toolZoomout);
-						this.components[targetid] = toolZoomout;
-					}else if (file == "ToolZoomin") {						
-						//get the last added toolgroup
-						var toolGroup:ToolGroup = this.toolGroups[this.toolGroups.length - 1];
-						var toolZoomin:ToolZoomin = new ToolZoomin(targetid, toolGroup, mc);
-						toolZoomin.setConfig(xmlNode);						
-						toolGroup.addTool(toolZoomin);
-						this.components[targetid] = toolZoomin;
-					}else if (file == "ToolMeasure") {						
-						//get the last added toolgroup
-						var toolGroup:ToolGroup = this.toolGroups[this.toolGroups.length - 1];
-						var toolMeasure:ToolMeasure = new ToolMeasure(targetid, toolGroup, mc);
-						toolMeasure.setConfig(xmlNode);						
-						toolGroup.addTool(toolMeasure);
-						this.components[targetid] = toolMeasure;
+						var tool:AbstractTool;
+						if (file == "ToolZoomout") {	
+							tool = new ToolZoomout(targetid, toolGroup, mc);							
+						}else if (file == "ToolZoomin") {						
+							tool = new ToolZoomin(targetid, toolGroup, mc);
+						}else if (file == "ToolMeasure") {						
+							tool = new ToolMeasure(targetid, toolGroup, mc);							
+						}else if (file == "ToolPan") {						
+							tool = new ToolPan(targetid, toolGroup, mc);							
+						}
+						tool.setConfig(xmlNode);						
+						toolGroup.addTool(tool);
+						this.components[targetid] = tool;
 					}
 					this.components[targetid].type = type;			
 					this.raiseEvent(this, "onLoadComponent", targetid);	
@@ -1043,10 +1038,14 @@ class Flamingo {
 		}
 	}
 	
-	
-	
+	/**
+	 * Checks if the file is a new component
+	 * @param	file
+	 * @return
+	 */
 	private function isEmbeddedComponents(file:String):Boolean {
 		switch(file) {
+			case "ToolPan":
 			case "ToolMeasure":
 			case "ToolZoomin":
 			case "ToolZoomout":
@@ -1055,8 +1054,19 @@ class Flamingo {
 				break;
 			default:
 				return false;
-		}
-		
+		}		
+	}
+	private function isTool(file:String):Boolean {
+		switch(file) {
+			case "ToolMeasure":
+			case "ToolZoomin":
+			case "ToolZoomout":
+			case "ToolPan":
+				return true;
+				break;
+			default:
+				return false;
+		}	
 	}
 	
 	private function loadComponent_defaults(url:String) {

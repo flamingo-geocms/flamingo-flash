@@ -126,8 +126,8 @@ class gui.tools.AbstractTool extends AbstractPositionable
 			}
 		}
 	}
-	public function setPosition():Void {
-		this.container._x = 30;
+	function setConfig(xml:Object) {
+		Logger.console("!!!Function needs to be overwritten");
 	}
 		
 	public function get _parent():ToolGroup {
