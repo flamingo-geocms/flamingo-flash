@@ -5,27 +5,15 @@
 import core.AbstractPositionable;
 import gui.tools.ToolGroup;
 import tools.Logger;
-class gui.tools.AbstractTool extends AbstractPositionable
+import gui.button.AbstractButton;
+
+class gui.tools.AbstractTool extends AbstractButton
 {
 	private var _holder:MovieClip;
 	private var _toolGroup:ToolGroup;
 	
 	//Is the tool active (used at the moment)
 	private var _active:Boolean;
-	//Is the tool available to use?
-	private var _enabled:Boolean;
-	
-	//the movieclips that are shown.
-	private var _mcUp:MovieClip;
-	private var _mcOver:MovieClip;
-	private var _mcDown:MovieClip;	
-	//the links to the images.
-	private var _toolDownLink:String;
-	private var _toolUpLink:String;
-	private var _toolOverLink:String;
-	
-	//the id of the tooltip (default: 'tooltip');
-	private var _tooltipId:String;
 	
 	//the map listener. If this tool is active this object will listen to the actions done by the user.
 	private var _lMap:Object;
@@ -41,24 +29,7 @@ class gui.tools.AbstractTool extends AbstractPositionable
 		//init vars
 		this.lMap = new Object();		
 		this.active = false;
-		this.enabled = true;
 		this.zoomscroll = true;
-		this.tooltipId = "tooltip";
-		
-		this.holder = this.container.createEmptyMovieClip("tool_" + id + "_holder", this.container.getNextHighestDepth());
-		
-		this.mcDown = this.holder.createEmptyMovieClip("tool_" + id+"_down", this.holder.getNextHighestDepth());
-		this.mcOver = this.holder.createEmptyMovieClip("tool" + id + "_over", this.holder.getNextHighestDepth());
-		this.mcUp = this.holder.createEmptyMovieClip("tool" + id+"_up", this.holder.getNextHighestDepth());
-								
-		var mcloader = new MovieClipLoader();	
-		mcloader.loadClip(_global.flamingo.correctUrl(this.toolDownLink), this.mcDown.createEmptyMovieClip("container",0));
-		mcloader.loadClip(_global.flamingo.correctUrl(this.toolOverLink), this.mcOver.createEmptyMovieClip("container",0));
-		mcloader.loadClip(_global.flamingo.correctUrl(this.toolUpLink), this.mcUp.createEmptyMovieClip("container",0));
-				
-		this.mcDown._visible = false;
-		this.mcOver._visible = false;
-		this.mcUp._visible = true;		
 		
 		var thisObj:AbstractTool = this;
 		//add mousewheel event to tool:
@@ -86,17 +57,17 @@ class gui.tools.AbstractTool extends AbstractPositionable
 				}
 			}
 		};
-		
-		//this.setPosition();
-		this.setEvents();		
+			
 	}
-		
+	/**
+	 * Overwrite the setEvents of the abstractButton
+	 */
 	public function setEvents():Void {		
 		var thisObj:AbstractTool = this;
-		this.holder.onRollOver = function() {
-			Logger.console("onRollOver " + thisObj.active);		
+		//overwrite the onRollOver
+		this.holder.onRollOver = function() {	
 			if (thisObj.enabled){
-				var id = thisObj.flamingo.getId(thisObj);
+				//var id = thisObj.flamingo.getId(thisObj);
 				thisObj.flamingo.showTooltip(thisObj.flamingo.getString(thisObj, thisObj.tooltipId), thisObj);
 				if (!thisObj.active) {
 					thisObj.mcOver._visible = true;
@@ -113,6 +84,7 @@ class gui.tools.AbstractTool extends AbstractPositionable
 				}
 			}
 		}
+		//Overwrite the onRelease function of the button
 		this.holder.onRelease = function() {
 			Logger.console("onRelease "+thisObj.active);
 			if (thisObj.enabled) {
@@ -125,6 +97,7 @@ class gui.tools.AbstractTool extends AbstractPositionable
 				}
 			}
 		}
+		
 	}
 	function setConfig(xml:Object) {
 		Logger.console("!!!Function needs to be overwritten");
@@ -150,16 +123,11 @@ class gui.tools.AbstractTool extends AbstractPositionable
 	 * @param	b true(enable) or false(disable
 	 */
 	public function setEnabled(b:Boolean):Void{
-		if (b) {
-			this.container._alpha = 100;
-		} else {
-			this.container._alpha = 20;
-			if (this.active) {
-				this.toolGroup.setCursor(undefined);				
-				this.setActive(false);
-			}
+		if (!b && this._active) {
+			this.toolGroup.setCursor(undefined);				
+			this.setActive(false);
 		}
-		this._enabled = b;
+		super.setEnabled(b);
 	}
 	/**
 	 * Active/deactivate the tool
@@ -209,112 +177,28 @@ class gui.tools.AbstractTool extends AbstractPositionable
 		this._active = value;
 	}
 	
-	public function get toolGroup():ToolGroup 
-	{
+	public function get toolGroup():ToolGroup {
 		return _toolGroup;
 	}
 	
-	public function set toolGroup(value:ToolGroup):Void 
-	{
+	public function set toolGroup(value:ToolGroup):Void {
 		_toolGroup = value;
 	}
 	
-	public function get enabled():Boolean{
+	public function get enabled():Boolean {
 		return _enabled;
 	}
 	
 	public function set enabled(value:Boolean) {
 		this._enabled = value;
 	}
-	public function get lMap():Object 
-	{
+	
+	public function get lMap():Object {
 		return _lMap;
 	}
 	
-	public function set lMap(value:Object):Void 
-	{
+	public function set lMap(value:Object):Void {
 		_lMap = value;
-	}
-	
-	
-	public function get toolDownLink():String 
-	{
-		return _toolDownLink;
-	}
-	
-	public function set toolDownLink(value:String):Void 
-	{
-		_toolDownLink = value;
-	}
-	
-	public function get toolUpLink():String 
-	{
-		return _toolUpLink;
-	}
-	
-	public function set toolUpLink(value:String):Void 
-	{
-		_toolUpLink = value;
-	}
-	
-	public function get toolOverLink():String 
-	{
-		return _toolOverLink;
-	}
-	
-	public function set toolOverLink(value:String):Void 
-	{
-		_toolOverLink = value;
-	}
-	
-	public function get tooltipId():String 
-	{
-		return _tooltipId;
-	}
-	
-	public function set tooltipId(value:String):Void 
-	{
-		_tooltipId = value;
-	}
-	
-	public function get holder():MovieClip 
-	{
-		return _holder;
-	}
-	
-	public function set holder(value:MovieClip):Void 
-	{
-		_holder = value;
-	}
-	
-	public function get mcUp():MovieClip 
-	{
-		return _mcUp;
-	}
-	
-	public function set mcUp(value:MovieClip):Void 
-	{
-		_mcUp = value;
-	}
-	
-	public function get mcOver():MovieClip 
-	{
-		return _mcOver;
-	}
-	
-	public function set mcOver(value:MovieClip):Void 
-	{
-		_mcOver = value;
-	}
-	
-	public function get mcDown():MovieClip 
-	{
-		return _mcDown;
-	}
-	
-	public function set mcDown(value:MovieClip):Void 
-	{
-		_mcDown = value;
 	}
 	
 	public function get zoomscroll():Boolean {
