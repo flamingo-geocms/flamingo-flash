@@ -96,11 +96,7 @@ class gui.tools.AbstractTool extends AbstractButton
 					//thisObj.setActive(false);				
 				}
 			}
-		}
-		
-	}
-	function setConfig(xml:Object) {
-		Logger.console("!!!Function needs to be overwritten");
+		}		
 	}
 		
 	public function get _parent():ToolGroup {

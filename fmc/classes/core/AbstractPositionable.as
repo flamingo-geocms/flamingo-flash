@@ -65,6 +65,14 @@ class core.AbstractPositionable
 		this.strings = new Object();
 		this.cursors = new Object();
 		this.styles = new TextField.StyleSheet();
+		
+		//if the parent is resized then resize this.
+		var lParent:Object = new Object();
+		var thisObj:AbstractPositionable = this;
+		lParent.onResize = function(mc:MovieClip ) {
+			thisObj.resize();
+		};
+		thisObj.flamingo.addListener(lParent, flamingo.getParent(this), this);
 	}
 	/**
 	 * Pass the hittest to the movieclip
@@ -75,6 +83,10 @@ class core.AbstractPositionable
 	 */
 	public function hitTest(x:Number, y:Number, shapeFlag:Boolean):Boolean {
 		return this.container.hitTest(x, y, shapeFlag);
+	}
+	
+	public function resize() {
+		this.flamingo.position(this);
 	}
 	
 	/*public function setCursor(cursor:String):Void {			

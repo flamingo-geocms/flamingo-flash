@@ -78,7 +78,13 @@ class gui.button.AbstractButton extends AbstractPositionable{
 				thisObj.mcOver._visible = false;
 				thisObj.mcUp._visible = false;
 				thisObj.mcDown._visible = true;
+				thisObj.press();
 			}
+		}
+		this.holder.onRelease = function() {
+			thisObj.mcDown._visible = false;
+			thisObj.mcOver._visible = false;
+			thisObj.mcUp._visible = true;
 		}
 	}
 	/**
@@ -95,8 +101,20 @@ class gui.button.AbstractButton extends AbstractPositionable{
 			this.container._alpha = 20;
 		}
 		this._enabled = b;
+	}	
+	/*****************************************************
+	 * Old functions that need to be supported.
+	 */
+	public function click() {
+		this.press();
 	}
-	
+	/*******************************************************
+	 * Functions that can be used to handle events on the button.
+	 */ 
+	public function press() { }
+	public function setConfig(xml:Object) {
+		Logger.console("!!!Function setConfig() needs to be overwritten in: "+this.id);
+	}
 	/*******************************************************
 	 * Getters and Setters
 	 */ 

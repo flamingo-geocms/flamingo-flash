@@ -42,6 +42,7 @@ import core.ComponentInterface;
 import flash.external.ExternalInterface;
 import flash.filters.DropShadowFilter;
 import gui.tools.*;
+import gui.button.*;
 import tools.Logger;
 
 class Flamingo {
@@ -972,6 +973,13 @@ class Flamingo {
 						tool.setConfig(xmlNode);						
 						toolGroup.addTool(tool);
 						this.components[targetid] = tool;
+					}else if (isButton(file)) {
+						var button:AbstractButton;
+						if (file == "ButtonFull") {
+							button = new ButtonFull(targetid, mc);							
+						}
+						button.setConfig(xmlNode);
+						this.components[targetid] = button;
 					}
 					this.components[targetid].type = type;			
 					this.raiseEvent(this, "onLoadComponent", targetid);	
@@ -1025,6 +1033,7 @@ class Flamingo {
 	 */
 	private function isEmbeddedComponents(file:String):Boolean {
 		switch(file) {
+			case "ButtonFull":
 			case "ToolIdentify":
 			case "ToolSuperPan":
 			case "ToolPan":
@@ -1046,6 +1055,15 @@ class Flamingo {
 			case "ToolZoomout":
 			case "ToolPan":
 			case "ToolSuperPan":
+				return true;
+				break;
+			default:
+				return false;
+		}	
+	}
+	private function isButton(file:String):Boolean {
+		switch(file) {
+			case "ButtonFull":
 				return true;
 				break;
 			default:
