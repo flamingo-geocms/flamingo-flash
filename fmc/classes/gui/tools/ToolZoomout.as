@@ -45,7 +45,8 @@ class gui.tools.ToolZoomout extends AbstractTool implements ComponentInterface
 	 * @param	container the visible part of this tool (movieclip)
 	 * @see AbstractTool#Constructor(id:String, toolGroup:ToolGroup ,container:MovieClip);
 	 */
-	public function ToolZoomout(id:String, toolGroup:ToolGroup ,container:MovieClip) {		
+	public function ToolZoomout(id:String, toolGroup:ToolGroup ,container:MovieClip) {	
+		super(id, toolGroup, container);		
 		this.toolDownLink = "assets/img/ToolZoomout_down.png";
 		this.toolUpLink = "assets/img/ToolZoomout_up.png";
 		this.toolOverLink = "assets/img/ToolZoomout_over.png";
@@ -55,9 +56,7 @@ class gui.tools.ToolZoomout extends AbstractTool implements ComponentInterface
 							"<string id='tooltip' nl='uitzoomen' en='zoom out'/>" +
 							"<cursor id='cursor' url='fmc/CursorsMap.swf' linkageid='zoomout'/>" +
 							"<cursor id='busy' url='fmc/CursorsMap.swf' linkageid='busy'/>" +
-							"</ToolZoomout>";
-		
-		super(id, toolGroup, container);		
+							"</ToolZoomout>";			
 		init();
 	}	
 	

@@ -41,7 +41,8 @@ class gui.tools.ToolPan extends AbstractTool implements ComponentInterface{
 	 * @param	container the visible part of this tool (movieclip)
 	 * @see AbstractTool#Constructor(id:String, toolGroup:ToolGroup ,container:MovieClip);
 	 */
-	public function ToolPan(id:String, toolGroup:ToolGroup ,container:MovieClip) {		
+	public function ToolPan(id:String, toolGroup:ToolGroup ,container:MovieClip) {	
+		super(id, toolGroup, container);			
 		this.toolDownLink = "assets/img/ToolPan_down.png";
 		this.toolUpLink = "assets/img/ToolPan_up.png";
 		this.toolOverLink = "assets/img/ToolPan_over.png";				
@@ -54,7 +55,6 @@ class gui.tools.ToolPan extends AbstractTool implements ComponentInterface{
 				        "<cursor id='grab' url='fmc/CursorsMap.swf' linkageid='grab_wrinkle'/>" +
 				        "</ToolPan>"; 
 		
-		super(id, toolGroup, container);		
 		this.cursorId = "pan";
 		init();
 	}

@@ -45,6 +45,7 @@ class gui.tools.ToolZoomin extends AbstractTool implements ComponentInterface{
 	 * @see AbstractTool#Constructor(id:String, toolGroup:ToolGroup ,container:MovieClip);
 	 */
 	public function ToolZoomin(id:String, toolGroup:ToolGroup ,container:MovieClip) {		
+		super(id, toolGroup, container);		
 		this.toolDownLink = "assets/img/ToolZoomin_down.png";
 		this.toolUpLink = "assets/img/ToolZoomin_up.png";
 		this.toolOverLink = "assets/img/ToolZoomin_over.png";
@@ -54,7 +55,6 @@ class gui.tools.ToolZoomin extends AbstractTool implements ComponentInterface{
 							"<cursor id='cursor' url='fmc/CursorsMap.swf' linkageid='zoomin'/>" +
 							"<cursor id='busy' url='fmc/CursorsMap.swf' linkageid='busy'/>" +
 							"</ToolZoomin>";
-		super(id, toolGroup, container);		
 		init();
 	}	
 	/*Init function*/

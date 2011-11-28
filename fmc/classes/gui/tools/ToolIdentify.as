@@ -31,6 +31,7 @@ class gui.tools.ToolIdentify extends AbstractTool implements ComponentInterface{
 	var identifyall:Boolean = true;
 
 	public function ToolIdentify(id:String, toolGroup:ToolGroup ,container:MovieClip) {		
+		super(id, toolGroup, container);		
 		this.toolDownLink = "assets/img/ToolIdentify_down.png";
 		this.toolUpLink = "assets/img/ToolIdentify_up.png";
 		this.toolOverLink = "assets/img/ToolIdentify_over.png";
@@ -43,7 +44,6 @@ class gui.tools.ToolIdentify extends AbstractTool implements ComponentInterface{
 							"<cursor id='busy' url='fmc/CursorsMap.swf' linkageid='busy' />" +
 							"</ToolIdentify>";
 		
-		super(id, toolGroup, container);		
 		init();
 	}
 	

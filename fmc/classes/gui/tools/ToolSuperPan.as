@@ -42,7 +42,8 @@ class gui.tools.ToolSuperPan extends AbstractTool implements ComponentInterface{
 	 * Constructor for creating a ToolSuperPan
 	 * @see AbstractTool#Constructor(id:String, toolGroup:ToolGroup ,container:MovieClip);
 	 */
-	public function ToolSuperPan(id:String, toolGroup:ToolGroup ,container:MovieClip) {		
+	public function ToolSuperPan(id:String, toolGroup:ToolGroup ,container:MovieClip) {
+		super(id, toolGroup, container);		
 		this.toolDownLink = "assets/img/ToolSuperPan_down.png";
 		this.toolUpLink = "assets/img/ToolSuperPan_up.png";
 		this.toolOverLink = "assets/img/ToolSuperPan_over.png";
@@ -54,8 +55,7 @@ class gui.tools.ToolSuperPan extends AbstractTool implements ComponentInterface{
 							"<cursor id='grab' url='fmc/CursorsMap.swf' linkageid='grab'/>" +
 							"<cursor id='busy' url='fmc/CursorsMap.swf' linkageid='busy'/>" +
 							"</ToolSuperPan>";
-		
-		super(id, toolGroup, container);		
+				
 		init();
 	}
 	/**

@@ -51,6 +51,7 @@ class gui.tools.ToolMeasure extends AbstractTool implements ComponentInterface{
 	 * @see AbstractTool#Constructor(id:String, toolGroup:ToolGroup ,container:MovieClip);
 	 */	
 	public function ToolMeasure(id:String, toolGroup:ToolGroup ,container:MovieClip) {		
+		super(id, toolGroup, container);		
 		this.toolDownLink = "assets/img/ToolMeasure_down.png";
 		this.toolUpLink = "assets/img/ToolMeasure_up.png";
 		this.toolOverLink = "assets/img/ToolMeasure_over.png";
@@ -61,7 +62,6 @@ class gui.tools.ToolMeasure extends AbstractTool implements ComponentInterface{
 						"<cursor id='cursor' url='fmc/CursorsMap.swf' linkageid='measure'/>" +
 						"</ToolMeasure>";
 						
-		super(id, toolGroup, container);		
 		init();
 	}
 	

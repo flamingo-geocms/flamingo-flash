@@ -15,6 +15,9 @@ class gui.button.AbstractButton extends AbstractPositionable{
 	//the id of the tooltip (default: 'tooltip');
 	private var _tooltipId:String;
 	
+	//
+	private var _mcloader:MovieClipLoader;
+	
 	//the movieclips that are shown.
 	private var _mcUp:MovieClip;
 	private var _mcOver:MovieClip;
@@ -24,6 +27,11 @@ class gui.button.AbstractButton extends AbstractPositionable{
 	private var _toolUpLink:String;
 	private var _toolOverLink:String;
 	
+	/**
+	 * Constructor for abstractButton. Creates a button and loads the images for the button stages.
+	 * @param	id the id of the button
+	 * @param	container the movieclip that holds this button
+	 */
 	public function AbstractButton(id:String, container:MovieClip) {					
 		super(id, container);
 		//make the holder for the movieclip
@@ -38,10 +46,7 @@ class gui.button.AbstractButton extends AbstractPositionable{
 		this.mcOver = this.holder.createEmptyMovieClip("tool" + id + "_over", this.holder.getNextHighestDepth());
 		this.mcUp = this.holder.createEmptyMovieClip("tool" + id+"_up", this.holder.getNextHighestDepth());
 								
-		var mcloader = new MovieClipLoader();	
-		mcloader.loadClip(_global.flamingo.correctUrl(this.toolDownLink), this.mcDown.createEmptyMovieClip("container",0));
-		mcloader.loadClip(_global.flamingo.correctUrl(this.toolOverLink), this.mcOver.createEmptyMovieClip("container",0));
-		mcloader.loadClip(_global.flamingo.correctUrl(this.toolUpLink), this.mcUp.createEmptyMovieClip("container",0));
+		this.mcloader = new MovieClipLoader();			
 				
 		this.mcDown._visible = false;
 		this.mcOver._visible = false;
@@ -49,6 +54,9 @@ class gui.button.AbstractButton extends AbstractPositionable{
 		
 		this.setEvents();	
 	}
+	/**
+	 * Set the events of this button.
+	 */
 	public function setEvents():Void {		
 		var thisObj:AbstractButton = this;
 		this.holder.onRollOver = function() {	
@@ -110,14 +118,13 @@ class gui.button.AbstractButton extends AbstractPositionable{
 		this._enabled = value;
 	}
 	
-	public function get toolDownLink():String 
-	{
+	public function get toolDownLink():String{
 		return _toolDownLink;
 	}
 	
-	public function set toolDownLink(value:String):Void 
-	{
+	public function set toolDownLink(value:String):Void {
 		_toolDownLink = value;
+		this.mcloader.loadClip(_global.flamingo.correctUrl(this.toolDownLink), this.mcDown.createEmptyMovieClip("container",0));		
 	}
 	
 	public function get toolUpLink():String 
@@ -125,9 +132,9 @@ class gui.button.AbstractButton extends AbstractPositionable{
 		return _toolUpLink;
 	}
 	
-	public function set toolUpLink(value:String):Void 
-	{
+	public function set toolUpLink(value:String):Void{
 		_toolUpLink = value;
+		this.mcloader.loadClip(_global.flamingo.correctUrl(this.toolUpLink), this.mcUp.createEmptyMovieClip("container",0));		
 	}
 	
 	public function get toolOverLink():String 
@@ -135,9 +142,9 @@ class gui.button.AbstractButton extends AbstractPositionable{
 		return _toolOverLink;
 	}
 	
-	public function set toolOverLink(value:String):Void 
-	{
+	public function set toolOverLink(value:String):Void {
 		_toolOverLink = value;
+		this.mcloader.loadClip(_global.flamingo.correctUrl(this.toolOverLink), this.mcOver.createEmptyMovieClip("container",0));		
 	}
 	
 	public function get tooltipId():String 
@@ -178,6 +185,14 @@ class gui.button.AbstractButton extends AbstractPositionable{
 	public function set mcDown(value:MovieClip):Void 
 	{
 		_mcDown = value;
+	}
+	
+	public function get mcloader():MovieClipLoader {
+		return _mcloader;
+	}
+	
+	public function set mcloader(value:MovieClipLoader):Void {
+		_mcloader = value;
 	}
 	
 	
