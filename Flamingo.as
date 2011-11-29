@@ -977,6 +977,10 @@ class Flamingo {
 						var button:AbstractButton;
 						if (file == "ButtonFull") {
 							button = new ButtonFull(targetid, mc);							
+						} else if ( file == "ButtonNext") {
+							button = new ButtonNext(targetid, mc);
+						}else if ( file == "ButtonPrev") {
+							button = new ButtonPrev(targetid, mc);
 						}
 						button.setConfig(xmlNode);
 						this.components[targetid] = button;
@@ -1034,6 +1038,8 @@ class Flamingo {
 	private function isEmbeddedComponents(file:String):Boolean {
 		switch(file) {
 			case "ButtonFull":
+			case "ButtonNext":
+			case "ButtonPrev":
 			case "ToolIdentify":
 			case "ToolSuperPan":
 			case "ToolPan":
@@ -1064,6 +1070,8 @@ class Flamingo {
 	private function isButton(file:String):Boolean {
 		switch(file) {
 			case "ButtonFull":
+			case "ButtonNext":
+			case "ButtonPrev":
 				return true;
 				break;
 			default:
