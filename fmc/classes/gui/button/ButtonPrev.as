@@ -71,7 +71,7 @@ class gui.button.ButtonPrev extends AbstractButton implements ComponentInterface
 		flamingo.raiseEvent(this, "onInit", this);
 	}
 	/**
-	* Configures a component by setting a xml.
+	* Configurates a component by setting a xml.
 	* @attr xml:Object Xml or string representation of a xml.
 	*/
 	function setConfig(xml:Object) {
@@ -106,4 +106,10 @@ class gui.button.ButtonPrev extends AbstractButton implements ComponentInterface
 			flamingo.getComponent(listento[i]).moveToPrevExtent();
 		}
 	}
+	/** 
+	 * Dispatched when a component is up and ready to run.
+	 * @param comp:MovieClip a reference to the component.
+	 */
+	//public function onInit(comp:MovieClip):Void {
+	//}
 }

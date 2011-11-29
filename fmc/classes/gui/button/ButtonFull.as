@@ -121,6 +121,4 @@ class gui.button.ButtonFull extends AbstractButton implements ComponentInterface
 	 */
 	//public function onInit(comp:MovieClip):Void {
 	//}
-	
-	
 }

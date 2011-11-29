@@ -23,7 +23,6 @@ class gui.tools.AbstractTool extends AbstractButton
 	
 	public function AbstractTool(id, toolGroup:ToolGroup, container) {			
 		super(id, container);
-		Logger.console("AbstractTool Construct");
 		this.toolGroup = toolGroup;
 		
 		//init vars
@@ -93,7 +92,6 @@ class gui.tools.AbstractTool extends AbstractButton
 	public function setActive(active:Boolean):Void {
 		//turn off
 		if (this.active && !active) {
-			Logger.console("Turn off button: " + this.id);
 			flamingo.removeListener(this.lMap, this.listento, this.toolGroup);		
 			this.toolGroup.setCursor(undefined);
 			this.mcDown._visible = false;
@@ -102,7 +100,6 @@ class gui.tools.AbstractTool extends AbstractButton
 			//TODO: Set correct cursor this.setCursor(mc.cursors[cursorid]);
 		}//turn on
 		else if (!this.active && active) {
-			Logger.console("Turn on button: " + this.id);		
 			flamingo.addListener(this.lMap, this.listento, this.toolGroup);
 			this.toolGroup.setCursor(this.cursors[this.cursorId]);
 			this.mcUp._visible = false;

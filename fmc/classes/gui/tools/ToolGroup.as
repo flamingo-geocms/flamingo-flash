@@ -122,7 +122,6 @@ dynamic class gui.tools.ToolGroup extends AbstractListenerRegister implements Co
 	* @attr xml:Object Xml or string representation of a xml.
 	*/
 	function setConfig(xml:Object) {
-		Logger.console("SetConfig", xml);
 		if (typeof (xml) == "string") {
 			xml = new XML(String(xml));
 			xml = xml.firstChild;
@@ -164,7 +163,6 @@ dynamic class gui.tools.ToolGroup extends AbstractListenerRegister implements Co
 	* @param xml:Object Xml or string representation of xml, describing tool.
 	*/
 	function addComposite(xml:Object):Void {
-		Logger.console("addComposite: ", xml);
 		if (typeof (xml) == "string") {
 			xml = new XML(String(xml));
 			xml= xml.firstChild;

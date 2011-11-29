@@ -59,8 +59,6 @@ class gui.tools.ToolZoomin extends AbstractTool implements ComponentInterface{
 	}	
 	/*Init function*/
 	private function init() {
-		Logger.console("INIT: " + this.id);
-		Logger.console("Old listener name :" +this.lMap.name);
 		var thisObj:ToolZoomin = this;
 		//onmousedown event when this tool is active
 		this.lMap.onMouseDown = function(mapOnMouseDown:MovieClip, xmouseOnMouseDown:Number, ymouseOnMouseDown:Number, coordOnMouseDown:Object) {

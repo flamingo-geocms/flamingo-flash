@@ -46,14 +46,7 @@ class gui.button.ButtonNext extends AbstractButton implements ComponentInterface
 							
 		flamingo.addListener(lParent, flamingo.getParent(this), this);
 
-		var thisObj:ButtonNext = this;
-		lMap.onUpdate = function(map:MovieClip) {
-			if (map.getNextExtents().length>0) {
-				thisObj.setEnabled(true);
-			} else {
-				thisObj.setEnabled(false);
-			}
-		};
+		
 		init();
 	
 	}
@@ -77,11 +70,19 @@ class gui.button.ButtonNext extends AbstractButton implements ComponentInterface
 		//remove xml from repository
 		flamingo.deleteXML(this);
 		this._visible = visible;
+		var thisObj:ButtonNext = this;
+		lMap.onUpdate = function(map:MovieClip) {
+			if (map.getNextExtents().length>0) {
+				thisObj.setEnabled(true);
+			} else {
+				thisObj.setEnabled(false);
+			}
+		};
 		flamingo.raiseEvent(this, "onInit", this);
 	}
 	
 	/**
-	* Configures a component by setting a xml.
+	* Configurates a component by setting a xml.
 	* @attr xml:Object Xml or string representation of a xml.
 	*/
 	function setConfig(xml:Object) {
@@ -116,4 +117,10 @@ class gui.button.ButtonNext extends AbstractButton implements ComponentInterface
 			flamingo.getComponent(listento[i]).moveToNextExtent();
 		}
 	}
+	/** 
+	 * Dispatched when a component is up and ready to run.
+	 * @param comp:MovieClip a reference to the component.
+	 */
+	//public function onInit(comp:MovieClip):Void {
+	//}
 }

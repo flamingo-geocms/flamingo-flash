@@ -62,7 +62,6 @@ class gui.button.AbstractButton extends AbstractPositionable{
 	public function setEvents():Void {		
 		var thisObj:AbstractButton = this;
 		this.holder.onRollOver = function() {	
-			Logger.console("onRollOver");
 			if (thisObj.isClickable()){
 				//var id = thisObj.flamingo.getId(thisObj);
 				thisObj.flamingo.showTooltip(thisObj.flamingo.getString(thisObj, thisObj.tooltipId), thisObj);
@@ -72,7 +71,6 @@ class gui.button.AbstractButton extends AbstractPositionable{
 			}
 		}
 		this.holder.onRollOut = function() {
-			Logger.console("onRollOut");			
 			if (thisObj.isClickable()) {
 				thisObj.mcOver._visible = false;				
 				thisObj.mcDown._visible = false;
@@ -81,7 +79,6 @@ class gui.button.AbstractButton extends AbstractPositionable{
 			}
 		}
 		this.holder.onPress = function() {
-			Logger.console("onPress");
 			if (thisObj.isClickable()) {				
 				thisObj.pressed = true;
 				thisObj.mcOver._visible = false;
@@ -91,7 +88,6 @@ class gui.button.AbstractButton extends AbstractPositionable{
 			}
 		}
 		this.holder.onRelease = function() {
-			Logger.console("onRelease");			
 			if (thisObj.isClickable()) {	
 				thisObj.pressed = false;
 				thisObj.mcDown._visible = false;
@@ -101,7 +97,6 @@ class gui.button.AbstractButton extends AbstractPositionable{
 			}
 		}
 		this.holder.onReleaseOutside = function() {
-			Logger.console("onReleaseOutside");
 			if (thisObj.isClickable()) {
 				thisObj.pressed = false;
 				thisObj.onReleaseOutside();
@@ -109,7 +104,6 @@ class gui.button.AbstractButton extends AbstractPositionable{
 		};
 		
 		this.holder.onDragOver = function() {
-			Logger.console("onDragOver");
 			if (thisObj.isClickable()) {
 				if (thisObj.pressed) {				
 					thisObj.mcOver._visible = false;	
@@ -121,7 +115,6 @@ class gui.button.AbstractButton extends AbstractPositionable{
 		};
 		
 		this.holder.onDragOut = function() {
-			Logger.console("onDragOver");
 			if (thisObj.isClickable()) {						
 				thisObj.mcOver._visible = false;		
 				thisObj.mcDown._visible = false;		

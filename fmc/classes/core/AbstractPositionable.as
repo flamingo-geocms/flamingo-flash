@@ -54,7 +54,6 @@ class core.AbstractPositionable
 	 * @param	container the visible container.
 	 */
 	public function AbstractPositionable (id:String, container:MovieClip) {
-		Logger.console("Positionable with id: " , id);
 		this.id = id;
 		this.container = container;
 		

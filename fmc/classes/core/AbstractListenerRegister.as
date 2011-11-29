@@ -12,7 +12,6 @@ class core.AbstractListenerRegister extends AbstractPositionable
 	private var _registerdListeners:Object;
 	
 	public function AbstractListenerRegister (id:String, container:MovieClip) {
-		Logger.console("Constructor AbstractListenerRegister");
 		super(id, container);
 	}
 	

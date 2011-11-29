@@ -61,10 +61,7 @@ class gui.tools.ToolZoomout extends AbstractTool implements ComponentInterface
 	}	
 	
 	
-	private function init() {
-		Logger.console("INIT: " + this.id);
-		Logger.console("Old listener name :" +this.lMap.name);
-		
+	private function init() {			
 		var thisObj:ToolZoomout = this;
 		//onmousedown event when this tool is active
 		this.lMap.onMouseDown = function(mapOnMouseMove:MovieClip, xmouseOnMouseMove:Number, ymouseOnMouseMove:Number, coordOnMouseMove:Object) {
