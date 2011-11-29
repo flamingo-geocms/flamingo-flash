@@ -88,6 +88,19 @@ class core.AbstractPositionable
 	public function resize() {
 		this.flamingo.position(this);
 	}
+	/**
+	 * Moves the movieclip to the given x and y
+	 * @param	x
+	 * @param	y
+	 */
+	function move(x:Number, y:Number) {
+		if (!(isNaN(x))) {
+			this.container._x = x;
+		}
+		if (!(isNaN(y))) {
+			this.container._y = y;
+		}
+	}
 	
 	/*public function setCursor(cursor:String):Void {			
 		flamingo.showCursor(cursor);		

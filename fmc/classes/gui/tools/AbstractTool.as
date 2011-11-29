@@ -134,7 +134,7 @@ class gui.tools.AbstractTool extends AbstractButton
 	/**
 	 * Handles the press of the button.
 	 */
-	public function press() { 
+	public function onRelease() { 
 		this.toolGroup.setTool(this.id);
 	}
 	/***********************************************************

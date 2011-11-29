@@ -67,7 +67,8 @@ class gui.button.AbstractButton extends AbstractPositionable{
 				//var id = thisObj.flamingo.getId(thisObj);
 				thisObj.flamingo.showTooltip(thisObj.flamingo.getString(thisObj, thisObj.tooltipId), thisObj);
 				thisObj.mcOver._visible = true;
-				thisObj.mcUp._visible = false;								
+				thisObj.mcUp._visible = false;	
+				thisObj.onRollOver();
 			}
 		}
 		this.holder.onRollOut = function() {
@@ -76,6 +77,7 @@ class gui.button.AbstractButton extends AbstractPositionable{
 				thisObj.mcOver._visible = false;				
 				thisObj.mcDown._visible = false;
 				thisObj.mcUp._visible = true;
+				thisObj.onRollOut();
 			}
 		}
 		this.holder.onPress = function() {
@@ -84,7 +86,8 @@ class gui.button.AbstractButton extends AbstractPositionable{
 				thisObj.pressed = true;
 				thisObj.mcOver._visible = false;
 				thisObj.mcUp._visible = false;
-				thisObj.mcDown._visible = true;				
+				thisObj.mcDown._visible = true;
+				thisObj.onPress();		
 			}
 		}
 		this.holder.onRelease = function() {
@@ -94,13 +97,14 @@ class gui.button.AbstractButton extends AbstractPositionable{
 				thisObj.mcDown._visible = false;
 				thisObj.mcUp._visible = false;
 				thisObj.mcOver._visible = true;
-				thisObj.press();
+				thisObj.onRelease();
 			}
 		}
 		this.holder.onReleaseOutside = function() {
 			Logger.console("onReleaseOutside");
 			if (thisObj.isClickable()) {
 				thisObj.pressed = false;
+				thisObj.onReleaseOutside();
 			}
 		};
 		
@@ -111,6 +115,7 @@ class gui.button.AbstractButton extends AbstractPositionable{
 					thisObj.mcOver._visible = false;	
 					thisObj.mcUp._visible = false;			
 					thisObj.mcDown._visible = true;	
+					thisObj.onDragOver();
 				}
 			}
 		};
@@ -150,7 +155,7 @@ class gui.button.AbstractButton extends AbstractPositionable{
 	 * Old functions that need to be supported.
 	 */
 	public function click() {
-		this.press();
+		this.onPress();
 	}
 	/*******************************************************
 	 * Functions that can be used to handle events on the button.
@@ -159,7 +164,14 @@ class gui.button.AbstractButton extends AbstractPositionable{
 	/**
 	 * Implement this function to handle the press of the button.
 	 */
-	public function press() { }
+	public function onRelease() { }
+	public function onPress() { }
+	public function onRollOut() { }
+	public function onRollOver() { }
+	public function onReleaseOutside() { }
+	public function onDragOver() { }
+	public function onDragOut() { }
+	
 	public function setConfig(xml:Object) {
 		Logger.console("!!!Function setConfig() needs to be overwritten in: "+this.id);
 	}
