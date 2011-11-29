@@ -98,21 +98,16 @@ class gui.button.ButtonFull extends AbstractButton implements ComponentInterface
 		resize();		
 	}
 		
-	public function press() {
-		Logger.console("Press function called");		
+	public function press() {		
 		for (var i = 0; i<listento.length; i++) {
 			var map = flamingo.getComponent(listento[i]);
 			if (map.getHoldOnUpdate() && map.isUpdating()) {
 				Logger.console("Error, is still updating....");
 				return;
 			}
-		}
-		Logger.console("Listento: "+listento);
-		Logger.console("Listento.length: " + listento.length);
-		
+		}		
 		for (var i = 0; i<listento.length; i++) {
 			var map = flamingo.getComponent(listento[i]);
-			Logger.console("Map: " + map);
 			if (extent == "initial") {
 				map.moveToExtent(map.getInitialExtent(),0);
 			} else {

@@ -58,46 +58,7 @@ class gui.tools.AbstractTool extends AbstractButton
 			}
 		};
 			
-	}
-	/**
-	 * Overwrite the setEvents of the abstractButton
-	 */
-	public function setEvents():Void {		
-		var thisObj:AbstractTool = this;
-		//overwrite the onRollOver
-		this.holder.onRollOver = function() {	
-			if (thisObj.enabled){
-				//var id = thisObj.flamingo.getId(thisObj);
-				thisObj.flamingo.showTooltip(thisObj.flamingo.getString(thisObj, thisObj.tooltipId), thisObj);
-				if (!thisObj.active) {
-					thisObj.mcOver._visible = true;
-					thisObj.mcUp._visible = false;				
-				}
-			}
-		}
-		this.holder.onRollOut = function() {
-			Logger.console("onRollOut "+thisObj.active);			
-			if (thisObj.enabled) {
-				if (!thisObj.active) {
-					thisObj.mcOver._visible = false;
-					thisObj.mcUp._visible = true;				
-				}
-			}
-		}
-		//Overwrite the onRelease function of the button
-		this.holder.onRelease = function() {
-			Logger.console("onRelease "+thisObj.active);
-			if (thisObj.enabled) {
-				if (!thisObj.active) {
-					thisObj.toolGroup.setTool(thisObj.id);
-					//thisObj.setActive(true);
-					thisObj.mcOver._visible = false;				
-				}else {
-					//thisObj.setActive(false);				
-				}
-			}
-		}		
-	}
+	}	
 		
 	public function get _parent():ToolGroup {
 		return this.toolGroup;
@@ -162,6 +123,19 @@ class gui.tools.AbstractTool extends AbstractButton
 			}
 		};
 		 */
+	}
+	/**
+	 * Returns true if this button is clickable
+	 */
+	public function isClickable():Boolean {
+		return super.isClickable() && !this.active;
+	}
+	
+	/**
+	 * Handles the press of the button.
+	 */
+	public function press() { 
+		this.toolGroup.setTool(this.id);
 	}
 	/***********************************************************
 	 * Getters and Setters.
