@@ -44,6 +44,7 @@ import flash.filters.DropShadowFilter;
 import gui.Coordinates;
 import gui.tools.*;
 import gui.button.*;
+import gui.BorderNavigation;
 import tools.Logger;
 
 class Flamingo {
@@ -952,6 +953,10 @@ class Flamingo {
 						this.toolGroups.push(toolGroup);
 						toolGroup.setConfig(xmlNode);						
 						this.components[targetid] = toolGroup;
+					}else if (file == "BorderNavigation") {
+						var borderNavigation:BorderNavigation = new BorderNavigation(targetid, mc);
+						borderNavigation.setConfig(xmlNode);
+						this.components[targetid] = borderNavigation;
 					}else if (file == "Coordinates") {
 						var coordinates:Coordinates = new Coordinates(targetid, mc);
 						this.components[targetid] = coordinates;
@@ -1039,6 +1044,7 @@ class Flamingo {
 	 */
 	private function isEmbeddedComponents(file:String):Boolean {
 		switch(file) {
+			case "BorderNavigation":
 			case "ButtonFull":
 			case "ButtonNext":
 			case "ButtonPrev":
@@ -2732,69 +2738,64 @@ class Flamingo {
 		
 		var id = this.getId(mc);
 		if (mc.left.length>0 && mc.width.length>0) {
-			//trace("x1")
+			//Logger.console("x1")
 			pt.width = getAbs(mc.width, pw);
 			pt.x = convertPosition(mc.left, pw, parent.guides.x);
-			return (pt);
 		}
-		if (mc.right.length>0 && mc.width.length>0) {
-			//trace("x2")
+		else if (mc.right.length>0 && mc.width.length>0) {
+			//Logger.console("x2")
 			pt.width = getAbs(mc.width, pw);
 			pt.x = convertPosition(mc.right, pw, parent.guides.x)-pt.width;
-			return (pt);
 		}
-		if (mc.xcenter.length>0 && mc.width.length>0) {
-			//trace("x3")
+		else if (mc.xcenter.length>0 && mc.width.length>0) {
+			//Logger.console("x3")
 			pt.width = getAbs(mc.width, pw);
 			pt.x = convertPosition(mc.xcenter, pw, parent.guides.x)-(pt.width/2);
-			return (pt);
 		}
-		if (mc.left.length>0 && mc.right.length>0) {
-			//trace("x4")
+		else if (mc.left.length>0 && mc.right.length>0) {
+			//Logger.console("x4")
 			pt.x = convertPosition(mc.left, pw, parent.guides.x);
 			pt.width = convertPosition(mc.right, pw, parent.guides.x)-pt.x;
-			return (pt);
 		}
-		if (mc.left.length>0 && mc.xcenter.length>0) {
-			//trace("x5")
+		else if (mc.left.length>0 && mc.xcenter.length>0) {
+			//Logger.console("x5")
 			pt.x = convertPosition(mc.left, pw, parent.guides.x);
 			pt.width = (convertPosition(mc.xcenter, pw, parent.guides.x)-pt.x)*2;
-			return (pt);
 		}
-		if (mc.right.length>0 && mc.xcenter.length>0) {
-			//trace("x6")
+		else if (mc.right.length>0 && mc.xcenter.length>0) {
+			//Logger.console("x6")
 			var r = convertPosition(mc.right, pw, parent.guides.x);
 			var c = convertPosition(mc.xcenter, pw, parent.guides.x);
 			pt.width = (r-c)*2;
 			pt.x = r-(pt.width/2);
-			return (pt);
 		}
-		if (mc.left.length>0) {
-			//trace("x7");
+		else if (mc.left.length>0) {
+			//Logger.console("x7");
 			pt.x = convertPosition(mc.left, pw, parent.guides.x);
 			pt.width = mc._width;
-			return (pt);
 		}
-		if (mc.right.length>0) {
-			//trace("x8")
+		else if (mc.right.length>0) {
+			//Logger.console("x8")
 			pt.x = convertPosition(mc.right, pw, parent.guides.x)-mc._width;
 			pt.width = mc._width;
-			return (pt);
 		}
-		if (mc.xcenter.length>0) {
-			//trace("x9")
+		else if (mc.xcenter.length>0) {
+			//Logger.console("x9")
 			pt.x = convertPosition(mc.xcenter, pw, parent.guides.x)-(mc._width/2);
 			pt.width = mc._width;
-			return (pt);
 		}
-		if (mc.width.length>0) {
-			//trace("x10")
+		else if (mc.width.length>0) {
+			//Logger.console("x10")
 			pt.x = mc._x;
 			pt.width = getAbs(mc.width, pw);
-			return (pt);
+		}else {
+			//Logger.console("x11")
+			pt.x = mc._x;
+			pt.width = mc._width;
 		}
-		pt.x = mc._x;
-		pt.width = mc._width;
+		if (isNaN(pt.x)) {
+			pt.x = 0;
+		}
 		return (pt);
 	}
 	private function getYPS(mc:Object, parent:MovieClip):Object {
@@ -2809,61 +2810,65 @@ class Flamingo {
 		if (ph == undefined) {
 			ph = Stage.height;
 		}
-		if (mc.top.length>0 && mc.height.length>0) {
+		if (mc.top.length > 0 && mc.height.length > 0) {
+			//Logger.console("y1");
 			pt.height = getAbs(mc.height, ph);
 			pt.y = convertPosition(mc.top, ph, parent.guides.y);
-			return (pt);
 		}
-		if (mc.bottom.length>0 && mc.height.length>0) {
+		else if (mc.bottom.length>0 && mc.height.length>0) {
+			//Logger.console("y2");
 			pt.height = getAbs(mc.height, ph);
 			pt.y = convertPosition(mc.bottom, ph, parent.guides.y)-pt.height;
-			return (pt);
 		}
-		if (mc.ycenter.length>0 && mc.height.length>0) {
+		else if (mc.ycenter.length>0 && mc.height.length>0) {
+			//Logger.console("y3");
 			pt.height = getAbs(mc.height, ph);
 			pt.y = convertPosition(mc.ycenter, ph, parent.guides.y)-(pt.height/2);
-			return (pt);
 		}
-		if (mc.top.length>0 && mc.bottom.length>0) {
+		else if (mc.top.length>0 && mc.bottom.length>0) {
+			//Logger.console("y4");
 			pt.y = convertPosition(mc.top, ph, parent.guides.y);
 			pt.height = convertPosition(mc.bottom, ph, parent.guides.y)-pt.y;
-			return (pt);
 		}
-		if (mc.top.length>0 && mc.ycenter.length>0) {
+		else if (mc.top.length>0 && mc.ycenter.length>0) {
+			//Logger.console("y5");
 			pt.y = convertPosition(mc.top, ph, mc._parent.guides.y);
 			pt.height = (convertPosition(mc.ycenter, ph, parent.guides.y)-pt.y)*2;
-			return (pt);
 		}
-		if (mc.bottom.length>0 && mc.ycenter.length>0) {
+		else if (mc.bottom.length>0 && mc.ycenter.length>0) {
+			//Logger.console("y6");
 			var b = convertPosition(mc.bottom, ph, parent.guides.y);
 			var c = convertPosition(mc.ycenter, ph, parent.guides.y);
 			pt.height = (b-c)*2;
 			pt.y = b-(pt.width/2);
-			return (pt);
 		}
-		if (mc.top.length>0) {
+		else if (mc.top.length>0) {
+			//Logger.console("y7");
 			pt.y = convertPosition(mc.top, ph, parent.guides.y);
 			pt.height = mc._height;
-			return (pt);
 		}
-		if (mc.bottom.length>0) {
+		else if (mc.bottom.length>0) {
+			//Logger.console("y8");
 			pt.y = convertPosition(mc.bottom, ph, parent.guides.y)-mc._height;
 			pt.height = mc._height;
-			return (pt);
 		}
-		if (mc.ycenter.length>0) {
-			//trace("y9")
+		else if (mc.ycenter.length>0) {
+			//Logger.console("y9");
 			pt.y = convertPosition(mc.ycenter, ph, parent.guides.y)-(mc._height/2);
 			pt.height = mc._height;
-			return (pt);
 		}
-		if (mc.height.length>0) {
+		else if (mc.height.length>0) {
+			//Logger.console("y10");
 			pt.y = mc._y;
 			pt.height = getAbs(mc.height, ph);
-			return (pt);
+		}else{
+			//Logger.console("y11");
+			pt.y = mc._y;
+			pt.height = mc._height;	
 		}
-		pt.y = mc._y;
-		pt.height = mc._height;
+		if (isNaN(pt.y)) {
+			pt.y = 0;
+		}
 		return (pt);
 	}
 	private function convertPosition(pos:String, abs:Number, guides:Object):Number {
