@@ -2009,6 +2009,9 @@ class Flamingo {
 	* @return MovieClip The component parent.
 	*/
 	public function getParent(comp:Object):MovieClip {
+		if (comp instanceof AbstractPositionable) {
+			return AbstractPositionable(comp).parent;
+		}
 		var id = this.components[this.getId(comp)].parent;
 		return (getComponent(id));
 	}

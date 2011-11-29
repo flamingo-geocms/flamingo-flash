@@ -19,8 +19,7 @@ class gui.BorderNavigation extends AbstractPositionable{
 		super(id, container);
 			Logger.console("Constructor BorderNavigation");
 		extentButtons = new Object();
-		init();		
-		//Logger.console("**********"+flamingo.getParent(this);
+		init();				
 	}
 	
 	function init() {
