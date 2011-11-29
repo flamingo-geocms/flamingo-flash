@@ -41,6 +41,7 @@ import core.AbstractPositionable;
 import core.ComponentInterface;
 import flash.external.ExternalInterface;
 import flash.filters.DropShadowFilter;
+import gui.Coordinates;
 import gui.tools.*;
 import gui.button.*;
 import tools.Logger;
@@ -946,13 +947,15 @@ class Flamingo {
 				if (this.components[targetid] != undefined && this.components[targetid] instanceof AbstractPositionable) {				
 					ComponentInterface(this.components[targetid]).setConfig(XML(xmlNode));
 				}else {
-					Logger.console("Add: " + file);
-					Logger.console("Config: ", xmlNode);
 					if (file == "ToolGroup") {
 						var toolGroup:ToolGroup = new ToolGroup(targetid,mc);										
 						this.toolGroups.push(toolGroup);
 						toolGroup.setConfig(xmlNode);						
 						this.components[targetid] = toolGroup;
+					}else if (file == "Coordinates") {
+						var coordinates:Coordinates = new Coordinates(targetid, mc);
+						this.components[targetid] = coordinates;
+						coordinates.setConfig(xmlNode);
 					}else if (isTool(file)) {
 						//get the last added toolgroup
 						var toolGroup:ToolGroup = this.toolGroups[this.toolGroups.length - 1];
@@ -987,7 +990,6 @@ class Flamingo {
 					}
 					this.components[targetid].type = type;			
 					this.raiseEvent(this, "onLoadComponent", targetid);	
-					Logger.console("Done Loading: " + targetid);
 					this.doneLoading();				
 				}				
 			}else {
@@ -1047,6 +1049,7 @@ class Flamingo {
 			case "ToolZoomin":
 			case "ToolZoomout":
 			case "ToolGroup":
+			case "Coordinates":
 				return true;
 				break;
 			default:
@@ -2629,7 +2632,6 @@ class Flamingo {
 		var mc:Object;
 		if (comp instanceof AbstractPositionable) {
 			mc = AbstractPositionable(comp);		
-			Logger.console("****** It's a AbstractPositionable with id: "+mc.id);
 		}else {
 			mc = this.getComponent(id);
 		}
@@ -2702,9 +2704,7 @@ class Flamingo {
 		var r:Object;
 		if (comp instanceof AbstractPositionable) {
 			r = this.getPosition(comp, parent);
-			mc = AbstractPositionable(comp).container;
-			Logger.console("****** r.x = " + r.x);
-			Logger.console("****** r.y = " + r.y);			
+			mc = AbstractPositionable(comp).container;		
 		}else {			
 			r = this.getPosition(comp, parent);			
 			mc = MovieClip(comp);
