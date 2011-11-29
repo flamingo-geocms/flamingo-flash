@@ -19,11 +19,11 @@ class gui.BorderNavigation extends AbstractPositionable{
 		super(id, container);
 			Logger.console("Constructor BorderNavigation");
 		extentButtons = new Object();
-		init();
+		init();		
+		//Logger.console("**********"+flamingo.getParent(this);
 	}
 	
 	function init() {
-		Logger.console("BorderNavigation.init()");
 		if (flamingo == undefined) {
 			var t:TextField = this.container.createTextField("readme", 0, 0, 0, 550, 400);
 			t.html = true;
@@ -51,7 +51,6 @@ class gui.BorderNavigation extends AbstractPositionable{
 	* @attr xml:Object Xml or string representation of a xml.
 	*/
 	function setConfig(xml:Object) {
-		Logger.console("BorderNavigation.setConfig()");
 		if (typeof (xml) == "string") {
 			xml = new XML(String(xml));
 			xml=xml.firstChild;
@@ -84,7 +83,6 @@ class gui.BorderNavigation extends AbstractPositionable{
 	}
 	
 	function refresh() {
-		Logger.console("BorderNavigation Refresh button length: "+this.buttons.length);
 		for (var i = 0; i<buttons.length; i++) {
 			var pos = buttons[i];
 			Logger.console("Direction: "+pos);
@@ -136,8 +134,6 @@ class gui.BorderNavigation extends AbstractPositionable{
 	}
 	function resize(map:MovieClip) {
 		var r = flamingo.getPosition(this);
-		Logger.console("rx: " + r.x);
-		Logger.console("ry: " + r.y);
 		/*r.x = 0;
 		r.y = 0;*/
 		var left = r.x - offset;		
@@ -145,14 +141,7 @@ class gui.BorderNavigation extends AbstractPositionable{
 		var right = r.x+r.width+offset;
 		var bottom = r.y+r.height+offset;
 		var xcenter = (right+left)/2;
-		var ycenter = (top + bottom) / 2;
-		Logger.console("**************************************************");
-		Logger.console("Left: " + left);
-		Logger.console("right: " + right);
-		Logger.console("ycenter: " + ycenter);
-		Logger.console("xcenter: " + xcenter);
-		Logger.console("top: " + top); 
-		Logger.console("bottom: " + bottom);		
+		var ycenter = (top + bottom) / 2;	
 		for (var pos in extentButtons) {
 			Logger.console("Resize pos: "+pos);
 			switch (pos) {
