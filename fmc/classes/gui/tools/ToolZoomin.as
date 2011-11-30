@@ -64,8 +64,8 @@ class gui.tools.ToolZoomin extends AbstractTool implements ComponentInterface{
 		this.lMap.onMouseDown = function(mapOnMouseDown:MovieClip, xmouseOnMouseDown:Number, ymouseOnMouseDown:Number, coordOnMouseDown:Object) {
 			var x:Number;
 			var y:Number;
-			if (! thisObj._parent.updating) {
-				thisObj._parent.cancelAll();
+			if (! thisObj.parent.updating) {
+				thisObj.parent.cancelAll();
 				x = xmouseOnMouseDown;
 				y = ymouseOnMouseDown;
 				thisObj.lMap.onMouseMove = function(map:MovieClip, xmouse:Number, ymouse:Number, coord:Object) {
@@ -89,7 +89,7 @@ class gui.tools.ToolZoomin extends AbstractTool implements ComponentInterface{
 						var ext = map.rect2Extent(thisObj.rect);
 						map.moveToExtent(ext, thisObj.zoomdelay);
 					}
-					thisObj._parent.updateOther(map, thisObj.zoomdelay);
+					thisObj.parent.updateOther(map, thisObj.zoomdelay);
 					//puin ruimen                                
 					//map.clearDrawings();
 					delete thisObj.lMap.onMouseMove;
@@ -165,7 +165,6 @@ class gui.tools.ToolZoomin extends AbstractTool implements ComponentInterface{
 				break;
 			}
 		}
-		_parent.initTool(this, skin+"_up", skin+"_over", skin+"_down", skin+"_up", lMap, "cursor", "tooltip");
 		this.setEnabled(enabled);
 		//this.setVisible(visible);
 		flamingo.position(this);
@@ -178,11 +177,11 @@ class gui.tools.ToolZoomin extends AbstractTool implements ComponentInterface{
 	}
 	function startUpdating() {
 
-		_parent.setCursor(this.cursors["busy"]);
+		parent.setCursor(this.cursors["busy"]);
 	}
 	function stopUpdating() {
 		
-		_parent.setCursor(this.cursors["cursor"]);
+		parent.setCursor(this.cursors["cursor"]);
 	}
 	/*************************************************************
 	 * Events

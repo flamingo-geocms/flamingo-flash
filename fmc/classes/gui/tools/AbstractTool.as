@@ -24,7 +24,7 @@ class gui.tools.AbstractTool extends AbstractButton
 	public function AbstractTool(id, toolGroup:ToolGroup, container) {			
 		super(id, container);
 		this.toolGroup = toolGroup;
-		
+		this.parent = toolGroup;
 		//init vars
 		this.lMap = new Object();		
 		this.active = false;
@@ -58,15 +58,18 @@ class gui.tools.AbstractTool extends AbstractButton
 		};
 			
 	}	
-		
-	public function get _parent():ToolGroup {
-		return this.toolGroup;
-	}
 	
 	/***********************************************************
 	 * Special getters / setters.... TODO: Still needed or implement in the other setters and getters?
-	 */ 
-	
+	 */
+	/**
+	 * Returns the real parent
+	 * @return the real parent In this case its always the borderNavigation
+	 */
+	public function getParent():Object {
+		return this.toolGroup;
+	}	 
+	 
 	/**
 	 * Get the listento. Default its the listento of the toolgroup
 	 */

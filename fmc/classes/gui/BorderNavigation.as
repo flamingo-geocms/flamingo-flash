@@ -84,7 +84,7 @@ class gui.BorderNavigation extends AbstractPositionable{
 		for (var i = 0; i<buttons.length; i++) {
 			var pos = buttons[i];
 			var moveExtentButton:MoveExtentButton = new MoveExtentButton(this.id + pos, 
-				this.container.createEmptyMovieClip("m" + pos, i));
+				this.container.createEmptyMovieClip("m" + pos, i),this);
 				
 			moveExtentButton.toolOverLink = "assets/img/borderNav_" + pos + "_over.png";
 			moveExtentButton.toolUpLink ="assets/img/borderNav_"+pos+"_up.png";

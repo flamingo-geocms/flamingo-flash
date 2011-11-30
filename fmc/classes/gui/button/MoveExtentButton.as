@@ -4,17 +4,18 @@
  */
 import gui.BorderNavigation;
 import gui.button.AbstractButton;
-
+import tools.Logger;
 class gui.button.MoveExtentButton extends AbstractButton {
 	private var _moveId:Number;
 	
 	private var _xDirection:Number;
 	private var _yDirection:Number;
-	private var _borderNavigation:BorderNavigation;
+	private var _borderNavigation:BorderNavigation = null;
 	
 	public function MoveExtentButton(id:String, container:MovieClip, borderNavigation:BorderNavigation) {
-		super(id, container);		
-		this.borderNavigation = borderNavigation;
+		super(id, container);
+		this.borderNavigation = borderNavigation;		
+		this.parent = borderNavigation;		
 	}
 	
 	public function setDirectionMatrix(x, y) {
@@ -30,7 +31,7 @@ class gui.button.MoveExtentButton extends AbstractButton {
 	}
 	public function onReleaseOutside() {
 		this.stopMove();		
-	}
+	}	
 	
 	public function startMove() {		
 		var dx = 0;
@@ -62,6 +63,13 @@ class gui.button.MoveExtentButton extends AbstractButton {
 		obj.map.moveToExtent(e, -1, 0);
 	}
 	
+	/**
+	 * Gets the real parent object 
+	 * @return the real parent. In this case its always the borderNavigation
+	 */
+	public function getParent():Object {
+		return this._borderNavigation;
+	}
 	/*********************************************************
 	 * getters and setters
 	 */ 

@@ -2008,8 +2008,9 @@ class Flamingo {
 	* @param comp:Object  Id or MovieClip representing the component.
 	* @return MovieClip The component parent.
 	*/
-	public function getParent(comp:Object):MovieClip {
+	public function getParent(comp:Object):Object {
 		if (comp instanceof AbstractPositionable) {
+			Logger.console("Flamingo.getParent() for "+comp.id+": " + AbstractPositionable(comp).parent);
 			return AbstractPositionable(comp).parent;
 		}
 		var id = this.components[this.getId(comp)].parent;
@@ -2282,8 +2283,12 @@ class Flamingo {
 				break;
 			}
 		}
+		//Logger.console("Flamingo.addListener() ListentoId: "+listentoId);
 		if (listentoId == undefined) {
+			Logger.console("!!!!! Flamingo.addListener() can't find the id for listento: " + listento);
 			return;
+		}else {
+			//Logger.console("Found listento: " + listento);
 		}
 		if (this.components[listentoId] == undefined) {
 			//Just make a reference 

@@ -5,7 +5,7 @@ import tools.Logger;
  * ...
  * @author Roy Braam
  */
-class core.AbstractPositionable
+class core.AbstractPositionable extends Object
 {	
 	/*Defaults set by flamingo shit*/
 	private var _name:String;
@@ -45,9 +45,10 @@ class core.AbstractPositionable
 	private var _cursorId:String;
 	//a array of id's to listen to
 	private var _listento:Array;
-	//
+	//The default xml with init config
 	private var _defaultXML:String;
-	
+	//the name of the parent. It's only used by old flamingo code. Implemented to be backwards compatible
+	private var _parentName:String;
 	/**
 	 * Constructor 
 	 * @param	id the id
@@ -65,15 +66,7 @@ class core.AbstractPositionable
 		this.cursors = new Object();
 		this.styles = new TextField.StyleSheet();
 		
-		//if the parent is resized then resize this.
-		var lParent:Object = new Object();
-		var thisObj:AbstractPositionable = this;
-		lParent.onResize = function(mc:MovieClip ) {
-			//Logger.console("Resize!");
-			thisObj.resize();
-		};
-		thisObj.flamingo.addListener(lParent, flamingo.getParent(this), this);
-		//Logger.console();
+		
 	}
 	/**
 	 * Pass the hittest to the movieclip
@@ -116,11 +109,58 @@ class core.AbstractPositionable
 	public function get _target():String {
 		return this.container._target;
 	}
-	public function get _parent():MovieClip {
+	/**
+	 * Function to support old flamingo code that calls _parent on the MovieClip. 
+	 * Returns the ._parent of the Movieclip that is added
+	 * @deprecated 
+	 */
+	public function get _parent():Object {
+		//Logger.console("!!!!! ._parent() is used on: " + id + " of type: "+type+". Use .parent instead.");
+		return this.parent;
+	}
+	/**
+	 * Returns the parent object. Default it's the MovieClip container._parent. 
+	 * If .parent is set by old flamingo code (a mc name is set then and is stored in _parentName)
+	 * the _parentName is returned.
+	 */
+	public function get parent():Object {	
+		if (_parentName != undefined ) {
+			Logger.console("!!!!! _parentName is set! So returning that one...");
+			return this._parentName;
+		}else{
+			return this.getParent();
+		}
+	}
+	/**
+	 * Gets the real parent object
+	 * Needs to be overwritten in subclasses if its something else, the return of the parentName must not be implemented!
+	 * @return the real parent.
+	 */
+	public function getParent():Object {
 		return this.container._parent;
 	}
-	public function get parent():MovieClip {
-		return this.container._parent;
+	/**
+	 * Sets the parent for flamingo. Also compatible with old flamingo code.
+	 * If the name of a parent movieclip is set it is stored in the _parentName
+	 * @param value A AbstractPositionable object that is the parent. Can also be a string (old flamingo code)
+	 * that name is stored in the _parentName.
+	 */
+	public function set parent(value:Object) {
+		if (value instanceof AbstractPositionable) {
+			//if the parent is resized then resize this.
+			var lParent:Object = new Object();		
+			var thisObj:AbstractPositionable = this;
+			lParent.onResize = function(mc:MovieClip ) {
+				//Logger.console("Resize!");
+				thisObj.resize();
+			};
+			this.flamingo.addListener(lParent, value, this);
+		}else if (value instanceof String) {
+			this._parentName = String(value);			
+		}else {
+			Logger.console("!!!!!!!! Can't set the parent because the given value is not of "+
+			"type AbstractPositionable (new code) or String (Old code)");
+		}
 	}
 	public function get flamingo():Flamingo {
 		return _global.flamingo;
