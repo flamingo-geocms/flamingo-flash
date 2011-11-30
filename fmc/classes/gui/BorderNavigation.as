@@ -17,7 +17,6 @@ class gui.BorderNavigation extends AbstractPositionable{
 	//listeners	
 	public function BorderNavigation(id:String, container:MovieClip) {
 		super(id, container);
-			Logger.console("Constructor BorderNavigation");
 		extentButtons = new Object();
 		init();				
 	}
@@ -84,7 +83,6 @@ class gui.BorderNavigation extends AbstractPositionable{
 	function refresh() {
 		for (var i = 0; i<buttons.length; i++) {
 			var pos = buttons[i];
-			Logger.console("Direction: "+pos);
 			var moveExtentButton:MoveExtentButton = new MoveExtentButton(this.id + pos, 
 				this.container.createEmptyMovieClip("m" + pos, i));
 				
@@ -92,7 +90,6 @@ class gui.BorderNavigation extends AbstractPositionable{
 			moveExtentButton.toolUpLink ="assets/img/borderNav_"+pos+"_up.png";
 			moveExtentButton.toolDownLink = "assets/img/borderNav_" + pos + "_down.png";
 			
-			Logger.console("New Button:"+moveExtentButton);
 			switch (pos) {
 				case "W" :
 					moveExtentButton.setDirectionMatrix(-1,0);
@@ -131,7 +128,8 @@ class gui.BorderNavigation extends AbstractPositionable{
 		}
 		resize();
 	}
-	function resize(map:MovieClip) {
+	function resize() {
+		//Logger.console("******* RESIZE()");
 		var r = flamingo.getPosition(this);
 		/*r.x = 0;
 		r.y = 0;*/
@@ -142,7 +140,7 @@ class gui.BorderNavigation extends AbstractPositionable{
 		var xcenter = (right+left)/2;
 		var ycenter = (top + bottom) / 2;	
 		for (var pos in extentButtons) {
-			Logger.console("Resize pos: "+pos);
+			//Logger.console("Resize pos: "+pos);
 			switch (pos) {
 			case "W" :
 				extentButtons[pos].move(left, ycenter-33);

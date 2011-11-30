@@ -69,9 +69,11 @@ class core.AbstractPositionable
 		var lParent:Object = new Object();
 		var thisObj:AbstractPositionable = this;
 		lParent.onResize = function(mc:MovieClip ) {
+			//Logger.console("Resize!");
 			thisObj.resize();
 		};
 		thisObj.flamingo.addListener(lParent, flamingo.getParent(this), this);
+		//Logger.console();
 	}
 	/**
 	 * Pass the hittest to the movieclip
