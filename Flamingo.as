@@ -1204,11 +1204,11 @@ class Flamingo {
 	* @param xml:XML Xml which have to be parsed.
 	*/
 	public function parseXML(comp:Object, xml:Object):Void {
+		var id:String = this.getId(comp);
 		if (xml == undefined) {
-			Logger.console("!!!!! Flamingo.parseXML() No XML!");
+			Logger.console("!!!!! Flamingo.parseXML() No XML for object: "+id);
 			return;
 		}
-		var id:String = this.getId(comp);
 		if (id == undefined) {
 			Logger.console("!!!!! Flamingo ParseXML no Id, stop loading defaults.");
 			return;
@@ -2027,7 +2027,6 @@ class Flamingo {
 	*/
 	public function getParent(comp:Object):Object {
 		if (comp instanceof AbstractPositionable) {
-			Logger.console("Flamingo.getParent() for "+comp.id+": " + AbstractPositionable(comp).parent);
 			return AbstractPositionable(comp).parent;
 		}
 		var id = this.components[this.getId(comp)].parent;
