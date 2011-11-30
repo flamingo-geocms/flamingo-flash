@@ -956,7 +956,7 @@ class Flamingo {
 					}else if (file == "BorderNavigation") {
 						var borderNavigation:BorderNavigation = new BorderNavigation(targetid, mc);
 						borderNavigation.setConfig(xmlNode);
-						this.components[targetid] = borderNavigation;
+						this.components[targetid] = borderNavigation;					
 					}else if (file == "Coordinates") {
 						var coordinates:Coordinates = new Coordinates(targetid, mc);
 						this.components[targetid] = coordinates;
@@ -993,7 +993,24 @@ class Flamingo {
 						button.setConfig(xmlNode);
 						this.components[targetid] = button;
 					}
-					this.components[targetid].type = type;			
+					this.components[targetid].type = type;	
+					/*if the parent is a movie clip, the parent is a old flamingo component. 
+					 * Then add the parent the old way.
+					 */
+					if (AbstractPositionable(this.components[targetid]).parent instanceof MovieClip) {
+						var parentmc:MovieClip = MovieClip(AbstractPositionable(this.components[targetid]).parent);
+						while (parentmc != undefined) {
+							if (parentmc._target == this.components.flamingo.target) {
+								this.components[targetid].parent = "flamingo";
+								break;
+							}
+							if (this.components[parentmc._name].target != undefined) {
+								this.components[targetid].parent = parentmc._name;
+								break;
+							}
+							parentmc = parentmc._parent;
+						}
+					}
 					this.raiseEvent(this, "onLoadComponent", targetid);	
 					this.doneLoading();				
 				}				
@@ -2257,10 +2274,14 @@ class Flamingo {
 		} else {
 			switch (typeof (listento)) {
 			case "object" :
-				for (var i = 0; i<listento.length; i++) {
-					this.addListener(listener, listento[i],caller);
+				if (listento instanceof AbstractPositionable) {
+					listentoId = AbstractPositionable(listento).id;
+				}else{
+					for (var i = 0; i<listento.length; i++) {
+						this.addListener(listener, listento[i],caller);
+					}
+					return;
 				}
-				return;
 				break;
 			case "string" :
 				listentoId = String(listento);
@@ -2287,15 +2308,13 @@ class Flamingo {
 		if (listentoId == undefined) {
 			Logger.console("!!!!! Flamingo.addListener() can't find the id for listento: " + listento);
 			return;
-		}else {
-			//Logger.console("Found listento: " + listento);
 		}
 		if (this.components[listentoId] == undefined) {
 			//Just make a reference 
 			this.components[listentoId] = new Object();
 			//trace(">"+listento+"<");
 			//trace(listentoId);
-			//this.showError("Warning", "a component wants to listen to <b>'"+listentoId+"'</b>"+newline+"Unfortunaly <b>"+listentoId+"</b> doesn't exist"+newline+"Please check your ini.xml...");
+			//Logger.console("Warning", "a component wants to listen to <b>'"+listentoId+"'</b>"+newline+"Unfortunaly <b>"+listentoId+"</b> doesn't exist"+newline+"Please check your ini.xml...");
 			//return;
 		}
 		if (this.components[listentoId].addListener == undefined) {
@@ -2368,7 +2387,7 @@ class Flamingo {
 	* @see addListener
 	*/
 	public function raiseEvent(comp:Object, event:String) {
-		var id:String = this.getId(comp);
+		var id:String = this.getId(comp);		
 		//remove first element (=comp) from arguments array 
 		arguments.shift();
 		//first element of arguments is now: event

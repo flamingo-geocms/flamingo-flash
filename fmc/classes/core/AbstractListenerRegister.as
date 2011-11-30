@@ -6,7 +6,7 @@
 import core.AbstractPositionable;
 import tools.Logger;
 
-class core.AbstractListenerRegister extends AbstractPositionable
+class core.AbstractListenerRegister extends Object
 {	
 	//the listeners that are added by this listenercreator
 	private var _registerdListeners:Object;

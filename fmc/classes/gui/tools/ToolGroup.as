@@ -8,7 +8,7 @@ import tools.Logger;
  * ...
  * @author Roy Braam
  */
-dynamic class gui.tools.ToolGroup extends AbstractListenerRegister implements ComponentInterface
+dynamic class gui.tools.ToolGroup extends AbstractPositionable implements ComponentInterface
 {		
 	//Old vars
 	private var _tool:String;
