@@ -410,4 +410,10 @@ class core.AbstractPositionable extends AbstractListenerRegister
 	}
 	
 	
+	/** 
+	 * Dispatched when the component is resized
+	 * @param comp:MovieClip a reference to the component.
+	 */
+	//public function onResize(comp:MovieClip):Void {
+	//}
 }

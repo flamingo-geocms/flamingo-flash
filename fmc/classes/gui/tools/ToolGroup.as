@@ -27,6 +27,12 @@ dynamic class gui.tools.ToolGroup extends AbstractPositionable implements Compon
 	
 	private var _tools:Array;
 	
+	/**
+	 * Constructor for ToolGroup
+	 * @param	id the id of this toolgroup
+	 * @param	container the MovieClip where this Toolgroup is placed
+	 * @see AbstractPositionable#Constructor(id:String,container:MovieClip);
+	 */
 	public function ToolGroup(id:String, container:MovieClip){
 		super(id, container);
 		tools = new Array();		
