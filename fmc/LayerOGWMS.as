@@ -34,9 +34,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 * @file LayerOGWMS.xml (configurationfile for layer, needed for publication on internet)
 * @change 2010-01-28 Added attribute InitService
 */
-
-import roo.FilterLayerLayerOGWMSAdapter;
-
 var version:String = "2.0";
 //---------------------------------
 var defaultXML:String = "";

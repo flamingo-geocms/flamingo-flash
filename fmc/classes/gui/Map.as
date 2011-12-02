@@ -122,7 +122,6 @@ class gui.Map extends AbstractPositionable implements PersistableComponent{
 	 */
 	public function Map(id:String, container:MovieClip) {
 		super(id, container);
-		Logger.console("Map()");
 		this.log = new Logger("Map",_global.flamingo.getLogLevel(),_global.flamingo.getScreenLogLevel());
 		if (flamingo == undefined) {
 			var t:TextField = this.container.createTextField("readme", 0, 0, 0, 550, 400);
@@ -333,25 +332,21 @@ class gui.Map extends AbstractPositionable implements PersistableComponent{
 	* @attr xml:Object Xml or string representation of a xml.
 	*/
 	public function setConfig(xml:Object) {
-		Logger.console("Map.setConfig()");
 		if (typeof (xml) == "string") {
 			xml = new XML(String(xml))
 			xml= xml.firstChild;
 		}
-		Logger.console("Type of map object: "+flamingo.getType(this).toLowerCase());
 		if (flamingo.getType(this).toLowerCase() != xml.localName.toLowerCase()) {
 			return;
 		}
 		clearlayers = false;
 		//load default attributes, strings, styles and cursors 
 		flamingo.parseXML(this, xml);
-		Logger.console("Map before .parseCustomAttr()");
 		this.parseCustomAttr(xml);
 		
 	}
 		
 	private function parseCustomAttr(xml:Object) {
-		Logger.console("Map.parseCustomAttr()");
 		for (var a in xml.attributes) {
 			var attr:String = a.toLowerCase();
 			var val:String = xml.attributes[attr];
@@ -478,7 +473,6 @@ class gui.Map extends AbstractPositionable implements PersistableComponent{
 		resize();
 		//component resized further with adding layers
 		//go on with adding layers
-		Logger.console("Map.addLayers()");
 		this.addLayers(xml);
 	}
 	private function maptip(x:Number, y:Number, coord:Object) {
@@ -503,7 +497,6 @@ class gui.Map extends AbstractPositionable implements PersistableComponent{
 	* This will raise the onResize event.
 	*/
 	public function resize():Void {		
-		Logger.console("Map.resize()");
 		this.container._xscale = this.container._yscale=100;
 		var r:Object = flamingo.getPosition(this, this._parent._parent);
 		this.container._x = r.x;
@@ -559,7 +552,6 @@ class gui.Map extends AbstractPositionable implements PersistableComponent{
 	* @return String Id of the added layer.
 	*/
 	public function addLayer(xml:Object):String {
-		Logger.console("Map.addLayer");
 		if (typeof (xml) == "string") {
 			xml = new XML(String(xml))
 			xml = xml.firstChild;			
@@ -675,7 +667,7 @@ class gui.Map extends AbstractPositionable implements PersistableComponent{
 				} else if (thisObj.nrOfServiceLayers==0){
 					themeSelector.setCurrentTheme();
 				} 				
-			};
+			};			
 			flamingo.addListener(lLayer, layerid, this);
 			flamingo.loadComponent(xml, mc, layerid);
 			//_global.flamingo.tracer("Map " + _global.flamingo.getId(this)+ " addLayer "  + layerid + " url " + _global.flamingo.getUrl(layerid) + _global.flamingo.getUrl(layerid).indexOf("LayerArcIMS"));

@@ -922,7 +922,7 @@ class Flamingo {
 		if (this.components[targetid].target != undefined) {
 			//mc = eval(this.components[targetid].target);
 		}
-		if (this.components[targetid].type == type && (mc.setConfig != undefined||mc["mKid"].setBaseConfig!=undefined)) {
+		if (this.components[targetid].type == type && (mc.setConfig != undefined || mc["mKid"].setBaseConfig != undefined)) {
 			//component already exists and it can be configurated
 			if(this.components[targetid].xmls == undefined){
 				this.components[targetid].xmls = new Array();
@@ -942,7 +942,6 @@ class Flamingo {
 			if (url.length == 0) {
 				return;
 			}
-			
 			var xmlNode:XMLNode = XMLNode(xml);
 			if (this.isEmbeddedComponents(file)){
 				//newtypeobjectaanmaken
@@ -1050,7 +1049,7 @@ class Flamingo {
 						break;
 					}
 					parentmc = parentmc._parent;
-				}				
+				}					
 				this.loadComponent_source(url, targetid, mc);
 			}
 			//get custom language, style and cursor definitions
