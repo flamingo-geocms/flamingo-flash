@@ -101,7 +101,7 @@ class gui.marker.AbstractMarker extends MovieClip {
 			_global.flamingo.removeListener(this.mapListener,this.map, this);
 		}
 		this.mapListener = new Object();
-		this.mapListener.onChangeExtent = function(map:MovieClip) {
+		this.mapListener.onChangeExtent = function(m:MovieClip) {
 			thisObj.draw();
 		};
 		_global.flamingo.addListener(this.mapListener,this.map, this);

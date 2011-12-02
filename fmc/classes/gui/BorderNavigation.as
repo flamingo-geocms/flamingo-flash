@@ -167,7 +167,7 @@ class gui.BorderNavigation extends AbstractPositionable{
 				extentButtons[pos].move(left, top);			
 				break;
 			}
-		}
+		}		
 	}
 	
 	public function updateMaps() {

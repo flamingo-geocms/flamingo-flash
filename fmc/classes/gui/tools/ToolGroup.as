@@ -218,14 +218,13 @@ dynamic class gui.tools.ToolGroup extends AbstractPositionable implements Compon
     /**
 	 * Force a resize
 	 */
-	function resize() {
+	/*TODO: Still needed????*/
+	function resize():Void {
 		var p = flamingo.getPosition(this);
 		this.container._x = p.x;
 		this.container._y = p.y;
 	}
-	/**
-	 * TODO: ?
-	 */
+	
 	function checkFinishUpdate() {
 		for (var i:Number = 0; i<listento.length; i++) {
 			var c = flamingo.getComponent(listento[i]);

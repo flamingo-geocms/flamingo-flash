@@ -45,6 +45,7 @@ import gui.Coordinates;
 import gui.tools.*;
 import gui.button.*;
 import gui.BorderNavigation;
+import gui.Map;
 import tools.Logger;
 
 class Flamingo {
@@ -961,6 +962,11 @@ class Flamingo {
 						var coordinates:Coordinates = new Coordinates(targetid, mc);
 						this.components[targetid] = coordinates;
 						coordinates.setConfig(xmlNode);
+					}else if (file == "Map") {
+						var map:Map = new Map(targetid, mc);		
+						map.type = type;
+						this.components[targetid] = map;
+						map.setConfig(xmlNode);
 					}else if (isTool(file)) {
 						//get the last added toolgroup
 						var toolGroup:ToolGroup = this.toolGroups[this.toolGroups.length - 1];
@@ -993,7 +999,7 @@ class Flamingo {
 						button.setConfig(xmlNode);
 						this.components[targetid] = button;
 					}
-					this.components[targetid].type = type;	
+					AbstractPositionable(this.components[targetid]).type = type;	
 					/*if the parent is a movie clip, the parent is a old flamingo component. 
 					 * Then add the parent the old way.
 					 */
@@ -1061,6 +1067,7 @@ class Flamingo {
 	 */
 	private function isEmbeddedComponents(file:String):Boolean {
 		switch(file) {
+			case "Map":
 			case "BorderNavigation":
 			case "ButtonFull":
 			case "ButtonNext":

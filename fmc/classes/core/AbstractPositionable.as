@@ -50,6 +50,12 @@ class core.AbstractPositionable extends AbstractListenerRegister
 	private var _defaultXML:String;
 	//the name of the parent. It's only used by old flamingo code. Implemented to be backwards compatible
 	private var _parentName:String;
+	//Border movieclip
+	private var _mBorder:MovieClip;
+	//Border settings:	
+	private var _bordercolor:Number;
+	private var _borderwidth:Number;
+	private var _borderalpha:Number;
 	/**
 	 * Constructor 
 	 * @param	id the id
@@ -65,7 +71,8 @@ class core.AbstractPositionable extends AbstractListenerRegister
 		this.visible = true;
 		this.strings = new Object();
 		this.cursors = new Object();
-		this.styles = new TextField.StyleSheet();		
+		this.styles = new TextField.StyleSheet();	
+		this.borderalpha = 100;
 	}
 	/**
 	 * Pass the hittest to the movieclip
@@ -78,9 +85,25 @@ class core.AbstractPositionable extends AbstractListenerRegister
 		return this.container.hitTest(x, y, shapeFlag);
 	}
 	
+	public function createBorder():Void {
+		this._mBorder = this.container.createEmptyMovieClip("mBorder", 2);		
+		mBorder.clear();
+		mBorder.lineStyle(borderwidth, bordercolor, borderalpha);
+		mBorder.moveTo(0, 0);
+		mBorder.lineTo(this.container._width, 0);
+		mBorder.lineTo(this.container._width, this.container._height);
+		mBorder.lineTo(0, this.container._height);
+		mBorder.lineTo(0, 0);
+	}
+	
 	public function resize() {		
 		this.flamingo.position(this);
+		if (this.mBorder != undefined) {
+			this.mBorder._width = this.container._widht;
+			this.mBorder._height = this.container._height;
+		}
 		flamingo.raiseEvent(this, "onResize", this);
+		
 	}
 	/**
 	 * Moves the movieclip to the given x and y
@@ -407,6 +430,38 @@ class core.AbstractPositionable extends AbstractListenerRegister
 	
 	public function set name(value:String):Void {
 		_name = value;
+	}
+	
+	public function get mBorder():MovieClip {
+		return _mBorder;
+	}
+	
+	public function set mBorder(value:MovieClip):Void {
+		_mBorder = value;
+	}
+	
+	public function get bordercolor():Number {
+		return _bordercolor;
+	}
+	
+	public function set bordercolor(value:Number):Void {
+		_bordercolor = value;
+	}
+	
+	public function get borderwidth():Number {
+		return _borderwidth;
+	}
+	
+	public function set borderwidth(value:Number):Void {
+		_borderwidth = value;
+	}
+	
+	public function get borderalpha():Number {
+		return _borderalpha;
+	}
+	
+	public function set borderalpha(value:Number):Void {
+		_borderalpha = value;
 	}
 	
 	
