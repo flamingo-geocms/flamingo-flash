@@ -46,6 +46,7 @@ import gui.tools.*;
 import gui.button.*;
 import gui.BorderNavigation;
 import gui.Map;
+import gui.layers.OGCWMSLayer;
 import tools.Logger;
 
 class Flamingo {
@@ -815,7 +816,7 @@ class Flamingo {
 	* @param targetid:String [optional] Id at which the component will be registered. If omitted the id in the xml will be used. If there is no id at all, flamingo will generate a unique id.
 	*/
 	public function addComponent(xml:Object, targetid:String):Void {
-		//trace("-------------------ADDCOMPONENT:"+targetid);
+		//Logger.console("-------------------ADDCOMPONENT:"+targetid);
 		//trace(xml);
 		if (typeof (xml) == "string") {
 			xml = new XML(String(xml));
@@ -840,8 +841,9 @@ class Flamingo {
 			if (this.components[targetid] == undefined) {
 				return;
 			}
-		}
+		}		
 		var target = this.components[targetid].target;
+		//Logger.console("Load component with target id: "+targetid);
 		if (target == undefined) {
 			//no entry in the componentslist > add new movie
 			//create e new movieclip
@@ -849,6 +851,7 @@ class Flamingo {
 			mc._visible = false;
 			this.loadComponent(xml, mc, targetid);
 		} else {
+			//Logger.console("Flamingo.AddComponent() with id: "+targetid+" already exist");
 			//id already exists in componentslist > movie exists or is being loaded
 			var type = xml.localName;
 			if (type.indexOf(".", 0)>=0) {
@@ -887,6 +890,7 @@ class Flamingo {
 	public function loadComponent(xml:Object, mc:MovieClip, targetid:String):Void {
 		//rule1: a component has a prefix and an id 
 		//rule2: a component can register only once, double ids are not allowed		
+		//Logger.console("-------------------LOADCOMPONENT:"+targetid);
 		if (xml == undefined) {
 			return;
 		}
@@ -917,8 +921,7 @@ class Flamingo {
 			this.showError("Error: Flamingo.loadComponent", "The id '"+targetid+"' is already in use...");
 			this.doneLoading();
 			return;
-		}
-
+		}			
 		if (this.components[targetid].target != undefined) {
 			//mc = eval(this.components[targetid].target);
 		}
@@ -945,6 +948,10 @@ class Flamingo {
 			var xmlNode:XMLNode = XMLNode(xml);
 			if (this.isEmbeddedComponents(file)){
 				//newtypeobjectaanmaken
+				var oldComponent = this.components[targetid];
+				if (this.components[targetid] != undefined && !this.components[targetid] instanceof AbstractPositionable) {	
+					Logger.console("The listeners: "+this.components[targetid]._listeners);
+				}
 				if (this.components[targetid] != undefined && this.components[targetid] instanceof AbstractPositionable) {				
 					ComponentInterface(this.components[targetid]).setConfig(XML(xmlNode));
 				}else {
@@ -966,6 +973,18 @@ class Flamingo {
 						map.type = type;
 						this.components[targetid] = map;
 						map.setConfig(xmlNode);
+					}else if (file == "LayerOGWMS") {
+						var foundMap:Map;
+						for (var i in this.components) {
+							if (this.components[i].type == "Map") {
+								foundMap = Map(this.components[i]);
+							}
+						}
+						Logger.console("The latest map: "+foundMap);
+						var layer:OGCWMSLayer = new OGCWMSLayer(targetid,mc,foundMap);
+						this.components[targetid] = layer;
+						layer.setConfig(xmlNode);
+						Logger.console("addLayer!!!");
 					}else if (isTool(file)) {
 						//get the last added toolgroup
 						var toolGroup:ToolGroup = this.toolGroups[this.toolGroups.length - 1];
@@ -985,7 +1004,7 @@ class Flamingo {
 						}
 						tool.setConfig(xmlNode);						
 						toolGroup.addTool(tool);
-						this.components[targetid] = tool;
+						this.components[targetid] = tool;					
 					}else if (isButton(file)) {
 						var button:AbstractButton;
 						if (file == "ButtonFull") {
@@ -1018,7 +1037,20 @@ class Flamingo {
 					}
 					this.raiseEvent(this, "onLoadComponent", targetid);	
 					this.doneLoading();				
-				}				
+				}	
+				/* A Component is added before, and had a listener to this object.
+				 * Therefor a temp listener object is made. Now add the listener to the real thing.*/
+				if (oldComponent != undefined) {
+					//There is a listener added. Now add it on the newly created object
+					if (oldComponent._listeners != undefined) {
+						//enable broadcasting
+						AsBroadcaster.initialize(this.components[targetid]);
+						for (var i = 0; i < oldComponent._listeners.length; i++) {
+							Logger.console("Listener: " + oldComponent._listeners[i].onGetCapabilities);
+							this.addListener(oldComponent._listeners[i], targetid,oldComponent.callers[i]);
+						}
+					}
+				}
 			}else {
 				//component new or existing component has no setConfig, so treat as new component   
 				//add a reference for a component to the components object    
@@ -1066,6 +1098,7 @@ class Flamingo {
 	 */
 	private function isEmbeddedComponents(file:String):Boolean {
 		switch(file) {
+			case "LayerOGWMS":
 			case "Map":
 			case "BorderNavigation":
 			case "ButtonFull":
@@ -2270,6 +2303,7 @@ class Flamingo {
 	public function addListener(listener:Object, listento:Object, caller:Object):Void {
 		var listentoId:String;
 		if (listento == undefined) {
+			Logger.console("!!!!! Flamingo.addListener: The listento is undefined!");
 			return;
 		}
 		if (listento == this) {
@@ -2321,12 +2355,20 @@ class Flamingo {
 			//trace(listentoId);
 			//Logger.console("Warning", "a component wants to listen to <b>'"+listentoId+"'</b>"+newline+"Unfortunaly <b>"+listentoId+"</b> doesn't exist"+newline+"Please check your ini.xml...");
 			//return;
+			
 		}
 		if (this.components[listentoId].addListener == undefined) {
 			AsBroadcaster.initialize(this.components[listentoId]);
+			//to store the callers for later use.
+			this.components[listentoId].callers = new Array();
+		}
+		if (listener.onGetGetCapabilities != undefined) {
+			Logger.console("*************Flamingo.addListener the right one is added!");
 		}
 		this.components[listentoId].addListener(listener);
-		
+		//add caller for later use.
+		this.components[listentoId].callers.push(caller);		
+
 		if (caller!=undefined && caller instanceof AbstractListenerRegister) {
 			var listenerRegister:AbstractListenerRegister = AbstractListenerRegister(caller);
 			listenerRegister.addAddedListener(listentoId, listener);
@@ -2480,6 +2522,7 @@ class Flamingo {
 				}
 			}
 			//Logger.console("****Arg lenght: "+arguments.length+" dispatche event: ", event_to_fire, arguments );
+			
 			ExternalInterface.call("dispatchEventJS",event_to_fire, arguments);
 			
 			

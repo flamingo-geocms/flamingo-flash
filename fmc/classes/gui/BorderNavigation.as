@@ -185,7 +185,7 @@ class gui.BorderNavigation extends AbstractPositionable{
 	//public function onInit(comp:MovieClip):Void {
 	//}
 	
-	public function get _parent():MovieClip {
+	public function getParent():Object {
 		return this.container._parent;
 	}
 	
