@@ -4,9 +4,9 @@
  */
 
 import core.ComponentInterface;
-import display.spriteloader.SpriteSettings;
 import gui.tools.AbstractTool;
 import gui.tools.ToolGroup;
+import display.spriteloader.SpriteSettings;
 import tools.Logger;
 
 /** @component ToolZoomin
@@ -50,6 +50,7 @@ class gui.tools.ToolZoomin extends AbstractTool implements ComponentInterface{
 		toolOverSettings = new SpriteSettings(2, 1162, 25, 23, 0, 0, true, 100);
 		toolDownSettings = new SpriteSettings(48, 1162, 25, 23, 0, 0, true, 100);
 		toolUpSettings = new SpriteSettings(97, 1163, 22, 19, 0, 0, true, 100);
+		
 		this.defaultXML = "<?xml version='1.0' encoding='UTF-8'?>" +
 							"<ToolZoomin>" +
 							"<string id='tooltip' nl='inzoomen' en='zoom in'/>" +

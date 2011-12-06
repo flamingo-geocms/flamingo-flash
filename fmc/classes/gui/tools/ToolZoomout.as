@@ -5,9 +5,9 @@
 
 import core.ComponentInterface;
 import gui.tools.AbstractTool;
+import display.spriteloader.SpriteSettings;
 import gui.tools.ToolGroup;
 import tools.Logger;
-import display.spriteloader.SpriteSettings;
 
 /** @component ToolZoomout
 * Tool for zooming a map by dragging a rectangle or just clicking the map

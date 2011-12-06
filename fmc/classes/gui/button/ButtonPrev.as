@@ -32,6 +32,7 @@ class gui.button.ButtonPrev extends AbstractButton implements ComponentInterface
 		toolOverSettings = new SpriteSettings(4, 452, 22, 22, 0, 0, true, 100);
 		toolDownSettings = new SpriteSettings(50, 452, 22, 22, 0, 0, true, 100);
 		toolUpSettings = new SpriteSettings(99, 452, 22, 22, 0, 0, true, 100);
+		
 		this.defaultXML = "<?xml version='1.0' encoding='UTF-8'?>" +
 						"<ButtonPrev>" +
 						"<string id='tooltip'  en='previous extent' nl='stap terug'/>" + 
