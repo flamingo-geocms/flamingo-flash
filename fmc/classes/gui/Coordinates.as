@@ -1,5 +1,6 @@
 import core.AbstractPositionable;
 import TextField.StyleSheet;
+import tools.Logger;
 /**
  * @author Meine Toonen
  */

@@ -228,7 +228,7 @@ dynamic class gui.tools.ToolGroup extends AbstractPositionable implements Compon
 	function checkFinishUpdate() {
 		for (var i:Number = 0; i<listento.length; i++) {
 			var c = flamingo.getComponent(listento[i]);
-			if (c.updating and c.holdonupdate) {
+			if (c.updating && c.holdonupdate) {
 				updating = true;
 				return;
 			}
@@ -242,7 +242,7 @@ dynamic class gui.tools.ToolGroup extends AbstractPositionable implements Compon
 	function checkFinishIdentify() {
 		for (var i:Number = 0; i<listento.length; i++) {
 			var c = flamingo.getComponent(listento[i]);
-			if (c.identifying and c.holdonidentify) {
+			if (c.identifying && c.holdonidentify) {
 				identifying = true;
 				return;
 			}

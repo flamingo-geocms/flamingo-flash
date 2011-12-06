@@ -3,6 +3,8 @@
  * @author Roy Braam
  */
 import core.AbstractPositionable;
+import display.spriteloader.SpriteMap;
+import display.spriteloader.SpriteSettings;
 import tools.Logger;
 
 class gui.button.AbstractButton extends AbstractPositionable{
@@ -29,13 +31,21 @@ class gui.button.AbstractButton extends AbstractPositionable{
 	private var _toolUpLink:String;
 	private var _toolOverLink:String;
 	
+	private var _toolDownSettings:SpriteSettings;
+	private var _toolUpSettings:SpriteSettings;
+	private var _toolOverSettings:SpriteSettings;
+	
+	private var _spriteMap:SpriteMap;
+	
 	/**
 	 * Constructor for abstractButton. Creates a button and loads the images for the button stages.
 	 * @param	id the id of the button
 	 * @param	container the movieclip that holds this button
 	 */
-	public function AbstractButton(id:String, container:MovieClip) {					
+	public function AbstractButton(id:String, container:MovieClip) {			
 		super(id, container);
+		spriteMap = flamingo.spriteMapFactory.obtainSpriteMap("sprite.png");
+		
 		//make the holder for the movieclip
 		this.holder = this.container.createEmptyMovieClip("tool_" + id + "_holder", this.container.getNextHighestDepth());
 		
@@ -272,6 +282,49 @@ class gui.button.AbstractButton extends AbstractPositionable{
 	
 	public function set pressed(value:Boolean):Void {
 		_pressed = value;
+	}
+	
+	public function get toolDownSettings():SpriteSettings 
+	{
+		return _toolDownSettings;
+	}
+	
+	public function set toolDownSettings(value:SpriteSettings):Void 
+	{
+		_toolDownSettings = value;
+		spriteMap.attachSpriteTo(this.mcDown.createEmptyMovieClip("container", this.mcDown.getNextHighestDepth()),value);
+	}
+	
+	public function get toolUpSettings():SpriteSettings 
+	{
+		return _toolUpSettings;
+	}
+	
+	public function set toolUpSettings(value:SpriteSettings):Void 
+	{
+		_toolUpSettings = value;
+		spriteMap.attachSpriteTo(this.mcUp.createEmptyMovieClip("container", this.mcUp.getNextHighestDepth()),value);
+	}
+	
+	public function get toolOverSettings():SpriteSettings 
+	{
+		return _toolOverSettings;
+	}
+	
+	public function set toolOverSettings(value:SpriteSettings):Void 
+	{
+		_toolOverSettings = value;
+		spriteMap.attachSpriteTo(this.mcOver.createEmptyMovieClip("container", this.mcOver.getNextHighestDepth()),value);
+	}
+	
+	public function get spriteMap():SpriteMap 
+	{
+		return _spriteMap;
+	}
+	
+	public function set spriteMap(value:SpriteMap):Void 
+	{
+		_spriteMap = value;
 	}
 	
 	

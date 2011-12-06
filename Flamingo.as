@@ -119,7 +119,6 @@ class Flamingo {
 	//All log messages with this loglevel or higher wil be logged on the screen (possible values: Logger.DEBUG,Logger.INFO,Logger.WARN,Logger.ERROR,Logger.CRITICAL)
 	private var screenLogLevel:Number = Logger.ERROR;
 	
-	
 	var _spriteMapFactory:SpriteMapFactory;
 	var _spriteMap:SpriteMap;
 		 
@@ -127,7 +126,7 @@ class Flamingo {
 	//@param mc MovieClip 
 	public function Flamingo(mc:MovieClip) {		
 		spriteMapFactory = SpriteMapFactory.getInstance();
-		var toolSpritesUrl:String = ("iconMapTest_1.png");
+		var toolSpritesUrl:String = ("sprite.png");
 		
 		//let the factory provide you with a new spritemap by calling obtainSpriteMap() on it with a url
 		//if you call obtainSpriteMap anywhere else with the same image url, it won't spoil bandwith requests and will only load it once..

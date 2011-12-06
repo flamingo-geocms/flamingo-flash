@@ -1,3 +1,4 @@
+
 /**
  * ...
  * @author Roy Braam
@@ -5,34 +6,39 @@
 import core.ComponentInterface;
 import gui.tools.AbstractTool;
 import gui.tools.ToolGroup;
+import display.spriteloader.SpriteSettings;
 import tools.Logger;
+
 /** @component ToolPan
-* Tool for panning a map.
-* @file ToolPan.fla (sourcefile)
-* @file ToolPan.swf (compiled component, needed for publication on internet)
-* @file ToolPan.xml (configurationfile, needed for publication on internet)
-* @configstring tooltip Tooltip.
-* @configcursor pan Cursor shown when the tool is hoovering over a map.
-* @configcursor grab Cursor shown when the tool clicks on a map.
-* @configcursor busy Cursor shown when a map is updating and holdonidentify(attribute of Map) is set to true.
-*/
+ * Tool for panning a map.
+ * @file ToolPan.fla (sourcefile)
+ * @file ToolPan.swf (compiled component, needed for publication on internet)
+ * @file ToolPan.xml (configurationfile, needed for publication on internet)
+ * @configstring tooltip Tooltip.
+ * @configcursor pan Cursor shown when the tool is hoovering over a map.
+ * @configcursor grab Cursor shown when the tool clicks on a map.
+ * @configcursor busy Cursor shown when a map is updating and holdonidentify(attribute of Map) is set to true.
+ */
+
 /** @tag <fmc:ToolPan>  
-* This tag defines a tool for panning a map. There are two actions; 1  dragging and 2 clicking the map (the map wil recenter at the position the user has clicked).
-* @hierarchy childnode of <fmc:ToolGroup> 
-* @attr clickdelay  (defaultvalue "1000") Time in milliseconds (1000 = 1 second) between releasing the mouse and updating the map when the user clicks the map. In this time the user can click again and the update of the map wil be postponed.
-* @attr pandelay  (defaultvalue "1000") Time in milliseconds (1000 = 1 second) between releasing the mouse and updating the map when the user drags the map. In this time the user can pickup the map again and the update of the map wil be postponed.
-* @attr zoomscroll (defaultvalue "true")  Enables (zoomscroll="true") or disables (zoomscroll="false") zooming with the scrollwheel.
-* @attr enabled (defaultvalue="true") True or false.
-* @attr skin (defaultvalue="") Available skins: "", "f2"
-*/
-class gui.tools.ToolPan extends AbstractTool implements ComponentInterface{
-	
+ * This tag defines a tool for panning a map. There are two actions; 1  dragging and 2 clicking the map (the map wil recenter at the position the user has clicked).
+ * @hierarchy childnode of <fmc:ToolGroup> 
+ * @attr clickdelay  (defaultvalue "1000") Time in milliseconds (1000 = 1 second) between releasing the mouse and updating the map when the user clicks the map. In this time the user can click again and the update of the map wil be postponed.
+ * @attr pandelay  (defaultvalue "1000") Time in milliseconds (1000 = 1 second) between releasing the mouse and updating the map when the user drags the map. In this time the user can pickup the map again and the update of the map wil be postponed.
+ * @attr zoomscroll (defaultvalue "true")  Enables (zoomscroll="true") or disables (zoomscroll="false") zooming with the scrollwheel.
+ * @attr enabled (defaultvalue="true") True or false.
+ * @attr skin (defaultvalue="") Available skins: "", "f2"
+ */
+
+
+class gui.tools.ToolPan extends AbstractTool implements ComponentInterface
+{
 	var defaultXML:String;
 	var pandelay:Number = 1000;
 	var clickdelay:Number = 1000;
 	var xold:Number;
-	var yold:Number;	
-	var skin = "_pan";	
+	var yold:Number;
+	var skin = "_pan";
 	
 	/**
 	 * Constructor for creating a toolzoomin
@@ -41,55 +47,70 @@ class gui.tools.ToolPan extends AbstractTool implements ComponentInterface{
 	 * @param	container the visible part of this tool (movieclip)
 	 * @see AbstractTool#Constructor(id:String, toolGroup:ToolGroup ,container:MovieClip);
 	 */
-	public function ToolPan(id:String, toolGroup:ToolGroup ,container:MovieClip) {	
-		super(id, toolGroup, container);			
-		this.toolDownLink = "assets/img/ToolPan_down.png";
-		this.toolUpLink = "assets/img/ToolPan_up.png";
-		this.toolOverLink = "assets/img/ToolPan_over.png";				
-		
-		this.defaultXML = "<?xml version='1.0' encoding='UTF-8'?>" +
-						"<ToolPan>" +
-						"<string id='tooltip' nl='kaartbeeld slepen' en='pan'/>" +
-				        "<cursor id='busy' url='fmc/CursorsMap.swf' linkageid='busy'/>" +
-				        "<cursor id='pan'  url='fmc/CursorsMap.swf' linkageid='pan'/>" +
-				        "<cursor id='grab' url='fmc/CursorsMap.swf' linkageid='grab_wrinkle'/>" +
-				        "</ToolPan>"; 
-		
+	
+	
+	public function ToolPan(id:String, toolGroup:ToolGroup, container:MovieClip)
+	{
+		super(id, toolGroup, container);
+		toolDownSettings = new SpriteSettings(3, 1045, 24, 23, 0, 0, true, 100);
+		toolOverSettings = new SpriteSettings(49, 1045, 24, 23, 0, 0, true, 100);
+		toolUpSettings = new SpriteSettings(97, 1046, 20, 18, 0, 0, true, 100);
+		this.defaultXML = "<?xml version='1.0' encoding='UTF-8'?>" + "<ToolPan>" + "<string id='tooltip' nl='kaartbeeld slepen' en='pan'/>" + "<cursor id='busy' url='fmc/CursorsMap.swf' linkageid='busy'/>" + "<cursor id='pan'  url='fmc/CursorsMap.swf' linkageid='pan'/>" + "<cursor id='grab' url='fmc/CursorsMap.swf' linkageid='grab_wrinkle'/>" + "</ToolPan>";
 		this.cursorId = "pan";
 		init();
 	}
 	
-	private function init() {
+	private function init()
+	{
 		var thisObj:ToolPan = this;
-		this.lMap.onMouseDown = function(mapOnMouseDown:MovieClip, xmouseOnMouseDown:Number, ymouseOnMouseDown:Number, coordOnMouseDown:Object) {
-			if (! thisObj._parent.updating) {
+		this.lMap.onMouseDown = function(mapOnMouseDown:MovieClip, xmouseOnMouseDown:Number, ymouseOnMouseDown:Number, coordOnMouseDown:Object)
+		{
+			if(!thisObj._parent.updating)
+			{
 				thisObj._parent.cancelAll();
 				var e = mapOnMouseDown.getCurrentExtent();
-				var msx = (e.maxx-e.minx)/mapOnMouseDown.getMovieClipWidth();
-				var msy = (e.maxy-e.miny)/mapOnMouseDown.getMovieClipHeight();
+				var msx = (e.maxx - e.minx) / mapOnMouseDown.getMovieClipWidth();
+				var msy = (e.maxy - e.miny) / mapOnMouseDown.getMovieClipHeight();
 				mapOnMouseDown.setCursor(thisObj.cursors["grab"]);
 				var x = xmouseOnMouseDown;
 				var y = ymouseOnMouseDown;
-
-				thisObj.lMap.onMouseMove = function(map:MovieClip, xmouse:Number, ymouse:Number, coord:Object) {
-					var dx = (x-xmouse)*msx;
-					var dy = (ymouse-y)*msy;
-					map.moveToExtent({minx:e.minx+dx, miny:e.miny+dy, maxx:e.maxx+dx, maxy:e.maxy+dy}, -1, 0,true,false);
+				thisObj.lMap.onMouseMove = function(map:MovieClip, xmouse:Number, ymouse:Number, coord:Object)
+				{
+					var dx = (x - xmouse) * msx;
+					var dy = (ymouse - y) * msy;
+					map.moveToExtent(
+					{
+						minx : e.minx + dx,
+						miny : e.miny + dy,
+						maxx : e.maxx + dx,
+						maxy : e.maxy + dy
+					}, - 1, 0, true, false);
+					
 					//updateAfterEvent();
+					
 				};
-				thisObj.lMap.onMouseUp = function(map:MovieClip, xmouse:Number, ymouse:Number, coord:Object) {
-					var dx:Number = Math.abs(xmouse-x);
-					var dy:Number = Math.abs(ymouse-y);
-					
-					var extent={minx:e.minx+dx, miny:e.miny+dy, maxx:e.maxx+dx, maxy:e.maxy+dy};
-					if (!map.isEqualExtent(e, extent)) {
+				thisObj.lMap.onMouseUp = function(map:MovieClip, xmouse:Number, ymouse:Number, coord:Object)
+				{
+					var dx:Number = Math.abs(xmouse - x);
+					var dy:Number = Math.abs(ymouse - y);
+					var extent = 
+					{
+						minx : e.minx + dx,
+						miny : e.miny + dy,
+						maxx : e.maxx + dx,
+						maxy : e.maxy + dy
+					};
+					if(!map.isEqualExtent(e, extent))
+					{
 						thisObj.flamingo.raiseEvent(map, "onReallyChangedExtent", map, map.copyExtent(extent), 1);
-					}			
-					//_parent._cursorid = "cursor";
-					var delay = thisObj.pandelay;
+					}
 					
-					if (dx<=2 and dy<=2) {
-						map.moveToCoordinate(coord, -1, 10);
+					//_parent._cursorid = "cursor";
+					
+					var delay = thisObj.pandelay;
+					if(dx<=2 && dy<=2)
+					{
+						map.moveToCoordinate(coord, - 1, 10);
 						delay = thisObj.clickdelay;
 					}
 					map.setCursor(thisObj.cursors["pan"]);
@@ -100,84 +121,111 @@ class gui.tools.ToolPan extends AbstractTool implements ComponentInterface{
 				};
 			}
 		};
-		if (flamingo == undefined) {
+		if(flamingo == undefined)
+		{
 			var t:TextField = this.container.createTextField("readme", 0, 0, 0, 550, 400);
 			t.html = true;
-			t.htmlText = "<P ALIGN='CENTER'><FONT FACE='Helvetica, Arial' SIZE='12' COLOR='#000000' LETTERSPACING='0' KERNING='0'><B>ToolPan "+this.version+"</B> - www.flamingo-mc.org</FONT></P>";
+			t.htmlText = "<P ALIGN='CENTER'><FONT FACE='Helvetica, Arial' SIZE='12' COLOR='#000000' LETTERSPACING='0' KERNING='0'><B>ToolPan " + this.version + "</B> - www.flamingo-mc.org</FONT></P>";
 			return;
 		}
 		this._visible = false;
-
+		
 		//defaults
+		
 		this.setConfig(defaultXML);
+		
 		//custom
-		var xmls:Array= flamingo.getXMLs(this);
-		for (var i = 0; i < xmls.length; i++){
+		
+		var xmls:Array = flamingo.getXMLs(this);
+		for(var i = 0; i < xmls.length; i++)
+		{
 			this.setConfig(xmls[i]);
 		}
 		delete xmls;
+		
 		//remove xml from repository
+		
 		flamingo.deleteXML(this);
 		this._visible = visible;
 		flamingo.raiseEvent(this, "onInit", this);
 	}
-
+	
 	/**
-	* Configurates a component by setting a xml.
-	* @attr xml:Object Xml or string representation of a xml.
-	*/
-	function setConfig(xml:Object) {
-		if (typeof (xml) == "string") {
-			xml = new XML(String(xml))
+	 * Configurates a component by setting a xml.
+	 * @attr xml:Object Xml or string representation of a xml.
+	 */
+	
+	
+	function setConfig(xml:Object)
+	{
+		if(typeof(xml) == "string")
+		{
+			xml = new XML(String(xml));
 			xml = xml.firstChild;
 		}
-		//load default attributes, strings, styles and cursors       
+		
+		//load default attributes, strings, styles and cursors
+		
 		flamingo.parseXML(this, xml);
+		
 		//parse custom attributes
-		for (var a in xml.attributes) {
+		
+		for(var a in xml.attributes)
+		{
 			var attr:String = a.toLowerCase();
 			var val:String = xml.attributes[attr];
-			switch (attr) {
-			case "clickdelay" :
-				clickdelay = Number(val);
-				break;
-			case "pandelay" :
-				pandelay = Number(val);
-				break;
-			case "zoomscroll" :
-				if (val.toLowerCase() == "true") {
-					zoomscroll = true;
-				} else {
-					zoomscroll = false;
-				}
-				break;
-			case "skin" :
-				skin = val+"_pan";
-				break;
-			case "enabled" :
-				if (val.toLowerCase() == "true") {
-					enabled = true;
-				} else {
-					enabled = false;
-				}
-				break;
-			default :
-				break;
-			}
+			switch(attr){
+				case "clickdelay":
+					clickdelay = Number(val);
+					break;
+				case "pandelay":
+					pandelay = Number(val);
+					break;
+				case "zoomscroll":
+					if(val.toLowerCase() == "true")
+					{
+						zoomscroll = true;
+					}
+					break;
+				case "skin":
+					skin = val + "_pan";
+					break;
+				case "enabled":
+					if(val.toLowerCase() == "true")
+					{
+						enabled = true;
+					}
+					break;
+				default:
+					break;
+			};
 		}
+		
 		//
+		
 		this.setEnabled(enabled);
 		flamingo.position(this);
 	}
+	
 	//default functions-------------------------------
-	function startIdentifying() {
+	
+	
+	function startIdentifying()
+	{
 	}
-	function stopIdentifying() {
+	
+	function stopIdentifying()
+	{
 	}
-	function startUpdating() {		
+	
+	function startUpdating()
+	{
 	}
-	function stopUpdating() {		
+	
+	function stopUpdating()
+	{
 	}
+	
 	/** 
 	 * Dispatched when a component is up and ready to run.
 	 * @param comp:MovieClip a reference to the component.
