@@ -35,19 +35,21 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 * ExternalInterface.call("dispatchEventJS",event_to_fire, arguments);
 * Author:Linda Vels,IDgis bv
 */
-import core.AbstractComponent;
 import core.AbstractListenerRegister;
 import core.AbstractPositionable;
 import core.ComponentInterface;
 import flash.external.ExternalInterface;
 import flash.filters.DropShadowFilter;
-import gui.Coordinates;
-import gui.tools.*;
-import gui.button.*;
 import gui.BorderNavigation;
+import gui.button.*;
+import gui.Coordinates;
 import gui.Map;
+import gui.Scalebar;
+import gui.tools.*;
 import gui.layers.OGCWMSLayer;
 import tools.Logger;
+import display.spriteloader.SpriteMap;
+import display.spriteloader.SpriteMapFactory;
 
 class Flamingo {
 	private var version:String = "3.3";
@@ -115,10 +117,22 @@ class Flamingo {
 	//All log messages with this loglevel or higher wil be logged in the flash_log (possible values: Logger.DEBUG,Logger.INFO,Logger.WARN,Logger.ERROR,Logger.CRITICAL)
 	private var logLevel:Number=Logger.ERROR;
 	//All log messages with this loglevel or higher wil be logged on the screen (possible values: Logger.DEBUG,Logger.INFO,Logger.WARN,Logger.ERROR,Logger.CRITICAL)
-	private var screenLogLevel:Number=Logger.ERROR;
+	private var screenLogLevel:Number = Logger.ERROR;
+	
+	
+	var _spriteMapFactory:SpriteMapFactory;
+	var _spriteMap:SpriteMap;
+		 
 	//Flamingo class constructor
 	//@param mc MovieClip 
 	public function Flamingo(mc:MovieClip) {		
+		spriteMapFactory = SpriteMapFactory.getInstance();
+		var toolSpritesUrl:String = ("iconMapTest_1.png");
+		
+		//let the factory provide you with a new spritemap by calling obtainSpriteMap() on it with a url
+		//if you call obtainSpriteMap anywhere else with the same image url, it won't spoil bandwith requests and will only load it once..
+		this.spriteMap = spriteMapFactory.obtainSpriteMap(toolSpritesUrl);
+		
 		System.security.allowDomain("*");
 		//save base url of flamingo.swf
 		var url = mc._url.split("?")[0];
@@ -183,6 +197,8 @@ class Flamingo {
 		this.init();
 	}
 	private function init() {
+		
+		
 		this.mFlamingo.strings = new Object();
 		this.mFlamingo.cursors = new Object();
 		this.mFlamingo.guides = new Object();
@@ -242,7 +258,8 @@ class Flamingo {
 				delete thisObj.mFlamingo.config;
 			}
 		};
-		xml.load(this.correctUrl("flamingo.xml"));
+		xml.load(this.correctUrl("flamingo.xml"));		
+		
 		this.raiseEvent(this, "onInit");
 	}
 	/**
@@ -968,6 +985,10 @@ class Flamingo {
 						var coordinates:Coordinates = new Coordinates(targetid, mc);
 						this.components[targetid] = coordinates;
 						coordinates.setConfig(xmlNode);
+					}else if (file == "Scalebar") {
+						var scalebar:Scalebar = new Scalebar(targetid, mc);
+						this.components[targetid] = scalebar;
+						scalebar.setConfig(xmlNode);
 					}else if (file == "Map") {
 						var map:Map = new Map(targetid, mc);		
 						map.type = type;
@@ -1001,6 +1022,8 @@ class Flamingo {
 							tool = new ToolSuperPan(targetid, toolGroup, mc);							
 						}else if (file == "ToolIdentify") {						
 							tool = new ToolIdentify(targetid, toolGroup, mc);							
+						}else if (file == "ZoomerV") {
+							tool = new ToolZoomerV(targetid, toolGroup, mc);
 						}
 						tool.setConfig(xmlNode);						
 						toolGroup.addTool(tool);
@@ -1112,6 +1135,8 @@ class Flamingo {
 			case "ToolZoomout":
 			case "ToolGroup":
 			case "Coordinates":
+			case "Scalebar":
+			case "ZoomerV":
 				return true;
 				break;
 			default:
@@ -1126,6 +1151,7 @@ class Flamingo {
 			case "ToolZoomout":
 			case "ToolPan":
 			case "ToolSuperPan":
+			case "ZoomerV":
 				return true;
 				break;
 			default:
@@ -3567,6 +3593,26 @@ class Flamingo {
 	 */
 	static function main(mc) {
 		_global.flamingo = new Flamingo(mc);
+	}
+	
+	public function get spriteMapFactory():SpriteMapFactory 
+	{
+		return _spriteMapFactory;
+	}
+	
+	public function set spriteMapFactory(value:SpriteMapFactory):Void 
+	{
+		_spriteMapFactory = value;
+	}
+	
+	public function get spriteMap():SpriteMap 
+	{
+		return _spriteMap;
+	}
+	
+	public function set spriteMap(value:SpriteMap):Void 
+	{
+		_spriteMap = value;
 	}
 	
 }
