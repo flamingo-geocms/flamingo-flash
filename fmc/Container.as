@@ -1,4 +1,4 @@
-﻿/*-----------------------------------------------------------------------------
+/*-----------------------------------------------------------------------------
 Copyright (C) 2006  Menko Kroeske
 
 This file is part of Flamingo MapComponents.
@@ -24,6 +24,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 * @file Container.xml (configurationfile, needed for publication on internet)
 */
 var version:String = "2.0";
+//import spriteloader classes, set the AS2 FLA classpath to "classes\" !
+//  ->publish settings->flash tab->actionscript 2 Settings button-> add line "classes\"
+var importClasses:Array = [display.spriteloader.Sprite]
 //---------------------------------------
 var defaultXML:String = "";
 var bordercolor:Number;

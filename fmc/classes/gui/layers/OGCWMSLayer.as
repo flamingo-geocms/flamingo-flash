@@ -72,7 +72,6 @@ class gui.layers.OGCWMSLayer extends AbstractPositionable{
 	var starttime:Date;
 	
 	public function OGCWMSLayer(id:String, container:MovieClip, map:Map) {
-		Logger.console("OGWMSLAYER.constructor()");
 		super (id, container);
 		this.map = map;
 		this.parent = map;
@@ -116,7 +115,6 @@ class gui.layers.OGCWMSLayer extends AbstractPositionable{
 			thisObj.update();
 		};
 		
-		Logger.console("OGWMSLayer init, this parent"+_global.flamingo.getParent(this));
 		flamingo.addListener(lMap, _global.flamingo.getParent(this), this);
 		
 		this.container._visible = false;
@@ -142,7 +140,6 @@ class gui.layers.OGCWMSLayer extends AbstractPositionable{
 	* Be carefull with this, because flamingo adds listeners etc. and replaces #ALL# with all layers while doing a getCap request.
 	*/
 	function setConfig(xml:Object,dontGetCap:Boolean) {
-		Logger.console("OGWMSLAYER.setConfig()");
 		if (dontGetCap == undefined){
 			dontGetCap=false;
 		}
@@ -324,7 +321,6 @@ class gui.layers.OGCWMSLayer extends AbstractPositionable{
 		}
 		//after loading all parameters set the layer properties.
 		if (nullIfEmpty(slayers) != null) {
-			Logger.console("slayers: "+slayers);
 			if (visible_layers==null){
 				//_global.flamingo.tracer("LayerOGWMS setLayerProperty " + this.visible + " slayers " + slayers);
 				setLayerProperty(slayers, "visible", true);
@@ -400,8 +396,6 @@ class gui.layers.OGCWMSLayer extends AbstractPositionable{
 				}
 			}
 		}
-		Logger.console("OGWMSLAYER.setConfig() url: " + url);
-		Logger.console("OGWMSLAYER.setConfig() getCapurl: "+ getcapabilitiesurl);
 		//get extra information about mapserver and the layers                                                                 
 		if (url == undefined and getcapabilitiesurl == undefined) {
 			return;
@@ -424,7 +418,7 @@ class gui.layers.OGCWMSLayer extends AbstractPositionable{
 		};
 		lConn.onGetCapabilities = function(service, servicelayers, obj, reqid) {
 			//_global.flamingo.tracer("lConn.onGetCapabilities, layer = " + _global.flamingo.getId(thisObj));
-			Logger.console("Listener on GetCapabilities");
+			Logger.console("OGCWMS.GetConfig().Listener on GetCapabilities");
 			if (thisObj.name == undefined) {
 				thisObj.name = service.title;
 			}
@@ -441,7 +435,6 @@ class gui.layers.OGCWMSLayer extends AbstractPositionable{
 		if (c_url == undefined) {
 			this.getcapabilitiesurl = this.url;
 		}
-		Logger.console("OGWMSLAYER.config create Connector: " + url);
 		var cogwms:OGWMSConnector = OGWMSConnector.getInstance(this.getcapabilitiesurl);
 		cogwms.addListener(lConn);
 		var args:Object = new Object();
@@ -457,10 +450,10 @@ class gui.layers.OGCWMSLayer extends AbstractPositionable{
 			args.SERVICE="WMS";
 		}
 		if(this.initService==true && !dontGetCap){
-			cogwms.getCapabilities(this.getcapabilitiesurl, args, lConn);
 			Logger.console("OGWMSLAYER.config() do getCap: " + url);
+			cogwms.getCapabilities(this.getcapabilitiesurl, args, lConn);
 		}else {
-			Logger.console("Do Update!");
+			Logger.console("OGWMSLAYER.config() Do Update!");
 			update();
 		}
 	}
@@ -560,7 +553,6 @@ class gui.layers.OGCWMSLayer extends AbstractPositionable{
 	* @forceupdate forces a  update. A timestamp is added in seconds.
 	*/
 	public function update(forceupdate:Boolean) {
-		Logger.console("OGWMSLayer.update()");
 		_update(1,forceupdate);
 	}
 	
@@ -1663,7 +1655,6 @@ class gui.layers.OGCWMSLayer extends AbstractPositionable{
 		this.container._visible = value;
 	}
 	public function getParent():Object {
-		Logger.console("OGCWMSLayer.getParent() is called: "+this.map);
 		return this.map;
 	}
 }
