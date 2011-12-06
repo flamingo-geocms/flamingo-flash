@@ -11,7 +11,6 @@ class gui.layers.OGCWMSLayer extends AbstractPositionable{
 	var version:String = "2.0";
 	//---------------------------------
 	var defaultXML:String = "";
-	var visible:Boolean;
 	var query_layers:String;
 	//same as query_layers, needed for IdentifyResultsHTML, to make interface for LayerArcIMS, LayerArcServer vs LayerOGWMS equal 
 	var identifyids:String; 
@@ -39,7 +38,7 @@ class gui.layers.OGCWMSLayer extends AbstractPositionable{
 	var canmaptip:Boolean = false;
 	var maptipFeatureCount:Number=1;
 	//-------------------------------------
-	var updating:Boolean = false;
+	var _updating:Boolean = false;
 	var updateWhenEmpty:Boolean = true;
 	var layers:Object = new Object();
 	var timeoutid:Number;
@@ -79,7 +78,6 @@ class gui.layers.OGCWMSLayer extends AbstractPositionable{
 	}
 	
 	public function init():Void {
-		Logger.console("OGWMSLAYER.init()");
 		if (flamingo == undefined) {
 			var t:TextField = this.container.createTextField("readme", 0, 0, 0, 550, 400);
 			t.html = true;
@@ -129,7 +127,7 @@ class gui.layers.OGCWMSLayer extends AbstractPositionable{
 		//remove xml from repository
 		_global.flamingo.deleteXML(this);
 		
-		this.container._visible = visible;
+		this.container._visible = this.visible;
 		_global.flamingo.raiseEvent(this, "onInit", this);
 	}
 	
@@ -418,7 +416,6 @@ class gui.layers.OGCWMSLayer extends AbstractPositionable{
 		};
 		lConn.onGetCapabilities = function(service, servicelayers, obj, reqid) {
 			//_global.flamingo.tracer("lConn.onGetCapabilities, layer = " + _global.flamingo.getId(thisObj));
-			Logger.console("OGCWMS.GetConfig().Listener on GetCapabilities");
 			if (thisObj.name == undefined) {
 				thisObj.name = service.title;
 			}
@@ -450,10 +447,8 @@ class gui.layers.OGCWMSLayer extends AbstractPositionable{
 			args.SERVICE="WMS";
 		}
 		if(this.initService==true && !dontGetCap){
-			Logger.console("OGWMSLAYER.config() do getCap: " + url);
 			cogwms.getCapabilities(this.getcapabilitiesurl, args, lConn);
 		}else {
-			Logger.console("OGWMSLAYER.config() Do Update!");
 			update();
 		}
 	}
@@ -557,15 +552,14 @@ class gui.layers.OGCWMSLayer extends AbstractPositionable{
 	}
 	
 	function _update(nrtry:Number, forceupdate:Boolean) {
-		Logger.console("OGWMSLayer._update()");
 		var thisObj:OGCWMSLayer = this;
 		//_global.flamingo.tracer("LayerOGWMS _update " + _global.flamingo.getId(this) + " visible " + visible);
-		if (! visible || ! map.visible) {
+		if (! this.visible|| ! map.visible) {
 			this.container._visible = false;
 			return;
 		}
 		//only one request will be fired at once                                                                                    
-		if (updating) {
+		if (this.updating) {
 			return;
 		}
 		if (this.url == undefined) {
@@ -583,7 +577,7 @@ class gui.layers.OGCWMSLayer extends AbstractPositionable{
 			if (ms<=minscale) {
 				_global.flamingo.raiseEvent(thisObj, "onUpdate", thisObj, nrtry);
 				_global.flamingo.raiseEvent(thisObj, "onUpdateComplete", thisObj, 0, 0, 0);
-				_visible = false;
+				this.container._visible = false;
 				return;
 			}
 		}
@@ -591,7 +585,7 @@ class gui.layers.OGCWMSLayer extends AbstractPositionable{
 			if (ms>maxscale) {
 				_global.flamingo.raiseEvent(thisObj, "onUpdate", thisObj, nrtry);
 				_global.flamingo.raiseEvent(thisObj, "onUpdateComplete", thisObj, 0, 0, 0);
-				_visible = false;
+				this.container._visible = false;
 				return;
 			}
 		}
@@ -600,7 +594,7 @@ class gui.layers.OGCWMSLayer extends AbstractPositionable{
 		if (layerstring.length<=0 && ((this.attributes["sld"] == undefined)||!updateWhenEmpty)) {
 			_global.flamingo.raiseEvent(thisObj, "onUpdate", thisObj, nrtry);
 			_global.flamingo.raiseEvent(thisObj, "onUpdateComplete", thisObj, 0, 0, 0);
-			_visible = false;
+			this.container._visible = false;
 			return;
 		}
 		//var requestedextent = map.getMapExtent();                                                                                    
@@ -615,7 +609,7 @@ class gui.layers.OGCWMSLayer extends AbstractPositionable{
 		updating = true;
 		_visible = true;
 		nrcache++;
-		var cachemovie:MovieClip = this.container.createEmptyMovieClip("mCache"+nrcache, nrcache);
+		var cachemovie:MovieClip = this.container.createEmptyMovieClip("mCache" + nrcache, nrcache);
 		cachemovie.createEmptyMovieClip("mHolder", 0);
 		cachemovie._alpha = 0;
 		var w = map.__width;
@@ -635,7 +629,7 @@ class gui.layers.OGCWMSLayer extends AbstractPositionable{
 			cachemovie.extent.maxx = extent.maxx;
 			cachemovie.extent.maxy = extent.maxy;
 		}
-		caches[nrcache] = "";
+		caches[nrcache] = cachemovie;
 		//extent;
 		//listener for OGWMSConnector	
 		var lConn:Object = new Object();
@@ -682,16 +676,15 @@ class gui.layers.OGCWMSLayer extends AbstractPositionable{
 				var loadtime = (newTime.getTime()-thisObj.starttime.getTime())/1000;
 				thisObj.updateCache(cachemovie);
 				var currentFiltersFingerprint:String = "";
-				
 				if (thisObj.map.fadesteps>0) {
 					var step = (100/thisObj.map.fadesteps)+1;
 					thisObj.container.onEnterFrame = function() {
 						cachemovie._alpha = cachemovie._alpha+step;
 						if (cachemovie._alpha>=100) {
 							delete this.onEnterFrame;
-							_global.flamingo.raiseEvent(thisObj, "onUpdateComplete", thisObj, requesttime, loadtime, mc.getBytesTotal());
-							this.updating = false;
-							this._clearCache();
+							thisObj.flamingo.raiseEvent(thisObj, "onUpdateComplete", thisObj, requesttime, loadtime, mc.getBytesTotal());
+							thisObj.updating = false;
+							thisObj._clearCache();
 							if ((!thisObj.map.isEqualExtent(correctedExtent) and !thisObj.map.isEqualExtent(thisObj.extent)) || thisObj._getVisLayers() != thisObj.vislayers ||
 								("|" + currentFiltersFingerprint + "|") !=  ("|" + thisObj.lastFiltersFingerprint + "|")) {
 								//_global.flamingo.tracer("re-update, fadesteps>0");
@@ -1227,14 +1220,14 @@ class gui.layers.OGCWMSLayer extends AbstractPositionable{
 	function _clearCache() {
 		for (var nr in caches) {
 			if (nr != nrcache) {
-				this["mCache"+nr].removeMovieClip();
+				this.caches[nr].removeMovieClip();
 				delete caches[nr];
 			}
 		}
 	}
 	function updateCaches() {
 		for (var nr in caches) {
-			updateCache(this["mCache"+nr]);
+			this.updateCache(caches[nr]);
 		}
 	}
 	function getLegend(id):String {
@@ -1247,7 +1240,7 @@ class gui.layers.OGCWMSLayer extends AbstractPositionable{
 	function getScale():Number {
 		return map.getScaleHint(extent);
 	}
-	function updateCache(cache:MovieClip) {
+	function updateCache(cache:MovieClip) {		
 		if (cache == undefined) {
 			return;
 		}
@@ -1281,6 +1274,7 @@ class gui.layers.OGCWMSLayer extends AbstractPositionable{
 			*If all layers are not visible and the map is updated the cache will be visible for a short time! 
 			*/
 			//_visible = true;
+			
 			var r:Object = map.extent2Rect(cache.extent);
 			//cache.scrollRect = new flash.geom.Rectangle(0, 0, map.__width, map.__height);
 			cache._x = r.x;
@@ -1643,18 +1637,18 @@ class gui.layers.OGCWMSLayer extends AbstractPositionable{
 	//public function onMaptipData(layer:MovieClip, maptip:String):Void {
 	//
 	
-	/*Kan later weg*/
+	public function getParent():Object {
+		return this.map;
+	}
 	public function get flamingo():MovieClip {
 		return _global.flamingo;
 	}
+	/*Getters and setters*/	
+	public function get updating():Boolean {
+		return _updating;
+	}
 	
-	public function get _visible():Boolean {
-		return this.container._visible;
-	}
-	public function set _visible(value:Boolean){
-		this.container._visible = value;
-	}
-	public function getParent():Object {
-		return this.map;
+	public function set updating(value:Boolean):Void {
+		_updating = value;
 	}
 }

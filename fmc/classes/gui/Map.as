@@ -552,7 +552,6 @@ class gui.Map extends AbstractPositionable implements PersistableComponent{
 	* @return String Id of the added layer.
 	*/
 	public function addLayer(xml:Object):String {
-		Logger.console("addLayer: " + xml);
 		if (typeof (xml) == "string") {
 			xml = new XML(String(xml))
 			xml = xml.firstChild;			
@@ -592,20 +591,17 @@ class gui.Map extends AbstractPositionable implements PersistableComponent{
 			var thisObj:Map = this;
 			var lLayer:Object = new Object();
 			lLayer.onUpdate = function(layer:MovieClip, nrtry:Number) {
-				Logger.console("Map.Listener.onupdate");
 				thisObj.layersupdating[layer._name] = new Object();
 				thisObj.layersupdating[layer._name].updatecomplete = false;
 				thisObj.checkUpdate();
 			};
 			lLayer.onUpdateComplete = function(layer:MovieClip) {
-				Logger.console("Map.Listener.onupdatecomplpete");
 				thisObj.layersupdating[layer._name].updatecomplete = true;
 				thisObj.checkUpdate();
 			};
 			lLayer.onIdentify = function(layer:MovieClip, extent:Object) {
 				//thisObj.identifying = true;
 				//trace("Onidentify:"+thisObj.extent2String(extent));
-				Logger.console("Map.Listener.onidentify");
 				thisObj.layersidentifying[layer._name] = new Object();
 				thisObj.layersidentifying[layer._name].nridentified = 0;
 				thisObj.layersidentifying[layer._name].totalidentify = 0;
@@ -634,7 +630,6 @@ class gui.Map extends AbstractPositionable implements PersistableComponent{
 			};
 			lLayer.onError = function(layer:MovieClip, type:String, error:String) {				
 				type = type.toLowerCase();
-				Logger.console("Map.Listener.onerror");
 				if (type == "identify") {
 					thisObj.flamingo.raiseEvent(thisObj, "onError", thisObj, "identify", error, layer);
 					thisObj.layersidentifying[layer._name].totalidentify = thisObj.layersidentifying[layer._name].nridentified;
@@ -649,7 +644,6 @@ class gui.Map extends AbstractPositionable implements PersistableComponent{
 				}
 			};
 			lLayer.onGetServiceInfo = function(layer:MovieClip) {
-				Logger.console("Map.Listener.ongetServiceInfo");
 				thisObj.nrOfServiceLayers--;
 				var themeSelector:Object = thisObj.getThemeSelector();
 				if(thisObj.configObjId!=null){
@@ -663,7 +657,6 @@ class gui.Map extends AbstractPositionable implements PersistableComponent{
 				} 	
 			};
 			lLayer.onGetCapabilities =  function(layer:MovieClip) {
-				Logger.console("Map.layerListener: onGetCapabilities");
 				thisObj.nrOfServiceLayers--;
 				var themeSelector:Object = thisObj.getThemeSelector();
 				if(thisObj.configObjId!=null){

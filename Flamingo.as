@@ -965,10 +965,7 @@ class Flamingo {
 			var xmlNode:XMLNode = XMLNode(xml);
 			if (this.isEmbeddedComponents(file)){
 				//newtypeobjectaanmaken
-				var oldComponent = this.components[targetid];
-				if (this.components[targetid] != undefined && !this.components[targetid] instanceof AbstractPositionable) {	
-					Logger.console("The listeners: "+this.components[targetid]._listeners);
-				}
+				var oldComponent = this.components[targetid];				
 				if (this.components[targetid] != undefined && this.components[targetid] instanceof AbstractPositionable) {				
 					ComponentInterface(this.components[targetid]).setConfig(XML(xmlNode));
 				}else {
@@ -1001,11 +998,9 @@ class Flamingo {
 								foundMap = Map(this.components[i]);
 							}
 						}
-						Logger.console("The latest map: "+foundMap);
-						var layer:OGCWMSLayer = new OGCWMSLayer(targetid,mc,foundMap);
+						var layer:OGCWMSLayer = new OGCWMSLayer(targetid, mc, foundMap);
 						this.components[targetid] = layer;
 						layer.setConfig(xmlNode);
-						Logger.console("addLayer!!!");
 					}else if (isTool(file)) {
 						//get the last added toolgroup
 						var toolGroup:ToolGroup = this.toolGroups[this.toolGroups.length - 1];
@@ -1059,21 +1054,20 @@ class Flamingo {
 						}
 					}
 					this.raiseEvent(this, "onLoadComponent", targetid);	
-					this.doneLoading();				
-				}	
-				/* A Component is added before, and had a listener to this object.
-				 * Therefor a temp listener object is made. Now add the listener to the real thing.*/
-				if (oldComponent != undefined) {
-					//There is a listener added. Now add it on the newly created object
-					if (oldComponent._listeners != undefined) {
-						//enable broadcasting
-						AsBroadcaster.initialize(this.components[targetid]);
-						for (var i = 0; i < oldComponent._listeners.length; i++) {
-							Logger.console("Listener: " + oldComponent._listeners[i].onGetCapabilities);
-							this.addListener(oldComponent._listeners[i], targetid,oldComponent.callers[i]);
+					this.doneLoading();
+					/* A Component is added before, and had a listener to this object.
+					 * Therefor a temp listener object is made. Now add the listener to the real thing.*/
+					if (oldComponent != undefined) {
+						//There is a listener added. Now add it on the newly created object
+						if (oldComponent._listeners != undefined) {
+							//enable broadcasting
+							AsBroadcaster.initialize(this.components[targetid]);
+							for (var i = 0; i < oldComponent._listeners.length; i++) {
+								this.addListener(oldComponent._listeners[i], targetid,oldComponent.callers[i]);
+							}
 						}
 					}
-				}
+				}				
 			}else {
 				//component new or existing component has no setConfig, so treat as new component   
 				//add a reference for a component to the components object    
@@ -2387,9 +2381,6 @@ class Flamingo {
 			AsBroadcaster.initialize(this.components[listentoId]);
 			//to store the callers for later use.
 			this.components[listentoId].callers = new Array();
-		}
-		if (listener.onGetGetCapabilities != undefined) {
-			Logger.console("*************Flamingo.addListener the right one is added!");
 		}
 		this.components[listentoId].addListener(listener);
 		//add caller for later use.

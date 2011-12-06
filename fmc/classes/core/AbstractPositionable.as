@@ -34,7 +34,7 @@ class core.AbstractPositionable extends AbstractListenerRegister
 	//version of component.
 	private var _version:String;	
 	//visible
-	private var _visible:Boolean;
+	private var configVisible:Boolean;
 	//The strings that are used in this component
 	private var _strings:Object;
 	//The cursors for the object
@@ -258,13 +258,19 @@ class core.AbstractPositionable extends AbstractListenerRegister
 	{
 		_type = value;
 	}
-		
+	/*Both _visible (getter and setter) are forwarded to visible(getter and setter)*/	
+	public function set _visible(value:Boolean) {
+		this.container._visible = value;
+	}
+	public function get _visible():Boolean {
+		return this.container.visible;
+	}
 	public function get visible():Boolean { 		
-		return _visible;
+		return configVisible;
 	}
 	
-	public function set visible(value:Boolean):Void{
-		_visible = value;
+	public function set visible(value:Boolean):Void {
+		this.configVisible = value;
 	}
 		
 	public function get strings():Object 
