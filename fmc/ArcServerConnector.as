@@ -80,7 +80,7 @@ class ArcServerConnector {
 		if (_server.substr(_server.length-1, 1).toLowerCase() != "/") {
 			_server = _server+"/";
 		}
-		if (_server.substr(0, 4).toLowerCase() != "http" and _server.substr(0, 4).toLowerCase() != "file") {
+		if (_server.substr(0, 4).toLowerCase() != "http" && _server.substr(0, 4).toLowerCase() != "file") {
 			_server = "http://"+_server;
 		}
 		var extra = "";

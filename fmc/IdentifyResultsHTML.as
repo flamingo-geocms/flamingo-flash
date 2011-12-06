@@ -372,7 +372,7 @@ function show() {
 	//make sure that this component is visible
 	_visible = true;
 	var parent = flamingo.getParent(this);
-	while (not flamingo.isVisible(parent) and parent != undefined) {
+	while (! flamingo.isVisible(parent) && parent != undefined) {
 		parent.show();
 		parent._visible = true;
 	}
