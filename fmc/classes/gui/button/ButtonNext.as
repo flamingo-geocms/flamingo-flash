@@ -106,7 +106,7 @@ class gui.button.ButtonNext extends AbstractButton implements ComponentInterface
 		this.resize()
 	}
 
-	function press() {
+	function onRelease() {
 		for (var i = 0; i<listento.length; i++) {
 			var map = flamingo.getComponent(listento[i]);
 			if (map.getHoldOnUpdate() and map.isUpdating()) {
