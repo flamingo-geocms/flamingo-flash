@@ -73,6 +73,7 @@ class core.AbstractPositionable extends AbstractListenerRegister
 		this.cursors = new Object();
 		this.styles = new TextField.StyleSheet();	
 		this.borderalpha = 100;
+		this.version = "2.0";
 	}
 	/**
 	 * Pass the hittest to the movieclip

@@ -18,6 +18,8 @@
 	private var capReqid:Number = 0;
 	private var instanceId:Number = 0;
 	
+	var starttime:Date;
+	
 	static private var instances:Array = new Array();
 	
 	static function getInstance(url:String):OGWMSConnector {
@@ -143,7 +145,7 @@
 				// do some cleaning
 				delete this;
 			};
-			var starttime:Date = new Date();
+			this.starttime = new Date();
 			xrequest.load(req_url);
 		}
 		return (this.requestid);

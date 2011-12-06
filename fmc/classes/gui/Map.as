@@ -628,7 +628,7 @@ class gui.Map extends AbstractPositionable implements PersistableComponent{
 				thisObj.layersidentifying[layer._name].identifycomplete = true;
 				thisObj.checkIdentify();
 			};
-			lLayer.onError = function(layer:MovieClip, type:String, error:String) {				
+			lLayer.onError = function(layer:MovieClip, type:String, error:String) {		
 				type = type.toLowerCase();
 				if (type == "identify") {
 					thisObj.flamingo.raiseEvent(thisObj, "onError", thisObj, "identify", error, layer);

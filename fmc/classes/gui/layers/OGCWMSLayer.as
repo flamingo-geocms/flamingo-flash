@@ -6,7 +6,62 @@ import coremodel.service.wms.OGWMSConnector;
 import core.AbstractPositionable;
 import tools.Logger;
 import gui.Map;
-
+/** @component LayerOGWMS
+* Open Gis WMS layer. (Tested with Demis, Geoserver, Degree, Esri and Mapserver)
+* @file OGWMSConnector.as (sourcefile)
+* @file LayerOGWMS.fla (sourcefile)
+* @file LayerOGWMS.swf (compiled layer, needed for publication on internet)
+* @file LayerOGWMS.xml (configurationfile for layer, needed for publication on internet)
+* @change 2010-01-28 Added attribute InitService
+*/
+/** @tag <fmc:LayerOGWMS>  
+* This tag defines a Open Gis WMS layer.
+* @hierarchy childnode of <fmc:Map> 
+* @example 
+* <fmc:Map id="map"  left="5" top="5" bottom="bottom -5" right="right -5"  extent="13562,306839,278026,614073,Nederland" fullextent="13562,306839,278026,614073,Nederland">
+*    <fmc:LayerOGWMS id="mylayer" url="myserver.com" WMS="mymap" MAPTIP_LAYERS="Countries" QUERY_LAYERS="#ALL#" LAYERS="#ALL#">
+*        <layer id="Countries" maptip="[Name]"/>
+*   </fmc:LayerOGWMS>
+* </fmc:Map>
+* @attr url  Base url of the mapserver, without! these arguments: BBOX, TRANSPARENT, FORMAT, INFO_FORMAT, LAYERS, QUERY_LAYERS, WIDTH, HEIGTH, FEATURE_COUNT, STYLES, EXCEPTIONS, X and Y etc.
+* @attr getfeatureinfourl  This url is used when the getFeatureinfo request requires a different url as the getMap request. When omitted the 'url' is used
+* @attr getcapabilitiesurl  This url is used when the getCapabilities request requires a different url as the getMap request. When omitted the 'url' is used
+* @attr format (defaultvalue = "image/png") Format of returned image.
+* @attr info_format  (defaultvalue = "application/vnd.ogc.gml") Format of identify information.
+* @attr exceptions  (defaultvalue = "application/vnd.ogc.se_xml") EXCEPTIONS argument.
+* @attr srs (defaultvalue = "EPSG:4326") SRS argument.
+* @attr version (defaultvalue = "1.1.1") VERSION argument.
+* @attr transparent  (defaultvalue = "true") True or false.
+* @attr layers  A comma seperated list of layers that have to be displayed. Use keyword "#ALL#" for displaying all available layers.
+* @attr styles  STYLES argument. A comma seperated list of the styles used to display the layers. Be aware: Number of styles have to mach the number of layers!
+* @attr query_layers  A comma seperated list of layers that will be identified. Use keyword "#ALL#" for querying all available layers.
+* @attr maptip_layers  A comma seperated list of layers that will be queried during a maptip event. Use keyword "#ALL#" for querying all available layers.
+* @attr feature_count (defaultvalue = "10")  Number of features that will be returned after an identify.
+* @attr maptip_feature_count (defaultvalue= "1") Number of features that wil be shown when a maptip is done on this flamingo layer.
+* @attr limitedtofullextent  (defaultvalue = "false") True or false.
+* @attr timeout  (defaultvalue = "10") Time in seconds when the layer will dispatch an onErrorUpdate event.
+* @attr retryonerror (defaultvalue = "0") Number of retrys when encountering an error.
+* @attr showerrors  (defaultvalue = "false") True or false. If true errors will be displayed in a standard flamingo error window.
+* @attr minscale  If mapscale is less then or equal minscale, the layer will not be shown.
+* @attr maxscale  If mapscale is greater then maxscale, the layer will not be shown.
+* @attr fullextent  Extent of layer (comma seperated list of minx,miny,maxx,maxy). When the map is outside this extent, no update will performed.
+* @attr alpha (defaultvalue = "100") Transparency of the layer.
+* @attr maxHttpGetUrlLength default: 0 If a url is longer then the maxHttpGetUrlLength the layer tries to do a HTTP POST request. If set to 0 (default)the layer wil alwalys do a HTTP GET.
+* @attr nocache default:false if set to true the getMap requests are done with a extra parameter to force a no cache
+* @attr visible default:true if set to false this component will be set to invisible but also all the layers will be set to visible=false;
+* @attr visible_layers Comma seperated list of layers that must be visible. If omitted all layers are visible.
+* @attr updateWhenEmpty deafult:true If set to false the layer will not get updated when the layerstring is empty(no sublayers), although the sld parameter may be set. The layer will be set invisible instead. 
+* @attr identPerLayer When true, an identify request will be sent for each sublayer seperately when sending the identify request per sublayer you know the sublayer name when handling the response. The FeatureInfo response of ArcGisServer WMS often doesn't contain the 
+* faeturetype (or sublayer) name.  
+* @attr initService (default="true") if set to false the service won't do a getCap request to init the service. If set to false all parameters must be filled, and no #ALL# can be used.
+*/
+/** @tag <layer>  
+* This defines a sublayer of an OG-WMS service.
+* @hierarchy childnode of <fmc:LayerOGWMS> 
+* @attr id  layerid, same as in the getcapabilities listing.
+* @attr aka  The layerid of a layer in the getfeatureinfo response.
+* @attr maptip Configuration string for a maptip. Fieldnames between square brackets will be replaced  with their actual values. For multi-language support use a standard string tag with id='maptip'.
+*/
 class gui.layers.OGCWMSLayer extends AbstractPositionable{
 	var version:String = "2.0";
 	//---------------------------------
@@ -755,7 +810,7 @@ class gui.layers.OGCWMSLayer extends AbstractPositionable{
 				var mcl:MovieClipLoader = new MovieClipLoader();
 				mcl.addListener(listener);
 				mcl.loadClip(imageurl, cachemovie.mHolder);
-				var starttime:Date = new Date();
+				this.starttime = new Date();
 				thisObj._starttimeout();			
 			
 			}
@@ -929,7 +984,7 @@ class gui.layers.OGCWMSLayer extends AbstractPositionable{
 		} else {
 			var reqid = cogwms.getFeatureInfo(url, args, this.map.copyExtent(this.identifyextent));
 		}
-		var starttime:Date = new Date();
+		this.starttime = new Date();
 	}
 
 	/*
@@ -1531,7 +1586,9 @@ class gui.layers.OGCWMSLayer extends AbstractPositionable{
 		return s;		
 	}
 
-
+	public function getParent():Object {
+		return this.map;
+	}
 
 	/**
 	* Dispatched when the layer gets a request object from the connector.
@@ -1636,13 +1693,7 @@ class gui.layers.OGCWMSLayer extends AbstractPositionable{
 	*/
 	//public function onMaptipData(layer:MovieClip, maptip:String):Void {
 	//
-	
-	public function getParent():Object {
-		return this.map;
-	}
-	public function get flamingo():MovieClip {
-		return _global.flamingo;
-	}
+		
 	/*Getters and setters*/	
 	public function get updating():Boolean {
 		return _updating;

@@ -47,6 +47,7 @@ import gui.Map;
 import gui.Scalebar;
 import gui.tools.*;
 import gui.layers.OGCWMSLayer;
+import gui.layers.ArcIMSLayer;
 import tools.Logger;
 import display.spriteloader.SpriteMap;
 import display.spriteloader.SpriteMapFactory;
@@ -981,11 +982,11 @@ class Flamingo {
 						var coordinates:Coordinates = new Coordinates(targetid, mc);
 						this.components[targetid] = coordinates;
 						coordinates.setConfig(xmlNode);
-					}else if (file == "Scalebar") {
+					}/*else if (file == "Scalebar") {
 						var scalebar:Scalebar = new Scalebar(targetid, mc);
 						this.components[targetid] = scalebar;
 						scalebar.setConfig(xmlNode);
-					}else if (file == "Map") {
+					}*/else if (file == "Map") {
 						var map:Map = new Map(targetid, mc);		
 						map.type = type;
 						this.components[targetid] = map;
@@ -998,6 +999,16 @@ class Flamingo {
 							}
 						}
 						var layer:OGCWMSLayer = new OGCWMSLayer(targetid, mc, foundMap);
+						this.components[targetid] = layer;
+						layer.setConfig(xmlNode);
+					}else if (file == "LayerArcIMS") {
+						var foundMap:Map;
+						for (var i in this.components) {
+							if (this.components[i].type == "Map") {
+								foundMap = Map(this.components[i]);
+							}
+						}
+						var layer:ArcIMSLayer = new ArcIMSLayer(targetid, mc, foundMap);
 						this.components[targetid] = layer;
 						layer.setConfig(xmlNode);
 					}else if (isTool(file)) {
@@ -1017,7 +1028,7 @@ class Flamingo {
 						}else if (file == "ToolIdentify") {						
 							tool = new ToolIdentify(targetid, toolGroup, mc);							
 						}else if (file == "ZoomerV") {
-							tool = new ToolZoomerV(targetid, toolGroup, mc);
+							/*tool = new ToolZoomerV(targetid, toolGroup, mc);*/
 						}
 						tool.setConfig(xmlNode);						
 						toolGroup.addTool(tool);
@@ -1114,6 +1125,7 @@ class Flamingo {
 	 */
 	private function isEmbeddedComponents(file:String):Boolean {
 		switch(file) {
+			case "LayerArcIMS":
 			case "LayerOGWMS":
 			case "Map":
 			case "BorderNavigation":
@@ -2322,7 +2334,7 @@ class Flamingo {
 	public function addListener(listener:Object, listento:Object, caller:Object):Void {
 		var listentoId:String;
 		if (listento == undefined) {
-			Logger.console("!!!!! Flamingo.addListener: The listento is undefined!");
+			Logger.console("!!!!! Flamingo.addListener: The listento is undefined! Caller: "+caller.id);
 			return;
 		}
 		if (listento == this) {
@@ -2451,6 +2463,7 @@ class Flamingo {
 	*/
 	public function raiseEvent(comp:Object, event:String) {
 		var id:String = this.getId(comp);		
+		//Logger.console("RaiseEvent: " + event+" id: "+id+" component: "+this.components[id]);
 		//remove first element (=comp) from arguments array 
 		arguments.shift();
 		//first element of arguments is now: event
