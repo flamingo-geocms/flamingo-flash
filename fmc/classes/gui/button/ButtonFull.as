@@ -5,6 +5,12 @@
 import core.ComponentInterface;
 import gui.button.AbstractButton;
 import tools.Logger;
+import display.spriteloader.SpriteSettings;
+import display.spriteloader.Sprite;
+import display.spriteloader.SpriteMap;
+import display.spriteloader.event.SpriteMapEvent;
+import display.spriteloader.SpriteMapFactory;
+
 /** @component ButtonFull
 * A button to zoom the map to the intial or full extent.
 * @file ButtonFull.fla (sourcefile)
@@ -24,6 +30,7 @@ import tools.Logger;
 class gui.button.ButtonFull extends AbstractButton implements ComponentInterface{	
 	var extent:String;
 	var skin:String = "";
+	var spriteMap:SpriteMap;
 	//---------------------------------
 	
 	/**
@@ -34,16 +41,14 @@ class gui.button.ButtonFull extends AbstractButton implements ComponentInterface
 	 */
 	public function ButtonFull(id:String, container:MovieClip) {		
 		super(id, container);
-		this.toolDownLink = "assets/img/ButtonFull_down.png";
-		this.toolUpLink = "assets/img/ButtonFull_up.png";
-		this.toolOverLink = "assets/img/ButtonFull_over.png";		
 		
 		this.defaultXML = "<?xml version='1.0' encoding='UTF-8'?>" +
 							"<ButtonFull>" +
 							"<string id='tooltip' en='full extent' nl='zoom naar volledige uitsnede'/>" + 
-							"</ButtonFull>";
+							"</ButtonFull>";	
 		init();
 	}
+	
 	function init():Void {		
 		if (flamingo == undefined) {
 			var t:TextField = this.container.createTextField("readme", 0, 0, 0, 550, 400);
@@ -51,11 +56,14 @@ class gui.button.ButtonFull extends AbstractButton implements ComponentInterface
 			t.htmlText = "<P ALIGN='CENTER'><FONT FACE='Helvetica, Arial' SIZE='12' COLOR='#000000' LETTERSPACING='0' KERNING='0'><B>ButtonFull "+this.version+"</B> - www.flamingo-mc.org</FONT></P>";
 			return;
 		}
+		
+		var spriteMap:SpriteMap = flamingo.spriteMapFactory.obtainSpriteMap("sprite.png");			
+		spriteMap.attachSpriteTo(this.mcOver.createEmptyMovieClip("container", this.mcOver.getNextHighestDepth()), new SpriteSettings(3, 359 , 22, 31, 0, 0, true, 100));
+		spriteMap.attachSpriteTo(this.mcDown.createEmptyMovieClip("container", this.mcDown.getNextHighestDepth()), new SpriteSettings(50, 359 , 22, 31, 0, 0, true, 100));
+		spriteMap.attachSpriteTo(this.mcUp.createEmptyMovieClip("container", this.mcUp.getNextHighestDepth()), new SpriteSettings(97, 359 , 22, 31, 0, 0, true, 100));
+		
+		
 		this._visible = false;
-		//load defaults
-		//var xml:XML = new XML()
-		//xml.ignoreWhite = true;
-		//xml.load(getNocacheName(url+".xml", this.nocache))
 		
 		this.setConfig(defaultXML);
 			//custom
