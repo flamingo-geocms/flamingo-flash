@@ -32,7 +32,6 @@ class display.spriteloader.SpriteMapFactory
 			_instance = new SpriteMapFactory( { internalCreation:true } );
 			
 		}
-		trace(_instance)
 		return _instance;
 	}
 	
