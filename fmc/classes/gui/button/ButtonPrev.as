@@ -29,8 +29,8 @@ class gui.button.ButtonPrev extends AbstractButton implements ComponentInterface
 	public function ButtonPrev(id:String, container:MovieClip) 
 	{
 		super(id, container);
-		toolOverSettings = new SpriteSettings(4, 452, 22, 22, 0, 0, true, 100);
-		toolDownSettings = new SpriteSettings(50, 452, 22, 22, 0, 0, true, 100);
+		toolDownSettings = new SpriteSettings(4, 452, 22, 22, 0, 0, true, 100);
+		toolOverSettings = new SpriteSettings(50, 452, 22, 22, 0, 0, true, 100);
 		toolUpSettings = new SpriteSettings(99, 452, 22, 22, 0, 0, true, 100);
 		
 		this.defaultXML = "<?xml version='1.0' encoding='UTF-8'?>" +

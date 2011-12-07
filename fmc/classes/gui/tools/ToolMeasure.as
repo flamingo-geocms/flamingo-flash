@@ -53,8 +53,8 @@ class gui.tools.ToolMeasure extends AbstractTool implements ComponentInterface{
 	 */	
 	public function ToolMeasure(id:String, toolGroup:ToolGroup ,container:MovieClip) {		
 		super(id, toolGroup, container);		
-		toolOverSettings = new SpriteSettings(4, 951, 23, 23, 0, 0, true, 100);
-		toolDownSettings = new SpriteSettings(49, 951, 23, 23, 0, 0, true, 100);
+		toolDownSettings = new SpriteSettings(4, 951, 23, 23, 0, 0, true, 100);
+		toolOverSettings = new SpriteSettings(49, 951, 23, 23, 0, 0, true, 100);
 		toolUpSettings = new SpriteSettings(97, 953, 20, 20, 0, 0, true, 100);
 		
 		this.defaultXML = "<?xml version='1.0' encoding='UTF-8'?>" +

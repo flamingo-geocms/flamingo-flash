@@ -36,8 +36,8 @@ class gui.button.ButtonNext extends AbstractButton implements ComponentInterface
 	public function ButtonNext(id:String, container:MovieClip) 
 	{
 		super(id, container);
-		toolOverSettings = new SpriteSettings(4, 405, 22, 22, 0, 0, true, 100);
-		toolDownSettings = new SpriteSettings(50, 405, 22, 22, 0, 0, true, 100);
+		toolDownSettings = new SpriteSettings(4, 405, 22, 22, 0, 0, true, 100);
+		toolOverSettings = new SpriteSettings(50, 405, 22, 22, 0, 0, true, 100);
 		toolUpSettings = new SpriteSettings(99, 405, 22, 22, 0, 0, true, 100);
 		
 		this.defaultXML = "<?xml version='1.0' encoding='UTF-8'?>" + 
