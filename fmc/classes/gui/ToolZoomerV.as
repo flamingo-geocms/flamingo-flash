@@ -41,7 +41,7 @@ import core.AbstractPositionable;
  */
 
 
-class gui.tools.ToolZoomerV  extends AbstractPositionable{
+class gui.ToolZoomerV  extends AbstractPositionable{
 
 	var _zoomid:Number;
 	var thisObj = this;

@@ -1,10 +1,10 @@
 
 /**
- * ...
- * @author ...
+ * 
+ * @author Meine Toonen
  */
 import gui.button.AbstractButton;
-import gui.tools.ToolZoomerV;
+import gui.ToolZoomerV;
 import tools.Logger;
 import display.spriteloader.SpriteSettings;
 

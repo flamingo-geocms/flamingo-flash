@@ -1,4 +1,4 @@
-import gui.tools.ToolZoomerV;
+import gui.ToolZoomerV;
 import tools.Logger;
 import gui.button.AbstractButton;
 import display.spriteloader.SpriteSettings;
