@@ -82,7 +82,6 @@ class gui.layers.ArcServerLayer extends AbstractPositionable{
 		
 		var lMap:Object = new Object();
 		lMap.onUpdate = function(map:MovieClip):Void  {
-			Logger.console("ArcServerLayer.Lmap.onUpdate");
 			thisObj.update();
 		};
 		lMap.onChangeExtent = function(map:MovieClip):Void  {
