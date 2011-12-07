@@ -736,7 +736,7 @@ class gui.layers.OGCWMSLayer extends AbstractPositionable{
 					thisObj.container.onEnterFrame = function() {
 						cachemovie._alpha = cachemovie._alpha+step;
 						if (cachemovie._alpha>=100) {
-							delete this.onEnterFrame;
+							delete thisObj.container.onEnterFrame;
 							thisObj.flamingo.raiseEvent(thisObj, "onUpdateComplete", thisObj, requesttime, loadtime, mc.getBytesTotal());
 							thisObj.updating = false;
 							thisObj._clearCache();

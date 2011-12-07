@@ -2,164 +2,15 @@
  * ...
  * @author Roy Braam
  */
-import coremodel.service.arcims.ArcIMSConnector;
+import coremodel.service.arcgis.ArcServerConnector;
 import core.AbstractPositionable;
 import tools.Logger;
 import gui.Map;
-/** @component LayerArcIMS
-* ESRI arcims layer.
-* @version 2.0.4
-* @file ArcIMSConnector.as (sourcefile)
-* @file LayerArcIMS.fla (sourcefile)
-* @file LayerArcIMS.swf (compiled layer, needed for publication on internet)
-* @file LayerArcIMS.xml (configurationfile for layer, needed for publication on internet)
-* @change 2007-10-25 version 2.0.1
-* @change 2007-10-25 FIX - Maptips of layers from local shapefiles didn't show up correctly.
-* @change 2007-11-12 version 2.0.2
-* @change 2007-11-12 CHANGE - Attribute 'maptipfields' removed of <layer> tag. Maptipfields are determined from the maptip string.
-* @change 2007-11-12 CHANGE - The fieldnames between the square brackets in the attribute 'maptip' are no longer case-senstive.
-* @change 2007-11-12 CHANGE - onResponse, onRequest and onError events also trigged by the requests of maptips.
-* @change 2007-11-12 NEW - Attribute 'maptipdistance' added to the <fmc:LayerArcIMS> tag to control the sensitivity of the maptip.
-* @change 2007-11-12 NEW - Attribute 'maptipall' added to the <fmc:LayerArcIMS> tag to control the amount of maptips.
-* @change 2007-11-12 NEW - Attributes 'maptipdistance' and 'identifydistance' added to <layer> tag. Each layer can be configured seperatly.
-* @change 2007-11-12 NEW - Raster data (images) can now be identified and maptipped.
-* @change 2007-11-12 NEW - <layerdefstring> tag added to the <layer> tag for incorporating custom AXL to a sublayer.
-* @change 2007-11-12 NEW - <mydatastring> tag added to the <layer> tag for attaching custom data to a sublayer.
-* @change 2007-11-12 NEW - 3 new functions to add, remove and get custom data to a layer > addMydata(...)  getMydata(...)  removeMydata(...)
-* @change 2007-11-12 NEW - new function to make a ValueMapRender string, based on a layer, some custom data and a couple of classes > getValueMapRenderer(...)
-* @change 2008-03-06 NEW - Visualisation selected: Selected can be colored
-* @change 2008-11-27 NEW - Initservice parameter added
-*/
-/** @tag <fmc:LayerArcIMS>  
-* This tag defines a ESRI arcims layer.
-* @hierarchy childnode of <fmc:Map> 
-* @example 
-* <fmc:Map id="map"  left="5" top="5" bottom="bottom -5" right="right -5"  extent="13562,306839,278026,614073,Nederland" fullextent="13562,306839,278026,614073,Nederland">
-*   <fmc:LayerArcIMS  id="layer1" identifyall="true" server="www.mymap.com"  mapservice="mymap" identifyids="1,39" maptipids="1">
-*      <layer id="1" subfields="field1,field2"  maptip="name:[field3]" >
-*         <string id="maptip" en="name:[field3]" nl="naam:[field3]"/>
-*      </layer>
-*   </fmc:LayerArcIMS>
-* </fmc:Map>
-* @attr server  servername of the ArcIMS mapservice
-* @attr servlet (defaultvalue "servlet/com.esri.esrimap.Esrimap")
-* @attr mapservice  mapservicename
-* @attr outputtype  (defaultvalue = "png24") Image format of requested map.
-* @attr transcolor  (defaultvalue = "#FBFBFB") Color which will be transparent.
-* @attr backgroundcolor  (defaultvalue = "#FBFBFB") Color of the background.
-* @attr legendcolor  (defaultvalue = "#FFFFFF") Color of the background of a legend.
-* @attr timeout  (defaultvalue = "10") Time in seconds when the ArcIMSLayer will dispatch an onErrorUpdate event.
-* @attr retryonerror (defaultvalue = "0") Number of retrys when encountering an error.
-* @attr minscale  If mapscale is less then or equal minscale, the layer will not be shown.
-* @attr maxscale  If mapscale is greater then maxscale, the layer will not be shown.
-* @attr identifydistance  (defaultvalue = "10") Distance in pixels for performing getFeatures request.
-* @attr maptipdistance  (defaultvalue = "10") Distance in pixels for performing getFeatures request for a maptip.
-* @attr featurelimit  (defaultvalue = "1") Number of features that will return after an identify.
-* @attr fullextent  Extent of layer (comma seperated list of minx,miny,maxx,maxy). When the map is outside this extent, no update will performed.
-* @attr identifyall (defaultvalue = "false") true or false;  true= all layerid's will be identified, false = identify stops after identify success
-* @attr maptipall (defaultvalue = "true") true or false;  true= all maptips will show up, false = maptip stops after showing sucessfully the maptip of one layer.
-* @attr legend  (defaultvalue = "false") true or false;   false = no legend image wil be generated with an update
-* @attr hidelegendids Comma seperated list of layerid's (same as in axl) Id's in this list will not appear in a legend.
-* @attr showlegendids Comma seperated list of layerid's (same as in axl) Id's in this list will appear in a legend.
-* @attr visibleids Comma seperated list of layerid's (same as in axl) Id's in this list will be visible.
-* @attr hiddenids Comma seperated list of layerid's (same as in axl) Id's in this list will be hidden.
-* @attr identifyids Comma seperated list of layerid's (same as in axl) Id's in this list will be identified in the order of the list. Use keyword "#ALL#" to identify all layers.
-* @attr forceidentifyids Comma seperated list of layerid's (same as in axl) Id's in this list will be identified regardless if they are visible in the order of the list. Use keyword "#ALL#" to identify all layers.
-* @attr maptipids Comma seperated list of layerid's (same as in axl) Id's in this list will be queried during a maptip event. Use keyword "#ALL#" to query all layers.
-* @attr visible  (defaultvalue "true") true or false
-* @attr alpha (defaultvalue = "100") Transparency of the layer.
-* @attr colorids Comma seperated list of the layers that need to be colored after a identify
-* @attr colorIdsKey comma seperated list of the keys that colors the objects.
-* @attr record if true the component let the clicked items colored (click 2 times to uncolor)
-* @attr autorefreshdelay  (optional; no defaultvalue) Time in miliseconds (1000 = 1 second) at which rate the layer automatically refreshes. If not given, the layer will not refresh automatically, unless at map level an automatic refresh delay is given.
-* @attr initService (default="true") if set to false the service won't do a getCap request to init the service. If set to false all parameters must be filled, and no #ALL# can be used.
-*/
-/** @tag <layer>  
-* This defines a sublayer of an ArcIMS mapservice
-* @hierarchy childnode of <fmc:LayerArcIMS> 
-* @attr id  layerid, same as in the axl.
-* @attr subfields  Comma seperated list of fields, which will be identified.
-* @attr identifydistance  (defaultvalue = "10") Distance in pixels for performing getFeatures request.
-* @attr maptipdistance (defaultvalue = "10") Distance in pixels for performing getFeatures request for a maptip. 
-* @attr featurelimit  (defaultvalue = "1") Number of features that will return after an identify.
-* @attr query  The 'where' clause in the getImage and getFeatures request.
-* @attr maptip Configuration string for a maptip. Fieldnames between square brackets will be replaced  with their actual values. For multi-language support use a standard string tag with id='maptip'.
-*/
-/** @tag <layerdefstring>  
-* This defines a part of AXL which is added to the request. Use the '<![CDATA[ ...her comes the AXL...  ]]>' tag, to incoperate the AXL.
-* @example 
-* <fmc:LayerArcIMS  server="myserver" mapservice="mymapservice">
-*    <layer id="0">
-*          <layerdefstring><!&#91;CDATA&#91;<GROUPRENDERER> <VALUEMAPRENDERER lookupfield='CODE'> 
-*                               <EXACT value= '26;27;28;29;30;31 ' label='2600 - 3101'> <SIMPLEPOLYGONSYMBOL boundarycolor='100,100,100'fillcolor='255,200,0'/> </EXACT> 
-*                               <EXACT value= '21;22;23;24;25 ' label='2100 - 2600'> <SIMPLEPOLYGONSYMBOL boundarycolor='100,100,100'fillcolor='255,211,40'/> </EXACT> 
-*                               <EXACT value= '16;17;18;19;20 ' label='1600 - 2100'> <SIMPLEPOLYGONSYMBOL boundarycolor='100,100,100'fillcolor='255,222,80'/> </EXACT> 
-*                               <EXACT value= '11;12;13;14;15 ' label='1100 - 1600'> <SIMPLEPOLYGONSYMBOL boundarycolor='100,100,100'fillcolor='255,233,120'/> </EXACT>
-*                               <EXACT value= '6;7;8;9;10 ' label='600 - 1100'> <SIMPLEPOLYGONSYMBOL boundarycolor='100,100,100'fillcolor='255,244,160'/> </EXACT> 
-*                               <EXACT value= '1;2;3;4;5 ' label='100 - 600'> <SIMPLEPOLYGONSYMBOL boundarycolor='100,100,100'fillcolor='255,255,200'/> </EXACT> 
-*                               <OTHER> <SIMPLEPOLYGONSYMBOL boundarycolor='175,175,175'fillcolor='204,204,204'/> </OTHER> 
-*                           </VALUEMAPRENDERER> </GROUPRENDERER>&#93;&#93;></layerdefstring>
-*    </layer> 
-* </fmc:LayerArcIMS>
-* @hierarchy childnode of <layer> 
-*/
-/** @tag <mydatastring>  
-* This tag defines custom data which is joined to a layer with a joinfield. The tag itself contains the data string.
-* The first line of the data string contains the fieldnames.
-* @example 
-* <fmc:LayerArcIMS  server="myserver" mapservice="mymapservice">
-*    <layer id="0">
-*        <mydatastring jointo="CODE" joinfield="mycode" fielddelimiter="," recorddelimiter="#">mycode,value#1,100#2,200#3,300#4,400#5,500#6,600#7,700#8,800#9,900#10,1000</mydatastring>
-*    </layer> 
-* </fmc:LayerArcIMS>
-* 
-* <fmc:LayerArcIMS  server="myserver" mapservice="mymapservice">
-*    <layer id="0">
-*        <mydatastring jointo="CODE" joinfield="mycode">
-*          mycode,value
-*				1,100
-*				2,200
-*				3,300
-*				4,400
-*				5,500
-*				6,600
-*		</mydatastring>
-*    </layer> 
-* </fmc:LayerArcIMS>
-* @hierarchy childnode of <layer> 
-* @attr jointo Fieldname to which the data will be joined. This field must exists in the layer.
-* @attr joinfield  Fieldname of mydata which contains the comparable joinid's.
-* @attr fielddelimiter (defaultvalue = ",") A token which acts as the field delimiter.
-* @attr recorddelimiter (defaultvalue = "\n") A token which acts as the record delimiter.
-*
-/****
-/** @ tag <visualisationselected>
-* This tag defines the visualisation of selected features. The attributes are identical to the attributes of ArcIMS renderer attributes. 
-* Default values are shown between square braquets.
-* <layer id="110">
-*     <visualisationselected id="110" fillcolor="255,0,0" other_fillcolor="255,255,255"/>
-* </layer>
-* @hierarchy childnode of <layer> 
-* @attr antialiasing="true | false" [false]
-* @attr boundary="true | false" [true]
-* @attr boundarycaptype="butt | round | square" [butt]
-* @attr boundarycolor="0,0,0 - 255,255,255" [0,0,0]
-* @attr boundaryjointype="round | miter | bevel" [round]
-* @attr boundarytransparency="0.0 - 1.0" [1]
-* @attr boundarytype="solid | dash | dot | dash_dot | dash_dot_dot" [solid]
-* @attr boundarywidth="1 - NNN" [1]
-* @attr fillcolor="0,0,0 - 255,255,255" [0,200,0]
-* @attr fillinterval="2 - NNN" [6]
-* @attr filltransparency="0.0 - 1.0" [1]
-* @attr filltype="solid | bdiagonal | fdiagonal | cross | diagcross | horizontal | vertical | gray | lightgray | darkgray" [solid]
-* @attr overlap="true | false" [true]
-* @attr transparency="0.0 - 1.0" [no default]
-* @attr other_<see above> = the attributes for not selected objects
-*
-*/
-class gui.layers.ArcIMSLayer extends AbstractPositionable{
+
+class gui.layers.ArcServerLayer extends AbstractPositionable{
 	
 	//properties which can be set in ini
+	var visible:Boolean;
 	var fullextent:Object;
 	var server:String;
 	var servlet:String;
@@ -187,63 +38,51 @@ class gui.layers.ArcIMSLayer extends AbstractPositionable{
 	var hiddenids:String;
 	var outputtype:String = "png24";
 	var alpha:Number = 100;
+	var id:String;
 	//---------------------------------
 	var layers:Object = new Object();
-	var vislayers:String = null;
 	var updating:Boolean = false;
 	var nrcache:Number = 0;
 	var map:Map;
 	var caches:Object = new Object();
-	//var thisObj:ArcIMSLayer = this;
 	var _identifylayers:Array;
 	var _hotlinklayers:Array;
 	var _maptiplayers:Array;
 	var identifyextent:Object;
-	var selectextent:Object;
 	var maptipcoordinate:Object;
 	var showmaptip:Boolean;
 	var canmaptip:Boolean = false;
 	var timeoutid:Number;
 	var initialized:Boolean = false;
-	var serviceInfoRequestSent = false;
 	var extent:Object;
 	var nrlayersqueried:Number;
 	var layerliststring:String;
-	//***
-	var initService:Boolean=true;
-	//***
-	//-------------------------------------------
-	var DEBUG:Boolean = false;
-	var colorIds:String;
-	var colorIdsKey:String;
-	var record:Boolean = false;
-	var visualisationSelected:Object = new Object();
-	//-------------------------------------------
-	var addRecorded:Object = new Object();
-	var newRecorded:Object = new Object();
-		
+	var dataframe:String;
+	var esriArcServerVersion:String;
+	
 	var starttime:Date;
 	var maptipextent:Object;
 	
-	public function ArcIMSLayer(id:String, container:MovieClip, map:Map) {
+	public function ArcServerLayer(id:String, container:MovieClip, map:Map) {
 		super (id, container);
 		this.map = map;
 		this.parent = map;
-		
-		this.version="2.0.4"
-		init();			
+		defaultXML = "<LayerArcServer/>";
+		init();		
 	}
 	
 	function init():Void {
 		if (flamingo == undefined) {
 			var t:TextField = this.container.createTextField("readme", 0, 0, 0, 550, 400);
 			t.html = true;
-			t.htmlText = "<P ALIGN='CENTER'><FONT FACE='Helvetica, Arial' SIZE='12' COLOR='#000000' LETTERSPACING='0' KERNING='0'><B>LayerArcIMS "+this.version+"</B> - www.flamingo-mc.org</FONT></P>";
+			t.htmlText = "<P ALIGN='CENTER'><FONT FACE='Helvetica, Arial' SIZE='12' COLOR='#000000' LETTERSPACING='0' KERNING='0'><B>LayerArcServer "+this.version+"</B> - www.flamingo-mc.org</FONT></P>";
 			return;
 		}
-		var thisObj:ArcIMSLayer = this;
+		var thisObj:ArcServerLayer = this;
+		
 		var lMap:Object = new Object();
 		lMap.onUpdate = function(map:MovieClip):Void  {
+			Logger.console("ArcServerLayer.Lmap.onUpdate");
 			thisObj.update();
 		};
 		lMap.onChangeExtent = function(map:MovieClip):Void  {
@@ -252,16 +91,11 @@ class gui.layers.ArcIMSLayer extends AbstractPositionable{
 		lMap.onIdentify = function(map:MovieClip, identifyextent:Object):Void  {
 			thisObj.identify(identifyextent);
 		};
-		lMap.onHotlink = function(map:MovieClip, identifyextent:Object):Void  {
-			thisObj.hotlink(identifyextent);
-		};
-		lMap.onSelect = function(map:MovieClip, serviceId:Object, selectExtent:Object, selectLayer:Object, subfields:Array) {
-			if(serviceId == thisObj.name) {
-				thisObj.select(selectExtent, selectLayer, subfields)
-			}
-		}
 		lMap.onIdentifyCancel = function(map:MovieClip):Void  {
 			thisObj.cancelIdentify();
+		};
+		lMap.onHotlink = function(map:MovieClip, identifyextent:Object):Void  {
+			thisObj.hotlink(identifyextent);
 		};
 		lMap.onHotlinkCancel = function(map:MovieClip):Void  {
 			thisObj.cancelHotlink();
@@ -278,39 +112,36 @@ class gui.layers.ArcIMSLayer extends AbstractPositionable{
 		lMap.onShow = function(map:MovieClip):Void  {
 			thisObj.update();
 		};
-
+		
 		flamingo.addListener(lMap, flamingo.getParent(this), this);
 		
 		this._visible = false;
-		
 		//defaults
+		this.setConfig(defaultXML);
 		//custom
 		var xmls:Array = flamingo.getXMLs(this);
 		for (var i = 0; i<xmls.length; i++) {
 			this.setConfig(xmls[i]);
 		}
-		//delete xmls;
+		delete xmls;
 		//remove xml from repository
-		//flamingo.deleteXML(this);
-		this._visible = this.visible;
+		flamingo.deleteXML(this);
+		this._visible = visible;
 		flamingo.raiseEvent(this, "onInit", this);
 	}
-	
 	/**
 	* Configurates a component by setting a xml.
 	* @attr xml:Object Xml or string representation of a xml.
 	*/
 	function setConfig(xml:Object) {
-		
-		//_global.flamingo.tracer(" LayerArcIMS setConfig server /n/n/n" + xml.toString());
 		if (xml == undefined) {
 			return;
 		}
 		if (typeof (xml) == "string") {
-			xml = new XML(String(xml));
-			xml=xml.firstChild;
+			xml = new XML(String(xml))
+			xml= xml.firstChild;
 		}
-		//load default attributes, strings, styles and cursors                                                                                                                                                                                    
+		//load default attributes, strings, styles and cursors                                           
 		flamingo.parseXML(this, xml);
 		//parse custom attributes
 		for (var attr in xml.attributes) {
@@ -389,7 +220,6 @@ class gui.layers.ArcIMSLayer extends AbstractPositionable{
 				this.container.dropShadow();
 				break;
 			case "server" :
-			//_global.flamingo.tracer(" LayerArcIMS setConfig server " + val);
 				server = val;
 				break;
 			case "servlet" :
@@ -408,7 +238,6 @@ class gui.layers.ArcIMSLayer extends AbstractPositionable{
 				break;
 			case "visibleids" :
 				setLayerProperty(val, "visible", true);
-				setLayerProperty(val, "id", true);
 				this.visibleids = val;
 				break;
 			case "hiddenids" :
@@ -423,35 +252,16 @@ class gui.layers.ArcIMSLayer extends AbstractPositionable{
 				setLayerProperty(val, "forceidentify", true);
 				this.forceidentifyids = val;
 				break;
-			//***
-			case "initservice" :			
-				if (val.toLowerCase() == "false") {
-					this.initService  = false;
-				}else {
-					this.initService  = true;
-				}
-				break;
-				//***
 			case "maptipids" :
 				this.canmaptip = true;
-				setLayerProperty(val, "maptipable", true);
+				setLayerProperty(val, "maptip", true);
 				this.maptipids = val;
-				break;		
-			case "colorids" :
-				this.colorIds= val;						
 				break;
-			case "coloridskey" :
-				this.colorIdsKey= val;
-				break;				
-			case "record" :
-				if (val.toLowerCase()=="true"){
-					this.record=true;
-				}else{
-					this.record=false;
-				}
+			case "dataframe" :
+				dataframe = val;
 				break;
-			case "autorefreshdelay" :
-				setInterval(this, "autoRefresh", Number(val));
+			case "esriarcserverversion" :
+				esriArcServerVersion = val;
 				break;
 			}
 		}
@@ -522,34 +332,25 @@ class gui.layers.ArcIMSLayer extends AbstractPositionable{
 										break;
 									}
 								}
-								this.addMydata(id, jointo, mydata, joinfield, recorddelimiter, fielddelimiter);
+								//Does not exist:
+								//this.addMydata(id, jointo, mydata, joinfield, recorddelimiter, fielddelimiter);
 								break;
 							case "mydata" :
 								break;
 							case "layerdefstring" :
 								layers[id].layerdefstring = xmydatas[j].firstChild.nodeValue;
 								break;
-							case "visualisationselected" :
-								if (visualisationSelected[id]==undefined){
-									this.visualisationSelected[id]=new Object();
 							}
-								for (var attr in xmydatas[j].attributes) {
-									var val:String = xmydatas[j].attributes[attr];
-									this.visualisationSelected[id][attr.toLowerCase()] = val;							
 						}
 					}
 				}
 			}
 		}
-			}
-		}
-		//                                                                                                                                                                           
-		//
-		//_global.flamingo.tracer(" LayerArcIMS setConfig" + _global.flamingo.getId(this) +" server = " + server + " mapservice = " + mapservice);
+
 		if (visible == undefined) {
 			visible = true;
 		}
-		// deal with arguments                                                                                                                                                                             
+		// deal with arguments                                    
 		var val = flamingo.getArgument(this, "visible");
 		if (val != undefined) {
 			this.setLayerProperty(val, "visible", true);
@@ -569,26 +370,19 @@ class gui.layers.ArcIMSLayer extends AbstractPositionable{
 		if (mapservice == undefined) {
 			return;
 		}
-		var thisObj:ArcIMSLayer = this;
+		var thisObj:ArcServerLayer = this;
 		var lConn = new Object();
-		lConn.onResponse = function(connector:ArcIMSConnector) {
-			//trace(connector.response)
+		lConn.onResponse = function(connector:ArcServerConnector) {
 			thisObj.flamingo.raiseEvent(thisObj, "onResponse", thisObj, "init", connector);
 		};
-		lConn.onRequest = function(connector:ArcIMSConnector,requesttype:String) {
+		lConn.onRequest = function(connector:ArcServerConnector) {
+			//flamingo.raiseEvent(thisObj, "onGetServiceInfoRequest", thisObj, connector);
 			thisObj.flamingo.raiseEvent(thisObj, "onRequest", thisObj, "init", connector);
 		};
 		lConn.onError = function(error:String, objecttag:Object, requestid:String) {
 			thisObj.flamingo.raiseEvent(thisObj, "onError", thisObj, "init", error);
 		};
-		lConn.onStoreServiceInfo = function(){
-			if(!thisObj.initialized){
-				ArcIMSConnector.getServiceInfoFromStore(thisObj.server, thisObj.mapservice,this);
-			}
-		} 
 		lConn.onGetServiceInfo = function(extent, servicelayers, objecttag, requestid) {
-			//_global.flamingo.tracer(" LayerArcIMS onGetServiceInfo" + _global.flamingo.getId(thisObj));
-			thisObj.initialized = true;
 			for (var id in servicelayers) {
 				if (thisObj.layers[id] == undefined) {
 					thisObj.layers[id] = new Object();
@@ -598,7 +392,7 @@ class gui.layers.ArcIMSLayer extends AbstractPositionable{
 						thisObj.layers[id][attr] = servicelayers[id][attr];
 					}
 				}
-				if (thisObj.layers[id].type == "featureclass" || thisObj.layers[id].type == "image") {
+				if (thisObj.layers[id].type == "Feature Layer") {
 					thisObj.layers[id].queryable = true;
 				} else {
 					thisObj.layers[id].queryable = false;
@@ -630,349 +424,28 @@ class gui.layers.ArcIMSLayer extends AbstractPositionable{
 			if (thisObj.maptipids.toUpperCase() == "#ALL#") {
 				thisObj.setLayerProperty("#ALL#", "maptipable", true);
 			}
-			//update is done in lLayer.onGetServiceResponse of the Map
-			//thisObj.update();
+			thisObj.update();
+			//The update is done in the Map in lLayer.onGetServiceInfo 
 			thisObj.flamingo.raiseEvent(thisObj, "onGetServiceInfo", thisObj);
-				
-		};//***
-		if (this.initService==true){
-			var conn:ArcIMSConnector = new ArcIMSConnector(server);
-			//_global.flamingo.tracer(" LayerArcIMS addInfoReponseListener" + _global.flamingo.getId(this));
-			ArcIMSConnector.addInfoReponseListener(lConn,server,mapservice);
-			if (servlet.length>0) {
-				conn.servlet = servlet;
-			}	
-			//_global.flamingo.tracer(_global.flamingo.getId(this) + " naar getServiceInfo " + mapservice);
-			if(!serviceInfoRequestSent){
-				serviceInfoRequestSent = true;
-				//_global.flamingo.tracer(_global.flamingo.getId(this) + " naar getServiceInfo " + mapservice);
-				conn.getServiceInfo(mapservice,lConn);
-			}
+			thisObj.initialized = true;
+		};
+		var conn:ArcServerConnector = new ArcServerConnector(server);
+		conn.addListener(lConn);
+		conn.dataframe = dataframe;
+		conn.esriArcServerVersion = esriArcServerVersion;
+
+		if (servlet.length>0) {
+			conn.servlet = servlet;
 		}
-		//***
-		else{
-			setLayersQueryAbleFeatureclass(this.maptipids,true);
-			setLayersQueryAbleFeatureclass(this.identifyids,true);
-			initialized = true;		
-			update();		
-		}
-		//***
-	}
-	/**
-	* Remove custom data from a layer.
-	* @param layerid:String Id of the sublayer.
-	* @param jointo:String [optional] All data joined to this field will be removed.
-	* @param id:String [optional] All data with this joinid will be removed
-	* @param field:String [optional] All data in this custom field will be removed.
-	*/
-	function removeMydata(layerid:String, jointo:String, id:String, field:String):Array {
-		if (layerid == undefined) {
-			return null;
-		}
-		var b:Boolean;
-		//
-		if (field != undefined) {
-			for (var joins in layers[layerid].mydatajoins) {
-				for (var fld in layers[layerid].mydatajoins[joins]) {
-					if (fld == field) {
-						delete layers[layerid].mydatajoins[joins][fld];
-					}
-				}
-				b = true;
-				for (var fld in layers[layerid].mydatajoins[joins]) {
-					b = false;
-					break;
-				}
-				if (b) {
-					delete layers[layerid].mydatajoins[joins];
-				}
-			}
-		}
-		//                                          
-		for (var joindata in layers[layerid].mydata) {
-			if (jointo == undefined || joindata.toLowerCase() == jointo.toLowerCase()) {
-				for (var joinid in layers[layerid].mydata[joindata]) {
-					if (id == undefined || joinid == id) {
-						for (var joinfield in layers[layerid].mydata[joindata][joinid]) {
-							if (field == undefined || joinfield.toLowerCase() == field.toLowerCase()) {
-								delete layers[layerid].mydata[joindata][joinid][joinfield];
-							}
-						}
-						b = true;
-						for (var joinfield in layers[layerid].mydata[joindata][joinid]) {
-							b = false;
-							break;
-						}
-						if (b) {
-							delete layers[layerid].mydata[joindata][joinid];
-						}
-					}
-				}
-				b = true;
-				for (var joinid in layers[layerid].mydata[joindata]) {
-					b = false;
-					break;
-				}
-				if (b) {
-					delete layers[layerid].mydata[joindata];
-					delete layers[layerid].mydatajoins[joindata];
-				}
-			}
-		}
-		b = true;
-		for (var joindata in layers[layerid].mydata) {
-			b = false;
-			break;
-		}
-		if (b) {
-			delete layers[layerid].mydata;
-			delete layers[layerid].mydatajoins;
-		}
-		return null;
-	}
-	function getMydataJoins(layerid:String):Array {
-		if (layerid == undefined) {
-			return null;
-		}
-		return layers[layerid].mydatajoins;
-	}
-	/**
-	* Gets (not permanent) custom data which is joined to a layer.
-	* @param layerid:String Id of the sublayer.
-	* @param jointo:String [optional] All data joined to this field will be returned.
-	* @param id:String [optional] All data with this joinid will be returned.
-	* @param field:String [optional] All data in this custom field will be removed.
-	* @return Array An array of records. A record is an object of fields. [{field1:value, field2:value},{field1:value, field2:value}] 
-	*/
-	function getMydata(layerid:String, jointo:String, id:String, field:String):Array {
-		var b:Boolean;
-		var data:Array = new Array();
-		for (var joindata in layers[layerid].mydata) {
-			if (jointo == undefined || joindata.toLowerCase() == jointo.toLowerCase()) {
-				for (var joinid in layers[layerid].mydata[joindata]) {
-					if (id == undefined || joinid == id) {
-						var record = new Object();
-						record[joindata] = joinid;
-						b = false;
-						for (var joinfield in layers[layerid].mydata[joindata][joinid]) {
-							//if (field == undefined or joinfield.toLowerCase() == field.toLowerCase()) {
-							record[joinfield] = layers[layerid].mydata[joindata][joinid][joinfield];
-							b = true;
-							//}
-						}
-						if (b) {
-							data.push(record);
-						}
-					}
-				}
-			}
-		}
-		return data;
-	}
-	function _completeWithMydata(layerid:String, data:Array) {
-		if (layerid == undefined) {
-			return;
-		}
-		if (layers[layerid].mydata != undefined) {
-			var joins = getMydataJoins(layerid);
-			for (var jointo in joins) {
-				for (var j = 0; j<data.length; j++) {
-					var joinid = _getValue(data[j], jointo);
-					if (joinid != undefined) {
-						var mydata = getMydata(layerid, jointo, joinid);
-						for (var k = 0; k<mydata.length; k++) {
-							for (var field in mydata[k]) {
-								if (field != jointo) {
-									data[j]["MYDATA."+field] = mydata[k][field];
-								}
-							}
-						}
-					}
-				}
-			}
-		}
-	}
-	/**
-	* Gets a ValueMapRenderer string based on custom data and a layer.
-	* @example
-	*  //javascript:
-	*  var app = getMovie("flamingo");
-	*  var data="code,value#1,100#2,200#3,300#4,400#5,500#6,600#7,700#8,800#9,900#10,100";
-	*  app.call("map_mylayer","addMydata", 0 , "CODE", data, "code", "#", ",");
-	*  var classes = new Array();
-	*  classes.push({min:0, max:50, label:'0-50', fillcolor:'204,0,204', boundarycolor:'175,175,175'});
-	*  classes.push({min:50, max:100, label:'50-100',fillcolor:'0,204,204', boundarycolor:'175,175,175'});
-	*  classes.push({fillcolor:'204,204,204', boundarycolor:'175,175,175'});
-	*  var vmr = app.call("map_mylayer","getValueMapRenderer", 0,  "CODE", data, "code", "value", classes, "#", ",");
-	*  app.call("map_mylayer","setLayerProperty", 0, "layerdefstring", vmr);
-	*  app.call("map_mylayer","setLayerProperty", 0, "maptip", "[VALUE]");
-	*  app.call("map_mylayer","setLayerProperty", 0, "visible", true);
-	*  app.call("map_mylayer","update");
-	* @param layerid:String Id of the sublayer.
-	* @param lookupfield:String Fieldname which contains the id's of the sublayer.
-	* @param data:Object An array or string containing the data. The array is an array of record objects. A record object contains fieldobjects. [{field1:value, field2:value},{field1:value, field2:value}] When table is a string, the first line must contain the fieldnames. 
-	* @param lookupfieldtable:String Fieldname which contains the id's in the custom data.
-	* @param classfield:String Fieldname which contains the class values in the custom data.
-	* @param classes:String Array of class objects. A class object has the following attributes: min, max, label, fillcolor, boundarycolor, linecolor, color, width etc.
-	* @param recorddelimiter:String [optional] Token by which records are seperated. Use only when table is a string.
-	* @param fielddelimiter:String [optional] Token by which fields are seperated. Use only when table is a string.
-	*/
-	function getValueMapRenderer(layerid:String, lookupfield:String, data:Object, lookupfieldtable:String, classfield:String, classes:Object, recorddelimiter:String, fielddelimiter:String):String {
-		if (layers[layerid] == undefined) {
-			return null;
-		}
-		if (layers[layerid].type != "featureclass") {
-			return null;
-		}
-		//
-		if (typeof (data) == "string") {
-			if (recorddelimiter == undefined) {
-				return null;
-			}
-			if (fielddelimiter == undefined) {
-				return null;
-			}
-			data = _string2Table(String(data), recorddelimiter, fielddelimiter);
-		}
-		var val:Number;
-		var id:String;
-		var min:Number;
-		var max:Number;
-		var vs:String;
-		var other:String = "";
-		var cls:Object;
-		var record:Object;
-		var tag:String;
-		switch (layers[layerid].fclasstype.toLowerCase()) {
-		case "polygon" :
-			tag = "SIMPLEPOLYGONSYMBOL";
-			break;
-		case "line" :
-			tag = "SIMPLELINESYMBOL";
-			break;
-		case "point" :
-			tag = "SIMPLEMARKERSYMBOL";
-			break;
-		}
-		var s = "<GROUPRENDERER>";
-		s += newline+"<VALUEMAPRENDERER lookupfield='"+lookupfield+"'>";
-		for (var cl in classes) {
-			cls = classes[cl];
-			if (cls.min != undefined and cls.max != undefined) {
-				min = Number(cls.min);
-				max = Number(cls.max);
-				delete cls.min;
-				delete cls.max;
-				vs = "";
-				for (var i = 0; i<data.length; i++) {
-					record = data[i];
-					val = Number(_getValue(record, classfield));
-					if (val>=min and val<max) {
-						id = _getValue(record, lookupfieldtable);
-						if (vs.length == 0) {
-							vs = String(id);
-						} else {
-							vs += ";"+String(id);
-						}
-					}
-				}
-				//
-				s += newline+"<EXACT value= '"+vs+" ' label='"+cls.label+"'>";
-				delete cls.label;
-				s += newline+"<"+tag+" ";
-				for (var attr in cls) {
-					//transparency='0,6' 
-					//filltransparency='1,0'
-					//fillcolor='180,230,249'
-					//boundarycaptype='round' 
-					//boundarycolor='90,200,234'
-					s += attr+"='"+cls[attr]+"'";
-				}
-				s += "/>";
-				s += newline+"</EXACT>";
-			} else {
-				// no min and max > treat this class as 'other'
-				other = "<OTHER>";
-				other += newline+"<"+tag+" ";
-				for (var attr in cls) {
-					other += attr+"='"+cls[attr]+"'";
-				}
-				other += "/>";
-				other += newline+"</OTHER>";
-			}
-		}
-		s += newline+other;
-		s += newline+"</VALUEMAPRENDERER>";
-		s += newline+"</GROUPRENDERER>";
-		//layers[layerid].layerdefstring = s;
-		return s;
-	}
-	/**
-	* Joins (not permanent) custom data to a layer.
-	* @param layerid:String Id of the sublayer.
-	* @param jointo:String Fieldname which contains joinid's of the sublayer.
-	* @param table:Object An array or string containing the custom data. The array is an array of record objects. A record object contains fieldobjects. [{field1:value, field2:value},{field1:value, field2:value}] When table is a string, the first line must contain the fieldnames. 
-	* @param joinfield:String Fieldname which contains the joinid's in the custom data.
-	* @param recorddelimiter:String [optional] Token by which records are seperated. Use only when table is a string.
-	* @param fielddelimiter:String [optional] Token by which fields are seperated. Use only when table is a string.
-	*/
-	function addMydata(layerid:String, jointo:String, table:Object, joinfield:String, recorddelimiter:String, fielddelimiter:String) {
-		if (layers[layerid] == undefined and initialized) {
-			return;
-		}
-		if (layers[layerid] == undefined) {
-			layers[layerid] = new Object();
-		}
-		if (layers[layerid].mydata == undefined) {
-			layers[layerid].mydata = new Object();
-			layers[layerid].mydatajoins = new Object();
-		}
-		if (joinfield == undefined) {
-			joinfield = jointo;
-		}
-		//if (layers[layerid].mydata[jointo] == undefined) {                                                                       
-		//layers[layerid].mydata[jointo] = new Object();
-		//}
-		if (typeof (table) == "string") {
-			if (recorddelimiter == undefined) {
-				return;
-			}
-			if (fielddelimiter == undefined) {
-				return;
-			}
-			table = _string2Table(String(table), recorddelimiter, fielddelimiter);
-		}
-		//                                                                    
-		jointo = jointo.toLowerCase();
-		if (layers[layerid].mydata[jointo] == undefined) {
-			layers[layerid].mydata[jointo] = new Object();
-		}
-		if (layers[layerid].mydatajoins[jointo] == undefined) {
-			layers[layerid].mydatajoins[jointo] = new Object();
-		}
-		for (var rec in table) {
-			var joinid = _getValue(table[rec], joinfield);
-			if (layers[layerid].mydata[jointo][joinid] == undefined) {
-				layers[layerid].mydata[jointo][joinid] = new Object();
-			}
-			for (var fld in table[rec]) {
-				//if (fld.toLowerCase() != joinfield.toLowerCase()) {
-				if (layers[layerid].mydatajoins[jointo][fld] == undefined) {
-					layers[layerid].mydatajoins[jointo][fld] = 1;
-				} else {
-					layers[layerid].mydatajoins[jointo][fld] = layers[layerid].mydatajoins[jointo][fld]+1;
-				}
-				layers[layerid].mydata[jointo][joinid][fld] = table[rec][fld];
-				//}
-			}
-		}
+		conn.getServiceInfo(mapservice);
+		
 	}
 	/**
 	* Sets the transparency of a layer.
 	* @param alpha:Number A number between 0 and 100, 0=transparent, 100=opaque
 	*/
 	function setAlpha(alpha:Number) {
-		this.container._alpha = alpha;
+		this._alpha = alpha;
 		_global.flamingo.raiseEvent(this, "onSetValue", "setAlpha", alpha, this);	
 	}
 	/**
@@ -980,78 +453,36 @@ class gui.layers.ArcIMSLayer extends AbstractPositionable{
 	* @return alpha, number between 0 and 100, 0=transparent, 100=opaque
 	*/
 	function getAlpha(){
-		return this.container._alpha;
+		return this._alpha;
 	}
 	/**
 	* Hides a layer.
 	*/
 	function hide():Void {
-		if(visible!=false){
 		visible = false;
 		update();
 		flamingo.raiseEvent(this, "onHide", this);
-	}
 	}
 	/**
 	* Shows a layer.
 	*/
 	function show():Void {
-		if (visible!=true){
-			if (!initService){
-				for (var l in layers){
-					layers[l].visible=true;
-				}
-			}
-			visible = true;
-			updateCaches();
-			update();
-			flamingo.raiseEvent(this, "onShow", this);
-		}
+		visible = true;
+		updateCaches();
+		update();
+		flamingo.raiseEvent(this, "onShow", this);
 	}
-
-	function autoRefresh():Void {
-		if (!this.updating) {
-			refresh();
-		}
-	}
-
-	function refresh():Void {
-		this.update();
-	}
-
 	/**
 	* Updates a layer.
 	*/
 	function update():Void {
-		if(initialized){
 		_update(1);
 	}
-	}
-
-	/*function noLayersVisible():Boolean {
-		var lyrs:Object = this.getLayers();
-		if(lyrs != null){
-			for (var lyr in lyrs){
-				if(getLayerProperty(lyr,"visible")){
-					return false; 
-				}
-			}
-			return true;
-		} else {
-			return false;		
-		}
-	}*/
-
 	function _update(nrtry:Number):Void {
-		if (! visible || ! map.visible) {
+		if (! visible || !map.visible) {
 			_visible = false;
 			return;
 		}
-		//check if any sublayer is visible 
-		//if(noLayersVisible()){
-			//_visible = false;
-			//return;
-		//}		
 		if (updating) {
 			return;
 		}
@@ -1061,7 +492,7 @@ class gui.layers.ArcIMSLayer extends AbstractPositionable{
 		if (mapservice == undefined) {
 			return;
 		}
-		if (! map.hasextent) {
+		if (!map.hasextent) {
 			return;
 		}
 		extent = map.getMapExtent();
@@ -1083,7 +514,7 @@ class gui.layers.ArcIMSLayer extends AbstractPositionable{
 			}
 		}
 		if (fullextent != undefined) {
-			if (! map.isHit(fullextent)) {
+			if (!map.isHit(fullextent)) {
 				flamingo.raiseEvent(this, "onUpdate", this, nrtry);
 				flamingo.raiseEvent(this, "onUpdateComplete", this, 0, 0, 0);
 				_visible = false;
@@ -1096,17 +527,18 @@ class gui.layers.ArcIMSLayer extends AbstractPositionable{
 		var cache:MovieClip = this.container.createEmptyMovieClip("mCache"+nrcache, nrcache);
 		cache._alpha = 0;
 		caches[nrcache] = cache;
+		
+		var vislayers = _getVisLayers();
 		//
-		var thisObj:ArcIMSLayer = this;
+		var thisObj:ArcServerLayer = this;
 		var lConn:Object = new Object();
-		lConn.onResponse = function(connector:ArcIMSConnector) {
+		lConn.onResponse = function(connector:ArcServerConnector) {
 			thisObj._stoptimeout();
-			//trace(connector.response)
-			thisObj.flamingo.raiseEvent(thisObj, "onResponse", thisObj, "update", connector);
+			thisObj.flamingo.raiseEvent(this, "onResponse", this, "update", connector);
 		};
-		lConn.onRequest = function(connector:ArcIMSConnector) {
-			//trace(connector.request)
-			thisObj.flamingo.raiseEvent(thisObj, "onRequest", thisObj, "update", connector);
+		lConn.onRequest = function(connector:ArcServerConnector) {
+			//trace(requestobject.request)
+			thisObj.flamingo.raiseEvent(this, "onRequest", this, "update", connector);
 		};
 		lConn.onError = function(error:String, objecttag:Object, requestid:String) {
 			thisObj._stoptimeout();
@@ -1115,17 +547,18 @@ class gui.layers.ArcIMSLayer extends AbstractPositionable{
 				nrtry++;
 				thisObj._update(nrtry);
 			} else {
-				thisObj.flamingo.raiseEvent(thisObj, "onError", thisObj, "update", error);
+				thisObj.flamingo.raiseEvent(this, "onError", this, "update", error);
 			}
 		};
+		
 		lConn.onGetImage = function(ext:Object, imageurl:String, legurl:String, objecttag:Object, requestid:String) {
 			if (legurl.length>0) {
 				thisObj.legendurl = legurl;
-				thisObj.flamingo.raiseEvent(thisObj, "onGetLegend", thisObj, thisObj.legendurl);
+				thisObj.flamingo.raiseEvent(this, "onGetLegend", this, thisObj.legendurl);
 			}
 			thisObj._starttimeout();
-			var newDate = new Date();
-			var requesttime = (newDate.getTime()-thisObj.starttime.getTime())/1000;
+			var newDate:Date = new Date();
+			var requesttime = (newDate.getTime() - thisObj.starttime.getTime()) / 1000;
 			var listener:Object = new Object();
 			listener.onLoadError = function(mc:MovieClip, error:String, httpStatus:Number) {
 				thisObj._stoptimeout();
@@ -1137,10 +570,9 @@ class gui.layers.ArcIMSLayer extends AbstractPositionable{
 				thisObj.flamingo.raiseEvent(thisObj, "onUpdateProgress", thisObj, bytesLoaded, bytesTotal);
 			};
 			listener.onLoadInit = function(mc:MovieClip) {
-				var newDate2 = new Date();
+				var newDate2:Date = new Date();
 				var loadtime = (newDate2.getTime()-thisObj.starttime.getTime())/1000;
 				mc.extent = ext;
-				//mc.requestedextent = objecttag;
 				thisObj.updateCache(mc);
 				if (thisObj.map.fadesteps>0) {
 					mc.loadtime = loadtime;
@@ -1151,17 +583,14 @@ class gui.layers.ArcIMSLayer extends AbstractPositionable{
 						cache = thisObj.caches[thisObj.nrcache];
 						cache._alpha = cache._alpha+step;
 						if (cache._alpha>=100) {
-							delete this.onEnterFrame;
-							thisObj.flamingo.raiseEvent(this, "onUpdateComplete", this, cache.requesttime, cache.loadtime, cache.totalbytes);
+							delete thisObj.container.onEnterFrame;
+							thisObj.flamingo.raiseEvent(thisObj, "onUpdateComplete", thisObj, cache.requesttime, cache.loadtime, cache.totalbytes);
 							delete cache.requesttime;
 							delete cache.loadtime;
 							delete cache.totalbytes;
 							thisObj.updating = false;
 							thisObj._clearCache();
-							//_global.flamingo.tracer(_global.flamingo.getId(thisObj) + " vislayers " + vislayers);
-							//_global.flamingo.tracer(_global.flamingo.getId(thisObj) + " _getVisLayers() " + _getVisLayers());
-							//_global.flamingo.tracer(_global.flamingo.getId(thisObj) + " map.isEqualExtent(extent) " + map.isEqualExtent(extent));
-							if (!thisObj.map.isEqualExtent(thisObj.extent) || thisObj._getVisLayers() != thisObj.vislayers) {
+							if (!thisObj.map.isEqualExtent(thisObj.extent)  ||  thisObj._getVisLayers() != vislayers) {
 								thisObj.update();
 							}
 						}
@@ -1171,8 +600,7 @@ class gui.layers.ArcIMSLayer extends AbstractPositionable{
 					thisObj.flamingo.raiseEvent(thisObj, "onUpdateComplete", thisObj, requesttime, loadtime, mc.getBytesTotal());
 					thisObj.updating = false;
 					thisObj._clearCache();
-					
-					if (!thisObj.map.isEqualExtent(thisObj.extent) || thisObj._getVisLayers() != thisObj.vislayers) {
+					if (!thisObj.map.isEqualExtent(thisObj.extent) || thisObj._getVisLayers() != vislayers) {
 						thisObj.update();
 					}
 				}
@@ -1182,41 +610,39 @@ class gui.layers.ArcIMSLayer extends AbstractPositionable{
 			thisObj.starttime = new Date();
 			mcl.loadClip(imageurl, cache);
 		};
-		var conn:ArcIMSConnector = new ArcIMSConnector(server);
+		
+		var conn:ArcServerConnector = new ArcServerConnector(server);
 		conn.addListener(lConn);
-		conn.setIdentifyColorLayer(this.colorIds);
-		conn.setIdentifyColorLayerKey(this.colorIdsKey);
-		conn.setVisualisationSelected(this.visualisationSelected);
-		conn.setRecord(this.record);
-		for (var layerid in this.newRecorded){
-			for (var key in this.newRecorded[layerid]){
-				conn.setRecorded(layerid,key,this.newRecorded[layerid][key]);
-			}
-		}
-		for (var layerid in this.addRecorded){
-			for (var key in this.addRecorded[layerid]){
-				conn.addRecorded(layerid,key,this.addRecorded[layerid][key]);
-			}
-		}
-		this.addRecorded= new Object();
-		this.newRecorded= new Object();
-		
-		
+		conn.dataframe = dataframe;
+		conn.esriArcServerVersion = esriArcServerVersion;
+
 		if (servlet.length>0) {
 			conn.servlet = servlet;
 		}
-		conn.layerliststring = this.layerliststring;
 		conn.transcolor = this.transcolor;
 		conn.backgroundcolor = this.backgroundcolor;
 		conn.legendcolor = this.legendcolor;
 		conn.outputtype = outputtype;
 		conn.legend = legend;
 		this.starttime = new Date();
-		vislayers = _getVisLayers();
 		flamingo.raiseEvent(this, "onUpdate", this, nrtry);
-		conn.getImage(mapservice, extent, {width:Math.ceil(map.__width), height:Math.ceil(map.__height)}, layers);
-		thisObj._starttimeout();
+		
+		//add escapes
+		for(var i in layers)
+		{
+			layers[i].query = searchAndReplace(layers[i].query, "<", "&lt;");
+			layers[i].query = searchAndReplace(layers[i].query, ">", "&gt;");
+		}
+		conn.getImage(mapservice, extent, {width:Math.ceil(map.__width), height:Math.ceil(map.__height), dpi:96}, layers);
+		this._starttimeout();
 	}
+
+	function searchAndReplace(holder, searchfor, replacement):String {
+		var temparray = holder.split(searchfor);
+		holder = temparray.join(replacement);
+		return (holder);
+	}
+
 	function _starttimeout() {
 		clearInterval(timeoutid);
 		timeoutid = setInterval(this, "_timeout", (timeout*1000));
@@ -1224,7 +650,7 @@ class gui.layers.ArcIMSLayer extends AbstractPositionable{
 	function _stoptimeout() {
 		clearInterval(timeoutid);
 	}
-	function _timeout() {		
+	function _timeout() {
 		clearInterval(timeoutid);
 		updating = false;
 		flamingo.raiseEvent(this, "onError", this, "update", "timeout, connection failed...");
@@ -1290,7 +716,7 @@ class gui.layers.ArcIMSLayer extends AbstractPositionable{
 								continue;
 							}
 						}
-						//all tests passed, this layer can be identified                                                                                                                                                                                                               
+						//all tests passed, this layer can be identified                                                                      
 						layerlist.push(id);
 					}
 				}
@@ -1302,6 +728,10 @@ class gui.layers.ArcIMSLayer extends AbstractPositionable{
 		_identifylayers = new Array();
 		this.identifyextent = undefined;
 	}
+	/**
+	* Identifies a layer.
+	* @param identifyextent:Object extent of the identify
+	*/
 	/**
 	* Identifies a layer.
 	* @param identifyextent:Object extent of the identify
@@ -1336,23 +766,25 @@ class gui.layers.ArcIMSLayer extends AbstractPositionable{
 			return;
 		}
 		this.identifyextent = map.copyExtent(_identifyextent);
-		flamingo.raiseEvent(this, "onIdentify", this, identifyextent);
+		flamingo.raiseEvent(this, "onIdentify", this, identifyextent);	
 		_identifylayer(this.identifyextent, new Date());
 	}
+
 	function _identifylayer(_identifyextent:Object, starttime:Date) {
+		
 		if (_identifylayers.length == 0) {
-			var newDate = new Date();
+			var newDate:Date = new Date();
 			var t = (newDate.getTime()-starttime.getTime())/1000;
 			flamingo.raiseEvent(this, "onIdentifyComplete", this, t);
 			return;
 		}
-		var thisObj:ArcIMSLayer = this;
+		var thisObj:ArcServerLayer = this;
 		var lConn = new Object();
-		lConn.onResponse = function(connector:ArcIMSConnector) {
+		lConn.onResponse = function(connector:ArcServerConnector) {
 			//trace(connector.response);
-			thisObj.flamingo.raiseEvent(this, "onResponse", this, "identify", connector);
+			thisObj.flamingo.raiseEvent(thisObj, "onResponse", thisObj, "identify", connector);
 		};
-		lConn.onRequest = function(connector:ArcIMSConnector) {
+		lConn.onRequest = function(connector:ArcServerConnector) {
 			//trace(connector.request);
 			thisObj.flamingo.raiseEvent(thisObj, "onRequest", thisObj, "identify", connector);
 		};
@@ -1366,9 +798,9 @@ class gui.layers.ArcIMSLayer extends AbstractPositionable{
 		};
 		lConn.onGetRasterInfo = function(layerid:String, data:Array, objecttag:Object) {
 			if (thisObj.map.isEqualExtent(thisObj.identifyextent, objecttag)) {
-				// add data from mydata
-				thisObj._completeWithMydata(layerid, data);
-				//                                               
+				//Does not exists in this class! 			
+				//add data from mydata	
+				//thisObj._completeWithMydata(layerid, data);  
 				var features = new Object();
 				features[layerid] = data;
 				thisObj.flamingo.raiseEvent(thisObj, "onIdentifyData", thisObj, features, thisObj.identifyextent, (thisObj.nrlayersqueried-thisObj._identifylayers.length), thisObj.nrlayersqueried);
@@ -1383,7 +815,7 @@ class gui.layers.ArcIMSLayer extends AbstractPositionable{
 						}
 					}
 					if (b) {
-						var newDate = new Date();
+						var newDate:Date = new Date();
 						var t = (newDate.getTime()-starttime.getTime())/1000;
 						thisObj.flamingo.raiseEvent(thisObj, "onIdentifyComplete", thisObj, t);
 					} else {
@@ -1396,34 +828,25 @@ class gui.layers.ArcIMSLayer extends AbstractPositionable{
 		};
 		lConn.onGetFeatures = function(layerid:String, data:Array, count:Number, hasmore:Boolean, objecttag:Object) {
 			if (thisObj.map.isEqualExtent(thisObj.identifyextent, objecttag)) {
-				// add data from mydata
-				thisObj._completeWithMydata(layerid, data);
+				//Does not exists in this class! 			
+				//add data from mydata	
+				//thisObj._completeWithMydata(layerid, data);
 				//                                               
 				var features = new Object();
 				features[layerid] = data;
 				thisObj.flamingo.raiseEvent(thisObj, "onIdentifyData", thisObj, features, thisObj.identifyextent, (thisObj.nrlayersqueried-thisObj._identifylayers.length), thisObj.nrlayersqueried);
+
 				if (!thisObj.identifyall and count > 0) {
-					var newDate:Date = new Date();
+					var newDate:Date = new Date();					
 					var t = (newDate.getTime()-starttime.getTime())/1000;
-					thisObj.flamingo.raiseEvent(thisObj, "onIdentifyComplete", thisObj, t);
+					thisObj.flamingo.raiseEvent(thisObj, "onIdentifyComplete", thisObj, t);				
 				} else {
 					thisObj._identifylayer(_identifyextent, starttime);
 				}
-				if (data.length > 0 && thisObj.colorIds.length> 0){
-					thisObj.update();
 			}
-			}
-		};
-		lConn.onRecord= function(layerid:String, recordedValues:Object){
-			thisObj.flamingo.raiseEvent(thisObj, "onRecord", thisObj, layerid, recordedValues);			
-			
 		};
 		var layerid:String = String(_identifylayers.pop());
-		var conn:ArcIMSConnector = new ArcIMSConnector(server);
-		conn.setIdentifyColorLayer(this.colorIds);
-		conn.setIdentifyColorLayerKey(this.colorIdsKey);
-		conn.setVisualisationSelected(this.visualisationSelected);
-		conn.setRecord(this.record);
+		var conn:ArcServerConnector = new ArcServerConnector(server);
 		if (servlet.length>0) {
 			conn.servlet = servlet;
 		}
@@ -1433,8 +856,12 @@ class gui.layers.ArcIMSLayer extends AbstractPositionable{
 			_featurelimit = this.featurelimit;
 		}
 		conn.featurelimit = _featurelimit;
+		conn.dataframe = dataframe;
+		conn.esriArcServerVersion = esriArcServerVersion;
+		
 		switch (layers[layerid].type) {
 		case "featureclass" :
+		case "Feature Layer" :
 			//calculate the real identify extent based on the identify extent of the map
 			//if the extent is actually a point 
 			var _identifydistance = layers[layerid].identifydistance;
@@ -1454,13 +881,21 @@ class gui.layers.ArcIMSLayer extends AbstractPositionable{
 			}
 			var subfields:String = layers[layerid].subfields.split(",").join(" ");
 			var query:String = layers[layerid].query;
+			//add escapes
+			for(var i in layers)
+			{
+				query = searchAndReplace(query, "<", "&lt;");
+				query = searchAndReplace(query, ">", "&gt;");			
+			}
+			//No geometry needed for identify
+			conn.includeGeometry = false;
 			conn.getFeatures(mapservice, layerid, real_identifyextent, subfields, query, map.copyExtent(_identifyextent));
 			break;
 		case "image" :
-			var point = new Object();
-			point.x = (_identifyextent.maxx+_identifyextent.minx)/2;
-			point.y = (_identifyextent.maxy+_identifyextent.miny)/2;
-			conn.getRasterInfo(mapservice, layerid, point, layers[layerid].coordsys, map.copyExtent(_identifyextent));
+	//		var point = new Object();
+	//		point.x = (_identifyextent.maxx+_identifyextent.minx)/2;
+	//		point.y = (_identifyextent.maxy+_identifyextent.miny)/2;
+	//		conn.getRasterInfo(mapservice, layerid, point, layers[layerid].coordsys, map.copyExtent(_identifyextent));
 			break;
 		}
 	}
@@ -1468,7 +903,7 @@ class gui.layers.ArcIMSLayer extends AbstractPositionable{
 		_hotlinklayers = new Array();
 		this.identifyextent = undefined;
 	}
-	/**
+	/*
 	* Hotlink a layer.
 	* @param identifyextent:Object extent of the identify
 	*/
@@ -1504,20 +939,21 @@ class gui.layers.ArcIMSLayer extends AbstractPositionable{
 		flamingo.raiseEvent(this, "onHotlink", this, identifyextent);
 		_hotlinklayer(this.identifyextent, new Date());
 	}
-	function _hotlinklayer(_identifyextent:Object, starttime:Date) {
+	function _hotlinklayer(_identifyextent:Object, starttime:Date)
+	{
 		if (_hotlinklayers.length == 0) {
 			var newDate:Date = new Date();
-			var t = (newDate.getTime() -starttime.getTime()) / 1000;
+			var t = (newDate.getTime()-starttime.getTime())/1000;
 			flamingo.raiseEvent(this, "onHotlinkComplete", this, t);
 			return;
 		}
-		var thisObj:ArcIMSLayer = this;
+		var thisObj:ArcServerLayer = this;
 		var lConn = new Object();
-		lConn.onResponse = function(connector:ArcIMSConnector) {
+		lConn.onResponse = function(connector:ArcServerConnector) {
 			//trace(connector.response);
 			thisObj.flamingo.raiseEvent(thisObj, "onResponse", thisObj, "hotlink", connector);
 		};
-		lConn.onRequest = function(connector:ArcIMSConnector) {
+		lConn.onRequest = function(connector:ArcServerConnector) {
 			//trace(connector.request);
 			thisObj.flamingo.raiseEvent(thisObj, "onRequest", thisObj, "hotlink", connector);
 		};
@@ -1531,8 +967,9 @@ class gui.layers.ArcIMSLayer extends AbstractPositionable{
 		};
 		lConn.onGetRasterInfo = function(layerid:String, data:Array, objecttag:Object) {
 			if (thisObj.map.isEqualExtent(thisObj.identifyextent, objecttag)) {
+				// Does not exists in this class
 				// add data from mydata
-				thisObj._completeWithMydata(layerid, data);
+				//thisObj._completeWithMydata(layerid, data);
 				//                                               
 				var features = new Object();
 				features[layerid] = data;
@@ -1562,33 +999,24 @@ class gui.layers.ArcIMSLayer extends AbstractPositionable{
 		lConn.onGetFeatures = function(layerid:String, data:Array, count:Number, hasmore:Boolean, objecttag:Object) {
 			if (thisObj.map.isEqualExtent(thisObj.identifyextent, objecttag)) {
 				// add data from mydata
-				thisObj._completeWithMydata(layerid, data);
+				// does not exists in this class
+				//thisObj._completeWithMydata(layerid, data);
 				//                                               
 				var features = new Object();
 				features[layerid] = data;
 				thisObj.flamingo.raiseEvent(thisObj, "onHotlinkData", thisObj, features, thisObj.identifyextent, (thisObj.nrlayersqueried-thisObj._hotlinklayers.length), thisObj.nrlayersqueried);
+
 				if (!thisObj.identifyall and count > 0) {
-					var newDate = new Date();
+					var newDate:Date = new Date();
 					var t = (newDate.getTime()-starttime.getTime())/1000;
-					thisObj.flamingo.raiseEvent(thisObj, "onHotlinkComplete", thisObj, t);
+					thisObj.flamingo.raiseEvent(thisObj, "onHotlilnkComplete", thisObj, t);				
 				} else {
 					thisObj._hotlinklayer(_identifyextent, starttime);
 				}
-				if (data.length > 0 && thisObj.colorIds.length> 0){
-					thisObj.update();
-				}
 			}
 		};
-		lConn.onRecord= function(layerid:String, recordedValues:Object){
-			thisObj.flamingo.raiseEvent(thisObj, "onRecord", thisObj, layerid, recordedValues);			
-
-		};
 		var layerid:String = String(_hotlinklayers.pop());
-		var conn:ArcIMSConnector = new ArcIMSConnector(server);	
-		conn.setIdentifyColorLayer(this.colorIds);
-		conn.setIdentifyColorLayerKey(this.colorIdsKey);
-		conn.setVisualisationSelected(this.visualisationSelected);
-		conn.setRecord(this.record);
+		var conn:ArcServerConnector = new ArcServerConnector(server);
 		if (servlet.length>0) {
 			conn.servlet = servlet;
 		}
@@ -1598,8 +1026,12 @@ class gui.layers.ArcIMSLayer extends AbstractPositionable{
 			_featurelimit = this.featurelimit;
 		}
 		conn.featurelimit = _featurelimit;
+		conn.dataframe = dataframe;
+		conn.esriArcServerVersion = esriArcServerVersion;
+		
 		switch (layers[layerid].type) {
 		case "featureclass" :
+		case "Feature Layer" :
 			//calculate the real identify extent based on the identify extent of the map
 			//if the extent is actually a point 
 			var _identifydistance = layers[layerid].identifydistance;
@@ -1619,109 +1051,23 @@ class gui.layers.ArcIMSLayer extends AbstractPositionable{
 			}
 			var subfields:String = layers[layerid].subfields.split(",").join(" ");
 			var query:String = layers[layerid].query;
+			//add escapes
+			for(var i in layers)
+			{
+				query = searchAndReplace(query, "<", "&lt;");
+				query = searchAndReplace(query, ">", "&gt;");			
+			}
+			conn.includeGeometry = false;
 			conn.getFeatures(mapservice, layerid, real_identifyextent, subfields, query, map.copyExtent(_identifyextent));
 			break;
 		case "image" :
-			var point = new Object();
-			point.x = (_identifyextent.maxx+_identifyextent.minx)/2;
-			point.y = (_identifyextent.maxy+_identifyextent.miny)/2;
-			conn.getRasterInfo(mapservice, layerid, point, layers[layerid].coordsys, map.copyExtent(_identifyextent));
+	//		var point = new Object();
+	//		point.x = (_identifyextent.maxx+_identifyextent.minx)/2;
+	//		point.y = (_identifyextent.maxy+_identifyextent.miny)/2;
+	//		conn.getRasterInfo(mapservice, layerid, point, layers[layerid].coordsys, map.copyExtent(_identifyextent));
 			break;
 		}
 	}
-
-	function setLayersQueryAbleFeatureclass(ids:String,val:Boolean){
-		var a_ids = flamingo.asArray(ids);
-		for (var i = 0; i<a_ids.length; i++) {
-			var id = a_ids[i];
-			if (layers[id] == undefined) {
-				layers[id] = new Object();
-			}
-			layers[id].queryable=val;
-			layers[id].type='featureclass';
-		}
-	}
-	/** 
-	* Selects from a layer.
-	* @param selectExtent:Object extent of the selection
-	* @param selectLayer:String Layerid
-	*/
-	function select(_selectExtent:Object, _selectLayer:Object) {
-		this.selectextent = undefined;
-		if (!this.initialized) {
-			return;
-		}
-		if (!visible || !_visible) {
-			return;
-		}
-		if (server == undefined) {
-			return;
-		}
-		if (mapservice == undefined) {
-			return;
-		}
-
-		this.selectextent = map.copyExtent(_selectExtent);
-		flamingo.raiseEvent(this, "onSelect", this, _selectExtent, _selectLayer);
-		_selectlayer(_selectExtent, _selectLayer, 1);
-	}
-
-	function _selectlayer(_selectExtent:Object, _selectLayer:Object, _beginrecord:Number) {
-		var lConn = new Object();
-		
-		var layeridString:String = String(_selectLayer);
-		var conn:ArcIMSConnector = new ArcIMSConnector(server);	
-
-		if (servlet.length>0) {
-			conn.servlet = servlet;
-		}
-		conn.addListener(lConn);
-		var _featurelimit:Number = layers[layeridString].featurelimit;
-		if (_featurelimit == undefined) {
-			_featurelimit = this.featurelimit;
-		}
-		conn.envelope = true;
-		conn.featurelimit = _featurelimit;
-		conn.beginrecord = _beginrecord
-		var thisObj:ArcIMSLayer = this;
-		lConn.onGetFeatures = function(layerid:String, data:Array, count:Number, hasmore:Boolean, objecttag:Object) {
-			if (thisObj.map.isEqualExtent(thisObj.selectextent, objecttag)) {
-				var features = new Object();
-				features[layerid] = data;
-				thisObj.flamingo.raiseEvent(thisObj, "onSelectData", thisObj, features, thisObj.selectextent, _beginrecord);
-				if(hasmore) {
-					thisObj._selectlayer(_selectExtent, _selectLayer, _beginrecord + _featurelimit);
-				}
-			}
-		};
-		
-		switch (layers[layeridString].type) {
-		case "featureclass" :
-			//calculate the real identify extent based on the identify extent of the map
-			//if the extent is actually a point 
-			var _identifydistance = layers[layeridString].identifydistance;
-			if (_identifydistance == undefined) {
-				_identifydistance = this.identifydistance;
-			}
-			var real_identifyextent = map.copyExtent(_selectExtent);
-			if ((real_identifyextent.maxx-real_identifyextent.minx) == 0) {
-				var w = map.getScale()*_identifydistance;
-				real_identifyextent.minx = real_identifyextent.minx-(w/2);
-				real_identifyextent.maxx = real_identifyextent.minx+w;
-			}
-			if ((real_identifyextent.maxy-real_identifyextent.miny) == 0) {
-				var h = map.getScale()*_identifydistance;
-				real_identifyextent.miny = real_identifyextent.miny-(h/2);
-				real_identifyextent.maxy = real_identifyextent.miny+h;
-			}
-			var subfields:String = layers[layeridString].subfields.split(",").join(" ");
-			var query:String = layers[layeridString].query;
-			conn.getFeatures(mapservice, layeridString, _selectExtent, subfields, query, map.copyExtent(_selectExtent));
-
-			break;
-		}
-	}
-
 	/** 
 	* Changes the layers collection.
 	* @param ids:String Comma seperated string of affected layerids. If keyword "#ALL#" is used, all layers will be affected.
@@ -1730,7 +1076,7 @@ class gui.layers.ArcIMSLayer extends AbstractPositionable{
 	* @example mylayer.setLayerProperty("39,BRZO","visible",true)
 	* mylayer.setLayerProperty("#ALL#","identify",false)
 	*/
-	function setLayerProperty(ids:String, field:String, value:Object) {	
+	function setLayerProperty(ids:String, field:String, value:Object) {
 		if (ids.toUpperCase() == "#ALL#") {
 			for (var id in layers) {
 				layers[id][field] = value;
@@ -1744,6 +1090,10 @@ class gui.layers.ArcIMSLayer extends AbstractPositionable{
 					layers[id][field] = value;
 				} else {
 					layers[id][field] = value;
+				}
+				//update feature id for buffer when the query is removed
+				if(field == "query" && value == ""){
+					updateLayerFID(id);
 				}
 			}
 		}
@@ -1759,7 +1109,7 @@ class gui.layers.ArcIMSLayer extends AbstractPositionable{
 		if (layers[id] == undefined) {
 			return null;
 		}
-		return layers[id][field.toLowerCase()];
+		return layers[id][field];
 	}
 	/** 
 	* Returns a reference to the layers collection.
@@ -1827,7 +1177,7 @@ class gui.layers.ArcIMSLayer extends AbstractPositionable{
 	}
 	/** 
 	* Changes the visiblity of a layer or a sub-layer.
-	* @param vis:Boolean True (visible) or false (not visible).
+	* @param vis:Boolean True (visible) or false (!visible).
 	* @param id:String [optional] A layerid. If omitted the entire maplayer will be effected.
 	*/
 	function setVisible(vis:Boolean, id:String) {
@@ -1971,9 +1321,147 @@ class gui.layers.ArcIMSLayer extends AbstractPositionable{
 				s += "0";
 			}
 		}
-		
 		return s;
 	}
+	
+	function stopMaptip() {
+		this.showmaptip = false;
+		this.maptipextent = undefined;
+		this._maptiplayers = new Array();
+	}
+	function startMaptip(x:Number, y:Number) {
+		if (!this.canmaptip) {
+			return;
+		}
+		if (!this.initialized) {
+			return;
+		}
+		if (maptipids.length<=0) {
+			return;
+		}
+		if (!visible || !_visible) {
+			return;
+		}
+		if (server == undefined) {
+			return;
+		}
+		if (mapservice == undefined) {
+			return;
+		}
+		this.showmaptip = true;
+		var r = new Object();
+		r.x = x-this.identifydistance/2;
+		r.y = y-this.identifydistance/2;
+		r.width = this.identifydistance;
+		r.height = this.identifydistance;
+		this.maptipextent = this.map.rect2Extent(r);
+		if (this.fullextent != undefined) {
+			if (!this.map.isHit(this.fullextent, this.maptipextent)) {
+				return;
+			}
+		}
+		this._maptiplayers = new Array();
+		this._maptiplayers = _getLayerlist(maptipids, "maptip");
+		_maptip();
+	}
+	function _maptip() {
+		if (this._maptiplayers.length == 0) {
+			return;
+		}
+		var layeridString:String = String(_maptiplayers.pop());
+		var maptipfields:String = layers[layeridString].maptipfields;
+		
+		if (maptipfields == undefined || maptipfields.length == 0) {
+			this._maptip();
+			return;
+		}
+		var thisObj:ArcServerLayer = this;
+		var lConn = new Object();
+		lConn.onGetFeatures = function(layerid:String, data:Array, count:Number, hasmore:Boolean, objecttag:Object) {
+			if (thisObj.showmaptip) {
+				if (count>0) {
+					if (thisObj.map.isEqualExtent(thisObj.maptipextent, objecttag)) {
+						var maptip = thisObj._getString(thisObj.layers[layerid], "maptip");
+						if (maptip.length == 0) {
+							for (var field in data[0]) {
+								if (maptip.length == 0) {
+									maptip = data[0][field];
+								} else {
+									maptip += ","+data[0][field];
+								}
+							}
+						} else {
+							var maptipfieldsArray:Array = thisObj.flamingo.asArray(thisObj.layers[layerid].maptipfields, " ");
+							for (var i = 0; i<maptipfieldsArray.length; i++) {
+								var value;
+								var maptipfield = maptipfieldsArray[i];
+								if (maptipfield.indexOf(".", 0)>=0) {
+									value = data[0][maptipfield];
+								} else {
+									for (var field in data[0]) {
+										if (field.substr(field.length-maptipfield.length-1) == "."+maptipfield) {
+											value = data[0][field];
+											break;
+										}
+									}
+								}
+								if (value != undefined) {
+									maptip = maptip.split("["+maptipfield+"]").join(value);
+								}
+							}
+						}
+						if (maptip.length>=0) {
+							thisObj.flamingo.raiseEvent(thisObj, "onMaptipData", thisObj, maptip);
+						}
+					}
+				}
+				if (thisObj._maptiplayers.length>0) {
+					thisObj._maptip();
+				}
+			}
+		};
+		var conn:ArcServerConnector = new ArcServerConnector(server);	
+		if (servlet.length>0) {
+			conn.servlet = servlet;
+		}
+		conn.addListener(lConn);
+		conn.featurelimit = 1;
+		var query:String = layers[layeridString].query;
+		
+		//add escapes
+		for(var i in layers)
+		{
+			query = searchAndReplace(query, "<", "&lt;");
+			query = searchAndReplace(query, ">", "&gt;");
+		}
+		//No geometry needed for maptip
+		conn.includeGeometry = false;
+		conn.getFeatures(mapservice, layeridString, maptipextent, maptipfields, query, this.map.copyExtent(this.maptipextent));
+	}
+	//custom functions 
+	//gets the id's of the visible features in the layer.
+	function updateLayerFID(layerId:String){
+		var conn:ArcServerConnector = new ArcServerConnector(server);	
+		var query:String = getLayerProperty(layerId, "query").toString();
+		if(query == undefined){
+			query = "";
+		}
+		//add escapes
+		for(var i in layers)
+		{
+			query = searchAndReplace(query, "<", "&lt;");
+			query = searchAndReplace(query, ">", "&gt;");
+		}
+		conn.getQueryFeatureIDs(mapservice, layerId, query, layers);
+		var lConn = new Object();
+		
+		var thisObj:ArcServerLayer = this;
+		lConn.onGetQueryFeatureIDs = function(selectedFID:Array, objecttag:Object, requestid:String) {
+			thisObj.map.refresh();
+		};
+		conn.addListener(lConn);
+	}
+
 	function _getString(item:Object, stringid:String):String {
 		var lang = flamingo.getLanguage();
 		var s = item.language[stringid][lang];
@@ -2028,7 +1516,7 @@ class gui.layers.ArcIMSLayer extends AbstractPositionable{
 		this.maptipcoordinate.y = y;
 		this.showmaptip = true;
 		this._maptiplayers = _getLayerlist(maptipids, "maptipable");
-		_maptip(x, y);
+		_maptipXY(x, y);
 		var r = new Object();
 		r.x = x-this.identifydistance/2;
 		r.y = y-this.identifydistance/2;
@@ -2036,33 +1524,34 @@ class gui.layers.ArcIMSLayer extends AbstractPositionable{
 		r.height = this.identifydistance;
 		this.maptipextent = this.map.rect2Extent(r);
 	}
-	function _maptip(x:Number, y:Number) {
+	function _maptipXY(x:Number, y:Number) {
 		if (!this.showmaptip) {
 			return;
 		}
 		if (this._maptiplayers.length == 0) {
 			return;
 		}
-		var thisObj:ArcIMSLayer = this;
+		var thisObj:ArcServerLayer = this;
 		var lConn = new Object();
-		lConn.onResponse = function(connector:ArcIMSConnector) {
+		lConn.onResponse = function(connector:ArcServerConnector) {
 			//trace(connector.response);
 			thisObj.flamingo.raiseEvent(thisObj, "onResponse", thisObj, "maptip", connector);
 		};
-		lConn.onRequest = function(connector:ArcIMSConnector) {
+		lConn.onRequest = function(connector:ArcServerConnector) {
 			//trace(connector.request);
 			thisObj.flamingo.raiseEvent(thisObj, "onRequest", thisObj, "maptip", connector);
 		};
 		lConn.onError = function(error:String, objecttag:Object, requestid:String) {
 			thisObj.flamingo.raiseEvent(thisObj, "onError", thisObj, "maptip", error);
 			if (thisObj._maptiplayers.length>0) {
-				thisObj._maptip(x, y);
+				thisObj._maptipXY(x, y);
 			}
 		};
 		lConn.onGetRasterInfo = function(layerid:String, data:Array, objecttag:Object) {
 			if (thisObj.showmaptip) {
 				if (thisObj.maptipcoordinate.x == objecttag.x and thisObj.maptipcoordinate.y == objecttag.y) {
-					thisObj._completeWithMydata(layerid, data);
+					//Does not exists
+					//thisObj._completeWithMydata(layerid, data);
 					var maptip = thisObj._getString(thisObj.layers[layerid], "maptip");
 					maptip = thisObj._makeMaptip(layerid, maptip, data[0]);
 					if (maptip.length>=0) {
@@ -2073,7 +1562,7 @@ class gui.layers.ArcIMSLayer extends AbstractPositionable{
 					}
 				}
 				if (thisObj._maptiplayers.length>0) {
-					thisObj._maptip(x, y);
+					thisObj._maptipXY(x, y);
 				}
 			}
 		};
@@ -2081,7 +1570,8 @@ class gui.layers.ArcIMSLayer extends AbstractPositionable{
 			if (thisObj.showmaptip) {
 				if (count>0) {
 					if (thisObj.maptipcoordinate.x == objecttag.x and thisObj.maptipcoordinate.y == objecttag.y) {
-						thisObj._completeWithMydata(layerid, data);
+						//Does not exists
+						//thisObj._completeWithMydata(layerid, data);
 						var maptip = thisObj._getString(thisObj.layers[layerid], "maptip");
 						maptip = thisObj._makeMaptip(layerid, maptip, data[0]);
 						if (maptip.length>=0) {
@@ -2093,27 +1583,30 @@ class gui.layers.ArcIMSLayer extends AbstractPositionable{
 					}
 				}
 				if (thisObj._maptiplayers.length>0) {
-					thisObj._maptip(x, y);
+					thisObj._maptipXY(x, y);
 				}
 			}
 		};
-		//
+		
 		var layerid:String = String(_maptiplayers.pop());
-		var conn:ArcIMSConnector = new ArcIMSConnector(server);
+		var conn:ArcServerConnector = new ArcServerConnector(server);
+
 		if (servlet.length>0) {
 			conn.servlet = servlet;
 		}
 		conn.addListener(lConn);
 		conn.featurelimit = 1;
-		
 		var maptip = _getString(layers[layerid], "maptip");
+
 		var maptipfields = _getMaptipFields(layerid, maptip);
+		
 		if (maptipfields == undefined || maptipfields.length == 0) {
-			thisObj._maptip(x, y);
+			thisObj._maptipXY(x, y);
 			return;
 		}
+
 		switch (layers[layerid].type) {
-		case "featureclass" :
+		case "Feature Layer" :
 			var query:String = layers[layerid].query;
 			var flds = maptipfields;
 			var _maptipdistance = layers[layerid].maptipdistance;
@@ -2127,10 +1620,19 @@ class gui.layers.ArcIMSLayer extends AbstractPositionable{
 			_maptipextent.miny = y-(h/2);
 			_maptipextent.maxx = _maptipextent.minx+w;
 			_maptipextent.maxy = _maptipextent.miny+h;
+
+			//add escapes
+				for(var i in layers)
+			{
+				query = searchAndReplace(query, "<", "&lt;");
+				query = searchAndReplace(query, ">", "&gt;");
+			}
+			//No geometry needed for maptip
+			conn.includeGeometry = false;
 			conn.getFeatures(mapservice, layerid, _maptipextent, flds, query, {x:x, y:y});
 			break;
 		case "image" :
-			conn.getRasterInfo(mapservice, layerid, {x:x, y:y}, layers[layerid].coordsys, {x:x, y:y});
+	//		conn.getRasterInfo(mapservice, layerid, {x:x, y:y}, layers[layerid].coordsys, {x:x, y:y});
 			break;
 		}
 	}
@@ -2141,9 +1643,6 @@ class gui.layers.ArcIMSLayer extends AbstractPositionable{
 				value = record[fld];
 				break;
 			}
-			if (fld.indexOf(".", 0)>=0 and field.indexOf(".", 0)<0) {
-				field = "."+field;
-			}
 			if (fld.substr(fld.length-field.length).toLowerCase() == field.toLowerCase()) {
 				value = record[fld];
 				break;
@@ -2151,14 +1650,13 @@ class gui.layers.ArcIMSLayer extends AbstractPositionable{
 		}
 		return value;
 	}
-	//
 	function _string2Table(s:String, rdel:String, fdel:String):Array {
 		var table:Array = new Array();
 		var record:Object;
 		var records:Array;
 		var values:Array;
 		var fields:Array;
-		//
+		
 		s = flamingo.trim(s);
 		records = flamingo.asArray(s, rdel);
 		fields = flamingo.asArray(records[0], fdel);
@@ -2172,7 +1670,7 @@ class gui.layers.ArcIMSLayer extends AbstractPositionable{
 		}
 		return table;
 	}
-	//
+
 	function _getMaptipFields(layerid:String, maptip:String):String {
 		layers[layerid].maptipfields = new Object();
 		var flds:Array = new Array();
@@ -2191,7 +1689,7 @@ class gui.layers.ArcIMSLayer extends AbstractPositionable{
 			}
 			begin = maptip.indexOf("[", begin+1);
 		}
-		//
+		
 		for (var jointo in layers[layerid].mydatajoins) {
 			for (var joinfield in layers[layerid].mydatajoins[jointo]) {
 				for (var maptipfield in temp) {
@@ -2205,7 +1703,7 @@ class gui.layers.ArcIMSLayer extends AbstractPositionable{
 		for (var maptipfield in temp) {
 			flds.push(maptipfield);
 		}
-		//
+		
 		return flds.join(" ");
 	}
 	function _makeMaptip(layerid:String, maptip:String, record:Object):String {
@@ -2226,63 +1724,40 @@ class gui.layers.ArcIMSLayer extends AbstractPositionable{
 			return "";
 		}
 	}
-	/**
-	* Sets (overwrites) the recorded (object that needs to be colored) of this layer
-	* @param layerid:String the layer id of this object.
-	* @param key:String the key on which the check is done?
-	* @param values:String Comma seperated list. All objects with key = values[] are recorded (colored)
-	*/
-	function setRecordedValues(layerid:String, key:String, values:String){
-		if (this.newRecorded[layerid] ==undefined){
-			this.newRecorded[layerid]=new Object();
-		}
-		this.newRecorded[layerid][key]=values.split(",");
-		update();
+	//added
+	function setMapservice(new_mapservice:String, new_dataframe:String):Void
+	{
+		mapservice = new_mapservice;
+		dataframe = new_dataframe;
 	}
-	/**
-	* Adds recorded (object that needs to be colored) condition of this layer
-	* @param layerid:String the layer id of this object.
-	* @param key:String the key on which the check is done?
-	* @param values:String Comma seperated list. All objects with key = values[] are recorded (colored)
-	*/
-	function addRecordedValues(layerid:String, key:String, values:String){
-		if (this.addRecorded[layerid] ==undefined){
-			this.addRecorded[layerid]=new Object();
-		}
-		this.addRecorded[layerid][key]=values.split(",");
-		update();
-		
-	}
-	function log(stringtolog:Object){	
-		if (DEBUG){
-			var newDate:Date = new Date();
-			trace(newDate +"LayerArcIms: " + stringtolog);
-		}
+	function getServer():String
+	{
+		return server;
 	}
 	
-	public function getParent():Object {
+	function getParent():Object {
 		return this.map;
 	}
 	/**
 	* Dispatched when the layer gets a request object from the connector.
 	* @param layer:MovieClip a reference to the layer.
-	* @param type:String "update", "identify" , "init" or "maptip"
-	* @param requestobject:Object the object returned from the ArcIMSConnector, containing the raw requests and other properties.
+	* @param type:String "update", "identify" or "init"
+	* @param requestobject:Object the object returned from the ArcServerConnector, containing the raw requests and other properties.
 	*/
 	//public function onRequest(layer:MovieClip, type:String, requestobject:Object):Void {
 	//
 	/**
 	* Dispatched when the layer gets a response object from the connector.
 	* @param layer:MovieClip a reference to the layer.
-	* @param type:String "update", "identify" , "init" or "maptip"
-	* @param responseobject:Object the object returned from the ArcIMSConnector, containing the raw response and other properties.
+	* @param type:String "update", "identify" or "init"
+	* @param responseobject:Object the object returned from the ArcServerConnector, containing the raw response and other properties.
 	*/
 	//public function onResponse(layer:MovieClip, type:String, responseobject:Object):Void {
 	//
 	/**
 	* Dispatched when there is an error.
 	* @param layer:MovieClip a reference to the layer.
-	* @param type:String "update", "identify" , "init" or "maptip"
+	* @param type:String "update", "identify" or "init"
 	* @param error:String error message
 	*/
 	//public function onError(layer:MovieClip, type:String, error:String):Void {
@@ -2378,4 +1853,6 @@ class gui.layers.ArcIMSLayer extends AbstractPositionable{
 	*/
 	//public function onMaptipData(layer:MovieClip, maptip:String):Void {
 	//
+
+	
 }

@@ -191,6 +191,21 @@ class core.AbstractPositionable extends AbstractListenerRegister
 	public function get flamingo():Flamingo {
 		return _global.flamingo;
 	}
+	
+	/*Both _visible (getter and setter) are forwarded to the container _visible(getter and setter)*/	
+	public function set _visible(value:Boolean) {
+		this.container._visible = value;
+	}
+	public function get _visible():Boolean {
+		return this.container.visible;
+	}
+	
+	public function set _alpha(value:Number) {
+		this.container._alpha=value;
+	}
+	public function get _alpha():Number {
+		return this.container._alpha;
+	}
 	/*public function get _x():Number {
 		return this.container._x;
 	}
@@ -259,13 +274,7 @@ class core.AbstractPositionable extends AbstractListenerRegister
 	{
 		_type = value;
 	}
-	/*Both _visible (getter and setter) are forwarded to visible(getter and setter)*/	
-	public function set _visible(value:Boolean) {
-		this.container._visible = value;
-	}
-	public function get _visible():Boolean {
-		return this.container.visible;
-	}
+	
 	public function get visible():Boolean { 		
 		return configVisible;
 	}
