@@ -4,6 +4,7 @@ import display.spriteloader.event.SpriteMapEvent;
 import display.spriteloader.Sprite;
 import display.spriteloader.SpriteSettings;
 import flash.display.BitmapData;
+import tools.Logger;
 /**
  * ...
  * @author 
@@ -88,15 +89,17 @@ class display.spriteloader.SpriteMap extends Object
 	{
 		switch(e.type) 
 		{	case SpriteMapEvent.LOAD_ERROR:
-				trace("SpriteMap::handleEvent():  " + e.type + ", error: "+e.data.error+ ", errorNumber: "+e.data.errorNumber);
-			break;
+				//trace("SpriteMap::handleEvent():  " + e.type + ", error: "+e.data.error+ ", errorNumber: "+e.data.errorNumber);
+				break;
 			case SpriteMapEvent.LOAD_PROGRESS:
-				trace("SpriteMap::handleEvent() :" + e.type + ", progress: "+ e.data.progress);
-			break;
+				//trace("SpriteMap::handleEvent() :" + e.type + ", progress: "+ e.data.progress);
+				break;
+			case SpriteMapEvent.LOAD_COMPLETE:
+				//trace("SpriteMap::handleEvent() :" + e.type + " COMPLETED: " + e.data.progress);
+				break;
 			default:
-				trace("SpriteMap::handleEvent() :" + e.type);
-			break;
-			
+				//trace("SpriteMap::handleEvent() :" + e.type);
+				break;
 		}
 	}
 	
