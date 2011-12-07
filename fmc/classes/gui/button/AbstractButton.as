@@ -5,6 +5,7 @@
 import core.AbstractPositionable;
 import display.spriteloader.SpriteMap;
 import display.spriteloader.SpriteSettings;
+import display.spriteloader.event.SpriteMapEvent;
 import tools.Logger;
 
 class gui.button.AbstractButton extends AbstractPositionable{
@@ -62,7 +63,16 @@ class gui.button.AbstractButton extends AbstractPositionable{
 				
 		this.mcDown._visible = false;
 		this.mcOver._visible = false;
-		this.mcUp._visible = true;		
+		this.mcUp._visible = true;
+		
+		if (flamingo.spriteMap.loaded) {
+			this.resize();
+		}else {
+			var thisObj = this;
+			flamingo.spriteMap.addEventListener(SpriteMapEvent.LOAD_COMPLETE, function() {
+				thisObj.resize();
+			});
+		}
 		
 		this.setEvents();	
 	}
@@ -327,6 +337,23 @@ class gui.button.AbstractButton extends AbstractPositionable{
 		_spriteMap = value;
 	}
 	
+	public function set width(value:Number) {
+		mcUp._width = value;
+		mcDown._width = value;
+		mcOver._width = value;	
+	}
 	
+	public function set height(value:Number) {
+		mcUp._height = value;
+		mcDown._height = value;
+		mcOver._height = value;
+	}
 	
+	public function get width():Number {
+		return mcUp._width;
+	}
+	
+	public function get height():Number {
+		return mcUp._height;
+	}
 }
