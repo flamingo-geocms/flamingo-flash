@@ -1,4 +1,4 @@
-import gui.ToolZoomerV;
+import gui.ZoomerV;
 import tools.Logger;
 import gui.button.AbstractButton;
 import display.spriteloader.SpriteSettings;
@@ -11,13 +11,12 @@ import display.spriteloader.SpriteSettings;
 
 class gui.button.ZoomInButton extends AbstractButton
 {
-	private var zoomerV:ToolZoomerV;
+	private var zoomerV:ZoomerV;
 	private var _zoomid:Number;
 	
-	public function ZoomInButton(id:String, container:MovieClip, zoomerV:ToolZoomerV)
+	public function ZoomInButton(id:String, container:MovieClip, zoomerV:ZoomerV)
 	{
 		super(id, container);
-		Logger.console("asdfasdfasdfasdfwerwerwwerpppppppppppp");
 		toolDownSettings = new SpriteSettings(143, 1092, 20, 20, 0, 0, true, 100);
 		toolOverSettings = new SpriteSettings(185, 1092, 20, 20, 0, 0, true, 100);
 		toolUpSettings = new SpriteSettings(229, 1094, 16, 17, 0, 0, true, 100);

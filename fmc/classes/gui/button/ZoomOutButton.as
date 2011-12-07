@@ -1,4 +1,4 @@
-import gui.ToolZoomerV;
+import gui.ZoomerV;
 import tools.Logger;
 import gui.button.AbstractButton;
 import display.spriteloader.SpriteSettings;
@@ -11,10 +11,10 @@ import display.spriteloader.SpriteSettings;
 
 class gui.button.ZoomOutButton extends AbstractButton
 {
-	private var zoomerV:ToolZoomerV;
+	private var zoomerV:ZoomerV;
 	private var _zoomid:Number;
 	
-	public function ZoomOutButton(id:String, container:MovieClip, zoomerV:ToolZoomerV)
+	public function ZoomOutButton(id:String, container:MovieClip, zoomerV:ZoomerV)
 	{
 		super(id, container);
 		toolDownSettings = new SpriteSettings(269, 1092, 20, 20, 0, 0, true, 100);

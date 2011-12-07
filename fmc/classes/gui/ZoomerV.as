@@ -41,7 +41,7 @@ import core.AbstractPositionable;
  */
 
 
-class gui.ToolZoomerV  extends AbstractPositionable{
+class gui.ZoomerV  extends AbstractPositionable{
 
 	var _zoomid:Number;
 	var thisObj = this;
@@ -56,7 +56,7 @@ class gui.ToolZoomerV  extends AbstractPositionable{
 	var _lMap:Object = new Object();
 	var _spriteMap:SpriteMap;
 	
-	public function ToolZoomerV(id:String,  container:MovieClip)
+	public function ZoomerV(id:String,  container:MovieClip)
 	{
 		Logger.console("TooZoomerV");
 		super(id, container);
@@ -67,7 +67,7 @@ class gui.ToolZoomerV  extends AbstractPositionable{
 		//---------------------------------------
 		//---------------------------------------
 		
-		var thisObj:ToolZoomerV = this;
+		var thisObj:ZoomerV = this;
 		lMap.onInit = function(map:MovieClip)
 		{
 			thisObj.refresh();

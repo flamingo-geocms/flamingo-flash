@@ -4,19 +4,19 @@
  * @author Meine Toonen
  */
 import gui.button.AbstractButton;
-import gui.ToolZoomerV;
+import gui.ZoomerV;
 import tools.Logger;
 import display.spriteloader.SpriteSettings;
 
 
 class gui.button.SliderButton extends AbstractButton
 {
-	private var zoomerV:ToolZoomerV;
+	private var zoomerV:ZoomerV;
 	var center:Object;
 	var bSlide:Boolean = false;
 	var p:Number;
 	
-	public function SliderButton(id:String, container:MovieClip, zoomerV:ToolZoomerV)
+	public function SliderButton(id:String, container:MovieClip, zoomerV:ZoomerV)
 	{
 		super(id, container);
 		toolOverSettings = new SpriteSettings(22, 1090, 21, 12, 0, 0, true, 100);
