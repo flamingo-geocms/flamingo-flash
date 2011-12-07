@@ -979,6 +979,10 @@ class Flamingo {
 						var borderNavigation:BorderNavigation = new BorderNavigation(targetid, mc);
 						borderNavigation.setConfig(xmlNode);
 						this.components[targetid] = borderNavigation;					
+					}else if (file == "ZoomerV") {
+						var zoomerV = new ToolZoomerV(targetid, mc);
+						zoomerV.setConfig(xmlNode);
+						this.components[targetid] = zoomerV;		
 					}else if (file == "Coordinates") {
 						var coordinates:Coordinates = new Coordinates(targetid, mc);
 						this.components[targetid] = coordinates;
@@ -1038,8 +1042,6 @@ class Flamingo {
 							tool = new ToolSuperPan(targetid, toolGroup, mc);							
 						}else if (file == "ToolIdentify") {						
 							tool = new ToolIdentify(targetid, toolGroup, mc);							
-						}else if (file == "ZoomerV") {
-							/*tool = new ToolZoomerV(targetid, toolGroup, mc);*/
 						}
 						tool.setConfig(xmlNode);						
 						toolGroup.addTool(tool);
