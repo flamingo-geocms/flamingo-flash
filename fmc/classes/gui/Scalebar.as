@@ -25,7 +25,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 * @configstyle .label Fontstyle of the scalenumbers.
 * @configstyle .units Fontstyle of the unitstring.
 */
-/** @tag <fmc:Scalebar>  
+	/** @tag <fmc:Scalebar>  
 	* This tag defines a scalebar
 	* The positioning tags (top, left, width etc.) affects only the size and position of the bar exclusive labels. 
 	* Use multiple scalebars  and their min- and maxscale properties to support multi units.
@@ -43,17 +43,13 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 	* @attr maxscale  (defaultvalue = "") When the map reaches this scale the bar will be shown.
 	* @attr minscale  (defaultvalue = "") When the map reaches this scale the bar will be hidden.
 	*/
-import core.ComponentInterface;
-import gui.button.AbstractButton;
+import core.AbstractPositionable;
+import display.spriteloader.SpriteSettings;
+
 import tools.Logger;
-class gui.Scalebar extends AbstractButton {
+class gui.Scalebar extends AbstractPositionable {
 	
 	//-------------------------------
-	var defaultXML:String = "<?xml version='1.0' encoding='UTF-8'?>" +
-							"<Scalebar>" +
-							"<style id='.label' font-family='verdana' font-size='11px' color='#333333' display='block' font-weight='normal'/>" +
-							"<style id='.units' font-family='verdana' font-size='11px' color='#333333' display='block' font-weight='normal'/>" +
-							"</Scalebar>";
 	var visible:Boolean;
 	var labelcount:Number = 2;
 	var labelposition:String = "CENTER";
@@ -63,27 +59,18 @@ class gui.Scalebar extends AbstractButton {
 	var magicnumber:Number = 1;
 	var minscale:Number;
 	var maxscale:Number;
-	
-	
-	//the movieclip loader
-	var _mcloader:MovieClipLoader;
-	
-	//the movieclips that are shown.
-	var _mBar:MovieClip;
-	var _mHolder:MovieClip;
-		var lMap:Object = new Object();
-	
-	public function Scalebar(id:String, container:MovieClip) {
+	var lMap:Object = new Object();
+	var mHolder:MovieClip;
+	var mBar:MovieClip	
+	public function Scalebar(id:String, container:MovieClip){
 		super(id, container);
-		var thisObj = this;
-		
-		mHolder = this.container;
-		mBar = mHolder.createEmptyMovieClip("mBar", this.container.getNextHighestDepth());
-		
-		this.mcloader = new MovieClipLoader();		
-		
-		this.mcloader.loadClip(_global.flamingo.correctUrl("/assets/img/scalebar.png"), this.mBar);	
-		
+		defaultXML = "<?xml version='1.0' encoding='UTF-8'?>" +
+							"<Scalebar>" +
+							"<style id='.label' font-family='verdana' font-size='11px' color='#333333' display='block' font-weight='normal'/>" +
+							"<style id='.units' font-family='verdana' font-size='11px' color='#333333' display='block' font-weight='normal'/>" +
+							"</Scalebar>";
+		//---------------------------------
+		var thisObj:Scalebar = this;
 		lMap.onChangeExtent = function(map:MovieClip):Void  {
 			thisObj.resize();
 		};
@@ -96,15 +83,11 @@ class gui.Scalebar extends AbstractButton {
 		flamingo.addListener(lParent, flamingo.getParent(this), this);
 		//---------------------------------------
 		//---------------------------------------
+
 		init();
 	}
-	
-	//var tScale:TextField = null;
 
-	//---------------------------------
-	
-	
-	private function init():Void {
+	function init():Void {
 		if (flamingo == undefined) {
 			var t:TextField = this.container.createTextField("readme", 0, 0, 0, 550, 400);
 			t.html = true;
@@ -117,7 +100,7 @@ class gui.Scalebar extends AbstractButton {
 		this.setConfig(defaultXML);
 		//custom
 		var xmls:Array= flamingo.getXMLs(this);
-		for (var i = 0; i < xmls.length; i++){ 
+		for (var i = 0; i < xmls.length; i++){
 			this.setConfig(xmls[i]);
 		}
 		delete xmls;
@@ -125,10 +108,13 @@ class gui.Scalebar extends AbstractButton {
 		flamingo.deleteXML(this);
 		this.container.useHandCursor = false;
 		this._visible = visible;
+		mHolder = this.container.createEmptyMovieClip("mHolder", this.container.getNextHighestDepth());
+		mBar = mHolder.createEmptyMovieClip("mBar", mHolder.getNextHighestDepth());
+		
+		var value:SpriteSettings = new SpriteSettings(1, 646, 200, 6, 0, 0, true, 100);
+		flamingo.spriteMap.attachSpriteTo(mBar,value);
 		resize()
 		flamingo.raiseEvent(this, "onInit", this);
-
-
 	}
 	/**
 	* Configurates a component by setting a xml.
@@ -169,14 +155,8 @@ class gui.Scalebar extends AbstractButton {
 			case "magicnumber" :
 				magicnumber = Number(val);
 				break;
-			/*case "skin" :
-				skin = val;
-				break;*/
 			}
 		}
-
-		
-		var mc = mBar;
 		for (var i = 0; i<labelcount; i++) {
 			var t = mHolder.createTextField("tLabel"+i, i+1, 0, 0, 0, 0);
 			t.styleSheet = flamingo.getStyleSheet(this);
@@ -195,26 +175,16 @@ class gui.Scalebar extends AbstractButton {
 			t.selectable = false;
 			t.autoSize = true;
 		}
-	/*
-		tScale = mHolder.createTextField("tScale", labelcount+3, 0, 0, 0, 0);
-		tScale.styleSheet = flamingo.getStyleSheet(this);
-		tScale.multiline = false;
-		tScale.wordWrap = false;
-		tScale.html = false;
-		tScale.selectable = false;
-	*/	
+
 		flamingo.addListener(lMap, listento[0], this);
 
 		resize();
 	}
-	
-	function resize() {
-
-	/*	
+	function resize() {		
 		if (! visible) {
 			this._visible = false;
 			return;
-		}*/
+		}
 		var map = flamingo.getComponent(listento[0]);
 
 		if (map == undefined) {
@@ -255,21 +225,18 @@ class gui.Scalebar extends AbstractButton {
 			return;
 		}
 		this._visible = true;
-		//Logger.console("width:", (barlength/(ms/magicnumber)));
-		mBar._width = 400;// barlength / (ms / magicnumber);
-		mBar._x = 100;
-
+		mHolder.mBar._width = barlength/(ms/magicnumber);
 		if (barposition == "CENTER") {
-			mBar._x = r.width/2-mBar._width/2;
+			mHolder.mBar._x = r.width/2-mHolder.mBar._width/2;
 		} else if (barposition == "RIGHT") {
-			mBar._x = r.width-mBar._width;
+			mHolder.mBar._x = r.width-mHolder.mBar._width;
 		}
 	/*
 		tScale.text = String(Math.round(ms*1000)/1000);
 		tScale._width = tScale.textWidth+5;
 		tScale._height = tScale.textHeight+5;
-		tScale._x = mBar._x - tScale._width - 20;
-		tScale._y = mBar._y;	
+		tScale._x = mHolder.mBar._x - tScale._width - 20;
+		tScale._y = mHolder.mBar._y;	
 	*/	
 		if (labelcount == 1) {
 			var l = barlength;
@@ -279,12 +246,12 @@ class gui.Scalebar extends AbstractButton {
 			mHolder["tLabel0"].htmlText = "<span class='label'>"+l+"</span>";
 			mHolder["tLabel0"]._width = mHolder["tLabel0"].textWidth+5;
 			mHolder["tLabel0"]._height = mHolder["tLabel0"].textHeight+5;
-			var xcenter = mBar._x+(mBar._width/2);
+			var xcenter = mHolder.mBar._x+(mHolder.mBar._width/2);
 			mHolder["tLabel0"]._x = xcenter-(mHolder["tLabel0"]._width/2);
 			if (labelposition == "TOP") {
-				mHolder["tLabel0"]._y = mBar._y-mHolder["tLabel0"]._height;
+				mHolder["tLabel0"]._y = mHolder.mBar._y-mHolder["tLabel0"]._height;
 			} else {
-				mHolder["tLabel0"]._y = mBar._y+mBar._height;
+				mHolder["tLabel0"]._y = mHolder.mBar._y+mHolder.mBar._height;
 			}
 		} else {
 			for (var i = 0; i<labelcount; i++) {
@@ -292,20 +259,20 @@ class gui.Scalebar extends AbstractButton {
 				mHolder["tLabel"+i].htmlText = "<span class='label'>"+l+"</span>";
 				mHolder["tLabel"+i]._width = mHolder["tLabel"+i].textWidth+5;
 				mHolder["tLabel"+i]._height = mHolder["tLabel"+i].textHeight+5;
-				var xcenter = mBar._x+(mBar._width/(labelcount-1)*(i));
+				var xcenter = mHolder.mBar._x+(mHolder.mBar._width/(labelcount-1)*(i));
 				mHolder["tLabel"+i]._x = xcenter-(mHolder["tLabel"+i]._width/2);
 				if (labelposition == "TOP") {
-					mHolder["tLabel"+i]._y = mBar._y-mHolder["tLabel"+i]._height;
+					mHolder["tLabel"+i]._y = mHolder.mBar._y-mHolder["tLabel"+i]._height;
 				} else if (labelposition == "CENTER") {
-					mHolder["tLabel"+i]._y = mBar._y+(mBar._height/2)-(mHolder["tLabel"+i]._height/2);
+					mHolder["tLabel"+i]._y = mHolder.mBar._y+(mHolder.mBar._height/2)-(mHolder["tLabel"+i]._height/2);
 					if (i == 0) {
-						mHolder["tLabel"+i]._x = mBar._x-mHolder["tLabel"+i]._width;
+						mHolder["tLabel"+i]._x = mHolder.mBar._x-mHolder["tLabel"+i]._width;
 					}
 					if (i == (labelcount-1)) {
-						mHolder["tLabel"+i]._x = mBar._x+mBar._width;
+						mHolder["tLabel"+i]._x = mHolder.mBar._x+mHolder.mBar._width;
 					}
 				} else {
-					mHolder["tLabel"+i]._y = mBar._y+mBar._height;
+					mHolder["tLabel"+i]._y = mHolder.mBar._y+mHolder.mBar._height;
 				}
 				if (unitposition == "LASTLABEL" && i == (labelcount-1)) {
 					mHolder["tLabel"+i].htmlText = "<span class='label'>"+l+unitstring+"</span>";
@@ -318,55 +285,23 @@ class gui.Scalebar extends AbstractButton {
 			mHolder["tUnit"].htmlText = "<span class='units'>"+unitstring+"</span>";
 			mHolder["tUnit"]._width = mHolder["tUnit"].textWidth+5;
 			mHolder["tUnit"]._height = mHolder["tUnit"].textHeight+5;
-			mHolder["tUnit"]._x = (mBar._x+(mBar._width/2))-(mHolder["tUnit"]._width/2);
+			mHolder["tUnit"]._x = (mHolder.mBar._x+(mHolder.mBar._width/2))-(mHolder["tUnit"]._width/2);
 			if (unitposition == "TOP") {
-				mHolder["tUnit"]._y = mBar._y-mHolder["tUnit"]._height;
+				mHolder["tUnit"]._y = mHolder.mBar._y-mHolder["tUnit"]._height;
 			} else if (unitposition == "CENTER") {
-				mHolder["tUnit"]._y = mBar._y+(mBar._height/2)-(mHolder["tUnit"]._height/2);
+				mHolder["tUnit"]._y = mHolder.mBar._y+(mHolder.mBar._height/2)-(mHolder["tUnit"]._height/2);
 			} else {
-				mHolder["tUnit"]._y = mBar._y+mBar._height;
+				mHolder["tUnit"]._y = mHolder.mBar._y+mHolder.mBar._height;
 			}
 		}
-		/*
 		var ra = flamingo.getPosition(this);
 		mHolder._x = ra.x;
-		mHolder._y = ra.y;*/
-		flamingo.position(this);
+		mHolder._y = ra.y;
 	}
-	
-	public function get mBar():MovieClip 
-	{
-		return _mBar;
-	}
-	
-	public function set mBar(value:MovieClip):Void 
-	{
-		_mBar = value;
-	}
-	
-	public function get mHolder():MovieClip 
-	{
-		return _mHolder;
-	}
-	
-	public function set mHolder(value:MovieClip):Void 
-	{
-		_mHolder = value;
-	}
-	
-	public function get mcloader():MovieClipLoader 
-	{
-		return _mcloader;
-	}
-	
-	public function set mcloader(value:MovieClipLoader):Void 
-	{
-		_mcloader = value;
-	}
+}
 /** 
  * Dispatched when a component is up and ready to run.
  * @param comp:MovieClip a reference to the component.
  */
 //public function onInit(comp:MovieClip):Void {
 //}
-}

@@ -45,6 +45,7 @@ import gui.button.*;
 import gui.Coordinates;
 import gui.Map;
 import gui.Scalebar;
+import gui.ZoomerV;
 import gui.tools.*;
 import gui.layers.OGCWMSLayer;
 import gui.layers.ArcIMSLayer;
@@ -980,18 +981,18 @@ class Flamingo {
 						borderNavigation.setConfig(xmlNode);
 						this.components[targetid] = borderNavigation;					
 					}else if (file == "ZoomerV") {
-						var zoomerV = new ToolZoomerV(targetid, mc);
+						var zoomerV = new ZoomerV(targetid, mc);
 						zoomerV.setConfig(xmlNode);
 						this.components[targetid] = zoomerV;		
 					}else if (file == "Coordinates") {
 						var coordinates:Coordinates = new Coordinates(targetid, mc);
 						this.components[targetid] = coordinates;
 						coordinates.setConfig(xmlNode);
-					}/*else if (file == "Scalebar") {
+					}else if (file == "Scalebar") {
 						var scalebar:Scalebar = new Scalebar(targetid, mc);
 						this.components[targetid] = scalebar;
 						scalebar.setConfig(xmlNode);
-					}*/else if (file == "Map") {
+					}else if (file == "Map") {
 						var map:Map = new Map(targetid, mc);		
 						map.type = type;
 						this.components[targetid] = map;
