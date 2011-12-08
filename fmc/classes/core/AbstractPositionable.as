@@ -41,7 +41,8 @@ class core.AbstractPositionable extends AbstractListenerRegister
 	private var _cursors:Object;
 	//Styles for the object
 	private var _styles:TextField.StyleSheet;
-	
+	//guides of object
+	private var _guides:Object = null;
 	//the id of the cursor (default: 'cursor');
 	private var _cursorId:String;
 	//a array of id's to listen to
@@ -176,6 +177,10 @@ class core.AbstractPositionable extends AbstractListenerRegister
 			//if the parent is resized then resize this.
 			thisObj.resize();
 		};
+		//resize after the parent is init
+		lParent.onInit = function(mc:MovieClip) {
+			thisObj.resize();
+		}
 		if (value instanceof AbstractPositionable) {
 			//the parent is a new component.
 			this.flamingo.addListener(lParent, value, this);
@@ -480,7 +485,13 @@ class core.AbstractPositionable extends AbstractListenerRegister
 		_borderalpha = value;
 	}
 	
+	public function get guides():Object {
+		return _guides;
+	}
 	
+	public function set guides(value:Object):Void {
+		_guides = value;
+	}
 	/** 
 	 * Dispatched when the component is resized
 	 * @param comp:MovieClip a reference to the component.

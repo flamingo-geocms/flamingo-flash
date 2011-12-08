@@ -54,6 +54,7 @@ import gui.Map;
 import gui.Scalebar;
 import gui.SliderHor;
 import gui.ZoomerV;
+import gui.Container;
 import gui.tools.*;
 import tools.Logger;
 import display.spriteloader.SpriteMap;
@@ -981,6 +982,10 @@ class Flamingo {
 						this.toolGroups.push(toolGroup);
 						toolGroup.setConfig(xmlNode);						
 						this.components[targetid] = toolGroup;
+					}else if (file == "Container") {
+						var container:Container = new Container(targetid, mc);
+						container.setConfig(xmlNode);
+						this.components[targetid] = container;					
 					}else if (file == "BorderNavigation") {
 						var borderNavigation:BorderNavigation = new BorderNavigation(targetid, mc);
 						borderNavigation.setConfig(xmlNode);
@@ -1149,6 +1154,7 @@ class Flamingo {
 			return true;
 		}
 		switch(file) {
+			case "Container":
 			case "Map":
 			case "BorderNavigation":
 			case "ToolGroup":
