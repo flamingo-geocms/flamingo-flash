@@ -244,7 +244,7 @@ dynamic class Map extends MovieClip implements PersistableComponent {
 				if (thisObj.hit) {
 					var x = thisObj._xmouse;
 					var y = thisObj._ymouse;
-					var coord = this._parent.point2Coordinate({x:x, y:y});
+					var coord = this._parent.point2Coordinate( { x:x, y:y } );
 					flamingo.raiseEvent(thisObj, "onMouseMove", thisObj, x, y, coord);
 					// the following is for maptips
 					if (thisObj.maptipdelay>0) {

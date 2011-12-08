@@ -94,7 +94,6 @@ class gui.SliderHor extends AbstractPositionable{
 		increaseButton = new IncreaseButton("increaseButton", this.container.createEmptyMovieClip("increaseButton_container", this.container.getNextHighestDepth()), this);
 		decreaseButton = new DecreaseButton("decreaseButton ", this.container.createEmptyMovieClip("decreaseButton _container", this.container.getNextHighestDepth()), this);
 				//
-			Logger.console("werqwer", flamingo.getString(thisObj, "tooltip_plus"));
 		if (flamingo.getString(this, "label") != undefined && flamingo.getString(this, "label") != "") {
 			Logger.console("sdfasdf");
 			mLabel = this.container.createTextField("mLabel", this.container.getNextHighestDepth(), 0, 0, 100, 25);
