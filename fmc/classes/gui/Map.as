@@ -240,7 +240,7 @@ class gui.Map extends AbstractPositionable implements PersistableComponent{
 				if (thisObj.hit) {
 					var x = thisObj.container._xmouse;
 					var y = thisObj.container._ymouse;
-					var coord = this._parent.point2Coordinate({x:x, y:y});
+					var coord = thisObj.point2Coordinate( { x:x, y:y } );
 					thisObj.flamingo.raiseEvent(thisObj, "onMouseMove", thisObj, x, y, coord);
 					// the following is for maptips
 					if (thisObj.maptipdelay>0) {
@@ -264,7 +264,7 @@ class gui.Map extends AbstractPositionable implements PersistableComponent{
 				if (thisObj.hit) {
 					clearInterval(thisObj.maptipid);
 					this.md = true;
-					var coord = this._parent.point2Coordinate({x:thisObj.container._xmouse, y:thisObj.container._ymouse});
+					var coord = thisObj.point2Coordinate({x:thisObj.container._xmouse, y:thisObj.container._ymouse});
 					thisObj.flamingo.raiseEvent(thisObj, "onMouseDown", thisObj, thisObj.container._xmouse, thisObj.container._ymouse, coord);
 				}
 			};
@@ -284,7 +284,7 @@ class gui.Map extends AbstractPositionable implements PersistableComponent{
 			this.onMouseUp = function() {
 				if (this.md) {
 					delete this.md;
-					var coord = this._parent.point2Coordinate({x:thisObj.container._xmouse, y:thisObj.container._ymouse});
+					var coord = thisObj.point2Coordinate({x:thisObj.container._xmouse, y:thisObj.container._ymouse});
 					thisObj.flamingo.raiseEvent(thisObj, "onMouseUp", thisObj, thisObj.container._xmouse, thisObj.container._ymouse, coord);
 				}
 				if (!thisObj.hit) {
