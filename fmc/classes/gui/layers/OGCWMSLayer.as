@@ -67,7 +67,6 @@ import gui.layers.AbstractLayer;
 class gui.layers.OGCWMSLayer extends AbstractLayer{
 	var version:String = "2.0";
 	//---------------------------------
-	var defaultXML:String = "";
 	var query_layers:String;
 	//same as query_layers, needed for IdentifyResultsHTML, to make interface for LayerArcIMS, LayerArcServer vs LayerOGWMS equal 
 	var identifyids:String; 
@@ -135,6 +134,7 @@ class gui.layers.OGCWMSLayer extends AbstractLayer{
 	}
 	
 	public function init():Void {
+		super.init();
 		var thisObj:OGCWMSLayer = this;
 		
 		this.container._visible = false;
@@ -165,18 +165,10 @@ class gui.layers.OGCWMSLayer extends AbstractLayer{
 			xml= xml.firstChild;
 		}
 		super.setConfig(XMLNode(xml));
+		
 		if (dontGetCap == undefined){
 			dontGetCap=false;
-		}
-		
-		//load default attributes, strings, styles and cursors                     
-		_global.flamingo.parseXML(this, xml);
-		//parse custom attributes
-		attributes = new Object();
-		for (var attr in xml.attributes) {
-			var val:String = xml.attributes[attr];
-			
-		}
+		}				
 		//after loading all parameters set the layer properties.
 		if (nullIfEmpty(slayers) != null) {
 			if (visible_layers==null){
@@ -216,44 +208,7 @@ class gui.layers.OGCWMSLayer extends AbstractLayer{
 			setLayerProperty(query_layers, "identify", true);
 			setLayerProperty(query_layers, "queryable", true);
 		}	
-		//walk through xml (layer) childs.
-		var xlayers:Array = xml.childNodes;
-		if (xlayers.length>0) {
-			for (var i:Number = xlayers.length-1; i>=0; i--) {
-				if (xlayers[i].nodeName.toLowerCase() == "layer") {
-					var id;
-					for (var attr in xlayers[i].attributes) {
-						if (attr.toLowerCase() == "id") {
-							id = xlayers[i].attributes[attr];
-							break;
-						}
-					}
-					if (id != undefined) {
-						if (layers[id] == undefined) {
-							layers[id] = new Object();
-						}
-						if (layers[id].language == undefined) {
-							layers[id].language = new Object();
-						}
-						_global.flamingo.parseString(xlayers[i], layers[id].language);
-						for (var attr in xlayers[i].attributes) {
-							var val:String = xlayers[i].attributes[attr];
-							switch (attr.toLowerCase()) {
-							case "aka" :
-								this.aka[val] = id;
-								break;
-							case "fields" :
-								layers[id].fields = val;
-								break;
-							default :
-								layers[id][attr.toLowerCase()] = val;
-								break;
-							}
-						}
-					}
-				}
-			}
-		}
+		
 		//get extra information about mapserver and the layers                                                                 
 		if (url == undefined and getcapabilitiesurl == undefined) {
 			return;
@@ -466,7 +421,45 @@ class gui.layers.OGCWMSLayer extends AbstractLayer{
 				break;
 			}
     }
-	
+	/**
+	 * Passes a name and child xml to the component.
+	 * @param name the name of the tag
+	 * @param config the xml child
+	 */ 
+	function addComposite(name:String, config:XMLNode):Void { 
+		if (name.toLowerCase() == "layer") {
+			var id;
+			for (var attr in config.attributes) {
+				if (attr.toLowerCase() == "id") {
+					id = config.attributes[attr];
+					break;
+				}
+			}
+			if (id != undefined) {
+				if (layers[id] == undefined) {
+					layers[id] = new Object();
+				}
+				if (layers[id].language == undefined) {
+					layers[id].language = new Object();
+				}
+				_global.flamingo.parseString(config, layers[id].language);
+				for (var attr in config.attributes) {
+					var val:String = config.attributes[attr];
+					switch (attr.toLowerCase()) {
+					case "aka" :
+						this.aka[val] = id;
+						break;
+					case "fields" :
+						layers[id].fields = val;
+						break;
+					default :
+						layers[id][attr.toLowerCase()] = val;
+						break;
+					}
+				}
+			}
+		}
+	}
 	function trim(str:String):String {
 		var i = 0;
 		var j = str.length-1;
@@ -490,24 +483,6 @@ class gui.layers.OGCWMSLayer extends AbstractLayer{
 	function getSLDparam():String {
 	  return this.sldParam;
 	}
-
-	/**
-	* Sets the transparency of a layer.
-	* @param alpha:Number A number between 0 and 100, 0=transparent, 100=opaque
-	*/
-	function setAlpha(alpha:Number) {
-		this.container._alpha = alpha;
-		_global.flamingo.raiseEvent(this, "onSetValue", "setAlpha", alpha, this);	
-	}
-
-	/**
-	* Gets the transparancy of a layer.
-	* @return alpha, number between 0 and 100, 0=transparent, 100=opaque
-	*/
-	function getAlpha(){
-		return this.container._alpha;
-	}
-
 	/**
 	* Gets the url of a service
 	* @return the url
@@ -1048,25 +1023,7 @@ class gui.layers.OGCWMSLayer extends AbstractLayer{
 			var reqid = cogwms.getFeatureInfo(url, args, this.map.copyExtent(this.maptipextent));
 		}
 	}
-	/**
-	* Hides a layer.
-	* @param map:MovieClip [optional]
-	*/
-	function hide() {
-		visible = false;
-		update();
-		_global.flamingo.raiseEvent(this, "onHide", this);
-	}
-	/**
-	* Shows a layer.
-	* @param map:MovieClip [optional]
-	*/
-	function show() {
-		visible = true;
-		updateCaches();
-		update();
-		_global.flamingo.raiseEvent(this, "onShow", this);
-	}
+	
 	function extent2String(ext:Object):String {
 		return (ext.minx+","+ext.miny+","+ext.maxx+","+ext.maxy);
 	}

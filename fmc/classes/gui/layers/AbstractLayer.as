@@ -158,6 +158,25 @@ class gui.layers.AbstractLayer extends AbstractConfigurable{
         mc.filters = [myColorMatrix_filter];
     }
     
+	/**
+	* Hides a layer.
+	* @param map:MovieClip [optional]
+	*/
+	function hide() {
+		_visible = false;
+		update();
+		_global.flamingo.raiseEvent(this, "onHide", this);
+	}
+	/**
+	* Shows a layer.
+	* @param map:MovieClip [optional]
+	*/
+	function show() {
+		_visible = true;
+		updateCaches();
+		update();
+		_global.flamingo.raiseEvent(this, "onShow", this);
+	}
         
     /*
     Functions that will be called by the map (listento.
