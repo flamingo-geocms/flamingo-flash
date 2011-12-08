@@ -2197,15 +2197,14 @@ class gui.Map extends AbstractPositionable implements PersistableComponent{
 			curve = false;
 		}*/
 		if (this.mAcetate == undefined) {
-			this.mAcetate = this.container.createEmptyMovieClip("mAcetate", 10);
+			this.mAcetate = this.container.createEmptyMovieClip("mAcetate", this.container.getNextHighestDepth());
 		}
 		var figure = this.mAcetate[id];
 		if (figure == undefined) {
 			figure = this.mAcetate.createEmptyMovieClip(id, this.mAcetate.getNextHighestDepth());
 		} else {
-			figure.clear();
+			 figure.clear();
 		}
-    
 		with (figure) {
 			if (lineSymbol != undefined) {
 				lineStyle(lineSymbol.width, lineSymbol.color, lineSymbol.alpha);
@@ -2226,6 +2225,7 @@ class gui.Map extends AbstractPositionable implements PersistableComponent{
 			if (fillSymbol != undefined) {
 				endFill();
 			}
+    
 		}
 	}
 	/** Clears drawings.
@@ -2233,9 +2233,11 @@ class gui.Map extends AbstractPositionable implements PersistableComponent{
 	 */
 	public function clearDrawings(id:String) {
 		if (id == undefined) {
-			this.mAcetate.removeMovieClip();
+			for (var figure in this.mAcetate) {
+				this.mAcetate[figure].clear();
+			}
 		} else {
-			this.mAcetate[id].removeMovieClip();
+			this.mAcetate[id].clear();
 		}
 	}
 	
