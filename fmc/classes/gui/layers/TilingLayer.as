@@ -295,7 +295,6 @@ class gui.layers.TilingLayer extends AbstractLayer{
 	* @see AbstractLayer#init
     */
     function reinit():Void {    
-		super.init();
         if (this.resolutions!=null){
             tileFactoryOptions[AbstractTileFactory.RESOLUTIONS_KEY]=this.resolutions;
         }
@@ -311,7 +310,7 @@ class gui.layers.TilingLayer extends AbstractLayer{
         this.tileFactory.setTileHeight(this.tileHeight);
         this.tileFactory.setTileWidth(this.tileWidth);
         this.tileFactory.setTileExtension(this.tileExtension);
-        this.layerDepth=map.getNextDepth() + 100;
+        this.layerDepth = this.container.getNextHighestDepth();// map.getNextDepth() + 100;
         this.tileDepth=layerDepth;
         this.tileStage = this.container.createEmptyMovieClip("tileStage", layerDepth);
         //start with the mapExtent as the loadedTileExtent (later it will be made greater anyways)
