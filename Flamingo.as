@@ -45,6 +45,7 @@ import gui.button.*;
 import gui.Coordinates;
 import gui.Map;
 import gui.Scalebar;
+import gui.SliderHor;
 import gui.ZoomerV;
 import gui.tools.*;
 import gui.layers.OGCWMSLayer;
@@ -985,6 +986,10 @@ class Flamingo {
 						var zoomerV = new ZoomerV(targetid, mc);
 						zoomerV.setConfig(xmlNode);
 						this.components[targetid] = zoomerV;		
+					}else if (file == "SliderHor") {
+						var sliderHor:SliderHor = new SliderHor(targetid, mc);
+						sliderHor.setConfig(xmlNode);
+						this.components[targetid] = sliderHor;
 					}else if (file == "Coordinates") {
 						var coordinates:Coordinates = new Coordinates(targetid, mc);
 						this.components[targetid] = coordinates;
@@ -1170,6 +1175,7 @@ class Flamingo {
 			case "Coordinates":
 			case "Scalebar":
 			case "ZoomerV":
+			case "SliderHor":
 				return true;
 				break;
 			default:
@@ -1185,6 +1191,7 @@ class Flamingo {
 			case "ToolPan":
 			case "ToolSuperPan":
 			case "ZoomerV":
+			case "SliderHor":
 				return true;
 				break;
 			default:
