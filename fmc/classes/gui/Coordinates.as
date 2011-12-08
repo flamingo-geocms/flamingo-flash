@@ -112,7 +112,6 @@ class gui.Coordinates  extends AbstractPositionable{
 		};
 		lMap.onMouseMove = function(map:MovieClip, xpos:Number, ypos:Number, coord:Object):Void  {
 			var x = coord.x;
-			Logger.console("asdfasdf",x);
 			var y = coord.y;
 			if (isNaN(x) || isNaN(y)){
 				thisObj.tCoord.htmlText = "";
