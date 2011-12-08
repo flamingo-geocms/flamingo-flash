@@ -73,9 +73,9 @@ class gui.BorderNavigation extends AbstractPositionable
 			xml = xml.firstChild;
 		}
 		
-		//if (flamingo.getType(this).toLowerCase() != xml.localName.toLowerCase()) {
-		//return;
-		//}
+		if (this.type!=undefined && this.type.toLowerCase() != xml.localName.toLowerCase()) {
+			return;
+		}
 		//load default attributes, strings, styles and cursors
 		
 		flamingo.parseXML(this, xml);

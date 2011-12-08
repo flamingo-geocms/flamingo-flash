@@ -336,7 +336,7 @@ class gui.Map extends AbstractPositionable implements PersistableComponent{
 			xml = new XML(String(xml))
 			xml= xml.firstChild;
 		}
-		if (flamingo.getType(this).toLowerCase() != xml.localName.toLowerCase()) {
+		if (this.type!=undefined && this.type.toLowerCase() != xml.localName.toLowerCase()) {
 			return;
 		}
 		clearlayers = false;
@@ -685,7 +685,7 @@ class gui.Map extends AbstractPositionable implements PersistableComponent{
 		var comps:Array = _global.flamingo.getComponents();
 		var themeSelector:Object = null;
 		for(var i:Number=0;i<comps.length;i++){
-			if(_global.flamingo.getType(comps[i])=="ThemeSelector"){
+			if(flamingo.getType(comps[i])=="ThemeSelector"){
 				var mapId:String =  _global.flamingo.getComponent(comps[i]).getMapId();
 				if(mapId == _global.flamingo.getId(this) || mapId == configObjId){
 					themeSelector=_global.flamingo.getComponent(comps[i]);
