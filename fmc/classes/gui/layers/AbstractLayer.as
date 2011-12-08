@@ -26,25 +26,26 @@ class gui.layers.AbstractLayer extends AbstractConfigurable{
 		super(id, container);
 		this.map = map;
 		this.parent = map;
-		//init();
 	} 
 	
     /**
-    Initialize the AbstractLayer.
+    * ReInitialize the AbstractLayer.
+	* @see AbstractConfigurable#init
     */
-    function init():Void {         
+    function reinit():Void {         
 		super.init();
-        //map=getParent(null);
         if (this.map==undefined){
             log.critical("Can't find the parent Map component.");
         }
         if (serviceUrl==null){
             log.critical("Attribute "+SERVICEURL_ATTRNAME+" is mandatory");
         }
-        //setMap(map);
-        //map.mLayers.createEmptyMovieClip(id, map.getNextDepth());
     }
-    
+    /**
+	 * Passes a configured attribute for this component.
+	 * @param name name of the attribute
+	 * @param value value of the attribute
+	 */
     function setAttribute(name:String, value:String):Void {
         var lowerName=name.toLowerCase();
         if (lowerName==SERVICEURL_ATTRNAME){

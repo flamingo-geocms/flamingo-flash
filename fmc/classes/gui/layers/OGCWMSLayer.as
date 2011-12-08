@@ -6,6 +6,8 @@ import coremodel.service.wms.OGWMSConnector;
 import core.AbstractPositionable;
 import tools.Logger;
 import gui.Map;
+import gui.layers.AbstractLayer;
+
 /** @component LayerOGWMS
 * Open Gis WMS layer. (Tested with Demis, Geoserver, Degree, Esri and Mapserver)
 * @file OGWMSConnector.as (sourcefile)
@@ -62,7 +64,7 @@ import gui.Map;
 * @attr aka  The layerid of a layer in the getfeatureinfo response.
 * @attr maptip Configuration string for a maptip. Fieldnames between square brackets will be replaced  with their actual values. For multi-language support use a standard string tag with id='maptip'.
 */
-class gui.layers.OGCWMSLayer extends AbstractPositionable{
+class gui.layers.OGCWMSLayer extends AbstractLayer{
 	var version:String = "2.0";
 	//---------------------------------
 	var defaultXML:String = "";
@@ -133,42 +135,7 @@ class gui.layers.OGCWMSLayer extends AbstractPositionable{
 	}
 	
 	public function init():Void {
-		if (flamingo == undefined) {
-			var t:TextField = this.container.createTextField("readme", 0, 0, 0, 550, 400);
-			t.html = true;
-			t.htmlText = "<P ALIGN='CENTER'><FONT FACE='Helvetica, Arial' SIZE='12' COLOR='#000000' LETTERSPACING='0' KERNING='0'><B>LayerOGWMS "+this.version+"</B> - www.flamingo-mc.org</FONT></P>";
-			return;
-		}
-		
 		var thisObj:OGCWMSLayer = this;
-		
-		lMap.onUpdate = function(map:MovieClip) {
-			thisObj.update();
-		};
-		lMap.onChangeExtent = function(map:MovieClip) {
-			thisObj.updateCaches();
-		};
-		lMap.onIdentify = function(map:MovieClip, identifyextent:Object):Void  {
-			//_global.flamingo.tracer("lMap.onIdentify");
-			thisObj.identify(identifyextent);
-		};
-		lMap.onIdentifyCancel = function(map:MovieClip):Void  {
-			thisObj.cancelIdentify();
-		};
-		lMap.onMaptip = function(map:MovieClip, x:Number, y:Number, coord:Object):Void  {
-			thisObj.startMaptip(x, y);
-		};
-		lMap.onMaptipCancel = function(map:MovieClip):Void  {
-			thisObj.stopMaptip();
-		};
-		lMap.onHide = function(map:MovieClip):Void  {
-			thisObj.update();
-		};
-		lMap.onShow = function(map:MovieClip):Void  {
-			thisObj.update();
-		};
-		
-		flamingo.addListener(lMap, _global.flamingo.getParent(this), this);
 		
 		this.container._visible = false;
 		//map =_global.flamingo.getParent(this);
@@ -192,38 +159,165 @@ class gui.layers.OGCWMSLayer extends AbstractPositionable{
 	* @attr dontGetCap:Boolean default=false. If you dont want to let flamingo do a getCap request.
 	* Be carefull with this, because flamingo adds listeners etc. and replaces #ALL# with all layers while doing a getCap request.
 	*/
-	function setConfig(xml:Object,dontGetCap:Boolean) {
-		if (dontGetCap == undefined){
-			dontGetCap=false;
-		}
+	function setConfig(xml:Object, dontGetCap:Boolean) {
 		if (typeof (xml) == "string") {
 			xml = new XML(String(xml));
 			xml= xml.firstChild;
 		}
+		super.setConfig(XMLNode(xml));
+		if (dontGetCap == undefined){
+			dontGetCap=false;
+		}
+		
 		//load default attributes, strings, styles and cursors                     
 		_global.flamingo.parseXML(this, xml);
 		//parse custom attributes
 		attributes = new Object();
 		for (var attr in xml.attributes) {
 			var val:String = xml.attributes[attr];
-			switch (attr.toLowerCase()) {
-			case "id" :
-			case "visible" :
-			case "name" :
-			case "width" :
-			case "height" :
-			case "left" :
-			case "right" :
-			case "top" :
-			case "bottom" :
-			case "xcenter" :
-			case "ycenter" :
-			case "listento" :
-			case "maxwidth" :
-			case "maxheight" :
-			case "minwidth" :
-			case "minheight" :
-				break;
+			
+		}
+		//after loading all parameters set the layer properties.
+		if (nullIfEmpty(slayers) != null) {
+			if (visible_layers==null){
+				//_global.flamingo.tracer("LayerOGWMS setLayerProperty " + this.visible + " slayers " + slayers);
+				setLayerProperty(slayers, "visible", true);
+			}else{
+				setLayerProperty(slayers,"visible",false);
+				if (nullIfEmpty(visible_layers)!=null){
+					setLayerProperty(visible_layers,"visible",true);
+				}
+			}	
+		}
+		if (nullIfEmpty(slayers)!=null){
+			if(maxscale!=null){
+				setLayerProperty(slayers, "maxscale", maxscale);
+			}
+			if(minscale!=null){
+				setLayerProperty(slayers, "minscale", minscale);
+			}	
+		}	
+		if (nullIfEmpty(styles)!=null){
+			if (styles.length>0) {
+				var a_styles = _global.flamingo.asArray(styles);
+				var a_layers = _global.flamingo.asArray(slayers);
+				if (a_styles.length == a_layers.length) {
+					for (var i = 0; i<a_styles.length; i++) {
+						this.setLayerProperty(a_layers[i], "style", a_styles[i]);
+					}
+				}
+			}
+		}
+		if (nullIfEmpty(maptip_layers)!=null){
+			setLayerProperty(maptip_layers, "maptip", true);
+			setLayerProperty(maptip_layers, "queryable", true);
+		}
+		if (nullIfEmpty(query_layers)!=null){
+			setLayerProperty(query_layers, "identify", true);
+			setLayerProperty(query_layers, "queryable", true);
+		}	
+		//walk through xml (layer) childs.
+		var xlayers:Array = xml.childNodes;
+		if (xlayers.length>0) {
+			for (var i:Number = xlayers.length-1; i>=0; i--) {
+				if (xlayers[i].nodeName.toLowerCase() == "layer") {
+					var id;
+					for (var attr in xlayers[i].attributes) {
+						if (attr.toLowerCase() == "id") {
+							id = xlayers[i].attributes[attr];
+							break;
+						}
+					}
+					if (id != undefined) {
+						if (layers[id] == undefined) {
+							layers[id] = new Object();
+						}
+						if (layers[id].language == undefined) {
+							layers[id].language = new Object();
+						}
+						_global.flamingo.parseString(xlayers[i], layers[id].language);
+						for (var attr in xlayers[i].attributes) {
+							var val:String = xlayers[i].attributes[attr];
+							switch (attr.toLowerCase()) {
+							case "aka" :
+								this.aka[val] = id;
+								break;
+							case "fields" :
+								layers[id].fields = val;
+								break;
+							default :
+								layers[id][attr.toLowerCase()] = val;
+								break;
+							}
+						}
+					}
+				}
+			}
+		}
+		//get extra information about mapserver and the layers                                                                 
+		if (url == undefined and getcapabilitiesurl == undefined) {
+			return;
+		}
+		var thisObj:OGCWMSLayer = this;
+		var lConn = new Object();
+		lConn.onError = function(error:String, objecttag:Object) {
+			if (thisObj.showerrors) {
+				_global.flamingo.showError("LayerOGWMS error", error);
+			}
+			_global.flamingo.raiseEvent(thisObj, "onError", thisObj, "init", error);
+		};
+		lConn.onRequest = function(connector:OGWMSConnector) {
+			//_global.flamingo.tracer(requestobject.url);
+			_global.flamingo.raiseEvent(thisObj, "onRequest", thisObj, "init", connector);
+		};
+		lConn.onResponse = function(connector:OGWMSConnector) {
+			//trace(responseobject.response);
+			_global.flamingo.raiseEvent(thisObj, "onResponse", thisObj, "init", connector);
+		};
+		lConn.onGetCapabilities = function(service, servicelayers, obj, reqid) {
+			//_global.flamingo.tracer("lConn.onGetCapabilities, layer = " + _global.flamingo.getId(thisObj));
+			if (thisObj.name == undefined) {
+				thisObj.name = service.title;
+			}
+			thisObj._parseLayers(servicelayers);
+			thisObj.flamingo.raiseEvent(thisObj, "onGetCapabilities", thisObj);
+			//set initialized in analogy with LayerArcIMS and LayerArcServer.
+			thisObj.initialized = true;
+			//The update is done in the Map in lLayer.onGetCapabilities 
+			//if (thisObj.slayers == "#ALL#") {
+			//thisObj.update();
+			//}
+		};
+		var c_url = this.getcapabilitiesurl;
+		if (c_url == undefined) {
+			this.getcapabilitiesurl = this.url;
+		}
+		var cogwms:OGWMSConnector = OGWMSConnector.getInstance(this.getcapabilitiesurl);
+		cogwms.addListener(lConn);
+		var args:Object = new Object();
+		args.VERSION = wmsversion;
+		for (var attr in this.attributes) {
+		  //remove sld and sld_body parameter from request
+		  if ((attr.toUpperCase()) != "SLD" && (attr.toUpperCase() != "SLD_BODY")) {
+				args[attr.toUpperCase()] = this.attributes[attr];
+			}
+		}
+		//set the service param if not set.
+		if (args.SERVICE==undefined){
+			args.SERVICE="WMS";
+		}
+		if(this.initService==true && !dontGetCap){
+			cogwms.getCapabilities(this.getcapabilitiesurl, args, lConn);
+		}else {
+			update();
+		}
+	}
+	
+	/**
+	 * @see AbstractLayer#setAttribute
+	 */
+	function setAttribute(name:String, val:String):Void {
+        switch (name.toLowerCase()) {
 			case "retryonerror" :
 				this.retryonerror = Number(val);
 				break;
@@ -366,148 +460,13 @@ class gui.layers.OGCWMSLayer extends AbstractPositionable{
 				}
 				break;			
 			default :
-				if (attr.toLowerCase().indexOf("xmlns:", 0) == -1) {
-					this.attributes[attr] = val;
+				if (name.toLowerCase().indexOf("xmlns:", 0) == -1) {
+					this.attributes[name] = val;
 				}
 				break;
 			}
-		}
-		//after loading all parameters set the layer properties.
-		if (nullIfEmpty(slayers) != null) {
-			if (visible_layers==null){
-				//_global.flamingo.tracer("LayerOGWMS setLayerProperty " + this.visible + " slayers " + slayers);
-				setLayerProperty(slayers, "visible", true);
-			}else{
-				setLayerProperty(slayers,"visible",false);
-				if (nullIfEmpty(visible_layers)!=null){
-					setLayerProperty(visible_layers,"visible",true);
-				}
-			}	
-		}
-		if (nullIfEmpty(slayers)!=null){
-			if(maxscale!=null){
-				setLayerProperty(slayers, "maxscale", maxscale);
-			}
-			if(minscale!=null){
-				setLayerProperty(slayers, "minscale", minscale);
-			}	
-		}	
-		if (nullIfEmpty(styles)!=null){
-			if (styles.length>0) {
-				var a_styles = _global.flamingo.asArray(styles);
-				var a_layers = _global.flamingo.asArray(slayers);
-				if (a_styles.length == a_layers.length) {
-					for (var i = 0; i<a_styles.length; i++) {
-						this.setLayerProperty(a_layers[i], "style", a_styles[i]);
-					}
-				}
-			}
-		}
-		if (nullIfEmpty(maptip_layers)!=null){
-			setLayerProperty(maptip_layers, "maptip", true);
-			setLayerProperty(maptip_layers, "queryable", true);
-		}
-		if (nullIfEmpty(query_layers)!=null){
-			setLayerProperty(query_layers, "identify", true);
-			setLayerProperty(query_layers, "queryable", true);
-		}	
-		//walk through xml (layer) childs.
-		var xlayers:Array = xml.childNodes;
-		if (xlayers.length>0) {
-			for (var i:Number = xlayers.length-1; i>=0; i--) {
-				if (xlayers[i].nodeName.toLowerCase() == "layer") {
-					var id;
-					for (var attr in xlayers[i].attributes) {
-						if (attr.toLowerCase() == "id") {
-							id = xlayers[i].attributes[attr];
-							break;
-						}
-					}
-					if (id != undefined) {
-						if (layers[id] == undefined) {
-							layers[id] = new Object();
-						}
-						if (layers[id].language == undefined) {
-							layers[id].language = new Object();
-						}
-						_global.flamingo.parseString(xlayers[i], layers[id].language);
-						for (var attr in xlayers[i].attributes) {
-							var val:String = xlayers[i].attributes[attr];
-							switch (attr.toLowerCase()) {
-							case "aka" :
-								this.aka[val] = id;
-								break;
-							case "fields" :
-								layers[id].fields = val;
-								break;
-							default :
-								layers[id][attr.toLowerCase()] = val;
-								break;
-							}
-						}
-					}
-				}
-			}
-		}
-		//get extra information about mapserver and the layers                                                                 
-		if (url == undefined and getcapabilitiesurl == undefined) {
-			return;
-		}
-		var thisObj:OGCWMSLayer = this;
-		var lConn = new Object();
-		lConn.onError = function(error:String, objecttag:Object) {
-			if (thisObj.showerrors) {
-				_global.flamingo.showError("LayerOGWMS error", error);
-			}
-			_global.flamingo.raiseEvent(thisObj, "onError", thisObj, "init", error);
-		};
-		lConn.onRequest = function(connector:OGWMSConnector) {
-			//_global.flamingo.tracer(requestobject.url);
-			_global.flamingo.raiseEvent(thisObj, "onRequest", thisObj, "init", connector);
-		};
-		lConn.onResponse = function(connector:OGWMSConnector) {
-			//trace(responseobject.response);
-			_global.flamingo.raiseEvent(thisObj, "onResponse", thisObj, "init", connector);
-		};
-		lConn.onGetCapabilities = function(service, servicelayers, obj, reqid) {
-			//_global.flamingo.tracer("lConn.onGetCapabilities, layer = " + _global.flamingo.getId(thisObj));
-			if (thisObj.name == undefined) {
-				thisObj.name = service.title;
-			}
-			thisObj._parseLayers(servicelayers);
-			thisObj.flamingo.raiseEvent(thisObj, "onGetCapabilities", thisObj);
-			//set initialized in analogy with LayerArcIMS and LayerArcServer.
-			thisObj.initialized = true;
-			//The update is done in the Map in lLayer.onGetCapabilities 
-			//if (thisObj.slayers == "#ALL#") {
-			//thisObj.update();
-			//}
-		};
-		var c_url = this.getcapabilitiesurl;
-		if (c_url == undefined) {
-			this.getcapabilitiesurl = this.url;
-		}
-		var cogwms:OGWMSConnector = OGWMSConnector.getInstance(this.getcapabilitiesurl);
-		cogwms.addListener(lConn);
-		var args:Object = new Object();
-		args.VERSION = wmsversion;
-		for (var attr in this.attributes) {
-		  //remove sld and sld_body parameter from request
-		  if ((attr.toUpperCase()) != "SLD" && (attr.toUpperCase() != "SLD_BODY")) {
-				args[attr.toUpperCase()] = this.attributes[attr];
-			}
-		}
-		//set the service param if not set.
-		if (args.SERVICE==undefined){
-			args.SERVICE="WMS";
-		}
-		if(this.initService==true && !dontGetCap){
-			cogwms.getCapabilities(this.getcapabilitiesurl, args, lConn);
-		}else {
-			update();
-		}
-	}
-
+    }
+	
 	function trim(str:String):String {
 		var i = 0;
 		var j = str.length-1;
@@ -1589,6 +1548,19 @@ class gui.layers.OGCWMSLayer extends AbstractPositionable{
 	public function getParent():Object {
 		return this.map;
 	}
+	
+	/*************************************************************
+	 * Overwrites of map listener functions in AbstractLayer
+	 **/
+	public function onChangeExtent(map:MovieClip):Void {
+		this.updateCaches();
+	};
+	public function onHide(map:MovieClip):Void  {
+		this.update();
+	};
+	public function onShow(map:MovieClip):Void  {
+		this.update();
+	};
 
 	/**
 	* Dispatched when the layer gets a request object from the connector.

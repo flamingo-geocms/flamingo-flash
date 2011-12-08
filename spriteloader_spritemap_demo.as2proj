@@ -1,16 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<project version="2">
+<project>
   <!-- Output SWF options -->
   <output>
-    <movie outputType="Application" />
+    <movie disabled="False" />
     <movie input="" />
     <movie path="_spritemapdemo_\spritemapdemo.swf" />
     <movie fps="25" />
     <movie width="200" />
     <movie height="200" />
     <movie version="8" />
-    <movie minorVersion="0" />
-    <movie platform="Flash Player" />
     <movie background="#F2F2F2" />
   </output>
   <!-- Other classes to be compiled into your SWF -->
@@ -47,7 +45,7 @@
     <!-- example: <hidden path="..." /> -->
   </hiddenPaths>
   <!-- Executed before build -->
-  <preBuildCommand>prebuild.bat</preBuildCommand>
+  <preBuildCommand />
   <!-- Executed after build -->
   <postBuildCommand alwaysRun="False" />
   <!-- Other project options -->
@@ -55,6 +53,4 @@
     <option showHiddenPaths="False" />
     <option testMovie="ExternalPlayer" />
   </options>
-  <!-- Plugin storage -->
-  <storage />
 </project>

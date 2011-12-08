@@ -171,7 +171,7 @@ class gui.layers.TilingLayer extends AbstractLayer{
         newTiles =new Array();
         tilesToProcess = 0;
         intervalId = 0;
-		//init();
+		init();
 
     }
     /*Getters and setters for configurable params*/
@@ -290,10 +290,11 @@ class gui.layers.TilingLayer extends AbstractLayer{
     }
 
     
-    /**
-    Initialize the tilinglayer.
+   /**
+    * ReInitialize the AbstractLayer.
+	* @see AbstractLayer#init
     */
-    function init():Void {    
+    function reinit():Void {    
 		super.init();
         if (this.resolutions!=null){
             tileFactoryOptions[AbstractTileFactory.RESOLUTIONS_KEY]=this.resolutions;

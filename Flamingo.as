@@ -1043,7 +1043,7 @@ class Flamingo {
 						var layer:TilingLayer = new TilingLayer(targetid, mc, foundMap);
 						this.components[targetid] = layer;
 						layer.setConfig(xmlNode);
-						layer.init();						
+						layer.reinit();						
 					}else if (isTool(file)) {
 						//get the last added toolgroup
 						var toolGroup:ToolGroup = this.toolGroups[this.toolGroups.length - 1];
