@@ -58,7 +58,6 @@ class gui.ZoomerV  extends AbstractPositionable{
 	
 	public function ZoomerV(id:String,  container:MovieClip)
 	{
-		Logger.console("TooZoomerV");
 		super(id, container);
 		spriteMap = flamingo.spriteMap;
 		defaultXML = "<?xml version='1.0' encoding='UTF-8'?>" + "<ZoomerV>" + "<string id='tooltip_zoomin' en='zoom in' nl='inzoomen'/>" + "<string id='tooltip_zoomout' en='zoom out' nl='uitzoomen'/>" + "</ZoomerV>";
