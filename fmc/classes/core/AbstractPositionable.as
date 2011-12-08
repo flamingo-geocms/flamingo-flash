@@ -197,7 +197,7 @@ class core.AbstractPositionable extends AbstractListenerRegister
 		this.container._visible = value;
 	}
 	public function get _visible():Boolean {
-		return this.container.visible;
+		return this.container._visible;
 	}
 	
 	public function set _alpha(value:Number) {

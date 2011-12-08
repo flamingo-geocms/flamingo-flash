@@ -6,7 +6,7 @@ class coremodel.service.tiling.TileListener{
     private var tilingLayer:TilingLayer=null;
     private var log:Logger;
     function TileListener(tilingLayer:TilingLayer){
-        new Logger("coremodel.service.tiling.TileListener",_global.flamingo.getLogLevel(),_global.flamingo.getScreenLogLevel());
+        log=new Logger("coremodel.service.tiling.TileListener",_global.flamingo.getLogLevel(),_global.flamingo.getScreenLogLevel());
         this.tilingLayer=tilingLayer;
     }
     function onLoadInit(mc:MovieClip){
@@ -25,7 +25,7 @@ class coremodel.service.tiling.TileListener{
     function onLoadComplete(mc:MovieClip){
         var tile=Tile(mc._parent.tile);
         mc._parent.finishedLoading=true;
-        log.debug("layer = " + tilingLayer._name + " onLoadComplete: " + tile.getTileId() );
+        log.debug("layer = " + tilingLayer.name + " onLoadComplete: " + tile.getTileId() );
         tilingLayer.finishedLoadingTile(mc);
     }
 }

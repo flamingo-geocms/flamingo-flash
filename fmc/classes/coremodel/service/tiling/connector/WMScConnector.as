@@ -6,6 +6,8 @@ import tools.Logger;
 class coremodel.service.tiling.connector.WMScConnector {
     private var events:Object;
     var error:String;
+	var requestid:String;
+	var busy:Boolean;
     private var log:Logger = null;
     
     function addListener(listener:Object) {
@@ -25,7 +27,7 @@ class coremodel.service.tiling.connector.WMScConnector {
         args.REQUEST = "GetFeatureInfo";
         var xrequest:XML = new XML();
         xrequest.ignoreWhite = true;
-        var thisObj:Object = this;
+        var thisObj:WMScConnector = this;
         var req_url = url;
         for (var arg in args) {
             req_url = this._changeArgs(req_url, arg, args[arg]);
@@ -33,15 +35,15 @@ class coremodel.service.tiling.connector.WMScConnector {
         xrequest.onLoad = function(success:Boolean) {
             if (success) {
                 if (this.firstChild.nodeName.toLowerCase() == "serviceexceptionreport") {
-                    error = this.firstChild.toString();
+                    thisObj.error = this.firstChild.toString();
                     thisObj.events.broadcastMessage("onResponse", thisObj);
-                    thisObj.events.broadcastMessage("onError", error, obj);
+                    thisObj.events.broadcastMessage("onError", thisObj.error, obj);
                 } else {
                     thisObj.events.broadcastMessage("onResponse", thisObj);
                     thisObj._processFeatureInfo(this, obj, thisObj.requestid);
                 }
             } else {
-                thisObj.error = thisObj.url + " connection failed...";
+                thisObj.error = url + " connection failed...";
                 thisObj.events.broadcastMessage("onResponse", thisObj);
                 thisObj.events.broadcastMessage("onError", thisObj.error, obj);
             }
@@ -143,7 +145,7 @@ class coremodel.service.tiling.connector.WMScConnector {
         }
         var p1:Number = url.toLowerCase().indexOf("&"+arg.toLowerCase()+"=", 0);
         if (p1 == -1) {
-            var p1:Number = url.toLowerCase().indexOf("?"+arg.toLowerCase()+"=", 0);
+            p1 = url.toLowerCase().indexOf("?"+arg.toLowerCase()+"=", 0);
             if (p1 == -1) {
                 return (url+amp+arg+"="+val);
             }

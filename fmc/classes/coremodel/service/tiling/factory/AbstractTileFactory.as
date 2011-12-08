@@ -158,14 +158,14 @@ class coremodel.service.tiling.factory.AbstractTileFactory{
         if (res >= maxres) {
             return 0;
         }
-        var maxres:Number = this.resolutions[this.resolutions.length - 1] * maxresfactor;
-        var minres:Number = maxres / intervalfactor;
+        maxres = this.resolutions[this.resolutions.length - 1] * maxresfactor;
+        minres = maxres / intervalfactor;
         if (res <= minres) {
             return this.resolutions.length - 1;
         }
         for (var i:Number = 0; i < this.resolutions.length; i++) {
-            var maxres:Number = this.resolutions[i] * maxresfactor;
-            var minres:Number = maxres / intervalfactor;            
+            maxres = this.resolutions[i] * maxresfactor;
+            minres = maxres / intervalfactor;            
             if (res > minres && res <= maxres) {
                 return i;
             }

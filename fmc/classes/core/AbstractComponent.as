@@ -81,7 +81,8 @@ class core.AbstractComponent extends MovieClip {
     * Sets the component's base configuration, which comprises of the 19 base properties.
     */
     function setBaseConfig():Void {
-		var xml:XMLNode = new XML(defaultXML).firstChild;        
+		var xml:XMLNode = new XML(defaultXML)
+		xml=xml.firstChild;        
         _global.flamingo.parseXML(this, xml);
         
         // Retrieves the application configurations for the component, in order to set the base properties.
@@ -215,8 +216,8 @@ class core.AbstractComponent extends MovieClip {
         for (var i = 0; i < appConfigs.length; i++) {
             var config:XMLNode = XMLNode(appConfigs[i]);
 		        // Parses the xml child nodes to object composites.
-		        for (var i:Number = 0; i < config.childNodes.length; i++) {
-		            var xmlNode:XMLNode = config.childNodes[i];
+		        for (var j:Number = 0; j < config.childNodes.length; j++) {
+		            var xmlNode:XMLNode = config.childNodes[j];
 		            var nodeName:String = xmlNode.nodeName;
 		            if (nodeName.indexOf(":") > -1) {
 		                nodeName = nodeName.substr(nodeName.indexOf(":") + 1);

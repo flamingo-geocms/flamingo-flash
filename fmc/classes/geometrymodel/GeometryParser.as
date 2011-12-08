@@ -37,7 +37,7 @@ class geometrymodel.GeometryParser {
                                                    && (geometryNode.nodeName != "gml:PolygonPatch")
 												   && (geometryNode.nodeName != "gml:Envelope")) {
             _global.flamingo.tracer("Exception in GeometryParser.parseGeometry()");
-            return;
+            return null;
         }	
 
         var outerBoundaryNode:XMLNode = null;

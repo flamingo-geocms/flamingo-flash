@@ -70,7 +70,6 @@ For TMS the TilingParams are added after the calculated tile url for example htt
     <TilingParam name="SRS">EPSG:28992</TilingParam>
 </fmc:TilingLayer>
 **/
-import core.AbstractComponent;
 import gui.layers.*;
 import coremodel.service.tiling.factory.TileFactoryInterface;
 import coremodel.service.tiling.factory.TMSTileFactory;
@@ -81,6 +80,7 @@ import coremodel.service.tiling.TileListener;
 import geometrymodel.Envelope;
 import tools.Logger;
 import tools.Utils;
+import gui.Map;
 
 import coremodel.service.tiling.connector.WMScConnector;
 
@@ -159,7 +159,8 @@ class gui.layers.TilingLayer extends AbstractLayer{
     
     private var loadStartTime:Date = null;
    
-    function TilingLayer(){
+    public function TilingLayer(id:String, container:MovieClip, map:Map) {		
+		super(id, container, map);
         this.log = new Logger("gui.layers.TilingLayer",_global.flamingo.getLogLevel(),_global.flamingo.getScreenLogLevel());
         tileListener=new TileListener(this);
         tileLoader=new MovieClipLoader();       
@@ -170,6 +171,7 @@ class gui.layers.TilingLayer extends AbstractLayer{
         newTiles =new Array();
         tilesToProcess = 0;
         intervalId = 0;
+		//init();
 
     }
     /*Getters and setters for configurable params*/
@@ -279,8 +281,7 @@ class gui.layers.TilingLayer extends AbstractLayer{
             _global.flamingo.tracer ("clearAllTiles: setVisible " + visible);
             clearAllTiles();
     	}
-    	*/
-    	
+    	*/    	
         var oldVisible: Boolean = this.visible;
         super.setVisible(visible);
         if (oldVisible != visible) {
@@ -292,8 +293,8 @@ class gui.layers.TilingLayer extends AbstractLayer{
     /**
     Initialize the tilinglayer.
     */
-    function initLayer():Void {    
-        log.debug("initialize the layer");
+    function init():Void {    
+		super.init();
         if (this.resolutions!=null){
             tileFactoryOptions[AbstractTileFactory.RESOLUTIONS_KEY]=this.resolutions;
         }
@@ -305,14 +306,13 @@ class gui.layers.TilingLayer extends AbstractLayer{
         tileFactoryOptions[AbstractTileFactory.MAP_KEY]=this.map;
         tileFactoryOptions[AbstractTileFactory.SERVICEURL_KEY]=this.serviceUrl;
         //find the correct tileFactory.
-        this.tileFactory=tileFactoryFinder.findFactory(tileFactoryOptions);
+        this.tileFactory = tileFactoryFinder.findFactory(tileFactoryOptions);
         this.tileFactory.setTileHeight(this.tileHeight);
         this.tileFactory.setTileWidth(this.tileWidth);
         this.tileFactory.setTileExtension(this.tileExtension);
         this.layerDepth=map.getNextDepth() + 100;
         this.tileDepth=layerDepth;
-        this.tileStage = this.createEmptyMovieClip("tileStage", layerDepth);
-        log.debug("tileStage._quality = " + this.tileStage._quality);
+        this.tileStage = this.container.createEmptyMovieClip("tileStage", layerDepth);
         //start with the mapExtent as the loadedTileExtent (later it will be made greater anyways)
         this.loadedTileExtent=map.getMapExtent();
         //do the first update.
@@ -321,8 +321,8 @@ class gui.layers.TilingLayer extends AbstractLayer{
     /**
     The setAttribute is called for al custom layer attributes.
     */
-    function setLayerAttribute(name:String, value:String):Boolean {
-        log.debug("name = " + name + " value = " + value);
+    function setAttribute(name:String, value:String):Boolean {
+		super.setAttribute(name, value);
         var lowerName=name.toLowerCase();
         if (lowerName==RESOLUTIONS_ATTRNAME){
             var resArray:Array=value.split(",");
@@ -367,8 +367,8 @@ class gui.layers.TilingLayer extends AbstractLayer{
         return true;
     }
     /*Add a new composite*/
-    function addComposite(nodeName:String, config:XMLNode):Void { 
-        super.addComposite(nodeName,config);
+    public function addComposite(nodeName:String, config:XMLNode):Void { 
+        //super.addComposite(nodeName,config);
         if (nodeName=="TilingParam"){
             if (config.firstChild.nodeValue==undefined){
                 tileFactoryOptions[(config.attributes.name).toUpperCase()]="";
@@ -381,7 +381,7 @@ class gui.layers.TilingLayer extends AbstractLayer{
     /**
     the update function
     */
-    function update(map):Void{
+    function update(map):Void {		
         if (tileFactory == undefined) { //not initialzed yet
             return;
         }
@@ -390,22 +390,20 @@ class gui.layers.TilingLayer extends AbstractLayer{
         }
         super.update(map);   
 
-        if(isWithinScaleRange()){
-            this._visible = this.visible;
+        if (isWithinScaleRange()) {
+			this._visible = this.visible;
         } else {
-            this._visible = false;
+			this._visible = false;
             _global.flamingo.raiseEvent(this, "onUpdate", this, 1);
             _global.flamingo.raiseEvent(this, "onUpdateComplete", this, 0, 0, 0);
         }
 
         //_global.flamingo.tracer("update.layer = " + this._name + " _visible = " + this._visible + " getVisible = " + this.getVisible() + " mapRes = " + map.getScale(this.map.getMapExtent()));
-
-        if(!this._visible){
-            clearAllTiles();
+		if (!this._visible) {
+			clearAllTiles();
             return;
         }
 
-        log.debug("do update");
         var extent=this.map.getMapExtent();
 
         var mapResUpd = map.getScale(extent);
@@ -502,7 +500,8 @@ class gui.layers.TilingLayer extends AbstractLayer{
         };
         lConn.onGetFeatureInfo = function(features:Object, obj:Object, requestid:String) {
             if (thisObj.map.isEqualExtent(thisObj.identifyextent, obj)) {
-                var identifytime = (new Date()-starttime)/1000;
+				var newDate:Date = new Date();
+                var identifytime = (newDate.getTime()-starttime.getTime())/1000;
                 for (var layer in features) {
                     var realname = thisObj.aka[layer];
                     if (realname != undefined) {
@@ -900,7 +899,7 @@ class gui.layers.TilingLayer extends AbstractLayer{
         }
         var currentTime = new Date();
         //use a timeout to remove a pending progress bar (is a hack)
-        if (allLoaded || (currentTime - this.loadStartTime) > 30000) {
+        if (allLoaded || (currentTime.getTime() - this.loadStartTime.getTime()) > 30000) {
             //if ((currentTime - this.loadStartTime) > 30000) {
             //    _global.flamingo.tracer("layer = " + this._name + "currentTime - this.loadStartTime = " + (currentTime - this.loadStartTime) );
             //}

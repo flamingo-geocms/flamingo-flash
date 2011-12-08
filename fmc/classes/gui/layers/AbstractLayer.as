@@ -1,49 +1,54 @@
-﻿import core.AbstractComponent;
+﻿import core.AbstractPositionable;
+import core.AbstractConfigurable;
 import tools.Logger;
 import tools.Utils;
+import gui.Map;
 
 import flash.filters.ColorMatrixFilter;
 
-class gui.layers.AbstractLayer extends core.AbstractComponent{  
+class gui.layers.AbstractLayer extends AbstractConfigurable{  
     private var log:Logger = null;
     /*statics*/
     private static var SERVICEURL_ATTRNAME:String="serviceurl";
-    private static var ID_ATTRNAME:String="id";
     private static var MINSCALE_ATTRNAME:String="minscale";
     private static var MAXSCALE_ATTRNAME:String="maxscale";
     private static var ALPHA_ATTRNAME:String="alpha";
     private static var GRAYSCALE_ATTRNAME:String="grayscale";
     private static var SHOWMAPTIPS_ATTRNAME:String="showmaptips";
     /*attributes*/
-    private var map:Object = null;
+    private var _map:Map = null;
     private var serviceUrl:String=null;
     private var minScale:Number=null;
     private var maxScale:Number=null;
-    private var id:String = null;   
     private var grayscale:Boolean = false;
     
+	public function AbstractLayer(id:String, container:MovieClip, map:Map) {
+		super(id, container);
+		this.map = map;
+		this.parent = map;
+		//init();
+	} 
+	
     /**
     Initialize the AbstractLayer.
     */
-    function init():Void {                              
-        map=getParent(null);
-        if (map==undefined){
+    function init():Void {         
+		super.init();
+        //map=getParent(null);
+        if (this.map==undefined){
             log.critical("Can't find the parent Map component.");
         }
         if (serviceUrl==null){
             log.critical("Attribute "+SERVICEURL_ATTRNAME+" is mandatory");
         }
-        setMap(map);
-        map.mLayers.createEmptyMovieClip(id, map.getNextDepth());
-        initLayer();
+        //setMap(map);
+        //map.mLayers.createEmptyMovieClip(id, map.getNextDepth());
     }
     
     function setAttribute(name:String, value:String):Void {
         var lowerName=name.toLowerCase();
         if (lowerName==SERVICEURL_ATTRNAME){
             this.serviceUrl=value;
-        }else if(lowerName==ID_ATTRNAME){
-            this.id=value;
         }else if(lowerName==MINSCALE_ATTRNAME){
             this.setMinScale(Number(value));            
         }else if(lowerName==MAXSCALE_ATTRNAME){
@@ -57,30 +62,16 @@ class gui.layers.AbstractLayer extends core.AbstractComponent{
             else {
                 this.grayscale = false;
             }
-        }else{
-            if(!setLayerAttribute(name,value)){
-                log.warn("Attribute with name: "+name+" is not available for this component");
-            }
         }
     }
         
     /*
     Getters and setters:
     */
-    /**
-    Set the map
-    */
-    function setMap(m:Object){
-        map=m;      
-        _global.flamingo.addListener(this, map, this);
-    }
-    /**
-    Get the map that is defined by the listenTo
-    */
-    function getMap():Object{
-        return map;
-    }
-    
+	function getParent():Object {
+		return this.map;
+	}
+        
     function setMaxScale(maxScale:Number){
         this.maxScale=maxScale;
         if (isNaN(this.maxScale)){
@@ -170,8 +161,7 @@ class gui.layers.AbstractLayer extends core.AbstractComponent{
     /*
     Functions that will be called by the map (listento.
     */
-    function onUpdate(map:MovieClip):Void{      
-    
+    function onUpdate(map:MovieClip):Void {
         update(map);
         
     }
@@ -197,13 +187,6 @@ class gui.layers.AbstractLayer extends core.AbstractComponent{
         // doShow();
     }
 
-    
-    /**
-    Must be overwritten in class that's extending this class.
-    */
-    /*initLayer is called the layer can be initialized.*/
-    function initLayer():Void{}
-
     /*Called when a 'onUpdate' event occured in the map object
     * Update is called when the layer needs to be updated*/
     function update(map):Void{}
@@ -218,5 +201,15 @@ class gui.layers.AbstractLayer extends core.AbstractComponent{
     function startMaptip(x:Number, y:Number) {}
     function doHide():Void{}
     function doShow():Void{}
-    function setLayerAttribute(name:String, value:String):Boolean{return false;}
+    //function setLayerAttribute(name:String, value:String):Boolean{return false;}
+	
+	/*Getters and setters*/
+	public function get map():Map {
+		return _map;
+	}
+	
+	public function set map(value:Map):Void {
+		_map = value;		
+        flamingo.addListener(this, _map, this);
+	}
 }

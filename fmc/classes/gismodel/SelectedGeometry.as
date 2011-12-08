@@ -55,7 +55,7 @@ class gismodel.SelectedGeometry {
 	}
     function setGeometry(geometry:Geometry){
 		if (geometry == null) {
-            _global.flamingo.tracer("Exception in gismodel.SelectedGeometry.<<init>>(" + id + ")\No geometry given.");
+            _global.flamingo.tracer("Exception in gismodel.SelectedGeometry.<<init>>(" + id + ")\\No geometry given.");
             return;
         }
 		this.geometry=geometry;		

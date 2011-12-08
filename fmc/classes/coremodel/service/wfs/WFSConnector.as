@@ -157,7 +157,7 @@ class coremodel.service.wfs.WFSConnector extends ServiceConnector {
         request(url, requestString, processTransaction, null, actionEventListener, 0);
     }
     
-    function processDescribeFeatureType(responseXML:XML, serviceLayer:ServiceLayer, actionEventListener:ActionEventListener, contextObject:Object):Void {
+    function processDescribeFeatureType(responseXML:XML, givenServiceLayer:ServiceLayer, actionEventListener:ActionEventListener, contextObject:Object):Void {
 		var serviceLayer:ServiceLayer = new FeatureType(responseXML.firstChild, contextObject);
         var actionEvent:ActionEvent = new ActionEvent(this, "ServiceConnector", ActionEvent.LOAD);
         actionEvent["serviceLayer"] = serviceLayer;

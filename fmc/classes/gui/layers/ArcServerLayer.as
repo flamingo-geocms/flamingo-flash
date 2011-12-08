@@ -38,7 +38,6 @@ class gui.layers.ArcServerLayer extends AbstractPositionable{
 	var hiddenids:String;
 	var outputtype:String = "png24";
 	var alpha:Number = 100;
-	var id:String;
 	//---------------------------------
 	var layers:Object = new Object();
 	var updating:Boolean = false;

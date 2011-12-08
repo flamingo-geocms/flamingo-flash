@@ -21,17 +21,17 @@ class coremodel.service.ServiceConnector {
     static function getInstance(url):ServiceConnector {
         if (url == null) {
             _global.flamingo.tracer("Exception in ServiceConnector.getInstance()\nNo url given.");
-            return;
+            return null;
         }
         if (url.indexOf("::") == -1) {
             _global.flamingo.tracer("Exception in ServiceConnector.getInstance()\nThe given url does not contain \"::\". Required format example: \"wfs::http://localhost:8080/\"");
-            return;
+            return null;
         }
         
         var connectorType:String = url.split("::")[0];
         if (connectorType != "wfs" && connectorType != 'xml') {
             _global.flamingo.tracer("Exception in ServiceConnector.getInstance()\nThe given connector type \"" + connectorType + "\" is not supported.");
-            return;
+            return null;
         }
         
         url = url.split("::")[1];
@@ -72,6 +72,7 @@ class coremodel.service.ServiceConnector {
         var responseXML:XML = new XML();
         responseXML.ignoreWhite = true;
         responseXML.onLoad = function(successful:Boolean):Void {
+			var exceptionMessage:String = null;
             if (!successful) {
                 exceptionMessage = "Exception in ServiceConnector.request(" + url + ")\nCould not load the resource.";
                 _global.flamingo.tracer("Exception in ServiceConnector.request(" + url + ")\nCould not load the resource.");
@@ -80,8 +81,8 @@ class coremodel.service.ServiceConnector {
                 if (crossDomainURL != url) {
                     var crossDomainXML:XML = new XML();
                     crossDomainXML.ignoreWhite = true;
-                    crossDomainXML.onLoad = function(successful:Boolean):Void {
-                        if (!successful) {
+                    crossDomainXML.onLoad = function(successful2:Boolean):Void {
+                        if (!successful2) {
                             _global.flamingo.tracer("Could not load the crossdomain file, " + crossDomainURL + ", either.");
                         } else {
                             _global.flamingo.tracer("There is a crossdomain file, " + crossDomainURL + ", though. Its status is: " + this.status + ".");
@@ -90,8 +91,7 @@ class coremodel.service.ServiceConnector {
                     crossDomainXML.load(crossDomainURL);
                 }
             } else {
-                var exceptionNode:XMLNode = null;
-                var exceptionMessage:String = null;
+                var exceptionNode:XMLNode = null;                
                 exceptionNode = XMLTools.getChild("Exception", this.firstChild);
                 if (exceptionNode != null) {
                     exceptionMessage = "Exception in ServiceConnector.request(" + url + ")\n" + exceptionNode.firstChild.firstChild.nodeValue;

@@ -12,16 +12,16 @@ class coremodel.service.tiling.factory.TileFactoryFinder{
         log.debug("try to create tileFactory: "+options[AbstractTileFactory.TILINGTYPE_KEY]);
         if (options[AbstractTileFactory.SERVICEURL_KEY]==undefined){
             log.critical("Param "+AbstractTileFactory.SERVICEURL_KEY+" is mandatory for tiling");
-            return;
+            return null;
         }else if (options[AbstractTileFactory.MAP_KEY]==undefined){
             log.critical("Param "+AbstractTileFactory.MAP_KEY+" is mandatory for tiling");
-            return;
+            return null;
         }else if(!options[AbstractTileFactory.RESOLUTIONS_KEY]){
             log.critical("Param "+AbstractTileFactory.RESOLUTIONS_KEY+" is mandatory for tiling");
-            return;
+            return null;
         }else if(!options[AbstractTileFactory.BBOX_KEY]){
             log.critical("Param "+AbstractTileFactory.BBOX_KEY+" is mandatory for tiling");
-            return;
+            return null;
         }
         var factory:TileFactoryInterface;
         //create tiling tms factory

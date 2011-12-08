@@ -50,6 +50,7 @@ import gui.tools.*;
 import gui.layers.OGCWMSLayer;
 import gui.layers.ArcIMSLayer;
 import gui.layers.ArcServerLayer;
+import gui.layers.TilingLayer;
 import tools.Logger;
 import display.spriteloader.SpriteMap;
 import display.spriteloader.SpriteMapFactory;
@@ -1027,6 +1028,17 @@ class Flamingo {
 						var layer:ArcServerLayer = new ArcServerLayer(targetid, mc, foundMap);
 						this.components[targetid] = layer;
 						layer.setConfig(xmlNode);
+					}else if (file == "TilingLayer") {
+						var foundMap:Map;
+						for (var i in this.components) {
+							if (this.components[i].type == "Map") {
+								foundMap = Map(this.components[i]);
+							}
+						}
+						var layer:TilingLayer = new TilingLayer(targetid, mc, foundMap);
+						this.components[targetid] = layer;
+						layer.setConfig(xmlNode);
+						layer.init();						
 					}else if (isTool(file)) {
 						//get the last added toolgroup
 						var toolGroup:ToolGroup = this.toolGroups[this.toolGroups.length - 1];
@@ -1139,6 +1151,7 @@ class Flamingo {
 	 */
 	private function isEmbeddedComponents(file:String):Boolean {
 		switch(file) {
+			case "TilingLayer":
 			case "LayerArcServer":
 			case "LayerArcIMS":
 			case "LayerOGWMS":
