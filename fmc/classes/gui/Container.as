@@ -18,7 +18,6 @@ class gui.Container extends AbstractPositionable{
 	var mContent:MovieClip;
 
 	public function Container(id:String, container:MovieClip) {
-		Logger.console("Container construct()");
 		super(id, container);
 		init();
 	}
@@ -56,7 +55,6 @@ class gui.Container extends AbstractPositionable{
 	* @attr xml:Object Xml or string representation of a xml.
 	*/
 	function setConfig(xml:Object) {
-		Logger.console("xml: " + xml);
 		if (typeof (xml) == "string") {
 			xml = new XML(String(xml));
 			xml = xml.firstChild; 
@@ -128,14 +126,9 @@ class gui.Container extends AbstractPositionable{
 		this.container._y = r.y;
 		__width = r.width;
 		__height = r.height;
-		Logger.console(" __width" + __height);
-		Logger.console(" __height"+__width);
 		mContent.__width = __width;
 		mContent.__height = __height;
 		this._alpha = alpha;
-		Logger.console("mBG: " + mBG);
-		Logger.console("id: "+id+" backgroundcolor" + backgroundcolor);
-		Logger.console("id: "+id+"backgroundalpha"+backgroundalpha);
 		
 		mBG.clear();
 		mBG.beginFill(backgroundcolor, backgroundalpha);
