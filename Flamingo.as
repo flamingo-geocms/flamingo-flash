@@ -43,6 +43,7 @@ import flash.filters.DropShadowFilter;
 import gui.BorderNavigation;
 import gui.button.*;
 import gui.Coordinates;
+import gui.layers.ImageLayer;
 import gui.Map;
 import gui.Scalebar;
 import gui.SliderHor;
@@ -1041,6 +1042,17 @@ class Flamingo {
 							}
 						}
 						var layer:TilingLayer = new TilingLayer(targetid, mc, foundMap);
+						this.components[targetid] = layer;
+						layer.setConfig(xmlNode);
+						layer.reinit();						
+					}else if (file == "LayerImage") {
+						var foundMap:Map;
+						for (var i in this.components) {
+							if (this.components[i].type == "Map") {
+								foundMap = Map(this.components[i]);
+							}
+						}
+						var layer:ImageLayer = new ImageLayer(targetid, mc, foundMap);
 						this.components[targetid] = layer;
 						layer.setConfig(xmlNode);
 						layer.reinit();						

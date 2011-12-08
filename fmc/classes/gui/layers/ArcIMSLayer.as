@@ -907,21 +907,7 @@ class gui.layers.ArcIMSLayer extends AbstractLayer{
 			}
 		}
 	}
-	/**
-	* Sets the transparency of a layer.
-	* @param alpha:Number A number between 0 and 100, 0=transparent, 100=opaque
-	*/
-	function setAlpha(alpha:Number) {
-		this.container._alpha = alpha;
-		_global.flamingo.raiseEvent(this, "onSetValue", "setAlpha", alpha, this);	
-	}
-	/**
-	* Gets the transparancy of a layer.
-	* @return alpha, number between 0 and 100, 0=transparent, 100=opaque
-	*/
-	function getAlpha(){
-		return this.container._alpha;
-	}
+	
 	/**
 	* Hides a layer.
 	*/
