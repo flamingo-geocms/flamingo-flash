@@ -4,6 +4,7 @@
  */
 import gui.layers.AbstractLayer;
 import gui.Map;
+import tools.Logger;
  /** @tag <fmc:LayerImage>  
 * This tag defines a image layer.
 * @hierarchy childnode of <fmc:Map> 
@@ -34,38 +35,18 @@ class gui.layers.ImageLayer extends AbstractLayer{
 	* @attr xml:Object Xml or string representation of a xml.
 	*/
 	function setConfig(xml:Object) {
+		if (xml == undefined) {
+			return;
+		}
 		if (typeof (xml) == "string") {
 			xml = new XML(String(xml))
 			xml = xml.firstChild;			
 		}
-		if (flamingo.getType(this).toLowerCase() != xml.localName.toLowerCase()) {
+		if (this.type!=undefined && this.type.toLowerCase() != xml.localName.toLowerCase()) {
 			return;
 		}
 		super.setConfig(XMLNode(xml));
-		//load default attributes, strings, styles and cursors    
-		flamingo.parseXML(this, xml);
-		//parse custom attributes
-		for (var attr in xml.attributes) {
-			var val:String = xml.attributes[attr];
-			switch (attr.toLowerCase()) {
-			case "url" :
-			case "imageurl" :
-				imageurl = val;
-				break;
-			case "alpha" :
-				this._alpha = Number(val);
-				break;
-			case "extent" :
-				extent = map.string2Extent(val);
-				break;
-			case "maxscale" :
-				maxscale = Number(val);
-				break;
-			case "minscale" :
-				minscale = Number(val);
-				break;
-			}
-		}
+		
 		if(map.visible){
 			setImage(imageurl, extent);
 		}	

@@ -157,8 +157,6 @@ class gui.Coordinates  extends AbstractPositionable{
 					break;
 			}
 		}
-		Logger.console("lisntesetconfig", listento);
-		Logger.console("lMap", lMap.onMouseMove);
 		flamingo.addListener(lMap, listento, this);
 		this.setString();
 		flamingo.position(this);

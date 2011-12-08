@@ -79,7 +79,7 @@ class gui.tools.ToolMeasure extends AbstractTool implements ComponentInterface{
 			y = ymouseOnMouseDown;
 
 			thisObj.lMap.onMouseMove = function(map:MovieClip, xmouse:Number, ymouse:Number, coord:Object) {
-				var r:Number = Math.sqrt((Math.pow((xmouse-x), 2)+Math.pow((ymouse-y), 2)));
+				var r:Number = Math.sqrt((Math.pow((xmouse-x), 2) + Math.pow((ymouse-y), 2)));				
 				map.drawCircle("circle_1",{x:x,y:y,radius:r},{color:0x000000,alpha:10},undefined) //{color:0x333333,alpha:100,width:0})
 				//map.drawCircle("circle_2",{x:x+1,y:y+1,radius:r},undefined,{color:0xffffff,alpha:100,width:0})
 				map.draw("line_2", [{x:x+1, y:y+1},{x:xmouse+1,y:ymouse+1}], undefined,{color:0xffffff,alpha:100,width:0.1})

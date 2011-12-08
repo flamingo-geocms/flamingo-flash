@@ -44,15 +44,17 @@ import gui.BorderNavigation;
 import gui.button.*;
 import gui.Coordinates;
 import gui.layers.ImageLayer;
+import gui.layers.OGCWMSLayer;
+import gui.layers.ArcIMSLayer;
+import gui.layers.ArcServerLayer;
+import gui.layers.TilingLayer;
+import gui.layers.GridLayer;
+import gui.layers.AbstractLayer;
 import gui.Map;
 import gui.Scalebar;
 import gui.SliderHor;
 import gui.ZoomerV;
 import gui.tools.*;
-import gui.layers.OGCWMSLayer;
-import gui.layers.ArcIMSLayer;
-import gui.layers.ArcServerLayer;
-import gui.layers.TilingLayer;
 import tools.Logger;
 import display.spriteloader.SpriteMap;
 import display.spriteloader.SpriteMapFactory;
@@ -1003,59 +1005,35 @@ class Flamingo {
 						var map:Map = new Map(targetid, mc);		
 						map.type = type;
 						this.components[targetid] = map;
-						map.setConfig(xmlNode);
-					}else if (file == "LayerOGWMS") {
+						map.setConfig(xmlNode);									
+					}else if (isLayer(file)) {
 						var foundMap:Map;
 						for (var i in this.components) {
 							if (this.components[i].type == "Map") {
 								foundMap = Map(this.components[i]);
 							}
 						}
-						var layer:OGCWMSLayer = new OGCWMSLayer(targetid, mc, foundMap);
-						this.components[targetid] = layer;
-						layer.setConfig(xmlNode);
-					}else if (file == "LayerArcIMS") {
-						var foundMap:Map;
-						for (var i in this.components) {
-							if (this.components[i].type == "Map") {
-								foundMap = Map(this.components[i]);
-							}
+						var layer:AbstractLayer;
+						if (file == "LayerOGWMS") {							
+							layer = new OGCWMSLayer(targetid, mc, foundMap);							
+						}else if (file == "LayerArcIMS") {
+							layer = new ArcIMSLayer(targetid, mc, foundMap);							
+						}else if (file == "LayerArcServer") {
+							layer = new ArcServerLayer(targetid, mc, foundMap);							
+						}else if (file == "TilingLayer") {
+							layer = new TilingLayer(targetid, mc, foundMap);							
+						}else if (file == "LayerImage") {
+							layer = new ImageLayer(targetid, mc, foundMap);										
+						}else if (file == "LayerGrid") {						
+							layer = new GridLayer(targetid, mc, foundMap);							
+						}		
+						if (layer!=undefined){
+							this.components[targetid] = layer;
+							layer.setConfig(xmlNode);
+							layer.reinit();						
+						}else {
+							Logger.console("!!!!! config object is a layer but is not supported: " + file);
 						}
-						var layer:ArcIMSLayer = new ArcIMSLayer(targetid, mc, foundMap);
-						this.components[targetid] = layer;
-						layer.setConfig(xmlNode);
-					}else if (file == "LayerArcServer") {
-						var foundMap:Map;
-						for (var i in this.components) {
-							if (this.components[i].type == "Map") {
-								foundMap = Map(this.components[i]);
-							}
-						}
-						var layer:ArcServerLayer = new ArcServerLayer(targetid, mc, foundMap);
-						this.components[targetid] = layer;
-						layer.setConfig(xmlNode);
-					}else if (file == "TilingLayer") {
-						var foundMap:Map;
-						for (var i in this.components) {
-							if (this.components[i].type == "Map") {
-								foundMap = Map(this.components[i]);
-							}
-						}
-						var layer:TilingLayer = new TilingLayer(targetid, mc, foundMap);
-						this.components[targetid] = layer;
-						layer.setConfig(xmlNode);
-						layer.reinit();						
-					}else if (file == "LayerImage") {
-						var foundMap:Map;
-						for (var i in this.components) {
-							if (this.components[i].type == "Map") {
-								foundMap = Map(this.components[i]);
-							}
-						}
-						var layer:ImageLayer = new ImageLayer(targetid, mc, foundMap);
-						this.components[targetid] = layer;
-						layer.setConfig(xmlNode);
-						layer.reinit();						
 					}else if (isTool(file)) {
 						//get the last added toolgroup
 						var toolGroup:ToolGroup = this.toolGroups[this.toolGroups.length - 1];
@@ -1075,7 +1053,7 @@ class Flamingo {
 						}
 						tool.setConfig(xmlNode);						
 						toolGroup.addTool(tool);
-						this.components[targetid] = tool;					
+						this.components[targetid] = tool;	
 					}else if (isButton(file)) {
 						var button:AbstractButton;
 						if (file == "ButtonFull") {
@@ -1167,22 +1145,12 @@ class Flamingo {
 	 * @return
 	 */
 	private function isEmbeddedComponents(file:String):Boolean {
+		if (isTool(file) || isButton(file) || isLayer(file)) {
+			return true;
+		}
 		switch(file) {
-			case "TilingLayer":
-			case "LayerArcServer":
-			case "LayerArcIMS":
-			case "LayerOGWMS":
 			case "Map":
 			case "BorderNavigation":
-			case "ButtonFull":
-			case "ButtonNext":
-			case "ButtonPrev":
-			case "ToolIdentify":
-			case "ToolSuperPan":
-			case "ToolPan":
-			case "ToolMeasure":
-			case "ToolZoomin":
-			case "ToolZoomout":
 			case "ToolGroup":
 			case "Coordinates":
 			case "Scalebar":
@@ -1202,8 +1170,6 @@ class Flamingo {
 			case "ToolZoomout":
 			case "ToolPan":
 			case "ToolSuperPan":
-			case "ZoomerV":
-			case "SliderHor":
 				return true;
 				break;
 			default:
@@ -1220,6 +1186,20 @@ class Flamingo {
 			default:
 				return false;
 		}	
+	}
+	private function isLayer(file:String):Boolean {
+		switch(file) {
+			case "LayerGrid":
+			case "TilingLayer":
+			case "LayerArcServer":
+			case "LayerArcIMS":			
+			case "LayerImage":
+			case "LayerOGWMS":
+				return true;
+				break;
+			default:
+				return false;
+		}				
 	}
 	
 	private function loadComponent_defaults(url:String) {
