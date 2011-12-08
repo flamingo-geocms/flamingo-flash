@@ -355,7 +355,7 @@ class gui.layers.ArcServerLayer extends AbstractLayer{
 	 */ 
 	function addComposite(name:String, config:XMLNode):Void { 
 		super.addComposite(name, config);
-		if (config.nodeName.toLowerCase() == "layer") {
+		if (name.toLowerCase() == "layer") {
 			subLayerCounter++;
 			var id;
 			for (var attr in config.attributes) {
@@ -1303,12 +1303,12 @@ class gui.layers.ArcServerLayer extends AbstractLayer{
 		return s;
 	}
 	
-	function stopMaptip() {
+	/*Old, can be removedfunction stopMaptip() {
 		this.showmaptip = false;
 		this.maptipextent = undefined;
 		this._maptiplayers = new Array();
-	}
-	function startMaptip(x:Number, y:Number) {
+	}*/
+	/*Old, can be removedfunction startMaptip(x:Number, y:Number) {
 		if (!this.canmaptip) {
 			return;
 		}
@@ -1342,7 +1342,7 @@ class gui.layers.ArcServerLayer extends AbstractLayer{
 		this._maptiplayers = new Array();
 		this._maptiplayers = _getLayerlist(maptipids, "maptip");
 		_maptip();
-	}
+	}*/
 	function _maptip() {
 		if (this._maptiplayers.length == 0) {
 			return;
@@ -1460,12 +1460,12 @@ class gui.layers.ArcServerLayer extends AbstractLayer{
 		//option D
 		return "";
 	}
-	function _stopMaptip() {
+	function stopMaptip() {
 		this.showmaptip = false;
 		this.maptipcoordinate = new Object();
 		this._maptiplayers = new Array();
 	}
-	function _startMaptip(x:Number, y:Number) {
+	function startMaptip(x:Number, y:Number) {
 		this._maptiplayers = new Array();
 		this.maptipcoordinate = new Object();
 		if (!this.canmaptip) {
