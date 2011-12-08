@@ -170,6 +170,7 @@ class core.AbstractPositionable extends AbstractListenerRegister
 	 * that name is stored in the _parentName.
 	 */
 	public function set parent(value:Object) {
+		Logger.console("setParent: " + value);
 		var lParent:Object = new Object();		
 		var thisObj:AbstractPositionable = this;
 		lParent.onResize = function(mc:MovieClip ) {
@@ -184,7 +185,7 @@ class core.AbstractPositionable extends AbstractListenerRegister
 			this._parentName = String(value);	
 			this.flamingo.addListener(lParent, value, this);
 		}else {
-			Logger.console("!!!!!!!! Can't set the parent because the given value is not of "+
+			Logger.console("!!!!!!!! Can't set the parent for: "+id+" because the given value is not of "+
 			"type AbstractPositionable (new code) or String (Old code): "+value);
 		}
 	}

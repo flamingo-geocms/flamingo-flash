@@ -127,9 +127,7 @@ class gui.layers.OGCWMSLayer extends AbstractLayer{
 	var starttime:Date;
 	
 	public function OGCWMSLayer(id:String, container:MovieClip, map:Map) {
-		super (id, container);
-		this.map = map;
-		this.parent = map;
+		super (id, container,map);		
 		init();		
 	}
 	
@@ -1519,10 +1517,6 @@ class gui.layers.OGCWMSLayer extends AbstractLayer{
 			return null;
 		}
 		return s;		
-	}
-
-	public function getParent():Object {
-		return this.map;
 	}
 	
 	/*************************************************************
