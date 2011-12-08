@@ -11,7 +11,7 @@ import display.spriteloader.SpriteSettings;
 
 class gui.BorderNavigation extends AbstractPositionable
 {
-	var buttons:Array = new Array("W", "S", "N", "E","SW");
+	var buttons:Array = new Array("W", "S", "N", "E");
 	
 	///*, "NW", "NE", "SE", "SW"*/);
 	
