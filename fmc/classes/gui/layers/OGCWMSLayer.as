@@ -131,25 +131,6 @@ class gui.layers.OGCWMSLayer extends AbstractLayer{
 		init();		
 	}
 	
-	public function init():Void {
-		super.init();
-		var thisObj:OGCWMSLayer = this;
-		
-		this.container._visible = false;
-		//map =_global.flamingo.getParent(this);
-		//defaults
-		//custom
-		var xmls:Array =_global.flamingo.getXMLs(this);
-		for (var i = 0; i<xmls.length; i++) {
-			this.setConfig(xmls[i]);
-		}
-		delete xmls;
-		//remove xml from repository
-		_global.flamingo.deleteXML(this);
-		
-		this.container._visible = this.visible;
-		_global.flamingo.raiseEvent(this, "onInit", this);
-	}
 	
 	/**
 	* Configurates a component by setting a xml.
@@ -270,6 +251,7 @@ class gui.layers.OGCWMSLayer extends AbstractLayer{
 	 * @see AbstractLayer#setAttribute
 	 */
 	function setAttribute(name:String, val:String):Void {
+		super.setAttribute(name, val);
         switch (name.toLowerCase()) {
 			case "retryonerror" :
 				this.retryonerror = Number(val);
@@ -425,6 +407,7 @@ class gui.layers.OGCWMSLayer extends AbstractLayer{
 	 * @param config the xml child
 	 */ 
 	function addComposite(name:String, config:XMLNode):Void { 
+		super.addComposite(name, config);
 		if (name.toLowerCase() == "layer") {
 			var id;
 			for (var attr in config.attributes) {
@@ -1524,13 +1507,13 @@ class gui.layers.OGCWMSLayer extends AbstractLayer{
 	 **/
 	public function onChangeExtent(map:MovieClip):Void {
 		this.updateCaches();
-	};
+	}
 	public function onHide(map:MovieClip):Void  {
 		this.update();
-	};
+	}
 	public function onShow(map:MovieClip):Void  {
 		this.update();
-	};
+	}
 
 	/**
 	* Dispatched when the layer gets a request object from the connector.

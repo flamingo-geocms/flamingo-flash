@@ -33,6 +33,7 @@ class core.AbstractConfigurable extends AbstractPositionable{
 		//remove xml from repository
 		flamingo.deleteXML(this);
 		this._visible = visible;
+		flamingo.raiseEvent(this, "onInit", this);
 	}
 	
 	public function setConfig(xml:XMLNode) {

@@ -6,8 +6,9 @@ import coremodel.service.arcgis.ArcServerConnector;
 import core.AbstractPositionable;
 import tools.Logger;
 import gui.Map;
+import gui.layers.AbstractLayer;
 
-class gui.layers.ArcServerLayer extends AbstractPositionable{
+class gui.layers.ArcServerLayer extends AbstractLayer{
 	
 	//properties which can be set in ini
 	var visible:Boolean;
@@ -62,71 +63,14 @@ class gui.layers.ArcServerLayer extends AbstractPositionable{
 	var starttime:Date;
 	var maptipextent:Object;
 	
+	var subLayerCounter:Number = -1;
+	
 	public function ArcServerLayer(id:String, container:MovieClip, map:Map) {
-		super (id, container);
-		this.map = map;
-		this.parent = map;
+		super (id, container,map);
 		defaultXML = "<LayerArcServer/>";
 		init();		
 	}
-	
-	function init():Void {
-		if (flamingo == undefined) {
-			var t:TextField = this.container.createTextField("readme", 0, 0, 0, 550, 400);
-			t.html = true;
-			t.htmlText = "<P ALIGN='CENTER'><FONT FACE='Helvetica, Arial' SIZE='12' COLOR='#000000' LETTERSPACING='0' KERNING='0'><B>LayerArcServer "+this.version+"</B> - www.flamingo-mc.org</FONT></P>";
-			return;
-		}
-		var thisObj:ArcServerLayer = this;
-		
-		var lMap:Object = new Object();
-		lMap.onUpdate = function(map:MovieClip):Void  {
-			thisObj.update();
-		};
-		lMap.onChangeExtent = function(map:MovieClip):Void  {
-			thisObj.updateCaches();
-		};
-		lMap.onIdentify = function(map:MovieClip, identifyextent:Object):Void  {
-			thisObj.identify(identifyextent);
-		};
-		lMap.onIdentifyCancel = function(map:MovieClip):Void  {
-			thisObj.cancelIdentify();
-		};
-		lMap.onHotlink = function(map:MovieClip, identifyextent:Object):Void  {
-			thisObj.hotlink(identifyextent);
-		};
-		lMap.onHotlinkCancel = function(map:MovieClip):Void  {
-			thisObj.cancelHotlink();
-		};
-		lMap.onMaptip = function(map:MovieClip, x:Number, y:Number, coord:Object):Void  {
-			thisObj._startMaptip(coord.x, coord.y);
-		};
-		lMap.onMaptipCancel = function(map:MovieClip):Void  {
-			thisObj._stopMaptip();
-		};
-		lMap.onHide = function(map:MovieClip):Void  {
-			thisObj.update();
-		};
-		lMap.onShow = function(map:MovieClip):Void  {
-			thisObj.update();
-		};
-		
-		flamingo.addListener(lMap, flamingo.getParent(this), this);
-		
-		this._visible = false;
-		//defaults
-		this.setConfig(defaultXML);
-		//custom
-		var xmls:Array = flamingo.getXMLs(this);
-		for (var i = 0; i<xmls.length; i++) {
-			this.setConfig(xmls[i]);
-		}
-		delete xmls;
-		//remove xml from repository
-		flamingo.deleteXML(this);
-		this._visible = visible;
-		flamingo.raiseEvent(this, "onInit", this);
-	}
+
 	/**
 	* Configurates a component by setting a xml.
 	* @attr xml:Object Xml or string representation of a xml.
@@ -139,212 +83,8 @@ class gui.layers.ArcServerLayer extends AbstractPositionable{
 			xml = new XML(String(xml))
 			xml= xml.firstChild;
 		}
-		//load default attributes, strings, styles and cursors                                           
-		flamingo.parseXML(this, xml);
-		//parse custom attributes
-		for (var attr in xml.attributes) {
-			var val:String = xml.attributes[attr];
-			switch (attr.toLowerCase()) {
-			case "legendcolor" :
-				if (val.charAt(0) == "#") {
-					this.legendcolor = Number("0x"+val.substring(1, val.length));
-				} else {
-					this.legendcolor = Number(val);
-				}
-				break;
-			case "transcolor" :
-				if (val.charAt(0) == "#") {
-					this.transcolor = Number("0x"+val.substring(1, val.length));
-				} else {
-					this.transcolor = Number(val);
-				}
-				break;
-			case "backgroundcolor" :
-				if (val.charAt(0) == "#") {
-					this.backgroundcolor = Number("0x"+val.substring(1, val.length));
-				} else {
-					this.backgroundcolor = Number(val);
-				}
-				break;
-			case "alpha" :
-				this.container._alpha = Number(val);
-				break;
-			case "outputtype" :
-				this.outputtype = val;
-				break;
-			case "timeout" :
-				this.timeout = Number(val);
-				break;
-			case "retryonerror" :
-				this.retryonerror = Number(val);
-				break;
-			case "minscale" :
-				this.minscale = Number(val);
-				break;
-			case "maxscale" :
-				this.maxscale = Number(val);
-				break;
-			case "identifydistance" :
-				this.identifydistance = Number(val);
-				break;
-			case "featurelimit" :
-				this.featurelimit = Number(val);
-				break;
-			case "fullextent" :
-				this.fullextent = map.string2Extent(val);
-				break;
-			case "maptipall" :
-				if (val.toLowerCase() == "true") {
-					maptipall = true;
-				} else {
-					maptipall = false;
-				}
-				break;
-			case "identifyall" :
-				if (val.toLowerCase() == "true") {
-					identifyall = true;
-				} else {
-					identifyall = false;
-				}
-				break;
-			case "legend" :
-				if (val.toLowerCase() == "true") {
-					legend = true;
-				} else {
-					legend = false;
-				}
-				break;
-			case "shadow" :
-				this.container.dropShadow();
-				break;
-			case "server" :
-				server = val;
-				break;
-			case "servlet" :
-				servlet = val;
-				break;
-			case "mapservice" :
-				mapservice = val;
-				break;
-			case "showlegendids" :
-				setLayerProperty(val, "legend", true);
-				this.showlegendids = val;
-				break;
-			case "hidelegendids" :
-				setLayerProperty(val, "legend", false);
-				this.hidelegendids = val;
-				break;
-			case "visibleids" :
-				setLayerProperty(val, "visible", true);
-				this.visibleids = val;
-				break;
-			case "hiddenids" :
-				setLayerProperty(val, "visible", false);
-				this.hiddenids = val;
-				break;
-			case "identifyids" :
-				setLayerProperty(val, "identify", true);
-				this.identifyids = val;
-				break;
-			case "forceidentifyids" :
-				setLayerProperty(val, "forceidentify", true);
-				this.forceidentifyids = val;
-				break;
-			case "maptipids" :
-				this.canmaptip = true;
-				setLayerProperty(val, "maptip", true);
-				this.maptipids = val;
-				break;
-			case "dataframe" :
-				dataframe = val;
-				break;
-			case "esriarcserverversion" :
-				esriArcServerVersion = val;
-				break;
-			}
-		}
-		var xlayers:Array = xml.childNodes;
-		if (xlayers.length>0) {
-			for (var i:Number = xlayers.length-1; i>=0; i--) {
-				if (xlayers[i].nodeName.toLowerCase() == "layer") {
-					var id;
-					for (var attr in xlayers[i].attributes) {
-						if (attr.toLowerCase() == "id") {
-							id = xlayers[i].attributes[attr];
-							break;
-						}
-					}
-					if (id != undefined) {
-						if (layers[id] == undefined) {
-							layers[id] = new Object();
-						}
-						if (layers[id].language == undefined) {
-							layers[id].language = new Object();
-						}
-						layers[id].order = i;
-						//get maptip
-						flamingo.parseString(xlayers[i], layers[id].language);
-						for (var attr in xlayers[i].attributes) {
-							var val:String = xlayers[i].attributes[attr];
-							switch (attr.toLowerCase()) {
-							case "identifydistance" :
-							case "maptipdistance" :
-							case "featurelimit" :
-								layers[id][attr.toLowerCase()] = Number(val);
-								break;
-							case "subfields" :
-							case "fields" :
-								layers[id].subfields = val;
-								break;
-							default :
-								layers[id][attr.toLowerCase()] = val;
-								break;
-							}
-						}
-					}
-					//search for mydata                                                                                                                                      
-					var xmydatas = xlayers[i].childNodes;
-					if (xmydatas.length>0) {
-						for (var j:Number = xmydatas.length-1; j>=0; j--) {
-							switch (xmydatas[j].nodeName.toLowerCase()) {
-							case "mydatastring" :
-								var mydata = xmydatas[j].firstChild.nodeValue;
-								var fielddelimiter = ",";
-								var recorddelimiter = "\n";
-								var joinfield;
-								var jointo;
-								for (var attr in xmydatas[j].attributes) {
-									var value = xmydatas[j].attributes[attr];
-									switch (attr.toLowerCase()) {
-									case "fielddelimiter" :
-										fielddelimiter = value;
-										break;
-									case "recorddelimiter" :
-										recorddelimiter = value;
-										break;
-									case "joinfield" :
-										joinfield = value;
-										break;
-									case "jointo" :
-										jointo = value;
-										break;
-									}
-								}
-								//Does not exist:
-								//this.addMydata(id, jointo, mydata, joinfield, recorddelimiter, fielddelimiter);
-								break;
-							case "mydata" :
-								break;
-							case "layerdefstring" :
-								layers[id].layerdefstring = xmydatas[j].firstChild.nodeValue;
-								break;
-							}
-						}
-					}
-				}
-			}
-		}
-
+		super.setConfig(XMLNode(xml));
+		
 		if (visible == undefined) {
 			visible = true;
 		}
@@ -439,20 +179,215 @@ class gui.layers.ArcServerLayer extends AbstractPositionable{
 		
 	}
 	/**
-	* Sets the transparency of a layer.
-	* @param alpha:Number A number between 0 and 100, 0=transparent, 100=opaque
-	*/
-	function setAlpha(alpha:Number) {
-		this._alpha = alpha;
-		_global.flamingo.raiseEvent(this, "onSetValue", "setAlpha", alpha, this);	
+	 * @see AbstractLayer#setAttribute
+	 */
+	function setAttribute(name:String, val:String):Void {
+		super.setAttribute(name, val);
+		switch (name.toLowerCase()) {
+		case "legendcolor" :
+			if (val.charAt(0) == "#") {
+				this.legendcolor = Number("0x"+val.substring(1, val.length));
+			} else {
+				this.legendcolor = Number(val);
+			}
+			break;
+		case "transcolor" :
+			if (val.charAt(0) == "#") {
+				this.transcolor = Number("0x"+val.substring(1, val.length));
+			} else {
+				this.transcolor = Number(val);
+			}
+			break;
+		case "backgroundcolor" :
+			if (val.charAt(0) == "#") {
+				this.backgroundcolor = Number("0x"+val.substring(1, val.length));
+			} else {
+				this.backgroundcolor = Number(val);
+			}
+			break;
+		case "alpha" :
+			this.container._alpha = Number(val);
+			break;
+		case "outputtype" :
+			this.outputtype = val;
+			break;
+		case "timeout" :
+			this.timeout = Number(val);
+			break;
+		case "retryonerror" :
+			this.retryonerror = Number(val);
+			break;
+		case "minscale" :
+			this.minscale = Number(val);
+			break;
+		case "maxscale" :
+			this.maxscale = Number(val);
+			break;
+		case "identifydistance" :
+			this.identifydistance = Number(val);
+			break;
+		case "featurelimit" :
+			this.featurelimit = Number(val);
+			break;
+		case "fullextent" :
+			this.fullextent = map.string2Extent(val);
+			break;
+		case "maptipall" :
+			if (val.toLowerCase() == "true") {
+				maptipall = true;
+			} else {
+				maptipall = false;
+			}
+			break;
+		case "identifyall" :
+			if (val.toLowerCase() == "true") {
+				identifyall = true;
+			} else {
+				identifyall = false;
+			}
+			break;
+		case "legend" :
+			if (val.toLowerCase() == "true") {
+				legend = true;
+			} else {
+				legend = false;
+			}
+			break;
+		case "shadow" :
+			this.container.dropShadow();
+			break;
+		case "server" :
+			server = val;
+			break;
+		case "servlet" :
+			servlet = val;
+			break;
+		case "mapservice" :
+			mapservice = val;
+			break;
+		case "showlegendids" :
+			setLayerProperty(val, "legend", true);
+			this.showlegendids = val;
+			break;
+		case "hidelegendids" :
+			setLayerProperty(val, "legend", false);
+			this.hidelegendids = val;
+			break;
+		case "visibleids" :
+			setLayerProperty(val, "visible", true);
+			this.visibleids = val;
+			break;
+		case "hiddenids" :
+			setLayerProperty(val, "visible", false);
+			this.hiddenids = val;
+			break;
+		case "identifyids" :
+			setLayerProperty(val, "identify", true);
+			this.identifyids = val;
+			break;
+		case "forceidentifyids" :
+			setLayerProperty(val, "forceidentify", true);
+			this.forceidentifyids = val;
+			break;
+		case "maptipids" :
+			this.canmaptip = true;
+			setLayerProperty(val, "maptip", true);
+			this.maptipids = val;
+			break;
+		case "dataframe" :
+			dataframe = val;
+			break;
+		case "esriarcserverversion" :
+			esriArcServerVersion = val;
+			break;
+		}
 	}
 	/**
-	* Gets the transparancy of a layer.
-	* @return alpha, number between 0 and 100, 0=transparent, 100=opaque
-	*/
-	function getAlpha(){
-		return this._alpha;
+	 * Passes a name and child xml to the component.
+	 * @param name the name of the tag
+	 * @param config the xml child
+	 */ 
+	function addComposite(name:String, config:XMLNode):Void { 
+		super.addComposite(name, config);
+		if (config.nodeName.toLowerCase() == "layer") {
+			subLayerCounter++;
+			var id;
+			for (var attr in config.attributes) {
+				if (attr.toLowerCase() == "id") {
+					id = config.attributes[attr];
+					break;
+				}
+			}
+			if (id != undefined) {
+				if (layers[id] == undefined) {
+					layers[id] = new Object();
+				}
+				if (layers[id].language == undefined) {
+					layers[id].language = new Object();
+				}
+				layers[id].order = subLayerCounter;
+				//get maptip
+				flamingo.parseString(config, layers[id].language);
+				for (var attr in config.attributes) {
+					var val:String = config.attributes[attr];
+					switch (attr.toLowerCase()) {
+					case "identifydistance" :
+					case "maptipdistance" :
+					case "featurelimit" :
+						layers[id][attr.toLowerCase()] = Number(val);
+						break;
+					case "subfields" :
+					case "fields" :
+						layers[id].subfields = val;
+						break;
+					default :
+						layers[id][attr.toLowerCase()] = val;
+						break;
+					}
+				}
+			}
+			//search for mydata                                                                                                                                      
+			var xmydatas = config.childNodes;
+			if (xmydatas.length>0) {
+				for (var j:Number = xmydatas.length-1; j>=0; j--) {
+					switch (xmydatas[j].nodeName.toLowerCase()) {
+					case "mydatastring" :
+						var mydata = xmydatas[j].firstChild.nodeValue;
+						var fielddelimiter = ",";
+						var recorddelimiter = "\n";
+						var joinfield;
+						var jointo;
+						for (var attr in xmydatas[j].attributes) {
+							var value = xmydatas[j].attributes[attr];
+							switch (attr.toLowerCase()) {
+							case "fielddelimiter" :
+								fielddelimiter = value;
+								break;
+							case "recorddelimiter" :
+								recorddelimiter = value;
+								break;
+							case "joinfield" :
+								joinfield = value;
+								break;
+							case "jointo" :
+								jointo = value;
+								break;
+							}
+						}
+						//Does not exist:
+						//this.addMydata(id, jointo, mydata, joinfield, recorddelimiter, fielddelimiter);
+						break;
+					case "mydata" :
+						break;
+					case "layerdefstring" :
+						layers[id].layerdefstring = xmydatas[j].firstChild.nodeValue;
+						break;
+					}
+				}
+			}
+		}
 	}
+	
 	/**
 	* Hides a layer.
 	*/
@@ -1735,6 +1670,25 @@ class gui.layers.ArcServerLayer extends AbstractPositionable{
 	
 	function getParent():Object {
 		return this.map;
+	}
+	
+	/**********************************************************
+	 * Listener functions for map.
+	 */ 
+	public function onChangeExtent(map:MovieClip):Void  {
+		this.updateCaches();
+	}
+	public function onHotlink(map:MovieClip, identifyextent:Object):Void  {
+		this.hotlink(identifyextent);
+	}
+	public function onHotlinkCancel(map:MovieClip):Void  {
+		this.cancelHotlink();
+	}
+	public function onHide(map:MovieClip):Void  {
+		this.update();
+	}
+	public function onShow(map:MovieClip):Void  {
+		this.update();
 	}
 	/**
 	* Dispatched when the layer gets a request object from the connector.
