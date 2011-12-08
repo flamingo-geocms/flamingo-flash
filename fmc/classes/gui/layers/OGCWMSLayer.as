@@ -1254,6 +1254,25 @@ class gui.layers.OGCWMSLayer extends AbstractLayer{
 			cache._height = r.height;
 		}
 	}
+	/**
+	* Hides a layer.
+	* @param map:MovieClip [optional]
+	*/
+	function hide() {
+		_visible = false;
+		update();
+		_global.flamingo.raiseEvent(this, "onHide", this);
+	}
+	/**
+	* Shows a layer.
+	* @param map:MovieClip [optional]
+	*/
+	function show() {
+		_visible = true;
+		updateCaches();
+		update();
+		_global.flamingo.raiseEvent(this, "onShow", this);
+	}
 	function _getVisLayers():String {
 		var s = "";
 		for (var layer in layers) {
