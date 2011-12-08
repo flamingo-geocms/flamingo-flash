@@ -7,7 +7,53 @@ import core.AbstractPositionable;
 import tools.Logger;
 import gui.Map;
 import gui.layers.AbstractLayer;
+/** @component LayerArcServer
+* ESRI ArcGIS server layer.
+* @version 3.0
+* @file ArcServerConnector.as (sourcefile)
+* @file LayerArcServer.fla (sourcefile)
+* @file LayerArcServer.swf (compiled layer, needed for publication on internet)
+* @file LayerArcServer.xml (configurationfile for layer, needed for publication on internet)
+*/
+/** @tag <fmc:LayerArcServer>  
+* This tag defines a ESRI ArcGIS Server (version 9.3) layer .
+* @hierarchy childnode of <fmc:Map> 
+* @example 
+* <fmc:Map id="map"  left="5" top="5" bottom="bottom -5" right="right -5"  extent="13562,306839,278026,614073,Nederland" fullextent="13562,306839,278026,614073,Nederland">
+*   <fmc:LayerArcServer  id="layer1" identifyall="true" server="www.mymap.com"  mapservice="mymap" identifyids="1,39" maptipids="1">
+*      <layer id="1" subfields="field1,field2"  maptip="name:[field3]" >
+*         <string id="maptip" en="name:[field3]" nl="naam:[field3]"/>
+*      </layer>
+*   </fmc:LayerArcServer>
+* </fmc:Map>
 
+* @attr server  servername of the ArcGIS Server mapservice
+* @attr mapservice  mapservice name
+* @attr identifyall (defaultvalue = "false") true or false;  true= all layerid's will be identified, false = identify stops after identify success
+* @attr legend  (defaultvalue = "false") true or false;   false = no legend image wil be generated with an update
+* @attr hiddenids Comma seperated list of layerid's (the order of the layers same as in mxd) Id's in this list will be hidden.
+* @attr visibleids Comma seperated list of layerid's (the order of the layers same as in mxd) Id's in this list will be visible.
+* @attr identifyids Comma seperated list of layerid's (the order of the layers same as in mxd) Id's in this list will be identified in the order of the list. Use keyword "#ALL#" to identify all layers.
+* @attr maptipids Comma seperated list of layerid's (the order of the layers same as in mxd) Id's in this list will be queried during a maptip event. Use keyword "#ALL#" to query all layers.
+* @attr dataframe dataframename of the mapservice
+* @attr esriArcServerVersion (defaultvalue ="9.2") the version of ArcGIS Server of the mapservices. This can have the values "9.3" or "9.2"
+* @attr fullextent Extent of layer (comma seperated list of minx,miny,maxx,maxy). When the map is outside this extent, no update will performed.
+* @attr visible  (defaultvalue "true") true or false
+* @attr alpha (defaultvalue = "100") Transparency of the layer
+* @attr minscale  If mapscale is less then or equal minscale, the layer will not be shown.
+* @attr maxscale  If mapscale is greater then maxscale, the layer will not be shown.. 
+*/
+/** @tag <layer>  
+* This defines a sublayer of an ArcGIS Server mapservice
+* @hierarchy childnode of <fmc:LayerArcServer> 
+* @attr id  layerid, same as in the axl.
+* @attr subfields  Comma seperated list of fields, which will be identified.
+* @attr identifydistance  (defaultvalue = "10") Distance in pixels for performing getFeatures request.
+* @attr maptipdistance (defaultvalue = "10") Distance in pixels for performing getFeatures request for a maptip. 
+* @attr featurelimit  (defaultvalue = "1") Number of features that will return after an identify.
+* @attr query  The 'where' clause in the getImage and getFeatures request.
+* @attr maptip Configuration string for a maptip. Fieldnames between square brackets will be replaced  with their actual values. For multi-language support use a standard string tag with id='maptip'.
+*/
 class gui.layers.ArcServerLayer extends AbstractLayer{
 	
 	//properties which can be set in ini
