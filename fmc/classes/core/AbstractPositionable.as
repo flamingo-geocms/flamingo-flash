@@ -174,7 +174,7 @@ class core.AbstractPositionable extends AbstractListenerRegister
 		var lParent:Object = new Object();		
 		var thisObj:AbstractPositionable = this;
 		lParent.onResize = function(mc:MovieClip ) {
-			//if the parent is resized then resize this.
+			//if the parent is resized then resize this.			
 			thisObj.resize();
 		};
 		//resize after the parent is init

@@ -38,7 +38,7 @@ class gui.tools.ToolSuperPan extends AbstractTool implements ComponentInterface{
 	var skin = "_superpan";
 	var panmap:MovieClip 
 	var maphit:Boolean 	
-	var thisObj:ToolSuperPan = this;
+	
 	/**
 	 * Constructor for creating a ToolSuperPan
 	 * @see AbstractTool#Constructor(id:String, toolGroup:ToolGroup ,container:MovieClip);

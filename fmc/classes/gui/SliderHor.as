@@ -1,4 +1,4 @@
-/**
+﻿/**
  * @author Meine Toonen
 
 This file is part of Flamingo MapComponents.
@@ -89,7 +89,7 @@ class gui.SliderHor extends AbstractPositionable{
 				//build buttons
 		spriteMap = flamingo.spriteMap;
 		sliderBar = this.container.createEmptyMovieClip("sliderBar", this.container.getNextHighestDepth());
-		spriteMap.attachSpriteTo(sliderBar, new SpriteSettings(0, 762, 50, 2, 0, 0, true, 100); );
+		spriteMap.attachSpriteTo(sliderBar, new SpriteSettings(0, 762, 50, 2, 0, 0, true, 100) );
 		sliderButton = new HorSliderButton("sliderButton", this.container.createEmptyMovieClip("sliderButton_container", this.container.getNextHighestDepth()), this);
 		increaseButton = new IncreaseButton("increaseButton", this.container.createEmptyMovieClip("increaseButton_container", this.container.getNextHighestDepth()), this);
 		decreaseButton = new DecreaseButton("decreaseButton ", this.container.createEmptyMovieClip("decreaseButton _container", this.container.getNextHighestDepth()), this);

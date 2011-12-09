@@ -1,7 +1,6 @@
-import core.AbstractListenerRegister;
+﻿import core.AbstractListenerRegister;
 import core.AbstractPositionable;
 import core.ComponentInterface;
-import core.ListenerCreator;
 import gui.tools.AbstractTool;
 import tools.Logger;
 /**

@@ -38,7 +38,7 @@ class gui.tools.ToolZoomout extends AbstractTool implements ComponentInterface
 	var skin:String = "_zoomout";
 	var enabled = true
 	var rect:Object = new Object()
-	var thisObj = this
+	
 	/**
 	 * Constructor for creating a toolzoomout
 	 * @param	id the id of the tool

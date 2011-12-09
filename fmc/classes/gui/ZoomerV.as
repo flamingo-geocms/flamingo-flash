@@ -1,4 +1,4 @@
-import display.spriteloader.Sprite;
+﻿import display.spriteloader.Sprite;
 import gui.button.SliderButton;
 import gui.button.ZoomInButton;
 import gui.button.ZoomOutButton;
@@ -44,7 +44,6 @@ import core.AbstractPositionable;
 class gui.ZoomerV  extends AbstractPositionable{
 
 	var _zoomid:Number;
-	var thisObj = this;
 	var center:Object;
 	var updatedelay:Number = 500;
 	//listeners
@@ -82,7 +81,7 @@ class gui.ZoomerV  extends AbstractPositionable{
 		
 		//---------------------------------------
 		sliderBar = this.container.createEmptyMovieClip("sliderBar", this.container.getNextHighestDepth());
-		spriteMap.attachSpriteTo(sliderBar, new SpriteSettings(0, 1089, 2, 50, 0, 0, true, 100); );
+		spriteMap.attachSpriteTo(sliderBar, new SpriteSettings(0, 1089, 2, 50, 0, 0, true, 100) );
 		zoomIn = new ZoomInButton(this.id + "_zoomInButton", this.container.createEmptyMovieClip("zoomInButton", this.container.getNextHighestDepth()), this);
 		zoomOut = new ZoomOutButton(this.id + "_zoomOutButton", this.container.createEmptyMovieClip("zoomOutButton", this.container.getNextHighestDepth()), this);
 		sliderButton = new SliderButton(this.id + "_sliderButton", this.container.createEmptyMovieClip("sliderButton", this.container.getNextHighestDepth()), this);

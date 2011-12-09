@@ -46,6 +46,7 @@ import mx.controls.ComboBox;
 
 import gui.URL;
 import core.AbstractContainer;
+import gui.Map;
 
 import mx.utils.Delegate;
 import mx.controls.ComboBase;

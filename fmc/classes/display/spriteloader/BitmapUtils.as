@@ -1,4 +1,4 @@
-import flash.display.BitmapData;
+﻿import flash.display.BitmapData;
 import flash.geom.ColorTransform;
 import flash.geom.Matrix;
 /**
@@ -16,7 +16,7 @@ class display.spriteloader.BitmapUtils
 		
 	public static function bitmapDataToMovieClip(bmpData:BitmapData, attachTarget:MovieClip, newMcName:String, newDepth:Number):MovieClip
 	{
-		var depth:Number (newDepth==undefined) ? attachTarget.getNextHighestDepth() : newDepth;
+		var depth:Number =(newDepth==undefined) ? attachTarget.getNextHighestDepth() : newDepth;
 		if(bmpData==undefined){
 			trace("BitmapUtils::bitmapDataToMovieClip():BitmapData undefined ("+newMcName+") ")
 			return null;

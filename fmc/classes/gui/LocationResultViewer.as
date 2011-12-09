@@ -38,6 +38,7 @@ import mx.controls.TextArea;
 
 import core.AbstractComponent;
 import core.AbstractContainer;
+import gui.Map;
 
 import mx.utils.Delegate;
 
@@ -134,7 +135,7 @@ class gui.LocationResultViewer extends AbstractComponent {
 	function showLocation(index:Number) {
 		var map:Map = getMap ();
 		if(locationlayer == null){
-			locationlayer = map.createEmptyMovieClip("mLocation", map.getNextHighestDepth());
+			locationlayer = map.container.createEmptyMovieClip("mLocation", map.container.getNextHighestDepth());
 		} else {
 			locationlayer.clear();
 		}
