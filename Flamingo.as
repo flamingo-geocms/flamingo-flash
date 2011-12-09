@@ -135,7 +135,7 @@ class Flamingo {
 	//@param mc MovieClip 
 	public function Flamingo(mc:MovieClip) {		
 		spriteMapFactory = SpriteMapFactory.getInstance();
-		var toolSpritesUrl:String = ("sprite.png");
+		var toolSpritesUrl:String = ("flamingo/assets/img/sprite.png");
 		
 		//let the factory provide you with a new spritemap by calling obtainSpriteMap() on it with a url
 		//if you call obtainSpriteMap anywhere else with the same image url, it won't spoil bandwith requests and will only load it once..
@@ -3235,7 +3235,7 @@ class Flamingo {
 		if (method == undefined) {
 			return null;
 		}
-		arguments.shift();
+		arguments.shift();	
 		var comp = this.components[id].target;
 		if (comp == undefined) {
 			return null;
@@ -3251,7 +3251,8 @@ class Flamingo {
 			}
 			return r;
 		} else {
-			var func = eval(comp+"."+method);
+	
+			var func = eval(comp + "." + method);
 			if (func == undefined) {
 				return null;
 			}
@@ -3259,6 +3260,7 @@ class Flamingo {
 			if (typeof (r) == "movieclip") {
 				r = this.getId(r);
 			}
+			
 			return r;
 		}
 	}

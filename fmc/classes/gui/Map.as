@@ -1068,6 +1068,7 @@ class gui.Map extends AbstractPositionable implements PersistableComponent{
 	* @return Object Extent. An extent has 4 properties 'minx', 'miny', 'miny', 'maxy' and optional 'name'
 	*/
 	public function getExtent():Object {
+		Logger.console("getextent");
 		return this.copyExtent(this._extent);
 	}
 	/**
