@@ -61,7 +61,7 @@ import display.spriteloader.SpriteMap;
 import display.spriteloader.SpriteMapFactory;
 
 class Flamingo {
-	private var version:String = "3.3";
+	private var version:String = "3.3 R969";
 	//reference to main movie from which this class is loaded
 	//at the main movie the components are loaded at 'moviedepth'--  ;moviedepth starts by 10000
 	//at the main movie a cursor movie is loaded at depth 50005
@@ -1090,7 +1090,8 @@ class Flamingo {
 						}
 					}
 					this.raiseEvent(this, "onLoadComponent", targetid);	
-					this.doneLoading();
+					/* Done loading can only work for external .swf files.
+					this.doneLoading();*/
 					/* A Component is added before, and had a listener to this object.
 					 * Therefor a temp listener object is made. Now add the listener to the real thing.*/
 					if (oldComponent != undefined) {
