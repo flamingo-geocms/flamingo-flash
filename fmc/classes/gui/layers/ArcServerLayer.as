@@ -513,11 +513,11 @@ class gui.layers.ArcServerLayer extends AbstractLayer{
 		var lConn:Object = new Object();
 		lConn.onResponse = function(connector:ArcServerConnector) {
 			thisObj._stoptimeout();
-			thisObj.flamingo.raiseEvent(this, "onResponse", this, "update", connector);
+			thisObj.flamingo.raiseEvent(thisObj, "onResponse", thisObj, "update", connector);
 		};
 		lConn.onRequest = function(connector:ArcServerConnector) {
 			//trace(requestobject.request)
-			thisObj.flamingo.raiseEvent(this, "onRequest", this, "update", connector);
+			thisObj.flamingo.raiseEvent(thisObj, "onRequest", thisObj, "update", connector);
 		};
 		lConn.onError = function(error:String, objecttag:Object, requestid:String) {
 			thisObj._stoptimeout();
@@ -526,14 +526,14 @@ class gui.layers.ArcServerLayer extends AbstractLayer{
 				nrtry++;
 				thisObj._update(nrtry);
 			} else {
-				thisObj.flamingo.raiseEvent(this, "onError", this, "update", error);
+				thisObj.flamingo.raiseEvent(thisObj, "onError", thisObj, "update", error);
 			}
 		};
 		
 		lConn.onGetImage = function(ext:Object, imageurl:String, legurl:String, objecttag:Object, requestid:String) {
 			if (legurl.length>0) {
 				thisObj.legendurl = legurl;
-				thisObj.flamingo.raiseEvent(this, "onGetLegend", this, thisObj.legendurl);
+				thisObj.flamingo.raiseEvent(thisObj, "onGetLegend", thisObj, thisObj.legendurl);
 			}
 			thisObj._starttimeout();
 			var newDate:Date = new Date();
