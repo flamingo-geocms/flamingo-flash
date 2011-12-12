@@ -928,10 +928,15 @@ class Flamingo {
 		if (targetid == undefined) {
 			return;
 		}
-		//                                                                                                              
+		//                                                                                                            
 		if (xml instanceof XML) {
 			xml = xml.firstChild;
+		}else if ( ! xml instanceof XMLNode) {
+			
+			xml = new XML(String(xml));
+			xml = xml.firstChild;
 		}
+
 		if (xml.prefix.length == 0) {
 			return;
 		}
@@ -939,6 +944,7 @@ class Flamingo {
 		//<fmc:Bundle.MyComponent ----> url=fmc/Bundle type=MyComponent
 		var file = xml.localName;
 		var type = xml.localName;
+		
 		if (type.indexOf(".", 0)>=0) {
 			var a:Array = type.split(".");
 			type = a.pop();
@@ -977,9 +983,9 @@ class Flamingo {
 			if (this.isEmbeddedComponents(file)) {
 				//newtypeobjectaanmaken
 				var oldComponent = this.components[targetid];				
-				if (this.components[targetid] != undefined && this.components[targetid] instanceof AbstractPositionable) {				
+				if (this.components[targetid] != undefined && this.components[targetid] instanceof AbstractPositionable) {		
 					ComponentInterface(this.components[targetid]).setConfig(XML(xmlNode));
-				}else {
+				}else {	
 					if (file == "ToolGroup") {
 						var toolGroup:ToolGroup = new ToolGroup(targetid,mc);										
 						this.toolGroups.push(toolGroup);
@@ -3256,8 +3262,9 @@ class Flamingo {
 			}
 			return r;
 		} else if ( this.components[id]instanceof AbstractPositionable) {
-			var m = this.components[id];
-			var ret =  m[method](arguments);
+			
+			comp = this.components[id];
+			var ret  =  comp[method](arguments);
 			return ret;
 		} else{
 			var func = eval(comp + "." + method);

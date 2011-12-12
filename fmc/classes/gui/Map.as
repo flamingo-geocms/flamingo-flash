@@ -557,11 +557,12 @@ class gui.Map extends AbstractPositionable implements PersistableComponent{
 	* @param xml:Object xml(or string representing an xml) with layer definition
 	* @return String Id of the added layer.
 	*/
-	public function addLayer(xml:Object):String {
+	public function addLayer(xml):String {
 		if (typeof (xml) == "string") {
-			xml = new XML(String(xml))
+			xml = new XML(String(xml));
 			xml = xml.firstChild;			
 		}
+			
 		//determine id                         
 		var mapid:String = flamingo.getId(this);
 		var id:String;
@@ -675,7 +676,11 @@ class gui.Map extends AbstractPositionable implements PersistableComponent{
 				} 				
 			};			
 			flamingo.addListener(lLayer, layerid, this);
+			Logger.console("xml", xml);
+			Logger.console("mc", mc);
+			Logger.console("layerid",layerid);
 			flamingo.loadComponent(xml, mc, layerid);
+		Logger.console("asfasfasfasdf");
 			//_global.flamingo.tracer("Map " + _global.flamingo.getId(this)+ " addLayer "  + layerid + " url " + _global.flamingo.getUrl(layerid) + _global.flamingo.getUrl(layerid).indexOf("LayerArcIMS"));
 			//count the number of serviceLayers
 			if(_global.flamingo.getUrl(layerid).indexOf("LayerArcIMS")>0 || 
