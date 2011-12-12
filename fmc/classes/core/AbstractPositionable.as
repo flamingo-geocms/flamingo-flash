@@ -82,6 +82,7 @@ class core.AbstractPositionable extends AbstractListenerRegister
 		this.styles = new TextField.StyleSheet();	
 		this.borderalpha = 100;
 		this.version = "2.0";
+		reassignListeners();
 	}
 	/**
 	 * Pass the hittest to the movieclip
@@ -126,6 +127,22 @@ class core.AbstractPositionable extends AbstractListenerRegister
 		}
 		if (!(isNaN(y))) {
 			this.container._y = y;
+		}
+	}
+	
+	public function reassignListeners() {
+		/* A Component is added before, and had a listener to this object.
+		 * Therefor a temp listener object is made. Now add the listener to the real thing.*/
+		var oldComponent = flamingo.getComponent(id);
+		if (oldComponent != undefined) {
+			//There is a listener added. Now add it on the newly created object
+			if (oldComponent._listeners != undefined) {
+				//enable broadcasting
+				AsBroadcaster.initialize(flamingo.getComponent[id]);
+				for (var i = 0; i < oldComponent._listeners.length; i++) {
+					flamingo.addListener(oldComponent._listeners[i], id,oldComponent.callers[i]);
+				}
+			}
 		}
 	}
 	

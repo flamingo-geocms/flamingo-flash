@@ -136,11 +136,11 @@ class Flamingo {
 	//@param mc MovieClip 
 	public function Flamingo(mc:MovieClip) {		
 		spriteMapFactory = SpriteMapFactory.getInstance();
-		var toolSpritesUrl:String = ( correctUrl ("assets/img/sprite.png"));
+		//var toolSpritesUrl:String = (correctUrl( "assets/img/sprite.png"));
 		
 		//let the factory provide you with a new spritemap by calling obtainSpriteMap() on it with a url
 		//if you call obtainSpriteMap anywhere else with the same image url, it won't spoil bandwith requests and will only load it once..
-		this.spriteMap = spriteMapFactory.obtainSpriteMap(toolSpritesUrl);
+	//	this.spriteMap = spriteMapFactory.obtainSpriteMap(toolSpritesUrl);
 		
 		System.security.allowDomain("*");
 		//save base url of flamingo.swf
@@ -1098,18 +1098,7 @@ class Flamingo {
 					this.raiseEvent(this, "onLoadComponent", this.components[targetid]);	
 					/* Done loading can only work for external .swf files.
 					this.doneLoading();*/
-					/* A Component is added before, and had a listener to this object.
-					 * Therefor a temp listener object is made. Now add the listener to the real thing.*/
-					if (oldComponent != undefined) {
-						//There is a listener added. Now add it on the newly created object
-						if (oldComponent._listeners != undefined) {
-							//enable broadcasting
-							AsBroadcaster.initialize(this.components[targetid]);
-							for (var i = 0; i < oldComponent._listeners.length; i++) {
-								this.addListener(oldComponent._listeners[i], targetid,oldComponent.callers[i]);
-							}
-						}
-					}
+					
 				}				
 			}else {
 				//component new or existing component has no setConfig, so treat as new component   
