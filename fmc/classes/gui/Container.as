@@ -120,12 +120,12 @@ class gui.Container extends AbstractPositionable{
 		this.addComponents(xml);
 		
 	}
-	function resize() {
+	function resize() {		
 		var r = flamingo.getPosition(this);
 		this.container._x = r.x;
-		this.container._y = r.y;
+		this.container._y = r.y;		
 		__width = r.width;
-		__height = r.height;
+		__height = r.height;	
 		mContent.__width = __width;
 		mContent.__height = __height;
 		this._alpha = alpha;
@@ -146,6 +146,10 @@ class gui.Container extends AbstractPositionable{
 		mBorder.lineTo(0, __height);
 		mBorder.lineTo(0, 0);*/
 		createBorder();
+		if (this.mBorder != undefined) {
+			this.mBorder._width = __width;
+			this.mBorder._height = __height;
+		}
 		if (this.mask) {
 			mContent.scrollRect = new flash.geom.Rectangle(0, 0, (__width), (__height));
 		}
@@ -252,6 +256,9 @@ class gui.Container extends AbstractPositionable{
 			} else {
 				var mc:MovieClip = this.mContent.createEmptyMovieClip(id, this.mContent.getNextHighestDepth());
 				flamingo.loadComponent(xml, mc, id);
+			}			
+			if (flamingo.getComponent(id) instanceof AbstractPositionable) {
+				flamingo.getComponent(id).parent = this;				
 			}
 			return id;
 		}

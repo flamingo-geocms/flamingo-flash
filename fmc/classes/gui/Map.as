@@ -498,7 +498,7 @@ class gui.Map extends AbstractPositionable implements PersistableComponent{
 	*/
 	public function resize():Void {		
 		this.container._xscale = this.container._yscale=100;
-		var r:Object = flamingo.getPosition(this, this._parent._parent);
+		var r:Object = flamingo.getPosition(this);
 		this.container._x = r.x;
 		this.container._y = r.y;
 		this.__width = r.width;

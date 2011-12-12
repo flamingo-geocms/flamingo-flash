@@ -984,8 +984,8 @@ class Flamingo {
 						this.components[targetid] = toolGroup;
 					}else if (file == "Container") {
 						var container:Container = new Container(targetid, mc);
-						container.setConfig(xmlNode);
-						this.components[targetid] = container;					
+						this.components[targetid] = container;	
+						container.setConfig(xmlNode);				
 					}else if (file == "BorderNavigation") {
 						var borderNavigation:BorderNavigation = new BorderNavigation(targetid, mc);
 						borderNavigation.setConfig(xmlNode);
@@ -2771,7 +2771,7 @@ class Flamingo {
 	* this._height = rect.height
 	* }
 	*/
-	public function getPosition(comp:Object, parent:MovieClip):Object {
+	public function getPosition(comp:Object, parent:Object):Object {
 		var id = this.getId(comp);
 		var mc:Object;
 		if (comp instanceof AbstractPositionable) {
@@ -2861,7 +2861,7 @@ class Flamingo {
 		
 	}	
 	
-	private function getXPS(mc:Object, parent:MovieClip):Object {
+	private function getXPS(mc:Object, parent:Object):Object {	
 		if (parent == undefined) {
 			parent = mc._parent;
 		}
@@ -2936,17 +2936,17 @@ class Flamingo {
 		}
 		return (pt);
 	}
-	private function getYPS(mc:Object, parent:MovieClip):Object {
+	private function getYPS(mc:Object, parent:Object):Object {
 		if (parent == undefined) {
 			parent = mc._parent;
 		}
 		var pt:Object = new Object();
-		var ph = parent.__height;
+		var ph = parent.__height;		
 		if (ph == undefined) {
 			ph = parent._height;
 		}
 		if (ph == undefined) {
-			ph = Stage.height;
+			ph = Stage.height;			
 		}
 		if (mc.top.length > 0 && mc.height.length > 0) {
 			//Logger.console("y1");

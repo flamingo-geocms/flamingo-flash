@@ -51,12 +51,19 @@ class core.AbstractPositionable extends AbstractListenerRegister
 	private var _defaultXML:String;
 	//the name of the parent. It's only used by old flamingo code. Implemented to be backwards compatible
 	private var _parentName:String;
+	//if the parent is a AbstractPositionable:
+	private var _parentObject:AbstractPositionable;
 	//Border movieclip
 	private var _mBorder:MovieClip;
 	//Border settings:	
 	private var _bordercolor:Number;
 	private var _borderwidth:Number;
 	private var _borderalpha:Number;
+	
+	private var _width1;
+	private var _height1;
+	private var _width2;
+	private var _height2;
 	/**
 	 * Constructor 
 	 * @param	id the id
@@ -88,7 +95,8 @@ class core.AbstractPositionable extends AbstractListenerRegister
 	}
 	
 	public function createBorder():Void {
-		this._mBorder = this.container.createEmptyMovieClip("mBorder", 2);		
+		if (this._mBorder == undefined)
+			this._mBorder = this.container.createEmptyMovieClip("mBorder", 2);		
 		mBorder.clear();
 		mBorder.lineStyle(borderwidth, bordercolor, borderalpha);
 		mBorder.moveTo(0, 0);
@@ -150,7 +158,9 @@ class core.AbstractPositionable extends AbstractListenerRegister
 	 */
 	public function get parent():Object {	
 		//if a old flamingo object is set as parent the _parentName is returned (the old way)
-		if (_parentName != undefined ) {
+		if (_parentObject != undefined) {
+			return _parentObject;
+		}else if (_parentName != undefined ) {
 			return this._parentName;
 		}else{
 			return this.getParent();
@@ -158,7 +168,8 @@ class core.AbstractPositionable extends AbstractListenerRegister
 	}
 	/**
 	 * Gets the real parent object
-	 * Needs to be overwritten in subclasses if its something else, the return of the parentName must not be implemented!
+	 * Needs to be implemented if the parent is not set as parent, but needs to return something else.
+	 * Is only called when there is no parent set.
 	 * @return the real parent.
 	 */
 	public function getParent():Object {
@@ -171,6 +182,7 @@ class core.AbstractPositionable extends AbstractListenerRegister
 	 * that name is stored in the _parentName.
 	 */
 	public function set parent(value:Object) {
+		Logger.console(id+"container new parent: " + value);
 		var lParent:Object = new Object();		
 		var thisObj:AbstractPositionable = this;
 		lParent.onResize = function(mc:MovieClip ) {
@@ -183,8 +195,9 @@ class core.AbstractPositionable extends AbstractListenerRegister
 		}
 		if (value instanceof AbstractPositionable) {
 			//the parent is a new component.
+			this._parentObject = AbstractPositionable(value);
 			this.flamingo.addListener(lParent, value, this);
-		}else if (value instanceof String || typeof(value) == "string") {
+		}else if (value instanceof String || typeof(value) == "string") {			
 			//The parent is a movieclip / old flamingo object.
 			this._parentName = String(value);	
 			this.flamingo.addListener(lParent, value, this);
@@ -222,18 +235,31 @@ class core.AbstractPositionable extends AbstractListenerRegister
 	}
 	public function set _y(value:Number):Void {
 		this.container._y=value;
-	}
-	public function get _width():Number {
-		return this.container._width;
+	}*/
+	/*public function get _width():Number {
+		return this._width1;
 	}
 	public function set _width(value:Number):Void {
-		this.container._width = value;
+		this._width1 = value;
 	}
 	public function get _height():Number {
-		return this.container._height;
+		return this._height1;
 	}
 	public function set _height(value:Number):Void {
-		this.container._height=value;
+		this._height1=value;
+	}*/
+	
+	/*public function get __width():Number {
+		return this._width2;
+	}
+	public function set __width(value:Number):Void {
+		this._width2 = value;
+	}
+	public function get __height():Number {
+		return this._height2;
+	}
+	public function set __height(value:Number):Void {
+		this._height2=value;
 	}*/
 	/***********************************************************************/	
 	/***********************************************************************
@@ -491,6 +517,14 @@ class core.AbstractPositionable extends AbstractListenerRegister
 	
 	public function set guides(value:Object):Void {
 		_guides = value;
+	}
+	
+	public function get parentObject():AbstractPositionable {
+		return _parentObject;
+	}
+	
+	public function set parentObject(value:AbstractPositionable):Void {
+		_parentObject = value;
 	}
 	/** 
 	 * Dispatched when the component is resized
