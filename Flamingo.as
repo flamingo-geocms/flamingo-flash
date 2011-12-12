@@ -51,6 +51,7 @@ import gui.layers.TilingLayer;
 import gui.layers.GridLayer;
 import gui.layers.AbstractLayer;
 import gui.Map;
+import gui.MapTip;
 import gui.Scalebar;
 import gui.SliderHor;
 import gui.ZoomerV;
@@ -135,7 +136,7 @@ class Flamingo {
 	//@param mc MovieClip 
 	public function Flamingo(mc:MovieClip) {		
 		spriteMapFactory = SpriteMapFactory.getInstance();
-		var toolSpritesUrl:String = ("flamingo/assets/img/sprite.png");
+		var toolSpritesUrl:String = ( correctUrl ("assets/img/sprite.png"));
 		
 		//let the factory provide you with a new spritemap by calling obtainSpriteMap() on it with a url
 		//if you call obtainSpriteMap anywhere else with the same image url, it won't spoil bandwith requests and will only load it once..
@@ -971,7 +972,7 @@ class Flamingo {
 				return;
 			}
 			var xmlNode:XMLNode = XMLNode(xml);
-			if (this.isEmbeddedComponents(file)){
+			if (this.isEmbeddedComponents(file)) {
 				//newtypeobjectaanmaken
 				var oldComponent = this.components[targetid];				
 				if (this.components[targetid] != undefined && this.components[targetid] instanceof AbstractPositionable) {				
@@ -1011,7 +1012,12 @@ class Flamingo {
 						map.type = type;
 						this.components[targetid] = map;
 						map.setConfig(xmlNode);									
-					}else if (isLayer(file)) {
+					}else if (file == "Maptip") {
+						var maptip:MapTip = new MapTip(targetid, mc);
+						this.components[targetid] = maptip;
+						Logger.console("pre",xmlNode);
+						maptip.setConfig(xmlNode);			
+					} else if (isLayer(file)) {
 						var foundMap:Map;
 						for (var i in this.components) {
 							if (this.components[i].type == "Map") {
@@ -1163,6 +1169,7 @@ class Flamingo {
 			case "Scalebar":
 			case "ZoomerV":
 			case "SliderHor":
+			case "Maptip":
 				return true;
 				break;
 			default:

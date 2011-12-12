@@ -45,7 +45,7 @@ class gui.button.AbstractButton extends AbstractPositionable{
 	 */
 	public function AbstractButton(id:String, container:MovieClip) {			
 		super(id, container);
-		spriteMap = flamingo.spriteMapFactory.obtainSpriteMap("flamingo/assets/img/sprite.png");
+		spriteMap = flamingo.spriteMapFactory.obtainSpriteMap(flamingo.correctUrl( "assets/img/sprite.png"));
 		
 		//make the holder for the movieclip
 		this.holder = this.container.createEmptyMovieClip("tool_" + id + "_holder", this.container.getNextHighestDepth());
