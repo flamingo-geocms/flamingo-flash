@@ -1015,9 +1015,9 @@ class Flamingo {
 						this.components[targetid] = map;
 						map.setConfig(xmlNode);				
 					}else if (file == "Maptip") {
-						var maptip:MapTip = new MapTip(targetid, mc);
+						/*var maptip:MapTip = new MapTip(targetid, mc);
 						this.components[targetid] = maptip;
-						maptip.setConfig(xmlNode);			
+						maptip.setConfig(xmlNode);		*/	
 					} else if (isLayer(file)) {
 						var foundMap:Map;
 						for (var i in this.components) {
@@ -2206,6 +2206,9 @@ class Flamingo {
 			return eval(this.components[id].target);
 		}
 	}
+	public function getRawComponent(id) {
+		return this.components[id];
+	}
 	/** 
 	* Gets the url of a component. 
 	* @param comp:Object  Id or MovieClip representing the component.
@@ -2363,10 +2366,12 @@ class Flamingo {
 	*/
 	public function addListener(listener:Object, listento:Object, caller:Object):Void {
 		var listentoId:String;
+		
+		var listentoObject:Object;
 		if (listento == undefined) {
-			Logger.console("!!!!! Flamingo.addListener: The listento is undefined! Caller: "+caller.id);
+			//Logger.console("!!!!! Flamingo.addListener: The listento is undefined! Caller: "+caller.id);
 			return;
-		}
+		}		
 		if (listento == this) {
 			listentoId = "flamingo";
 		} else if (listento.toLowerCase() == "flamingo") {
@@ -2375,6 +2380,7 @@ class Flamingo {
 			switch (typeof (listento)) {
 			case "object" :
 				if (listento instanceof AbstractPositionable) {
+					listentoObject = AbstractPositionable(listento);
 					listentoId = AbstractPositionable(listento).id;
 				}else{
 					for (var i = 0; i<listento.length; i++) {
@@ -2403,30 +2409,33 @@ class Flamingo {
 				}
 				break;
 			}
-		}
+		}		
 		//Logger.console("Flamingo.addListener() ListentoId: "+listentoId);
 		if (listentoId == undefined) {
-			Logger.console("!!!!! Flamingo.addListener() can't find the id for listento: " + listento);
+			//Logger.console("!!!!! Flamingo.addListener() can't find the id for listento: " + listento);
 			return;
+		}else if (listentoObject==undefined){
+			listentoObject = this.components[listentoId];
 		}
-		if (this.components[listentoId] == undefined) {
+		if (listentoObject == undefined) {
 			//Just make a reference 
-			this.components[listentoId] = new Object();
+			listentoObject = new Object();
+			this.components[listentoId] = listentoObject;
 			//trace(">"+listento+"<");
 			//trace(listentoId);
 			//Logger.console("Warning", "a component wants to listen to <b>'"+listentoId+"'</b>"+newline+"Unfortunaly <b>"+listentoId+"</b> doesn't exist"+newline+"Please check your ini.xml...");
 			//return;
 			
 		}
-		if (this.components[listentoId].addListener == undefined) {
-			AsBroadcaster.initialize(this.components[listentoId]);
+		if (listentoObject.addListener == undefined) {
+			AsBroadcaster.initialize(listentoObject);
 			//to store the callers for later use.
-			this.components[listentoId].callers = new Array();
+			listentoObject.callers = new Array();
 		}
-		this.components[listentoId].addListener(listener);
+		listentoObject.addListener(listener);
 		//add caller for later use.
-		this.components[listentoId].callers.push(caller);		
-
+		listentoObject.callers.push(caller);
+		
 		if (caller!=undefined && caller instanceof AbstractListenerRegister) {
 			var listenerRegister:AbstractListenerRegister = AbstractListenerRegister(caller);
 			listenerRegister.addAddedListener(listentoId, listener);
@@ -2606,7 +2615,7 @@ class Flamingo {
 			trace(">"+obj);
 		}
 	}
-	private function objects2Javascript(obj:Object):Object {
+	private function objects2Javascript(obj:Object):Object {		
 		var new_obj;
 		if (obj == this) {
 			return "flamingo";
@@ -2618,7 +2627,7 @@ class Flamingo {
 			if (obj instanceof AbstractPositionable) {
 				//Logger.console("objects2Javascript instance of AbstractPositionable");
 				return AbstractPositionable(obj).id;
-			}else{			
+			}else {						
 				for (var attr in obj) {
 					if (new_obj == undefined) {
 						if (obj.length && obj.splice && obj.sort) {
