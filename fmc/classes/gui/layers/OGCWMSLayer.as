@@ -407,7 +407,7 @@ class gui.layers.OGCWMSLayer extends AbstractLayer{
 	 * @param config the xml child
 	 */ 
 	function addComposite(name:String, config:XMLNode):Void { 
-		super.addComposite(name, config);
+		//super.addComposite(name, config);
 		if (name.toLowerCase() == "layer") {
 			var id;
 			for (var attr in config.attributes) {

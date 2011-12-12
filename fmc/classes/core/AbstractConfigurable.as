@@ -79,7 +79,7 @@ class core.AbstractConfigurable extends AbstractPositionable{
 	 * @param config the xml child
 	 */ 
 	function addComposite(name:String, config:XMLNode):Void { 
-		Logger.console("!!!!!AbstractConfigurable.addComposite(name:String, config:XMLNode) must be implemented in subclass");
+		Logger.console("!!!!!AbstractConfigurable.addComposite(name:String, config:XMLNode) must be implemented in subclass of component with id: "+id);
 	}
 	
 	
