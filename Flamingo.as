@@ -2369,7 +2369,7 @@ class Flamingo {
 		
 		var listentoObject:Object;
 		if (listento == undefined) {
-			//Logger.console("!!!!! Flamingo.addListener: The listento is undefined! Caller: "+caller.id);
+			Logger.console("!!!!! Flamingo.addListener: The listento is undefined! Caller: "+caller.id);
 			return;
 		}		
 		if (listento == this) {
@@ -2410,9 +2410,8 @@ class Flamingo {
 				break;
 			}
 		}		
-		//Logger.console("Flamingo.addListener() ListentoId: "+listentoId);
 		if (listentoId == undefined) {
-			//Logger.console("!!!!! Flamingo.addListener() can't find the id for listento: " + listento);
+			Logger.console("!!!!! Flamingo.addListener() can't find the id for listento: " + listento);
 			return;
 		}else if (listentoObject==undefined){
 			listentoObject = this.components[listentoId];
@@ -2625,7 +2624,6 @@ class Flamingo {
 		} else if (typeof (obj) == "object") {
 			//if obj is a AbstractPositionable only add the id;
 			if (obj instanceof AbstractPositionable) {
-				//Logger.console("objects2Javascript instance of AbstractPositionable");
 				return AbstractPositionable(obj).id;
 			}else {						
 				for (var attr in obj) {
@@ -2857,11 +2855,13 @@ class Flamingo {
 		}else {			
 			r = this.getPosition(comp, parent);			
 			mc = MovieClip(comp);
-		}
+		}		
 		mc._x = r.x;
 		mc._y = r.y;
-		mc._width = r.width;
-		mc._height = r.height;
+		if (isNaN(r.width))
+			mc._width = r.width;
+		if (isNaN(r.height))
+			mc._height = r.height;
 		
 		
 	}	

@@ -108,7 +108,6 @@ class core.AbstractPositionable extends AbstractListenerRegister
 	}
 	
 	public function resize() {		
-		//Logger.console("AbstractPositionable resize: "+id);
 		this.flamingo.position(this);
 		if (this.mBorder != undefined) {
 			flamingo.position(this.mBorder);
