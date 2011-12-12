@@ -1013,11 +1013,10 @@ class Flamingo {
 						var map:Map = new Map(targetid, mc);		
 						map.type = type;
 						this.components[targetid] = map;
-						map.setConfig(xmlNode);									
+						map.setConfig(xmlNode);				
 					}else if (file == "Maptip") {
 						var maptip:MapTip = new MapTip(targetid, mc);
 						this.components[targetid] = maptip;
-						Logger.console("pre",xmlNode);
 						maptip.setConfig(xmlNode);			
 					} else if (isLayer(file)) {
 						var foundMap:Map;
@@ -2201,12 +2200,11 @@ class Flamingo {
 	* @return MovieClip The component.
 	*/
 	public function getComponent(id:String):MovieClip {
-		if (this.components[id] instanceof AbstractPositionable) {					
+		if (this.components[id] instanceof AbstractPositionable) {			
 			return this.components[id];
-		}else{
+		}else {
 			return eval(this.components[id].target);
 		}
-		
 	}
 	/** 
 	* Gets the url of a component. 
@@ -3248,8 +3246,11 @@ class Flamingo {
 				r = this.getId(r);
 			}
 			return r;
-		} else {
-	
+		} else if ( this.components[id]instanceof AbstractPositionable) {
+			var m = this.components[id];
+			var ret =  m[method](arguments);
+			return ret;
+		} else{
 			var func = eval(comp + "." + method);
 			if (func == undefined) {
 				return null;
