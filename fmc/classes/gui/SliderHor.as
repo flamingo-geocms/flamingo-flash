@@ -87,15 +87,16 @@ class gui.SliderHor extends AbstractPositionable{
 		init();
 		
 				//build buttons
-		spriteMap = flamingo.spriteMap;
+		spriteMap = flamingo.spriteMapFactory.obtainSpriteMap(flamingo.correctUrl( "assets/img/sprite.png"));
+		
 		sliderBar = this.container.createEmptyMovieClip("sliderBar", this.container.getNextHighestDepth());
 		spriteMap.attachSpriteTo(sliderBar, new SpriteSettings(0, 762, 50, 2, 0, 0, true, 100) );
 		sliderButton = new HorSliderButton("sliderButton", this.container.createEmptyMovieClip("sliderButton_container", this.container.getNextHighestDepth()), this);
 		increaseButton = new IncreaseButton("increaseButton", this.container.createEmptyMovieClip("increaseButton_container", this.container.getNextHighestDepth()), this);
-		decreaseButton = new DecreaseButton("decreaseButton ", this.container.createEmptyMovieClip("decreaseButton _container", this.container.getNextHighestDepth()), this);
-				//
+		decreaseButton = new DecreaseButton("decreaseButton", this.container.createEmptyMovieClip("decreaseButton _container", this.container.getNextHighestDepth()), this);
+
+		
 		if (flamingo.getString(this, "label") != undefined && flamingo.getString(this, "label") != "") {
-			Logger.console("sdfasdf");
 			mLabel = this.container.createTextField("mLabel", this.container.getNextHighestDepth(), 0, 0, 100, 25);
 			mLabel.multiline = false;
 			mLabel.wordWrap = false;
