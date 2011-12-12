@@ -1089,7 +1089,7 @@ class Flamingo {
 							parentmc = parentmc._parent;
 						}
 					}
-					this.raiseEvent(this, "onLoadComponent", targetid);	
+					this.raiseEvent(this, "onLoadComponent", this.components[targetid]);	
 					/* Done loading can only work for external .swf files.
 					this.doneLoading();*/
 					/* A Component is added before, and had a listener to this object.

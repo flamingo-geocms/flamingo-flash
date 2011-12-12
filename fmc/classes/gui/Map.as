@@ -167,8 +167,14 @@ class gui.Map extends AbstractPositionable implements PersistableComponent{
 		var thisObj:Map = this;		
 		//flamingo
 		var lFlamingo:Object = new Object();
-		lFlamingo.onLoadComponent = function(mc:MovieClip) {
-			if (thisObj.mLayers[mc._name] == mc) {
+		lFlamingo.onLoadComponent = function(mc:Object) {	
+			var objectid = mc._name;
+			var movieClip= MovieClip(mc);
+			if (mc instanceof AbstractPositionable){
+				objectid = AbstractPositionable(mc).id;
+				movieClip = AbstractPositionable(mc).container;
+			}
+			if (thisObj.mLayers[objectid] == movieClip) {
 				thisObj.flamingo.raiseEvent(thisObj, "onAddLayer", thisObj, mc);
 				thisObj.checkUpdate()
 				//deal with argument extent, wait untill at least one layer is loaded 

@@ -1,4 +1,4 @@
-/*-----------------------------------------------------------------------------
+﻿/*-----------------------------------------------------------------------------
 Copyright (C) 2006  Menko Kroeske
 
 This file is part of Flamingo MapComponents.
@@ -40,7 +40,7 @@ var thisObj = this;
 //---------------------------------
 var lLayer:Object = new Object();
 lLayer.onUpdate = function(layer:MovieClip) {
-	var id = flamingo.getId(layer);
+	var id = _global.flamingo.getId(layer);
 	monitorobjects[id] = new Object();
 	if (layer.name.length>0) {
 		monitorobjects[id].name = layer.name;
@@ -55,30 +55,30 @@ lLayer.onUpdateProgress = function(layer:MovieClip, bytesloaded:Number, bytestot
 	if (bytestotal>0) {
 		var p = bytesloaded/bytestotal*100;
 	}
-	monitorobjects[flamingo.getId(layer)].progress = p;
+	monitorobjects[_global.flamingo.getId(layer)].progress = p;
 	monitor();
 };
 lLayer.onError = function(layer:MovieClip, type:String, error:String) {
 	//if (type == "update") {
-		delete monitorobjects[flamingo.getId(layer)];
+		delete monitorobjects[_global.flamingo.getId(layer)];
 		monitor();
 	//}
 };
 lLayer.onUpdateComplete = function(layer:MovieClip) {
-	delete monitorobjects[flamingo.getId(layer)];
+	delete monitorobjects[_global.flamingo.getId(layer)];
 	monitor();
 };
 //---------------------------------------
 var lMap:Object = new Object();
 lMap.onAddLayer = function(map:MovieClip, layer:MovieClip) {
-	flamingo.addListener(lLayer, layer,thisObj);
+	_global.flamingo.addListener(lLayer, layer,thisObj);
 };
 //---------------------------------------
 var lParent:Object = new Object();
 lParent.onResize = function(mc:MovieClip) {
 	resize();
 };
-flamingo.addListener(lParent, flamingo.getParent(this), this);
+_global.flamingo.addListener(lParent, _global.flamingo.getParent(this), this);
 //----------------
 init();
 /** @tag <fmc:MonitorLayer>  
@@ -97,15 +97,15 @@ function init():Void {
 	//defaults
 	this.setConfig(defaultXML);
 	//custom
-	var xmls:Array= flamingo.getXMLs(this);
+	var xmls:Array= _global.flamingo.getXMLs(this);
 	for (var i = 0; i < xmls.length; i++){
 		this.setConfig(xmls[i]);
 	}
 	delete xmls;
 	//remove xml from repository
-	flamingo.deleteXML(this);
+	_global.flamingo.deleteXML(this);
 	this._visible = visible;
-	flamingo.raiseEvent(this, "onInit", this);
+	_global.flamingo.raiseEvent(this, "onInit", this);
 }
 /**
 * Configurates a component by setting a xml.
@@ -116,7 +116,7 @@ function setConfig(xml:Object) {
 		xml = new XML(String(xml)).firstChild;
 	}
 	//load default attributes, strings, styles and cursors 
-	flamingo.parseXML(this, xml);
+	_global.flamingo.parseXML(this, xml);
 	//parse custom attributes
 	for (var attr in xml.attributes) {
 		var val:String = xml.attributes[attr];
@@ -126,12 +126,20 @@ function setConfig(xml:Object) {
 			break;
 		}
 	}
-	setSkin();
-	flamingo.addListener(lMap, listento, this);
+	setSkin();	
+	if (listento!=undefined){
+		_global.flamingo.addListener(lMap, listento, this);
+		//if the layers already loaded add listeners.	
+		var map:Object = _global.flamingo.getComponent(listento);
+		for (var layerid in map.mLayers){
+			trace("The layer that is already added: "+layerid);
+			_global.flamingo.addListener(lLayer, map.mLayers[layerid],this);
+		}
+	}
 	resize();
 }
 function resize() {
-	flamingo.position(this);
+	_global.flamingo.position(this);
 }
 function monitor() {
 	for (var id in monitorobjects) {
@@ -139,7 +147,7 @@ function monitor() {
 		var p = monitorobjects[id].progress;
 		if (p>0) {
 			mProgress.gotoAndStop(Math.round(mProgress._totalframes*p/100));
-			var t = flamingo.getString(this, "loading", "");
+			var t = _global.flamingo.getString(this, "loading", "");
 			t = t.split("[layer]").join(monitorobjects[id].name);
 			t = t.split("[percentage]").join(String(Math.round(p)));
 			mProgress.txt.htmlText = "<span class='text'>"+t+"</span>";
@@ -147,7 +155,7 @@ function monitor() {
 			mBusy._visible = false;
 			mBusy.stop();
 		} else {
-			var t = flamingo.getString(this, "waiting", "");
+			var t = _global.flamingo.getString(this, "waiting", "");
 			t = t.split("[layer]").join(monitorobjects[id].name);
 			mBusy.txt.htmlText = "<span class='text'>"+t+"</span>";
 			mBusy.play();
@@ -163,11 +171,11 @@ function monitor() {
 function setSkin() {
 	this.useHandCursor = false;
 	var mc:MovieClip = attachMovie(skin+"_progress", "mProgress", 0);
-	mc.txt.styleSheet = flamingo.getStyleSheet(this);
+	mc.txt.styleSheet = _global.flamingo.getStyleSheet(this);
 	mc._visible = false;
 	mc.stop();
 	var mc:MovieClip = attachMovie(skin+"_busy", "mBusy", 1);
-	mc.txt.styleSheet = flamingo.getStyleSheet(this);
+	mc.txt.styleSheet = _global.flamingo.getStyleSheet(this);
 	mc._visible = false;
 	mc.stop();
 }
