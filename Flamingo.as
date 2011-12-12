@@ -134,13 +134,7 @@ class Flamingo {
 		 
 	//Flamingo class constructor
 	//@param mc MovieClip 
-	public function Flamingo(mc:MovieClip) {		
-		spriteMapFactory = SpriteMapFactory.getInstance();
-		//var toolSpritesUrl:String = (correctUrl( "assets/img/sprite.png"));
-		
-		//let the factory provide you with a new spritemap by calling obtainSpriteMap() on it with a url
-		//if you call obtainSpriteMap anywhere else with the same image url, it won't spoil bandwith requests and will only load it once..
-	//	this.spriteMap = spriteMapFactory.obtainSpriteMap(toolSpritesUrl);
+	public function Flamingo(mc:MovieClip) {
 		
 		System.security.allowDomain("*");
 		//save base url of flamingo.swf
@@ -153,6 +147,14 @@ class Flamingo {
 		}
 		a_url.pop();
 		this.rooturl = a_url.join("/");
+		//sprite factory
+		spriteMapFactory = SpriteMapFactory.getInstance();
+		var toolSpritesUrl:String = (correctUrl( "assets/img/sprite.png"));
+		
+		//let the factory provide you with a new spritemap by calling obtainSpriteMap() on it with a url
+		//if you call obtainSpriteMap anywhere else with the same image url, it won't spoil bandwith requests and will only load it once..
+	    this.spriteMap = spriteMapFactory.obtainSpriteMap(toolSpritesUrl);
+		
 		// make it possible to communicate from a html page with flamingo through the callFlamingo function
 		//ExternalInterface.addCallback("call", this, callMethod);
 		ExternalInterface.addCallback("callMethod", this, callMethod);

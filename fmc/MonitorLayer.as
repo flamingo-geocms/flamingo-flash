@@ -132,7 +132,6 @@ function setConfig(xml:Object) {
 		//if the layers already loaded add listeners.	
 		var map:Object = _global.flamingo.getComponent(listento);
 		for (var layerid in map.mLayers){
-			trace("The layer that is already added: "+layerid);
 			_global.flamingo.addListener(lLayer, map.mLayers[layerid],this);
 		}
 	}
