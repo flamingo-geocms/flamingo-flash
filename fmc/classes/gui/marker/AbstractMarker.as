@@ -1,6 +1,7 @@
 ﻿// This file is part of Flamingo MapComponents.
 // Author: Roy Braam
 import tools.Logger;
+import gui.Map;
 /**A abstarct marker class. Implement bij all markers
 */
 class gui.marker.AbstractMarker extends MovieClip {
@@ -8,7 +9,7 @@ class gui.marker.AbstractMarker extends MovieClip {
 	private var log:Logger=null;
 	private var mcPrefix="marker";
 	
-	private var map=null;
+	private var map:Map=null;
 	private var x:Number=null;
 	private var y:Number=null;
 	private var markerUrl:String=null;
@@ -41,7 +42,7 @@ class gui.marker.AbstractMarker extends MovieClip {
 	/**
 	Draw the marker on the map
 	*/
-	function draw():Void{
+	function draw():Void {
 		if (this.mcMarker==null){					
 			createMarker();
 			if (!this.visible){
@@ -68,7 +69,7 @@ class gui.marker.AbstractMarker extends MovieClip {
 	*/
 	public function createMarker(){
 		var depth:Number = this.map.getNextDepth()
-		this.mcMarker = this.map.createEmptyMovieClip(this.mcPrefix+this.id, depth);
+		this.mcMarker = this.map.container.createEmptyMovieClip(this.mcPrefix+this.id, depth);
 		//set init values
 		if (this.height){
 			this.mcMarker._height=this.height;
@@ -93,7 +94,7 @@ class gui.marker.AbstractMarker extends MovieClip {
 	/**
 	Set the map. Also sets a listener for onChangeExtent
 	*/
-	public function setMap(map:MovieClip){
+	public function setMap(map:Map) {
 		this.map=map;
 		//addListener for redrawing
 		var thisObj=this;
@@ -107,7 +108,7 @@ class gui.marker.AbstractMarker extends MovieClip {
 		_global.flamingo.addListener(this.mapListener,this.map, this);
 		
 	}	
-	public function getMap():MovieClip{
+	public function getMap():Map{
 		return this.map;
 	}
 		

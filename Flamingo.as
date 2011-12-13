@@ -3248,6 +3248,9 @@ class Flamingo {
 		}
 		arguments.shift();	
 		var comp = this.components[id].target;
+		if (this.components[id] instanceof AbstractPositionable) {
+			comp = this.components[id]
+		}
 		if (comp == undefined) {
 			return null;
 		}
@@ -3261,11 +3264,13 @@ class Flamingo {
 				r = this.getId(r);
 			}
 			return r;
-		} else if ( this.components[id]instanceof AbstractPositionable) {
-			
-			comp = this.components[id];
-			var ret  =  comp[method](arguments);
-			return ret;
+		} else if (comp instanceof AbstractPositionable) {
+			var func = comp[method];
+			if (func == undefined) {
+				return null;
+			}
+			var r = func.apply(comp, arguments);
+			return r;
 		} else{
 			var func = eval(comp + "." + method);
 			if (func == undefined) {

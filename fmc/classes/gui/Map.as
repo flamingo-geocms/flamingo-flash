@@ -104,7 +104,7 @@ class gui.Map extends AbstractPositionable implements PersistableComponent{
 	private var nextDepth:Number=0
 	private var markers:Array=null;
 	private var markerIDnr:Number = 0;
-	private var fovMarker=null;
+	private var fovMarker:FOVMarker=null;
 	public var nrOfServiceLayers:Number = 0;
 	public var log = null;
 	//Background movieclip
@@ -676,11 +676,9 @@ class gui.Map extends AbstractPositionable implements PersistableComponent{
 				} 				
 			};			
 			flamingo.addListener(lLayer, layerid, this);
-			Logger.console("xml", xml);
-			Logger.console("mc", mc);
-			Logger.console("layerid",layerid);
+			
 			flamingo.loadComponent(xml, mc, layerid);
-		Logger.console("asfasfasfasdf");
+			
 			//_global.flamingo.tracer("Map " + _global.flamingo.getId(this)+ " addLayer "  + layerid + " url " + _global.flamingo.getUrl(layerid) + _global.flamingo.getUrl(layerid).indexOf("LayerArcIMS"));
 			//count the number of serviceLayers
 			if(_global.flamingo.getUrl(layerid).indexOf("LayerArcIMS")>0 || 
@@ -1079,7 +1077,6 @@ class gui.Map extends AbstractPositionable implements PersistableComponent{
 	* @return Object Extent. An extent has 4 properties 'minx', 'miny', 'miny', 'maxy' and optional 'name'
 	*/
 	public function getExtent():Object {
-		Logger.console("getextent");
 		return this.copyExtent(this._extent);
 	}
 	/**
@@ -2286,8 +2283,8 @@ class gui.Map extends AbstractPositionable implements PersistableComponent{
 	* @param height [optional] height of marker. Note: not implemented.
 	* @param htmlText [optional] htmlText if the marker type is text. Note: only the default marker type is implemented.
 	*/
-	public function setMarker(id:String,type:String,x:Number,y:Number,width:Number,height:Number,htmlText:String):Void {
-		if (x==null || y==null) { //place marker in center of the map
+	public function setMarker(id:String, type:String, x:Number, y:Number, width:Number, height:Number, htmlText:String):Void {
+		if (x == null || y == null) { //place marker in center of the map
 			var coordinate:Object = getCenter(this._currentextent);
 			x = coordinate.x;
 			y = coordinate.y;
@@ -2309,8 +2306,8 @@ class gui.Map extends AbstractPositionable implements PersistableComponent{
 			}
 		}
 		if (!existingMarker) {
-			//create new marker
-			var mcMarker:Object = createMarker(id,type,x,y,width,height,htmlText);
+			//create new marker			
+			var mcMarker:Object = this.createMarker(id, type, x, y, width, height, htmlText);			
 			markers.push(mcMarker);
 		}
 		
@@ -2337,8 +2334,8 @@ class gui.Map extends AbstractPositionable implements PersistableComponent{
 		markers = null;
 	}
 	private function createMarker(id:String,type:String,x:Number,y:Number,width:Number,height:Number,htmlText:String):Object {
-		//create new marker				
-		var mcMarker= new DefaultMarker();
+		//create new marker			
+		var mcMarker:DefaultMarker= new DefaultMarker();
 		mcMarker.setId(id);
 		mcMarker.setMap(this);
 		mcMarker.setX(x);
@@ -2346,6 +2343,7 @@ class gui.Map extends AbstractPositionable implements PersistableComponent{
 		mcMarker.setWidth(width);
 		mcMarker.setHeight(height);
 		mcMarker.draw();
+		
 		return mcMarker;
 	}
 	/*Set a Field of View marker.
@@ -2360,7 +2358,7 @@ class gui.Map extends AbstractPositionable implements PersistableComponent{
 			this.fovMarker.removeMovieClip();
 		}
 		this.fovMarker= new FOVMarker();
-		this.fovMarker.setId(markerIDnr);
+		this.fovMarker.setId(""+markerIDnr);
 		this.fovMarker.setMap(this);
 		this.fovMarker.setX(x);
 		this.fovMarker.setY(y);
