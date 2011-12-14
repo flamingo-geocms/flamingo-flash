@@ -6,6 +6,7 @@
  -----------------------------------------------------------------------------*/
 
 import coregui.*;
+import tools.Logger;
 import event.ActionEvent;
 import event.ActionEventListener;
 
@@ -17,7 +18,7 @@ class coregui.ButtonBar extends MovieClip implements ActionEventListener{
     private var buttonWidth:Number = 10; // Set by init object.
     private var buttonHeight:Number = 10; // Set by init object.
     private var orientation:Number = HORIZONTAL; // Set by init object.
-    private var spacing:Number = 5; // Set by init object.
+    private var spacing:Number = 15; // Set by init object.
     private var expandable:Boolean = false; // Set by init object.
 	private var popwindow:Boolean = false; // Set by init object.
     private var buttonConfigs:Array = null; // Set by init object.
@@ -40,7 +41,8 @@ class coregui.ButtonBar extends MovieClip implements ActionEventListener{
 	private var popUpWindowHideDelay:Number = 1000; // Set by init object.
 	private var popUpWindowVisible:Boolean = false;
 	
-    
+	private var setXIntervalId;
+	
     function onLoad():Void {
 		default_xpos = _x;
 		default_ypos = _y;
@@ -97,25 +99,37 @@ class coregui.ButtonBar extends MovieClip implements ActionEventListener{
         for (var i:Number = 0; i < buttonConfigs.length; i++) {
             addButton(ButtonConfig(buttonConfigs[i]), i);
         }
+		setXIntervalId = setInterval(this,"setMovieclipX",10);
+		
     }
     
     private function addButton(buttonConfig:ButtonConfig, i:Number):Void {
         var symbolID:String = buttonConfig.getGraphicURL();
         var initObject:Object = new Object();
 		initObject["_width"] = buttonWidth;
+		initObject["_x"] = 123;
 		initObject["_height"] = buttonHeight;
         if (orientation == HORIZONTAL) {
             initObject["_x"] = i * (buttonWidth + spacing);
         } else { // VERTICAL
-            initObject["_y"] = i * (buttonHeight + spacing);
+            initObject["_y"] = i * (buttonHeight + spacing) + 20;
         }
 		initObject["id"] = i;
         initObject["tooltipText"] = buttonConfig.getToolTipText();
 		initObject["actionEventListener"] = buttonConfig.getActionEventListener();
         initObject["url"] = buttonConfig.getURL();
         initObject["windowName"] = buttonConfig.getWindowName();
-        buttons.push(attachMovie(symbolID, "m" + symbolID + i, i + 2, initObject));
+		var b:MovieClip = attachMovie(symbolID , "m" + symbolID + i, getNextHighestDepth(),initObject);
+		
+        buttons.push(b);
 		buttons[i].addActionEventListener(this);
+	}
+
+	private function setMovieclipX(){
+		for (var i:Number = 0; i < buttons.length; i++) {
+            buttons[i]._x = i * (buttonWidth + spacing);
+		}		
+		clearInterval(setXIntervalId);
 	}
     
     private function removeButtons():Void {
