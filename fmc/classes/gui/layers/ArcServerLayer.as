@@ -86,11 +86,11 @@ class gui.layers.ArcServerLayer extends AbstractLayer{
 	var outputtype:String = "png24";
 	var alpha:Number = 100;
 	//---------------------------------
-	var layers:Object = new Object();
+	var layers:Object;
 	var updating:Boolean = false;
 	var nrcache:Number = 0;
 	var map:Map;
-	var caches:Object = new Object();
+	var caches:Object;
 	var _identifylayers:Array;
 	var _hotlinklayers:Array;
 	var _maptiplayers:Array;
@@ -113,6 +113,8 @@ class gui.layers.ArcServerLayer extends AbstractLayer{
 	
 	public function ArcServerLayer(id:String, container:MovieClip, map:Map) {
 		super (id, container,map);
+		caches = new Object();
+		layers = new Object();
 		defaultXML = "<LayerArcServer/>";
 		init();		
 	}

@@ -1313,7 +1313,7 @@ class Flamingo {
 	public function parseXML(comp:Object, xml:Object):Void {
 		var id:String = this.getId(comp);
 		if (xml == undefined) {
-			Logger.console("!!!!! Flamingo.parseXML() No XML for object: "+id);
+			//Logger.console("!!!!! Flamingo.parseXML() No XML for object: "+id);
 			return;
 		}
 		if (id == undefined) {
@@ -2375,7 +2375,7 @@ class Flamingo {
 		
 		var listentoObject:Object;
 		if (listento == undefined) {
-			Logger.console("!!!!! Flamingo.addListener: The listento is undefined! Caller: "+caller.id);
+			//Logger.console("!!!!! Flamingo.addListener: The listento is undefined! Caller: "+caller.id);
 			return;
 		}		
 		if (listento == this) {
@@ -2417,7 +2417,7 @@ class Flamingo {
 			}
 		}		
 		if (listentoId == undefined) {
-			Logger.console("!!!!! Flamingo.addListener() can't find the id for listento: " + listento);
+			//Logger.console("!!!!! Flamingo.addListener() can't find the id for listento: " + listento);
 			return;
 		}else if (listentoObject==undefined){
 			listentoObject = this.components[listentoId];

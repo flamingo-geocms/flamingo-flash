@@ -96,11 +96,11 @@ class gui.layers.OGCWMSLayer extends AbstractLayer{
 	//-------------------------------------
 	var _updating:Boolean = false;
 	var updateWhenEmpty:Boolean = true;
-	var layers:Object = new Object();
+	var layers:Object;
 	var timeoutid:Number;
 	var nrcache:Number = 0;
 	var map:Map;
-	var caches:Object = new Object();
+	var caches:Object;
 	var extent:Object;
 	var maptipextent:Object;
 	var identifyextent:Object;
@@ -127,7 +127,9 @@ class gui.layers.OGCWMSLayer extends AbstractLayer{
 	var starttime:Date;
 	
 	public function OGCWMSLayer(id:String, container:MovieClip, map:Map) {
-		super (id, container,map);		
+		super (id, container, map);		
+		caches = new Object();
+		layers = new Object();
 		init();		
 	}
 	

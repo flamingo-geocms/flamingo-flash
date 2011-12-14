@@ -61,12 +61,13 @@ dynamic class gui.tools.ToolGroup extends AbstractPositionable implements Compon
 			thisObj.checkFinishIdentify();
 			thisObj.setTool(thisObj.tool);
 		};
+		
 		flamingo.addListener(lFlamingo, "flamingo", this);		
 		//-------------------------		
-		lParent.onResize = function(mc:MovieClip) {
+		/*lParent.onResize = function(mc:MovieClip) {
 			thisObj.resize();
 		};
-		flamingo.addListener(lParent, flamingo.getParent(this), this);
+		flamingo.addListener(lParent, flamingo.getParent(this), this);*/
 		//-------------------------		
 		lMap.onIdentify = function(map:MovieClip) {
 			if (map.holdonidentify) {
@@ -158,7 +159,7 @@ dynamic class gui.tools.ToolGroup extends AbstractPositionable implements Compon
 			for (var i:Number = xTools.length-1; i>=0; i--) {
 				addComposite(xTools[i]);
 			}
-		}
+		}		
 		flamingo.addListener(lMap, listento, this);
 		resize();
 		flamingo.position(this.container);
