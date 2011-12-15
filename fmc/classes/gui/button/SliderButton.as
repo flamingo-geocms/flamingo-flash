@@ -29,9 +29,9 @@ class gui.button.SliderButton extends AbstractButton
 	function onPress()	{
 		zoomerV.cancelUpdate();
 		var l = this.container._x;
-		var t = zoomerV.sliderBar._y + (this.height/2);
+		var t = zoomerV.sliderBar._y;
 		var r = this.container._x;
-		var b = zoomerV.sliderBar._y + zoomerV.sliderBar._height - (this.height *1.5);
+		var b = zoomerV.sliderBar._y + zoomerV.sliderBar._height;
 		
 		this.container.startDrag(false, l, t, r, b);
 		var thisObj = this;
