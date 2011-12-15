@@ -89,6 +89,10 @@ class gui.button.SliderButton extends AbstractButton
 		map.moveToScale(scale, center, -1, 0);
 	}
 	
+	function resize():Void {
+		//don't do anything on resize. The parent is positioning this object.
+	}
+	
 	public function get map():Object
 	{
 		return flamingo.getComponent(this.zoomerV.listento[0]);

@@ -27,7 +27,7 @@ class gui.BorderNavigation extends AbstractPositionable
 	public function BorderNavigation(id:String, container:MovieClip)
 	{
 		super(id, container);
-		extentButtons = new Object();
+		extentButtons = new Object();		
 		init();
 	}
 	
@@ -110,15 +110,15 @@ class gui.BorderNavigation extends AbstractPositionable
 		{
 			var pos = buttons[i];
 			var moveExtentButton:MoveExtentButton = new MoveExtentButton(this.id + pos, this.container.createEmptyMovieClip("m" + pos, i), this);
-			var offsetx = 10;
-			var offsety = 11; 
+			var offsetx = 15;
+			var offsety = 22; 
 			switch(pos){
 				case "W":
 					moveExtentButton.setDirectionMatrix(- 1, 0);
 					moveExtentButton.tooltipId = "";
-					moveExtentButton.toolDownSettings = new SpriteSettings(4, 313, 12, 19, offsetx, offsety, true, 100);
-					moveExtentButton.toolOverSettings = new SpriteSettings(44, 313, 12, 19, offsetx, offsety, true, 100);
-					moveExtentButton.toolUpSettings = new SpriteSettings(85, 313, 12, 19, offsetx, offsety, true, 100);
+					moveExtentButton.toolDownSettings = new SpriteSettings(4, 313, 12, 19, 5, offsety, true, 100);
+					moveExtentButton.toolOverSettings = new SpriteSettings(44, 313, 12, 19, 5, offsety, true, 100);
+					moveExtentButton.toolUpSettings = new SpriteSettings(85, 313, 12, 19, 5, offsety, true, 100);
 					break;
 				case "E":
 					moveExtentButton.setDirectionMatrix(1, 0);
@@ -130,16 +130,16 @@ class gui.BorderNavigation extends AbstractPositionable
 				case "N":
 					moveExtentButton.setDirectionMatrix(0, 1);
 					moveExtentButton.tooltipId = "tooltip_north";
-					moveExtentButton.toolDownSettings = new SpriteSettings(4,48, 19, 12, offsetx, offsety, true, 100);
-					moveExtentButton.toolOverSettings = new SpriteSettings(47, 50, 19, 12, offsetx, offsety, true, 100);
-					moveExtentButton.toolUpSettings = new SpriteSettings(96, 50, 19, 12, offsetx, offsety, true, 100);
+					moveExtentButton.toolDownSettings = new SpriteSettings(4,48, 19, 12, 25, 0, true, 100);
+					moveExtentButton.toolOverSettings = new SpriteSettings(49, 50, 19, 12, 25, 0, true, 100);
+					moveExtentButton.toolUpSettings = new SpriteSettings(96, 50, 19, 12, 25, 0, true, 100);
 					break;
 				case "S":
 					moveExtentButton.setDirectionMatrix(0, - 1);
 					moveExtentButton.tooltipId = "tooltip_south";
-					moveExtentButton.toolDownSettings = new SpriteSettings(4,183, 19, 12, offsetx, offsety, true, 100);
-					moveExtentButton.toolOverSettings = new SpriteSettings(47, 183, 19, 12, offsetx, offsety, true, 100);
-					moveExtentButton.toolUpSettings = new SpriteSettings(96, 183, 19, 12, offsetx, offsety, true, 100);
+					moveExtentButton.toolDownSettings = new SpriteSettings(4,183, 19, 12, 25, 19, true, 100);
+					moveExtentButton.toolOverSettings = new SpriteSettings(49, 183, 19, 12, 25, 19, true, 100);
+					moveExtentButton.toolUpSettings = new SpriteSettings(96, 183, 19, 12, 25, 19, true, 100);
 					break;
 				case "NE":
 					moveExtentButton.setDirectionMatrix(1, 1);
@@ -172,30 +172,28 @@ class gui.BorderNavigation extends AbstractPositionable
 			};
 			this.extentButtons[pos] = moveExtentButton;
 		}
-		resize();
+			resize();
 	}
 	
 	function resize()
-	{
-		
-		//Logger.console("******* RESIZE()");
-		
+	{		
+		super.resize();
 		var r = flamingo.getPosition(this);
-		
 		/*r.x = 0;
 		 r.y = 0;*/
 		
-		var left = r.x - offset;
-		var top = r.y - offset;
-		var right = r.x + r.width + offset;
-		var bottom = r.y + r.height + offset;
+		/*var left = r.x - offset;
+		var top = r.y - offset;*/
+		var left = 0;
+		var top = 0;
+		var right = left + r.width + offset;
+		var bottom = top + r.height + offset;
 		var xcenter = (right + left) / 2;
 		var ycenter = (top + bottom) / 2;
+		
 		for(var pos in extentButtons)
-		{
-			
-			//Logger.console("Resize pos: "+pos);
-			
+		{			
+			//Logger.console("Resize pos: "+pos);			
 			switch(pos){
 				case "W":
 					extentButtons[pos].move(left, ycenter - 33);
@@ -242,10 +240,4 @@ class gui.BorderNavigation extends AbstractPositionable
 	 */
 	//public function onInit(comp:MovieClip):Void {
 	//}
-	
-	
-	public function getParent():Object
-	{
-		return this.container._parent;
-	}
 }

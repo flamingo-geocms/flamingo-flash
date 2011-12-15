@@ -32,7 +32,7 @@ class gui.button.MoveExtentButton extends AbstractButton {
 	public function onReleaseOutside() {
 		this.stopMove();		
 	}	
-	
+		
 	public function startMove() {		
 		var dx = 0;
 		var dy = 0;
@@ -61,6 +61,10 @@ class gui.button.MoveExtentButton extends AbstractButton {
 		e.maxx = e.maxx+obj.dx;
 		e.maxy = e.maxy+obj.dy;
 		obj.map.moveToExtent(e, -1, 0);
+	}
+	
+	function resize():Void {
+		//don't do anything on resize. The parent is positioning this object.
 	}
 	
 	/**
