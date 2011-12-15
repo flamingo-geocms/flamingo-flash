@@ -181,10 +181,10 @@ class gui.layers.OGCWMSLayer extends AbstractLayer{
 				}
 			}
 		}
-		if (nullIfEmpty(maptip_layers)!=null){
+	/*	if (nullIfEmpty(maptip_layers) != null) {
 			setLayerProperty(maptip_layers, "maptip", true);
 			setLayerProperty(maptip_layers, "queryable", true);
-		}
+		}*/
 		if (nullIfEmpty(query_layers)!=null){
 			setLayerProperty(query_layers, "identify", true);
 			setLayerProperty(query_layers, "queryable", true);
@@ -215,6 +215,7 @@ class gui.layers.OGCWMSLayer extends AbstractLayer{
 			if (thisObj.name == undefined) {
 				thisObj.name = service.title;
 			}
+	
 			thisObj._parseLayers(servicelayers);
 			thisObj.flamingo.raiseEvent(thisObj, "onGetCapabilities", thisObj);
 			//set initialized in analogy with LayerArcIMS and LayerArcServer.
@@ -426,6 +427,7 @@ class gui.layers.OGCWMSLayer extends AbstractLayer{
 					layers[id].language = new Object();
 				}
 				_global.flamingo.parseString(config, layers[id].language);
+				
 				for (var attr in config.attributes) {
 					var val:String = config.attributes[attr];
 					switch (attr.toLowerCase()) {
@@ -963,7 +965,9 @@ class gui.layers.OGCWMSLayer extends AbstractLayer{
 						if (id == undefined) {
 							id = layer;
 						}
+				
 						var maptip = thisObj._getString(thisObj.layers[id], "maptip");
+						
 						if (maptip.length>0) {
 							var record = features[layer][0];
 							for (var field in record) {

@@ -936,7 +936,7 @@ class Flamingo {
 			xml = new XML(String(xml));
 			xml = xml.firstChild;
 		}
-
+		
 		if (xml.prefix.length == 0) {
 			return;
 		}
@@ -1021,9 +1021,9 @@ class Flamingo {
 						this.components[targetid] = map;
 						map.setConfig(xmlNode);				
 					}else if (file == "Maptip") {
-						/*var maptip:MapTip = new MapTip(targetid, mc);
+						var maptip:MapTip = new MapTip(targetid, mc);
 						this.components[targetid] = maptip;
-						maptip.setConfig(xmlNode);		*/	
+						maptip.setConfig(xmlNode);		
 					} else if (isLayer(file)) {
 						var foundMap:Map;
 						for (var i in this.components) {

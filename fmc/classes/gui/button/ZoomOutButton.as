@@ -34,7 +34,6 @@ class gui.button.ZoomOutButton extends AbstractButton
 	
 	public function onPress()
 	{
-		Logger.console("zoomoutpress");
 		zoomerV.cancelUpdate();
 		_zoomid = setInterval(zoomerV, "_zoom", 10, map, 95);
 	}

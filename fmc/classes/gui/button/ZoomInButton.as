@@ -27,10 +27,6 @@ class gui.button.ZoomInButton extends AbstractButton
 	public function onPress()
 	{
 		zoomerV.cancelUpdate();
-		
-		//var map = flamingo.getComponent(listento[0]);
-		
-		Logger.console("zoominpress", map);
 		_zoomid = setInterval(zoomerV, "_zoom", 10, map, 105);
 	}
 	
