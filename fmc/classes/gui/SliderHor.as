@@ -81,16 +81,17 @@ class gui.SliderHor extends AbstractPositionable{
 		};
 		flamingo.addListener(lParent, flamingo.getParent(this), this);
 		
-
-		
 		//---------------------------------------
 		init();
 		
 				//build buttons
 		spriteMap = flamingo.spriteMapFactory.obtainSpriteMap(flamingo.correctUrl( "assets/img/sprite.png"));
 		
+		
 		sliderBar = this.container.createEmptyMovieClip("sliderBar", this.container.getNextHighestDepth());
-		spriteMap.attachSpriteTo(sliderBar, new SpriteSettings(0, 762, 50, 2, 0, 0, true, 100) );
+		var offsetX = 0;
+		var offsetY = -2;
+		spriteMap.attachSpriteTo(sliderBar, new SpriteSettings(0, 762, 50, 2, offsetX, offsetY, true, 100) );
 		sliderButton = new HorSliderButton("sliderButton", this.container.createEmptyMovieClip("sliderButton_container", this.container.getNextHighestDepth()), this);
 		increaseButton = new IncreaseButton("increaseButton", this.container.createEmptyMovieClip("increaseButton_container", this.container.getNextHighestDepth()), this);
 		decreaseButton = new DecreaseButton("decreaseButton", this.container.createEmptyMovieClip("decreaseButton _container", this.container.getNextHighestDepth()), this);
@@ -209,33 +210,44 @@ class gui.SliderHor extends AbstractPositionable{
 		  }
 
 		  updateListeners();    
-	}
+	} 
 
 
 	function refresh() {
 		if (sliderButton.bSlide) {
 			return;
 		}
-		sliderButton.container._x = sliderBar._x + (sliderBar._width * Math.abs(minimum - currentValue) / Math.abs(maximum - minimum));
+		sliderButton.container._x = sliderBar._x + (sliderBar._width * Math.abs(minimum - currentValue) / Math.abs(maximum - minimum));// - sliderButton.width;
 	}
 
 	function resize() {
 		var r = flamingo.getPosition(this);
-		//increaseButton.container._x = r.x + r.width - mIncrease._width / 2;
-		increaseButton.move(r.x + r.width + increaseButton.width / 2, r.y);
-	//	mIncrease._y = r.y;
-		decreaseButton.move( r.x + decreaseButton.width / 2, r.y);
-		//mDecrease._y = r.y;
-		sliderBar._x = r.x + (decreaseButton.width *2) + (sliderButton.width/2);
-		sliderBar._y = r.y + decreaseButton.height / 2;
-		sliderBar._width = r.width - decreaseButton.width - increaseButton.width  - sliderButton.width;
-		sliderButton.container._x = sliderBar._x;
-		sliderButton.container._y = sliderBar._y - (sliderButton.height/2);
+		r.width = r.width - 20;
+		var increaseX = r.x + r.width - increaseButton.width / 2;
+		var increaseY = r.y;
+		increaseButton.move(increaseX, increaseY);
+		
+		var decreaseX = r.x + decreaseButton.width / 2;
+		var decreaseY = r.y;
+		decreaseButton.move(decreaseX, decreaseY);
+		
+		var sliderbarX = r.x + decreaseButton.width + sliderButton.width/2;
+		var sliderbarY = r.y;
+		var sliderbarWidth = r.width - decreaseButton.width - increaseButton.width  - sliderButton.width;
+		sliderBar._width = sliderbarWidth;
+		sliderBar._x = sliderbarX +3;
+		sliderBar._y = sliderbarY;
+		
+		var sliderButtonX = sliderBar._x;
+		var sliderbuttonY = sliderBar._y;
+		sliderButton.move(sliderButtonX, sliderbuttonY);
+		
 		if (mLabel != undefined) {
-			mLabel._x = r.x + decreaseButton.width;
+			mLabel._x = r.x +  decreaseButton.width;
 			mLabel._y = r.y + 5;
 		}
 		refresh();
+
 	}
 
 	function updateListeners() {

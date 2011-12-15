@@ -15,18 +15,23 @@ class gui.button.HorSliderButton extends AbstractButton
 	public function HorSliderButton(id:String, container:MovieClip, sliderHor:SliderHor) 
 	{
 		super(id, container);
-		toolOverSettings = new SpriteSettings(102, 762, 13, 20,0, 0, true, 100);
-		toolDownSettings  = new SpriteSettings(69, 762, 13, 20, 0, 0, true, 100);
-		toolUpSettings = new SpriteSettings(136, 764, 9, 16, 0, 0, true, 100);
+		toolOverSettings = new SpriteSettings(102, 762, 13, 20,-5, -5, true, 100);
+		toolDownSettings  = new SpriteSettings(69, 762, 13, 20, -5, -5, true, 100);
+		toolUpSettings = new SpriteSettings(136, 764, 9, 16, -5, -5, true, 100);
 		this.sliderHor = sliderHor;
 		this.parent = sliderHor;
 	}
 
 	function onPress() {
 		sliderHor.cancelUpdate();
+		/*
+		 * var l = mSliderbar._x;
+		var t = mSlider._y;
+		var r = mSliderbar._x+mSliderbar._width;
+		var b = mSlider._y;*/
 		var l = sliderHor.sliderBar._x;
 		var t = this.container._y;
-		var r = sliderHor.sliderBar._x+sliderHor.sliderBar._width;
+		var r = sliderHor.sliderBar._width + sliderHor.sliderBar._x;
 		var b = this.container._y;
 		this.container.startDrag( false, l, t, r, b);
 		var thisObj:HorSliderButton = this;
