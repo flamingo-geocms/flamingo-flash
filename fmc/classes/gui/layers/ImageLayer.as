@@ -17,7 +17,7 @@ import tools.Logger;
 class gui.layers.ImageLayer extends AbstractLayer{
 	
 	var imageurl:String;
-	var extent:Object;
+	var _extent:Object;
 	var maxscale:Number;
 	var minscale:Number;
 	var visible:Boolean;
@@ -50,6 +50,12 @@ class gui.layers.ImageLayer extends AbstractLayer{
 		if(map.visible){
 			setImage(imageurl, extent);
 		}	
+		/* Make backwards compatible
+		 * pass the listento to the container so all the clickable overviews will still work....
+		 */
+		if (this.listento != undefined) {
+			this.container.listento = this.listento;
+		}
 	}
 	/**
 	 * Passes a configured attribute for this component.
@@ -280,6 +286,18 @@ class gui.layers.ImageLayer extends AbstractLayer{
 			update();
 		}	
 	}	
+	
+	public function get extent():Object {
+		return _extent;
+	}
+	
+	public function set extent(value:Object):Void {
+		/* Make backwards compatible:
+		 * pass the extent to the container so all the clickable overviews will still work....	
+		 */
+		this.container.extent = value;
+		_extent = value;
+	}
 	/**
 	* Dispatched when the layerimage is downloaded.
 	* @param layer:MovieClip a reference to the layer.
