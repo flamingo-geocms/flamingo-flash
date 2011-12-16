@@ -34,6 +34,10 @@ class gui.button.IncreaseButton extends AbstractButton
 	
 	public function onRollOver () {
 		flamingo.showTooltip(flamingo.getString(sliderHor, "tooltip_plus"), this);
+	}	
+	
+	function resize():Void {
+		//don't do anything on resize. The parent is positioning this object.
 	}
 	public function get sliderHor():SliderHor 
 	{
@@ -43,5 +47,5 @@ class gui.button.IncreaseButton extends AbstractButton
 	public function set sliderHor(value:SliderHor):Void 
 	{
 		_sliderHor = value;
-	}	
+	}
 }

@@ -47,8 +47,13 @@ class gui.button.ZoomInButton extends AbstractButton
 		flamingo.showTooltip(flamingo.getString(zoomerV, "tooltip_zoomin"), this);
 	}
 	
+	public function resize():Void {
+		//don't do anything on resize. The parent is positioning this object.
+	}
+	
 	public function get map():Object
 	{
 		return flamingo.getComponent(this.zoomerV.listento[0]);
 	}
+	
 }
