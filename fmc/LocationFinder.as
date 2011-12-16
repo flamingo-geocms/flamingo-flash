@@ -623,13 +623,13 @@ function _findLocationWFS(locationdata:Object, search:String, nr:Number, updatef
 				whereClauses.push(whereClause);
 				var env:Envelope = null;
 				var reqprops:Array = locationdata.outputfields.split(" ");
-				if(extent instanceof Geometry){
+				if (extent instanceof Geometry) {
 					conn.performGetFeature(serviceLayer, Geometry(extent), whereClauses, null, false, this, reqprops, thisObj.contextObject);
 				} else if (!isNaN(extent.minx) && !isNaN(extent.maxx) && !isNaN(extent.miny) && !isNaN(extent.maxy)){
 					env = new Envelope(extent.minx, extent.miny, extent.maxx, extent.maxy) ;
                 	conn.performGetFeature(serviceLayer, env, whereClauses, null, false, this, reqprops, contextObject);
-				} else{
-					conn.performGetFeature(serviceLayer, null, whereClauses, null, false, this, reqprops);
+				} else {
+					conn.performGetFeature(serviceLayer, null, whereClauses, null, false, this, reqprops, contextObject);
 				}
 			} else if (serviceFeatures != null) {
 				foundlocations = new Array();
