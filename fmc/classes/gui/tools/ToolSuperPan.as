@@ -4,7 +4,7 @@
  */
 import core.ComponentInterface;
 import gui.tools.AbstractTool;
-import gui.tools.ToolGroup;
+import gui.tools.ToolGroup;  
 import display.spriteloader.SpriteSettings;
 import tools.Logger;
 /** @component ToolSuperPan

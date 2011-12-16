@@ -8,6 +8,7 @@ import event.*;
 import flash.external.ExternalInterface;
 
 import core.AbstractComponent;
+import tools.Logger;
 
 class event.StateEventDispatcher {
     

@@ -52,6 +52,7 @@ import mx.controls.TextArea;
 import mx.controls.UIScrollBar;
 import mx.utils.Delegate;
 import mx.controls.Button;
+import tools.Logger;
 
 import core.AbstractComponent;
 
@@ -529,7 +530,7 @@ class gui.EditProperties extends AbstractComponent implements StateEventListener
 				}
             }
             var propertyName:String = String(component["propertyName"]);
-            feature.setValue(propertyName,value);
+            feature.setValue(propertyName, value);
         }        
     }
 	//verify if we should use this GeometryProperty for this geometry

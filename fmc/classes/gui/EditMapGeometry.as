@@ -22,6 +22,7 @@ import mx.controls.Label;
 
 import event.AddRemoveEvent;
 import event.GeometryListener;
+import tools.Logger;
 
 class gui.EditMapGeometry extends GeometryPane implements GeometryListener {
 	
@@ -121,7 +122,7 @@ class gui.EditMapGeometry extends GeometryPane implements GeometryListener {
         draw();
     }
     
-    function setLabelText(labelText:String):Void {
+    function setLabelText(labelText:String):Void {		
         if (this.labelText == labelText) {
             return;
         }

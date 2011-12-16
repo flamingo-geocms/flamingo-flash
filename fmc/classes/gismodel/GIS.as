@@ -248,8 +248,6 @@ class gismodel.GIS extends AbstractComponent {
 	
 	function init():Void{
 		stateEventDispatcher = new StateEventDispatcher();
-		
-        
     }
     
     function setAttribute(name:String, value:String):Void {

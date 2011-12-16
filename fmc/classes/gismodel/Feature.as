@@ -13,6 +13,7 @@ import geometrymodel.Geometry;
 import geometrymodel.GeometryTools;
 
 import geometrymodel.Envelope;
+import tools.Logger;
 
 class gismodel.Feature {
     
@@ -167,7 +168,6 @@ class gismodel.Feature {
                 serviceFeature.setValue(name, value);
                 layer.addOperation(new Update(serviceFeature));
             }
-            
             stateEventDispatcher.dispatchEvent(new StateEvent(this, "Feature", StateEvent.CHANGE, "values", layer.getGIS()));
         }
     }

@@ -11,4 +11,4 @@ interface gui.tools.ToolInterface
 	public function setActive(active:Boolean);
 	public function isActive():Boolean;
 	
-}
+} 

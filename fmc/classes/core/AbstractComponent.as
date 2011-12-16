@@ -1,4 +1,6 @@
-﻿import core.ParentChildComponentAdapter;
+﻿
+import tools.Logger;
+import core.ParentChildComponentAdapter;
 import core.VisibleAdapter;
 import core.InitAdapter;
 

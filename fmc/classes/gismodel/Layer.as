@@ -118,14 +118,13 @@ class gismodel.Layer extends AbstractComposite implements ActionEventListener {
         } else if (name == "Style") {
             style = new Style(xmlNode);
         }
-		
     }
     
     function getTitle():String {
         return title;
     }
     
-	function getName():String{
+	function getName():String{ 
 		return name;
 	}
     function setVisible(visible:Boolean):Void {

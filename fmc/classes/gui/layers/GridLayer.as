@@ -75,7 +75,6 @@ class gui.layers.GridLayer extends AbstractLayer{
 	* Updates the layer.
 	*/
 	function update() {
-		Logger.console("Grid do update()");
 		if (visible) {
 			if (map == undefined) {
 				var map = flamingo.getParent(this);

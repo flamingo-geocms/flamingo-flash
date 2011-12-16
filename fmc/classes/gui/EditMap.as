@@ -488,7 +488,7 @@ class gui.EditMap extends AbstractComponent implements StateEventListener, core.
 	/**
 	Add the editMapSelectFeature component to select a geometry.
 	*/
-	private function addEditMapSelectFeature():Void{
+	private function addEditMapSelectFeature():Void {
 		var initObject:Object = new Object();
         initObject["map"] = map;
 		initObject["gis"] = gis;
