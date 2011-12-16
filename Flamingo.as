@@ -1025,10 +1025,15 @@ class Flamingo {
 						this.components[targetid] = maptip;
 						maptip.setConfig(xmlNode);		
 					} else if (isLayer(file)) {
-						var foundMap:Map;
-						for (var i in this.components) {
-							if (this.components[i].type == "Map") {
-								foundMap = Map(this.components[i]);
+						var mapid=xmlNode.parentNode.attributes["id"];						
+						var foundMap:Map = this.components[mapid];
+						//if the map not is found by using the id of the parent node. Find the first added map.
+						if (foundMap==undefined){
+							for (var i in this.components) {
+								if (this.components[i].type == "Map") {
+									foundMap = Map(this.components[i]);		
+									break;
+								}
 							}
 						}
 						var layer:AbstractLayer;
