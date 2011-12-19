@@ -68,7 +68,6 @@ class coremodel.service.ServiceConnector {
         //_global.flamingo.tracer(url + "\n" + requestString);
 		
 		var env:ServiceConnector = this;
-        
         var responseXML:XML = new XML();
         responseXML.ignoreWhite = true;
         responseXML.onLoad = function(successful:Boolean):Void {

@@ -55,12 +55,12 @@ class coremodel.service.wfs.WFSFeature extends ServiceFeature {
 		            	||property.getType() == preFix + ":MultiPolygonPropertyType "
 		            	||property.getType() == preFix + ":MultiLineStringPropertyType"
 		            	||property.getType() == preFix + ":MultiPointPropertyType") {
+							
                 		if(!contextObject.parseGeometry){
                 			//keep xmlNode as value
                 			this.values.push(propertyNode);
                 		} else {		 
                     		this.values.push(GeometryParser.parseGeometry(propertyNode));
-                    		
                 		}
                     	 
                 	} else {

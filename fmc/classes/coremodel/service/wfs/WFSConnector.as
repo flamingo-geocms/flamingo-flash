@@ -170,7 +170,6 @@ class coremodel.service.wfs.WFSConnector extends ServiceConnector {
     
     function processGetFeature(responseXML:XML, serviceLayer:ServiceLayer, actionEventListener:ActionEventListener, contextObject:Object):Void {
 		var numFeatures:Number = Number(responseXML.firstChild.attributes["numberOfFeatures"]);
-        
         var featureNodes:Array = XMLTools.getChildNodes("gml:featureMember", responseXML.firstChild);
         var features:Array = new Array();
         for (var i:Number = 0; i < featureNodes.length; i++) {
