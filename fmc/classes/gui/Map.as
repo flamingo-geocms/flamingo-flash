@@ -1841,6 +1841,8 @@ class gui.Map extends AbstractPositionable implements PersistableComponent{
 		return true;
 	}
 	public function copyExtent(obj:Object):Object {
+		if (obj == undefined)
+			return undefined;
 		var extent = new Object();
 		for (var attr in obj) {
 			extent[attr] = obj[attr];
