@@ -76,7 +76,7 @@ class gui.Hotlink extends AbstractComposite {
 				link=link.split("["+attri+"]").join(feature[attri]);
 			}
 			//todo: remove all []
-			while(link.indexOf("[")>=0 && link.indexOf("]") >=0){
+		while (link.indexOf("[") >= 0 && link.indexOf("]") >= 0) {
 				var beginIndex=link.indexOf("[");
 				var endIndex=link.indexOf("]");
 				var replacePart:String = "["+link.substring(beginIndex+1,endIndex)+"]";

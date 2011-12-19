@@ -1137,10 +1137,11 @@ class Flamingo {
 						this.components[targetid].parent = "flamingo";
 						break;
 					}
-					if (this.components[parentmc._name].target != undefined) {
+					if (this.components[parentmc._name].target != undefined ) {
 						this.components[targetid].parent = parentmc._name;
 						break;
 					}
+		
 					parentmc = parentmc._parent;
 				}					
 				this.loadComponent_source(url, targetid, mc);

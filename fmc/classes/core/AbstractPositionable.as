@@ -177,7 +177,7 @@ class core.AbstractPositionable extends AbstractListenerRegister
 		if (_parentObject != undefined) {
 			return _parentObject;
 		}else if (_parentName != undefined ) {
-			return this._parentName;
+			return flamingo.getComponent(_parentName);
 		}else{
 			return this.getParent();
 		}

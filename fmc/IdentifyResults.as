@@ -1,4 +1,4 @@
-/*-----------------------------------------------------------------------------
+﻿/*-----------------------------------------------------------------------------
 Copyright (C) 2006  Menko Kroeske
 
 This file is part of Flamingo MapComponents.
@@ -34,6 +34,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 * @configstyle .seperator Fontstyle of the seperator
 * @configstyle .error Fontstyle of an error.
 */
+import tools.Logger;
 var version:String = "2.0";
 //-------------------------------
 
@@ -67,9 +68,12 @@ lMap.onIdentify = function(map:MovieClip, extent:Object) {
 	results = new Object();
 };
 lMap.onIdentifyProgress = function(map:MovieClip, layersindentified:Number, layerstotal:Number, sublayersindentified:Number, sublayerstotal:Number) {
-	var p:String = String(Math.round(sublayersindentified/sublayerstotal*100));
-	if (isNaN(p)) {
-		p = "0";
+	var p:String="0";
+	if (sublayerstotal!=0){
+		p = String(Math.round(sublayersindentified/sublayerstotal*100));
+		if (isNaN(p)) {
+			p = "0";
+		}
 	}
 	var s = flamingo.getString(thisObj, "identify", "identify progress [progress]%");
 	s = s.split("[progress]").join(p);
@@ -128,11 +132,11 @@ init();
 function show() {
 	//make sure that this component is visible
 	_visible = true;
-	var parent = this;
-	while (not flamingo.isVisible(this) or parent != undefined) {
-		parent = flamingo.getParent(parent);
-		parent.show();
+	var parent = flamingo.getParent(this);
+	while (! flamingo.isVisible(parent) && parent != undefined) {
 		parent._visible = true;
+		parent.show();
+		parent = flamingo.getParent(parent);
 	}
 }
 /** @tag <fmc:IdentifyResults>  
@@ -145,6 +149,7 @@ function show() {
 * @attr showonidentify  (defaultvalue = "true") If the component and all parents should be made visible on the onIdentify event.
 */
 function init():Void {
+	Logger.console("InitIdentify, ", parent);
 	if (flamingo == undefined) {
 		var t:TextField = this.createTextField("readme", 0, 0, 0, 550, 400);
 		t.html = true;
