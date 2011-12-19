@@ -271,24 +271,6 @@ class gui.layers.TilingLayer extends AbstractLayer{
     public function getProperty (propertyName: String): Object {
     	return _global.flamingo.getProperty (_global.flamingo.getId (this), propertyName);
     }
-
-    /**
-    * First clear the tile cache before making it visible
-    **/
-    public function setVisible(visible){
-    	/*
-    	if (visible != this.visible) {
-            _global.flamingo.tracer ("clearAllTiles: setVisible " + visible);
-            clearAllTiles();
-    	}
-    	*/    	
-        var oldVisible: Boolean = this.visible;
-        super.setVisible(visible);
-        if (oldVisible != visible) {
-        	_global.flamingo.raiseEvent (this, visible ? "onShow" : "onHide", this);
-        }
-    }
-
     
    /**
     * ReInitialize the AbstractLayer.

@@ -134,17 +134,6 @@ class gui.layers.GridLayer extends AbstractLayer{
 		}
 	}
 
-	/** 
-	* Changes the visiblity of a layer.
-	* @param vis:Boolean True (visible) or false (not visible).
-	*/
-	function setVisible(vis:Boolean) {
-		if (vis) {
-			this.show();
-		} else {
-			this.hide();
-		}
-	}
 	/**
 	* Hides a layer.
 	*/

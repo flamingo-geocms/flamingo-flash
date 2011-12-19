@@ -1380,11 +1380,7 @@ class gui.layers.OGCWMSLayer extends AbstractLayer{
 	*/
 	function setVisible(vis:Boolean, id:String) {
 		if (id.length == 0 || id == undefined) {
-			if (vis) {			
-				this.show();
-			} else {
-				this.hide();
-			}
+			super.setVisible(vis);
 		} else {
 			this.setLayerProperty(id, "visible", vis);
 		}

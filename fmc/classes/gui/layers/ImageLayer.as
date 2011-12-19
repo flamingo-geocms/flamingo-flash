@@ -176,17 +176,7 @@ class gui.layers.ImageLayer extends AbstractLayer{
 			mHolder._visible = false;
 		}
 	}
-	/** 
-	* Changes the visiblity of a layer.
-	* @param vis:Boolean True (visible) or false (not visible).
-	*/
-	function setVisible(vis:Boolean) {
-		if (vis) {
-			this.show();
-		} else {
-			this.hide();
-		}
-	}
+	
 	/**
 	* Shows a layer.
 	*/

@@ -102,8 +102,15 @@ class gui.layers.AbstractLayer extends AbstractConfigurable{
     
     function setVisible(visible){
         //log.debug("visible = " + visible + " setVisible,caller = " + Utils.getFunctionName(arguments.caller));
-        this.visible = visible;
+        var oldVisible: Boolean = this.visible;
+        if (oldVisible != visible) {
+        	_global.flamingo.raiseEvent (this, visible ? "onShow" : "onHide", this);
+        }
+		this.visible = visible;
         this._visible = visible;
+		if (visible) {
+			updateCaches();
+		}
         this.update(map);
     }
 
@@ -191,7 +198,7 @@ class gui.layers.AbstractLayer extends AbstractConfigurable{
     /*Called when a 'onUpdate' event occured in the map object
     * Update is called when the layer needs to be updated*/
     function update(map):Void{}
-    
+    function updateCaches():Void { };
     /*Called on the 'onChangeExtent' event from the map.
     change extent is called when the map zooms animated to the wished extent. With every stap this function is called*/
     function changeExtent():Void{}
