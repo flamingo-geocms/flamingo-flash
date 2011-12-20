@@ -1162,15 +1162,10 @@ class gui.layers.ArcServerLayer extends AbstractLayer{
 	* @param id:String [optional] A layerid. If omitted the entire maplayer will be effected.
 	*/
 	function setVisible(vis:Boolean, id:String) {
-		if (id.length == 0 || id == undefined) {
-			if (vis) {
-				this.show();
-			} else {
-				this.hide();
-			}
-		} else {
+		if ( id != undefined && id.length > 0 ) {			
 			this.setLayerProperty(id, "visible", vis);
 		}
+		super.setVisible(vis);
 	}
 	/** 
 	* Checks if a maplayer or a layer of a maplayer is visible.

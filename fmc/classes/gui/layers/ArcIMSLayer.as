@@ -1767,11 +1767,10 @@ class gui.layers.ArcIMSLayer extends AbstractLayer{
 	* @param id:String [optional] A layerid. If omitted the entire maplayer will be effected.
 	*/
 	function setVisible(vis:Boolean, id:String) {
-		if (id.length == 0 || id == undefined) {
-			super.setVisible(vis);
-		} else {
+		if (id != undefined && id.length > 0) {			
 			this.setLayerProperty(id, "visible", vis);
 		}
+		super.setVisible(vis);
 	}
 	/** 
 	* Checks if a maplayer or a layer of a maplayer is visible.
