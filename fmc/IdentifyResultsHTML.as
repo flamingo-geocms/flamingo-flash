@@ -375,7 +375,7 @@ function show() {
 	while (! flamingo.isVisible(parent) && parent != undefined) {
 		parent.show();
 		parent._visible = true;
-		parent = flamingo.getParent(this);
+		parent = flamingo.getParent(parent);
 	}
 }
 /** @tag <fmc:IdentifyResultsHTML>  
