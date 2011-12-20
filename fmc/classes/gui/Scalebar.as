@@ -59,9 +59,10 @@ class gui.Scalebar extends AbstractPositionable {
 	var magicnumber:Number = 1;
 	var minscale:Number;
 	var maxscale:Number;
-	var lMap:Object = new Object();
 	var mHolder:MovieClip;
-	var mBar:MovieClip	
+	var mBar:MovieClip;
+	var lMap:Object;
+	
 	public function Scalebar(id:String, container:MovieClip){
 		super(id, container);
 		defaultXML = "<?xml version='1.0' encoding='UTF-8'?>" +
@@ -71,6 +72,8 @@ class gui.Scalebar extends AbstractPositionable {
 							"</Scalebar>";
 		//---------------------------------
 		var thisObj:Scalebar = this;
+		
+		lMap = new Object();
 		lMap.onChangeExtent = function(map:MovieClip):Void  {
 			thisObj.resize();
 		};
@@ -297,6 +300,7 @@ class gui.Scalebar extends AbstractPositionable {
 		var ra = flamingo.getPosition(this);
 		mHolder._x = ra.x;
 		mHolder._y = ra.y;
+		
 	}
 }
 /** 
