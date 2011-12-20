@@ -232,6 +232,7 @@ class gui.layers.ArcIMSLayer extends AbstractLayer{
 		super (id, container, map);
 		caches = new Object();
 		layers = new Object();
+		visibleids = null;
 		init();			
 	}
 	
@@ -367,9 +368,10 @@ class gui.layers.ArcIMSLayer extends AbstractLayer{
 		else{
 			setLayersQueryAbleFeatureclass(this.maptipids,true);
 			setLayersQueryAbleFeatureclass(this.identifyids,true);
-			initialized = true;	
-			if (visibleids.length > 0)
-				update();		
+			initialized = true;				
+			if (this.visibleids != null && this.visible) {				
+				update();
+			}
 		}
 		//***
 	}
