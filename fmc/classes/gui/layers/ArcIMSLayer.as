@@ -239,7 +239,7 @@ class gui.layers.ArcIMSLayer extends AbstractLayer{
 	* Configurates a component by setting a xml.
 	* @attr xml:Object Xml or string representation of a xml.
 	*/
-	function setConfig(xml:Object) {		
+	function setConfig(xml:Object, dontGetCap:Boolean) {		
 		//_global.flamingo.tracer(" LayerArcIMS setConfig server /n/n/n" + xml.toString());
 		if (xml == undefined) {
 			return;
@@ -250,6 +250,13 @@ class gui.layers.ArcIMSLayer extends AbstractLayer{
 		}
 		super.setConfig(XMLNode(xml));
 		
+		if (dontGetCap == undefined){
+			if (visibleids != "#ALL#") {
+				dontGetCap = true;
+			}else{
+				dontGetCap = false;
+			}
+		}
 		//                                                                                                                                                                           
 		//
 		//_global.flamingo.tracer(" LayerArcIMS setConfig" + _global.flamingo.getId(this) +" server = " + server + " mapservice = " + mapservice);
@@ -342,7 +349,7 @@ class gui.layers.ArcIMSLayer extends AbstractLayer{
 			thisObj.flamingo.raiseEvent(thisObj, "onGetServiceInfo", thisObj);
 				
 		};//***
-		if (this.initService==true){
+		if(this.initService==true && !dontGetCap){
 			var conn:ArcIMSConnector = new ArcIMSConnector(server);
 			//_global.flamingo.tracer(" LayerArcIMS addInfoReponseListener" + _global.flamingo.getId(this));
 			ArcIMSConnector.addInfoReponseListener(lConn,server,mapservice);
@@ -360,8 +367,9 @@ class gui.layers.ArcIMSLayer extends AbstractLayer{
 		else{
 			setLayersQueryAbleFeatureclass(this.maptipids,true);
 			setLayersQueryAbleFeatureclass(this.identifyids,true);
-			initialized = true;		
-			update();		
+			initialized = true;	
+			if (visibleids.length > 0)
+				update();		
 		}
 		//***
 	}
