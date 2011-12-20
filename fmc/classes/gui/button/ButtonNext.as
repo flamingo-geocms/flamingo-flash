@@ -79,6 +79,7 @@ class gui.button.ButtonNext extends AbstractButton implements ComponentInterface
 				thisObj.setEnabled(false);
 			}
 		};
+		thisObj.setEnabled(false);
 		flamingo.raiseEvent(this, "onInit", this);
 	}
 	

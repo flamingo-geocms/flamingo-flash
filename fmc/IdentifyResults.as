@@ -149,7 +149,6 @@ function show() {
 * @attr showonidentify  (defaultvalue = "true") If the component and all parents should be made visible on the onIdentify event.
 */
 function init():Void {
-	Logger.console("InitIdentify, ", parent);
 	if (flamingo == undefined) {
 		var t:TextField = this.createTextField("readme", 0, 0, 0, 550, 400);
 		t.html = true;

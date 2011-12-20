@@ -100,7 +100,7 @@ class gui.layers.AbstractLayer extends AbstractConfigurable{
         return this.id;
     }
     
-    function setVisible(visible){
+    function setVisible(visible) {
         //log.debug("visible = " + visible + " setVisible,caller = " + Utils.getFunctionName(arguments.caller));
         var oldVisible: Boolean = this.visible;
         if (oldVisible != visible) {

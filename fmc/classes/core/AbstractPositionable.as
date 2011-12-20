@@ -221,7 +221,7 @@ class core.AbstractPositionable extends AbstractListenerRegister
 			"type AbstractPositionable (new code) or String (Old code): "+value);
 		}
 	}
-	public function get flamingo():Flamingo {
+	public function get flamingo():Object {
 		return _global.flamingo;
 	}
 	

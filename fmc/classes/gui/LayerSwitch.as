@@ -1,4 +1,4 @@
-/*-----------------------------------------------------------------------------
+﻿/*-----------------------------------------------------------------------------
 * This file is part of Flamingo MapComponents.
 * Author: Herman Assink, Linda Vels.
 * IDgis bv
@@ -31,7 +31,6 @@
 
 import coregui.GradientButton;
 
-
 class gui.LayerSwitch extends GradientButton {    
     private var layers1:Array = null;
     private var layers2:Array = null;
@@ -39,7 +38,6 @@ class gui.LayerSwitch extends GradientButton {
     private var layerNames2:String = null;
     private var label1Text:String = null;
     private var label2Text:String = null;
-
    	private var next : Number = 1;
 
 	var intervalID : Number;
