@@ -239,7 +239,7 @@ class gui.SliderHor extends AbstractPositionable{
 		sliderBar._y = sliderbarY;
 		
 		var sliderButtonX = sliderBar._x;
-		var sliderbuttonY = sliderBar._y;
+		var sliderbuttonY = r.y - sliderBar._height * 2;
 		sliderButton.move(sliderButtonX, sliderbuttonY);
 		
 		if (mLabel != undefined) {
