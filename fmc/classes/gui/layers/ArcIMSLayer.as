@@ -1288,7 +1288,7 @@ class gui.layers.ArcIMSLayer extends AbstractLayer{
 		var lConn = new Object();
 		lConn.onResponse = function(connector:ArcIMSConnector) {
 			//trace(connector.response);
-			thisObj.flamingo.raiseEvent(this, "onResponse", this, "identify", connector);
+			thisObj.flamingo.raiseEvent(thisObj, "onResponse", thisObj, "identify", connector);
 		};
 		lConn.onRequest = function(connector:ArcIMSConnector) {
 			//trace(connector.request);
