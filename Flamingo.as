@@ -2600,7 +2600,7 @@ class Flamingo {
 					prefix = this.getType(id);
 				}
 			}
-			//Logger.console("****Arg lenght: "+arguments.length+" dispatche event: ", event_to_fire, arguments );
+		//	Logger.console("****Arg lenght: "+arguments.length+" dispatche event: ", event_to_fire, arguments );
 			
 			ExternalInterface.call("dispatchEventJS",event_to_fire, arguments);
 			

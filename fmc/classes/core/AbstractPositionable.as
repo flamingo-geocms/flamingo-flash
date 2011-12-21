@@ -82,6 +82,7 @@ class core.AbstractPositionable extends AbstractListenerRegister
 		this.styles = new TextField.StyleSheet();	
 		this.borderalpha = 100;
 		this.version = "2.0";
+		//this.height = "10";
 		reassignListeners();		
 	}
 	/**
@@ -280,6 +281,13 @@ class core.AbstractPositionable extends AbstractListenerRegister
 	/***********************************************************************
 	 * Getters and Setters.
 	 */
+	
+	public function get _height():Number {
+		return this.container._height;
+	}
+	public function get _width():Number {
+		return this.container._width;
+	}
 	
 		
 	public function get id():String 
