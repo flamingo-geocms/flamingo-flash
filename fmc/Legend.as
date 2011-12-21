@@ -36,6 +36,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 import flash.geom.ColorTransform;
 import flash.geom.Transform;
 var version:String = "2.0";
+import tools.Logger;
 
 
 //-------------------------------
@@ -83,25 +84,19 @@ var configObjId:String;
 //----------------------------------
 var lLayer:Object = new Object();
 lLayer.onShow = function(layer:MovieClip) {
-	var id = flamingo.getId(layer)
-	//var mapid = flamingo.getId(layer.map)
-	//var id = id.substring(mapid.length+1, layerid.length)
+	var id = flamingo.getId(layer);
 	//remember scale of layer in scales object
 	scales[id] = layer.getScale();
 	thisObj.refresh();
 };
 lLayer.onHide = function(layer:MovieClip) {
 	var id = flamingo.getId(layer)
-	//var mapid = flamingo.getId(layer.map)
-	//var id = id.substring(mapid.length+1, layerid.length)
 	//remember scale of layer in scales object
 	scales[id] = layer.getScale();
 	thisObj.refresh();
 };
 lLayer.onUpdateComplete = function(layer:MovieClip) {
-	var id = flamingo.getId(layer)
-	//var mapid = flamingo.getId(layer.map)
-	//var id = id.substring(mapid.length+1, layerid.length)
+	var id = flamingo.getId(layer);
 	//remember scale of layer in scales object
 	scales[id] = layer.getScale();
 	thisObj.refresh();
@@ -194,10 +189,6 @@ function init():Void {
 	for (var i = 0; i < xmls.length; i++){
 		this.setConfig(xmls[i]);
 	}
-	//LV:Do not remove the xmls because of re-use by the legend(s) in the printtemplate(s)
-	//delete xmls;
-	//remove xml from repository
-	//flamingo.deleteXML(this);
 	this._visible = visible;
 	flamingo.raiseEvent(this, "onInit", this);
 }
@@ -224,7 +215,6 @@ function parseCustomAttr(xml:Object){
 		switch (attr.toLowerCase()) {
 		case "configobject" :
 				configObjId = val;
-				//_global.flamingo.tracer(_global.flamingo.getId(this) + " Legend set configObj " + _global.flamingo.getId(configObj) + flamingo.getXMLs(configObj).length);
 				//parsing of xml is done when printTemplate becomes visible
 				break;
 		case "shadowsymbols" :
@@ -464,12 +454,6 @@ function addItem(xml:Object, items:Array, insertIndex:Number):Void {
 					case "mouseover_styleid" :
 						group.mouseover_styleid = val;
 						break;
-						//case "maxscale" :
-						//group.maxscale = Number(val);
-						//break;
-						//case "minscale" :
-						//group.minscale = Number(val);
-						//break;
 					}
 				}
 				break;
@@ -600,9 +584,6 @@ function addItem(xml:Object, items:Array, insertIndex:Number):Void {
 						break;
 					}
 				}
-				//for (j=0; j<xnode[i].childNodes.length; j++) {
-				//text[xnode[i].childNodes[j].nodeName.toLowerCase()] = xnode[i].childNodes[j].childNodes[0].nodeValue;
-				//}
 				break;
 			case "symbol" :
 				var sym:Object = new Object();
@@ -887,6 +868,7 @@ function _refreshItem(mc:MovieClip, animate:Boolean) {
 	} else {
 		var mapscale = _getScale(mc.item.listento);
 	}
+	Logger.console("Mapscale",mapscale);
 	if (mapscale != undefined) {
 		if (mapscale<mc.item.minscale) {
 			mc._yscale = mc._xscale=0;
@@ -911,7 +893,6 @@ function _refreshItem(mc:MovieClip, animate:Boolean) {
 		mc._x += groupdx;
 		var left = mc.mHeader.getBounds(thisObj)["xMin"];
 		var w = this.__width-left-20;
-		//_fill(mc.mHeader, 0xcccccc, 100, w);
 		if (mc.item.collapsed) {
 			mc.mHeader.attachMovie(skin+"_group_close", "skin", 1);
 			mc.mItems._yscale = mc.mItems._xscale=0;
@@ -922,23 +903,7 @@ function _refreshItem(mc:MovieClip, animate:Boolean) {
 			mc.mItems._visible = true;
 		}
 		_drawGroupLabel(mc, false);
-		/*
-		var url = getString(mc.item, "infourl");
-		var label = getString(mc.item, "label");
-		if (url.length>0) {
-		var styleid = mc.item.styleid;
-		if (styleid == undefined) {
-		styleid = "group_link";
-		}
-		mc.mHeader.mLabel.htmlText = "<span class='"+styleid+"'><a href='"+url+"'>"+label+"</a></span>";
-		} else {
-		var styleid = mc.item.styleid;
-		if (styleid == undefined) {
-		styleid = "group";
-		}
-		mc.mHeader.mLabel.htmlText = "<span class='"+styleid+"'>"+label+"</span>";
-		}
-		*/
+
 		mc.mHeader.mLabel._height = 5000;
 		mc.mHeader.mLabel._width = w-mc.mHeader.skin._width;
 		mc.mHeader.mLabel._height = mc.mHeader.mLabel.textHeight+5;
@@ -969,8 +934,7 @@ function _refreshItem(mc:MovieClip, animate:Boolean) {
 				if (styleid == undefined) {
 					styleid = "item_link";
 				}
-				mc.mLabel.htmlText = "<span class='"+styleid+"'><a href=\""+url+"\">"+label+"</a></span>";
-				//mc.mLabel.htmlText = "<span class='item_link'><a href=\"javascript:openNewWindow('legend/info/kaartondergrond.html', 'legwin','width=350,height=400,top=20,left=70,toolbar=no,scrollbars=yes,resizable=yes');\">Kaartondergrond</a></span>"
+				mc.mLabel.htmlText = "<span class='"+styleid+"'><a href=\""+url+"\">"+label+"</a></span>";	//mc.mLabel.htmlText = "<span class='item_link'><a href=\"javascript:openNewWindow('legend/info/kaartondergrond.html', 'legwin','width=350,height=400,top=20,left=70,toolbar=no,scrollbars=yes,resizable=yes');\">Kaartondergrond</a></span>"
 			} else {
 				var styleid = mc.item.styleid;
 				if (styleid == undefined) {
@@ -997,7 +961,6 @@ function _refreshItem(mc:MovieClip, animate:Boolean) {
 				}
 			} else if (mc.item.itemvisible == 0) {
 				mc.chkButton.setChecked(false);
-				//mc.chkButton.setEnabled(false);
 			} else {
 				mc.chkButton.setChecked(false);
 			}
@@ -1059,8 +1022,6 @@ function _refreshItem(mc:MovieClip, animate:Boolean) {
 			mc.mLabel._width = mc.mLabel.textWidth+5;
 			mc.mLabel._height = mc.mLabel.textHeight+5;
 			mc.mLabel._x = 0;
-			//mc.mSymbol._x+mc.mSymbol._width;
-			//mc.mLabel._y =Math.max(0, ((mc.mSymbol._height/2)-(mc.mLabel._height/2)));;
 		}
 		if (mc.mSymbol == undefined && mc.item.url != undefined && _getVisible(mc._parent._parent.item.listento)==1) {
 				loadSymbol(mc);
@@ -1069,8 +1030,6 @@ function _refreshItem(mc:MovieClip, animate:Boolean) {
 		if (mc.mSymbol != undefined) {
 			mc.mSymbol._x = 0;
 			mc.mSymbol._y = 0;
-			//mc.mSymbol._x += mc.item.dx;
-			//mc.mSymbol._y += mc.item.dy;
 			mc.mLabel._x = mc.mSymbol._x+mc.mSymbol._width;
 			mc.mSymbol._y = Math.max(0, ((mc.mLabel._height/2)-(mc.mSymbol._height/2)));
 			mc.mLabel._y = Math.max(0, ((mc.mSymbol._y+mc.mSymbol._height/2)-(mc.mLabel._height/2)));
@@ -1108,7 +1067,6 @@ function _refreshItem(mc:MovieClip, animate:Boolean) {
 			}
 			mc.mLabel.htmlText = "<span class='"+styleid+"'>"+txt+"</span>";
 			mc.mLabel._width = w;
-			//mc.mLabel.textWidth+5;
 			mc.mLabel._height = 100000;
 			mc.mLabel._height = mc.mLabel.textHeight+5;
 			mc.mLabel._x = 0;
@@ -1138,7 +1096,6 @@ function _getScale(listento:Object):Number {
 	return scale;
 }
 function _getVisible(listento:Object):Number {
-	//_global.flamingo.tracer("in _getVisible " + listento);
 	if (listento == undefined) {
 		return;
 	}
@@ -1164,22 +1121,8 @@ function _getVisible(listento:Object):Number {
 					vis = mc.getVisible(lyrs[i]);
 				}
 			}
-			//1 or more sublayers, examine the first one
-			
-			//var layer = listento[maplayer].split(",")[0];
-			//return mc.getVisible(layer);
-			//if (vis>0) {
-			// sublayer is visible, but is the maplayer visible
-			//var mapvis = mc.getVisible();
-			//if (mapvis == 0) {
-			//maplayer is invisible, layer is visible
-			//return 5;
-			//}
-			//}
-			//return vis;
 		}
 	}
-	//_global.flamingo.tracer("in _getVisible return " + vis);
 	return vis;
 }
 function _drawGroupLabel(mc:MovieClip, mouseover:Boolean) {
@@ -1212,7 +1155,6 @@ function drawLegend(list:Array, parent:MovieClip, _indent:Number) {
 		mc.item = item;
 		//keep a referenc of an item (can be group, item , text, symbol or hr) at itemclips
 		itemclips.push(mc);
-		//mc.indent = _indent;
 		switch (item.type) {
 		case "group" :
 			//this movie will act as a group
@@ -1261,7 +1203,6 @@ function drawLegend(list:Array, parent:MovieClip, _indent:Number) {
 				mc.chkButton = new FlamingoCheckButton(mc.createEmptyMovieClip("mCheck", 1), skin+"_checked", skin+"_checkeddown", skin+"_checkedover", skin+"_unchecked", skin+"_uncheckeddown", skin+"_uncheckedover", skin+"_checked", mc, false);
 				mc.chkButton.onPress = function(checked:Boolean) {
 					clearInterval(updateid);
-					//mc.item.itemvisible;
 					for (var maplayer in this.item.listento) {
 						var layers = this.item.listento[maplayer];
 						var comp = flamingo.getComponent(maplayer);
@@ -1313,7 +1254,6 @@ function drawLegend(list:Array, parent:MovieClip, _indent:Number) {
 			}
 			if (item.label != undefined) {
 				mc.createTextField("mLabel", 2, 0, 0, 1, 1);
-				//mc.mLabel.border = true;
 				mc.mLabel.styleSheet = flamingo.getStyleSheet(this);
 				mc.mLabel.multiline = true;
 				mc.mLabel.wordWrap = false;
@@ -1334,7 +1274,6 @@ function drawLegend(list:Array, parent:MovieClip, _indent:Number) {
 			break;
 		case "text" :
 			mc.createTextField("mLabel", 1, 0, 0, 1, 1);
-			//mc.mLabel.border = true;
 			mc.mLabel.styleSheet = flamingo.getStyleSheet(this);
 			mc.mLabel.wordWrap = true;
 			mc.mLabel.multiline = true;
@@ -1343,8 +1282,7 @@ function drawLegend(list:Array, parent:MovieClip, _indent:Number) {
 			var styleid = item.styleid;
 			if (styleid == undefined) {
 				styleid = "text";
-			}
-			//mc.mLabel.htmlText = "<span class='"+styleid+"'>"+item.text+"</span>";                                                                                            
+			}                                                                                    
 			break;
 		case "symbol" :
 			//label
@@ -1378,7 +1316,6 @@ function loadSymbol(mc:MovieClip):Void{
 		listener.onLoadComplete =function(mcsymbol:MovieClip) {
 		}; 
 		listener.onLoadInit = function(mcsymbol:MovieClip) {
-			//mc.init();
 			for (var attr in mcsymbol._parent.item) {
 				switch (attr) {
 				case "mSymbol" :
@@ -1431,26 +1368,19 @@ function resize() {
 	if (mScrollPane.vScroller == undefined) {
 		var sb = 0;
 	} else {
-		var sb = 20//mScrollPane.vScroller._width;
+		var sb = 20;
 	}
-	//_fill(mScrollPane.content.mBG, 0x33ccff, 100, __width-sb, Math.max(mScrollPane.content._height, __height));
 	for (var i = 0; i<itemclips.length; i++) {
 		switch (itemclips[i].item.type) {
-			//case "group" :
-			//var left = itemclips[i].getBounds(thisObj)["xMin"];
-			//var w = Math.max(this.__width-left-sb, mScrollPane.content._width)-1;
-			//_fill(itemclips[i], 0xcccccc, 0, w);
-			//break;
-		case "hr" :
-			var left = itemclips[i].getBounds(thisObj)["xMin"];
-			var w = Math.max(this.__width-left-sb, mScrollPane.content._width)-1;
-			itemclips[i].mHr._width = w;
-			break;
+			case "hr" :
+				var left = itemclips[i].getBounds(thisObj)["xMin"];
+				var w = Math.max(this.__width-left-sb, mScrollPane.content._width)-1;
+				itemclips[i].mHr._width = w;
+				break;
 		}
 	}
 	mScrollPane.content.clear()
 	if (sb>0) {
-		//var w = Math.max(this.__width-sb, mScrollPane.content._width)-1;
 		var w = mScrollPane.content._width-25;
 	} else {
 		var w = mScrollPane.content._width-1;
@@ -1474,7 +1404,6 @@ function _fill(mc:MovieClip, color:Number, alpha:Number, w:Number, h:Number) {
 	mc.endFill();
 }
 function _dropShadow(mc:MovieClip) {
-	//return;
 	import flash.filters.DropShadowFilter;
 	var distance:Number = 2;
 	var angleInDegrees:Number = 45;
@@ -1488,10 +1417,7 @@ function _dropShadow(mc:MovieClip) {
 	var knockout:Boolean = false;
 	var hideObject:Boolean = false;
 	var filter:DropShadowFilter = new DropShadowFilter(distance, angleInDegrees, color, alpha, blurX, blurY, strength, quality, inner, knockout, hideObject);
-	//var filterArray:Array = mc.filters;
-	//filterArray.push(filter);
 	mc.filters = [filter];
-	//filterArray;
 }
 function update() {
 	clearInterval(updateid);
@@ -1508,15 +1434,6 @@ function _clear(mc:MovieClip) {
 	mc._alpha = 100;
 }
 function _grayOut(mc:MovieClip) {
-	//var my_color:Color = new Color(mc);
-	//mc.setRGB(0xcccccc);
-	//mc._alpha = 50;
-	//import flash.filters.BlurFilter;
-	//var blurX:Number = 4;
-	//var blurY:Number = 4;
-	//var quality:Number = 3;
-	//var filter:BlurFilter = new BlurFilter(blurX, blurY, quality);
-	//mc.filters = [filter];
 	var colort:ColorTransform = new ColorTransform();
 	colort.rgb = 0xffffff;
 	var trans:Transform = new Transform(mc);
@@ -1542,7 +1459,7 @@ function getString(item:Object, stringid:String):String {
 		return item.language[stringid][attr];
 	}
 	//option D
-	return "";
+	return "";	// No null? Seriously?
 }
 
 /**
@@ -1590,13 +1507,6 @@ function getGroups(collapsed:Boolean):Array {
 		return groupsOpened;
 	}
 }
-
-	
-
-
-
-
-
 
 /** 
  * Dispatched when a component is up and ready to run.
