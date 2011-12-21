@@ -204,10 +204,10 @@ class gui.tools.ToolSuperPan extends AbstractTool implements ComponentInterface{
 	 * @param	map the movie clip that contains the map
 	 */
 	function velocity(map:MovieClip) {		
-		this.vx = this.xold-map._xmouse;
-		this.vy = this.yold-map._ymouse;
-		this.xold = map._xmouse;
-		this.yold = map._ymouse;
+		this.vx = this.xold-map.container._xmouse;
+		this.vy = this.yold-map.container._ymouse;
+		this.xold = map.container._xmouse;
+		this.yold = map.container._ymouse;
 	}
 	/**
 	 * Auto pan
