@@ -33,7 +33,7 @@ class gui.button.IncreaseButton extends AbstractButton
 	}
 	
 	public function onRollOver () {
-		flamingo.showTooltip(flamingo.getString(sliderHor, "tooltip_plus"), this);
+		flamingo.showTooltip(flamingo.getString(sliderHor, "tooltip_increase"), this);
 	}	
 	
 	function resize():Void {

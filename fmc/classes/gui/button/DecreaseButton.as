@@ -33,7 +33,7 @@ class gui.button.DecreaseButton extends AbstractButton
 	}
 	
 	function onRollOver () {
-		flamingo.showTooltip(flamingo.getString(sliderHor, "tooltip_min"), this);
+		flamingo.showTooltip(flamingo.getString(sliderHor, "tooltip_decrease"), this);
 	}
 	function resize():Void {
 		//don't do anything on resize. The parent is positioning this object.
