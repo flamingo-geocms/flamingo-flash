@@ -868,7 +868,7 @@ function _refreshItem(mc:MovieClip, animate:Boolean) {
 	} else {
 		var mapscale = _getScale(mc.item.listento);
 	}
-	Logger.console("Mapscale",mapscale);
+
 	if (mapscale != undefined) {
 		if (mapscale<mc.item.minscale) {
 			mc._yscale = mc._xscale=0;
