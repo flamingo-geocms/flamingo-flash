@@ -82,9 +82,9 @@ class gui.button.AbstractButton extends AbstractPositionable{
 	public function setEvents():Void {		
 		var thisObj:AbstractButton = this;
 		this.holder.onRollOver = function() {	
+			thisObj.flamingo.showTooltip(thisObj.flamingo.getString(thisObj, thisObj.tooltipId), thisObj);
 			if (thisObj.isClickable()){
 				//var id = thisObj.flamingo.getId(thisObj);
-				thisObj.flamingo.showTooltip(thisObj.flamingo.getString(thisObj, thisObj.tooltipId), thisObj);
 				thisObj.mcOver._visible = true;
 				thisObj.mcUp._visible = false;	
 				thisObj.onRollOver();
