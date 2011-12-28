@@ -3,7 +3,6 @@ import tools.Logger;
 import core.ParentChildComponentAdapter;
 import core.VisibleAdapter;
 import core.InitAdapter;
-import core.LoadComponentAdapter;
 
 
 /*-----------------------------------------------------------------------------
@@ -43,7 +42,7 @@ class core.AbstractComponent extends MovieClip {
     var defaultXML:String = "";
     // Some properties used for components to wait for each other at init time.
     private var initAdapters:Array = null;
-	private var loadComponentAdapters:Array = null;
+	private var stillLoading:Boolean;
     private var inited:Boolean = false;
     
     // Some adapters for containers and their content to adapt to each other's state.
@@ -118,42 +117,34 @@ class core.AbstractComponent extends MovieClip {
     */
     function wait():Void {
         initAdapters = new Array();
-		loadComponentAdapters = new Array();
+		stillLoading = false;
 		
 		var flamComp = _global.flamingo.getRawComponent(id);		
-		if (!flamComp.loaded) {						
-			addLoadComponentAdapter();
+		if (!flamComp.loaded) {					
+			stillLoading = true;
+			_global.flamingo.addListener(this, _global.flamingo, this);
 		}
         if (listento != null) {
 			addInitAdapters(listento);
-		}
-		
-        if (initAdapters.length == 0 && loadComponentAdapters.length==0) {
+		}		
+        if (initAdapters.length == 0 && !stillLoading) {
             afterLoad();
         }
     }
-    private function addLoadComponentAdapter(flamComp:Object) {
-		//Logger.console(id+"add    onLoadComponent adapter for: " + id);
-		var adapter:LoadComponentAdapter = new LoadComponentAdapter(this);		
-		if (!flamComp.loaded) {
-			loadComponentAdapters.push(adapter);
-			_global.flamingo.addListener(adapter, _global.flamingo, this);
+   
+	public function onLoadComponent(mc):Void {	
+		var tokens:Array = mc._name.split(".");
+		var mcId = tokens[tokens.length - 1];
+		if (this.id == mcId) {			
+			stillLoading = false;
+			_global.flamingo.removeListener(this, _global.flamingo, this);
+			if (initAdapters.length == 0 && !stillLoading) {
+				afterLoad();
+			}
 		}
-	}
-	
-	public function removeLoadComponentAdapter(adapter:LoadComponentAdapter):Void {
-		for (var i:String in loadComponentAdapters) {
-            if (loadComponentAdapters[i] == adapter) {				
-				//Logger.console(id+ "remove onLoadComponent adapter for: " + id);
-                loadComponentAdapters.splice(int(Number(i)), 1);				
-				_global.flamingo.removeListener(adapter, _global.flamingo, this);                
-                if (loadComponentAdapters.length == 0 && initAdapters.length == 0 ) {
-					afterLoad();
-                }
-                return;
-            }
-        }
-	}
+		
+    }
+
     /**
     * 
     */
@@ -182,7 +173,7 @@ class core.AbstractComponent extends MovieClip {
 				
                 _global.flamingo.removeListener(initAdapter, listento[i], this);
                 
-                if (initAdapters.length == 0 && loadComponentAdapters.length == 0 ) {
+                if (initAdapters.length == 0 && !stillLoading) {
                     afterLoad();
                 }
                 return;
