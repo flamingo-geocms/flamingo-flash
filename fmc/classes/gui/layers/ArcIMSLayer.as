@@ -320,7 +320,7 @@ class gui.layers.ArcIMSLayer extends AbstractLayer{
 				}
 			}
 			for (var id in thisObj.layers) {
-				if (thisObj.layers[id].name == undefined and thisObj.layers[id].id == undefined) {
+				if (thisObj.layers[id].name == undefined && thisObj.layers[id].id == undefined) {
 					delete thisObj.layers[id];
 				}
 			}
@@ -810,7 +810,7 @@ class gui.layers.ArcIMSLayer extends AbstractLayer{
 		s += newline+"<VALUEMAPRENDERER lookupfield='"+lookupfield+"'>";
 		for (var cl in classes) {
 			cls = classes[cl];
-			if (cls.min != undefined and cls.max != undefined) {
+			if (cls.min != undefined && cls.max != undefined) {
 				min = Number(cls.min);
 				max = Number(cls.max);
 				delete cls.min;
@@ -819,7 +819,7 @@ class gui.layers.ArcIMSLayer extends AbstractLayer{
 				for (var i = 0; i<data.length; i++) {
 					record = data[i];
 					val = Number(_getValue(record, classfield));
-					if (val>=min and val<max) {
+					if (val>=min & val<max) {
 						id = _getValue(record, lookupfieldtable);
 						if (vs.length == 0) {
 							vs = String(id);
@@ -869,7 +869,7 @@ class gui.layers.ArcIMSLayer extends AbstractLayer{
 	* @param fielddelimiter:String [optional] Token by which fields are seperated. Use only when table is a string.
 	*/
 	function addMydata(layerid:String, jointo:String, table:Object, joinfield:String, recorddelimiter:String, fielddelimiter:String) {
-		if (layers[layerid] == undefined and initialized) {
+		if (layers[layerid] == undefined && initialized) {
 			return;
 		}
 		if (layers[layerid] == undefined) {
@@ -1184,7 +1184,7 @@ class gui.layers.ArcIMSLayer extends AbstractLayer{
 					if (layers[id][field] == false) {
 						continue;
 					}
-					if (field == "identify" and layers[id].forceidentify == true) {
+					if (field == "identify" && layers[id].forceidentify == true) {
 						layerlist.push(id);
 					} else {
 						if (layers[id].visible == false) {
@@ -1212,7 +1212,7 @@ class gui.layers.ArcIMSLayer extends AbstractLayer{
 					if (layers[id][field] == false) {
 						continue;
 					}
-					if (field == "identify" and layers[id].forceidentify == true) {
+					if (field == "identify" && layers[id].forceidentify == true) {
 						layerlist.push(id);
 					} else {
 						if (getVisible(id) != 1) {
@@ -1340,7 +1340,7 @@ class gui.layers.ArcIMSLayer extends AbstractLayer{
 				var features = new Object();
 				features[layerid] = data;
 				thisObj.flamingo.raiseEvent(thisObj, "onIdentifyData", thisObj, features, thisObj.identifyextent, (thisObj.nrlayersqueried-thisObj._identifylayers.length), thisObj.nrlayersqueried);
-				if (!thisObj.identifyall and count > 0) {
+				if (!thisObj.identifyall && count > 0) {
 					var newDate:Date = new Date();
 					var t = (newDate.getTime()-starttime.getTime())/1000;
 					thisObj.flamingo.raiseEvent(thisObj, "onIdentifyComplete", thisObj, t);
@@ -1505,7 +1505,7 @@ class gui.layers.ArcIMSLayer extends AbstractLayer{
 				var features = new Object();
 				features[layerid] = data;
 				thisObj.flamingo.raiseEvent(thisObj, "onHotlinkData", thisObj, features, thisObj.identifyextent, (thisObj.nrlayersqueried-thisObj._hotlinklayers.length), thisObj.nrlayersqueried);
-				if (!thisObj.identifyall and count > 0) {
+				if (!thisObj.identifyall && count > 0) {
 					var newDate = new Date();
 					var t = (newDate.getTime()-starttime.getTime())/1000;
 					thisObj.flamingo.raiseEvent(thisObj, "onHotlinkComplete", thisObj, t);
@@ -1677,7 +1677,7 @@ class gui.layers.ArcIMSLayer extends AbstractLayer{
 			var a_ids = flamingo.asArray(ids);
 			for (var i = 0; i<a_ids.length; i++) {
 				var id = a_ids[i];
-				if (layers[id] == undefined and !initialized) {
+				if (layers[id] == undefined && !initialized) {
 					layers[id] = new Object();
 					layers[id][field] = value;
 				} else {
@@ -1994,7 +1994,7 @@ class gui.layers.ArcIMSLayer extends AbstractLayer{
 		};
 		lConn.onGetRasterInfo = function(layerid:String, data:Array, objecttag:Object) {
 			if (thisObj.showmaptip) {
-				if (thisObj.maptipcoordinate.x == objecttag.x and thisObj.maptipcoordinate.y == objecttag.y) {
+				if (thisObj.maptipcoordinate.x == objecttag.x && thisObj.maptipcoordinate.y == objecttag.y) {
 					thisObj._completeWithMydata(layerid, data);
 					var maptip = thisObj._getString(thisObj.layers[layerid], "maptip");
 					maptip = thisObj._makeMaptip(layerid, maptip, data[0]);
@@ -2013,7 +2013,7 @@ class gui.layers.ArcIMSLayer extends AbstractLayer{
 		lConn.onGetFeatures = function(layerid:String, data:Array, count:Number, hasmore:Boolean, objecttag:Object) {
 			if (thisObj.showmaptip) {
 				if (count>0) {
-					if (thisObj.maptipcoordinate.x == objecttag.x and thisObj.maptipcoordinate.y == objecttag.y) {
+					if (thisObj.maptipcoordinate.x == objecttag.x && thisObj.maptipcoordinate.y == objecttag.y) {
 						thisObj._completeWithMydata(layerid, data);
 						var maptip = thisObj._getString(thisObj.layers[layerid], "maptip");
 						maptip = thisObj._makeMaptip(layerid, maptip, data[0]);
@@ -2055,11 +2055,15 @@ class gui.layers.ArcIMSLayer extends AbstractLayer{
 			}
 			var _maptipextent = new Object();
 			var w = map.getScale()*_maptipdistance;
-			var h = map.getScale()*_maptipdistance;
-			_maptipextent.minx = x-(w/2);
-			_maptipextent.miny = y-(h/2);
+			var h = map.getScale() * _maptipdistance;
+			var coord = map.point2Coordinate( { x:x, y:y } );
+			var tempX = coord.x;
+			var tempy = coord.y;
+			_maptipextent.minx = tempX-(w/2);
+			_maptipextent.miny = tempy-(h/2);
 			_maptipextent.maxx = _maptipextent.minx+w;
-			_maptipextent.maxy = _maptipextent.miny+h;
+			_maptipextent.maxy = _maptipextent.miny + h;
+		
 			conn.getFeatures(mapservice, layerid, _maptipextent, flds, query, {x:x, y:y});
 			break;
 		case "image" :
@@ -2074,7 +2078,7 @@ class gui.layers.ArcIMSLayer extends AbstractLayer{
 				value = record[fld];
 				break;
 			}
-			if (fld.indexOf(".", 0)>=0 and field.indexOf(".", 0)<0) {
+			if (fld.indexOf(".", 0)>=0 && field.indexOf(".", 0)<0) {
 				field = "."+field;
 			}
 			if (fld.substr(fld.length-field.length).toLowerCase() == field.toLowerCase()) {
