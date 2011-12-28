@@ -3,6 +3,8 @@ import tools.Logger;
 import core.ParentChildComponentAdapter;
 import core.VisibleAdapter;
 import core.InitAdapter;
+import core.LoadComponentAdapter;
+
 
 /*-----------------------------------------------------------------------------
 * This file is part of Flamingo MapComponents.
@@ -41,12 +43,16 @@ class core.AbstractComponent extends MovieClip {
     var defaultXML:String = "";
     // Some properties used for components to wait for each other at init time.
     private var initAdapters:Array = null;
+	private var loadComponentAdapters:Array = null;
     private var inited:Boolean = false;
     
     // Some adapters for containers and their content to adapt to each other's state.
     private var parentChildComponentAdapter:ParentChildComponentAdapter = null;
     private var visibleAdapter:VisibleAdapter = null;
     
+	
+	private var _id:String;
+	
     /** @component AbstractComponent
     * Abstract superclass for all components.
     * @file AbstractComponent.as (sourcefile)
@@ -62,7 +68,8 @@ class core.AbstractComponent extends MovieClip {
             
             return;
         }
-        _global.flamingo.correctTarget(_parent, this);
+		id = this._target.split("/")[this._target.split("/").length - 2];
+		_global.flamingo.correctTarget(_parent, this);
     }
     
     function onLoad():Void {
@@ -111,14 +118,42 @@ class core.AbstractComponent extends MovieClip {
     */
     function wait():Void {
         initAdapters = new Array();
+		loadComponentAdapters = new Array();
+		
+		var flamComp = _global.flamingo.getRawComponent(id);		
+		if (!flamComp.loaded) {						
+			addLoadComponentAdapter();
+		}
         if (listento != null) {
-        		addInitAdapters(listento);
-				}
-        if (initAdapters.length == 0) {
+			addInitAdapters(listento);
+		}
+		
+        if (initAdapters.length == 0 && loadComponentAdapters.length==0) {
             afterLoad();
         }
     }
-    
+    private function addLoadComponentAdapter(flamComp:Object) {
+		//Logger.console(id+"add    onLoadComponent adapter for: " + id);
+		var adapter:LoadComponentAdapter = new LoadComponentAdapter(this);		
+		if (!flamComp.loaded) {
+			loadComponentAdapters.push(adapter);
+			_global.flamingo.addListener(adapter, _global.flamingo, this);
+		}
+	}
+	
+	public function removeLoadComponentAdapter(adapter:LoadComponentAdapter):Void {
+		for (var i:String in loadComponentAdapters) {
+            if (loadComponentAdapters[i] == adapter) {				
+				//Logger.console(id+ "remove onLoadComponent adapter for: " + id);
+                loadComponentAdapters.splice(int(Number(i)), 1);				
+				_global.flamingo.removeListener(adapter, _global.flamingo, this);                
+                if (loadComponentAdapters.length == 0 && initAdapters.length == 0 ) {
+					afterLoad();
+                }
+                return;
+            }
+        }
+	}
     /**
     * 
     */
@@ -147,7 +182,7 @@ class core.AbstractComponent extends MovieClip {
 				
                 _global.flamingo.removeListener(initAdapter, listento[i], this);
                 
-                if (initAdapters.length == 0) {
+                if (initAdapters.length == 0 && loadComponentAdapters.length == 0 ) {
                     afterLoad();
                 }
                 return;
@@ -181,8 +216,7 @@ class core.AbstractComponent extends MovieClip {
         
         init();
         inited = true;
-        _global.flamingo.raiseEvent(this, "onInit", this);
-        
+        _global.flamingo.raiseEvent(this, "onInit", this);        
         layout();
     }
     
@@ -260,15 +294,20 @@ class core.AbstractComponent extends MovieClip {
     * @param height:Number The height.
     */
     function setBounds(x:Number, y:Number, width:Number, height:Number):Void {
-        _x = x;
-        _y = y;
-        __width = width;
-        __height = height;
+		if (!isNaN(x))
+			_x = x;
+        if (!isNaN(y))
+			_y = y;
+        if (!isNaN(width))
+			__width = width;
+        if (!isNaN(height))
+			__height = height;
         
         if (inited) {
             layout();
+			
         }
-        
+		
         _global.flamingo.raiseEvent(this, "onResize", this);
     }
     
@@ -350,5 +389,13 @@ class core.AbstractComponent extends MovieClip {
         _global.flamingo.tracer("__WIDTH " + __width);
         _global.flamingo.tracer("__HEIGHT " + __height);
     }
+	
+	public function get id():String {
+		return _id;
+	}
+	
+	public function set id(value:String):Void {
+		_id = value;
+	}
     
 }

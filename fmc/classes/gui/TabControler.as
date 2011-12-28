@@ -50,7 +50,7 @@ class gui.TabControler extends AbstractContainer {
 	private var startuptab: Number = 0;
 	var buttons:MovieClip = null;
 	
-	function onLoad(){
+	function onLoad() {			
 		super.onLoad();
 		this.setVisible(false);
 	}
@@ -61,11 +61,11 @@ class gui.TabControler extends AbstractContainer {
         }
     }
 		
-	function init():Void {	
+	function init():Void {		
 	    var tabIDs:Array = getComponents();
         var tab:Tab = null;
         tabs = new Array();
-
+		
         for (var tabId:String in tabIDs) {
             tab = _global.flamingo.getComponent(tabIDs[tabId]);
             if (tab.getComponentName() != "Tab") {

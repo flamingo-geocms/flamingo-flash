@@ -38,6 +38,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 import core.AbstractListenerRegister;
 import core.AbstractPositionable;
 import core.ComponentInterface;
+import core.AbstractComponent;
 import flash.external.ExternalInterface;
 import flash.filters.DropShadowFilter;
 import gui.BorderNavigation;
@@ -931,8 +932,7 @@ class Flamingo {
 		//                                                                                                            
 		if (xml instanceof XML) {
 			xml = xml.firstChild;
-		}else if ( ! xml instanceof XMLNode) {
-			
+		}else if ( ! xml instanceof XMLNode) {			
 			xml = new XML(String(xml));
 			xml = xml.firstChild;
 		}
@@ -2244,6 +2244,12 @@ class Flamingo {
 				return String(comp);
 				break;
 			case "movieclip" :
+				if (comp instanceof AbstractComponent) {
+					var id = AbstractComponent(comp).id;
+					if (id != undefined){
+						return id;
+					}					
+				}
 			//TODO: target omsmurfen
 				for (var id in this.components) {
 					if (this.components[id].target == comp._target) {
@@ -2277,7 +2283,11 @@ class Flamingo {
 	* @return Array list of XML objects
 	*/
 	function getXMLs(comp:Object):Array {
-		return this.components[this.getId(comp)].xmls;
+		var id = this.getId(comp);
+		if (id == undefined){
+			//Logger.console("!!!!!!!!!!!!!!!!!!!!!!Id in getXMLs is undefined: " + comp);			
+		}		
+		return this.components[id].xmls;
 	}
 	/** 
 	* Gets a reference of the first xml belonging to a component.
