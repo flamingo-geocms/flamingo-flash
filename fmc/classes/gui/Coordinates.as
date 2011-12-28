@@ -73,12 +73,12 @@ class gui.Coordinates  extends AbstractPositionable{
 		
 		
 		tCoord = this.container.createTextField("tCoord", 0, 0, 0, 0, 0);
-		tCoord.htmlText = "asdfasdfasdfasdf";
+		tCoord.htmlText = "";
 		tCoord.multiline = true;
 		tCoord.wordWrap = false;
 		tCoord.html = true;
 		tCoord.selectable = false;
-		tCoord.styleSheet = StyleSheet(flamingo.getStyleSheet(this));
+
 		//defaults
 		this.setConfig(defaultXML);
 		//custom
@@ -160,6 +160,7 @@ class gui.Coordinates  extends AbstractPositionable{
 		flamingo.addListener(lMap, listento, this);
 		this.setString();
 		flamingo.position(this);
+		tCoord.styleSheet = StyleSheet(flamingo.getStyleSheet(this));
 	}
 
 	function setString(){
