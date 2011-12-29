@@ -153,22 +153,10 @@ class coremodel.service.tiling.factory.AbstractTileFactory{
     */
     public function getZoomLevel(res:Number, maxresfactor:Number, intervalfactor:Number):Number{ 
         //_global.flamingo.tracer("res = " + res + " maxresfactor = " + maxresfactor + " intervalfactor " + intervalfactor);
-        var maxres:Number = this.resolutions[0] * maxresfactor;
-        var minres:Number = maxres / intervalfactor;
-        if (res >= maxres) {
-            return 0;
-        }
-        maxres = this.resolutions[this.resolutions.length - 1] * maxresfactor;
-        minres = maxres / intervalfactor;
-        if (res <= minres) {
-            return this.resolutions.length - 1;
-        }
         for (var i:Number = 0; i < this.resolutions.length; i++) {
-            maxres = this.resolutions[i] * maxresfactor;
-            minres = maxres / intervalfactor;            
-            if (res > minres && res <= maxres) {
-                return i;
-            }
+			if (res > this.resolutions[i] || ((res-this.resolutions[i] < 0.0000000001) && (res-this.resolutions[i] > -0.0000000001))){
+				return i;
+			}
         }
 		log.debug("found none, return last zoomlevel (smallest)");
 		return (this.resolutions.length-1);
