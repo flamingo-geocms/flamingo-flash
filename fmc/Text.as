@@ -57,7 +57,7 @@ init();
 * </string>
 * </fmc:Text>
 */
-function init():Void {
+function init():Void {	
 	if (flamingo == undefined) {
 		var t:TextField = this.createTextField("readme", 0, 0, 0, 550, 400);
 		t.html = true;
@@ -65,6 +65,12 @@ function init():Void {
 		return;
 	}
 	this._visible = false;
+	//execute init() when the movieclip is realy loaded and in the timeline
+	if (!flamingo.isLoaded(this)) {
+		var id = flamingo.getId(this, true);
+		flamingo.loadCompQueue.executeAfterLoad(id, this, init);
+		return;
+	}
 
 	//defaults
 	this.setConfig(defaultXML);
