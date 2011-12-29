@@ -78,6 +78,13 @@ function init():Void {
 		return;
 	}
 	
+	this._visible = false;
+	//execute init() when the movieclip is realy loaded and in the timeline
+	if (!flamingo.isLoaded(this)) {
+		var id = flamingo.getId(this, true);
+		flamingo.loadCompQueue.executeAfterLoad(id, this, init);
+		return;
+	}
 		createTextField("tExtent", 0, 0, 0, 1, 1);
 	//mc.mLabel.border = true;
 	tExtent.wordWrap = true;
@@ -85,7 +92,6 @@ function init():Void {
 	tExtent.html = true;
 	tExtent.selectable = false;
 	//
-	this._visible = false;
 
 	//defaults
 	this.setConfig(defaultXML);

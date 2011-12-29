@@ -170,6 +170,14 @@ function init():Void {
 		return;
 	}
 	this._visible = false;
+	
+	//execute init() when the movieclip is realy loaded and in the timeline
+	if (!flamingo.isLoaded(this)) {
+		var id = flamingo.getId(this, true);
+		flamingo.loadCompQueue.executeAfterLoad(id, this, init);
+		return;
+	}
+	
 	this.createClassObject(mx.containers.ScrollPane, "mScrollPane", 1);
 	mScrollPane.contentPath = skin+"_legend";
 	mScrollPane.vLineScrollSize = 50;

@@ -97,6 +97,13 @@ function init() {
 		return;
 	}
 	this._visible = false;
+	
+	//execute init() when the movieclip is realy loaded and in the timeline
+	if (!flamingo.isLoaded(this)) {
+		var id = flamingo.getId(this, true);
+		flamingo.loadCompQueue.executeAfterLoad(id, this, init);
+		return;
+	}
 
 	//defaults
 	this.setConfig(defaultXML);

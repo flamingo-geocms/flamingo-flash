@@ -109,6 +109,12 @@ function init() {
 		return;
 	}
 	this._visible = false
+	//execute init() when the movieclip is realy loaded and in the timeline
+	if (!flamingo.isLoaded(this)) {
+		var id = flamingo.getId(this, true);
+		flamingo.loadCompQueue.executeAfterLoad(id, this, init);
+		return;
+	}
 	//move this window to a position below 20000
 	//20000 is the top window
 	var parent = flamingo.getParent(this);

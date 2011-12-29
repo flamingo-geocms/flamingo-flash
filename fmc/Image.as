@@ -74,6 +74,14 @@ function init() {
 		t.htmlText = "<P ALIGN='CENTER'><FONT FACE='Helvetica, Arial' SIZE='12' COLOR='#000000' LETTERSPACING='0' KERNING='0'><B>Image "+this.version+"</B> - www.flamingo-mc.org</FONT></P>";
 		return;
 	}
+	
+	//execute init() when the movieclip is realy loaded and in the timeline
+	if (!flamingo.isLoaded(this)) {
+		var id = flamingo.getId(this, true);
+		flamingo.loadCompQueue.executeAfterLoad(id, this, init);
+		return;
+	}
+	
 	this._visible = false;
 	
 	//defaults
