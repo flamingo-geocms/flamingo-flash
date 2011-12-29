@@ -62,6 +62,8 @@ import tools.Logger;
 import display.spriteloader.SpriteMap;
 import display.spriteloader.SpriteMapFactory;
 
+import core.loading.LoadComponentQueue;
+
 class Flamingo {
 	private var version:String = "3.3 R1118";
 	//reference to main movie from which this class is loaded
@@ -132,6 +134,8 @@ class Flamingo {
 	
 	var _spriteMapFactory:SpriteMapFactory;
 	var _spriteMap:SpriteMap;
+	
+	private var _loadCompQueue:LoadComponentQueue;
 		 
 	//Flamingo class constructor
 	//@param mc MovieClip 
@@ -173,7 +177,10 @@ class Flamingo {
 		this.components.flamingo.target = mc._target;
 		this.components.flamingo.url = "flamingo";
 		this.components.flamingo.type = "flamingo";
-		//
+		
+		//loadCompQueue
+		loadCompQueue = new LoadComponentQueue();
+		this.addListener(loadCompQueue, this, this);
 		//
 		//keep a reference to the movie
 		this.mFlamingo = mc;
@@ -1323,8 +1330,13 @@ class Flamingo {
 			return;
 		}
 		if (id == undefined) {
-			Logger.console("!!!!! Flamingo ParseXML no Id, stop loading defaults.");
-			return;
+			//Logger.console("!!!!! Flamingo ParseXML no Id, stop loading xml: "+xml);
+			id = this.getId(comp, true);
+			var flamComp = this.getRawComponent(id);
+			if (!flamComp.loaded) {
+				Logger.console("!!!!Component with id not fully loaded??");
+				return;
+			}			
 		}
 		var mc = null;
 		if (comp instanceof AbstractPositionable) {			
@@ -1335,7 +1347,7 @@ class Flamingo {
 		//default flamingo attributes
 		if (mc.visible == undefined) {
 			mc.visible = true;
-		}		
+		}	
 		for (var attr in xml.attributes) {
 			attr = attr.toLowerCase();
 			var val:String = xml.attributes[attr];
@@ -2233,11 +2245,17 @@ class Flamingo {
 	/** 
 	* Gets the id of a component.
 	* @param comp:Object Id or MovieClip representing the component.
+	* @param solvIdFromComp:Boolean If set to true the id will be solved when the comp is a movieclip.
+	* 	The id will be solved from the movieclip path. Default: false; So, if true the id will be returned 
+	*   even if the component not is loaded completely (target is set when completely loaded)
 	* @return String Id of component.
 	*/
-	public function getId(comp:Object):String {
+	public function getId(comp:Object, solvIdFromComp:Boolean):String {		
 		if (comp == this) {
 			return ("flamingo");
+		}
+		if (solvIdFromComp == undefined){
+			solvIdFromComp = false;
 		}
 		switch (typeof (comp)) {
 			case "string" :
@@ -2250,18 +2268,24 @@ class Flamingo {
 						return id;
 					}					
 				}
-			//TODO: target omsmurfen
-				for (var id in this.components) {
+				for (var id in this.components) {					
 					if (this.components[id].target == comp._target) {
 						return (id);
 					}
 				}
 				for (var id in this.components) {
-					//TODO: target omsmurfen
 					if (this.components[id].killtarget == comp._target) {
 						return (id);
 					}
 				}
+				if (solvIdFromComp){
+					var tokens:Array = ("" + comp).split(".");
+					var id = tokens[tokens.length - 1];
+					if (id != undefined){
+						return id;
+					}
+				}
+				//Logger.console("No id! " + comp);
 				return null;
 				break;
 			case "object" :				
@@ -2273,6 +2297,7 @@ class Flamingo {
 				return id;
 				break;
 			default :
+				//Logger.console("No id! " + comp);
 				return null;
 				break;
 		}
@@ -2283,9 +2308,9 @@ class Flamingo {
 	* @return Array list of XML objects
 	*/
 	function getXMLs(comp:Object):Array {
-		var id = this.getId(comp);
+		var id = this.getId(comp,true);
 		if (id == undefined){
-			//Logger.console("!!!!!!!!!!!!!!!!!!!!!!Id in getXMLs is undefined: " + comp);			
+			Logger.console("!!!!!!!!!!!!!!!!!!!!!!Id in getXMLs is undefined: " + comp);			
 		}		
 		return this.components[id].xmls;
 	}
@@ -3647,6 +3672,14 @@ class Flamingo {
 		mc.filters = filterArray;
 	}
 	
+	public function isLoaded(comp):Boolean {
+		var flamcomp = this.getRawComponent(this.getId(comp, true));
+		if (flamcomp == undefined || !flamcomp.loaded) {
+			return false;
+		}else {
+			return true;
+		}
+	}
 	/*Getters and setters for logging.*/
 	public function getLogLevel():Number{
 		return this.logLevel;
@@ -3688,6 +3721,14 @@ class Flamingo {
 	public function set spriteMap(value:SpriteMap):Void 
 	{
 		_spriteMap = value;
+	}
+	
+	public function get loadCompQueue():LoadComponentQueue {
+		return _loadCompQueue;
+	}
+	
+	public function set loadCompQueue(value:LoadComponentQueue):Void {
+		_loadCompQueue = value;
 	}
 	
 }
