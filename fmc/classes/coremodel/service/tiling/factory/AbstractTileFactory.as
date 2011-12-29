@@ -151,6 +151,11 @@ class coremodel.service.tiling.factory.AbstractTileFactory{
     /*Get the fixed zoomlevel of the given Resolution from this service: 'res'
     @param res The resolution resolution
     */
+	
+	/*
+	 * previous code open to various mis configurations, which made flamingo crash. The zoomlevel was incorrectly calculated when intervalfactor (or maxresfactor) was not/not properly configured. 
+	 * Besides: resolutions are not bound to logic, so no constant buffer can be defined over all resolutions (if wanted, they can be calculated in relation to the next/previous resolution)
+	 * -
     public function getZoomLevel(res:Number, maxresfactor:Number, intervalfactor:Number):Number{ 
         //_global.flamingo.tracer("res = " + res + " maxresfactor = " + maxresfactor + " intervalfactor " + intervalfactor);
         for (var i:Number = 0; i < this.resolutions.length; i++) {
