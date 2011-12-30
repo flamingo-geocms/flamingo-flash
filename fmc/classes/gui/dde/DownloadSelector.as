@@ -167,6 +167,11 @@ class gui.dde.DownloadSelector extends AbstractComponent implements GeometryList
 	private var debug:Boolean = false;
 	
     function onLoad():Void {
+		//execute the rest when the movieclip is realy loaded and in the timeline
+		if (!_global.flamingo.isLoaded(this)) {
+			_global.flamingo.loadCompQueue.executeAfterLoad(id, this, onLoad);
+			return;
+		}
 		ddeConnector = new DDEConnector;
 		ddeConnector.addListener(this);
 		ddeConnector.setAreaSelectionType("inArea");

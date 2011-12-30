@@ -30,6 +30,11 @@ class gui.dde.DownloadSelectorButton extends AbstractComponent {
 							"</DownloadSelectorButton>";
 		
 	function onLoad():Void {
+		//execute the rest when the movieclip is realy loaded and in the timeline
+		if (!_global.flamingo.isLoaded(this)) {
+			_global.flamingo.loadCompQueue.executeAfterLoad(id, this, onLoad);
+			return;
+		}
 		super.onLoad();
 		this.useHandCursor = false;
 	}

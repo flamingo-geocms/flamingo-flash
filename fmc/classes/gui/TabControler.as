@@ -50,7 +50,12 @@ class gui.TabControler extends AbstractContainer {
 	private var startuptab: Number = 0;
 	var buttons:MovieClip = null;
 	
-	function onLoad() {			
+	function onLoad() {	
+		//execute the rest when the movieclip is realy loaded and in the timeline
+		if (!_global.flamingo.isLoaded(this)) {
+			_global.flamingo.loadCompQueue.executeAfterLoad(id, this, onLoad);
+			return;
+		}
 		super.onLoad();
 		this.setVisible(false);
 	}

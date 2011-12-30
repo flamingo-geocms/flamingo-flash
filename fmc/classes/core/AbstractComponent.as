@@ -67,7 +67,16 @@ class core.AbstractComponent extends MovieClip {
             
             return;
         }
-		id = this._target.split("/")[this._target.split("/").length - 2];
+		//try to get some sort of id.... Not so nice :(
+		var tokens:Array = this._target.split("/");		
+		if (tokens[tokens.length - 1] == "mKid") {
+			id = tokens[tokens.length - 2];
+		}else {
+			id = tokens[tokens.length - 1];
+		}
+				
+		/*Logger.console("AbstractComp target: "+this._target);
+		Logger.console("AbstractComp id: "+id);*/
 		_global.flamingo.correctTarget(_parent, this);
     }
     
@@ -75,6 +84,11 @@ class core.AbstractComponent extends MovieClip {
         if (_parent._parent == null) {
             return;
         }
+		//execute the rest when the movieclip is realy loaded and in the timeline
+		if (!_global.flamingo.isLoaded(this)) {
+			_global.flamingo.loadCompQueue.executeAfterLoad(id, this, onLoad);
+			return;
+		}
         setConfig();
     }
     
@@ -119,11 +133,12 @@ class core.AbstractComponent extends MovieClip {
         initAdapters = new Array();
 		stillLoading = false;
 		
-		var flamComp = _global.flamingo.getRawComponent(id);		
+		/*var flamComp = _global.flamingo.getRawComponent(id);		
 		if (!flamComp.loaded) {					
+			Logger.console("?? Dit kan toch niet meer");
 			stillLoading = true;
 			_global.flamingo.addListener(this, _global.flamingo, this);
-		}
+		}*/
         if (listento != null) {
 			addInitAdapters(listento);
 		}		

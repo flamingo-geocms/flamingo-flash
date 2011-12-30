@@ -65,7 +65,7 @@ import display.spriteloader.SpriteMapFactory;
 import core.loading.LoadComponentQueue;
 
 class Flamingo {
-	private var version:String = "3.3 R1118";
+	private var version:String = "3.3 R1159";
 	//reference to main movie from which this class is loaded
 	//at the main movie the components are loaded at 'moviedepth'--  ;moviedepth starts by 10000
 	//at the main movie a cursor movie is loaded at depth 50005
@@ -3671,13 +3671,20 @@ class Flamingo {
 		filterArray.push(filter);
 		mc.filters = filterArray;
 	}
-	
+	/**
+	 * Check if a component is loaded. 
+	 * @param	comp The component that needs to be checked. 
+	 * @return Returns true if loaded and if the component is not known by flamingo 
+	 */
 	public function isLoaded(comp):Boolean {
 		var flamcomp = this.getRawComponent(this.getId(comp, true));
-		if (flamcomp == undefined || !flamcomp.loaded) {
-			return false;
-		}else {
+		if (flamcomp == undefined ||flamcomp.loaded) {
+			if (flamcomp == undefined) {
+				Logger.console("Heeeey! flamcomp not here?: " + comp);
+			}
 			return true;
+		}else {
+			return false;
 		}
 	}
 	/*Getters and setters for logging.*/

@@ -11,7 +11,8 @@ import event.ActionEvent;
 import event.ActionEventListener;
 
 class coregui.ButtonBar extends MovieClip implements ActionEventListener{
-    
+    private var id:String;
+	
     static var HORIZONTAL:Number = 0;
     static var VERTICAL:Number = 1;
     
@@ -44,6 +45,12 @@ class coregui.ButtonBar extends MovieClip implements ActionEventListener{
 	private var setXIntervalId;
 	
     function onLoad():Void {
+		//try to get some sort of id...
+		id = this._target.split("/")[this._target.split("/").length - 2];
+		if (!_global.flamingo.isLoaded(this)) {
+			_global.flamingo.loadCompQueue.executeAfterLoad(id, this, onLoad);
+			return;
+		}
 		default_xpos = _x;
 		default_ypos = _y;
 	

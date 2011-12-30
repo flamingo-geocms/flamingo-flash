@@ -52,7 +52,12 @@ class gui.Tab extends AbstractContainer {
 	private var gradientVisible:GradientFill=null;
 	private var gradientInvisible:GradientFill=null;
 
-	function onLoad(){
+	function onLoad() {
+		//execute the rest when the movieclip is realy loaded and in the timeline		
+		if (!_global.flamingo.isLoaded(this)) {
+			_global.flamingo.loadCompQueue.executeAfterLoad(id, this, onLoad);
+			return;
+		}
 		super.onLoad();
 		this.setVisible(false);
 	}	

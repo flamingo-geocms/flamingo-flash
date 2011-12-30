@@ -240,7 +240,12 @@ class gismodel.GIS extends AbstractComponent {
     
 	private var log:Logger=null;
 	
-	function onLoad(){		
+	function onLoad(){	
+		//execute the rest when the movieclip is realy loaded and in the timeline
+		if (!_global.flamingo.isLoaded(this)) {
+			_global.flamingo.loadCompQueue.executeAfterLoad(id, this, onLoad);
+			return;
+		}
 		layers = new Array();
 		super.onLoad();
 		this.log = new Logger("gismodel.GIS",_global.flamingo.getLogLevel(),_global.flamingo.getScreenLogLevel());

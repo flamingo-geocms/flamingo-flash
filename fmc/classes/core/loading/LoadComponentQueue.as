@@ -15,6 +15,7 @@ class core.loading.LoadComponentQueue{
 	 * @param	flamingo
 	 */
 	public function LoadComponentQueue() {
+		//setInterval(this, "logQueue", 10000);
 	}
 	/**
 	 * Use this function to add functions that are called when a onLoadComplete occured for the object (id)
@@ -52,5 +53,20 @@ class core.loading.LoadComponentQueue{
 		}
 		
     }
+	
+	public function logQueue():Void {
+		var noc:Number = 0;
+		var log:String = "";
+		for (var s in queue) {
+			noc++;
+			log += "Component: " + s + " has " + queue[s].length + " calls waiting.";
+			for (var i = 0; i < queue[s].length; i++) {
+				var fc:FunctionCall = FunctionCall(queue[s][i]);
+				log += "\n   call " + i + " has arguments: " + fc.funcOwner;
+			}
+		}
+		Logger.console("Waiting for " + noc + " components.\n"+log);
+		
+	}
 	
 }
