@@ -86,19 +86,19 @@ var lLayer:Object = new Object();
 lLayer.onShow = function(layer:MovieClip) {
 	var id = flamingo.getId(layer);
 	//remember scale of layer in scales object
-	scales[id] = layer.getScale();
+	thisObj.scales[id] = layer.getScale();
 	thisObj.refresh();
 };
 lLayer.onHide = function(layer:MovieClip) {
 	var id = flamingo.getId(layer)
 	//remember scale of layer in scales object
-	scales[id] = layer.getScale();
+	thisObj.scales[id] = layer.getScale();
 	thisObj.refresh();
 };
 lLayer.onUpdateComplete = function(layer:MovieClip) {
 	var id = flamingo.getId(layer);
 	//remember scale of layer in scales object
-	scales[id] = layer.getScale();
+	thisObj.scales[id] = layer.getScale();
 	thisObj.refresh();
 };
 //---------------------------------------
@@ -846,7 +846,7 @@ function refresh() {
 	resize();
 }
 function _refreshItem(mc:MovieClip, animate:Boolean) {
-	if (not mc._parent._visible) {
+	if (! mc._parent._visible) {
 		return;
 	}
 	mc.clear();
@@ -980,7 +980,7 @@ function _refreshItem(mc:MovieClip, animate:Boolean) {
 		if (mc.mItems != undefined) {
 			mc.mItems._x = x;
 			mc.mItems._y = y;
-			 if (mc.item.itemvisible == 1 or mc.item.itemvisible ==undefined) {
+			 if (mc.item.itemvisible == 1 || mc.item.itemvisible ==undefined) {
 				mc.mItems._yscale = mc.mItems._xscale=100;
 				mc.mItems._visible = true;
 			} else {
@@ -1041,7 +1041,7 @@ function _refreshItem(mc:MovieClip, animate:Boolean) {
 			mc.mLabel._x = mc.mSymbol._x+mc.mSymbol._width;
 			mc.mSymbol._y = Math.max(0, ((mc.mLabel._height/2)-(mc.mSymbol._height/2)));
 			mc.mLabel._y = Math.max(0, ((mc.mSymbol._y+mc.mSymbol._height/2)-(mc.mLabel._height/2)));
-			if (_getVisible(mc._parent._parent.item.listento) == 1 or mc._parent._parent.item.itemvisible ==undefined) {
+			if (_getVisible(mc._parent._parent.item.listento) == 1 || mc._parent._parent.item.itemvisible ==undefined) {
 				_clear(mc.mSymbol);
 				if (shadowsymbols) {
 					_dropShadow(mc.mSymbol);
@@ -1058,7 +1058,7 @@ function _refreshItem(mc:MovieClip, animate:Boolean) {
 		while (mcprev != undefined) {
 			mcprev.mLabel._x = Math.max(mcprev.mLabel._x, tx);
 			mc.mLabel._x = Math.max(mcprev.mLabel._x, tx);
-			mcprev = mc._parent[Number(mcprev._name)-1];
+			mcprev = mc._parent[Number(mcprev._name) - 1];
 		}
 		//
 		break;
@@ -1207,7 +1207,7 @@ function drawLegend(list:Array, parent:MovieClip, _indent:Number) {
 			drawLegend(item.items, mc.mItems, space);
 			break;
 		case "item" :
-			if (item.canhide == true and item.listento != undefined) {
+			if (item.canhide == true && item.listento != undefined) {
 				mc.chkButton = new FlamingoCheckButton(mc.createEmptyMovieClip("mCheck", 1), skin+"_checked", skin+"_checkeddown", skin+"_checkedover", skin+"_unchecked", skin+"_uncheckeddown", skin+"_uncheckedover", skin+"_checked", mc, false);
 				mc.chkButton.onPress = function(checked:Boolean) {
 					clearInterval(updateid);
@@ -1251,7 +1251,7 @@ function drawLegend(list:Array, parent:MovieClip, _indent:Number) {
 						}
 					}
 					var parentgroup = this._parent._parent;
-					if (parentgroup.item.hideallbutone and checked) {
+					if (parentgroup.item.hideallbutone && checked) {
 						for (var item in parentgroup.mItems) {
 							if (parentgroup.mItems[item] != this) {
 								parentgroup.mItems[item].chkButton.uncheck();
@@ -1366,7 +1366,7 @@ function _checkChildrenOf(mc:MovieClip, checked:Boolean) {
 		_checkChildrenOf(mc.mItems[item], checked);
 	}
 }
-function resize() {
+function resize() { 
 	var r = flamingo.getPosition(this);
 	this._x = r.x;
 	this._y = r.y;
