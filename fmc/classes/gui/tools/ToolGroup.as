@@ -25,6 +25,7 @@ dynamic class gui.tools.ToolGroup extends AbstractPositionable implements Compon
 							"</Toolgroup>";
 	
 	private var _tools:Array;
+	private var _oldTools:Array;
 	
 	/**
 	 * Constructor for ToolGroup
@@ -35,6 +36,7 @@ dynamic class gui.tools.ToolGroup extends AbstractPositionable implements Compon
 	public function ToolGroup(id:String, container:MovieClip){
 		super(id, container);
 		tools = new Array();		
+		oldTools = new Array();
 		init();
 	}
 	/*
@@ -190,6 +192,12 @@ dynamic class gui.tools.ToolGroup extends AbstractPositionable implements Compon
 			var mc:MovieClip = this.container.createEmptyMovieClip(toolid, this.container.getNextHighestDepth());
 			flamingo.loadComponent(xml, mc, toolid);
 		}
+		var tool = flamingo.getComponent(toolid);
+		if (! tool instanceof AbstractTool) {
+			//tool._parent(this);
+			addOldTool(tool);
+			
+		}
 	}
 	
 	/***********************************************************************************
@@ -201,6 +209,10 @@ dynamic class gui.tools.ToolGroup extends AbstractPositionable implements Compon
 	function addTool(tool:AbstractTool):Void {
 		this.tools.push(tool);
 	}
+	
+	function addOldTool(tool):Void {
+		this.oldTools.push(tool);
+	}
 	/**
 	 * Get the tool with id == toolid
 	 * @param	toolId
@@ -209,6 +221,12 @@ dynamic class gui.tools.ToolGroup extends AbstractPositionable implements Compon
 	function getTool(toolId:String):AbstractTool {
 		for (var i = 0; i < this.tools.length; i++) {
 			var t:AbstractTool = AbstractTool(this.tools[i]);
+			if (t.id == toolId) {
+				return t;
+			}
+		}
+		for (var j = 0; j < this.oldTools.length; j++) {
+			var t = this.oldTools[j];
 			if (t.id == toolId) {
 				return t;
 			}
@@ -297,6 +315,11 @@ dynamic class gui.tools.ToolGroup extends AbstractPositionable implements Compon
 			var t:AbstractTool = AbstractTool(this.tools[i]);
 			toolIds.push(t.id);
 		}
+		
+		for (var j = 0; j < this.oldTools.length; j++) {
+			var t = this.oldTools[j];
+			toolIds.push(t.id);
+		}
 		return toolIds;
 	}
 	/**
@@ -316,12 +339,22 @@ dynamic class gui.tools.ToolGroup extends AbstractPositionable implements Compon
 		if (toolid == undefined) {
 			return;
 		}
+		var toolComp = this.getTool(this.tool);
 		if(this.tool!=undefined){
 			flamingo.raiseEvent(this, "onReleaseTool", this, tool);
-			this.getTool(this.tool).setActive(false);
+			if (toolComp instanceof AbstractTool) {
+				toolComp.setActive(false);
+			}else {
+				toolComp._releaseTool();
+			}
 		}
 		this.tool = toolid;
-		this.getTool(this.tool).setActive(true);
+		toolComp = this.getTool(this.tool);
+		if (toolComp instanceof AbstractTool) {
+			toolComp.setActive(true);
+		}else {
+			toolComp._pressTool();
+		}
 		flamingo.raiseEvent(this, "onSetTool", this, tool);
 	}
 	/********************************************************************
@@ -450,5 +483,13 @@ dynamic class gui.tools.ToolGroup extends AbstractPositionable implements Compon
 	public function set defaultXML(value:String):Void 
 	{
 		_defaultXML = value;
+	}
+	public function get oldTools():Array 
+	{
+		return _oldTools;
+	}
+	public function set oldTools(value:Array):Void 
+	{
+		_oldTools = value;
 	}
 }

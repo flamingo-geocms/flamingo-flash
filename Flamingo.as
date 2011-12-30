@@ -996,8 +996,8 @@ class Flamingo {
 					if (file == "ToolGroup") {
 						var toolGroup:ToolGroup = new ToolGroup(targetid,mc);										
 						this.toolGroups.push(toolGroup);
-						toolGroup.setConfig(xmlNode);						
 						this.components[targetid] = toolGroup;
+						toolGroup.setConfig(xmlNode);						
 					}else if (file == "Container") {
 						var container:Container = new Container(targetid, mc);
 						this.components[targetid] = container;	
@@ -1145,7 +1145,10 @@ class Flamingo {
 						break;
 					}
 					if (this.components[parentmc._name].target != undefined ) {
-						this.components[targetid].parent = parentmc._name;
+						var p = this.getComponent(parentmc._name);
+						this.components[targetid].parent = p;// parentmc._name;
+						mc.parent = p;
+						mc._parent = p;
 						break;
 					}
 		
@@ -1257,6 +1260,10 @@ class Flamingo {
 		lLoader.onLoadInit = function(lMc:MovieClip) {
 			thisObj.components[id].loaded = true;
 			delete thisObj.components[id].loader;
+			if (thisObj.components[id].parent != undefined) {
+				lMc.parent = thisObj.components[id].parent;
+				lMc._parent =  thisObj.components[id].parent;
+			}
 			thisObj.raiseEvent(thisObj, "onLoadComponent", lMc);
 			thisObj.doneLoading();
 			//thisObj.isloadingcomponent = false;

@@ -12,6 +12,7 @@
 * @configstring tooltip Tooltip.
 * @configcursor busy Cursor shown when a map is updating and holdonidentify(attribute of Map) is set to true.
 */
+import tools.Logger;
 var version:String = "3.0";
 //-------------------------------------------
 var defaultXML:String = "<?xml version='1.0' encoding='UTF-8'?>" +
@@ -178,11 +179,80 @@ function setConfig(xml:Object) {
 		}
 	}
 	//
-	_parent.initTool(this, skin+"_up", skin+"_over", skin+"_down", skin+"_up", lMap, "pan", "tooltip");
+
+	initTool( skin + "_up", skin + "_over", skin + "_down", skin + "_up", lMap, "pan", "tooltip"); +
+	parent.addOldTool(this);
 	this.setEnabled(enabled);
 	this.setVisible(visible);
 	flamingo.position(this);
 }
+
+function initTool( uplink:String, overlink:String, downlink:String, hitlink:String, maplistener:Object, cursorid:String, tooltipid:String) {
+	flamingo.getParent(this).resize();
+	this._pressed = false;
+	this._enabled = true;
+	this.attachMovie(uplink, "mSkin", 1);
+	this.attachMovie(hitlink, "mHit", 0, {_alpha:0});
+	this.mHit.useHandCursor = false;
+	var thisObj = this;
+	this.setVisible = function(b:Boolean) {
+		thisObj.visible = b;
+		thisObj._visible = b;
+	};
+	this.setEnabled = function(b:Boolean) {
+		if (b) {
+			thisObj._alpha = 100;
+		} else {
+			thisObj._alpha = 20;
+			if (thisObj._pressed) {
+				setCursor(undefined);
+				thisObj._releaseTool();
+			}
+		}
+		thisObj._enabled = b;
+		thisObj.enabled = b;
+	};
+	this._releaseTool = function() {
+		if (thisObj._enabled) {
+			thisObj._pressed = false;
+			thisObj.attachMovie(uplink, "mSkin", 1);
+			flamingo.removeListener(maplistener, listento, thisObj);
+			thisObj.releaseTool();
+		}
+	};
+	//
+	this._pressTool = function() {
+		if (thisObj._enabled) {
+			thisObj._pressed = true;
+			thisObj.attachMovie(downlink, "mSkin", 1);
+			setCursor(thisObj.cursors[cursorid]);
+			flamingo.addListener(maplistener, listento, thisObj);
+			thisObj.pressTool();
+		}
+	};
+	//
+	this.mHit.onRollOver = function() {
+		flamingo.showTooltip(flamingo.getString(mc, tooltipid), thisObj);
+		if (thisObj._enabled) {
+			if (! thisObj._pressed) {
+				thisObj.attachMovie(overlink, "mSkin", 1);
+			}
+		}
+	};
+	//
+	this.mHit.onRollOut = function() {
+		if (! thisObj._pressed) {
+			thisObj.attachMovie(uplink, "mSkin", 1);
+		}
+	};
+	//
+	this.mHit.onPress = function() {
+		if (thisObj._enabled) {
+			parent.setTool(flamingo.getId(thisObj));
+		}
+	};
+}
+
 function setConfig2(xml:Object) {
 		if (typeof (xml) == "string") {
 		xml = new XML(String(xml)).firstChild;
@@ -361,7 +431,6 @@ function initWindow(){
 	
 	setWindowLabels();
 	for(var i=0; i<layers.length; i++){
-		
 		if(isVisible(this.layers[i].layerID)){
 			window.content.cmb_layers.addItem(layers[i].layerName, i);
 		}
@@ -418,7 +487,7 @@ function initControls() {
 		if(window.content.ta_radius.text == "" || window.content.cmb_layers.value ==-1 || number == "NaN" || radius < 0){
 			window.content.lbl_error.visible = true;
 		}
-		else{
+		else {
 			window.content.lbl_error.visible = false;
 			generateBuffer(window.content.cmb_layers.value, radius);
 
