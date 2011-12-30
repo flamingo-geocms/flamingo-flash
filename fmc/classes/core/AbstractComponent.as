@@ -49,9 +49,10 @@ class core.AbstractComponent extends MovieClip {
     private var parentChildComponentAdapter:ParentChildComponentAdapter = null;
     private var visibleAdapter:VisibleAdapter = null;
     
+	private var intervalId:Number= null;
 	
 	private var _id:String;
-	
+		
     /** @component AbstractComponent
     * Abstract superclass for all components.
     * @file AbstractComponent.as (sourcefile)
@@ -71,20 +72,32 @@ class core.AbstractComponent extends MovieClip {
 		var tokens:Array = this._target.split("/");		
 		if (tokens[tokens.length - 1] == "mKid") {
 			id = tokens[tokens.length - 2];
-		}else {
-			//cant set the id, set the id later by getting it from Flamingo			
+		}else {			
+			//cant set the id, set the id later by getting it from Flamingo
 		}
 		_global.flamingo.correctTarget(_parent, this);
     }
     
     function onLoad():Void {
+		if (intervalId != null) {
+			Logger.console("Returned from interval, retry");
+		}
+		clearInterval(intervalId);
         if (_parent._parent == null) {
             return;
-        }
+        }		
 		//if the constructor didn't set a id get the id from flamingo.
-		if (id == undefined) {
-			id = _global.flamingo.getId(this);
-		}
+		if (id == undefined) {			
+			id = _global.flamingo.getId(this);			
+			if (id == undefined) {
+				Logger.console("!!!!!!Still no id for AbstractComponent with MovieClip._target: " + this._target);
+				//if do 1 retry, need the id.
+				if (intervalId!=null){
+					intervalId = setInterval(this, "onLoad", 300);
+				}
+				return;
+			}
+		}		
 		//execute the rest when the movieclip is realy loaded and in the timeline
 		if (!_global.flamingo.isLoaded(this)) {
 			_global.flamingo.loadCompQueue.executeAfterLoad(id, this, onLoad);
@@ -94,8 +107,8 @@ class core.AbstractComponent extends MovieClip {
     }
     
     
-    function setConfig():Void {
-    	setBaseConfig();
+    function setConfig():Void {		
+    	setBaseConfig();		
         setCustomConfig();
         wait();
     }
@@ -280,7 +293,7 @@ class core.AbstractComponent extends MovieClip {
     * @param visible:Boolean True or false.
     */
     function setVisible(visible:Boolean):Void {
-        //if (this.visible != visible) {
+		//if (this.visible != visible) {
              this.visible = visible;
             _visible = visible;
             _global.flamingo.raiseEvent(this, "onSetVisible", this, visible);
@@ -403,6 +416,5 @@ class core.AbstractComponent extends MovieClip {
 	
 	public function set id(value:String):Void {
 		_id = value;
-	}
-    
+	}    
 }
