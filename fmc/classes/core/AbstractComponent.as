@@ -72,11 +72,8 @@ class core.AbstractComponent extends MovieClip {
 		if (tokens[tokens.length - 1] == "mKid") {
 			id = tokens[tokens.length - 2];
 		}else {
-			id = tokens[tokens.length - 1];
+			//cant set the id, set the id later by getting it from Flamingo			
 		}
-				
-		/*Logger.console("AbstractComp target: "+this._target);
-		Logger.console("AbstractComp id: "+id);*/
 		_global.flamingo.correctTarget(_parent, this);
     }
     
@@ -84,6 +81,10 @@ class core.AbstractComponent extends MovieClip {
         if (_parent._parent == null) {
             return;
         }
+		//if the constructor didn't set a id get the id from flamingo.
+		if (id == undefined) {
+			id = _global.flamingo.getId(this);
+		}
 		//execute the rest when the movieclip is realy loaded and in the timeline
 		if (!_global.flamingo.isLoaded(this)) {
 			_global.flamingo.loadCompQueue.executeAfterLoad(id, this, onLoad);
@@ -110,7 +111,7 @@ class core.AbstractComponent extends MovieClip {
         // Retrieves the application configurations for the component, in order to set the base properties.
         var appConfigs:Array = _global.flamingo.getXMLs(this);
         for (var i = 0; i < appConfigs.length; i++) {
-            _global.flamingo.parseXML(this, XMLNode(appConfigs[i]));
+			_global.flamingo.parseXML(this, XMLNode(appConfigs[i]));
         }
         //some base properties may be reloaded in another xml so f.i. the bounds change
         //TODO: check other base properties  

@@ -1,5 +1,5 @@
 ﻿import core.AbstractComponent;
-
+import tools.Logger;
 /*-----------------------------------------------------------------------------
 * This file is part of Flamingo MapComponents.
 * Author: Linda Vels.
@@ -29,14 +29,9 @@ class gui.dde.DownloadSelectorButton extends AbstractComponent {
 							"<string id='tooltip' en='open DDE download window' nl='open DDE download scherm'/>" +
 							"</DownloadSelectorButton>";
 		
-	function onLoad():Void {
-		//execute the rest when the movieclip is realy loaded and in the timeline
-		if (!_global.flamingo.isLoaded(this)) {
-			_global.flamingo.loadCompQueue.executeAfterLoad(id, this, onLoad);
-			return;
-		}
-		super.onLoad();
-		this.useHandCursor = false;
+	function onLoad():Void {		
+		super.onLoad();		
+		this.useHandCursor = false;		
 	}
 		
 	function onPress():Void{

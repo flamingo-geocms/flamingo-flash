@@ -2261,13 +2261,7 @@ class Flamingo {
 			case "string" :
 				return String(comp);
 				break;
-			case "movieclip" :
-				if (comp instanceof AbstractComponent) {
-					var id = AbstractComponent(comp).id;
-					if (id != undefined){
-						return id;
-					}					
-				}
+			case "movieclip" :				
 				for (var id in this.components) {					
 					if (this.components[id].target == comp._target) {
 						return (id);
@@ -2277,6 +2271,12 @@ class Flamingo {
 					if (this.components[id].killtarget == comp._target) {
 						return (id);
 					}
+				}
+				if (comp instanceof AbstractComponent) {
+					var id = AbstractComponent(comp).id;
+					if (id != undefined){
+						return id;
+					}					
 				}
 				if (solvIdFromComp){
 					var tokens:Array = ("" + comp).split(".");
@@ -3678,7 +3678,7 @@ class Flamingo {
 	 */
 	public function isLoaded(comp):Boolean {
 		var flamcomp = this.getRawComponent(this.getId(comp, true));
-		if (flamcomp == undefined ||flamcomp.loaded) {
+		if (flamcomp == undefined || flamcomp.loaded) {
 			if (flamcomp == undefined) {
 				Logger.console("Heeeey! flamcomp not here?: " + comp);
 			}
