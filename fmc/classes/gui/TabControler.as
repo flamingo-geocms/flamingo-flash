@@ -43,6 +43,8 @@ import mx.utils.Delegate;
 
 import core.AbstractContainer;
 
+import tools.Logger;
+
 class gui.TabControler extends AbstractContainer {
 	
 	private var tabs : Array;
@@ -71,11 +73,11 @@ class gui.TabControler extends AbstractContainer {
         var tab:Tab = null;
         tabs = new Array();
 		
-        for (var tabId:String in tabIDs) {
+		for (var tabId:String in tabIDs) {
             tab = _global.flamingo.getComponent(tabIDs[tabId]);
-            if (tab.getComponentName() != "Tab") {
+		    if (tab.getComponentName() != "Tab") {
                 continue;
-            } 
+            }
             tab._y = 30;      
 			tabs.push(tab); 
 			numTabs++;  

@@ -1,5 +1,5 @@
 import core.AbstractComponent;
-
+import tools.Logger;
 /*-----------------------------------------------------------------------------
 * This file is part of Flamingo MapComponents.
 * Author: Michiel J. van Heek.
@@ -19,6 +19,7 @@ class core.ParentChildComponentAdapter {
     }
     
     function onResize():Void {
+		//Logger.console("On resize "+listener.id);
         var bounds:Object = _global.flamingo.getPosition(listener);
         listener.setBounds(bounds.x, bounds.y, bounds.width, bounds.height);
     }

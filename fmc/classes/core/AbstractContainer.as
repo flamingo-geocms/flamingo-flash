@@ -1,4 +1,5 @@
 ﻿import core.AbstractComponent;
+import tools.Logger;
 
 /*-----------------------------------------------------------------------------
 * This file is part of Flamingo MapComponents.
@@ -44,7 +45,7 @@ class core.AbstractContainer extends AbstractComponent {
 		if (!_global.flamingo.isLoaded(this)) {
 			_global.flamingo.loadCompQueue.executeAfterLoad(id, this, onLoad);
 			return;
-		}
+		}		
         background = createEmptyMovieClip("mBackground", 0);
         contentPane = createEmptyMovieClip("mContentPane", 1);
         border = createEmptyMovieClip("mBorder", 2);

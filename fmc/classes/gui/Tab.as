@@ -57,7 +57,8 @@ class gui.Tab extends AbstractContainer {
 		if (!_global.flamingo.isLoaded(this)) {
 			_global.flamingo.loadCompQueue.executeAfterLoad(id, this, onLoad);
 			return;
-		}
+		}		
+		_global.flamingo.correctTarget(_parent, this);
 		super.onLoad();
 		this.setVisible(false);
 	}	
