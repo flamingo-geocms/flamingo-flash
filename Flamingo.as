@@ -2242,7 +2242,7 @@ class Flamingo {
 	public function getComponent(id:String):MovieClip {
 		if (this.components[id] instanceof AbstractPositionable) {			
 			return this.components[id];
-		}else {
+		}else{
 			return eval(this.components[id].target);
 		}
 	}
@@ -2651,12 +2651,16 @@ class Flamingo {
 					prefix = this.getType(id);
 				}
 			}
-		//	Logger.console("****Arg lenght: "+arguments.length+" dispatche event: ", event_to_fire, arguments );
+			//Logger.console("****Arg lenght: "+arguments.length+" dispatche event: ", event_to_fire, arguments );
 			
 			ExternalInterface.call("dispatchEventJS",event_to_fire, arguments);
+			//function can't start with number
+			if (!isNaN(prefix)){
+				return;				
+			}
 			
+			event_to_fire = prefix + "_" + event_to_fire;
 			
-			event_to_fire = prefix+"_"+event_to_fire;
 			if (this.flamingoid.length>0) {
 				event_to_fire = this.flamingoid+"_"+event_to_fire;
 			}
@@ -3169,7 +3173,7 @@ class Flamingo {
 	public function correctTarget(from:Object, to:MovieClip):Void {
 		var id = this.getId(from);
 		from = eval(this.components[id].target);
-		this.components[id].killtarget = this.components[id].target;
+		this.components[id].killtarget = this.components[id].target;		
 		this.components[id].target = to._target;
 	}
 	/** 
