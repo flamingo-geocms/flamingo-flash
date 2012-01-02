@@ -1066,7 +1066,8 @@ class gui.layers.ArcServerLayer extends AbstractLayer{
 			var a_ids = flamingo.asArray(ids);
 			for (var i = 0; i<a_ids.length; i++) {
 				var id = a_ids[i];
-				if (layers[id] == undefined and !initialized) {
+				//don't check for initialized because maybe the getServiceInfo is not done.
+				if (layers[id] == undefined /*and !initialized*/) {
 					layers[id] = new Object();
 					layers[id][field] = value;
 				} else {

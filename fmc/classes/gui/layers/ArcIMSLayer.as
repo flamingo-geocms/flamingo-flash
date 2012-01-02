@@ -1668,7 +1668,7 @@ class gui.layers.ArcIMSLayer extends AbstractLayer{
 	* @example mylayer.setLayerProperty("39,BRZO","visible",true)
 	* mylayer.setLayerProperty("#ALL#","identify",false)
 	*/
-	function setLayerProperty(ids:String, field:String, value:Object) {	
+	function setLayerProperty(ids:String, field:String, value:Object) {
 		if (ids.toUpperCase() == "#ALL#") {
 			for (var id in layers) {
 				layers[id][field] = value;
@@ -1677,7 +1677,8 @@ class gui.layers.ArcIMSLayer extends AbstractLayer{
 			var a_ids = flamingo.asArray(ids);
 			for (var i = 0; i<a_ids.length; i++) {
 				var id = a_ids[i];
-				if (layers[id] == undefined && !initialized) {
+				//don't check for initialized because maybe the getServiceInfo is not done.
+				if (layers[id] == undefined /*&& !initialized*/) {
 					layers[id] = new Object();
 					layers[id][field] = value;
 				} else {
