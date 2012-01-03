@@ -42,6 +42,7 @@ import core.AbstractContainer;
 import coregui.GradientFill;
 
 import gui.ScalableContainer;
+import tools.Logger;
 
 
 class gui.Tab extends AbstractContainer {

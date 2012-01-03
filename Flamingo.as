@@ -2846,20 +2846,20 @@ class Flamingo {
 		var mc:Object;
 		if (comp instanceof AbstractPositionable) {
 			mc = AbstractPositionable(comp);		
-		}else if (comp instanceof AbstractComponent) {
+		}else if (comp instanceof AbstractComponent) {			
 			mc = AbstractComponent(comp);
 		}else {
 			mc = this.getComponent(id);
 		}
 		if (parent == undefined) {
-			parent = mc._parent;
+			parent = getParent(comp);
+			/*parent = mc._parent;			
 			if (this.components[id].killtarget != undefined) {
-				//TODO: target omsmurfen
 				var c = this.components[id].target.split("/").length-this.components[id].killtarget.split("/").length;
 				for (var i = 0; i<c; i++) {
 					parent = parent._parent;
 				}
-			}
+			}*/			
 		}
 		//mc = comp          
 		var rect:Object = new Object();

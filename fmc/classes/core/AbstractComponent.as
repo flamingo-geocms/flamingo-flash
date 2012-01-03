@@ -93,7 +93,7 @@ class core.AbstractComponent extends MovieClip {
 				Logger.console("!!!!!!Still no id for AbstractComponent with MovieClip._target: " + this._target);
 				//if do 1 retry, need the id.
 				if (intervalId!=null){
-					intervalId = setInterval(this, "onLoad", 300);
+					intervalId = setInterval(this, "onLoad", 1000);
 				}
 				return;
 			}
@@ -417,4 +417,7 @@ class core.AbstractComponent extends MovieClip {
 	public function set id(value:String):Void {
 		_id = value;
 	}    
+	public function get type():String {
+		return getComponentName();
+	}
 }
