@@ -97,7 +97,6 @@ class gui.EditMap extends AbstractComponent implements StateEventListener, core.
         if (name == "Style") {
             style = new Style(xmlNode);
         }
-		
     }
 	
     function setBounds(x:Number, y:Number, width:Number, height:Number):Void {
@@ -120,10 +119,16 @@ class gui.EditMap extends AbstractComponent implements StateEventListener, core.
     
     function init():Void {
 		this.log = new Logger("gui.EditMap",_global.flamingo.getLogLevel(),_global.flamingo.getScreenLogLevel());
-        editMapLayers = new Array();
-		gis=_global.flamingo.getComponent(listento[0]);
-        map=_global.flamingo.getComponent(listento[1]);
-		tools=_global.flamingo.getComponent(listento[2]);
+		editMapLayers = new Array();
+		if (!_global.flamingo.isLoaded(listento[0])){
+			_global.flamingo.loadCompQueue.executeAfterLoad(listento[0], this, init);
+			return;
+		}
+		
+		gis = _global.flamingo.getComponent(listento[0]);
+		map = _global.flamingo.getComponent(listento[1]);
+		tools = _global.flamingo.getComponent(listento[2]);
+		
         gis.addEventListener(this, "GIS", StateEvent.ADD_REMOVE, "layers");
         gis.addEventListener(this, "GIS", StateEvent.CHANGE, "createGeometry");		
 		gis.addEventListener(this, "GIS", StateEvent.CHANGE, "activeFeature");
@@ -349,7 +354,6 @@ class gui.EditMap extends AbstractComponent implements StateEventListener, core.
 		//create new JsFeature with featureObject and add it to the layer
 		var jsFeature:JsFeature= new JsFeature(featureObject,layer.getServiceLayer());
 		if (jsFeature != null) {
-			log.info("addFeature");
 			layer.addFeature(jsFeature);	//the feature is made active by the postAction in Layer.as addFeature().
 		} else {
 			_global.flamingo.tracer("Exception in EditMap.addFeature()\n JsFeature is <<null>>. Can not add it to layer with layerName = "+layerName);

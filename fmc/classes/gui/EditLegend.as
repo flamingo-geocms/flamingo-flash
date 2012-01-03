@@ -62,6 +62,7 @@ import event.*;
 import gismodel.GIS;
 import gismodel.Layer;
 import core.AbstractComponent;
+import tools.Logger;
 
 class gui.EditLegend extends AbstractComponent implements StateEventListener {
     
@@ -125,15 +126,24 @@ class gui.EditLegend extends AbstractComponent implements StateEventListener {
 	}
 	
     function init():Void {
+		if (!_global.flamingo.isLoaded(listento[0],true)) {
+			_global.flamingo.loadCompQueue.executeAfterLoad(listento[0], this, init);
+			return;
+		}
 		gis = _global.flamingo.getComponent(listento[0]).getGIS();
-	
+			
+		if (!_global.flamingo.isLoaded(gis,true)) {
+			_global.flamingo.loadCompQueue.executeAfterLoad(gis, this, init);
+			return;
+		}
+		
 		editLegendLayers = new Array();
         
         gis.addEventListener(this, "GIS", StateEvent.ADD_REMOVE, "layers");
         
-        var layers:Array = gis.getLayers();
+		var layers:Array = gis.getLayers();
         var layer:Layer = null;
-        for (var i:Number = 0; i < layers.length; i++) {
+		for (var i:Number = 0; i < layers.length; i++) {
             layer = Layer(layers[i]);
             addEditLegendLayer(layer);
         }
@@ -150,7 +160,7 @@ class gui.EditLegend extends AbstractComponent implements StateEventListener {
         var actionType:Number = stateEvent.getActionType();
         var propertyName:String = stateEvent.getPropertyName();
         if (sourceClassName + "_" + actionType + "_" + propertyName == "GIS_" + StateEvent.ADD_REMOVE + "_layers") { // Removing is not supported at the moment, because we use this event only at init time.
-            var layers:Array = AddRemoveEvent(stateEvent).getAddedObjects();
+			var layers:Array = AddRemoveEvent(stateEvent).getAddedObjects();
             for (var i:Number = 0; i < layers.length; i++) {
                 addEditLegendLayer(Layer(layers[i]));
             }

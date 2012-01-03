@@ -97,7 +97,8 @@ class core.AbstractComponent extends MovieClip {
 				}
 				return;
 			}
-		}		
+		}	
+		_global.flamingo.correctTarget(_parent, this);
 		//execute the rest when the movieclip is realy loaded and in the timeline
 		if (!_global.flamingo.isLoaded(this)) {
 			_global.flamingo.loadCompQueue.executeAfterLoad(id, this, onLoad);

@@ -246,6 +246,7 @@ class gismodel.GIS extends AbstractComponent {
 			_global.flamingo.loadCompQueue.executeAfterLoad(id, this, onLoad);
 			return;
 		}
+		_global.flamingo.correctTarget(_parent, this);
 		layers = new Array();
 		super.onLoad();
 		this.log = new Logger("gismodel.GIS",_global.flamingo.getLogLevel(),_global.flamingo.getScreenLogLevel());
