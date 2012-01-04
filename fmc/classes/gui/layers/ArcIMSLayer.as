@@ -1187,7 +1187,7 @@ class gui.layers.ArcIMSLayer extends AbstractLayer{
 					if (field == "identify" && layers[id].forceidentify == true) {
 						layerlist.push(id);
 					} else {
-						if (layers[id].visible == false) {
+						if (layers[id].visible == undefined || layers[id].visible == false) {
 							continue;
 						}
 						if (layers[id].minscale != undefined) {
