@@ -1032,9 +1032,18 @@ class Flamingo {
 						this.components[targetid] = maptip;
 						maptip.setConfig(xmlNode);		
 					} else if (isLayer(file)) {
-						var mapid=xmlNode.parentNode.attributes["id"];						
-						var foundMap:Map = this.components[mapid];
-						//if the map not is found by using the id of the parent node. Find the first added map.
+						var foundMap:Map;
+						//first try to get it with the layer id
+						if (targetid.indexOf("_")>0){
+							var mapid = targetid.split("_")[0];
+							foundMap = this.components[mapid];
+						}
+						//if still not found: Hope the rest of the xml also is given..
+						if (foundMap==undefined){
+							var mapid=xmlNode.parentNode.attributes["id"];						
+							foundMap = this.components[mapid];
+							//if the map not is found by using the id of the parent node. Find the first added map.
+						}//still not found?? Then it's the last map added.
 						if (foundMap==undefined){
 							for (var i in this.components) {
 								if (this.components[i].type == "Map") {
@@ -1042,7 +1051,7 @@ class Flamingo {
 									break;
 								}
 							}
-						}
+						}	
 						var layer:AbstractLayer;
 						if (file == "LayerOGWMS") {							
 							layer = new OGCWMSLayer(targetid, mc, foundMap);							
