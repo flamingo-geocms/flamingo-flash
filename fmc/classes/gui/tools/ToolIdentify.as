@@ -32,8 +32,7 @@ class gui.tools.ToolIdentify extends AbstractTool implements ComponentInterface{
 	var identifyall:Boolean;
 
 	public function ToolIdentify(id:String, toolGroup:ToolGroup ,container:MovieClip) {		
-		super(id, toolGroup, container);		
-		identifyall = true;
+		super(id, toolGroup, container);	
 		toolDownSettings = new SpriteSettings(3, 903, 23, 24, 0, 0, true, 100);
 		toolOverSettings = new SpriteSettings(49, 903, 23, 24, 0, 0, true, 100);
 		toolUpSettings = new SpriteSettings(98, 904, 20, 19, 0, 0, true, 100);

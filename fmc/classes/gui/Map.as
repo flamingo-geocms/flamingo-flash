@@ -724,18 +724,18 @@ class gui.Map extends AbstractPositionable implements PersistableComponent{
 		var identifytotal:Number = 0;
 		var totalsublayers:Number = 0;
 		var nrsublayers:Number = 0;
-		var layersidentifying:Number = 0;
+		var numberlayersidentifying:Number = 0;
 		this.identifying = true;
 		for (var attr in this.layersidentifying) {
 			identifytotal++;
 			nrsublayers += this.layersidentifying[attr].nridentified;
 			totalsublayers += this.layersidentifying[attr].totalidentify;
 			if (this.layersidentifying[attr].identifycomplete) {
-				layersidentifying++;
+				numberlayersidentifying++;
 			}
 		}
-		flamingo.raiseEvent(this, "onIdentifyProgress", this, layersidentifying, identifytotal, nrsublayers, totalsublayers);
-		if (identifytotal == layersidentifying) {
+		flamingo.raiseEvent(this, "onIdentifyProgress", this, numberlayersidentifying, identifytotal, nrsublayers, totalsublayers);
+		if (identifytotal == numberlayersidentifying) {
 			this.identifying = false;
 			flamingo.raiseEvent(this, "onIdentifyComplete", this);
 		}
@@ -848,6 +848,7 @@ class gui.Map extends AbstractPositionable implements PersistableComponent{
 	*/
 	public function cancelIdentify():Void {
 		flamingo.raiseEvent(this, "onIdentifyCancel", this);
+		identifying = false;
 		//this.checkIdentify();
 	}
 	/**
