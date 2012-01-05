@@ -248,7 +248,7 @@ function initTool( uplink:String, overlink:String, downlink:String, hitlink:Stri
 	//
 	this.mHit.onPress = function() {
 		if (thisObj._enabled) {
-			parent.setTool(flamingo.getId(thisObj));
+			thisObj.parent.setTool(flamingo.getId(thisObj));
 		}
 	};
 }
@@ -360,7 +360,7 @@ function setConfig2(xml:Object) {
 }
 
 function onLayerAvailable (layerId: String, callback: Function, args: Object): Void {
-	var layerComponentId: String = this._parent.listento[0] + '_' + this.layers[layerId].mapServiceID,
+	var layerComponentId: String = this.parent.listento[0] + '_' + this.layers[layerId].mapServiceID,
 		mapService: MovieClip = _global.flamingo.getComponent (layerComponentId);
 		
 	if (mapService && mapService.initialized && !mapService.updating) {
@@ -381,7 +381,7 @@ function onLayerAvailable (layerId: String, callback: Function, args: Object): V
 }
 
 function generateBuffer(layerIndex:String, radius:Number){
-	var layerComponent:String = this._parent.listento[0]+"_"+this.layers[layerIndex].mapServiceID;
+	var layerComponent:String = this.parent.listento[0]+"_"+this.layers[layerIndex].mapServiceID;
 	var mapService = flamingo.getComponent(layerComponent);
 	
 	if(mapService == undefined){
@@ -397,18 +397,18 @@ function generateBuffer(layerIndex:String, radius:Number){
 	_global.setTimeout (function (): Void {
 		mapService.refresh();
 	}, 1);
-	flamingo.getComponent(this._parent.listento[0]).refresh();
+	flamingo.getComponent(this.parent.listento[0]).refresh();
 }
 
 function removeBuffer(layerIndex:String){	
 	
-	var layerComponent:String = this._parent.listento[0]+"_"+this.layers[layerIndex].mapServiceID;//this._parent.listento[0]+"_"+mapServiceID;
+	var layerComponent:String = this.parent.listento[0]+"_"+this.layers[layerIndex].mapServiceID;//this._parent.listento[0]+"_"+mapServiceID;
 	var mapService = flamingo.getComponent(layerComponent);
 
 	this.layers[layerIndex].hasBuffer = false;
 
 	mapService.setLayerProperty(this.layers[layerIndex].layerID ,"buffer");
-	flamingo.getComponent(this._parent.listento[0]).refresh();	
+	flamingo.getComponent(this.parent.listento[0]).refresh();	
 }
 
 function getBuffers (): Object {
@@ -500,7 +500,7 @@ function initControls() {
 
 //check if the layer is visible
 function isVisible(layerIndex:String):Boolean{
-	var layerComponent:String = this._parent.listento[0]+"_"+this.layers[layerIndex].mapServiceID;
+	var layerComponent:String = this.parent.listento[0]+"_"+this.layers[layerIndex].mapServiceID;
 	var layer = flamingo.getComponent(layerComponent);
 	if(layer.getVisible(layerIndex) < 0)
 		return false;

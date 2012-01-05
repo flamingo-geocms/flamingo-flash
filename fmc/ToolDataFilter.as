@@ -338,7 +338,7 @@ function initTool( uplink:String, overlink:String, downlink:String, hitlink:Stri
 	//
 	this.mHit.onPress = function() {
 		if (thisObj._enabled) {
-			parent.setTool(flamingo.getId(thisObj));
+			thisObj.parent.setTool(flamingo.getId(thisObj));
 		}
 	};
 }
@@ -604,7 +604,7 @@ function setWindowLabels()
 }
 function isVisible(layerIndex:String):Boolean {
 	//get the mapserver from the layer
-	var layerComponent:String = this._parent.listento[0]+"_"+this.layers[layerIndex].mapServiceID;
+	var layerComponent:String = this.parent.listento[0]+"_"+this.layers[layerIndex].mapServiceID;
 	var mapService = flamingo.getComponent(layerComponent);
 	if (mapService == undefined) {
 		trace("map service is undefined");
@@ -616,7 +616,7 @@ function isVisible(layerIndex:String):Boolean {
 	}
 }
 function updateFields(layerIndex:String) {
-	var layerComponent:String = this._parent.listento[0]+"_"+this.layers[layerIndex].mapServiceID;
+	var layerComponent:String = this.parent.listento[0]+"_"+this.layers[layerIndex].mapServiceID;
 	var mapService = flamingo.getComponent(layerComponent);
 	if (mapService.getLayerProperty(this.layers[layerIndex].layerID,"query")!="") {
 		window.content.btn_clear.visible = true;
@@ -672,7 +672,7 @@ function updateValues2(layerIndex:String, fieldIndex:String) {
 function setSelectQuery(layerIndex:String, query:String, queryLabel:String) {
 	this.query = query;
 	this.queryLabel = queryLabel;
-	var layerComponent:String = this._parent.listento[0]+"_"+this.layers[layerIndex].mapServiceID;
+	var layerComponent:String = this.parent.listento[0]+"_"+this.layers[layerIndex].mapServiceID;
 	var mapService = flamingo.getComponent(layerComponent);
 	if (mapService.getLayerProperty(this.layers[layerIndex].layerID,"query")=="") {
 		window.visible = false;
@@ -684,7 +684,7 @@ function setSelectQuery(layerIndex:String, query:String, queryLabel:String) {
 
 function selectQuery(layerIndex:String) {
 	//get the mapserver from the layer
-	var layerComponent:String = this._parent.listento[0]+"_"+this.layers[layerIndex].mapServiceID;
+	var layerComponent:String = this.parent.listento[0]+"_"+this.layers[layerIndex].mapServiceID;
 	var mapService = flamingo.getComponent(layerComponent);
 
 	if (mapService == undefined) {
@@ -692,11 +692,11 @@ function selectQuery(layerIndex:String) {
 	}
 	mapService.setLayerProperty(this.layers[layerIndex].layerID,"queryable",true);
 	mapService.setLayerProperty(this.layers[layerIndex].layerID,"query",this.query);
-	flamingo.getComponent(this._parent.listento[0]).refresh();
+	flamingo.getComponent(this.parent.listento[0]).refresh();
 }
 function removeSelectQuery(layerIndex:String) {
 	//get the mapserver from the layer       
-	var layerComponent:String = this._parent.listento[0]+"_"+this.layers[layerIndex].mapServiceID;
+	var layerComponent:String = this.parent.listento[0]+"_"+this.layers[layerIndex].mapServiceID;
 	var mapService = flamingo.getComponent(layerComponent);
 
 	if (mapService == undefined) {
@@ -704,7 +704,7 @@ function removeSelectQuery(layerIndex:String) {
 	}
 	mapService.setLayerProperty(this.layers[layerIndex].layerID,"query","");
 	mapService.setLayerProperty(this.layers[layerIndex].layerID,"queryable",true);
-	flamingo.getComponent(this._parent.listento[0]).refresh();
+	flamingo.getComponent(this.parent.listento[0]).refresh();
 }
 
 
@@ -746,7 +746,7 @@ function pressTool() {
 		_parent.setCursor(this.cursors["busy"]);
 	}
 	initWindow();
-	var map = flamingo.getComponent(this._parent.listento[0]);
+	var map = flamingo.getComponent(this.parent.listento[0]);
 	var rect = map.extent2Rect(map._extent);
 	showWindow(rect.width,rect.height);
 }
