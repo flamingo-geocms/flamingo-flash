@@ -46,7 +46,7 @@ import core.AbstractContainer;
 import tools.Logger;
 
 class gui.TabControler extends AbstractContainer {
-	
+	private var intervalId:Number;
 	private var tabs : Array;
 	private var numTabs : Number;
 	private var startuptab: Number = 0;
@@ -90,7 +90,11 @@ class gui.TabControler extends AbstractContainer {
         }
         drawTabButtons();
 		_global.flamingo.addListener(this,"flamingo",this);	
-		this.setVisible(true);
+		this.setVisible(true);	
+		intervalId=setInterval(this, "setStartTabVisible", 100);
+	}
+	private function setStartTabVisible():Void {
+		clearInterval(intervalId);
 		tabs[startuptab].show();
 	}
 
@@ -149,7 +153,8 @@ class gui.TabControler extends AbstractContainer {
 	
     function onClickButton(button:MovieClip): Void {
 		for(var i:Number = 0; i< tabs.length;i++){
-			if(tabs[i].getButton() == button){
+			if (tabs[i].getButton() == button) {
+				Logger.console("show tab with i: "+i);
 				tabs[i].show();
 			} 
 		}
