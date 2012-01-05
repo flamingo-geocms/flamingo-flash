@@ -1271,7 +1271,7 @@ class Flamingo {
 			delete thisObj.components[id].loader;
 			if (thisObj.components[id].parent != undefined) {
 				lMc.parent = thisObj.components[id].parent;
-				lMc._parent =  thisObj.components[id].parent;
+				//lMc._parent =  thisObj.components[id].parent;
 			}
 			thisObj.raiseEvent(thisObj, "onLoadComponent", lMc);
 			thisObj.doneLoading();
