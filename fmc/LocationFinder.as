@@ -93,7 +93,8 @@ import coremodel.service.*;
 import geometrymodel.Envelope;
 import geometrymodel.Geometry;
 import gui.LocationPin;
-
+import coremodel.service.arcgis.ArcServerConnector;
+import coremodel.service.arcims.ArcIMSConnector;
 
 var lParent:Object = new Object();
 lParent.onResize = function(mc:MovieClip) {
