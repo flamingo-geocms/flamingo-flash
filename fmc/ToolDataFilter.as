@@ -12,6 +12,7 @@
 * @file ToolDataFilter.xml (configurationfile, needed for publication on internet)
 * @configstring tooltip Tooltip.
 */
+import tools.Logger;
 var version:String = "3.0";
 //-------------------------------------------
 var defaultXML:String = "<?xml version='1.0' encoding='UTF-8'?>" +
@@ -316,13 +317,13 @@ function initTool( uplink:String, overlink:String, downlink:String, hitlink:Stri
 			thisObj._pressed = true;
 			thisObj.attachMovie(downlink, "mSkin", 1);
 			setCursor(thisObj.cursors[cursorid]);
-			flamingo.addListener(maplistener, listento, thisObj);
+			flamingo.addListener(maplistener, listento, thisObj);		
 			thisObj.pressTool();
 		}
 	};
 	//
 	this.mHit.onRollOver = function() {
-		flamingo.showTooltip(flamingo.getString(mc, tooltipid), thisObj);
+		_global.flamingo.showTooltip(_global.flamingo.getString(thisObj, tooltipid), thisObj);
 		if (thisObj._enabled) {
 			if (! thisObj._pressed) {
 				thisObj.attachMovie(overlink, "mSkin", 1);

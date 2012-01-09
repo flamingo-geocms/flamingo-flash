@@ -232,7 +232,7 @@ function initTool( uplink:String, overlink:String, downlink:String, hitlink:Stri
 	};
 	//
 	this.mHit.onRollOver = function() {
-		flamingo.showTooltip(flamingo.getString(mc, tooltipid), thisObj);
+		_global.flamingo.showTooltip(_global.flamingo.getString(thisObj, tooltipid), thisObj);
 		if (thisObj._enabled) {
 			if (! thisObj._pressed) {
 				thisObj.attachMovie(overlink, "mSkin", 1);
