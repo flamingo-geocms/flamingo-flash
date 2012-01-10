@@ -29,9 +29,25 @@ class gui.dde.DownloadSelectorButton extends AbstractComponent {
 							"<string id='tooltip' en='open DDE download window' nl='open DDE download scherm'/>" +
 							"</DownloadSelectorButton>";
 		
+	function DownloadSelectorButton() {
+		super();		
+		//because not a mkid is used in the fla find the id like this:
+		if (id == undefined) {			
+			//try to get some sort of id.... Not so nice :(
+			var tokens:Array = this._target.split("/");		
+			if (tokens[tokens.length - 1] == "mDownloadSelectorButton") {
+				id = tokens[tokens.length - 2];
+			}else {			
+				//cant set the id, set the id later by getting it from Flamingo
+			}
+		}
+		_global.flamingo.correctTarget(_parent, this);
+    }
+							
 	function onLoad():Void {		
 		super.onLoad();		
-		this.useHandCursor = false;		
+		this.useHandCursor = false;	
+		
 	}
 		
 	function onPress():Void{
