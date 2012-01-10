@@ -105,6 +105,7 @@ import mx.controls.TextInput;
 import mx.containers.ScrollPane;
 
 import core.AbstractComponent;
+import tools.Logger;
 
 class gui.dde.DownloadSelector extends AbstractComponent implements GeometryListener,DDEConnectorListener {
     var defaultXML:String = "<?xml version='1.0' encoding='UTF-8'?>" +
@@ -166,7 +167,22 @@ class gui.dde.DownloadSelector extends AbstractComponent implements GeometryList
 	private var legendItems:Array;
 	private var debug:Boolean = false;
 	
+	private var intervalId:Number = null;
+	
     function onLoad():Void {
+		clearInterval(intervalId);
+		//if the constructor didn't set a id get the id from flamingo.
+		if (id == undefined) {			
+			id = _global.flamingo.getId(this);			
+			if (id == undefined) {
+				Logger.console("!!!!!!Still no id for AbstractComponent with MovieClip._target: " + this._target);
+				//if do 1 retry, need the id.
+				if (intervalId!=null){
+					intervalId = setInterval(this, "onLoad", 1000);
+				}
+				return;
+			}
+		}	
 		//execute the rest when the movieclip is realy loaded and in the timeline
 		if (!_global.flamingo.isLoaded(this)) {
 			_global.flamingo.loadCompQueue.executeAfterLoad(id, this, onLoad);

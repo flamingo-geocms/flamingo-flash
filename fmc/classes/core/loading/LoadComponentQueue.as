@@ -27,7 +27,7 @@ class core.loading.LoadComponentQueue{
 	 */
 	public function executeAfterLoad(id:String, funcOwner:Object,func:Function) {
 		if (id == null || id ==  undefined) {
-			Logger.console("!!!!!! can not execute after load! No id given" );
+			Logger.console("!!!!!! can not execute after load! No id given. \n FuncOwner: " +funcOwner);
 			return;
 		}
 		if (queue == null) {

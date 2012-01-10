@@ -78,10 +78,7 @@ class core.AbstractComponent extends MovieClip {
 		_global.flamingo.correctTarget(_parent, this);
     }
     
-    function onLoad():Void {
-		if (intervalId != null) {
-			Logger.console("Returned from interval, retry");
-		}
+    function onLoad():Void {		
 		clearInterval(intervalId);
         if (_parent._parent == null) {
             return;
