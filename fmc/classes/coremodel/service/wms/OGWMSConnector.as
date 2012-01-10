@@ -1,4 +1,5 @@
-﻿dynamic class coremodel.service.wms.OGWMSConnector {
+﻿import tools.Logger;
+dynamic class coremodel.service.wms.OGWMSConnector {
 	//meta
 	var version:String = "2.0";
 	//-----------------------
@@ -164,6 +165,10 @@
 			//bah :( :
 			//is with seperate field objects in fields tag?
 			if (xml.firstChild.firstChild.localName.toLowerCase()=="fields"){
+				//arcgis WMS
+				_process_featureInfoResponseWithAttributesInFieldsTag(xml, obj, reqid);
+			}else if (xml.firstChild.firstChild.firstChild.localName.toLowerCase() == "field") {
+				//Oraclemap wms
 				_process_featureInfoResponseWithSeperateFields(xml, obj, reqid);
 			}else{
 				_process_featureInfoResponse(xml, obj, reqid);
@@ -182,7 +187,9 @@
 			this.events.broadcastMessage("onError", "cannot parse unknown output format...", obj, reqid);
 		}
 	}
-	private function _process_featureInfoResponseWithSeperateFields(xml, obj, reqid){
+	
+	/*Is used to process the response of a ArcGis WMS server*/
+	private function _process_featureInfoResponseWithAttributesInFieldsTag(xml, obj, reqid){
 		//Oraclemaps output
 		var features:Object = new Object();
 		var layer:String;
@@ -241,6 +248,44 @@
 		}
 		this.events.broadcastMessage("onGetFeatureInfo", features, obj, reqid);
 	}
+	
+	/*Is used to process the response of a Oracle WMS map server*/
+	private function _process_featureInfoResponseWithSeperateFields(xml, obj, reqid){
+		//Oraclemaps output
+		var features:Object = new Object();
+		var layer:String;
+		var val:String;
+		var featureObjects:Array = xml.firstChild.childNodes;
+		for (var i:Number = 0; i<featureObjects.length; i++) {
+			var feature:Object = new Object();
+			layer = "?";
+			var attributeObjects= featureObjects[i].childNodes;
+			for (var a:Number = 0; a < attributeObjects.length; a++) {
+				var attributeName:String=attributeObjects[a].attributes.name;
+				var attributeValue:String=attributeObjects[a].attributes.value;
+				feature[attributeName] = attributeValue;
+				//try to solve the layer name....
+				if (layer=="?"){
+					if (attributeName.indexOf(".")>0 && attributeName.toLowerCase().indexOf("geometry")!=0){
+						var tokens:Array = attributeName.split(".");
+						layer="";
+						for (var t=0; t < tokens.length-1; t++){
+							if (layer.length> 0){
+								layer+=".";
+							}
+							layer+=tokens[t];
+						}
+					}
+				}																								  
+			}
+			if (features[layer] == undefined) {
+				features[layer] = new Array();
+			}
+			features[layer].push(feature);
+		}
+		this.events.broadcastMessage("onGetFeatureInfo", features, obj, reqid);
+	}
+	
 	private function _process_getfeatureinforesults(s:String, obj, reqid) {
 		//GetFeatureInfo results:
 		//

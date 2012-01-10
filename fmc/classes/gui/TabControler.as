@@ -154,7 +154,6 @@ class gui.TabControler extends AbstractContainer {
     function onClickButton(button:MovieClip): Void {
 		for(var i:Number = 0; i< tabs.length;i++){
 			if (tabs[i].getButton() == button) {
-				Logger.console("show tab with i: "+i);
 				tabs[i].show();
 			} 
 		}
