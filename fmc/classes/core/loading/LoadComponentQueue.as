@@ -4,6 +4,7 @@
  */
 import tools.Logger;
 import core.loading.FunctionCall;
+import core.AbstractComponent;
  /**
   * Class that is used to hold a queue of Function calls that will be executed when the object is loaded.
   */
@@ -25,6 +26,10 @@ class core.loading.LoadComponentQueue{
 	 * Add all arguments that need to be used as functionarguments for the given function after these arguments.
 	 */
 	public function executeAfterLoad(id:String, funcOwner:Object,func:Function) {
+		if (id == null || id ==  undefined) {
+			Logger.console("!!!!!! can not execute after load! No id given" );
+			return;
+		}
 		if (queue == null) {
 			queue = new Object();
 		}
@@ -38,15 +43,13 @@ class core.loading.LoadComponentQueue{
 	/**
 	 * The function that is called after 'onLoadComponent'
 	 */
-	public function onLoadComponent(mc):Void {	
+	public function onLoadComponent(mc):Void {			
 		var tokens:Array = mc._name.split(".");
 		var mcId = tokens[tokens.length - 1];		
 		if (queue[mcId] != undefined) {
 			var execArray:Array = queue[mcId];
-			while (execArray.length > 0) {
-				
+			while (execArray.length > 0) {				
 				var fc:FunctionCall = FunctionCall(execArray.shift());
-				//Logger.console("Let "+fc.funcOwner+" execute "+fc.func+" with "+fc.arg);
 				fc.func.apply(fc.funcOwner, fc.arg);
 			}
 			delete queue[mcId];

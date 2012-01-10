@@ -24,6 +24,8 @@ import gismodel.Layer;
 import mx.controls.CheckBox;
 import mx.controls.Label;
 
+import tools.Logger;
+
 class gui.EditLegendLayer extends MovieClip implements StateEventListener, ActionEventListener {
     
     private var width:Number = -1; // Set by init object.

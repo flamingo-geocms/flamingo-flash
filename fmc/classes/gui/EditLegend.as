@@ -130,19 +130,25 @@ class gui.EditLegend extends AbstractComponent implements StateEventListener {
 			_global.flamingo.loadCompQueue.executeAfterLoad(listento[0], this, init);
 			return;
 		}
-		gis = _global.flamingo.getComponent(listento[0]).getGIS();
-			
-		if (!_global.flamingo.isLoaded(gis,true)) {
-			_global.flamingo.loadCompQueue.executeAfterLoad(gis, this, init);
+		var editMap = _global.flamingo.getComponent(listento[0]);
+		gis = editMap.getGIS();
+		//if gis not loaded yet, get the id of gis and wait till it's loaded.
+		if (gis == null) {
+			var gisId = _global.flamingo.getComponent(listento[0]).listento[0];
+			_global.flamingo.loadCompQueue.executeAfterLoad(gisId, this, init);
 			return;
 		}
-		
+		//if gis not loaded yet
+		if (!_global.flamingo.isLoaded(gis, true)) {
+			_global.flamingo.loadCompQueue.executeAfterLoad(gis, this, init);
+			return;
+		}		
 		editLegendLayers = new Array();
         
         gis.addEventListener(this, "GIS", StateEvent.ADD_REMOVE, "layers");
         
 		var layers:Array = gis.getLayers();
-        var layer:Layer = null;
+		var layer:Layer = null;
 		for (var i:Number = 0; i < layers.length; i++) {
             layer = Layer(layers[i]);
             addEditLegendLayer(layer);
