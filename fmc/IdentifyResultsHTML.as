@@ -656,7 +656,8 @@ function resize() {
 	var y = r.y;
 	var w = r.width;
 	var h = r.height;
-	var sb = 20;
+	var sb = 21;
+	var sh = 20;
 	//
 	txtHeader._x = x;
 	txtHeader._y = y;
@@ -666,14 +667,14 @@ function resize() {
 	//
 	txtInfo._x = x;
 	txtInfo._y = y+th;
-	txtInfo._height = h-th;
+	txtInfo._height = h-th-sh;
 	txtInfo._width = w-sb;
 	//
-	mSBV.setSize(sb, h-th-sb);
+	mSBV.setSize(sb, h-th-sh-sb);
 	mSBV.move(x+w-sb, y+th);
 	//
 	mSBH.setSize(w-sb, sb);
-	mSBH.move(x, y+h-sb);
+	mSBH.move(x, y+h-sb-sh);
 	//
 	var mc = createEmptyMovieClip("mLine", 10);
 	with (mc) {
