@@ -1090,7 +1090,7 @@ class gui.layers.ArcIMSLayer extends AbstractLayer{
 						cache._alpha = cache._alpha+step;
 						if (cache._alpha>=100) {
 							delete this.onEnterFrame;
-							thisObj.flamingo.raiseEvent(this, "onUpdateComplete", this, cache.requesttime, cache.loadtime, cache.totalbytes);
+							thisObj.flamingo.raiseEvent(this, "onUpdateComplete", thisObj, cache.requesttime, cache.loadtime, cache.totalbytes);
 							delete cache.requesttime;
 							delete cache.loadtime;
 							delete cache.totalbytes;
