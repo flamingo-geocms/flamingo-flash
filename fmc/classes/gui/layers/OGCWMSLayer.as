@@ -147,13 +147,16 @@ class gui.layers.OGCWMSLayer extends AbstractLayer{
 		}
 		super.setConfig(XMLNode(xml));
 		
-		if (dontGetCap == undefined){
+		/*if (dontGetCap == undefined){
 			if (slayers != "#ALL#") {
 				dontGetCap = true;
 			}else{
 				dontGetCap = false;
 			}
-		}		
+		}	*/
+		if (dontGetCap == undefined) {
+			dontGetCap = false;
+		}
 		//after loading all parameters set the layer properties.
 		if (nullIfEmpty(slayers) != null) {
 			if (visible_layers==null){

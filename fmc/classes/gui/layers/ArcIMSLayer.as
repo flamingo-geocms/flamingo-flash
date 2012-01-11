@@ -251,12 +251,15 @@ class gui.layers.ArcIMSLayer extends AbstractLayer{
 		}
 		super.setConfig(XMLNode(xml));
 		
-		if (dontGetCap == undefined){
+		/*if (dontGetCap == undefined){
 			if (visibleids != "#ALL#") {
 				dontGetCap = true;
 			}else{
 				dontGetCap = false;
 			}
+		}*/
+		if (dontGetCap == undefined) {
+			dontGetCap = false;
 		}
 		//                                                                                                                                                                           
 		//
@@ -1819,17 +1822,21 @@ class gui.layers.ArcIMSLayer extends AbstractLayer{
 				return -1;
 			}
 		} else {
-			var sublayer = layers[id];
+			var sublayer = layers[id];			
 			if (sublayer == undefined) {
 				return 0;
 			} else {
+				if (id == "streetview") Logger.console("---- Sublayer.visible: "+sublayer.visible);
 				if (sublayer.visible) {
+					if (id == "streetview") Logger.console("---- this.visible: "+visible);
 					if (visible) {
+						if (id == "streetview") Logger.console("---- sublayer.minscale: "+sublayer.minscale);
 						if (sublayer.minscale != undefined) {
 							if (ms<sublayer.minscale) {
 								return 2;
 							}
 						}
+						if (id == "streetview") Logger.console("---- sublayer.maxscale: "+sublayer.maxscale);
 						if (sublayer.maxscale != undefined) {
 							if (ms>sublayer.maxscale) {
 								return 2;
