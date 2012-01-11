@@ -236,7 +236,7 @@ function resize() {
 	var y = r.y;
 	var w = r.width;
 	var h = r.height;
-	var sb = 16;
+	var sb = 30;
 	//
 	txtHeader._x = x;
 	txtHeader._y = y;
