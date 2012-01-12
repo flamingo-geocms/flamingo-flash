@@ -82,6 +82,8 @@ import flash.geom.Matrix;
 
 import core.AbstractContainer;
 
+import tools.Logger;
+
 class gui.Print extends AbstractContainer {
     
     private var componentID:String = "Print 1.0";
@@ -107,8 +109,8 @@ class gui.Print extends AbstractContainer {
         var component:MovieClip = null;
         var dpiFactor:Number = null;
         printTemplates = new Array();
-        availPreviewWidth = this.__width - 10;
-        availPreviewHeight = this.__height - 230;
+        availPreviewWidth = this.__width;
+        availPreviewHeight = this.__height - 252;
         for (var i:String in componentIDs) {
             component = _global.flamingo.getComponent(componentIDs[i]);
             if (component.getComponentName() != "PrintTemplate") {
@@ -388,6 +390,8 @@ class gui.Print extends AbstractContainer {
     function toPrinter():Void {
         clearInterval(intervalID);
         
+		var keepAwakeInterval = setInterval(function() {}, 1000);
+
         var printJob:PrintJob = new PrintJob();
         if (printJob.start()) {
         	var dpiFactor:Number = currentPrintTemplate.getDPIFactor();
@@ -458,6 +462,7 @@ class gui.Print extends AbstractContainer {
             setPreviewScale(PrintTemplate(currentPrintTemplate));
             
         }
+		clearInterval(keepAwakeInterval);
         delete printJob;
     }
     
