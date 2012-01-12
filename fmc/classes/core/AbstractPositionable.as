@@ -102,10 +102,14 @@ class core.AbstractPositionable extends AbstractListenerRegister
 		mBorder.clear();
 		mBorder.lineStyle(borderwidth, bordercolor, borderalpha);
 		mBorder.moveTo(0, 0);
-		mBorder.lineTo(this.container._width, 0);
-		mBorder.lineTo(this.container._width, this.container._height);
-		mBorder.lineTo(0, this.container._height);
+		mBorder.lineTo(this.__width, 0);
+		mBorder.lineTo(this.__width, this.__height);
+		mBorder.lineTo(0, this.__height);
 		mBorder.lineTo(0, 0);
+		
+		mBorder._width = __width;
+		mBorder._height = __height;
+		
 	}
 	
 	public function resize() {		
@@ -265,7 +269,7 @@ class core.AbstractPositionable extends AbstractListenerRegister
 		this._height1=value;
 	}*/
 	
-	/*public function get __width():Number {
+	public function get __width():Number {
 		return this._width2;
 	}
 	public function set __width(value:Number):Void {
@@ -276,7 +280,7 @@ class core.AbstractPositionable extends AbstractListenerRegister
 	}
 	public function set __height(value:Number):Void {
 		this._height2=value;
-	}*/
+	}
 	/***********************************************************************/	
 	/***********************************************************************
 	 * Getters and Setters.

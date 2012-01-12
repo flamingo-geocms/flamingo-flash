@@ -1,4 +1,4 @@
-import core.AbstractPositionable;
+﻿import core.AbstractPositionable;
 /**
  * ...
  * @author Roy Braam
@@ -10,8 +10,6 @@ class gui.Container extends AbstractPositionable{
 	var backgroundcolor:Number;
 	var backgroundalpha:Number = 100;
 	var alpha:Number = 100;
-	var __width:Number;
-	var __height:Number;
 	var mask:Boolean = false;
 	
 	var mBG:MovieClip;
@@ -138,6 +136,7 @@ class gui.Container extends AbstractPositionable{
 		mBG.lineTo(0, __height);
 		mBG.lineTo(0, 0);
 		mBG.endFill();
+		
 		/*mBorder.clear();
 		mBorder.lineStyle(borderwidth, bordercolor, borderalpha);
 		mBorder.moveTo(0, 0);
@@ -146,12 +145,9 @@ class gui.Container extends AbstractPositionable{
 		mBorder.lineTo(0, __height);
 		mBorder.lineTo(0, 0);*/
 		createBorder();
-		if (this.mBorder != undefined) {
-			this.mBorder._width = __width;
-			this.mBorder._height = __height;
-		}
+		
 		if (this.mask) {
-			mContent.scrollRect = new flash.geom.Rectangle(0, 0, (__width), (__height));
+			mContent.scrollRect = new flash.geom.Rectangle(0, 0, __width, __height);
 		}
 		flamingo.raiseEvent(this, "onResize", this);
 	}
