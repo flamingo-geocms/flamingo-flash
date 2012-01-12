@@ -873,11 +873,12 @@ class Flamingo {
 				targetid = this.getUniqueId();
 			}
 		}
+		targetid = getValidId(targetid);
 		if (this.configloaded && !this.allowstrangers) {
 			if (this.components[targetid] == undefined) {
 				return;
 			}
-		}		
+		}
 		var target = this.components[targetid].target;
 		//Logger.console("Load component with target id: "+targetid);
 		if (target == undefined) {
@@ -926,7 +927,7 @@ class Flamingo {
 	public function loadComponent(xml:Object, mc:MovieClip, targetid:String):Void {
 		//rule1: a component has a prefix and an id 
 		//rule2: a component can register only once, double ids are not allowed		
-		//Logger.console("-------------------LOADCOMPONENT:"+targetid);
+		//Logger.console("-------------------LOADCOMPONENT:"+targetid);		
 		if (xml == undefined) {
 			return;
 		}
@@ -936,7 +937,7 @@ class Flamingo {
 		if (targetid == undefined) {
 			return;
 		}
-		//                                                                                                            
+		targetid = getValidId(targetid);                                                                                                            
 		if (xml instanceof XML) {
 			xml = xml.firstChild;
 		}else if ( ! xml instanceof XMLNode) {			
@@ -1235,6 +1236,17 @@ class Flamingo {
 			default:
 				return false;
 		}				
+	}
+	/**
+	 * Gives a valid component id;
+	 * @param	theId
+	 * @return the new valid id.
+	 */
+	private function getValidId(theId:String):String {
+		if (theId == "tools") {
+			theId=theId + "1";
+		}
+		return theId;
 	}
 	
 	private function loadComponent_defaults(url:String) {
