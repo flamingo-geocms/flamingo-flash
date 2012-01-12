@@ -110,7 +110,7 @@ class gui.Print extends AbstractContainer {
         var dpiFactor:Number = null;
         printTemplates = new Array();
         availPreviewWidth = this.__width;
-        availPreviewHeight = this.__height - 252;
+        availPreviewHeight = this.__height - 260;
         for (var i:String in componentIDs) {
             component = _global.flamingo.getComponent(componentIDs[i]);
             if (component.getComponentName() != "PrintTemplate") {
