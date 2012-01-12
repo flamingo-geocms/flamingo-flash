@@ -47,6 +47,8 @@ import mx.utils.Delegate;
 
 import core.AbstractComponent;
 
+import tools.Logger;
+
 class coregui.Confirmation extends AbstractComponent {
     
     private var veil:MovieClip = null;
@@ -58,10 +60,19 @@ class coregui.Confirmation extends AbstractComponent {
     						"<string id='no' en='No' nl='Nee'/>" +
     						"</Confirmation>";
     function init():Void {
-        veil = _global.flamingo.getComponent(listento[0]);
-        actionEventListener = _global.flamingo.getComponent(listento[1]);
-        		
-        var initObject:Object = null;
+		//wait for veil and actionEventListener to be loaded
+        if (!_global.flamingo.isLoaded(listento[0],true)) {			
+			_global.flamingo.loadCompQueue.executeAfterLoad(id, this, init);
+			return;
+		}
+		if (!_global.flamingo.isLoaded(listento[1],true)) {			
+			_global.flamingo.loadCompQueue.executeAfterLoad(id, this, init);
+			return;
+		}
+		veil = _global.flamingo.getComponent(listento[0]);			
+		actionEventListener = _global.flamingo.getComponent(listento[1]);
+		
+		var initObject:Object = null;
         
         initObject = new Object();
         initObject["_x"] = 85;

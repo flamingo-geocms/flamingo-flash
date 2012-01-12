@@ -65,7 +65,7 @@ import display.spriteloader.SpriteMapFactory;
 import core.loading.LoadComponentQueue;
 
 class Flamingo {
-	private var version:String = "3.3 R1245";
+	private var version:String = "3.3 R1258";
 	//reference to main movie from which this class is loaded
 	//at the main movie the components are loaded at 'moviedepth'--  ;moviedepth starts by 10000
 	//at the main movie a cursor movie is loaded at depth 50005
@@ -2251,8 +2251,12 @@ class Flamingo {
 	public function getComponent(id:String):MovieClip {
 		if (this.components[id] instanceof AbstractPositionable) {			
 			return this.components[id];
-		}else{
-			return eval(this.components[id].target);
+		}else {
+			var mc:MovieClip=eval(this.components[id].target);
+			//if the movieclip class is added in the "mKid" child, return the "mKid", because that is the class with functions and vars.
+			if (mc.mKid != undefined)
+				return mc.mKid;
+			return mc;				
 		}
 	}
 	public function getRawComponent(id) {
