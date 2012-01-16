@@ -389,8 +389,6 @@ class gui.Print extends AbstractContainer {
     
     function toPrinter():Void {
         clearInterval(intervalID);
-        
-		var keepAwakeInterval = setInterval(function() {}, 1000);
 
         var printJob:PrintJob = new PrintJob();
         if (printJob.start()) {
@@ -399,70 +397,69 @@ class gui.Print extends AbstractContainer {
             
             currentPrintTemplate.setScale(100 / dpiFactor);
             
-            var printPage:MovieClip = currentPrintTemplate.getContentPane();       
-            if (currentPrintTemplate.getOrientation() != printJob.orientation) {
-                _global.flamingo.showError("Orientation Error", "The chosen printer orientation is " + printJob.orientation + ", whereas the template orientation is " + currentPrintTemplate.getOrientation() + ".");
-                delete printJob;
-                setPreviewScale(PrintTemplate(currentPrintTemplate));
-                return;
-            }
-            /*
-            if (printPage._width > printJob.pageWidth + 5) { // 5 is for fault tolerance.
-                _global.flamingo.showError("Print Size Error", "The chosen paper size is not wide enough for the template. Is " + printJob.pageWidth + ", should be " + (printPage._width) + ".");
-                delete printJob;
-                setPreviewScale(PrintTemplate(currentPrintTemplate));
-                return;
-            }
-            if (printPage._height > printJob.pageHeight + 5) { // 5 is for fault tolerance.
-                _global.flamingo.showError("Print Size Error", "The chosen paper size is not high enough for the template. Is " + printJob.pageHeight + ", should be " + (printPage._height) + ".");
-                delete printJob;
-                setPreviewScale(PrintTemplate(currentPrintTemplate));
-                return;
-            }*/
-           
-			var width:Number = printPage._width;
-            var height:Number = printPage._height;
-        	//var componentIDs:Array = currentPrintTemplate.getComponents();
-            var xMargin:Number = ((printJob.pageWidth * dpiFactor)-(currentPrintTemplate.__width)) / 2;
-            var yMargin:Number = ((printJob.pageHeight * dpiFactor)-(currentPrintTemplate.__height)) / 2;			
-            var printArea:Object = new Object();
-            printArea["xMin"] = - xMargin;
-            printArea["yMin"] = - yMargin;    
-            printArea["xMax"] = xMargin + (currentPrintTemplate.__width);
-            printArea["yMax"] = yMargin + (currentPrintTemplate.__height);
+				var printPage:MovieClip = currentPrintTemplate.getContentPane();       
+				if (currentPrintTemplate.getOrientation() != printJob.orientation) {
+					_global.flamingo.showError("Orientation Error", "The chosen printer orientation is " + printJob.orientation + ", whereas the template orientation is " + currentPrintTemplate.getOrientation() + ".");
+					delete printJob;
+					setPreviewScale(PrintTemplate(currentPrintTemplate));
+					return;
+				}
+				/*
+				if (printPage._width > printJob.pageWidth + 5) { // 5 is for fault tolerance.
+					_global.flamingo.showError("Print Size Error", "The chosen paper size is not wide enough for the template. Is " + printJob.pageWidth + ", should be " + (printPage._width) + ".");
+					delete printJob;
+					setPreviewScale(PrintTemplate(currentPrintTemplate));
+					return;
+				}
+				if (printPage._height > printJob.pageHeight + 5) { // 5 is for fault tolerance.
+					_global.flamingo.showError("Print Size Error", "The chosen paper size is not high enough for the template. Is " + printJob.pageHeight + ", should be " + (printPage._height) + ".");
+					delete printJob;
+					setPreviewScale(PrintTemplate(currentPrintTemplate));
+					return;
+				}*/
+			   
+				var width:Number = printPage._width;
+				var height:Number = printPage._height;
+				//var componentIDs:Array = currentPrintTemplate.getComponents();
+				var xMargin:Number = ((printJob.pageWidth * dpiFactor)-(currentPrintTemplate.__width)) / 2;
+				var yMargin:Number = ((printJob.pageHeight * dpiFactor)-(currentPrintTemplate.__height)) / 2;			
+				var printArea:Object = new Object();
+				printArea["xMin"] = - xMargin;
+				printArea["yMin"] = - yMargin;    
+				printArea["xMax"] = xMargin + (currentPrintTemplate.__width);
+				printArea["yMax"] = yMargin + (currentPrintTemplate.__height);
 
-			// first draw the printPage to a bitmap data (transparancy will remain)
-			// fill a new MovieClip with this bitmap and print this MovieClip to the printer
-			// with printAsBitMap = false;
-			
-			//TODO: with a matrix you can rotate and translate in such a way that a lanscape image can be printed in portrait and vv 
-			//var myMatrix:Matrix = new Matrix();
-			//myMatrix.rotate(Math.PI/2);
-			//myMatrix.translate(-(width/2 - height/2), (width/2 - height/2))
-			
-			var bitmap:BitmapData = new BitmapData(2880, 2880, false, 0xffffff);
-			bitmap.draw(printPage);
-			var tmp:MovieClip = _root.createEmptyMovieClip("rasterPage", _root.getNextHighestDepth());
-			tmp.beginBitmapFill(bitmap);
-			
-			tmp.moveTo(-xMargin, -yMargin);
-			tmp.lineTo(2880, -yMargin);
-			tmp.lineTo(2880, 2880);
-			tmp.lineTo(-xMargin, 2880);
-			tmp.lineTo(-xMargin, -yMargin);
-			tmp._x = -tmp._width;
-			tmp._xscale =(1/dpiFactor) * 100;
-			tmp._yscale =(1/dpiFactor) * 100;
-			tmp.endFill();
+				// first draw the printPage to a bitmap data (transparancy will remain)
+				// fill a new MovieClip with this bitmap and print this MovieClip to the printer
+				// with printAsBitMap = false;
+				
+				//TODO: with a matrix you can rotate and translate in such a way that a lanscape image can be printed in portrait and vv 
+				//var myMatrix:Matrix = new Matrix();
+				//myMatrix.rotate(Math.PI/2);
+				//myMatrix.translate(-(width/2 - height/2), (width/2 - height/2))
+				
+				var bitmap:BitmapData = new BitmapData(2880, 2880, false, 0xffffff);
+				bitmap.draw(printPage);
+				var tmp:MovieClip = _root.createEmptyMovieClip("rasterPage", _root.getNextHighestDepth());
+				tmp.beginBitmapFill(bitmap);
+				
+				tmp.moveTo(-xMargin, -yMargin);
+				tmp.lineTo(2880, -yMargin);
+				tmp.lineTo(2880, 2880);
+				tmp.lineTo(-xMargin, 2880);
+				tmp.lineTo(-xMargin, -yMargin);
+				tmp._x = -tmp._width;
+				tmp._xscale =(1/dpiFactor) * 100;
+				tmp._yscale =(1/dpiFactor) * 100;
+				tmp.endFill();
 
-            if (printJob.addPage(tmp, printArea, {printAsBitmap: false})) {
-                printJob.send();
-            }
+				if (printJob.addPage(tmp, printArea, {printAsBitmap: false})) {
+					printJob.send();
+				}
             
             setPreviewScale(PrintTemplate(currentPrintTemplate));
             
         }
-		clearInterval(keepAwakeInterval);
         delete printJob;
     }
     
