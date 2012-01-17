@@ -154,11 +154,17 @@ class gui.layers.TilingLayer extends AbstractLayer{
     private var maptipEnabled:Boolean = true;
     private var maptipextent:Object = null;
     
-    private var maxresfactor:Number = 1.4142135623;
-    private var intervalfactor:Number = 2.0;
+    private var maxresfactor:Number;
+    private var intervalfactor:Number;
     
     private var loadStartTime:Date = null;
-   
+   /**
+	 * Constructor for creating this layer
+	 * @param	id the id of this object
+	 * @param	container the container where the visible components must be placed.
+	 * @param 	map reference to the map where this layer is placed
+	 * @see 	gui.layers.AbstractLayer
+	 */
     public function TilingLayer(id:String, container:MovieClip, map:Map) {		
 		super(id, container, map);
         this.log = new Logger("gui.layers.TilingLayer",_global.flamingo.getLogLevel(),_global.flamingo.getScreenLogLevel());
@@ -348,7 +354,12 @@ class gui.layers.TilingLayer extends AbstractLayer{
         }
         return true;
     }
-    /*Add a new composite*/
+    /**
+     * Adds a new composite
+     * @param	nodeName the name of the node of the composite
+     * @param	config the configuration for the composites
+	 * @see gui.layer.AbstractLayer#addComposite
+     */
     public function addComposite(nodeName:String, config:XMLNode):Void { 
         //super.addComposite(nodeName,config);
         if (nodeName=="TilingParam"){
@@ -359,9 +370,9 @@ class gui.layers.TilingLayer extends AbstractLayer{
             }           
         }
     }
-    /*Event 'functions' from map object.*/
     /**
-    the update function
+    * the update function
+	* @param map the map
     */
     function update(map):Void {		
         if (tileFactory == undefined) { //not initialzed yet
@@ -411,7 +422,10 @@ class gui.layers.TilingLayer extends AbstractLayer{
         correctPosition(extent);
     }
     
-    /*changeExtent function. called when the extent is changed (panning)*/
+    /**
+     * changeExtent function. called when the extent is changed (panning)
+	 * @param map the map on which the extent must be changed
+     */
     function changeExtent(map:Object):Void{         
         log.debug("changeExtent.layer = " + this);
 
@@ -455,7 +469,10 @@ class gui.layers.TilingLayer extends AbstractLayer{
             }
         }
     }
-    
+    /**
+     * Do a identify
+     * @param	extent the extent of the identify
+     */
     function identify(extent:Object):Void{
         log.debug("identify, tilingType = " + tilingType + ", visible = " + getVisible() + ", TilingLayer = " + this);
         if(tilingType!=WMSC_TILINGTYPE){
@@ -529,7 +546,11 @@ class gui.layers.TilingLayer extends AbstractLayer{
         this.showmaptip = false;
         this.maptipextent = undefined;
     }
-    
+    /**
+     * Start the maptip
+     * @param	x
+     * @param	y
+     */
     function startMaptip(x:Number, y:Number) {
         if(tilingType!=WMSC_TILINGTYPE){
             return;
@@ -584,7 +605,6 @@ class gui.layers.TilingLayer extends AbstractLayer{
 
         wmscConnector.getFeatureInfo(this.serviceUrl, args, this.map.copyExtent(maptipextent));
     }
-
     function doHide():Void{ 
         log.debug("doHide called");
         this.visible=false;
@@ -613,7 +633,11 @@ class gui.layers.TilingLayer extends AbstractLayer{
     	clearInterval (this.intervalId);
     	this.intervalId = 0;
     }
-    
+    /**
+     * Load the new tiles for the extent and zoomlevel
+     * @param	extent the extent for which the tiles must be loaded
+     * @param	zoomLevel the zoomlevel
+     */
     function loadNewTiles(extent:Object,zoomLevel:Number){  
         this.newTiles = createNewTiles(extent,zoomLevel);
         log.debug("number of new tiles created: "+newTiles.length);
@@ -637,7 +661,12 @@ class gui.layers.TilingLayer extends AbstractLayer{
             removeAllButZoomLevel(this.currentZoomLevel);
         }
     }
-    /*Create the new tile objects. Tiles that already exist won't be created again.*/
+    /**
+     * Create the new tile objects. Tiles that already exist won't be created again.
+     * @param	viewExtent the tiles that hit this extent are loaded.
+     * @param	zoomLevel the zoomlevel
+     * @return 	a array of tiles.
+     */
 	private function createNewTiles(viewExtent:Object,zoomLevel:Number):Array{		
 		log.debug("CreateTiles with extent: "+viewExtent.minx +","+ viewExtent.miny +","+ viewExtent.maxx +","+ viewExtent.maxy);
 		var extent=copyExtent(viewExtent);
@@ -705,7 +734,13 @@ class gui.layers.TilingLayer extends AbstractLayer{
         return tiles;
     }
     
-    /*Get a already existing movieTile (a MovieClip from a tile)*/
+    /**
+     * Get a already existing movieTile (a MovieClip from a tile)
+     * @param	xIndex the x index of the tile
+     * @param	yIndex the y index of the tile
+     * @param	zoomLevel the zoomlevel for the tile
+     * @return	the tile
+     */
     public function getMovieTile(xIndex:Number,yIndex:Number,zoomLevel:Number):MovieClip{
         if (this.mcTiles){
             for (var m in this.mcTiles){                
@@ -719,7 +754,9 @@ class gui.layers.TilingLayer extends AbstractLayer{
         return null;
     }
     
-     /*Get a already existing movieTiles (an Array of MovieClips from a tile)*/
+     /**
+      * Get a already existing movieTiles (an Array of MovieClips from a tile)
+      */
      public function getTilesArray():Array{
      	var tiles:Array = new Array();
      	for (var m in this.tileStage){
@@ -749,7 +786,10 @@ class gui.layers.TilingLayer extends AbstractLayer{
         this.tileStage.clear();
     }
     
-    /*Removes all tiles accept the tiles with zoomLevel*/
+    /**
+     * Removes all tiles accept the tiles with zoomLevel
+     * @param	zoomLevel the zoomlevel that must stay
+     */
     public function removeAllButZoomLevel(zoomLevel:Number){
         //_global.flamingo.tracer("layer = " + this + " removeAllButZoomLevel");
         var newLoadedTileExtent:Object = new Object();
@@ -796,7 +836,9 @@ class gui.layers.TilingLayer extends AbstractLayer{
             }
         }
     }
-    /*This function loads the image and creates the movieclip*/
+    /**
+     * This function loads the image and creates the movieclips
+     */
     private function loadTiles(){   
         var tile:Tile=Tile(this.newTiles.pop());    
                         
@@ -825,7 +867,9 @@ class gui.layers.TilingLayer extends AbstractLayer{
         this.tileLoader.loadClip(url,holder); 
         //_global.flamingo.tracer("load tile = " + tile.getTileId() );               
     }
-    /*Stops the loading of the tiles.*/
+    /**
+     * Stops the loading of the tiles.
+     */
     private function stopLoading(){
         log.debug("StopLoading");
         //clear the current interval:
@@ -836,7 +880,11 @@ class gui.layers.TilingLayer extends AbstractLayer{
         //this.tileLoader.addListener(this.tileListener);
     }
     
-    /*called when a tile is completly loaded*/
+    /**
+	 * called when a tile is completly loaded
+	 * @param tileMc the tile
+	 * @param error if a error occured
+	 */
     public function finishedLoadingTile(tileMc:MovieClip,error:String){     
         var tile=Tile(tileMc._parent.tile);
         tile=tileFactory.setTileScreenLocation(tile,map.getCurrentExtent());
@@ -859,7 +907,9 @@ class gui.layers.TilingLayer extends AbstractLayer{
         }           
     }
     
-    /* This function is added because not all tiles doe fire a onLoadInit and onLoadComplete event */
+    /**
+     * This function is added because not all tiles doe fire a onLoadInit and onLoadComplete event
+     */
     private function checkLoadProgress():Void {
         var allLoaded:Boolean = true;
         for (var m in this.mcTiles) {
@@ -892,8 +942,7 @@ class gui.layers.TilingLayer extends AbstractLayer{
         
     }
         
-    /*DEBUG functions:*/
-    
+    /*DEBUG functions:*/    
     /*Draw a rectangle on the screen where the tile needs to be.*/
     private function drawTileRect(tile:Tile){
         var rect:Object= new Object();
@@ -935,4 +984,60 @@ class gui.layers.TilingLayer extends AbstractLayer{
 		extent.maxy = Number(extent.maxy);
 		return extent;
 	}
+	/*********************** Events ***********************/
+	/**
+	 * Raised on the update of this layer
+	 * @param	layer this layer
+	 */
+	//public function onUpdate(layer:TilingLayer) { }
+	/**
+	 * Raised when the update is complete
+	 * @param	layer this layer
+	 */
+	//public function onUpdateComplete(layer:TilingLayer) { }
+	/**
+	 * Raised when there is a response
+	 * @param	layer this layer
+	 * @param	requestType the type of the response
+	 * @param	connector the connector that gives the response
+	 */
+	//public function onResponse(layer:TilingLayer, requestType:String, connector:WMScConnector) { }
+	/**
+	 * Raised when there is a request done
+	 * @param	layer this layer
+	 * @param	requestType the type of the response
+	 * @param	connector the connector that gives the response
+	 */
+	//public function onRequest(layer:TilingLayer, requestType:String, connector:WMScConnector) { }
+	/**
+	 * Raised when there is a error
+	 * @param	layer this layer
+	 * @param	requestType the type of the request
+	 * @param	error The error
+	 */
+	//public function onError(layer:TilingLayer, requestType:String, error:String) { }
+	/**
+	 * Raised when a identify is returned 
+	 * @param	layer this layer
+	 * @param	data the returned data features
+	 * @param	extent the extent
+	 */
+	//public function onIdentifyData(layer:TilingLayer, data:Object, extent:Object) { }
+	/**
+	 * raised when a identify is complete
+	 * @param	layer this layer
+	 * @param	timeInSec time it took in seconds
+	 */
+	//public function onIdentifyComplete(layer:TilingLayer, timeInSec:Number) { }
+	/**
+	 * Raised when a identify is done
+	 * @param	layer this layer
+	 * @param	identifyExtent the extent of the identify
+	 */
+	//public function onIdentify(layer:TilingLayer, identifyExtent:Object) { }
+	/**
+	 * Raised when the layer is hidden
+	 * @param	layer this layer
+	 */
+	//public function onHide(layer:TilingLayer) { }	
 }

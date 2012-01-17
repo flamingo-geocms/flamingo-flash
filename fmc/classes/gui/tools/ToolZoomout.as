@@ -1,9 +1,26 @@
-/**
- * Tool Test
- * @author Roy Braam
- */
+/*-----------------------------------------------------------------------------
+Copyright (C) 2006  Menko Kroeske
 
-import core.ComponentInterface;
+This file is part of Flamingo MapComponents.
+
+Flamingo MapComponents is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+-----------------------------------------------------------------------------*/
+/**
+ * Tool zoomout to zoom out with a click or to drag a box
+ * @author ...
+ **/
 import gui.tools.AbstractTool;
 import display.spriteloader.SpriteSettings;
 import gui.tools.ToolGroup;
@@ -29,7 +46,7 @@ import tools.Logger;
 * @attr enabled (defaultvalue="true") True or false.
 * @attr skin (defaultvalue="") Available skins: "", "f2"
 */
-class gui.tools.ToolZoomout extends AbstractTool implements ComponentInterface
+class gui.tools.ToolZoomout extends AbstractTool
 {	
 	//-----------------------------------------	
 	var zoomfactor:Number = 50;
@@ -60,8 +77,9 @@ class gui.tools.ToolZoomout extends AbstractTool implements ComponentInterface
 							"</ToolZoomout>";			
 		init();
 	}	
-	
-	
+	/**
+	 * Init the component with the defaults and already loaded configs
+	 */	
 	private function init() {			
 		var thisObj:ToolZoomout = this;
 		//onmousedown event when this tool is active
@@ -177,11 +195,7 @@ class gui.tools.ToolZoomout extends AbstractTool implements ComponentInterface
 		//this.setVisible(this.visible);
 		flamingo.position(this);
 	}
-	//default functions-------------------------------
-	function startIdentifying() {
-	}
-	function stopIdentifying() {
-	}
+	//default functions-------------------------------	
 	function startUpdating() {
 		this._parent.setCursor(this.cursors["busy"]);
 	}
@@ -189,9 +203,7 @@ class gui.tools.ToolZoomout extends AbstractTool implements ComponentInterface
 		this._parent.setCursor(this.cursors["cursor"]);
 	}
 
-	/**
-	 * Events
-	 */
+	/*********************** Events ***********************/
 	/** 
 	 * Dispatched when a component is up and ready to run.
 	 * @param comp:MovieClip a reference to the component.

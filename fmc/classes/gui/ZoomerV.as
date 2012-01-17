@@ -1,4 +1,23 @@
-﻿import display.spriteloader.Sprite;
+﻿/*-----------------------------------------------------------------------------
+Copyright (C) 2006  Menko Kroeske
+
+This file is part of Flamingo MapComponents.
+
+Flamingo MapComponents is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+-----------------------------------------------------------------------------*/
+import display.spriteloader.Sprite;
 import gui.button.SliderButton;
 import gui.button.ZoomInButton;
 import gui.button.ZoomOutButton;
@@ -9,11 +28,6 @@ import display.spriteloader.SpriteSettings;
 import display.spriteloader.event.SpriteMapEvent;
 import display.spriteloader.SpriteMap;
 import core.AbstractPositionable;
-
-/**
- * 
- * @author Meine Toonen
- */
 
 /** @component ZoomerV
  * A vertical zoombar.
@@ -39,22 +53,34 @@ import core.AbstractPositionable;
  * @attr updatedelay (defaultvalue="500") Amount of time in milliseconds(1000 = 1 second) between releasing the zoomin/out and slider buttons and the update of a map.
  * @attr skin (defaultvalue="") Available skins: "", "f2" 
  */
-
-
+/**
+ * A vertical zoombar.
+ */
 class gui.ZoomerV  extends AbstractPositionable{
 
 	var _zoomid:Number;
 	var center:Object;
 	var updatedelay:Number = 500;
 	//listeners
-	
+	//zoomin button
 	var _zoomIn:ZoomInButton;
+	//zoomout button
 	var _zoomOut:ZoomOutButton;
+	//the slider bar
 	var _sliderBar:MovieClip;
+	//the slider button
 	var _sliderButton:SliderButton;
+	//a reference to the map
 	var _lMap:Object = new Object();
+	//a reference to the spriteMap 
 	var _spriteMap:SpriteMap;
 	
+	/**
+	 * Constructor for creating a ZoomerV
+	 * @param	id the id of this object
+	 * @param	container the container where the visible components must be placed.
+	 * @see core.AbstractPositionable
+	 */
 	public function ZoomerV(id:String,  container:MovieClip)
 	{
 		super(id, container);
@@ -89,6 +115,9 @@ class gui.ZoomerV  extends AbstractPositionable{
 		init();
 	}
 	
+	/**
+	 * Init the component with the defaults and already loaded configs
+	 */
 	function init() {
 		if (flamingo == undefined) {
 			var t:TextField = this.container.createTextField("readme", 0, 0, 0, 550, 400);
@@ -138,6 +167,9 @@ class gui.ZoomerV  extends AbstractPositionable{
 		resize();
 		refresh();
 	}
+	/**
+	 * Refresh the slider to the correct position and length.
+	 */
 	function refresh() {
 		if (sliderButton.bSlide) {
 			return;
@@ -167,7 +199,9 @@ class gui.ZoomerV  extends AbstractPositionable{
 		}
 		sliderButton.move(flamingo.getPosition(sliderButton)._x, sliderBar._y+(sliderBar._height*p/100));
 	}
-	
+	/**
+	 * Resize the component according the set values and parent
+	 */
 	function resize() {
 		var r = flamingo.getPosition(this);
 		zoomIn.move(r.x, (r.y ));
@@ -179,6 +213,12 @@ class gui.ZoomerV  extends AbstractPositionable{
 		refresh()
 	}
 	
+	/**
+	 * Do the zoom 
+	 * @param	map the map which must zoom
+	 * @param	perc percentage of zooming.
+	 * @see 	gui.Map#moveToPercentage
+	 */
 	function _zoom(map:MovieClip, perc:Number) {
 		if (map.getScale() == 0) {
 			if (perc>100) {
@@ -191,6 +231,10 @@ class gui.ZoomerV  extends AbstractPositionable{
 		}
 		map.moveToPercentage(perc, undefined, -1, 0);
 	}
+	
+	/**
+	 * Update the maps that are referenced with the listento
+	 */
 	function updateMaps()
 	{
 		var map = flamingo.getComponent(listento[0]);
@@ -201,7 +245,9 @@ class gui.ZoomerV  extends AbstractPositionable{
 			mc.moveToExtent(map.getMapExtent(), updatedelay);
 		}
 	}
-	
+	/**
+	 * Cancel the update
+	 */
 	function cancelUpdate()
 	{
 		for(var i:Number = 0; i < listento.length; i++)
@@ -210,7 +256,7 @@ class gui.ZoomerV  extends AbstractPositionable{
 			mc.cancelUpdate();
 		}
 	}
-	
+	/****** Getters and setters ****/
 	public function get zoomIn():ZoomInButton
 	{
 		return _zoomIn;
@@ -270,7 +316,7 @@ class gui.ZoomerV  extends AbstractPositionable{
 	{
 		_spriteMap = value;
 	}
-	
+	/*********************** Events ***********************/
 	/** 
 	 * Dispatched when a component is up and ready to run.
 	 * @param comp:MovieClip a reference to the component.

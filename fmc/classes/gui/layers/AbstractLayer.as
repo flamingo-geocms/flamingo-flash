@@ -1,4 +1,27 @@
-﻿import core.AbstractPositionable;
+﻿/*-----------------------------------------------------------------------------
+Copyright (C) 2011
+
+This file is part of Flamingo MapComponents.
+
+Flamingo MapComponents is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+-----------------------------------------------------------------------------*/
+/**
+ * AbstractLayer that can be extended by a layer
+ * @author Roy Braam
+ */
+import core.AbstractPositionable;
 import core.AbstractConfigurable;
 import tools.Logger;
 import tools.Utils;
@@ -22,6 +45,13 @@ class gui.layers.AbstractLayer extends AbstractConfigurable{
     private var maxScale:Number=null;
     private var grayscale:Boolean = false;
     
+	/**
+	 * Constructor for creating this layer
+	 * @param	id the id of this object
+	 * @param	container the container where the visible components must be placed.
+	 * @param 	map reference to the map where this layer is placed
+	 * @see 	core.AbstractConfigurable
+	 */
 	public function AbstractLayer(id:String, container:MovieClip, map:Map) {
 		super(id, container);
 		this.map = map;
@@ -66,9 +96,7 @@ class gui.layers.AbstractLayer extends AbstractConfigurable{
         }
     }
         
-    /*
-    Getters and setters:
-    */
+    /*********************** Getters and Setters ***********************/
 	function getParent():Object {
 		return this.map;
 	}
@@ -99,7 +127,10 @@ class gui.layers.AbstractLayer extends AbstractConfigurable{
     function getId():Object{
         return this.id;
     }
-    
+    /**
+     * Set the visible and determine if the caches must be updated
+     * @param	visible
+     */
     function setVisible(visible) {
         //log.debug("visible = " + visible + " setVisible,caller = " + Utils.getFunctionName(arguments.caller));
         var oldVisible: Boolean = this.visible;
@@ -117,7 +148,10 @@ class gui.layers.AbstractLayer extends AbstractConfigurable{
     function getVisible(){
         return this.visible;
     }
-    
+    /**
+     * Checks if this layer is in range of the map extent and scale
+     * @return true/false >> if in range/not in range
+     */
     function isWithinScaleRange():Boolean {
         var extent = map.getMapExtent();        
         var ms:Number = map.getScaleHint(extent);
@@ -138,7 +172,10 @@ class gui.layers.AbstractLayer extends AbstractConfigurable{
         this._alpha = alpha;
         _global.flamingo.raiseEvent(this, "onSetValue", "setAlpha", alpha); 
     }
-    
+    /**
+     * Gets the transparency
+     * @return  A number between 0 and 100, 0=transparent, 100=opaque
+     */
     function getAlpha(): Number {
     	return this._alpha;
     }
@@ -150,12 +187,14 @@ class gui.layers.AbstractLayer extends AbstractConfigurable{
     function setGrayscale(grayscale:Boolean) {
         this.grayscale = grayscale;
         this.update();
-    }
-    
+    }    
     function getGrayscale(): Boolean {
     	return this.grayscale;
     }
-    
+    /**
+     * Apply a grayscale on the movieclip
+     * @param	mc the movieclip to apply the grayscale on.
+     */
     function applyGrayscale(mc:MovieClip):Void{
         var myElements_array:Array = [0.3, 0.59, 0.11, 0, 0,
                                 0.3, 0.59, 0.11, 0, 0,
@@ -167,7 +206,7 @@ class gui.layers.AbstractLayer extends AbstractConfigurable{
     
 	    
     /*
-    Functions that will be called by the map (listento.
+    Functions that will be called by the map (listento)
     */
     function onUpdate(map:MovieClip):Void {
         update(map);
@@ -211,7 +250,7 @@ class gui.layers.AbstractLayer extends AbstractConfigurable{
     function doShow():Void{}
     //function setLayerAttribute(name:String, value:String):Boolean{return false;}
 	
-	/*Getters and setters*/
+	/*********************** Getters and Setters ***********************/
 	public function get map():Map {
 		return _map;
 	}

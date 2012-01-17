@@ -1,8 +1,22 @@
-/**
- * ...
- * @author Roy Braam
- */
-import core.ComponentInterface;
+/*-----------------------------------------------------------------------------
+Copyright (C) 2006 Menko Kroese
+
+This file is part of Flamingo MapComponents.
+
+Flamingo MapComponents is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+-----------------------------------------------------------------------------*/
 import gui.button.AbstractButton;
 import display.spriteloader.SpriteSettings;
 import tools.Logger;
@@ -22,16 +36,20 @@ import tools.Logger;
 * @attr extent (no defaultvalue) If value is 'initial' the ButtonFull zooms to the (for the Map configured) 
 * (initial) extent instead of the fullextent.
 */
-class gui.button.ButtonFull extends AbstractButton implements ComponentInterface{	
+/**
+ * Button to move to full extent
+ * @author Roy Braam
+ */
+class gui.button.ButtonFull extends AbstractButton{	
 	var extent:String;
 	var skin:String = "";
 	//---------------------------------
 	
 	/**
-	 * Constructor
-	 * @param	id
-	 * @param	container
-	 * @see AbstractButton#Constructor(id:String,container:MovieClip);
+	 * Constructor for ButtonPrev. Creates a button and loads the images for the button stages.
+	 * @param	id the id of the button
+	 * @param	container the movieclip that holds this button
+	 * @see 	gui.button.AbstractButton
 	 */
 	public function ButtonFull(id:String, container:MovieClip) {		
 		super(id, container);
@@ -45,6 +63,10 @@ class gui.button.ButtonFull extends AbstractButton implements ComponentInterface
 							"</ButtonFull>";
 		init();
 	}
+	
+	/**
+	 * Init the component with the defaults and already loaded configs
+	 */
 	function init():Void {		
 		if (flamingo == undefined) {
 			var t:TextField = this.container.createTextField("readme", 0, 0, 0, 550, 400);
@@ -98,7 +120,7 @@ class gui.button.ButtonFull extends AbstractButton implements ComponentInterface
 			
 		resize();		
 	}
-		
+	/************* event handlers **************/
 	public function onRelease() {		
 		for (var i = 0; i<listento.length; i++) {
 			var map = flamingo.getComponent(listento[i]);
@@ -116,6 +138,7 @@ class gui.button.ButtonFull extends AbstractButton implements ComponentInterface
 			}
 		}
 	}
+	/*********************** Events ***********************/
 	/** 
 	 * Dispatched when a component is up and ready to run.
 	 * @param comp:MovieClip a reference to the component.

@@ -1,6 +1,24 @@
+/*-----------------------------------------------------------------------------
+Copyright (C)
+
+This file is part of Flamingo MapComponents.
+
+Flamingo MapComponents is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+-----------------------------------------------------------------------------*/
 /**
- * ...
- * @author Roy Braam
+ * @author ...
  */
 import coremodel.service.arcims.ArcIMSConnector;
 import core.AbstractPositionable;
@@ -228,6 +246,13 @@ class gui.layers.ArcIMSLayer extends AbstractLayer{
 	
 	var subLayerCounter:Number = -1;
 	
+	/**
+	 * Constructor for creating this layer
+	 * @param	id the id of this object
+	 * @param	container the container where the visible components must be placed.
+	 * @param 	map reference to the map where this layer is placed
+	 * @see 	gui.layers.AbstractLayer
+	 */
 	public function ArcIMSLayer(id:String, container:MovieClip, map:Map) {
 		super (id, container, map);
 		caches = new Object();
@@ -348,26 +373,20 @@ class gui.layers.ArcIMSLayer extends AbstractLayer{
 			if (thisObj.maptipids.toUpperCase() == "#ALL#") {
 				thisObj.setLayerProperty("#ALL#", "maptipable", true);
 			}
-			//update is done in lLayer.onGetServiceResponse of the Map
-			//thisObj.update();
 			thisObj.flamingo.raiseEvent(thisObj, "onGetServiceInfo", thisObj);
 				
-		};//***
+		};
 		if(this.initService==true && !dontGetCap){
 			var conn:ArcIMSConnector = new ArcIMSConnector(server);
-			//_global.flamingo.tracer(" LayerArcIMS addInfoReponseListener" + _global.flamingo.getId(this));
 			ArcIMSConnector.addInfoReponseListener(lConn,server,mapservice);
 			if (servlet.length>0) {
 				conn.servlet = servlet;
 			}	
-			//_global.flamingo.tracer(_global.flamingo.getId(this) + " naar getServiceInfo " + mapservice);
 			if(!serviceInfoRequestSent){
 				serviceInfoRequestSent = true;
-				//_global.flamingo.tracer(_global.flamingo.getId(this) + " naar getServiceInfo " + mapservice);
 				conn.getServiceInfo(mapservice,lConn);
 			}
 		}
-		//***
 		else{
 			setLayersQueryAbleFeatureclass(this.maptipids,true);
 			setLayersQueryAbleFeatureclass(this.identifyids,true);
@@ -376,9 +395,13 @@ class gui.layers.ArcIMSLayer extends AbstractLayer{
 				update();
 			}
 		}
-		//***
 	}
-	
+	/**
+	 * Set the attribute
+	 * @param	name
+	 * @param	val
+	 * @see gui.layer.AbstractLayer#setAttribute
+	 */
 	function setAttribute(name:String, val:String) {
 		super.setAttribute(name, val);
 		switch (name.toLowerCase()) {
@@ -455,7 +478,6 @@ class gui.layers.ArcIMSLayer extends AbstractLayer{
 			this.container.dropShadow();
 			break;
 		case "server" :
-		//_global.flamingo.tracer(" LayerArcIMS setConfig server " + val);
 			server = val;
 			break;
 		case "servlet" :
@@ -489,7 +511,6 @@ class gui.layers.ArcIMSLayer extends AbstractLayer{
 			setLayerProperty(val, "forceidentify", true);
 			this.forceidentifyids = val;
 			break;
-		//***
 		case "initservice" :			
 			if (val.toLowerCase() == "false") {
 				this.initService  = false;
@@ -497,7 +518,6 @@ class gui.layers.ArcIMSLayer extends AbstractLayer{
 				this.initService  = true;
 			}
 			break;
-			//***
 		case "maptipids" :
 			this.canmaptip = true;
 			setLayerProperty(val, "maptipable", true);
@@ -949,13 +969,17 @@ class gui.layers.ArcIMSLayer extends AbstractLayer{
 			flamingo.raiseEvent(this, "onShow", this);
 		}
 	}
-
+	/**
+	 * If autoRefreshDelay is set this function is called to refresh
+	 */
 	function autoRefresh():Void {
 		if (!this.updating) {
 			refresh();
 		}
 	}
-
+	/**
+	 * Refresh the layer
+	 */
 	function refresh():Void {
 		this.update();
 	}
@@ -1170,6 +1194,9 @@ class gui.layers.ArcIMSLayer extends AbstractLayer{
 		updating = false;
 		flamingo.raiseEvent(this, "onError", this, "update", "timeout, connection failed...");
 	}
+	/**
+	 * Clear the cache with images.
+	 */
 	function _clearCache() {
 		for (var nr in caches) {
 			if (nr != nrcache) {
@@ -1178,6 +1205,12 @@ class gui.layers.ArcIMSLayer extends AbstractLayer{
 			}
 		}
 	}
+	/**
+	 * Get a list of layers
+	 * @param	list list of layers 
+	 * @param	field some sort of filter for the layers that are returned
+	 * @return	Array of layer id's
+	 */
 	function _getLayerlist(list:String, field:String):Array {
 		var layerlist:Array = new Array();
 		var ms:Number = map.getScale();
@@ -1280,6 +1313,11 @@ class gui.layers.ArcIMSLayer extends AbstractLayer{
 		flamingo.raiseEvent(this, "onIdentify", this, identifyextent);
 		_identifylayer(this.identifyextent, new Date());
 	}
+	/**
+	 * Do identify on the layer
+	 * @param	_identifyextent the extent for the identify
+	 * @param	starttime the start time of the identify
+	 */
 	function _identifylayer(_identifyextent:Object, starttime:Date) {
 		if (_identifylayers.length == 0) {
 			var newDate = new Date();
@@ -1445,6 +1483,11 @@ class gui.layers.ArcIMSLayer extends AbstractLayer{
 		flamingo.raiseEvent(this, "onHotlink", this, identifyextent);
 		_hotlinklayer(this.identifyextent, new Date());
 	}
+	/**
+	 * Do a hotlink on the layer
+	 * @param	_identifyextent the extent for the hotlink
+	 * @param	starttime the start time of the reqeust
+	 */
 	function _hotlinklayer(_identifyextent:Object, starttime:Date) {
 		if (_hotlinklayers.length == 0) {
 			var newDate:Date = new Date();
@@ -1570,7 +1613,7 @@ class gui.layers.ArcIMSLayer extends AbstractLayer{
 			break;
 		}
 	}
-
+	
 	function setLayersQueryAbleFeatureclass(ids:String,val:Boolean){
 		var a_ids = flamingo.asArray(ids);
 		for (var i = 0; i<a_ids.length; i++) {
@@ -1935,6 +1978,11 @@ class gui.layers.ArcIMSLayer extends AbstractLayer{
 		this.maptipcoordinate = new Object();
 		this._maptiplayers = new Array();
 	}
+	/**
+	 * Start the maptip
+	 * @param	x x coord
+	 * @param	y y coord
+	 */
 	function startMaptip(x:Number, y:Number) {
 		this._maptiplayers = new Array();
 		this.maptipcoordinate = new Object();
@@ -1973,6 +2021,11 @@ class gui.layers.ArcIMSLayer extends AbstractLayer{
 		r.height = this.identifydistance;
 		this.maptipextent = this.map.rect2Extent(r);
 	}
+	/**
+	 * Do the maptip request
+	 * @param	x x coord
+	 * @param	y y coord
+	 */
 	function _maptip(x:Number, y:Number) {
 		if (!this.showmaptip) {
 			return;
@@ -2075,6 +2128,12 @@ class gui.layers.ArcIMSLayer extends AbstractLayer{
 			break;
 		}
 	}
+	/**
+	 * Gets a value from a record that is returned with a getFeature
+	 * @param	record the record
+	 * @param	field field name
+	 * @return 	the value
+	 */
 	function _getValue(record:Object, field:String):String {
 		var value;
 		for (var fld in record) {
@@ -2228,6 +2287,7 @@ class gui.layers.ArcIMSLayer extends AbstractLayer{
 	public function onShow(map:MovieClip):Void  {
 		update();
 	}
+	/*********************** Events ***********************/
 	/**
 	* Dispatched when the layer gets a request object from the connector.
 	* @param layer:MovieClip a reference to the layer.

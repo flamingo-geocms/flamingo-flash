@@ -5,7 +5,7 @@ import display.spriteloader.SpriteMapFactory;
 import mx.utils.Delegate;
 /**
  * ...
- * @author 
+ * @author Stijn De Ryck 
  */
 
 class SpriteMapDemo extends MovieClip

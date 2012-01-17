@@ -1,9 +1,6 @@
 /**
- * ...
+ * Class that holds the function call for LoadComponentQueue 
  * @author Roy Braam
- */
-/**
- *Class that holds the function call for LoadComponentQueue 
  */
 class core.loading.FunctionCall{
 	private var _func:Function;

@@ -5,9 +5,8 @@ import display.spriteloader.Sprite;
 import display.spriteloader.SpriteSettings;
 import flash.display.BitmapData;
 import tools.Logger;
-/**
- * ...
- * @author 
+/** 
+ * @author Stijn De Ryck 
  */
 class display.spriteloader.SpriteMap extends Object
 {

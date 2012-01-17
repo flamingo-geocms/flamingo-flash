@@ -25,28 +25,31 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 * @configstyle .label Fontstyle of the scalenumbers.
 * @configstyle .units Fontstyle of the unitstring.
 */
-	/** @tag <fmc:Scalebar>  
-	* This tag defines a scalebar
-	* The positioning tags (top, left, width etc.) affects only the size and position of the bar exclusive labels. 
-	* Use multiple scalebars  and their min- and maxscale properties to support multi units.
-	* @hierarchy childnode of <flamingo> or a container component. e.g. <fmc:Window>
-	* @example
-	* <fmc:Scalebar left="222" top="bottom -20" width="150" listento="map" minscale="50" units=" km" magicnumber="1000"/>
-	* <fmc:Scalebar left="222" top="bottom -20" width="150" listento="map" maxscale="50" units=" m" skin="f1"/>
-	* @attr labelcount  (defaultvalue = 2)  Number of scalelabels.
-	* @attr barposition  (defaultvalue = "LEFT") LEFT, CENTER or RIGHT  Aligning of the bar.
-	* @attr labelposition  (defaultvalue = "CENTER") TOP, CENTER or BOTTOM
-	* @attr unitposition  (defaultvalue = "LASTLABEL") TOP, CENTER, BOTTOM or LASTLABEL
-	* @attr units  (defaultvalue = "m") Any string representing units.
-	* @attr magicnumber  (defaultvalue = "1") a number by which the mapscale is divided in order to present the correct scale-units. 
-	* @attr skin  (defaultvalue = "") Skin. Available: "", "f1", "line", "style1", "style2"
-	* @attr maxscale  (defaultvalue = "") When the map reaches this scale the bar will be shown.
-	* @attr minscale  (defaultvalue = "") When the map reaches this scale the bar will be hidden.
-	*/
+/** @tag <fmc:Scalebar>  
+* This tag defines a scalebar
+* The positioning tags (top, left, width etc.) affects only the size and position of the bar exclusive labels. 
+* Use multiple scalebars  and their min- and maxscale properties to support multi units.
+* @hierarchy childnode of <flamingo> or a container component. e.g. <fmc:Window>
+* @example
+* <fmc:Scalebar left="222" top="bottom -20" width="150" listento="map" minscale="50" units=" km" magicnumber="1000"/>
+* <fmc:Scalebar left="222" top="bottom -20" width="150" listento="map" maxscale="50" units=" m" skin="f1"/>
+* @attr labelcount  (defaultvalue = 2)  Number of scalelabels.
+* @attr barposition  (defaultvalue = "LEFT") LEFT, CENTER or RIGHT  Aligning of the bar.
+* @attr labelposition  (defaultvalue = "CENTER") TOP, CENTER or BOTTOM
+* @attr unitposition  (defaultvalue = "LASTLABEL") TOP, CENTER, BOTTOM or LASTLABEL
+* @attr units  (defaultvalue = "m") Any string representing units.
+* @attr magicnumber  (defaultvalue = "1") a number by which the mapscale is divided in order to present the correct scale-units. 
+* @attr skin  (defaultvalue = "") Skin. Available: "", "f1", "line", "style1", "style2"
+* @attr maxscale  (defaultvalue = "") When the map reaches this scale the bar will be shown.
+* @attr minscale  (defaultvalue = "") When the map reaches this scale the bar will be hidden.
+*/
 import core.AbstractPositionable;
 import display.spriteloader.SpriteSettings;
 
 import tools.Logger;
+/**
+ * A scale bar
+ */
 class gui.Scalebar extends AbstractPositionable {
 	
 	//-------------------------------
@@ -63,6 +66,12 @@ class gui.Scalebar extends AbstractPositionable {
 	var mBar:MovieClip;
 	var lMap:Object;
 	
+	/**
+	 * Constructor for creating a ScaleBar
+	 * @param	id the id of this object
+	 * @param	container the container where the visible components must be placed.
+	 * @see core.AbstractPositionable
+	 */
 	public function Scalebar(id:String, container:MovieClip){
 		super(id, container);
 		defaultXML = "<?xml version='1.0' encoding='UTF-8'?>" +
@@ -89,7 +98,9 @@ class gui.Scalebar extends AbstractPositionable {
 
 		init();
 	}
-
+	/**
+	 * Init the configuration and defaults.
+	 */
 	function init():Void {
 		if (flamingo == undefined) {
 			var t:TextField = this.container.createTextField("readme", 0, 0, 0, 550, 400);
@@ -183,6 +194,9 @@ class gui.Scalebar extends AbstractPositionable {
 
 		resize();
 	}
+	/**
+	 * Resize the component according the set values and parent
+	 */
 	function resize() {		
 		if (! visible) {
 			this._visible = false;
@@ -234,13 +248,7 @@ class gui.Scalebar extends AbstractPositionable {
 		} else if (barposition == "RIGHT") {
 			mHolder.mBar._x = r.width-mHolder.mBar._width;
 		}
-	/*
-		tScale.text = String(Math.round(ms*1000)/1000);
-		tScale._width = tScale.textWidth+5;
-		tScale._height = tScale.textHeight+5;
-		tScale._x = mHolder.mBar._x - tScale._width - 20;
-		tScale._y = mHolder.mBar._y;	
-	*/	
+	
 		if (labelcount == 1) {
 			var l = barlength;
 			if (unitposition == "LASTLABEL") {
@@ -302,10 +310,11 @@ class gui.Scalebar extends AbstractPositionable {
 		mHolder._y = ra.y;
 		
 	}
+	/*********************** Events ***********************/
+	/** 
+	 * Dispatched when a component is up and ready to run.
+	 * @param comp:MovieClip a reference to the component.
+	 */
+	//public function onInit(comp:MovieClip):Void {
+	//}
 }
-/** 
- * Dispatched when a component is up and ready to run.
- * @param comp:MovieClip a reference to the component.
- */
-//public function onInit(comp:MovieClip):Void {
-//}

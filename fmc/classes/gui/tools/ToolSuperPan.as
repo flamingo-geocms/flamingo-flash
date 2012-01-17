@@ -1,8 +1,26 @@
+/*-----------------------------------------------------------------------------
+Copyright (C) 2006  Menko Kroeske
+
+This file is part of Flamingo MapComponents.
+
+Flamingo MapComponents is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+-----------------------------------------------------------------------------*/
 /**
- * ...
- * @author Roy Braam
+ * Super pan on the map. You can throw the map so it keeps panning
+ * @author ...
  */
-import core.ComponentInterface;
 import gui.tools.AbstractTool;
 import gui.tools.ToolGroup;  
 import display.spriteloader.SpriteSettings;
@@ -25,7 +43,7 @@ import tools.Logger;
 * @attr enabled (defaultvalue="true") True or false.
 * @attr skin (defaultvalue="") Available skins: "", "f2"
 */
-class gui.tools.ToolSuperPan extends AbstractTool implements ComponentInterface{
+class gui.tools.ToolSuperPan extends AbstractTool{
 	var delay:Number = 800;
 	var velocityid:Number;
 	var autopanid:Number;
@@ -40,8 +58,11 @@ class gui.tools.ToolSuperPan extends AbstractTool implements ComponentInterface{
 	var maphit:Boolean 	
 	
 	/**
-	 * Constructor for creating a ToolSuperPan
-	 * @see AbstractTool#Constructor(id:String, toolGroup:ToolGroup ,container:MovieClip);
+	 * Constructor for ToolSuperPan.
+	 * @param	id the id of the button
+	 * @param	toolGroup the toolgroup where this tool is in.
+	 * @param	container the movieclip that holds this button 
+	 * @see 	gui.tools.AbstractTool#Constructor(id:String, toolGroup:ToolGroup ,container:MovieClip);
 	 */
 	public function ToolSuperPan(id:String, toolGroup:ToolGroup ,container:MovieClip) {
 		super(id, toolGroup, container);		
@@ -60,7 +81,7 @@ class gui.tools.ToolSuperPan extends AbstractTool implements ComponentInterface{
 		init();
 	}
 	/**
-	 * init function
+	 * Init the component with the defaults and already loaded configs
 	 */
 	private function init() {
 		var thisObj:ToolSuperPan = this;
@@ -152,9 +173,7 @@ class gui.tools.ToolSuperPan extends AbstractTool implements ComponentInterface{
 		this._visible = visible;
 		flamingo.raiseEvent(this, "onInit", this);
 	}
-	/**
-	 * Config functions
-	 */ 
+	
 	/**
 	* Configurates a component by setting a xml.
 	* @attr xml:Object Xml or string representation of a xml.
@@ -236,19 +255,14 @@ class gui.tools.ToolSuperPan extends AbstractTool implements ComponentInterface{
 			panning = false;
 		}
 	}
-	//default functions-------------------------------
-	function startIdentifying() {
-	}
-	function stopIdentifying() {
-	}
+	//default functions-------------------------------	
 	function startUpdating() {
-
 		_parent.setCursor(this.cursors["busy"]);
 	}
-	function stopUpdating() {
-		
+	function stopUpdating() {		
 		_parent.setCursor(this.cursors["cursor"]);
 	}
+	/*********************** Events ***********************/
 	/** 
 	 * Dispatched when a component is up and ready to run.
 	 * @param comp:MovieClip a reference to the component.

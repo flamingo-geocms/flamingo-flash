@@ -1,14 +1,52 @@
+/*-----------------------------------------------------------------------------
+Copyright (C) 2006  Menko Kroeske
+
+This file is part of Flamingo MapComponents.
+
+Flamingo MapComponents is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+-----------------------------------------------------------------------------*/
 import core.AbstractPositionable;
 import gui.button.MoveExtentButton;
 import tools.Logger;
 import display.spriteloader.SpriteSettings;
-
+/** @component BorderNavigation
+* Navigation buttons at the border of a map.
+* @file BorderNavigation.fla (sourcefile)
+* @file BorderNavigation.swf (compiled component, needed for publication on internet)
+* @file BorderNavigation.xml (configurationfile, needed for publication on internet)
+* @configstring tooltip_north tooltiptext of north button
+* @configstring tooltip_south tooltiptext of south button
+* @configstring tooltip_west tooltiptext of west button
+* @configstring tooltip_east tooltiptext of east button
+* @configstring tooltip_northwest tooltiptext of northwest button
+* @configstring tooltip_southwest tooltiptext of southwest button
+* @configstring tooltip_southeast tooltiptext of southeast button
+* @configstring tooltip_northeast tooltiptext of northeast button
+*/
+/** @tag <fmc:BorderNavigation>  
+* This tag defines navigation buttons at the border of a map. It listens to 1 or more map components
+* @hierarchy childnode of <flamingo> or a container component. e.g. <fmc:Window>
+* @example <fmc:BorderNavigation left="10" top="10" right="right -10" bottom="50%" skin="" buttons="N,S,W,E,NE,SE,NW,SW" listento="map,map1" offset="6"/>
+* @attr buttons (defaultvalue = "W,S,N,E,NE,NW,SE,SW") Comma seperated list of buttons. W=West, S=South etc. Reconized values: W,S,N,E,NE,NW,SE,SW
+* @attr updatedelay (defaultvalue = "500") Time in milliseconds (1000 = 1 sec.) in which the map will be updated.
+* @attr offset (defaultvalue = "0") Offset in pixels applied to all buttons. For main positioning use the default positioning attributes (left, top etc.).
+* @attr skin (defaultvalue = "") Skin of the buttons. Available skins: default ("") "f1" and "f2".  When using the "f1" or "f2"  skin only the N,W,S,E buttons can be used.
+*/
 /**
- * ...
- * @author Roy Braam
+ * A border navigation, arrows to move up,down,left,right etc.
  */
-
-
 class gui.BorderNavigation extends AbstractPositionable
 {
 	var buttons:Array = new Array("W", "S", "N", "E");
@@ -23,7 +61,12 @@ class gui.BorderNavigation extends AbstractPositionable
 	
 	//listeners
 	
-	
+	/**
+	 * Constructor for creating this component
+	 * @param	id the id of this object
+	 * @param	container the container where the visible components must be placed.
+	 * @see core.AbstractPositionable
+	 */
 	public function BorderNavigation(id:String, container:MovieClip)
 	{
 		super(id, container);
@@ -31,6 +74,9 @@ class gui.BorderNavigation extends AbstractPositionable
 		init();
 	}
 	
+	/**
+	 * Init the component with the defaults and already loaded configs
+	 */
 	function init()
 	{
 		if(flamingo == undefined)
@@ -63,8 +109,6 @@ class gui.BorderNavigation extends AbstractPositionable
 	 * Configurates a component by setting a xml.
 	 * @attr xml:Object Xml or string representation of a xml.
 	 */
-	
-	
 	function setConfig(xml:Object)
 	{
 		if(typeof(xml) == "string")
@@ -103,7 +147,9 @@ class gui.BorderNavigation extends AbstractPositionable
 		flamingo.position(this.container);
 		refresh();
 	}
-	
+	/**
+	 * Refresh the component
+	 */
 	function refresh()
 	{
 		for(var i = 0; i < buttons.length; i++)
@@ -174,7 +220,9 @@ class gui.BorderNavigation extends AbstractPositionable
 		}
 			resize();
 	}
-	
+	/**
+	 * Resize the component according the set values and parent
+	 */
 	function resize()
 	{		
 		super.resize();
@@ -222,7 +270,9 @@ class gui.BorderNavigation extends AbstractPositionable
 			};
 		}
 	}
-	
+	/**
+	 * Update the maps in the listento
+	 */
 	public function updateMaps()
 	{
 		var map = flamingo.getComponent(listento[0]);

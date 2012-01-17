@@ -1,4 +1,3 @@
-
 /*-----------------------------------------------------------------------------
 Copyright (C) 2006  Menko Kroeske
 
@@ -35,6 +34,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 import core.AbstractPositionable;
 import tools.Logger;
+/**
+ * This component shows the result of a maptip request as a tooltip. 
+ */
 class gui.MapTip extends AbstractPositionable {
 		
 	public function MapTip(id:String, container:MovieClip)
@@ -46,7 +48,9 @@ class gui.MapTip extends AbstractPositionable {
 
 	var lMap:Object = new Object();
 	var lLayer:Object = new Object();
-
+	/**
+	 * Initialize this
+	 */
 	private function init():Void {
 		if (flamingo == undefined) {
 			var t:TextField = this.container.createTextField("readme", 0, 0, 0, 550, 400);
@@ -104,10 +108,11 @@ class gui.MapTip extends AbstractPositionable {
 		}
 		flamingo.addListener(lMap, listento, this);
 	}
+	/*********************** Events ***********************/
+	/** 
+	 * Dispatched when a component is up and ready to run.
+	 * @param comp:MovieClip a reference to the component.
+	 */
+	//public function onInit(comp:MovieClip):Void {
+	//}
 }
-/** 
- * Dispatched when a component is up and ready to run.
- * @param comp:MovieClip a reference to the component.
- */
-//public function onInit(comp:MovieClip):Void {
-//}

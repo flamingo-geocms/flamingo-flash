@@ -5,9 +5,8 @@ import flash.display.BitmapData;
 import flash.geom.Point;
 import flash.geom.Rectangle;
 import mx.utils.Delegate;
-/**
- * ...
- * @author 
+/** 
+ * @author Stijn De Ryck 
  */
 class display.spriteloader.Sprite extends MovieClip {
 

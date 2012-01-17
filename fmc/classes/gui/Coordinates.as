@@ -17,6 +17,9 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 -----------------------------------------------------------------------------*/
+import core.AbstractPositionable;
+import TextField.StyleSheet;
+import tools.Logger;
 /** @component Coordinates
 * Shows coordinates when the mouse is moved over the map.
 * @file Coordinates.fla (sourcefile)
@@ -25,43 +28,43 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 * @configstring xy (default = "[x] [y]") textstring to define coordinates. The values "[x]" and "[y]" are replaced by the actually coordinates.
 * @configstyle .xy fontstyle of coordinates(xy) string
 */
-	/** @tag <fmc:Coordinates>  
-	* This tag defines coordinates. It listens to 1 or more mapcomponents.
-	* @hierarchy childnode of <flamingo> or a container component. e.g. <fmc:Window>
-	* @example 
-	* <fmc:Coordinates  listento="map,map1"  left="x10" top="bottom -40" decimals="6">
-	*    <string id="xy" en="lat [y] &lt;br&gt;lon [x] "  nl="breedtegraad [y]  lengtegraad [x]"/>
-	* </fmc:Coordinates/>
-	* @attr decimals Number of decimals
-	*/
-import core.AbstractPositionable;
-import TextField.StyleSheet;
-import tools.Logger;
-
-class gui.Coordinates  extends AbstractPositionable{
-	//-------------------------------
-
-	
-							
-	//---------------------------------
+/** @tag <fmc:Coordinates>  
+* This tag defines coordinates. It listens to 1 or more mapcomponents.
+* @hierarchy childnode of <flamingo> or a container component. e.g. <fmc:Window>
+* @example 
+* <fmc:Coordinates  listento="map,map1"  left="x10" top="bottom -40" decimals="6">
+*    <string id="xy" en="lat [y] &lt;br&gt;lon [x] "  nl="breedtegraad [y]  lengtegraad [x]"/>
+* </fmc:Coordinates/>
+* @attr decimals Number of decimals
+*/
+/**
+ * A component that shows the Coordinates
+ */
+class gui.Coordinates  extends AbstractPositionable{	
 	var decimals:Number = 0;
 	var xy:String;
 	var resized:Boolean = false;
 	var _tCoord:TextField;
 	var _lMap:Object;
 	
+	/**
+	 * Constructor for creating this component
+	 * @param	id the id of this object
+	 * @param	container the container where the visible components must be placed.
+	 * @see core.AbstractPositionable
+	 */
 	public function Coordinates(id:String,  container:MovieClip) {
 		super(id, container);
 		defaultXML = "<?xml version='1.0' encoding='UTF-8'?>" +
 							"<Coordinates>" +
 							"<string id='xy' nl='[x] [y]' en='[x] [y]'/>" +
 							"<style id='.xy' font-family='verdana' font-size='12px' color='#333333' display='block' font-weight='normal'/>"+
-							"</Coordinates>";
-		
-		//---------------------------------------
+							"</Coordinates>";		
 		init();
 	}
-	
+	/**
+	 * Init the component with the defaults and already loaded configs
+	 */
 	private function init():Void {
 		if (flamingo == undefined) {
 			var t:TextField = this.container.createTextField("readme", 0, 0, 0, 550, 400);
@@ -162,26 +165,14 @@ class gui.Coordinates  extends AbstractPositionable{
 		flamingo.position(this);
 		tCoord.styleSheet = StyleSheet(flamingo.getStyleSheet(this));
 	}
-
+	/**
+	 * Set the xy string for this component, get it from flamingo
+	 */
 	function setString(){
 		this.xy = flamingo.getString(this, "xy", "[x] [y]");
 	}
-
-	/*function resize() {
-		var r = flamingo.getPosition(this)
-		this.container._x = r.x
-		this.container._y = r.y
-	}*/
-	/**
-	* Shows or hides coordinates.
-	* This will raise the onSetVisible event.
-	* @param vis:Boolean True or false.
-	*/
-	function setVisible(vis:Boolean):Void {
-		this._visible = vis;
-		this.visible = vis;
-		flamingo.raiseEvent(this, "onSetVisible", this, vis);
-	}
+	
+	/*********************** Getters and Setters *****************/
 	public function get tCoord():TextField 
 	{
 		return _tCoord;
@@ -198,11 +189,12 @@ class gui.Coordinates  extends AbstractPositionable{
 	{
 		_lMap = value;
 	}
+	/*********************** Events ***********************/
+	/** 
+	 * Dispatched when a component is up and ready to run.
+	 * @param comp:MovieClip a reference to the component.
+	 */
+	//public function onInit(comp:MovieClip):Void {
+	//}	
 }
 
-/** 
- * Dispatched when a component is up and ready to run.
- * @param comp:MovieClip a reference to the component.
- */
-//public function onInit(comp:MovieClip):Void {
-//}

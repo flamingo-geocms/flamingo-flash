@@ -10,9 +10,10 @@ class coremodel.service.tiling.factory.OSMTileFactory extends AbstractTileFactor
 		super(r,e,url,map);
 	}
 	/*Create osm/google/bing tile origin upper left
-	@param xIndex the x index of this tile
-    @param yIndex the y index of this tile
-    @param zoomLevel the zoomlevel index (index to resolution) of this tile.
+	 * @param xIndex the x index of this tile
+     * @param yIndex the y index of this tile
+     * @param zoomLevel the zoomlevel index (index to resolution) of this tile.
+	 * @see coremodel.service.tiling.factory.TileFactoryInterface#createTile	
     */
     public function createTile(xIndex:Number, yIndex:Number, zoomLevel:Number):Tile{               
 		var tile = super.createTile(xIndex,yIndex,zoomLevel);
@@ -44,8 +45,10 @@ class coremodel.service.tiling.factory.OSMTileFactory extends AbstractTileFactor
 		return tile;
 	}
 	 
-	/*for OSM/GOOGLE/BING Origin is top left
-	*/
+	/**
+	 * for OSM/GOOGLE/BING Origin is top left
+	 * @see coremodel.service.tiling.factory.TileFactoryInterface#getTileIndexY	
+	 */
 	public function getTileIndexY(yCoord:Number,zoomLevel:Number):Number{
 		var tileRes=resolutions[zoomLevel];
 		var tileSpanY:Number= tileRes*getTileHeight();

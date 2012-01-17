@@ -1,5 +1,24 @@
+/*-----------------------------------------------------------------------------
+Copyright (C) 2006  Menko Kroeske
+
+This file is part of Flamingo MapComponents.
+
+Flamingo MapComponents is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+-----------------------------------------------------------------------------*/
 /**
- * ...
+ * Abstract tool. Implement this when you want to create a tool implementation
  * @author Roy Braam
  */
 import core.AbstractPositionable;
@@ -21,7 +40,14 @@ class gui.tools.AbstractTool extends AbstractButton
 	//scroll properties:
 	private var _zoomscroll:Boolean;
 	
-	public function AbstractTool(id, toolGroup:ToolGroup, container) {			
+	/**
+	 * Constructor for AbstractTool.
+	 * @param	id the id of the button
+	 * @param	toolGroup the toolgroup where this tool is in.
+	 * @param	container the movieclip that holds this button 
+	 * @see 	gui.button.AbstractButton
+	 */
+	public function AbstractTool(id, toolGroup:ToolGroup, container:MovieClip) {			
 		super(id, container);
 		this.toolGroup = toolGroup;
 		this.parent = toolGroup;
@@ -112,17 +138,6 @@ class gui.tools.AbstractTool extends AbstractButton
 			//see toolgroup initTool
 		}
 		this._active = active;		
-		
-		/*
-		 * mc._releaseTool = function() {
-			if (mc._enabled) {
-				mc._pressed = false;
-				mc.attachMovie(uplink, "mSkin", 1);
-				thisObj.flamingo.removeListener(maplistener, thisObj.listento, this);
-				mc.releaseTool();
-			}
-		};
-		 */
 	}
 	/**
 	 * Returns true if this button is clickable
@@ -130,6 +145,11 @@ class gui.tools.AbstractTool extends AbstractButton
 	public function isClickable():Boolean {
 		return super.isClickable() && !this.active;
 	}
+	/***** Tool defaults, do nothing ******/
+	function startIdentifying() {}
+	function stopIdentifying() {}
+	function startUpdating() {}
+	function stopUpdating() {}
 	
 	/**
 	 * Handles the press of the button.
@@ -137,9 +157,7 @@ class gui.tools.AbstractTool extends AbstractButton
 	public function onRelease() { 
 		this.toolGroup.setTool(this.id);
 	}
-	/***********************************************************
-	 * Getters and Setters.
-	 */ 
+	/*********************** Getters and Setters ***********************/
 	public function get active():Boolean {
 		return this._active;
 	}

@@ -9,11 +9,12 @@ class coremodel.service.tiling.factory.ArcGisRestTileFactory extends AbstractTil
 	function ArcGisRestTileFactory(r:Array,e:Envelope,url:String,map:Object){		
 		super(r,e,url,map);
 	}
-	/*Create a ArcGis tile
-	@param xIndex the x index of this tile
-	@param yIndex the y index of this tile
-	@param zoomLevel the zoomlevel index (index to resolution) of this tile.
-	*/
+	/** Create a ArcGis tile
+	 * @param xIndex the x index of this tile
+	 * @param yIndex the y index of this tile
+	 * @param zoomLevel the zoomlevel index (index to resolution) of this tile.
+	 * @see coremodel.service.tiling.factory.TileFactoryInterface#createTile
+	 */
 	public function createTile(xIndex:Number, yIndex:Number, zoomLevel:Number):Tile{		
 		var tile = super.createTile(xIndex,yIndex,zoomLevel);
 		//setbbox
@@ -43,8 +44,10 @@ class coremodel.service.tiling.factory.ArcGisRestTileFactory extends AbstractTil
 		tile=setTileScreenLocation(tile);		
 		return tile;
 	}	
-	/*for ArcGis Rest map cache the y is in the other order. (starts at top left)
-	*/
+	/**
+	 * For ArcGis Rest map cache the y is in the other order. (starts at top left)	 
+	 * @see coremodel.service.tiling.factory.TileFactoryInterface#getTileIndexY
+	 */	
 	public function getTileIndexY(yCoord:Number,zoomLevel:Number):Number{
 		var tileRes=resolutions[zoomLevel];
 		var tileSpanY:Number= tileRes*getTileHeight();

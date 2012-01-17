@@ -37,7 +37,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 import core.AbstractListenerRegister;
 import core.AbstractPositionable;
-import core.ComponentInterface;
 import core.AbstractComponent;
 import flash.external.ExternalInterface;
 import flash.filters.DropShadowFilter;
@@ -992,7 +991,7 @@ class Flamingo {
 				//newtypeobjectaanmaken
 				var oldComponent = this.components[targetid];				
 				if (this.components[targetid] != undefined && this.components[targetid] instanceof AbstractPositionable) {		
-					ComponentInterface(this.components[targetid]).setConfig(XML(xmlNode));
+					AbstractPositionable(this.components[targetid]).setConfig(XML(xmlNode));
 				}else {	
 					if (file == "ToolGroup") {
 						var toolGroup:ToolGroup = new ToolGroup(targetid,mc);										

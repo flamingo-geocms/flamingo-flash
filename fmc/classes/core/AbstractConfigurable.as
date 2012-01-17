@@ -1,10 +1,31 @@
-/**
- * ...
- * @author Roy Braam
- */
+/*-----------------------------------------------------------------------------
+Copyright (C) 2011  Roy Braam / Meine Toonen B3partners BV
 
+This file is part of Flamingo MapComponents.
+
+Flamingo MapComponents is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+-----------------------------------------------------------------------------*/
 import core.AbstractPositionable;
 import tools.Logger;
+/**
+ * Make a implementation of this class to handle the parsing of the xml.
+ * It implements the setConfig() function and uses the addComposite and addAttribute
+ * functions of the implementations (both need to be implemented in the implementations) to set
+ * the values from the XML
+ * @author Roy Braam
+ */
 class core.AbstractConfigurable extends AbstractPositionable{
 	
 	public function AbstractConfigurable(id:String, container:MovieClip) {
@@ -13,6 +34,7 @@ class core.AbstractConfigurable extends AbstractPositionable{
 	}
 	/**
 	 * Called as last statement in constructor.
+	 * Initializes the object. It sets the defaults and gets the already set custom XML's from flamingo
 	 */
 	public function init():Void {
 		//set visible false while configuring
@@ -35,7 +57,10 @@ class core.AbstractConfigurable extends AbstractPositionable{
 		this._visible = visible;
 		flamingo.raiseEvent(this, "onInit", this);
 	}
-	
+	/**
+	 * Config this object with the given xml.
+	 * @param	xml the configuration of this object.
+	 */
 	public function setConfig(xml:XMLNode) {
 		//parse the default attributes.
 		flamingo.parseXML(this, xml);
@@ -47,7 +72,10 @@ class core.AbstractConfigurable extends AbstractPositionable{
 		//set the custom composites
 		addComposites(xml);
 	}
-	
+	/**
+	 * Set the composites (with the child xml nodes) for this object.
+	 * @param	config a XMLNode configuration of the childs for this object.
+	 */
 	function addComposites(config:XMLNode) {
 		for (var j:Number = 0; j < config.childNodes.length; j++) {
 			var xmlNode:XMLNode = config.childNodes[j];
@@ -62,11 +90,11 @@ class core.AbstractConfigurable extends AbstractPositionable{
 	 * Abstracts, need to be implemented
 	 */ 
 	/**
-	 * Use this function to reinit the configed settings.
+	 * Implement this function to reinit the configed settings.
 	 */
 	public function reinit():Void { };	
 	/**
-	 * Passes a configured attribute for this component.
+	 * Implement this function. It Passes a configured attribute for this component.
 	 * @param name name of the attribute
 	 * @param value value of the attribute
 	 */
@@ -74,7 +102,7 @@ class core.AbstractConfigurable extends AbstractPositionable{
 		Logger.console("!!!!!AbstractConfigurable.setAttribute(name:String, value:String) must be implemented in subclass");
 	}	
 	/**
-	 * Passes a name and child xml to the component.
+	 * Implement this function. It Passes a name and child xml to the component.
 	 * @param name the name of the tag
 	 * @param config the xml child
 	 */ 

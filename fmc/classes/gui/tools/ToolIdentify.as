@@ -1,8 +1,26 @@
+/*-----------------------------------------------------------------------------
+Copyright (C) 2006  Menko Kroeske
+
+This file is part of Flamingo MapComponents.
+
+Flamingo MapComponents is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+-----------------------------------------------------------------------------*/
 /**
- * ...
- * @author Roy Braam
+ * Tool identify to do a identify on the map
+ * @author ...
  */
-import core.ComponentInterface;
 import display.spriteloader.SpriteSettings;
 import gui.tools.AbstractTool;
 import gui.tools.ToolGroup;
@@ -26,11 +44,17 @@ import tools.Logger;
 * @attr identifyall (defaultvalue="true") True: identify all maps. False: identify only the map that's being clicked on.
 * @attr skin (defaultvalue="") Available skins: "", "f2" 
 */
-class gui.tools.ToolIdentify extends AbstractTool implements ComponentInterface{
+class gui.tools.ToolIdentify extends AbstractTool{
 	var defaultXML:String;
 	var skin = "_identify";
 	var identifyall:Boolean;
-
+	/**
+	 * Constructor for ToolIdentify.
+	 * @param	id the id of the button
+	 * @param	toolGroup the toolgroup where this tool is in.
+	 * @param	container the movieclip that holds this button 
+	 * @see 	gui.tools.AbstractTool#Constructor(id:String, toolGroup:ToolGroup ,container:MovieClip);
+	 */
 	public function ToolIdentify(id:String, toolGroup:ToolGroup ,container:MovieClip) {		
 		super(id, toolGroup, container);	
 		toolDownSettings = new SpriteSettings(3, 903, 23, 24, 0, 0, true, 100);
@@ -47,7 +71,9 @@ class gui.tools.ToolIdentify extends AbstractTool implements ComponentInterface{
 		
 		init();
 	}
-	
+	/**
+	 * Init the component with the defaults and already loaded configs
+	 */
 	private function init() {
 		var thisObj:ToolIdentify = this;
 		this.lMap.onMouseDown = function(map:MovieClip, xmouse:Number, ymouse:Number, coord:Object) {
@@ -137,21 +163,13 @@ class gui.tools.ToolIdentify extends AbstractTool implements ComponentInterface{
 
 	}
 	//default functions-------------------------------
-	function startIdentifying() {
-		
-			_parent.setCursor(this.cursors["busy"]);
+	function startIdentifying() {		
+		_parent.setCursor(this.cursors["busy"]);
 	}
 	function stopIdentifying() {
-		
-			_parent.setCursor(this.cursors["cursor"]);
+		_parent.setCursor(this.cursors["cursor"]);
 	}
-	function startUpdating() {
-	}
-	function stopUpdating() {
-	}
-	/****************************************
-	 * Events
-	 */
+	/*********************** Events ***********************/
 	/** 
 	 * Dispatched when a component is up and ready to run.
 	 * @param comp:MovieClip a reference to the component.

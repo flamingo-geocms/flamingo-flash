@@ -1,13 +1,32 @@
-/**
- * ...
- * @author Roy Braam
- */
+/*-----------------------------------------------------------------------------
+Copyright (C) 2011  Roy Braam / Meine Toonen B3partners BV
+
+This file is part of Flamingo MapComponents.
+
+Flamingo MapComponents is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+-----------------------------------------------------------------------------*/
 import core.AbstractPositionable;
 import display.spriteloader.SpriteMap;
 import display.spriteloader.SpriteSettings;
 import display.spriteloader.event.SpriteMapEvent;
 import tools.Logger;
-
+/**
+ * A abstract button object, extend this to implement a button
+ * @author Roy Braam
+ * @author Meine Toonen
+ */
 class gui.button.AbstractButton extends AbstractPositionable{
 	//the movieclip that holds the visible part.
 	private var _holder:MovieClip;
@@ -42,6 +61,7 @@ class gui.button.AbstractButton extends AbstractPositionable{
 	 * Constructor for abstractButton. Creates a button and loads the images for the button stages.
 	 * @param	id the id of the button
 	 * @param	container the movieclip that holds this button
+	 * @see 	core.AbstractPositionable
 	 */
 	public function AbstractButton(id:String, container:MovieClip) {			
 		super(id, container);
@@ -188,9 +208,7 @@ class gui.button.AbstractButton extends AbstractPositionable{
 	public function setConfig(xml:Object) {
 		Logger.console("!!!Function setConfig() needs to be overwritten in: "+this.id);
 	}
-	/*******************************************************
-	 * Getters and Setters
-	 */ 
+	/*********************** Getters and Setters ***********************/
 	public function get holder():MovieClip 
 	{
 		return _holder;

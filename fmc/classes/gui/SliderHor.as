@@ -1,47 +1,20 @@
-﻿/**
- * @author Meine Toonen
-
+﻿/*-----------------------------------------------------------------------------
 This file is part of Flamingo MapComponents.
 
-	Flamingo MapComponents is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
+Flamingo MapComponents is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
 
-	This program is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-	GNU General Public License for more details.
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
 
-	You should have received a copy of the GNU General Public License
-	along with this program; if not, write to the Free Software
-	Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-	-----------------------------------------------------------------------------*/
-	/** @component SliderHor
-	* A horizontal slider.
-	* @file SliderHor.fla (sourcefile)
-	* @file SliderHor.swf (compiled component, needed for publication on internet)
-	* @file SliderHor.xml (configurationfile, needed for publication on internet)
-	* @configstring minimum Minimum value.
-	* @configstring maximum Maximum value.
-	* @configstring initial Initial value.
-	* @configstring slidestep Value to increase or decrease current setting with every click.
-	* @configstring setter name of method on listeners to apply new value.
-	* @configstring tooltip_increase Tooltip of plus button.
-	* @configstring tooltip_decrease Tooltip of min button.
-	* @configstring tooltip_slider Tooltip of slider button.
-	*/
-	/** @tag <fmc:SliderHor>  
-	* This tag defines a horizontal slider. Another component may listen to change events.
-	* @example
-	* <fmc:SliderHor left="10" top="10" width="300" minimum="0" maximum="100" initial="100" setter="setAlpha" slidestep="5">
-	*		    <string id="tooltip_increase" en="opaque" nl="ondoorzichtig"/>
-	*		    <string id="tooltip_decrease" en="transparent" nl="transparant"/>
-	*		    <string id="tooltip_slider" en="drag to change transparency" nl="schuif voor transparantie"/>
-	* </fmc:SliderHor>
-	* @hierarchy childnode of <flamingo> or a container component. e.g. <fmc:Window>
-	* @attr skin (defaultvalue="") Available skins: "", "f2" 
-	*/
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+-----------------------------------------------------------------------------*/	
 import core.AbstractPositionable;
 import gui.button.DecreaseButton;
 import gui.button.HorSliderButton;
@@ -50,7 +23,34 @@ import display.spriteloader.SpriteSettings;
 import display.spriteloader.SpriteMap;
 import TextField.StyleSheet;
 import tools.Logger;
-
+/** @component SliderHor
+* A horizontal slider.
+* @file SliderHor.fla (sourcefile)
+* @file SliderHor.swf (compiled component, needed for publication on internet)
+* @file SliderHor.xml (configurationfile, needed for publication on internet)
+* @configstring minimum Minimum value.
+* @configstring maximum Maximum value.
+* @configstring initial Initial value.
+* @configstring slidestep Value to increase or decrease current setting with every click.
+* @configstring setter name of method on listeners to apply new value.
+* @configstring tooltip_increase Tooltip of plus button.
+* @configstring tooltip_decrease Tooltip of min button.
+* @configstring tooltip_slider Tooltip of slider button.
+*/
+/** @tag <fmc:SliderHor>  
+* This tag defines a horizontal slider. Another component may listen to change events.
+* @example
+* <fmc:SliderHor left="10" top="10" width="300" minimum="0" maximum="100" initial="100" setter="setAlpha" slidestep="5">
+*		    <string id="tooltip_increase" en="opaque" nl="ondoorzichtig"/>
+*		    <string id="tooltip_decrease" en="transparent" nl="transparant"/>
+*		    <string id="tooltip_slider" en="drag to change transparency" nl="schuif voor transparantie"/>
+* </fmc:SliderHor>
+* @hierarchy childnode of <flamingo> or a container component. e.g. <fmc:Window>
+* @attr skin (defaultvalue="") Available skins: "", "f2" 
+*/
+/**
+ * A horizontal slider
+ */
 class gui.SliderHor extends AbstractPositionable{
 	
 	/*-----------------------------------------------------------------------------*/
@@ -70,6 +70,12 @@ class gui.SliderHor extends AbstractPositionable{
 	var _spriteMap:SpriteMap;
 	var _mLabel:TextField;
 	
+	/**
+	 * Constructor for creating this component
+	 * @param	id the id of this object
+	 * @param	container the container where the visible components must be placed.
+	 * @see core.AbstractPositionable
+	 */
 	public function SliderHor(id:String, container:MovieClip) 
 	{
 		super(id, container);
@@ -109,7 +115,9 @@ class gui.SliderHor extends AbstractPositionable{
 			mLabel._height = mLabel.textHeight+5;
 		}
 	}
-	
+	/**
+	 * Init the component with the defaults and already loaded configs
+	 */
 	function init() {
 		if (flamingo == undefined) {
 			var t:TextField = this.container.createTextField("readme", 0, 0, 0, 550, 400);
@@ -183,7 +191,10 @@ class gui.SliderHor extends AbstractPositionable{
 		resize();
 		refresh();
 	}
-
+	/**
+	 * Set a slider step
+	 * @param	increase true/false increase/decrease
+	 */
 	function stepSlider(increase:Boolean) {
 		if (increase) {
 		  currentValue += slidestep;
@@ -212,14 +223,18 @@ class gui.SliderHor extends AbstractPositionable{
 		  updateListeners();    
 	} 
 
-
+	/**
+	 * Refresh the slider
+	 */
 	function refresh() {
 		if (sliderButton.bSlide) {
 			return;
 		}
 		sliderButton.container._x = sliderBar._x + (sliderBar._width * Math.abs(minimum - currentValue) / Math.abs(maximum - minimum));// - sliderButton.width;
 	}
-
+	/**
+	 * Resize the component according the set values and parent
+	 */
 	function resize() {
 		var r = flamingo.getPosition(this);
 		r.width = r.width - 20;
@@ -249,7 +264,9 @@ class gui.SliderHor extends AbstractPositionable{
 		refresh();
 
 	}
-
+	/**
+	 * Update the listeners
+	 */
 	function updateListeners() {
 		for (var i:Number = 0; i<listento.length; i++) {
 			var mc = flamingo.getComponent(listento[i]);
@@ -262,7 +279,9 @@ class gui.SliderHor extends AbstractPositionable{
 		}
 		refresh();
 	}
-	
+	/**
+	 * Cancel update
+	 */
 	function cancelUpdate()
 	{
 		for(var i:Number = 0; i < listento.length; i++)
@@ -271,7 +290,7 @@ class gui.SliderHor extends AbstractPositionable{
 			mc.cancelUpdate();
 		}
 	}
-	
+	/*********************** Getters / Setters *****************/
 	public function get sliderButton():HorSliderButton 
 	{
 		return _sliderButton;

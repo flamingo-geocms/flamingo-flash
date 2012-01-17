@@ -1,8 +1,26 @@
+/*-----------------------------------------------------------------------------
+Copyright (C) 2006  Menko Kroeske
+
+This file is part of Flamingo MapComponents.
+
+Flamingo MapComponents is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+-----------------------------------------------------------------------------*/
 /**
- * ...
- * @author Roy Braam
+ * ToolPan to pan the map
+ * @author ...
  */
-import core.ComponentInterface;
 import gui.tools.AbstractTool;
 import gui.tools.ToolGroup;
 import tools.Logger;
@@ -26,7 +44,7 @@ import display.spriteloader.SpriteSettings;
 * @attr enabled (defaultvalue="true") True or false.
 * @attr skin (defaultvalue="") Available skins: "", "f2"
 */
-class gui.tools.ToolPan extends AbstractTool implements ComponentInterface{
+class gui.tools.ToolPan extends AbstractTool{
 	
 	var defaultXML:String;
 	var pandelay:Number = 1000;
@@ -36,11 +54,11 @@ class gui.tools.ToolPan extends AbstractTool implements ComponentInterface{
 	var skin = "_pan";	
 	
 	/**
-	 * Constructor for creating a toolzoomin
-	 * @param	id the id of the tool
-	 * @param	toolGroup the toolgroup where this tool is added
-	 * @param	container the visible part of this tool (movieclip)
-	 * @see AbstractTool#Constructor(id:String, toolGroup:ToolGroup ,container:MovieClip);
+	 * Constructor for ToolPan.
+	 * @param	id the id of the button
+	 * @param	toolGroup the toolgroup where this tool is in.
+	 * @param	container the movieclip that holds this button 
+	 * @see 	gui.tools.AbstractTool#Constructor(id:String, toolGroup:ToolGroup ,container:MovieClip);
 	 */
 	public function ToolPan(id:String, toolGroup:ToolGroup ,container:MovieClip) {	
 		super(id, toolGroup, container);			
@@ -59,7 +77,9 @@ class gui.tools.ToolPan extends AbstractTool implements ComponentInterface{
 		this.cursorId = "pan";
 		init();
 	}
-	
+	/**
+	 * Init the component with the defaults and already loaded configs
+	 */
 	private function init() {
 		var thisObj:ToolPan = this;
 		this.lMap.onMouseDown = function(mapOnMouseDown:MovieClip, xmouseOnMouseDown:Number, ymouseOnMouseDown:Number, coordOnMouseDown:Object) {
@@ -169,16 +189,8 @@ class gui.tools.ToolPan extends AbstractTool implements ComponentInterface{
 		//
 		this.setEnabled(enabled);
 		flamingo.position(this);
-	}
-	//default functions-------------------------------
-	function startIdentifying() {
-	}
-	function stopIdentifying() {
-	}
-	function startUpdating() {		
-	}
-	function stopUpdating() {		
-	}
+	}	
+	/*********************** Events ***********************/
 	/** 
 	 * Dispatched when a component is up and ready to run.
 	 * @param comp:MovieClip a reference to the component.

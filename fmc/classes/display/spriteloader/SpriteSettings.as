@@ -1,6 +1,5 @@
-/**
- * ...
- * @author 
+/** 
+ * @author Stijn De Ryck 
  */
 class display.spriteloader.SpriteSettings extends Object
 {

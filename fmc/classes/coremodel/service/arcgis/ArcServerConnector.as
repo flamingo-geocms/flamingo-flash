@@ -1,6 +1,6 @@
 /**
- * ...
- * @author Roy Braam
+ * ArcGis Server connector
+ * @author 
  */
 class coremodel.service.arcgis.ArcServerConnector{
 	//meta

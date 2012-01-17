@@ -1,9 +1,54 @@
-﻿import core.AbstractPositionable;
-/**
- * ...
- * @author Roy Braam
- */
+﻿/*-----------------------------------------------------------------------------
+Copyright (C) 2006  Menko Kroeske
+
+This file is part of Flamingo MapComponents.
+
+Flamingo MapComponents is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+-----------------------------------------------------------------------------*/
+import core.AbstractPositionable;
 import tools.Logger;
+
+/** @component Container
+* Container component for other components. Also suitable for drawing backgrounds and borders.
+* @file Container.fla (sourcefile)
+* @file Container.swf (compiled component, needed for publication on internet)
+* @file Container.xml (configurationfile, needed for publication on internet)
+*/
+/** @tag <fmc:Container>  
+* This tag defines a container.
+* The positioning of the components in a container are relative to the container.
+* When you set a component's width in a container to 100%, the component wil get the same width as the container.
+* @hierarchy childnode of <flamingo> or a container component. e.g. <fmc:Window>
+* @example 
+* <fmc:Container borderwidth="0" bordercolor="#003399"  backgroundcolor="#0099ff" right="xcenter -22" bottom="ycenter -6" left="left" top="top">
+*   <fmc:Map id="map" width="100%" height="100%" fadesteps="5" movetime="200" movesteps="5" fullextent="110000,539000,282000,610000" nrprevextents="10" extent="110000,539000,282000,610000">
+*       <fmc:LayerImage id="nl" imageurl="stuff/nl.png" extent="13562,306839,282000,614073" />
+*   </fmc:Map>
+* </fmc:Container>
+* @attr bordercolor  Color of the border in a hexadecimal notation (bordercolor="#00cc66").
+* @attr backgroundcolor  Color of the background in a hexadecimal notation. if undefined the background is transparent.
+* @attr borderwidth  Width of the border. 0 means hairline, undefined means noborder
+* @attr borderalpha  (defaultvalue = "100") Transparency of the border.
+* @attr backgroundalpha  (defaultvalue = "100") Transparency of the background.
+* @attr alpha  (defaultvalue = "100") Transparency of complete container and al of its components.
+* @attr mask  (defaultvalue = "false") true or false.
+* @attr clear  (defaultvalue = "true") True or false. True: all existing components will be removed from the container.
+*/
+/**
+ * A container for layout
+ */
 class gui.Container extends AbstractPositionable{
 	var importClasses:Array = [display.spriteloader.Sprite]
 	//---------------------------------------
@@ -14,12 +59,20 @@ class gui.Container extends AbstractPositionable{
 	
 	var mBG:MovieClip;
 	var mContent:MovieClip;
-
+	
+	/**
+	 * Constructor for creating this component
+	 * @param	id the id of this object
+	 * @param	container the container where the visible components must be placed.
+	 * @see core.AbstractPositionable
+	 */
 	public function Container(id:String, container:MovieClip) {
 		super(id, container);
 		init();
 	}
-	
+	/**
+	 * Init the component with the defaults and already loaded configs
+	 */
 	public function init() {
 		var thisObj:Container = this;
 		var lFlamingo:Object = new Object();
@@ -118,6 +171,9 @@ class gui.Container extends AbstractPositionable{
 		this.addComponents(xml);
 		
 	}
+	/**
+	 * Resize the component according the set values and parent
+	 */
 	function resize() {		
 		var r = flamingo.getPosition(this);
 		this.container._x = r.x;
@@ -321,7 +377,7 @@ class gui.Container extends AbstractPositionable{
 		this.visible = true;
 		flamingo.raiseEvent(this, "onShow", this);
 	}
-	//---------------------------------------
+	/*********************** Events ***********************/
 	/** 
 	* Dispatched when a container resizes.
 	* @param component:MovieClip a reference to the container.

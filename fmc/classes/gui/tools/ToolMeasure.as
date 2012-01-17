@@ -1,9 +1,26 @@
-/**
- * ...
- * @author Roy Braam
- */
+/*-----------------------------------------------------------------------------
+Copyright (C) 2006  Menko Kroeske
 
-import core.ComponentInterface;
+This file is part of Flamingo MapComponents.
+
+Flamingo MapComponents is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+-----------------------------------------------------------------------------*/
+/**
+ * Tool Measure to measure on the map
+ * @author ...
+ */
 import gui.tools.AbstractTool;
 import gui.tools.ToolGroup;
 import tools.Logger;
@@ -40,7 +57,7 @@ import display.spriteloader.SpriteSettings;
 * @attr enabled (defaultvalue="true") True or false.
 * @attr skin (defaultvalue="") Available skins: "", "f2"
 */
-class gui.tools.ToolMeasure extends AbstractTool implements ComponentInterface{
+class gui.tools.ToolMeasure extends AbstractTool{
 	//-------------------------------------------
 	var unit:String = "";
 	var decimals:Number = 0;
@@ -48,9 +65,12 @@ class gui.tools.ToolMeasure extends AbstractTool implements ComponentInterface{
 	var skin:String = "_toolmeasure";
 	
 	/**
-	 * Constructor for creating a Tool Measure
-	 * @see AbstractTool#Constructor(id:String, toolGroup:ToolGroup ,container:MovieClip);
-	 */	
+	 * Constructor for ToolMeasure.
+	 * @param	id the id of the button
+	 * @param	toolGroup the toolgroup where this tool is in.
+	 * @param	container the movieclip that holds this button 
+	 * @see 	gui.tools.AbstractTool#Constructor(id:String, toolGroup:ToolGroup ,container:MovieClip);
+	 */
 	public function ToolMeasure(id:String, toolGroup:ToolGroup ,container:MovieClip) {		
 		super(id, toolGroup, container);		
 		toolDownSettings = new SpriteSettings(4, 951, 23, 23, 0, 0, true, 100);
@@ -67,8 +87,8 @@ class gui.tools.ToolMeasure extends AbstractTool implements ComponentInterface{
 	}
 	
 	/**
-	 * Init function
-	 **/
+	 * Init the component with the defaults and already loaded configs
+	 */
 	function init() {
 		var thisObj:ToolMeasure = this;
 		//onmousedown event when this tool is active	
@@ -168,19 +188,7 @@ class gui.tools.ToolMeasure extends AbstractTool implements ComponentInterface{
 		this.setEnabled(enabled);
 		flamingo.position(this);
 	}
-
-	//default functions-------------------------------
-	function startIdentifying() {
-	}
-	function stopIdentifying() {
-	}
-	function startUpdating() {
-	}
-	function stopUpdating() {
-	}
-	/************************************************************
-	 * Events
-	 **/ 
+	/*********************** Events ***********************/
 	/** 
 	 * Dispatched when a component is up and ready to run.
 	 * @param comp:MovieClip a reference to the component.

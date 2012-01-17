@@ -9,10 +9,12 @@ class coremodel.service.tiling.factory.TMSTileFactory extends AbstractTileFactor
     function TMSTileFactory(r:Array,e:Envelope,url:String,map:Object){      
         super(r,e,url,map);
     }
-    /*Create a TMS tile
-    @param xIndex the x index of this tile
-    @param yIndex the y index of this tile
-    @param zoomLevel the zoomlevel index (index to resolution) of this tile.
+    /**
+	 * Create a TMS tile
+     * @param xIndex the x index of this tile
+     * @param yIndex the y index of this tile
+     * @param zoomLevel the zoomlevel index (index to resolution) of this tile.
+	 * @see coremodel.service.tiling.factory.TileFactoryInterface#createTile
     */
     public function createTile(xIndex:Number, yIndex:Number, zoomLevel:Number):Tile{        
         var tile = super.createTile(xIndex,yIndex,zoomLevel);

@@ -1,6 +1,24 @@
+/*-----------------------------------------------------------------------------
+Copyright (C) 2006  Menko Kroeske
+
+This file is part of Flamingo MapComponents.
+
+Flamingo MapComponents is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+-----------------------------------------------------------------------------*/
 /**
- * ...
- * @author Roy Braam
+ * @author ... 
  */
 import gui.layers.AbstractLayer;
 import gui.Map;
@@ -25,7 +43,13 @@ class gui.layers.ImageLayer extends AbstractLayer{
 	var mHolder:MovieClip;
 	
 	var starttime:Date;
-	
+	/**
+	 * Constructor for creating this layer
+	 * @param	id the id of this object
+	 * @param	container the container where the visible components must be placed.
+	 * @param 	map reference to the map where this layer is placed
+	 * @see 	gui.layers.AbstractLayer
+	 */
 	public function ImageLayer(id:String, container:MovieClip, map:Map) {
 		super(id, container, map);
 		init();
@@ -82,7 +106,11 @@ class gui.layers.ImageLayer extends AbstractLayer{
 			break;
 		}
 	}	
-	
+	/**
+	 * Set the image as a layer
+	 * @param	url the url to the layer
+	 * @param	extent the extent for this image
+	 */
 	public function setImage(url:String, extent:Object) {
 		if (url != undefined and map.isValidExtent(extent)) {
 			imageurl = flamingo.getNocacheName(flamingo.correctUrl(url), "hour");
@@ -276,7 +304,7 @@ class gui.layers.ImageLayer extends AbstractLayer{
 			update();
 		}	
 	}	
-	
+	/*********************** Getters and Setters ***********************/
 	public function get extent():Object {
 		return _extent;
 	}
@@ -288,6 +316,7 @@ class gui.layers.ImageLayer extends AbstractLayer{
 		this.container.extent = value;
 		_extent = value;
 	}
+	/*********************** Events ***********************/
 	/**
 	* Dispatched when the layerimage is downloaded.
 	* @param layer:MovieClip a reference to the layer.

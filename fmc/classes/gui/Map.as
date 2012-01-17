@@ -1,8 +1,22 @@
-/**
- * ...
- * @author Roy Braam
- */
+/*-----------------------------------------------------------------------------
+Copyright (C) 2006  Menko Kroeske
 
+This file is part of Flamingo MapComponents.
+
+Flamingo MapComponents is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+-----------------------------------------------------------------------------*/
 import tools.Logger;
 import gui.marker.DefaultMarker;
 import gui.marker.FOVMarker;
@@ -351,7 +365,10 @@ class gui.Map extends AbstractPositionable implements PersistableComponent{
 		this.parseCustomAttr(xml);
 		
 	}
-		
+	/**
+	 * Parse custom attr for this object
+	 * @param	xml the xml configuration for this Map component
+	 */	
 	private function parseCustomAttr(xml:Object) {
 		for (var a in xml.attributes) {
 			var attr:String = a.toLowerCase();
@@ -481,6 +498,12 @@ class gui.Map extends AbstractPositionable implements PersistableComponent{
 		//go on with adding layers
 		this.addLayers(xml);
 	}
+	/**
+	 * Start a maptip
+	 * @param	x screen x
+	 * @param	y screen y
+	 * @param	coord coordinates
+	 */
 	private function maptip(x:Number, y:Number, coord:Object) {
 		clearInterval(this.maptipid);
 		this.maptipcoord.x = x;
@@ -488,16 +511,6 @@ class gui.Map extends AbstractPositionable implements PersistableComponent{
 		flamingo.raiseEvent(this, "onMaptip", this, x, y, coord);
 		this.maptipcalled = true;
 	}
-	//private function cacheMap() {
-	//trace("cache");
-	//this.bmpcache = new flash.display.BitmapData(__width, __height, true);
-	//this.mCache.attachBitmap(this.bmpcache, 0, "auto", true);
-	//this.bmpcache.draw(this.mLayers);
-	//}
-	//function releaseCache() {
-	//trace("release");
-	//this.bmpcache.dispose();
-	//}
 	/**
 	* Forces a resize of the map
 	* This will raise the onResize event.
@@ -584,14 +597,6 @@ class gui.Map extends AbstractPositionable implements PersistableComponent{
 		if (flamingo.exists(layerid)) {
 			// let flamingo deal with double ids
 			flamingo.addComponent(xml, layerid);
-			//if (this.mLayers[layerid] != undefined) {
-			//flamingo.loadComponent(xml, this.mLayers[layerid], layerid);
-			//}
-			//layer already exists, use original depth to add new layer 
-			//if (this.mLayers[layerid] != undefined) {
-			//depth = this.mLayers[layerid].getDepth();
-			//}
-			//this.removeLayer(layerid);
 		} else {
 			// add new movie 
 			var mc:MovieClip = this.mLayers.createEmptyMovieClip(layerid, depth);			
@@ -607,8 +612,6 @@ class gui.Map extends AbstractPositionable implements PersistableComponent{
 				thisObj.checkUpdate();
 			};
 			lLayer.onIdentify = function(layer:MovieClip, extent:Object) {
-				//thisObj.identifying = true;
-				//trace("Onidentify:"+thisObj.extent2String(extent));
 				thisObj.layersidentifying[layer._name] = new Object();
 				thisObj.layersidentifying[layer._name].nridentified = 0;
 				thisObj.layersidentifying[layer._name].totalidentify = 0;
@@ -679,7 +682,6 @@ class gui.Map extends AbstractPositionable implements PersistableComponent{
 			
 			flamingo.loadComponent(xml, mc, layerid);
 			
-			//_global.flamingo.tracer("Map " + _global.flamingo.getId(this)+ " addLayer "  + layerid + " url " + _global.flamingo.getUrl(layerid) + _global.flamingo.getUrl(layerid).indexOf("LayerArcIMS"));
 			//count the number of serviceLayers
 			if(_global.flamingo.getUrl(layerid).indexOf("LayerArcIMS")>0 || 
 				_global.flamingo.getUrl(layerid).indexOf("LayerArcServer")>0 ||
@@ -689,7 +691,10 @@ class gui.Map extends AbstractPositionable implements PersistableComponent{
 			return id;
 		}
 	}
-	
+	/**
+	 * Gets the themeselector
+	 * @return
+	 */
 	function getThemeSelector():Object {
 		var comps:Array = _global.flamingo.getComponents();
 		var themeSelector:Object = null;
@@ -703,7 +708,11 @@ class gui.Map extends AbstractPositionable implements PersistableComponent{
 		}	
 		return themeSelector;	
 	}
-	
+	/**
+	 * Check if the map is updating.
+	 * onUpdateProgress is raised when still updating
+	 * onUpdateComplete is raised when done.
+	 */
 	private function checkUpdate() {
 		var updatetotal:Number = 0;
 		var layersupdated:Number = 0;
@@ -720,6 +729,11 @@ class gui.Map extends AbstractPositionable implements PersistableComponent{
 			flamingo.raiseEvent(this, "onUpdateComplete", this);
 		}
 	}
+	/**
+	 * Checks if the layers are done identifying
+	 * onIdentifyProgress is raised when still busy
+	 * onIdentifyComplete is raised when all layers are done
+	 */
 	private function checkIdentify() {
 		var identifytotal:Number = 0;
 		var totalsublayers:Number = 0;
@@ -740,7 +754,10 @@ class gui.Map extends AbstractPositionable implements PersistableComponent{
 			flamingo.raiseEvent(this, "onIdentifyComplete", this);
 		}
 	}
-	/**TODO: Remove? Hotlink tool not needed*/
+	/**
+	 * Old hotlink methode
+	 * TODO: Can be removed.
+	 **/
 	private function checkHotlink() {
 		var identifytotal:Number = 0;
 		var totalsublayers:Number = 0;
@@ -855,8 +872,7 @@ class gui.Map extends AbstractPositionable implements PersistableComponent{
 	* Performs an identify on a map.
 	* This will raise the onIdentify event.
 	* @param identifyextent:Object Extent defining identify area.
-	*/
-	
+	*/	
 	public function identify(identifyextent:Object):Void {
 		if (this.holdonidentify && this.identifying) {
 			return;
@@ -884,8 +900,7 @@ class gui.Map extends AbstractPositionable implements PersistableComponent{
 	* @param serviceId:String LayerComponent id
 	* @param selectExtent:Object Extent defining the select area
 	* @param selectLayer:String Layerid
-	*/
-	
+	*/	
 	public function select(serviceId:Object, selectExtent:Object, selectLayer:Object):Void {
 		flamingo.raiseEvent(this, "onSelect", this, serviceId, selectExtent, selectLayer);
 	}
@@ -893,8 +908,7 @@ class gui.Map extends AbstractPositionable implements PersistableComponent{
 	/**
 	* This will raise the onCorrectIdentifyIcon event.
 	* @param identifyextent:Object Extent defining identify area.
-	*/
-	
+	*/	
 	public function correctIdentifyIcon(identifyextent:Object):Void {
 		flamingo.raiseEvent(this, "onCorrectIdentifyIcon", this, identifyextent);
 	}
@@ -939,6 +953,13 @@ class gui.Map extends AbstractPositionable implements PersistableComponent{
 			return scale;
 		}
 	}
+	/**
+	 * Alternive way to get the scale, not used anymore
+	 * TODO: Can be removed.
+	 * @param	extent
+	 * @return
+	 * @deprecated use getScale
+	 */
 	public function getScale2(extent:Object):Number {
 		if (extent == undefined) {
 			extent = this._currentextent;
@@ -954,6 +975,13 @@ class gui.Map extends AbstractPositionable implements PersistableComponent{
 			return scale;
 		}
 	}
+	/**
+	 * Alternive way to get the scaleHint, not used anymore
+	 * TODO: Can be removed.
+	 * @param	extent
+	 * @return
+	 * @deprecated use getScaleHint
+	 */
 	public function getScaleHint2(extent:Object):Number {
 		if (extent == undefined) {
 			extent = this._currentextent;
@@ -1247,13 +1275,6 @@ class gui.Map extends AbstractPositionable implements PersistableComponent{
 			//}
 		}
 		
-		//var ratio = 1
-		//if (this.conformal) {
-		//var rx = this.getDistance({x:x-0.5, y:y}, {x:x+0.5, y:y});
-		//var ry = this.getDistance({x:x, y:y-0.5}, {x:x, y:y+0.5});
-		//var ratio = rx/ry;
-		//}
-		
 		var ext:Object = new Object();
 		
 		var nw = (this._currentextent.maxx-this._currentextent.minx)/percentage*100;
@@ -1297,6 +1318,7 @@ class gui.Map extends AbstractPositionable implements PersistableComponent{
 	public function getNextExtents():Array{
 		return this.nextextents;
 	}
+	
 	/**
 	* Moves the map to the next extent. The array with next extents is filled by 'moveToPrevExtent'
 	* The map's 'extenthistory' must be greater than 0.
@@ -1311,6 +1333,7 @@ class gui.Map extends AbstractPositionable implements PersistableComponent{
 		this.rememberextent = false;
 		this.moveToExtent(ext, 0, movetime);
 	}
+	
 	/**
 	* returns the map's prevextents
 	* The map's 'extenthistory' must be greater than 0.
@@ -1319,6 +1342,7 @@ class gui.Map extends AbstractPositionable implements PersistableComponent{
 	public function getPrevExtents():Array{
 		return this.prevextents;
 	}
+	
 	/**
 	* Moves the map to the previous extent. 
 	* The map's 'extenthistory' must be greater than 0.
@@ -1376,13 +1400,6 @@ class gui.Map extends AbstractPositionable implements PersistableComponent{
 			if (finishedChanging)
 				flamingo.raiseEvent(this, "onReallyChangedExtent", this, this.copyExtent(extent), eventType);
 		}
-		//trace("----"+flamingo.getId(this));
-		//trace(this.__width+";"+this.__height);
-		//trace(this.extent2String(this._mapextent));
-		//trace("scalehint:"+this.getScaleHint(this._mapextent));
-		//trace("scalehint2:"+this.getScaleHint2(this._mapextent));
-		//trace("scale:"+this.getScale(this._mapextent));
-		//trace("scale2:"+this.getScale2(this._mapextent));
 		// stop previous animation                                        
 		clearInterval(this.moveid);
 		// start new animtion 
@@ -1466,11 +1483,13 @@ class gui.Map extends AbstractPositionable implements PersistableComponent{
 		extent.maxx = extent.minx+nw;
 		extent.maxy = extent.miny+nh;
 		
-		return extent;
-		
+		return extent;		
 	}
 	
-	//
+	/**
+	 * Do the real moving of the map viewport
+	 * @param	obj object with info for moving the viewport.
+	 */
 	private function _move(obj:Object) {
 		if (obj.step>=obj.nrsteps) {
 			this._currentextent = this.copyExtent(this._mapextent);
@@ -1495,20 +1514,27 @@ class gui.Map extends AbstractPositionable implements PersistableComponent{
 		updateAfterEvent();
 		obj.step++;
 	}
-	
+	/**
+	 * Autorefresh function is called with a interval when the autorefreshdelay is set in the config.
+	 */
 	private function autoRefresh():Void {
 		if (!this.updating) {
 			refresh();
 		}
 	}
-	
+	/**
+	 * Refresh the map wihtout delay (0) and with a forceUpdate=true
+	 * @see #update
+	 */
 	public function refresh():Void {
 		this.update(0, true);
 	}
 	/**
 	* Updates the map. 
-	* This will fire the onUpdate event.
+	* This will fire the onUpdate event. #_update is called with a delay
 	* @param delay:Number [optional] if omitted the onUpdate event will raise immediatelly, otherwhise after the delay time (milliseconds)
+	* @param forceupdate:Boolean Force a update
+	* @see #_update
 	*/
 	public function update(delay:Number, forceupdate:Boolean):Void {
 		var thisObj:Map = this;
@@ -1523,6 +1549,11 @@ class gui.Map extends AbstractPositionable implements PersistableComponent{
 			this._update(forceupdate);
 		}
 	}
+	/**
+	 * Raises a onUpdate event. Updates the map.
+	 * @param	forceupdate Even if the extent is the same, the map is updated.
+	 * @see #checkUpdate
+	 */
 	private function _update(forceupdate:Boolean) {
 		// stop previous update call
 		clearInterval(this.updateid);
@@ -1841,6 +1872,11 @@ class gui.Map extends AbstractPositionable implements PersistableComponent{
 		}
 		return true;
 	}
+	/**
+	 * Copy the extent
+	 * @param	obj the extent to copy
+	 * @return	a new extent that is a copy of obj
+	 */
 	public function copyExtent(obj:Object):Object {
 		if (obj == undefined)
 			return undefined;
@@ -1854,6 +1890,10 @@ class gui.Map extends AbstractPositionable implements PersistableComponent{
 		extent.maxy = Number(extent.maxy);
 		return extent;
 	}
+	/**
+	 * Correct the ratio of the extent according the widht and height of the Map component
+	 * @param	extent the extent that needs to be corrected.
+	 */
 	private function correctAspectRatio(extent:Object) {
 		//This method modifies the extent without making a copy!
 		var w:Number = extent.maxx-extent.minx;
@@ -1882,6 +1922,13 @@ class gui.Map extends AbstractPositionable implements PersistableComponent{
 			extent.maxx = extent.minx+nw;
 		}
 	}
+	/**
+	 * Corrects the extent it corrects: 
+	 * - the aspactratio
+	 * - the extent if the fullextent is set and is smaller then the given extent
+	 * - the extent according the min/max scale (if set)
+	 * @param	extent the extent that is corrected
+	 */
 	public function correctExtent(extent:Object) {
 		//This method modifies the extent without making a copy!
 		//check 1. does the extent has the same aspectratio as the mapcomponent     
@@ -2262,7 +2309,9 @@ class gui.Map extends AbstractPositionable implements PersistableComponent{
 	public function showTooltip(tiptext:String, delay:Number):Void{
 		flamingo.showTooltip(tiptext,this,delay);
 	}
-	
+	/**
+	 * Hide the tooltip
+	 */
 	public function hideTooltip():Void{
 		flamingo.hideTooltip();
 	}
@@ -2336,6 +2385,18 @@ class gui.Map extends AbstractPositionable implements PersistableComponent{
 		}
 		markers = null;
 	}
+	
+	/**
+	 * Create a new marker
+	 * @param	id the unique id of the marker
+	 * @param	type the type of the marker
+	 * @param	x x coord of the marker on the map
+	 * @param	y y coord of the marker on the map
+	 * @param	width the width of the new marker
+	 * @param	height the height of the new marker
+	 * @param	htmlText htmlText that is used in the marker (not supported yet)
+	 * @return	a new marker
+	 */
 	private function createMarker(id:String,type:String,x:Number,y:Number,width:Number,height:Number,htmlText:String):Object {
 		//create new marker			
 		var mcMarker:DefaultMarker= new DefaultMarker();
@@ -2371,7 +2432,11 @@ class gui.Map extends AbstractPositionable implements PersistableComponent{
 		markers.push(fovMarker);
 	}
 	
-	/*give a extent and return as string*/
+	/**
+	 * give a extent and return as string
+	 * @param	extent the extent
+	 * @return 	a string representation of the extent. (comma seperated coords)
+	 */
 	public function extentToString(extent):String{
 		var str="";
 		str+=extent.minx;
@@ -2380,7 +2445,11 @@ class gui.Map extends AbstractPositionable implements PersistableComponent{
 		str+=","+extent.maxy;
 		return str;		
 	}
-		
+	/**
+	 * Used for themeselector. It persists the state
+	 * @param	document
+	 * @param	node
+	 */	
 	public function persistState (document: XML, node: XMLNode): Void {
 			
 		// Current theme:
@@ -2430,7 +2499,10 @@ class gui.Map extends AbstractPositionable implements PersistableComponent{
 		
 		node.appendChild (layersNode);
 	}
-	
+	/**
+	 * Restore the state of the node
+	 * @param	node the node
+	 */ 
 	public function restoreState (node: XMLNode): Void {
 		
 		var extentNode: XMLNode = XMLTools.getChild ("Extent", node),
@@ -2482,7 +2554,12 @@ class gui.Map extends AbstractPositionable implements PersistableComponent{
 			}
 		}
 	}
-	
+	/**
+	 * Set the layer visibilitye
+	 * @param	layerId the layer id in this map
+	 * @param	layerVisible layer visible true/false
+	 * @param	visibleSubLayers optional sublayers
+	 */
 	private function setLayerVisibility (layerId: String, layerVisible: Boolean, visibleSubLayers: Array): Void {
 		var componentId: String = _global.flamingo.getId (this) + "_" + layerId,
 			layerComponent: MovieClip = _global.flamingo.getComponent (componentId),
@@ -2508,9 +2585,7 @@ class gui.Map extends AbstractPositionable implements PersistableComponent{
 			_global.flamingo.addListener (listener, componentId, this);
 		}
 	}
-	/**
-	 * Getters and setters
-	 */
+	/*********************** Getters and Setters ***********************/
 	public function get mBG():MovieClip {
 		return _mBG;
 	}
@@ -2526,7 +2601,7 @@ class gui.Map extends AbstractPositionable implements PersistableComponent{
 	public function set mLayers(value:MovieClip):Void {
 		_mLayers = value;
 	}
-	
+	/*********************** Events ***********************/
 	/** 
 	 * Dispatched when a map is up and ready to run.
 	 * @param map:MovieClip a reference to the map.
@@ -2618,6 +2693,13 @@ class gui.Map extends AbstractPositionable implements PersistableComponent{
 	*/
 	//public function onChangeExtent(map:MovieClip):Void {
 	//}
+	/**
+	 * When the extent is done changeing
+	 * @param	map a reference to the map
+	 * @param	extent the new extent
+	 * @param	eventType the typ of the event 1 or 3.
+	 */
+	//public function onReallyChangedExtent(map:Map, extent:Object,eventType:Number){}
 	/** 
 	* Dispatched when the map performs an identify.
 	* @param map:MovieClip a reference to the map.
@@ -2659,6 +2741,61 @@ class gui.Map extends AbstractPositionable implements PersistableComponent{
 	*/
 	//public function onIdentifyComplete(map:MovieClip):Void {
 	//}
+	/**
+	 * Dispatched when a identify is canceled
+	 * @param	map reference to the map
+	 */
+	//public function onIdentifyCancel(map:MovieClip):Void{
+	//}
+	/**
+	 * Raised when the identifyIcon is corrected to the new extent
+	 * @param	map reference to the map
+	 * @param	identifyExtent the new extent
+	 */
+	//public function onCorrectIdentifyIcon(map:Map, identifyExtent:Object){}
+	/**
+	 * When a hotlink request is done
+	 * @param	map the map
+	 * @param	extent the cliced extent
+	 * @deprecated
+	 */
+	//public function onHotlink(map:Map, extent:Object) { }
+	/**
+	 * Raised when a hotlink is completed
+	 * @param	map a reference to the map
+	 * @deprecated
+	 */
+	//public function onHotlinkComplete(map:Map) { }
+	/**
+	 * Raised when the hotlink is in progress
+	 * @param	map a reference to the map
+	 * @param	layersidentifying the layers that are progressing
+	 * @param	identifytotal the number of Layers that are requested
+	 * @param	nrsublayers the number of sublayers that are progressing
+	 * @param	totalsublayers the total number of layers that are reequested
+	 * @deprecated
+	 */
+	//public function onHotlinkProgress(map:Map, layersidentifying:String, identifytotal:Number, nrsublayers:Number, totalsublayers:Number) { }	
+	/**
+	 * Raised when the hotlink is returning with data
+	 * @param	map a reference to the map
+	 * @param	layer a reference to the layer that is returning with data
+	 * @param	data the data 
+	 * @param	identifyextent the extent that is clicked
+	 * @param	nridentified number of layers that are identified
+	 * @param	total the total number of layers that are identified
+	 */
+	//public function onHotlinkData(map:Map,layer:MovieClip,data:Object,identifyextent:Object,nridentified:Number,total:Number) { }
+	/**
+	 * Raised when the viewport is start moving to a new extent
+	 * @param	map a reference to the map
+	 */
+	//public funciton onStartMove(map:Map){}
+	/**
+	 * Raised when the viewport is stoped moving to a new extent.
+	 * @param	map a reference to the map
+	 */
+	//public funciton onStopMove(map:Map){}
 	/**
 	* Dispatched when the mouse is moved over the map. Fired only once.
 	* @param map:MovieClip a reference to the map.

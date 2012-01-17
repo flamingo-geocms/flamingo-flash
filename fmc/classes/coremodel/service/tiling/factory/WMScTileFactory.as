@@ -11,9 +11,10 @@ class coremodel.service.tiling.factory.WMScTileFactory extends AbstractTileFacto
         super(r,e,url,map);     
     }   
     /*Create a WMSc tile
-    @param xIndex the x index of this tile
-    @param yIndex the y index of this tile
-    @param zoomLevel the zoomlevel index (index to resolution) of this tile.
+     * @param xIndex the x index of this tile
+     * @param yIndex the y index of this tile
+     * @param zoomLevel the zoomlevel index (index to resolution) of this tile.
+	 * @see coremodel.service.tiling.factory.TileFactoryInterface#createTile
     */
     public function createTile(xIndex:Number, yIndex:Number, zoomLevel:Number):Tile{                
         var tile = super.createTile(xIndex,yIndex,zoomLevel);

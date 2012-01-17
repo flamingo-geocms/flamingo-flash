@@ -1,7 +1,6 @@
 import display.spriteloader.SpriteMap;
-/**
- * ...
- * @author ...
+/** 
+ * @author Stijn De Ryck 
  */
 class display.spriteloader.SpriteMapFactory
 {

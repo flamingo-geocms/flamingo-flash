@@ -26,6 +26,13 @@ class coremodel.service.tiling.factory.AbstractTileFactory{
     
     private var map:Object=null;
             
+	/**
+	 * Constructor
+	 * @param	r resolution array
+	 * @param	b Envelope of service
+	 * @param	url the url of the service
+	 * @param	map the map
+	 */
     public function AbstractTileFactory(r:Array,b:Envelope,url:String,map:Object){
         this.log = new Logger("coremodel.service.tiling.factory.AbstractTileFactory",_global.flamingo.getLogLevel(),_global.flamingo.getScreenLogLevel());
         setResolutions(r);
@@ -34,7 +41,7 @@ class coremodel.service.tiling.factory.AbstractTileFactory{
         setMap(map);
     }
     
-    /*Getters and setters*/
+    /*********************** Getters and Setters ***********************/
     public function setServiceBBox(b:Envelope){
         this.serviceBBox=b;
     }
@@ -83,11 +90,12 @@ class coremodel.service.tiling.factory.AbstractTileFactory{
     public function getExtraParams():Object{
         return this.extraUrlParams;
     }
-    /*Create a 'empty' tile: A tile without url and screen coordinates. (setTileScreen location not called)
-    @param xIndex the x index of this tile
-    @param yIndex the y index of this tile
-    @param zoomLevel the zoomlevel index (index to resolution) of this tile.
-    @return the Tile.
+    /* Create a 'empty' tile: A tile without url and screen coordinates. (setTileScreen location not called)
+     * @param xIndex the x index of this tile
+     * @param yIndex the y index of this tile
+     * @param zoomLevel the zoomlevel index (index to resolution) of this tile.
+     * @return the Tile.
+	 * @see coremodel.service.tiling.factory.TileFactoryInterface#createTile
     */
     public function createTile(xIndex:Number, yIndex:Number, zoomLevel:Number):Tile{        
         var tile = new Tile();
@@ -115,8 +123,9 @@ class coremodel.service.tiling.factory.AbstractTileFactory{
     }   
     
     /*Get the index number X of the tile on coordinate 'xCoord'.
-    @param xCoord The x coord.
-    @param zoomLevel the zoomLevel of the server.
+     * @param xCoord The x coord.
+     * @param zoomLevel the zoomLevel of the server.
+	 * @see coremodel.service.tiling.factory.TileFactoryInterface#getTileIndexX
     */
     public function getTileIndexX(xCoord:Number,zoomLevel:Number):Number{
         var tileRes=resolutions[zoomLevel];
@@ -132,8 +141,9 @@ class coremodel.service.tiling.factory.AbstractTileFactory{
         return tileIndexX;
     }
     /*Get the index number Y of the tile on coordinate 'yCoord' on zoomlevel 'zoomLevel'.
-    @param yCoord The y coord.
-    @param zoomLevel the zoomLevel of the server.
+     * @param yCoord The y coord.
+     * @param zoomLevel the zoomLevel of the server.
+	 * @see coremodel.service.tiling.factory.TileFactoryInterface#getTileIndexY
     */
     public function getTileIndexY(yCoord:Number,zoomLevel:Number):Number{
         var tileRes=resolutions[zoomLevel];
@@ -148,16 +158,41 @@ class coremodel.service.tiling.factory.AbstractTileFactory{
         }
         return tileIndexY
     }
-    /*Get the fixed zoomlevel of the given Resolution from this service: 'res'
-    @param res The resolution resolution
-    */
+    
 	
-	/*
-	 * previous code open to various mis configurations, which made flamingo crash. The zoomlevel was incorrectly calculated when intervalfactor (or maxresfactor) was not/not properly configured. 
-	 * Besides: resolutions are not bound to logic, so no constant buffer can be defined over all resolutions (if wanted, they can be calculated in relation to the next/previous resolution)
-	 */
-    public function getZoomLevel(res:Number, maxresfactor:Number, intervalfactor:Number):Number{ 
-        //_global.flamingo.tracer("res = " + res + " maxresfactor = " + maxresfactor + " intervalfactor " + intervalfactor);
+	/*Get the fixed zoomlevel of the given Resolution from this service: 'res'
+     * @param res The resolution resolution
+	 * @see coremodel.service.tiling.factory.TileFactoryInterface#getZoomLevel
+     */	
+    public function getZoomLevel(res:Number, maxresfactor:Number, intervalfactor:Number):Number { 
+		/*
+		 * previous code open to various mis configurations, which made flamingo crash. The zoomlevel was incorrectly calculated when intervalfactor (or maxresfactor) was not/not properly configured. 
+		 * Besides: resolutions are not bound to logic, so no constant buffer can be defined over all resolutions (if wanted, they can be calculated in relation to the next/previous resolution)
+		*/
+        //previous code.... To make use of the maxresfactor and the intervalfactor
+		if (maxresfactor != undefined && intervalfactor != undefined) {
+			var maxres = this.resolutions[0] * maxresfactor;
+			var minres = maxres / intervalfactor;
+			if (res >= maxres) {
+				return 0;
+			}
+			maxres = this.resolutions[this.resolutions.length - 1] * maxresfactor;
+			minres = maxres / intervalfactor;
+			if (res <= minres) {
+				return this.resolutions.length - 1;
+			}
+			for (var i:Number = 0; i < this.resolutions.length; i++) {
+				maxres = this.resolutions[i] * maxresfactor;
+				minres = maxres / intervalfactor;            
+				if (res > minres && res <= maxres) {
+					return i;
+				}
+			}
+			//log.debug("found none, return last zoomlevel (smallest)");
+			//return (this.resolutions.length-1);
+		}
+		
+		//_global.flamingo.tracer("res = " + res + " maxresfactor = " + maxresfactor + " intervalfactor " + intervalfactor);
         for (var i:Number = 0; i < this.resolutions.length; i++) {
 			if (res > this.resolutions[i] || ((res-this.resolutions[i] < 0.0000000001) && (res-this.resolutions[i] > -0.0000000001))){
 				return i;
@@ -168,9 +203,9 @@ class coremodel.service.tiling.factory.AbstractTileFactory{
     }
     
     
-    /*
-    Calculates the given worldExtent to the current mapRect Object (.x,.y,.width and .height)
-    */
+    /**
+     * Calculates the given worldExtent to the current mapRect Object (.x,.y,.width and .height)
+     */
     private function worldExtent2screenRect(worldExtent:Envelope,mapExtent:Object):Object {     
         if (mapExtent==undefined){
             mapExtent= map.getMapExtent();
@@ -184,7 +219,10 @@ class coremodel.service.tiling.factory.AbstractTileFactory{
         r.height = (worldExtent.getMaxY()-worldExtent.getMinY())/msy;
         return (r);
     }
-    /*Set the tile screen locations (screenX,screenY,screenWidth and screenHeight)*/
+    /**
+     * Set the tile screen locations (screenX,screenY,screenWidth and screenHeight)
+	 * @see coremodel.service.tiling.factory.TileFactoryInterface#setTileScreenLocation
+     */
     public function setTileScreenLocation(tile:Tile,mapExtent:Object):Tile{     
         var rect:Object=worldExtent2screenRect(tile.getBbox(),mapExtent);
         /*

@@ -1,13 +1,53 @@
-﻿import core.AbstractListenerRegister;
+﻿/*-----------------------------------------------------------------------------
+Copyright (C) 2006  Menko Kroeske
+
+This file is part of Flamingo MapComponents.
+
+Flamingo MapComponents is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+-----------------------------------------------------------------------------*/
+import core.AbstractListenerRegister;
 import core.AbstractPositionable;
-import core.ComponentInterface;
 import gui.tools.AbstractTool;
 import tools.Logger;
+
+/** @component Toolgroup
+* Container component for tools.
+* @file ToolGroup.fla (sourcefile)
+* @file ToolGroup.swf (compiled component, needed for publication on internet)
+* @file ToolGroup.xml (configurationfile, needed for publication on internet)
+*/
+/** @tag <fmc:Toolgroup>  
+* This tag defines a toolgroup. Listens to 1 or more maps.
+* @hierarchy childnode of <flamingo> or a container component. e.g. <fmc:Window>
+* @example
+  <fmc:ToolGroup left="210" top="0" tool="zoom" listento="map">
+      <fmc:ToolZoomin id="zoom"/>
+      <fmc:ToolZoomout left="30"/>
+      <fmc:ToolPan left="60"/>
+      <fmc:ToolIdentify left="90"/>
+      <fmc:ToolMeasure left="120" unit=" m" magicnumber="1">
+         <string id="tooltip" en="measure meters"/>
+  	 </fmc:ToolMeasure>
+  </fmc:ToolGroup>
+* @attr tool  Id of the tool that is set.
+* @attr defaulttool  Id of the tool that is set after each update event of a map.
+*/
 /**
- * ...
- * @author Roy Braam
+ * A toolgroup that holds tools
  */
-dynamic class gui.tools.ToolGroup extends AbstractPositionable implements ComponentInterface
+dynamic class gui.tools.ToolGroup extends AbstractPositionable
 {		
 	//Old vars
 	private var _tool:String;
@@ -39,19 +79,7 @@ dynamic class gui.tools.ToolGroup extends AbstractPositionable implements Compon
 		oldTools = new Array();
 		init();
 	}
-	/*
-	function setAttribute(name:String, value:String):Void { 
-		var nametoLower = name.toLowerCase();
-		switch(nametoLower) {
-			case "tool":
-				tool = value;
-				break;
-			case "listento":
-				listento = value;
-		}
-	}*/
-    
-	
+		
 	/**
 	 * Init function
 	 */
@@ -65,12 +93,7 @@ dynamic class gui.tools.ToolGroup extends AbstractPositionable implements Compon
 		};
 		
 		flamingo.addListener(lFlamingo, "flamingo", this);		
-		//-------------------------		
-		/*lParent.onResize = function(mc:MovieClip) {
-			thisObj.resize();
-		};
-		flamingo.addListener(lParent, flamingo.getParent(this), this);*/
-		//-------------------------		
+		
 		lMap.onIdentify = function(map:MovieClip) {
 			if (map.holdonidentify) {
 				thisObj.identiying = true;
@@ -236,13 +259,14 @@ dynamic class gui.tools.ToolGroup extends AbstractPositionable implements Compon
     /**
 	 * Force a resize
 	 */
-	/*TODO: Still needed????*/
 	function resize():Void {
 		var p = flamingo.getPosition(this);
 		this.container._x = p.x;
 		this.container._y = p.y;
 	}
-	
+	/**
+	 * Check if update is finsihed
+	 */
 	function checkFinishUpdate() {
 		for (var i:Number = 0; i<listento.length; i++) {
 			var c = flamingo.getComponent(listento[i]);
@@ -255,7 +279,7 @@ dynamic class gui.tools.ToolGroup extends AbstractPositionable implements Compon
 		flamingo.getComponent(tool).stopUpdating();
 	}
 	/**
-	 * TODO:?
+	 * Check if identify is finsihed
 	 */
 	function checkFinishIdentify() {
 		for (var i:Number = 0; i<listento.length; i++) {
@@ -269,7 +293,7 @@ dynamic class gui.tools.ToolGroup extends AbstractPositionable implements Compon
 		flamingo.getComponent(tool).stopIdentifying();
 	}
 	/**
-	 * TODO:?
+	 * Cancel all updates
 	 */
 	function cancelAll() {
 		for (var i:Number = 0; i<listento.length; i++) {
@@ -278,7 +302,9 @@ dynamic class gui.tools.ToolGroup extends AbstractPositionable implements Compon
 		}
 	}
 	/**
-	 * TODO:?
+	 * Update al the listento's except the map that is given
+	 * @param map the map that is not updated
+	 * @param delay the delay
 	 */
 	function updateOther(map:MovieClip, delay:Number) {
 		for (var i:Number = 0; i<listento.length; i++) {
@@ -356,35 +382,9 @@ dynamic class gui.tools.ToolGroup extends AbstractPositionable implements Compon
 			toolComp._pressTool();
 		}
 		flamingo.raiseEvent(this, "onSetTool", this, tool);
-	}
-	/********************************************************************
-	 * Events
-	 */
-	/**
-	* Dispatched when a tool is released.
-	* @param toolgroup:MovieClip a reference or id of the toolgroup.
-	* @param toolid:MovieClip Id of tool which is released.
-	*/
-	//public function onReleaseTool(toolgroup:MovieClip, toolid:String):Void {
-	//
-	/**
-	* Dispatched when a tool is set.
-	* @param toolgroup:MovieClip a reference or id of the toolgroup.
-	* @param toolid:MovieClip Id of tool which is set.
-	*/
-	//public function onSetTool(toolgroup:MovieClip, toolid:String):Void {
-	//
-	/**
-	* Dispatched when the component is up and running.
-	* @param toolgroup:MovieClip a reference or id of the toolgroup.
-	*/
-	//public function onInit(toolgroup:MovieClip):Void {
-	//
+	}	
 	
-	/*******************************************************************************
-	 * Getters and setters
-	 */
-	
+	/*********************** Getters and Setters ***********************/	
 	public function get tools():Array 
 	{
 		return _tools;
@@ -492,4 +492,25 @@ dynamic class gui.tools.ToolGroup extends AbstractPositionable implements Compon
 	{
 		_oldTools = value;
 	}
+	/*********************** Events ***********************/
+	/**
+	* Dispatched when a tool is released.
+	* @param toolgroup:MovieClip a reference or id of the toolgroup.
+	* @param toolid:MovieClip Id of tool which is released.
+	*/
+	//public function onReleaseTool(toolgroup:MovieClip, toolid:String):Void {
+	//
+	/**
+	* Dispatched when a tool is set.
+	* @param toolgroup:MovieClip a reference or id of the toolgroup.
+	* @param toolid:MovieClip Id of tool which is set.
+	*/
+	//public function onSetTool(toolgroup:MovieClip, toolid:String):Void {
+	//
+	/**
+	* Dispatched when the component is up and running.
+	* @param toolgroup:MovieClip a reference or id of the toolgroup.
+	*/
+	//public function onInit(toolgroup:MovieClip):Void {
+	//
 }

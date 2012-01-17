@@ -1,7 +1,25 @@
-/**
- * @author Meine Toonen
- */
+/*-----------------------------------------------------------------------------
+Copyright (C) 2006 Menko Kroese
 
+This file is part of Flamingo MapComponents.
+
+Flamingo MapComponents is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+-----------------------------------------------------------------------------*/
+import gui.button.AbstractButton;
+import display.spriteloader.SpriteSettings;
+import tools.Logger;
 /** @component ButtonPrev
 * A button to zoom the map to the previous extent.
 * @file ButtonPrev.fla (sourcefile)
@@ -16,16 +34,21 @@
 * @example <fmc:ButtonPrev  right="50% 140" top="71" listento="map"/>
 * @attr skin (defaultvalue = "") Skin of the button. Available skins: default ("") and "f2".
 */
-import core.ComponentInterface;
-import gui.button.AbstractButton;
-import display.spriteloader.SpriteSettings;
-import tools.Logger;
-class gui.button.ButtonPrev extends AbstractButton implements ComponentInterface
-{
+/**
+ * Button to zoom to previous extent
+ * @author Meine Toonen
+ */
+class gui.button.ButtonPrev extends AbstractButton{
 	var skin:String = "";
 	var lParent:Object = new Object();
 	var lMap:Object = new Object();
 
+	/**
+	 * Constructor for ButtonPrev. Creates a button and loads the images for the button stages.
+	 * @param	id the id of the button
+	 * @param	container the movieclip that holds this button
+	 * @see 	gui.button.AbstractButton
+	 */
 	public function ButtonPrev(id:String, container:MovieClip) 
 	{
 		super(id, container);
@@ -39,7 +62,9 @@ class gui.button.ButtonPrev extends AbstractButton implements ComponentInterface
 						"</ButtonPrev>";
 		init();
 	}
-	
+	/**
+	 * Init the component with the defaults and already loaded configs
+	 */
 	private function init():Void {
 		if (flamingo == undefined) {
 			var t:TextField = this.container.createTextField("readme", 0, 0, 0, 550, 400);
@@ -95,7 +120,7 @@ class gui.button.ButtonPrev extends AbstractButton implements ComponentInterface
 		this.setEnabled(false);
 		resize();
 	}
-
+	/************* event handlers **************/
 	function onRelease() {
 		for (var i = 0; i<listento.length; i++) {
 			var map = flamingo.getComponent(listento[i]);
@@ -107,6 +132,7 @@ class gui.button.ButtonPrev extends AbstractButton implements ComponentInterface
 			flamingo.getComponent(listento[i]).moveToPrevExtent();
 		}
 	}
+	/*********************** Events ***********************/
 	/** 
 	 * Dispatched when a component is up and ready to run.
 	 * @param comp:MovieClip a reference to the component.

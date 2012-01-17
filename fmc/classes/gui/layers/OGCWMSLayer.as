@@ -1,6 +1,24 @@
+/*-----------------------------------------------------------------------------
+Copyright (C)
+
+This file is part of Flamingo MapComponents.
+
+Flamingo MapComponents is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+-----------------------------------------------------------------------------*/
 /**
- * ...
- * @author Roy Braam
+ * @author ...
  */
 import coremodel.service.wms.OGWMSConnector;
 import core.AbstractPositionable;
@@ -125,7 +143,13 @@ class gui.layers.OGCWMSLayer extends AbstractLayer{
 	var maptip_layers:String;
 	var vislayers:String;
 	var starttime:Date;
-	
+	/**
+	 * Constructor for creating this layer
+	 * @param	id the id of this object
+	 * @param	container the container where the visible components must be placed.
+	 * @param 	map reference to the map where this layer is placed
+	 * @see 	gui.layers.AbstractLayer
+	 */
 	public function OGCWMSLayer(id:String, container:MovieClip, map:Map) {
 		super (id, container, map);		
 		caches = new Object();
@@ -188,10 +212,7 @@ class gui.layers.OGCWMSLayer extends AbstractLayer{
 				}
 			}
 		}
-	/*	if (nullIfEmpty(maptip_layers) != null) {
-			setLayerProperty(maptip_layers, "maptip", true);
-			setLayerProperty(maptip_layers, "queryable", true);
-		}*/
+	
 		if (nullIfEmpty(query_layers)!=null){
 			setLayerProperty(query_layers, "identify", true);
 			setLayerProperty(query_layers, "queryable", true);
@@ -476,13 +497,9 @@ class gui.layers.OGCWMSLayer extends AbstractLayer{
 	  return this.sldParam;
 	}
 	/**
-	* Gets the url of a service
-	* @return the url
-	*/
-	function getUrl(){
-		return this.url;
-	}
-
+	 * Parse the layers in the layers component.
+	 * @param	tlayers
+	 */
 	function _parseLayers(tlayers:Array) {
 		var thisObj:OGCWMSLayer = this;
 		for(var i:Number=0;i<tlayers.length;i++){
@@ -1085,6 +1102,10 @@ class gui.layers.OGCWMSLayer extends AbstractLayer{
 		}
 		return s;
 	}
+	/**
+	 * Get the style string.
+	 * @return
+	 */
 	function getStylesString():String {
 		var s = "";
 		if (slayers.length == 0) {
@@ -1128,6 +1149,10 @@ class gui.layers.OGCWMSLayer extends AbstractLayer{
 		}
 		return s;
 	}
+	/**
+	 * Get the (concated)layer string.
+	 * @return the layer string
+	 */
 	function getLayersString():String {
 		var s = "";
 		if (slayers.length == 0) {
@@ -1161,27 +1186,11 @@ class gui.layers.OGCWMSLayer extends AbstractLayer{
 				s += ","+id;
 			}
 		}
-		return s;
-		//turns the layers object into a string, regarding visible and order 
-		/*
-		var a:Array = new Array();
-		var s:String;
-		for (var id in layers) {
-		if (layers[id].visible) {
-		a.push({id:id, order:layers[id].order});
-		}
-		}
-		a.sortOn("order", Array.NUMERIC);
-		for (var i = 0; i<a.length; i++) {
-		if (s == undefined) {
-		s = a[i].id;
-		} else {
-		s += ","+a[i].id;
-		}
-		}
-		return s;
-		*/
+		return s;		
 	}
+	/**
+	 * Delete the cache
+	 */
 	function _clearCache() {
 		for (var nr in caches) {
 			if (nr != nrcache) {
@@ -1190,11 +1199,19 @@ class gui.layers.OGCWMSLayer extends AbstractLayer{
 			}
 		}
 	}
+	/**
+	 * Update the caches
+	 */
 	function updateCaches() {
 		for (var nr in caches) {
 			this.updateCache(caches[nr]);
 		}
 	}
+	/**
+	 * Get the legend of the layer with id
+	 * @param	id the layer id of this service
+	 * @return 	the legend url
+	 */
 	function getLegend(id):String {
 		return layers[id].legendurl;
 	}
@@ -1205,6 +1222,10 @@ class gui.layers.OGCWMSLayer extends AbstractLayer{
 	function getScale():Number {
 		return map.getScaleHint(extent);
 	}
+	/**
+	 * Update the cache
+	 * @param	cache the cache that needs to be updated
+	 */
 	function updateCache(cache:MovieClip) {		
 		if (cache == undefined) {
 			return;
@@ -1267,6 +1288,10 @@ class gui.layers.OGCWMSLayer extends AbstractLayer{
 		update();
 		_global.flamingo.raiseEvent(this, "onShow", this);
 	}
+	/**
+	 * Get visible layers. For every layer a 1 (visible) 0(invisible) is concated to one string
+	 * @return the concated string
+	 */
 	function _getVisLayers():String {
 		var s = "";
 		for (var layer in layers) {
@@ -1474,6 +1499,15 @@ class gui.layers.OGCWMSLayer extends AbstractLayer{
 			}
 		}
 	}
+	
+	/**
+	* Gets the url of a service
+	* @return the url
+	*/
+	function getUrl(){
+		return this.url;
+	}
+
 	function _getString(item:Object, stringid:String):String {
 		var lang = _global.flamingo.getLanguage();
 		var s = item.language[stringid][lang];
@@ -1509,6 +1543,7 @@ class gui.layers.OGCWMSLayer extends AbstractLayer{
 		}
 		return s;		
 	}
+	
 	
 	/*************************************************************
 	 * Overwrites of map listener functions in AbstractLayer

@@ -1,14 +1,36 @@
+/*-----------------------------------------------------------------------------
+Copyright (C) 2011  Roy Braam / Meine Toonen B3partners BV
+
+This file is part of Flamingo MapComponents.
+
+Flamingo MapComponents is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+-----------------------------------------------------------------------------*/
 import core.AbstractComposite;
 import core.AbstractListenerRegister;
 import mx.data.encoders.Num;
 import tools.Logger;
 /**
- * ...
- * @author Roy Braam
+ * A abstractpositionable object. Extend this object if you want to create a component that 
+ * is placeable somewhere in the movie. It has some backward compatible things so it works with the older parts
+ * of flamingo
+ * @author Roy Braam 
+ * @author Meine Toonen
  */
 class core.AbstractPositionable extends AbstractListenerRegister
 {	
-	/*Defaults set by flamingo shit*/
+	/*Defaults set by flamingo*/
 	private var _name:String;
 	private var _widthSetting:String;
 	private var _heightSetting:String;
@@ -59,9 +81,7 @@ class core.AbstractPositionable extends AbstractListenerRegister
 	private var _bordercolor:Number;
 	private var _borderwidth:Number;
 	private var _borderalpha:Number;
-	
-	private var _width1;
-	private var _height1;
+	//__width and __height settings.
 	private var _width2;
 	private var _height2;
 	/**
@@ -86,8 +106,14 @@ class core.AbstractPositionable extends AbstractListenerRegister
 		reassignListeners();		
 	}
 	/**
-	 * Pass the hittest to the movieclip
-	 * @param	x xcoord
+	 * overwrite in implementation
+	 * @param	xml
+	 */
+	public function setConfig(xml:XML) { }
+	
+	/**
+	 * Pass the hittest to the movieclip so the function call is backwards compatible
+	 * @param	x xcoord 
 	 * @param	y ycoord
 	 * @param	shapeFlag
 	 * @return	true if hit
@@ -95,7 +121,9 @@ class core.AbstractPositionable extends AbstractListenerRegister
 	public function hitTest(x:Number, y:Number, shapeFlag:Boolean):Boolean {
 		return this.container.hitTest(x, y, shapeFlag);
 	}
-	
+	/**
+	 * create a border around this component. It uses the border settings set for this component.
+	 */
 	public function createBorder():Void {
 		if (this._mBorder == undefined)
 			this._mBorder = this.container.createEmptyMovieClip("mBorder", 2);		
@@ -111,7 +139,9 @@ class core.AbstractPositionable extends AbstractListenerRegister
 		mBorder._height = __height;
 		
 	}
-	
+	/**
+	 * Function to resize this component
+	 */
 	public function resize() {		
 		this.flamingo.position(this);
 		if (this.mBorder != undefined) {
@@ -133,7 +163,13 @@ class core.AbstractPositionable extends AbstractListenerRegister
 			this.container._y = y;
 		}
 	}
-	
+	/**
+	 * Use this function to reassing Listeners that are set on a dummy object in flamingo.
+	 * If the listento in a object references an object that is not set yet, a dummy object wil be made
+	 * to store the listeners. In the 'old' way the rest of the information is set on that object when the 
+	 * object is loaded. The new way creates a new object with a constructor, so the old object with listeners
+	 * is only a dummy. There for it must be reassigned.
+	 */ 
 	public function reassignListeners() {
 		/* A Component is added before, and had a listener to this object.
 		 * Therefor a temp listener object is made. Now add the listener to the real thing.*/
@@ -150,6 +186,16 @@ class core.AbstractPositionable extends AbstractListenerRegister
 		}
 	}
 	
+	/**
+	* Shows or hides the component.
+	* This will raise the onSetVisible event.
+	* @param vis:Boolean True or false.
+	*/
+	function setVisible(vis:Boolean):Void {
+		this._visible = vis;
+		this.visible = vis;
+		flamingo.raiseEvent(this, "onSetVisible", this, vis);
+	}
 	/*public function setCursor(cursor:String):Void {			
 		flamingo.showCursor(cursor);		
 	}*/
@@ -174,8 +220,11 @@ class core.AbstractPositionable extends AbstractListenerRegister
 	}
 	/**
 	 * Returns the parent object. Default it's the MovieClip container._parent. 
-	 * If .parent is set by old flamingo code (a mc name is set then and is stored in _parentName)
+	 * If the parentObject is set that is returned, it's the real parent.
+	 * If .parent is set by old flamingo code (a mc name is set and is stored in _parentName)
 	 * the _parentName is returned.
+	 * If not the parentObject nor the parentName is set, the getParent function is called. Implementations
+	 * can overwrite this function.
 	 */
 	public function get parent():Object {	
 		//if a old flamingo object is set as parent the _parentName is returned (the old way)
@@ -226,6 +275,9 @@ class core.AbstractPositionable extends AbstractListenerRegister
 			"type AbstractPositionable (new code) or String (Old code): "+value);
 		}
 	}
+	/**
+	 * Returnes Flamingo as set in the _global
+	 */
 	public function get flamingo():Object {
 		return _global.flamingo;
 	}
@@ -243,32 +295,7 @@ class core.AbstractPositionable extends AbstractListenerRegister
 	}
 	public function get _alpha():Number {
 		return this.container._alpha;
-	}
-	/*public function get _x():Number {
-		return this.container._x;
-	}
-	public function set _x(value:Number):Void {
-		this.container._x = value;
-	}
-	public function get _y():Number {
-		return this.container._y;
-	}
-	public function set _y(value:Number):Void {
-		this.container._y=value;
-	}*/
-	/*public function get _width():Number {
-		return this._width1;
-	}
-	public function set _width(value:Number):Void {
-		this._width1 = value;
-	}
-	public function get _height():Number {
-		return this._height1;
-	}
-	public function set _height(value:Number):Void {
-		this._height1=value;
-	}*/
-	
+	}	
 	public function get __width():Number {
 		return this._width2;
 	}
@@ -553,10 +580,17 @@ class core.AbstractPositionable extends AbstractListenerRegister
 	public function set parentObject(value:AbstractPositionable):Void {
 		_parentObject = value;
 	}
+	/*********************** Events ***********************/
 	/** 
 	 * Dispatched when the component is resized
 	 * @param comp:MovieClip a reference to the component.
 	 */
-	//public function onResize(comp:MovieClip):Void {
+	//public function onResize(comp:AbstractPositionable):Void {
 	//}
+	/**
+	 * Raised when this component is set visible
+	 * @param	comp the component
+	 * @param	visible true/false. Visible or not visible
+	 */
+	//public function onSetVisible(comp:AbstractPositionable,visible:Boolean){}
 }

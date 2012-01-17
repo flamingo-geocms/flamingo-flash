@@ -1,17 +1,41 @@
-/**
+/*-----------------------------------------------------------------------------
+Copyright (C) 2011 Meine Toonen
 
- * @author Meine Toonen
- */
+This file is part of Flamingo MapComponents.
+
+Flamingo MapComponents is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+-----------------------------------------------------------------------------*/
 import gui.button.AbstractButton;
 import tools.Logger;
 import display.spriteloader.SpriteSettings;
 import gui.SliderHor;
-
+/**
+ * Horizontal slider button in sliderhor
+ * @author Meine Toonen
+ */
 class gui.button.HorSliderButton extends AbstractButton
 {
 	var _sliderHor:SliderHor;	
 	var bSlide:Boolean = false;
-	
+	/**
+	 * Constructor for HorSliderButton. Creates a button and loads the images for the button stages.
+	 * @param	id the id of the button
+	 * @param	container the movieclip that holds this button
+	 * @param	the sliderHor where this button is in
+	 * @see 	gui.button.AbstractButton
+	 */	
 	public function HorSliderButton(id:String, container:MovieClip, sliderHor:SliderHor) 
 	{
 		super(id, container);
@@ -21,7 +45,13 @@ class gui.button.HorSliderButton extends AbstractButton
 		this.sliderHor = sliderHor;
 		this.parent = sliderHor;
 	}
-
+	
+	function slide() {
+		sliderHor.currentValue = sliderHor.minimum + ((this.container._x-sliderHor.sliderBar._x) / sliderHor.sliderBar._width) * (sliderHor.maximum - sliderHor.minimum);
+		sliderHor.updateListeners();
+	}
+	
+	/************* event handlers **************/
 	function onPress() {
 		sliderHor.cancelUpdate();
 		/*
@@ -46,13 +76,7 @@ class gui.button.HorSliderButton extends AbstractButton
 		delete this.container.onMouseMove;
 		this.container.stopDrag();
 		slide();
-	}
-	
-	function slide() {
-
-		sliderHor.currentValue = sliderHor.minimum + ((this.container._x-sliderHor.sliderBar._x) / sliderHor.sliderBar._width) * (sliderHor.maximum - sliderHor.minimum);
-		sliderHor.updateListeners();
-	}
+	}	
 	
 	function onReleaseOutside() {
 		bSlide = false;
@@ -64,10 +88,11 @@ class gui.button.HorSliderButton extends AbstractButton
 	function onRollOver () {
 		flamingo.showTooltip(flamingo.getString(sliderHor, "tooltip_slider"), this);
 	}
+	
 	function resize():Void {
 		//don't do anything on resize. The parent is positioning this object.
 	}
-	
+	/*********************** Getters and Setters ***********************/
 	public function get sliderHor():SliderHor 
 	{
 		return _sliderHor;
