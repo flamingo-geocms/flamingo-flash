@@ -22,8 +22,8 @@ import TextField.StyleSheet;
 import tools.Logger;
 /** @component Coordinates
 * Shows coordinates when the mouse is moved over the map.
-* @file Coordinates.fla (sourcefile)
-* @file Coordinates.swf (compiled component, needed for publication on internet)
+* @file flamingo/classes/gui/Coordinates.as (sourcefile)
+* @file flamingo/classes/core/AbstractPositionable.as
 * @file Coordinates.xml (configurationfile, needed for publication on internet)
 * @configstring xy (default = "[x] [y]") textstring to define coordinates. The values "[x]" and "[y]" are replaced by the actually coordinates.
 * @configstyle .xy fontstyle of coordinates(xy) string
@@ -38,7 +38,10 @@ import tools.Logger;
 * @attr decimals Number of decimals
 */
 /**
- * A component that shows the Coordinates
+ * Shows coordinates when the mouse is moved over the map.
+ * @author ...
+ * @author Meine Toonen
+ * @author Roy Braam
  */
 class gui.Coordinates  extends AbstractPositionable{	
 	var decimals:Number = 0;

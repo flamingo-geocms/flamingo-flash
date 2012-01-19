@@ -17,12 +17,14 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 -----------------------------------------------------------------------------*/
+import core.AbstractPositionable;
+import tools.Logger;
 /** @component Maptip
 * This component shows the result of a maptip request as a tooltip. 
 * The content of the maptips have to be configured at the layers. See documentation of LayerArcIMS, LayerOGWMS, etc.
 * Beware: a map will only display maptips when its 'maptipdelay' attribute is set.
-* @file Maptip.fla (sourcefile)
-* @file Maptip.swf (compiled component, needed for publication on internet)
+* @file flamingo/classes/gui/Maptip.as (sourcefile)
+* @file flamingo/classes/core/AbstractPositionable.as
 * @file Maptip.xml (configurationfile, needed for publication on internet)
 */
 /** @tag <fmc:Maptip>  
@@ -32,10 +34,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 * @example 
 * <fmc:Maptip listento="map"/> 
 */
-import core.AbstractPositionable;
-import tools.Logger;
 /**
  * This component shows the result of a maptip request as a tooltip. 
+ * @author ...
+ * @author Meine Toonen
+ * @author Roy Braam
  */
 class gui.MapTip extends AbstractPositionable {
 		

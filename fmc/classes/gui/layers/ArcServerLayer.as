@@ -17,9 +17,6 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 -----------------------------------------------------------------------------*/
-/**
- * @author ....
- */
 import coremodel.service.arcgis.ArcServerConnector;
 import core.AbstractPositionable;
 import tools.Logger;
@@ -29,8 +26,10 @@ import gui.layers.AbstractLayer;
 * ESRI ArcGIS server layer.
 * @version 3.0
 * @file ArcServerConnector.as (sourcefile)
-* @file LayerArcServer.fla (sourcefile)
-* @file LayerArcServer.swf (compiled layer, needed for publication on internet)
+* @file flamingo/fmc/classes/gui/layers/AArcServerLayer.as (sourcefile)
+* @file flamingo/fmc/classes/gui/layers/AbstractLayer.as (sourcefile)
+* @file flamingo/fmc/classes/core/AbstractConfigurable.as
+* @file flamingo/fmc/classes/core/AbstractPositionable.as
 * @file LayerArcServer.xml (configurationfile for layer, needed for publication on internet)
 */
 /** @tag <fmc:LayerArcServer>  
@@ -49,6 +48,7 @@ import gui.layers.AbstractLayer;
 * @attr mapservice  mapservice name
 * @attr identifyall (defaultvalue = "false") true or false;  true= all layerid's will be identified, false = identify stops after identify success
 * @attr legend  (defaultvalue = "false") true or false;   false = no legend image wil be generated with an update
+* @attr legendcolor the color of the legend
 * @attr hiddenids Comma seperated list of layerid's (the order of the layers same as in mxd) Id's in this list will be hidden.
 * @attr visibleids Comma seperated list of layerid's (the order of the layers same as in mxd) Id's in this list will be visible.
 * @attr identifyids Comma seperated list of layerid's (the order of the layers same as in mxd) Id's in this list will be identified in the order of the list. Use keyword "#ALL#" to identify all layers.
@@ -60,6 +60,19 @@ import gui.layers.AbstractLayer;
 * @attr alpha (defaultvalue = "100") Transparency of the layer
 * @attr minscale  If mapscale is less then or equal minscale, the layer will not be shown.
 * @attr maxscale  If mapscale is greater then maxscale, the layer will not be shown.. 
+* @attr transcolor (optional; default 0xFBFBFB) the transcolor in the request
+* @attr backgroundcolor (optional; default 0xFBFBFB) the background color of the image
+* @attr outputtype (optional; default png24) the output type of the image
+* @attr timeout (optional; default 10) the max timeout for a service
+* @attr retryonerror (optional; default 0) Number of retries
+* @attr identifydistance (optional; default 10) default identifydistance for the layers. Can be set on the layers also
+* @attr featurelimit (optional; default ) the feature limit of a getfeature request, can be set on a layer also
+* @attr maptipall (optional; default false) set to true to maptip all layers
+* @attr shadow (optional;) if set, container has a shadow drop
+* @attr servlet Servlet name of the service
+* @attr showlegendids The ids of the legends that need to be shown
+* @attr hidelegendids The ids of the legends that must be hidden
+* @attr forceidentifyids The ids of the layers that must be forced to do a identify
 */
 /** @tag <layer>  
 * This defines a sublayer of an ArcGIS Server mapservice
@@ -72,6 +85,12 @@ import gui.layers.AbstractLayer;
 * @attr query  The 'where' clause in the getImage and getFeatures request.
 * @attr maptip Configuration string for a maptip. Fieldnames between square brackets will be replaced  with their actual values. For multi-language support use a standard string tag with id='maptip'.
 */
+/**
+ * ESRI ArcGis server layer
+ * @author ...
+ * @author Meine Toonen
+ * @author Roy Braam
+ */
 class gui.layers.ArcServerLayer extends AbstractLayer{
 	
 	//properties which can be set in ini

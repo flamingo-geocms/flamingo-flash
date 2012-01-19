@@ -25,14 +25,11 @@ import TextField.StyleSheet;
 import tools.Logger;
 /** @component SliderHor
 * A horizontal slider.
-* @file SliderHor.fla (sourcefile)
-* @file SliderHor.swf (compiled component, needed for publication on internet)
+* @file flamingo/classes/gui/SliderHor.as (sourcefile)
+* @file flamingo/classes/gui/button/IncreaseButton.as 
+* @file flamingo/classes/gui/button/DecreaseButton.as 
+* @file flamingo/classes/gui/button/HorSliderButton.as 
 * @file SliderHor.xml (configurationfile, needed for publication on internet)
-* @configstring minimum Minimum value.
-* @configstring maximum Maximum value.
-* @configstring initial Initial value.
-* @configstring slidestep Value to increase or decrease current setting with every click.
-* @configstring setter name of method on listeners to apply new value.
 * @configstring tooltip_increase Tooltip of plus button.
 * @configstring tooltip_decrease Tooltip of min button.
 * @configstring tooltip_slider Tooltip of slider button.
@@ -47,9 +44,17 @@ import tools.Logger;
 * </fmc:SliderHor>
 * @hierarchy childnode of <flamingo> or a container component. e.g. <fmc:Window>
 * @attr skin (defaultvalue="") Available skins: "", "f2" 
+* @attr minimum Minimum value.
+* @attr maximum Maximum value.
+* @attr initial Initial value.
+* @attr slidestep Value to increase or decrease current setting with every click.
+* @attr setter name of method on listeners to apply new value.
 */
 /**
  * A horizontal slider
+ * @author ...
+ * @author Meine Toonen
+ * @author Roy Braam
  */
 class gui.SliderHor extends AbstractPositionable{
 	

@@ -17,10 +17,13 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 -----------------------------------------------------------------------------*/
+import core.AbstractPositionable;
+import display.spriteloader.SpriteSettings;
+import tools.Logger;
 /** @component Scalebar
 * Scalebar.
-* @file Scalebar.fla (sourcefile)
-* @file Scalebar.swf (compiled component, needed for publication on internet)
+* @file flamingo/classes/gui/Scalebar.as (sourcefile)
+* @file flamingo/classes/core/AbstractPositionable.as
 * @file Scalebar.xml (configurationfile, needed for publication on internet)
 * @configstyle .label Fontstyle of the scalenumbers.
 * @configstyle .units Fontstyle of the unitstring.
@@ -39,16 +42,14 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 * @attr unitposition  (defaultvalue = "LASTLABEL") TOP, CENTER, BOTTOM or LASTLABEL
 * @attr units  (defaultvalue = "m") Any string representing units.
 * @attr magicnumber  (defaultvalue = "1") a number by which the mapscale is divided in order to present the correct scale-units. 
-* @attr skin  (defaultvalue = "") Skin. Available: "", "f1", "line", "style1", "style2"
 * @attr maxscale  (defaultvalue = "") When the map reaches this scale the bar will be shown.
 * @attr minscale  (defaultvalue = "") When the map reaches this scale the bar will be hidden.
 */
-import core.AbstractPositionable;
-import display.spriteloader.SpriteSettings;
-
-import tools.Logger;
 /**
- * A scale bar
+ * Scalebar
+ * @author ...
+ * @author Meine Toonen
+ * @author Roy Braam
  */
 class gui.Scalebar extends AbstractPositionable {
 	

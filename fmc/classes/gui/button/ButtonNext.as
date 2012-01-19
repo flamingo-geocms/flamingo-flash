@@ -22,8 +22,9 @@ import tools.Logger;
 import display.spriteloader.SpriteSettings;
 /** @component ButtonNext
 * A button to zoom the map to the next extent.
-* @file ButtonNext.fla (sourcefile)
-* @file ButtonNext.swf (compiled component, needed for publication on internet)
+* @file flamingo/fmc/classes/gui/button/ButtonNext.as (sourcefile)
+* @file flamingo/fmc/classes/gui/button/AbstractButton.as (extends)
+* @file flamingo/classes/core/AbstractPositionable.as
 * @file ButtonNext.xml (configurationfile, needed for publication on internet)
 * @configstring tooltip tooltiptext of the button
 */
@@ -32,11 +33,12 @@ import display.spriteloader.SpriteSettings;
 * Beware! To make this button work properly, it is necessary that the "nrprevextents" of the map is set!
 * @hierarchy childnode of <flamingo> or a container component. e.g. <fmc:Window>
 * @example <fmc:ButtonNext  right="50% 170" top="71" listento="map"/>
-* @attr skin (defaultvalue = "") Skin of the button.  Available skins: default ("") and "f2".
 */
 /**
- * Button to zoom to next extent
+ * A button to zoom the map to the next extent.
+ * @author ...
  * @author Meine Toonen
+ * @author Roy Braam
  */
 class gui.button.ButtonNext extends AbstractButton{
 	

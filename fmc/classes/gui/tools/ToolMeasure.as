@@ -28,8 +28,10 @@ import display.spriteloader.SpriteSettings;
 
 /** @component ToolMeasure
 * Tool for measuring a single distance on a map.
-* @file ToolMeasure.fla (sourcefile)
-* @file ToolMeasure.swf (compiled component, needed for publication on internet)
+* @file flamingo/classes/gui/tools/ToolMeasure.as (sourcefile)
+* @file flamingo/classes/gui/tools/AbstractTool.as
+* @file flamingo/classes/gui/button/AbstractButton.as
+* @file flamingo/classes/core/AbstractPositionable.as
 * @file ToolMeasure.xml (configurationfile, needed for publication on internet)
 * @configstring tooltip Tooltip.
 * @configcursor cursor Cursor shown when the tool is hoovering over a map.
@@ -55,8 +57,13 @@ import display.spriteloader.SpriteSettings;
 * @attr magicnumber (defaultvalue "1") A number by which the distance is divided, in order to support multiple measure-units.
 * @attr zoomscroll (defaultvalue "true")  Enables (zoomscroll="true") or disables (zoomscroll="false") zooming with the scrollwheel.
 * @attr enabled (defaultvalue="true") True or false.
-* @attr skin (defaultvalue="") Available skins: "", "f2"
 */
+/**
+ * Tool for measuring a single distance on a map.
+ * @author ...
+ * @author Meine Toonen
+ * @author Roy Braam
+ */
 class gui.tools.ToolMeasure extends AbstractTool{
 	//-------------------------------------------
 	var unit:String = "";

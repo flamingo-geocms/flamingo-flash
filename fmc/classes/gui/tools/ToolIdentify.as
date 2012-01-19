@@ -17,18 +17,17 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 -----------------------------------------------------------------------------*/
-/**
- * Tool identify to do a identify on the map
- * @author ...
- */
+
 import display.spriteloader.SpriteSettings;
 import gui.tools.AbstractTool;
 import gui.tools.ToolGroup;
 import tools.Logger;
 /** @component ToolIdentify
 * Tool for identifying maps.
-* @file ToolIdentify.fla (sourcefile)
-* @file ToolIdentify.swf (compiled component, needed for publication on internet)
+* @file flamingo/classes/gui/tools/ToolIdentify.as (sourcefile)
+* @file flamingo/classes/gui/tools/AbstractTool.as
+* @file flamingo/classes/gui/button/AbstractButton.as
+* @file flamingo/classes/core/AbstractPositionable.as
 * @file ToolIdentify.xml (configurationfile, needed for publication on internet)
 * @configstring tooltip Tooltip.
 * @configcursor cursor Cursor shown when the tool is hoovering over a map.
@@ -42,8 +41,13 @@ import tools.Logger;
 * @attr zoomscroll (defaultvalue "true")  True or false. Enables (zoomscroll="true") or disables (zoomscroll="false") zooming with the scrollwheel.
 * @attr enabled (defaultvalue="true") True or false.
 * @attr identifyall (defaultvalue="true") True: identify all maps. False: identify only the map that's being clicked on.
-* @attr skin (defaultvalue="") Available skins: "", "f2" 
 */
+/**
+ * Tool identify to do a identify on the map
+ * @author ...
+ * @author Meine Toonen
+ * @author Roy Braam
+ */
 class gui.tools.ToolIdentify extends AbstractTool{
 	var defaultXML:String;
 	var skin = "_identify";

@@ -22,8 +22,9 @@ import display.spriteloader.SpriteSettings;
 import tools.Logger;
 /** @component ButtonPrev
 * A button to zoom the map to the previous extent.
-* @file ButtonPrev.fla (sourcefile)
-* @file ButtonPrev.swf (compiled component, needed for publication on internet)
+* @file flamingo/fmc/classes/gui/button/ButtonPrev.as (sourcefile)
+* @file flamingo/fmc/classes/gui/button/AbstractButton.as (extends)
+* @file flamingo/classes/core/AbstractPositionable.as
 * @file ButtonPrev.xml (configurationfile, needed for publication on internet)
 * @configstring tooltip tooltiptext of the button
 */
@@ -32,11 +33,12 @@ import tools.Logger;
 * Beware! To make this button work properly, it is necessary that the "nrprevextents" of the map is set!
 * @hierarchy childnode of <flamingo> or a container component. e.g. <fmc:Window>
 * @example <fmc:ButtonPrev  right="50% 140" top="71" listento="map"/>
-* @attr skin (defaultvalue = "") Skin of the button. Available skins: default ("") and "f2".
 */
 /**
- * Button to zoom to previous extent
+ * A button to zoom the map to the previous extent.
+ * @author ...
  * @author Meine Toonen
+ * @author Roy Braam
  */
 class gui.button.ButtonPrev extends AbstractButton{
 	var skin:String = "";

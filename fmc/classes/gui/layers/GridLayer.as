@@ -17,12 +17,44 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 -----------------------------------------------------------------------------*/
-/**
- * @author ...
- */
+/** @component <fmc:LayerGrid>
+* A grid layer. With this component a grid can be shown on the map
+* @file flamingo/fmc/classes/gui/layers/GridLayer.as (sourcefile)
+* @file flamingo/fmc/classes/gui/layers/AbstractLayer.as (sourcefile)
+* @file flamingo/fmc/classes/core/AbstractConfigurable.as
+* @file flamingo/fmc/classes/core/AbstractPositionable.as
+* @file LayerImage.xml (configurationfile for layer, needed for publication on internet)
+*/
+/** @tag <fmc:LayerGrid>  
+* This tag defines a grid layer.
+* @hierarchy childnode of <fmc:Map> 
+* @example 
+* <fmc:Map id="map" conform="true" mapunits="DECIMALDEGREES" left="10" top="10" right="right -10" bottom="50%" fullextent="-180,-90,180,90"  extent="-180,-90,180,90"  >
+* <fmc:LayerGrid  gridwidth="10" gridheight="10" minscale="11000"/>
+* <fmc:LayerGrid  gridwidth="5" gridheight="5" maxscale="11000" minscale="5000"/>
+* <fmc:LayerGrid  gridwidth="2" gridheight="2" maxscale="5000" minscale="1000"/>
+* <fmc:LayerGrid  gridwidth="1" gridheight="1" maxscale="1000" minscale = "500"/>
+* <fmc:LayerGrid  gridwidth="0.5" gridheight="0.5" maxscale="500" minscale="100"/>
+* <fmc:LayerGrid  gridwidth="0.1" gridheight="0.1" maxscale="100"/>
+* </fmc:Map>
+* @attr gridwidth  Width of the grid in mapunits.
+* @attr gridheight Height of the grid in mapunits.
+* @attr maxlines (defaultvalue "10000") Maximum number of gridlines. If number of gridlines exceeds this value, no grid will be visible.
+* @attr gridlinecolor (defaultvalue "#777777") Color of the gridline.
+* @attr gridlinewidth (defaultvalue "0") Width of gridline.
+* @attr gridlinealpha (defaultvalue "20") Alpha blending of the gridline.
+* @attr minscale  If mapscale is less then or equal minscale, the layer will not be shown.
+* @attr maxscale  If mapscale is greater then maxscale, the layer will not be shown.
+*/
 import gui.layers.AbstractLayer;
 import gui.Map;
 import tools.Logger;
+/**
+ * A grid layer. With this component a grid can be shown on the map
+ * @author ...
+ * @author Meine Toonen
+ * @author Roy Braam
+ */
 class gui.layers.GridLayer extends AbstractLayer{
 	var gridheight:Number;
 	var gridwidth:Number;

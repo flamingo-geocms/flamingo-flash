@@ -23,8 +23,9 @@ import tools.Logger;
 import display.spriteloader.SpriteSettings;
 /** @component BorderNavigation
 * Navigation buttons at the border of a map.
-* @file BorderNavigation.fla (sourcefile)
-* @file BorderNavigation.swf (compiled component, needed for publication on internet)
+* @file flamingo/classes/gui/BorderNavigation.as (sourcefile)
+* @file flamingo/classes/core/AbstractPositionable.as
+* @file flamingo/classes/gui/Button/MoveExtentButton.as 
 * @file BorderNavigation.xml (configurationfile, needed for publication on internet)
 * @configstring tooltip_north tooltiptext of north button
 * @configstring tooltip_south tooltiptext of south button
@@ -38,14 +39,16 @@ import display.spriteloader.SpriteSettings;
 /** @tag <fmc:BorderNavigation>  
 * This tag defines navigation buttons at the border of a map. It listens to 1 or more map components
 * @hierarchy childnode of <flamingo> or a container component. e.g. <fmc:Window>
-* @example <fmc:BorderNavigation left="10" top="10" right="right -10" bottom="50%" skin="" buttons="N,S,W,E,NE,SE,NW,SW" listento="map,map1" offset="6"/>
+* @example <fmc:BorderNavigation left="10" top="10" right="right -10" bottom="50%" buttons="N,S,W,E,NE,SE,NW,SW" listento="map,map1" offset="6"/>
 * @attr buttons (defaultvalue = "W,S,N,E,NE,NW,SE,SW") Comma seperated list of buttons. W=West, S=South etc. Reconized values: W,S,N,E,NE,NW,SE,SW
 * @attr updatedelay (defaultvalue = "500") Time in milliseconds (1000 = 1 sec.) in which the map will be updated.
 * @attr offset (defaultvalue = "0") Offset in pixels applied to all buttons. For main positioning use the default positioning attributes (left, top etc.).
-* @attr skin (defaultvalue = "") Skin of the buttons. Available skins: default ("") "f1" and "f2".  When using the "f1" or "f2"  skin only the N,W,S,E buttons can be used.
 */
 /**
- * A border navigation, arrows to move up,down,left,right etc.
+ * Navigation buttons at the border of a map. Arrows to move up,down,left,right etc.
+ * @author ...
+ * @author Meine Toonen
+ * @author Roy Braam
  */
 class gui.BorderNavigation extends AbstractPositionable
 {

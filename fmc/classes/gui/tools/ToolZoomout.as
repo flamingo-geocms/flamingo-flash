@@ -17,10 +17,6 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 -----------------------------------------------------------------------------*/
-/**
- * Tool zoomout to zoom out with a click or to drag a box
- * @author ...
- **/
 import gui.tools.AbstractTool;
 import display.spriteloader.SpriteSettings;
 import gui.tools.ToolGroup;
@@ -28,8 +24,10 @@ import tools.Logger;
 
 /** @component ToolZoomout
 * Tool for zooming a map by dragging a rectangle or just clicking the map
-* @file ToolZoomout.fla (sourcefile)
-* @file ToolZoomout.swf (compiled component, needed for publication on internet)
+* @file flamingo/classes/gui/tools/ToolZoomout.as (sourcefile)
+* @file flamingo/classes/gui/tools/AbstractTool.as
+* @file flamingo/classes/gui/button/AbstractButton.as
+* @file flamingo/classes/core/AbstractPositionable.as
 * @file ToolZoomout.xml (configurationfile, needed for publication on internet)
 * @configstring tooltip Tooltip.
 * @configcursor cursor Cursor shown when the tool is hoovering over a map.
@@ -44,8 +42,13 @@ import tools.Logger;
 * @attr zoomfactor  (defaultvalue "50") A percentage the map will zoom after the user clicks the map.
 * @attr zoomscroll (defaultvalue "true")  Enables (zoomscroll="true") or disables (zoomscroll="false") zooming with the scrollwheel.
 * @attr enabled (defaultvalue="true") True or false.
-* @attr skin (defaultvalue="") Available skins: "", "f2"
 */
+/**
+ * Tool for zooming a map by dragging a rectangle or just clicking the map
+ * @author ...
+ * @author Meine Toonen
+ * @author Roy Braam
+ */
 class gui.tools.ToolZoomout extends AbstractTool
 {	
 	//-----------------------------------------	

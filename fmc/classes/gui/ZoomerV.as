@@ -31,9 +31,11 @@ import core.AbstractPositionable;
 
 /** @component ZoomerV
  * A vertical zoombar.
- * @file ZoomerV.fla (sourcefile)
- * @file ZoomerV.swf (compiled component, needed for publication on internet)
- * @file ZoomerV.xml (configurationfile, needed for publication on internet)
+ * @file flamingo/classes/gui/ZoomerV.as 
+ * @file flamingo/classes/gui/button/SliderButton.as
+ * @file flamingo/classes/gui/button/ZoomInButton.as
+ * @file flamingo/classes/gui/button/ZoomOutButton.as
+ * @file flamingo/classes/core/AbstractPositionable.as
  * @configstring tooltip_zoomin Tooltip of zoomin button.
  * @configstring tooltip_zoomout Tooltip of zoomout button.
  * @configstring tooltip_slider Tooltip of slider button.
@@ -51,10 +53,12 @@ import core.AbstractPositionable;
  * </fmc:ZoomerV>
  * @hierarchy childnode of <flamingo> or a container component. e.g. <fmc:Window>
  * @attr updatedelay (defaultvalue="500") Amount of time in milliseconds(1000 = 1 second) between releasing the zoomin/out and slider buttons and the update of a map.
- * @attr skin (defaultvalue="") Available skins: "", "f2" 
  */
 /**
- * A vertical zoombar.
+ * A vertical zoombar
+ * @author ...
+ * @author Meine Toonen
+ * @author Roy Braam
  */
 class gui.ZoomerV  extends AbstractPositionable{
 

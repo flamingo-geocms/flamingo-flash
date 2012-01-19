@@ -17,9 +17,6 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 -----------------------------------------------------------------------------*/
-/**
- * @author ...
- */
 import coremodel.service.wms.OGWMSConnector;
 import core.AbstractPositionable;
 import tools.Logger;
@@ -29,8 +26,10 @@ import gui.layers.AbstractLayer;
 /** @component LayerOGWMS
 * Open Gis WMS layer. (Tested with Demis, Geoserver, Degree, Esri and Mapserver)
 * @file OGWMSConnector.as (sourcefile)
-* @file LayerOGWMS.fla (sourcefile)
-* @file LayerOGWMS.swf (compiled layer, needed for publication on internet)
+* @file flamingo/fmc/classes/gui/layers/OGWMSLayer.as (sourcefile)
+* @file flamingo/fmc/classes/gui/layers/AbstractLayer.as (sourcefile)
+* @file flamingo/fmc/classes/core/AbstractConfigurable.as
+* @file flamingo/fmc/classes/core/AbstractPositionable.as
 * @file LayerOGWMS.xml (configurationfile for layer, needed for publication on internet)
 * @change 2010-01-28 Added attribute InitService
 */
@@ -82,6 +81,12 @@ import gui.layers.AbstractLayer;
 * @attr aka  The layerid of a layer in the getfeatureinfo response.
 * @attr maptip Configuration string for a maptip. Fieldnames between square brackets will be replaced  with their actual values. For multi-language support use a standard string tag with id='maptip'.
 */
+/**
+ * Open Gis WMS layer. (Tested with Demis, Geoserver, Degree, Esri and Mapserver)
+ * @author ...
+ * @author Meine Toonen
+ * @author Roy Braam
+ */
 class gui.layers.OGCWMSLayer extends AbstractLayer{
 	var version:String = "2.0";
 	//---------------------------------

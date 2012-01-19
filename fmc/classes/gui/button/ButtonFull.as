@@ -22,8 +22,9 @@ import display.spriteloader.SpriteSettings;
 import tools.Logger;
 /** @component ButtonFull
 * A button to zoom the map to the intial or full extent.
-* @file ButtonFull.fla (sourcefile)
-* @file ButtonFull.swf (compiled component, needed for publication on internet)
+* @file flamingo/fmc/classes/gui/button/ButtonFull.as (sourcefile)
+* @file flamingo/fmc/classes/gui/button/AbstractButton.as (extends)
+* @file flamingo/classes/core/AbstractPositionable.as
 * @file ButtonFull.xml (configurationfile, needed for publication on internet)
 * @change	2009-03-04 NEW attribute extent
 * @configstring tooltip tooltiptext of the button
@@ -32,12 +33,13 @@ import tools.Logger;
 * This tag defines a button for zooming the map to the fullextent. It listens to 1 or more maps
 * @hierarchy childnode of <flamingo> or a container component. e.g. <fmc:Window>
 * @example <fmc:ButtonFull   right="50% 200" top="71" listento="map"/>
-* @attr skin (defaultvalue = "") Skin of the button. No skins available at this moment.
 * @attr extent (no defaultvalue) If value is 'initial' the ButtonFull zooms to the (for the Map configured) 
 * (initial) extent instead of the fullextent.
 */
 /**
- * Button to move to full extent
+ * A button to zoom the map to the intial or full extent.
+ * @author ...
+ * @author Meine Toonen
  * @author Roy Braam
  */
 class gui.button.ButtonFull extends AbstractButton{	

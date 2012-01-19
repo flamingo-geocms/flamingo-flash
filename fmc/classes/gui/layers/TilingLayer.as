@@ -1,16 +1,29 @@
 ﻿/*-----------------------------------------------------------------------------
-* This file is part of Flamingo MapComponents.
-* Author: Roy Braam
-* B3partners bv
-* 
-* Support for GetFeatureInfo, Maptips, bug-fixing: Herman Assink, IDgis bv
- -----------------------------------------------------------------------------*/
+Copyright (C)
+
+This file is part of Flamingo MapComponents.
+
+Flamingo MapComponents is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+-----------------------------------------------------------------------------*/
 /** @component TilingLayer
-* A component shows a tiling service
+* A component that shows a tiling service
 * @file flamingo/fmc/classes/gui/layers/TilingLayer.as (sourcefile)
 * @file flamingo/fmc/classes/gui/layers/AbstractLayer.as (sourcefile)
+* @file flamingo/fmc/classes/core/AbstractConfigurable.as
+* @file flamingo/fmc/classes/core/AbstractPositionable.as
 */
-
 /** @tag <fmc:TilingLayer>
 * @class gui.layers.TilingLayer extends AbstractLayer
 * @hierarchy childnode of Map component.
@@ -83,7 +96,12 @@ import tools.Utils;
 import gui.Map;
 
 import coremodel.service.tiling.connector.WMScConnector;
-
+/**
+ * A component that shows a tiling service
+ * @author Roy Braam
+ * @author Herman Assink
+ * @author Meine Toonen 
+ */
 class gui.layers.TilingLayer extends AbstractLayer{ 
     /*Statics*/
     private static var RESOLUTIONS_ATTRNAME:String="resolutions";

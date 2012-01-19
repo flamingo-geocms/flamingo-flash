@@ -17,12 +17,17 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 -----------------------------------------------------------------------------*/
-/**
- * @author ... 
- */
 import gui.layers.AbstractLayer;
 import gui.Map;
 import tools.Logger;
+/** @component <fmc:LayerImage>
+* A image layer. With this component a image can be shown in the map
+* @file flamingo/fmc/classes/gui/layers/ImageLayer.as (sourcefile)
+* @file flamingo/fmc/classes/gui/layers/AbstractLayer.as (sourcefile)
+* @file flamingo/fmc/classes/core/AbstractConfigurable.as
+* @file flamingo/fmc/classes/core/AbstractPositionable.as
+* @file LayerImage.xml (configurationfile for layer, needed for publication on internet)
+*/
  /** @tag <fmc:LayerImage>  
 * This tag defines a image layer.
 * @hierarchy childnode of <fmc:Map> 
@@ -32,6 +37,12 @@ import tools.Logger;
 * @attr maxscale  If mapscale is greater then maxscale, the layer will not be shown.
 * @attr alpha (defaultvalue = "100") Transparency of the layer.
 */
+ /**
+ * A image layer. With this component a image can be shown in the map
+ * @author ...
+ * @author Meine Toonen
+ * @author Roy Braam
+ */
 class gui.layers.ImageLayer extends AbstractLayer{
 	
 	var imageurl:String;

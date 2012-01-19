@@ -17,10 +17,7 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 -----------------------------------------------------------------------------*/
-/**
- * Tool to zoom in with a click or drag
- * @author ...
- */
+
 import gui.tools.AbstractTool;
 import gui.tools.ToolGroup;
 import display.spriteloader.SpriteSettings;
@@ -28,8 +25,10 @@ import tools.Logger;
 
 /** @component ToolZoomin
 * Tool for zooming the a map by dragging a rectangle or just clicking the map
-* @file ToolZoomin.fla (sourcefile)
-* @file ToolZoomin.swf (compiled component, needed for publication on internet)
+* @file flamingo/classes/gui/tools/ToolZoomin.as (sourcefile)
+* @file flamingo/classes/gui/tools/AbstractTool.as
+* @file flamingo/classes/gui/button/AbstractButton.as
+* @file flamingo/classes/core/AbstractPositionable.as
 * @file ToolZoomin.xml (configurationfile, needed for publication on internet)
 * @configstring tooltip Tooltip.
 * @configcursor cursor Cursor shown when the tool is hoovering over a map.
@@ -44,8 +43,13 @@ import tools.Logger;
 * @attr zoomfactor  (defaultvalue "200") A percentage the map will zoom after the user clicked the map.
 * @attr zoomscroll (defaultvalue "true")  Enables (zoomscroll="true") or disables (zoomscroll="false") zooming with the scrollwheel.
 * @attr enabled (defaultvalue="true") True or false.
-* @attr skin (defaultvalue="") Available skins: "", "f2"
 */
+/**
+ * Tool for zooming the a map by dragging a rectangle or just clicking the map
+ * @author ...
+ * @author Meine Toonen
+ * @author Roy Braam
+ */
 class gui.tools.ToolZoomin extends AbstractTool{
 	var zoomfactor:Number = 200;
 	var zoomdelay:Number = 0;

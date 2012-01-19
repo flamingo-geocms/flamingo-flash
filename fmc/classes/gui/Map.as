@@ -27,15 +27,14 @@ import tools.XMLTools;
 /** @component Map
 * The Map is a container for layers.
 * Supported arguments: extent (comma seperated list of minx,miny,maxx,maxy)  eg. flamingo.swf?config=mymap.xml&amp;map.extent=100,123,124,156
-* @file Map.as  (sourcefile)
-* @file Map.fla (sourcefile)
-* @file Map.swf (compiled Map, needed for publication on internet)
+* @file flamingo/classes/gui/Map.as  (sourcefile)
+* @file flamingo/classes/core/AbstractPositinable.as 
 * @file Map.xml (configurationfile for Map, needed for publication on internet)
 */
 /** @tag <fmc:Map>  
 * This tag defines a map. A Map can contain different layer tags
 * @hierarchy childnode of <flamingo> or <fmc:Window>
-* @example
+* @example <fmc:Map id="map" left="0" top="0%" height="100%" width="100%" bottom="bottom" visible="true" extent="150000,431520,298480,580000"></fmc:Map>
 * @attr extent  Comma seperated list of minx,miny,maxx,maxy,{extentname} defining the current view of the map. 
 * @attr fullextent  Comma seperated list of minx,miny,maxx,maxy,{extentname}. When defined, a map cannot zoom further out than this extent.
 * @attr extenthistory (defaultvalue "0") Number of extents that are remembered.
@@ -56,7 +55,15 @@ import tools.XMLTools;
 * @attr maptipresolution (defaultvalue "3") Number of pixels the mouse have to move to raise a new maptip event.
 * @attr clear  (defaultvalue "true") True or false. True: all existing layers will be removed from the map.
 * @attr autorefreshdelay  (optional; no defaultvalue) Time in miliseconds (1000 = 1 second) at which rate the map automatically refreshes. If not given, the map will not refresh automatically.
+* @attr configobject (optional; no default) A id of a nother map. If set, the configuration of that map wil be applied on this Map
+* @attr saveextent (optional; default false) if set to true flamingo wil store the extent in a cookie
 */
+/**
+ * The Map is a container for layers.
+ * @author ...
+ * @author Meine Toonen
+ * @author Roy Braam
+ */
 class gui.Map extends AbstractPositionable implements PersistableComponent{
 	public var version:String = "2.0.1";
 	var defaultXML:String = "";

@@ -21,6 +21,7 @@ import coremodel.service.tiling.Tile;
 import geometrymodel.Envelope;
 /**
  * Interface for implementations of the TileFactory
+ * @author Roy Braam
  */
 interface coremodel.service.tiling.factory.TileFactoryInterface{    
         

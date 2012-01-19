@@ -17,9 +17,6 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 -----------------------------------------------------------------------------*/
-/**
- * @author ...
- */
 import coremodel.service.arcims.ArcIMSConnector;
 import core.AbstractPositionable;
 import tools.Logger;
@@ -29,8 +26,10 @@ import gui.layers.AbstractLayer;
 * ESRI arcims layer.
 * @version 2.0.4
 * @file ArcIMSConnector.as (sourcefile)
-* @file LayerArcIMS.fla (sourcefile)
-* @file LayerArcIMS.swf (compiled layer, needed for publication on internet)
+* @file flamingo/fmc/classes/gui/layers/ArcIMSLayer.as (sourcefile)
+* @file flamingo/fmc/classes/gui/layers/AbstractLayer.as (sourcefile
+* @file flamingo/fmc/classes/core/AbstractConfigurable.as)
+* @file flamingo/fmc/classes/core/AbstractPositionable.as
 * @file LayerArcIMS.xml (configurationfile for layer, needed for publication on internet)
 * @change 2007-10-25 version 2.0.1
 * @change 2007-10-25 FIX - Maptips of layers from local shapefiles didn't show up correctly.
@@ -92,6 +91,7 @@ import gui.layers.AbstractLayer;
 * @attr record if true the component let the clicked items colored (click 2 times to uncolor)
 * @attr autorefreshdelay  (optional; no defaultvalue) Time in miliseconds (1000 = 1 second) at which rate the layer automatically refreshes. If not given, the layer will not refresh automatically, unless at map level an automatic refresh delay is given.
 * @attr initService (default="true") if set to false the service won't do a getCap request to init the service. If set to false all parameters must be filled, and no #ALL# can be used.
+* @attr shadow (optional;) if set, container has a shadow drop
 */
 /** @tag <layer>  
 * This defines a sublayer of an ArcIMS mapservice
@@ -176,6 +176,12 @@ import gui.layers.AbstractLayer;
 * @attr other_<see above> = the attributes for not selected objects
 *
 */
+/**
+ * ESRI arcims layer.
+ * @author ...
+ * @author Meine Toonen
+ * @author Roy Braam
+ */
 class gui.layers.ArcIMSLayer extends AbstractLayer{
 	
 	//properties which can be set in ini

@@ -24,8 +24,8 @@ import tools.Logger;
 
 /** @component Toolgroup
 * Container component for tools.
-* @file ToolGroup.fla (sourcefile)
-* @file ToolGroup.swf (compiled component, needed for publication on internet)
+* @file flamingo/classes/gui/tools/ToolGroup.as (sourcefile)
+* @file flamingo/classes/core/AbstractPositionable.as
 * @file ToolGroup.xml (configurationfile, needed for publication on internet)
 */
 /** @tag <fmc:Toolgroup>  
@@ -43,9 +43,13 @@ import tools.Logger;
   </fmc:ToolGroup>
 * @attr tool  Id of the tool that is set.
 * @attr defaulttool  Id of the tool that is set after each update event of a map.
+* @attr clear (optional; default false) if set to true the toolgroup is cleared on init.
 */
 /**
  * A toolgroup that holds tools
+ * @author ...
+ * @author Meine Toonen
+ * @author Roy Braam
  */
 dynamic class gui.tools.ToolGroup extends AbstractPositionable
 {		

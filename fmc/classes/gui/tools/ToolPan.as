@@ -17,18 +17,17 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 -----------------------------------------------------------------------------*/
-/**
- * ToolPan to pan the map
- * @author ...
- */
+
 import gui.tools.AbstractTool;
 import gui.tools.ToolGroup;
 import tools.Logger;
 import display.spriteloader.SpriteSettings;
 /** @component ToolPan
 * Tool for panning a map.
-* @file ToolPan.fla (sourcefile)
-* @file ToolPan.swf (compiled component, needed for publication on internet)
+* @file flamingo/classes/gui/tools/ToolPan.as (sourcefile)
+* @file flamingo/classes/gui/tools/AbstractTool.as
+* @file flamingo/classes/gui/button/AbstractButton.as
+* @file flamingo/classes/core/AbstractPositionable.as
 * @file ToolPan.xml (configurationfile, needed for publication on internet)
 * @configstring tooltip Tooltip.
 * @configcursor pan Cursor shown when the tool is hoovering over a map.
@@ -42,8 +41,13 @@ import display.spriteloader.SpriteSettings;
 * @attr pandelay  (defaultvalue "1000") Time in milliseconds (1000 = 1 second) between releasing the mouse and updating the map when the user drags the map. In this time the user can pickup the map again and the update of the map wil be postponed.
 * @attr zoomscroll (defaultvalue "true")  Enables (zoomscroll="true") or disables (zoomscroll="false") zooming with the scrollwheel.
 * @attr enabled (defaultvalue="true") True or false.
-* @attr skin (defaultvalue="") Available skins: "", "f2"
 */
+/**
+ * ToolPan to pan the map
+ * @author ...
+ * @author Meine Toonen
+ * @author Roy Braam
+ */
 class gui.tools.ToolPan extends AbstractTool{
 	
 	var defaultXML:String;

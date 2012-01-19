@@ -22,8 +22,8 @@ import tools.Logger;
 
 /** @component Container
 * Container component for other components. Also suitable for drawing backgrounds and borders.
-* @file Container.fla (sourcefile)
-* @file Container.swf (compiled component, needed for publication on internet)
+* @file flamingo/classes/gui/Container.as (sourcefile)
+* @file flamingo/classes/core/AbstractPositionable.as 
 * @file Container.xml (configurationfile, needed for publication on internet)
 */
 /** @tag <fmc:Container>  
@@ -47,7 +47,10 @@ import tools.Logger;
 * @attr clear  (defaultvalue = "true") True or false. True: all existing components will be removed from the container.
 */
 /**
- * A container for layout
+ * Container component for other components. Also suitable for drawing backgrounds and borders.
+ * @author ...
+ * @author Meine Toonen
+ * @author Roy Braam
  */
 class gui.Container extends AbstractPositionable{
 	var importClasses:Array = [display.spriteloader.Sprite]
