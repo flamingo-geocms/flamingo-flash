@@ -94,7 +94,7 @@
     </target>
 
     <target name="compile" depends="init" >
-		<echo message="Compile project"/>
+		<echo message="-------------------------- Compile project --------------------------"/>
         <exec executable="${flash8path}/Flash" >
             <arg value="${build}/compileProject.jsfl"/>
         </exec>
@@ -103,7 +103,7 @@
     </target>
     
     <target name="dist" depends="compile">
-		<echo message="Building dist"/>
+		<echo message="-------------------------- Building dist --------------------------"/>
    	    <copy todir="${build}/dist/js">
     	  <fileset dir="js" includes="*.js"/>
     	</copy>
@@ -120,7 +120,7 @@
     </target>
     
      <target name="release" depends="compile">
-		 <echo message="Building release"/>
+		 <echo message="-------------------------- Building release --------------------------"/>
 		 <mkdir dir="${build}/release"/>
 		 <copy todir="${build}/release">
 			 <fileset dir="${build}/dist"/>
@@ -143,7 +143,7 @@
     </target>
     
     <target name="doc" depends="init-dirs">    
-		<echo message="Building reference docs"/>
+		<echo message=" -------------------------- Building reference docs --------------------------"/>
 		<mkdir dir="${build}/docs"/>
 		<mkdir dir="${build}/docs/ref-doc"/>
 		<mkdir dir="${naturalDocsProjectPath}"/>
@@ -155,7 +155,7 @@
             <!--arg line="-ro"/-->
 		</exec>
 		   
-		<echo message="Building configuration docs"/>
+		<echo message="-------------------------- Building configuration docs --------------------------"/>
 		<mkdir dir="${build}/docs"/>
 		<mkdir dir="${build}/docs/conf-doc"/>
 		<copy todir="${build}/docs/conf-doc">
