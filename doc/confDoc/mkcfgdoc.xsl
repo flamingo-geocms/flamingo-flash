@@ -7,17 +7,16 @@
 				<title>Flamingo-mc Configuration Documentation -- <xsl:value-of select="//component/name"/></title>
 				<LINK href="style.css" rel="stylesheet" type="text/css"/>
 			</head>
-			<body>
-				<div class="blockTitle">Configuration Reference Guide</div>
-				<div class="blockContent">
+			<body>				
+				<h1>
+					<xsl:value-of select="//component/name"/>
+				</h1>
+				<div class="blockContent">						
 					<p>
-						<font size="4">
-							<xsl:value-of select="//component/name"/>
-						</font>
-					</p>
-					<p>
+						<span class="bluebold">Description</span><br/>
 						<xsl:value-of disable-output-escaping="no" select="//component/description"/>
 					</p>
+					<p>
 					<span class="bluebold">Version and Changelog</span>
 					<br/>
 					<xsl:choose>
@@ -30,6 +29,7 @@
 						<xsl:value-of select="."/>
 						<br/>
 					</xsl:for-each>
+					</p>
 					<p>
 						<span class="bluebold">Component Files</span>
 						<br/>
@@ -103,14 +103,13 @@ No style id's<br/>
 						</xsl:when>
 					</xsl:choose>
 					<p>
-						<div class="blockTitle">Configuration tags</div>
 						<xsl:choose>
 							<xsl:when test="//configtags">
 								<xsl:for-each select="//configtags">
 									<xsl:choose>
 										<xsl:when test="//configtag">
 											<xsl:for-each select="//configtag">
-												<table width="100%" border="1">
+												<table width="100%">
 													<tr>
 														<th colspan="2">Configuration Tag Name: <xsl:value-of select="name"/>
 														</th>
@@ -145,11 +144,11 @@ No style id's<br/>
 																<td colspan="2">
 																	<span class="bluebold">Attributes</span>
 																	<br/>
-																	<table border="1">
+																	<table>
 																		<xsl:for-each select="attribute">
 																			<tr>
 																				<xsl:if test="(position() mod 2 = 1)">
-																					<xsl:attribute name="bgcolor">#EEEEFF</xsl:attribute>
+																					<xsl:attribute name="bgcolor">#F8F8D8</xsl:attribute>
 																				</xsl:if>
 																				<td width="128" class="lightbold">
 																					<xsl:value-of select="name"/>
