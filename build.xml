@@ -8,8 +8,7 @@
 	<tstamp>
 	  <format property="date" pattern="dd/MM/yyyy hh:mm aa"/>
 	</tstamp>
-
-	<property name="version" value="3.3"/>
+	<property name="version" value="3.3 r1323"/>
     <property name="build" location="build"/>
     <property name="dist" location="../dist"/>
     <property name="flapath" location="src"/>
@@ -18,7 +17,7 @@
     <property name="naturalDocsPath" location="C:/tools/NaturalDocs 1.52/NaturalDocs"/>
     <property name="naturalDocsProjectPath" location="NaturalDocsProj"/>
     <property name="CDGPath" location="CDGProj"/>
-	<property name="cfgDocDir" location="doc/confDoc"/>    
+	<property name="docDir" location="doc"/>    
     <target name="init-dirs">
         <mkdir dir="${build}"/>
         <mkdir dir="${build}/dist"/>
@@ -143,24 +142,45 @@
     </target>
     
     <target name="doc" depends="init-dirs">    
-		<echo message=" --------------- Building reference docs ---------------"/>
+		<echo message=" --------------- Building docs ---------------"/>
 		<mkdir dir="${build}/docs"/>
-		<mkdir dir="${build}/docs/ref-doc"/>
+		<copy todir="${build}/docs">
+			<fileset dir="${docDir}" excludes="*.svn*"/>
+    	</copy>    	
+    	<echo file="${build}/docs/index.html" append="false">
+			<![CDATA[
+			<html>
+				<head>
+					<title>Flamingo-MC Documentation (Version: ${version})</title>
+					<link rel="stylesheet" href="conf-doc/style.css">
+				</head>
+				<body>
+					<h1>Flamingo-MC Documentation (Version: ${version})</h1>
+					<div class="blockContent">
+						<p>
+							<a href="conf-doc/">Configuration Documentation</a>
+						</p>
+						<p>
+							<a href="ref-doc">Reference Documentation (API docs)</a>
+						</p>
+					</div>
+				</body>
+				</html>
+			]]>
+    	</echo>
+    	
+    	<echo message=" --------------- Building reference docs ---------------"/>
 		<mkdir dir="${naturalDocsProjectPath}"/>
 		<exec executable="${perlPath}">
 			<arg line="'${naturalDocsPath}'"/>
 			<arg line="-i ${flapath}"/>
             <arg line="-o HTML  ${build}\docs\ref-doc"/>
             <arg line="-p ${naturalDocsProjectPath}"/>
-            <!--arg line="-ro"/-->
-		</exec>
-		   
+            <arg line="-ro"/>
+		</exec>		   
 		<echo message="--------------- Building configuration docs ---------------"/>
 		<mkdir dir="${build}/docs"/>
-		<mkdir dir="${build}/docs/conf-doc"/>
-		<copy todir="${build}/docs/conf-doc">
-			<fileset dir="${cfgDocDir}" includes="*.*"/>
-    	</copy>
+		<mkdir dir="${build}/docs/conf-doc"/>		
 		<java jar="${CDGPath}/Configuration_Documentation_Generator.jar" fork="true">
 			<arg value="${flapath}"/>
 			<arg value="${build}/docs/conf-doc"/>

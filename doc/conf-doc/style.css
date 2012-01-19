@@ -1,0 +1,283 @@
+/*
+	KubrickFlexible v1.0 for Xoops 2.0.x
+
+	This theme was designed by Michael Heilemann, whose blog you will find at binarybonsai.com.
+	It was ported to Xoops by kavaXtreme who can't be bothered with a proper blog, but has a site at kavaxtreme.radiantchristians.com.
+
+	The CSS, XHTML and design is released under GPL:
+	http://www.opensource.org/licenses/gpl-license.php
+*/
+
+/* Begin Structure */
+body {
+	margin: 0;
+	padding: 0;
+	background: #bcc8d2;
+	color: #333;
+	font-size: 62.5%; /* Resets 1em to 10px */
+	font-family: 'Lucida Grande', Verdana, Arial, Sans-Serif;
+	text-align: left;
+	}
+#header-l {
+	margin: 0;
+	padding: 0;
+	background: #fff url("images/tlf.png") no-repeat left;
+	height: 150px;
+	}
+#header-r {
+	margin: 0;
+	padding: 0;
+	background: url("images/trf.png") no-repeat right;
+	height: 150px;
+	}
+#page-ml {
+	margin: 20px;
+	padding: 0;
+	background: #fff url("images/ml.png") repeat-y left;
+	}
+#page-mr {
+	margin: 0;
+	padding: 0;
+	background: url("images/mr.png") repeat-y right;
+	}
+#content {
+	margin: 0 1px 0 1px;
+	padding: 0;
+	}
+#footer-l {
+	margin: 0;
+	padding: 0;
+	background: #eee url("images/bl.png") no-repeat left;
+	height: 62px;
+	}
+#footer-r {
+	margin: 0;
+	padding: 0;
+	background: url("images/br.png") no-repeat right;
+	height: 62px;
+	}
+#footer-r p { margin: 0; padding: 20px 0 0 0; text-align: center; }
+/* End Structure */
+
+/* Begin Left Column */
+td#leftcolumn { padding: 10px 15px 0 15px; width: 190px; background: #f9f9f9; }
+td#leftcolumn th { }
+td#leftcolumn div.blockTitle {
+	margin: 10px 0 5px 0;
+	padding: 0;
+	font: bold 1.2em 'Lucida Grande', Verdana, Sans-Serif;
+	}
+td#leftcolumn div.blockContent { margin: 0 0 0 10px; }
+/* End Left Column */
+
+/* Begin Center Column */
+td#centercolumn { padding: 20px 10px 10px 10px; font-size: 1.2em; line-height: 1.4em; }
+td#centercolumn div.blockTitle {margin: 0 0 10px 0;font: bold 1.6em 'Trebuchet MS', 'Lucida Grande', Verdana, Arial, Sans-Serif;}
+td#centercolumn th { color: #fff; background: #48b; vertical-align: middle; }
+td#centercolumn .lightbold { color: #666; font-weight: bold; }
+td#centercolumn .bluebold { color: #48b; font-weight: bold; }
+
+td#centerCcolumn { padding: 0 3px 1px 3px; }
+td#centerCcolumn div.blockTitle {
+	margin: 0 0 10px 0;
+	font: bold 1.6em 'Trebuchet MS', 'Lucida Grande', Verdana, Arial, Sans-Serif;
+	}
+td#centerCcolumn div.blockContent { margin: 0 0 20px 0; }
+
+td#centerLcolumn { width: 50%; padding: 0 3px 0 0; }
+td#centerLcolumn div.blockTitle {
+	margin: 0 0 10px 0;
+	font: bold 1.6em 'Trebuchet MS', 'Lucida Grande', Verdana, Arial, Sans-Serif;
+	}
+td#centerLcolumn div.blockContent { margin: 0 0 20px 0; }
+
+td#centerRcolumn { width: 50%; padding: 0px 3px 0px 0px; }
+td#centerRcolumn div.blockTitle {
+	margin: 0 0 10px 0;
+	font: bold 1.6em 'Trebuchet MS', 'Lucida Grande', Verdana, Arial, Sans-Serif;
+	}
+td#centerRcolumn div.blockContent { margin: 0 0 20px 0; }
+/* End Center Column */
+
+/* Begin Right Column */
+td#rightcolumn { padding: 10px 15px 0 15px; width: 190px; background: #f9f9f9; }
+td#rightcolumn th { }
+td#rightcolumn div.blockTitle {
+	margin: 10px 0 5px 0;
+	padding: 0;
+	font: bold 1.2em 'Lucida Grande', Verdana, Sans-Serif;
+	}
+td#rightcolumn div.blockContent { margin: 0 0 0 10px; }
+/* End Right Column */
+
+/* Begin Menus */
+td#mainmenu { margin: 0; }
+td#mainmenu a:before { content: url(images/menubullet.png); }
+td#mainmenu a:hover { }
+td#mainmenu a.menuTop { padding-left: 3px; }
+td#mainmenu a.menuMain { padding-left: 0px; font: bold 1.2em 'Lucida Grande', Verdana, Sans-Serif;}
+td#mainmenu a.menuSub { padding-left: 9px; }
+
+td#usermenu { margin: 0; }
+td#usermenu a:before { content: url(images/menubullet.png); }
+td#usermenu a:hover { }
+td#usermenu a.menuTop { padding-left: 3px; }
+td#usermenu a.highlight { background: #fcc; }
+/* End Menus */
+
+/* Begin Headers */
+h1, h2, h3, h4 {
+	font-family: 'Trebuchet MS', 'Lucida Grande', Verdana, Arial, Sans-Serif;
+	font-weight: bold;
+	}
+h1 {
+	padding-top: 70px;
+	margin: 0;
+	font-size: 4em;
+	text-align: center;
+	}
+h2 { margin: 30px 0 10px 0; font-size: 1.6em; }
+h2.pagetitle { text-align: center; }
+td#leftcolumn h2, td#rightcolumn h2 {
+	margin: 5px 0 0 0;
+	padding: 0;
+	font: 1.2em 'Lucida Grande', Verdana, Sans-Serif;
+	}
+h3 { padding: 0; margin: 30px 0 0; font-size: 1.3em; }
+h1, h1 a, h1 a:hover, h1 a:visited, .description { color: white; text-decoration: none; }
+h2, h2 a, h2 a:visited, h3, h3 a, h3 a:visited { color: #333; }
+h2, h2 a, h2 a:hover, h2 a:visited, h3, h3 a, h3 a:hover, h3 a:visited, td#leftcolumn h2, td#rightcolumn h2, cite { text-decoration: none; }
+a, h2 a:hover, h3 a:hover { color: #06c; text-decoration: none; }
+a:hover { color: #147; background-color: #DDEEFF; }
+.description { font-size: 1.2em; text-align: center; }
+acronym, abbr, span.caps { font-size: 0.9em; letter-spacing: .07em; }
+/* End Headers */
+
+/* Begin Lists */
+html>body ul {
+	list-style: none;
+	text-indent: -12px;
+	}
+ul li:before {
+	content: "\00BB \0020";
+	}
+ul {
+	margin-top: 0;
+	margin-left: 0;
+	padding-left: 12px;
+	}
+li {
+	margin: 7px 0 8px 10px;
+	}
+/* End Lists */
+
+/* Begin System Messages */
+div.errorMsg {
+	border-top: 1px solid #ddf;
+	border-left: 10px solid #48b;
+	border-right: 1px solid #aaa;
+	border-bottom: 1px solid #aaa;
+	padding: 10px;
+	width: 75%;
+	background: #fcc;
+	font-weight: bold;
+	text-align: center;
+	}
+div.confirmMsg {
+	border-top: 1px solid #ddf;
+	border-left: 10px solid #48b;
+	border-right: 1px solid #aaa;
+	border-bottom: 1px solid #aaa;
+	padding: 10px;
+	width: 75%;
+	color: #136C99;
+	background: #ddffdf;
+	font-weight: bold;
+	text-align: left;
+	}
+div.resultMsg {
+	border-top: 1px solid silver;
+	border-left: 10px solid #48b;
+	border-right: 1px solid #666;
+	border-bottom: 1px solid #666;
+	padding: 10px;
+	width: 75%;
+	color: #333;
+	background: #f9f9f9;
+	font-weight: bold;
+	text-align: center;
+	}
+/* End System Messages */
+
+/* Begin Posts */
+div.xoopsCode {
+	border: 1px inset #000;
+	padding: 6px;
+	background: #e7e7e7;
+	font-family: "Courier New",Courier,monospace;
+	}
+div.xoopsQuote { font-style: italic; }
+/* End Posts */
+
+/* Begin Other */
+table { width: 100%; }
+table td { margin: 0; padding: 0; border-width: 0; vertical-align: top; }
+th {
+	padding: 2px;
+	color: #fff;
+	background: #48b;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	vertical-align: middle;
+	}
+tr.even td { padding: 5px; background: #f8f8f8; }
+tr.odd td { padding: 5px; background: #fff; }
+
+.outer { }
+.head { padding: 5px; background: #bcc8d2; font-weight: bold; }
+.even { padding: 5px; background: #fff; }
+.odd { padding: 5px; background: #f8f8f8; }
+.foot { padding: 5px; background: #f8f8f8; font-weight: bold; }
+
+.item { }
+.itemHead { padding: 3px; }
+.itemInfo { padding: 3px; text-align: right; }
+.itemTitle {
+	margin: 30px 0 10px 0;
+	color: #000;
+	font: bold 1.6em 'Trebuchet MS', 'Lucida Grande', Verdana, Arial, Sans-Serif;
+	}
+.itemTitle a { color: #000;	}
+.itemPoster { font-size: 90%; font-style: italic; }
+.itemPostDate { font-size: 90%; font-style: italic; }
+.itemStats { font-size: 90%; font-style: italic; }
+.itemBody { padding-left: 5px; }
+.itemText {
+	margin-top: 5px;
+	margin-bottom: 5px;
+	line-height: 1.5em;
+	}
+.itemText:first-letter { }
+.itemFoot { padding: 3px; text-align: right; }
+.itemAdminLink { font-size: 90%; }
+.itemPermaLink { font-size: 90%; }
+/* End Other */
+
+/* Begin NewBB */
+ul.newbb_level1, ul.newbb_level2, ul.newbb_level3 {
+	width: 140px;		/* Width of the Dropdownmenu Title and Menu themself */
+	background: #e7e7e7;	/* Main Background of the Menu Folder */
+	text-indent: 0;
+	}
+li.newbb_folder {
+	border: 1px solid #48b;	/* Should be the same color as above */
+	color: #fff; 		/* Textcolor of the Dropdownmenu Title */
+	background: #48b;
+	}
+li.newbb_folder:before {
+	content: "";
+	}
+.newbb_link:hover {
+	color: #fff
+	!important;		/* Hover Color of the Links */
+	}
+/* End NewBB */
