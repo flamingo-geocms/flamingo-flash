@@ -18,8 +18,7 @@
     <property name="naturalDocsPath" location="C:/tools/NaturalDocs 1.52/NaturalDocs"/>
     <property name="naturalDocsProjectPath" location="NaturalDocsProj"/>
     <property name="CDGPath" location="CDGProj"/>
-    <property name="srcDir" location="."/>
-	<property name="cfgXsl" location="doc/mkcfgdoc.xsl"/>    
+	<property name="cfgDocDir" location="doc/confDoc"/>    
     <target name="init-dirs">
         <mkdir dir="${build}"/>
         <mkdir dir="${build}/dist"/>
@@ -161,10 +160,10 @@
 		<mkdir dir="${build}/docs"/>
 		<mkdir dir="${build}/docs/conf-doc"/>
 		<copy todir="${build}/docs/conf-doc">
-    	  <fileset dir="${cfgXsl}"/>
+			<fileset dir="${cfgDocDir}" includes="*.*"/>
     	</copy>
 		<java jar="${CDGPath}/Configuration_Documentation_Generator.jar" fork="true">
-			<arg value="${srcDir}"/>
+			<arg value="${flapath}"/>
 			<arg value="${build}/docs/conf-doc"/>
 			<classpath>
 			   <pathelement location="${CDGPath}/Configuration_Documentation_Generator.jar"/>
