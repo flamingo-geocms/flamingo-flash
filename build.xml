@@ -152,7 +152,7 @@
 			<arg line="-i ${flapath}"/>
             <arg line="-o HTML  ${build}\docs\ref-doc"/>
             <arg line="-p ${naturalDocsProjectPath}"/>
-            <arg line="-ro"/>
+            <!--arg line="-ro"/-->
 		</exec>
 		   
 		<echo message="Building configuration docs"/>
