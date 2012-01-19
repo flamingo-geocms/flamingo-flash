@@ -6,8 +6,15 @@ Format: 1.52
 # instead.
 
 
-Ignore Keywords: 
-   private var
+# If you'd like to prevent keywords from being recognized by Natural Docs, you
+# can do it like this:
+# Ignore Keywords: [keyword], [keyword], ...
+#
+# Or you can use the list syntax like how they are defined:
+# Ignore Keywords:
+#    [keyword]
+#    [keyword], [plural keyword]
+#    ...
 
 
 #-------------------------------------------------------------------------------

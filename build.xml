@@ -12,7 +12,7 @@
 	<property name="version" value="3.3"/>
     <property name="build" location="build"/>
     <property name="dist" location="../dist"/>
-    <property name="flapath" location="."/>
+    <property name="flapath" location="src"/>
     <property name="flash8path" location="C:/Program Files (x86)/Adobe/Adobe Flash CS3"/>
     <property name="perlPath" value="perl"/>
     <property name="naturalDocsPath" location="C:/tools/NaturalDocs 1.52/NaturalDocs"/>
@@ -98,7 +98,7 @@
         <exec executable="${flash8path}/Flash" >
             <arg value="${build}/compileProject.jsfl"/>
         </exec>
-    	<copy file="${flapath}/GNU-GPL_LICENSE.txt" todir="${build}/dist/flamingo"/>
+    	<copy file="GNU-GPL_LICENSE.txt" todir="${build}/dist/flamingo"/>
     	<copy file="${flapath}/flamingo.xml" todir="${build}/dist/flamingo"/>
     </target>
     
@@ -149,13 +149,12 @@
 		<mkdir dir="${naturalDocsProjectPath}"/>
 		<exec executable="${perlPath}">
 			<arg line="'${naturalDocsPath}'"/>
-			<arg line="-i ."/>
+			<arg line="-i ${flapath}"/>
             <arg line="-o HTML  ${build}\docs\ref-doc"/>
             <arg line="-p ${naturalDocsProjectPath}"/>
             <arg line="-ro"/>
 		</exec>
-    </target>    
-    <target name="doc2" depends="init-dirs">    
+		   
 		<echo message="Building configuration docs"/>
 		<mkdir dir="${build}/docs"/>
 		<mkdir dir="${build}/docs/conf-doc"/>

@@ -455,8 +455,6 @@ Group: Fmc  {
    File: Window.as  (fmc\Window.as)
    }  # Group: Fmc
 
-File: SpriteMapDemo  (SpriteMapDemo.as)
-
 Group: Tpc  {
 
    File: gismodel.SelectedFeature  (tpc\lim\classes\gismodel\SelectedFeature.as)
