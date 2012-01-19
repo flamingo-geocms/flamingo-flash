@@ -14,11 +14,19 @@
     <property name="dist" location="../dist"/>
     <property name="flapath" location="."/>
     <property name="flash8path" location="C:/Program Files (x86)/Adobe/Adobe Flash CS3"/>
-    <target name="init">
+    <property name="perlPath" value="perl"/>
+    <property name="naturalDocsPath" location="C:/tools/NaturalDocs 1.52/NaturalDocs"/>
+    <property name="naturalDocsProjectPath" location="NaturalDocsProj"/>
+    <property name="CDGPath" location="CDGProj"/>
+    <property name="srcDir" location="."/>
+	<property name="cfgXsl" location="doc/mkcfgdoc.xsl"/>    
+    <target name="init-dirs">
         <mkdir dir="${build}"/>
         <mkdir dir="${build}/dist"/>
         <mkdir dir="${build}/bin"/>
         <mkdir dir="${dist}"/>	
+	</target>
+	<target name="init" depends="init-dirs">
         <echo file="${build}/compileProject.jsfl" append="false">var flaURI="file:///${flapath}";${line.separator}</echo>
         <echo file="${build}/compileProject.jsfl" append="true">var swfURI="file:///${build}/dist/flamingo";${line.separator}</echo>
         <echo file="${build}/compileProject.jsfl" append="true">var buildURI="file:///${build}";${line.separator}</echo>
@@ -87,6 +95,7 @@
     </target>
 
     <target name="compile" depends="init" >
+		<echo message="Compile project"/>
         <exec executable="${flash8path}/Flash" >
             <arg value="${build}/compileProject.jsfl"/>
         </exec>
@@ -95,6 +104,7 @@
     </target>
     
     <target name="dist" depends="compile">
+		<echo message="Building dist"/>
    	    <copy todir="${build}/dist/js">
     	  <fileset dir="js" includes="*.js"/>
     	</copy>
@@ -111,7 +121,7 @@
     </target>
     
      <target name="release" depends="compile">
-		 <delete dir="${build}/release"/>
+		 <echo message="Building release"/>
 		 <mkdir dir="${build}/release"/>
 		 <copy todir="${build}/release">
 			 <fileset dir="${build}/dist"/>
@@ -125,10 +135,43 @@
     	<copy file="changelog.txt" todir="${build}/dist"/>
     	<delete dir="${build}/release/flamingo/tpc"/>
     	<echo file="${build}/release/flamingo/version.txt" append="false">version: ${version} date: ${date}</echo>
-    	
+		
+		<antcall target="doc"/>		 
+ 	    <copy todir="${build}/release/docs">
+    	  <fileset dir="${build}/docs"/>
+    	</copy>
         <zip destfile="${build}/release/flamingo_${version}.zip" basedir="${build}/release"/>
     </target>
     
+    <target name="doc" depends="init-dirs">    
+		<echo message="Building reference docs"/>
+		<mkdir dir="${build}/docs"/>
+		<mkdir dir="${build}/docs/ref-doc"/>
+		<mkdir dir="${naturalDocsProjectPath}"/>
+		<exec executable="${perlPath}">
+			<arg line="'${naturalDocsPath}'"/>
+			<arg line="-i ."/>
+            <arg line="-o HTML  ${build}\docs\ref-doc"/>
+            <arg line="-p ${naturalDocsProjectPath}"/>
+            <arg line="-ro"/>
+		</exec>
+    </target>    
+    <target name="doc2" depends="init-dirs">    
+		<echo message="Building configuration docs"/>
+		<mkdir dir="${build}/docs"/>
+		<mkdir dir="${build}/docs/conf-doc"/>
+		<copy todir="${build}/docs/conf-doc">
+    	  <fileset dir="${cfgXsl}"/>
+    	</copy>
+		<java jar="${CDGPath}/Configuration_Documentation_Generator.jar" fork="true">
+			<arg value="${srcDir}"/>
+			<arg value="${build}/docs/conf-doc"/>
+			<classpath>
+			   <pathelement location="${CDGPath}/Configuration_Documentation_Generator.jar"/>
+			   <pathelement path="${CDGPath}/libs"/>
+			 </classpath>
+		</java>
+    </target>    
     <target name="clean">
         <delete dir="${build}"/>
     </target>
