@@ -1,0 +1,91 @@
+/*
+	KubrickFlexible v1.0 for Xoops 2.0.x
+
+	This theme was designed by Michael Heilemann, whose blog you will find at binarybonsai.com.
+	It was ported to Xoops by kavaXtreme who can't be bothered with a proper blog, but has a site at kavaxtreme.radiantchristians.com.
+
+	The CSS, XHTML and design is released under GPL:
+	http://www.opensource.org/licenses/gpl-license.php
+*/
+
+/* Begin Structure */
+body {
+	margin: 0;
+	padding: 0;
+	background: #FFFFFF;
+	color: #333;
+	font: 10pt Verdana,Arial,sans-serif;	
+	text-align: left;
+	}
+p {
+	background-color: #FFFFF0;
+	border-radius: 20px 20px 20px 20px;
+	border: 1px solid #C0C060;
+	padding: 10px;
+	margin: 10px 20px 0 20px;
+}
+
+/* Begin Headers */
+h1, h2, h3, h4 {
+	font-family: 'Trebuchet MS', 'Lucida Grande', Verdana, Arial, Sans-Serif;
+	font-weight: bold;
+	background-color: #7070C0;
+	}
+h1 {	
+	color:  #FFF;
+	margin: 0;	
+	background-color: #7070C0;
+	border-color: #000000;
+	border-width: 0 0 30px;
+	font-size: 20pt;
+	margin-left: 0;
+	margin-right: 0;
+    	padding: 10px 15px;	
+}
+/* End Headers */
+
+/* Begin Other */
+table { width: 100%; }
+table td { margin: 0; padding: 0; border-width: 0; vertical-align: top; }
+th {
+	padding: 2px;
+	color: #fff;
+	background: #7070C0;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	vertical-align: middle;
+	}
+tr.even td { padding: 5px; background: #f8f8f8; }
+tr.odd td { padding: 5px; background: #fff; }
+
+.outer { }
+.head { padding: 5px; background: #bcc8d2; font-weight: bold; }
+.even { padding: 5px; background: #fff; }
+.odd { padding: 5px; background: #f8f8f8; }
+.foot { padding: 5px; background: #f8f8f8; font-weight: bold; }
+
+/* End Other */
+
+
+.blockContent{
+	padding: 5px;
+}
+
+.bluebold{
+	color: #800000;
+	font-weight: bold;
+	font-variant: small-caps;
+}
+.lightbold{
+	font-weight: bold;
+	}
+.xml{
+	width: 99%;
+}
+
+.link{
+	float: left;	
+	border: 0 1px solid;
+	background-color: #FFFFF0;
+	width: 31%;
+	padding: 3px;	
+}
