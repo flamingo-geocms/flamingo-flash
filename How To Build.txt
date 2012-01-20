@@ -1,0 +1,31 @@
+----------- Tools --------------
+Things you need for building Flamingo-mc:
+- Adobe Flash 
+- Ant
+For documentation:
+- Natural docs & Perl
+
+
+------------Build Flamingo-------------
+How to build Flamingo-mc
+
+- Open te build.xml file and alter the property tags (version,flashPath,naturalDocsPath)
+
+- if you want to have a clean build execute the following command in the console at the project root dir:
+  @ ant clean
+  
+- Execute the following command in the console at the project root dir:
+
+  To only compile the code:
+  $ ant compile
+
+  To make a dist:
+  $ ant dist
+
+  To make the documentation:
+  $ ant doc
+  
+  To make a complete release:
+  $ ant release
+  
+  
