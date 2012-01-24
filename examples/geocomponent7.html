@@ -1,0 +1,81 @@
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>Drenthe</title>
+    </head>
+    <body style="min-height: 300px; min-width: 300px;">
+        <script type="text/javascript" src="scripts/swfobject.js"></script>
+
+        <div id="flashcontent" style="width: 100%; height: 100%">
+			<script type="text/javascript">
+
+
+function getURLParam(strParamName){
+	var strReturn = "";
+	var strHref = window.location.href;
+	if ( strHref.indexOf("?") > -1 ){
+		var strQueryString = strHref.substr(strHref.indexOf("?")+1);
+		var aQueryString = strQueryString.split("&");
+		for ( var iParam = 0; iParam < aQueryString.length; iParam++ ){
+			var aParam = aQueryString[iParam].split("=");
+			if ( strParamName == "") {
+				if ( aParam[1] == undefined) {
+					strReturn = aParam[0];
+					break;
+				}
+			}
+			else {
+			  if ( aQueryString[iParam].toLowerCase().indexOf(strParamName.toLowerCase() + "=") > -1 ){
+  			  strReturn = aParam[1];
+				break;
+	  		}
+			}
+		}
+	}
+	return unescape(strReturn);
+}
+
+function flamingo_onInit() {
+	var app = getMovie("flamingo");
+	var x = getURLParam("x");
+	var y = getURLParam("y");
+	//var ext     = getURLParam("ext");
+
+	//string omzetten naar number ivm met +
+	var nx = x * 1;
+	var ny = y * 1;
+
+	var minx = nx - 2000;
+	var maxx = nx + 2000;
+	var miny = ny - 2000;
+	var maxy = ny + 2000;
+
+	ext = minx + ',' + miny + ',' + maxx + ',' + maxy;
+
+	app.call("flamingo" , "setArgument", "map" , "extent" , ext);
+
+	app.call("flamingo", "map","setMarker",'blaah',"default",nx,ny);
+	//setMarker(x,y,'boeh');
+}
+
+function getMovie(movieName) {
+	if (navigator.appName.indexOf("Microsoft") != -1) {
+		return window[movieName];
+	}else {
+		return document[movieName];
+	}
+}
+function flamingo_map_onInit(){
+	flamingo.callMethod('map','setMarker','boe');
+}
+
+
+var so = new SWFObject("flamingo/flamingo.swf?config=../config/geocomponent.xml", "flamingo", "100%", "100%", "8", "#FFFFFF");
+so.addParam("wmode", "transparent");
+so.write("flashcontent");
+
+var flamingo = document.getElementById("flamingo");
+</script>
+</div>
+</body>
+</html>

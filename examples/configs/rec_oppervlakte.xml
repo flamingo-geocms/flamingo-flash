@@ -1,0 +1,19 @@
+<?xml version = "1.0" encoding="UTF-8" ?>
+<FLAMINGO>
+  <VALUE label="0.5"/> 
+  <VALUE label="1.0"/> 
+  <VALUE label="2.0"/> 
+  <VALUE label="3.0"/> 
+  <VALUE label="4.0"/> 
+  <VALUE label="5.0"/> 
+  <VALUE label="6.0"/> 
+  <VALUE label="7.0"/> 
+  <VALUE label="8.0"/> 
+  <VALUE label="9.0"/> 
+  <VALUE label="10.0"/> 
+  <VALUE label="15.0"/> 
+  <VALUE label="20.0"/> 
+  <VALUE label="30.0"/> 
+  <VALUE label="40.0"/> 
+  <VALUE label="50.0"/> 
+</FLAMINGO>

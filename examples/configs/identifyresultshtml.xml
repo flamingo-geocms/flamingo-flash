@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FLAMINGO id="flamingo" xmlns:fmc="fmc" xmlns:tpc="tpc" lang="nl" languages="nl" tooltipdelay="200" maxwidth="100%" maxheight="100%" borderwidth="0" useexternalinterface="true">
+	<!-- printwindow -->
+
+	
+	<fmc:ToolGroup listento="map" left="225" top="0" tool="zoom">
+		<fmc:ToolZoomin id="zoom" left="0" zoomdelay="0" clickdelay="0" skin="f1"/>
+		<fmc:ToolZoomout left="30" zoomdelay="0" clickdelay="0" skin="f1"/>
+		<fmc:ToolPan left="60" clickdelay="0" pandelay="0" skin="f1"/>
+		<fmc:ToolIdentify left="90" clickdelay="0" pandelay="0" skin="f1"/>
+		<fmc:ToolMeasure left="120" units=" m" magicnumber="1" decimals="0" skin="f1"/>
+		<fmc:PrintButton left="155" top="2" listento="print" visible="true">
+			<string id="tooltip" nl="printvenster openen/ sluiten" en="open/ close the print window" de="Schritt weiter" fr="Suivant"/>
+		</fmc:PrintButton>
+	</fmc:ToolGroup>
+	<!--button properties-->
+	<fmc:ButtonPrev right="438" top="2" listento="map"/>
+	<fmc:ButtonNext right="468" top="2" listento="map"/>
+	<fmc:ButtonFull right="498" top="2" listento="map"/>
+	<fmc:ZoomerV left="235" top="50" height="210" listento="map"/>
+	
+
+	<!--monitor maplayer and display waitstatus-->
+	<fmc:MonitorLayer id="monitor" left="528" top="200" listento="map">
+		<style id=".text" font-family="Arial Black" font-size="11px" color="#666666" display="block" font-weight="normal"/>
+		<string id="waiting" nl="Kaart wordt gemaakt, even geduld a.u.b..."/>
+		<string id="loading" nl="Kaart wordt opgehaald, even geduld a.u.b... ([percentage]%)"/>
+	</fmc:MonitorLayer>
+
+	<fmc:Container borderwidth="0" bordercolor="#b8b8b8" left="225" top="40" bottom="bottom -10" right="right -250">
+		<fmc:BorderNavigation skin="F1" width="100%" height="100%" listento="map"/>
+		<fmc:Map id="map" movequality="HIGH" extenthistory="10" width="100%" height="100%" conformal="true" mapunits="meters" visible="true" extent="177000,451000,232000,491000" fullextent="177000,451000,232000,491000" minscale="1.0">
+			<fmc:LayerIdentifyIcon id="identifyicon" skin="heartbeat"/>			
+			<!--
+				De gemeentegrens kaarten
+			-->
+			<fmc:LayerOGWMS id="gemeentegrenzen_regio_Stedendriehoek" name="gemeentegrenzen_regio_Stedendriehoek" format="image/png" alpha="100" visible="true" url="http://geodata.deventer.nl/ArcGIS/services/Milieuatlas_RegioStedendriehoek/gemeentegrenzen_regio_Stedendriehoek/MapServer/WMSServer?styles=" info_format="text/xml" getcapabilitiesurl="http://geodata.deventer.nl/ArcGIS/services/Milieuatlas_RegioStedendriehoek/gemeentegrenzen_regio_Stedendriehoek/MapServer/WMSServer?service=wms" visible_layers="0" QUERY_LAYERS="0" LAYERS="0" SRS="EPSG:28992">
+			</fmc:LayerOGWMS>
+			<!--
+				De ondergrond kaarten
+			-->
+			<fmc:LayerOGWMS id="luchtfoto" name="luchtfoto" format="image/png" alpha="100" visible="false" url="http://gdsc.nlr.nl/wms/lufo2005?" servicename="WMS-NLR" service="wms" version="1.1.1" info_format="text/xml" QUERY_LAYERS="lufo2005-1m" LAYERS="lufo2005-1m" SRS="EPSG:28992" visible_layers="">
+			</fmc:LayerOGWMS>
+			<fmc:LayerOGWMS id="kaart_OSM" name="kaart_OSM" format="image/png" alpha="100" visible="true" url="http://osm.kaartenbalie.nl/wms/mapserver" servicename="WMS-NLR" service="wms" version="1.1.1" info_format="text/xml" QUERY_LAYERS="#ALL#" LAYERS="#ALL#" SRS="EPSG:28992">
+			</fmc:LayerOGWMS>
+		</fmc:Map>
+		<!--<fmc:Map id="printMap0" configobject="map"/>
+		<fmc:Map id="printMap1" configobject="map"/>-->
+	</fmc:Container>
+
+	<!--HTML identify window-->
+	<fmc:Window title="info" visible="false" canclose="true" canresize="true" defocusalpha="50" width="25%" height="45%" left="1%" top="55%">
+		<string id="title" nl="Informatie" en="Information"/>
+		<fmc:Container width="100%" height="100%" backgroundcolor="#FFFFCC" alpha="85">
+			<fmc:IdentifyResultsHTML id="info" width="100%" height="100%" left="left" listento="map">
+				<style id=".bold" font-family="verdana" font-size="12px" color="#333333" display="block" font-weight="bold"/>
+				<style id=".normal" font-family="verdana" font-size="10px" color="#333333" display="block" font-weight="normal"/>
+				<style id=".url" font-family="verdana" font-size="10px" color="#0033cc" display="block" font-weight="normal"/> 
+				/*
+					Hieronder word de query naar de laag gegeven die je wilt opvragen met het I tooltje
+					verander de string id in die van de gewenste service.layer en geef de juiste velden op in het cdata blok
+				*/				
+				<string id="gemeentegrenzen_regio_Stedendriehoek.0" stripdatabase="true">
+					<nl><![CDATA[<span	class='normal'>
+							<textformat tabstops='[5]'>
+							<span class='bold'>Gemeente</span>
+								<b>Gemeente:</b> \t[gemeente]
+							</textformat> 
+						</span>]]></nl>
+				</string>
+			</fmc:IdentifyResultsHTML>
+		</fmc:Container>
+	</fmc:Window>
+	<!--scalebar properties-->
+	<fmc:Scalebar left="right -190" top="bottom -20" width="150" magicnumber="1" units=" m" listento="map">
+		<style id=".label" font-family="verdana" font-size="10px" color="#555555" display="block" font-weight="normal"/>
+		<style id=".units" font-family="verdana" font-size="10px" color="#555555" display="block" font-weight="normal"/>
+	</fmc:Scalebar>
+	<!--coordinate properties-->
+	<fmc:Coordinates left="right -75" top="bottom -60" decimals="0" listento="map">
+		<style id=".xy" font-family="verdana" font-size="10px" color="#555555" display="block" font-weight="normal"/>
+		<string id="xy">
+			<nl><![CDATA[X:[x]<br>Y:[y]]]></nl>
+		</string>
+	</fmc:Coordinates>
+
+</FLAMINGO>

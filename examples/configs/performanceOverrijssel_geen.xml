@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FLAMINGO xmlns:fmc="fmc" id="flamingo" lang="nl" languages="en,nl" tooltipdelay="300" commtojava="true" preloadtitle="Prototypemap" useexternalinterface="true">
+	<style id=".tooltip" font-family="arial, sans-serif" font-size="11" color="#880000" display="block"/>
+	<fmc:Container left="0" top="0" height="100%" width="75%">
+		<fmc:MonitorLayer id="monitorl" left="37%" top="50%" width="50%" listento="map">
+			<string id="waiting" en="Making... [layer] [percentage]%..." nl="Kaart aan het maken..."/>
+			<string id="loading" en="Making... [layer] [percentage]%..." nl="Kaart aan het laden. [percentage]%"/>
+		</fmc:MonitorLayer>
+		<!--fmc:Container backgroundcolor="#E8F3EB" left="0" top="0" height="6%" width="100%"-->
+		<fmc:ToolGroup id="toolgroup" tool="zoomout" listento="map" width="100%" height="100" left="10" top="10">
+			<fmc:ToolZoomout id="zoomout" left="30" skin="f2"/>
+			<fmc:ToolZoomin id="zoom" skin="f2"/>
+			<fmc:ToolPan left="60" skin="f2"/>
+			<fmc:ToolMeasure left="120" skin="f2"/>
+			<fmc:ToolIdentify left="150" skin="f2"/>
+			<fmc:ButtonFull left="180" listento="map">
+				<string id="tooltip" nl="Zoom naar volledig kaartbeeld"/>
+			</fmc:ButtonFull>
+			<fmc:ButtonPrev left="210" listento="map">
+				<string id="tooltip" nl="Stap terug"/>
+			</fmc:ButtonPrev>
+			<fmc:ButtonNext left="240" listento="map">
+				<string id="tooltip" nl="Stap vooruit"/>
+			</fmc:ButtonNext>
+		</fmc:ToolGroup>
+		<!--/fmc:Container-->
+		<fmc:Coordinates id="awerwe" listento="map" left="100" top="600" decimals="6">
+			<style id=".xy" font-family="arial, sans-serif" font-size="11"/>
+			<string id="xy" nl="dfsg: [x]     Y: [y]"/>
+		</fmc:Coordinates>
+		<fmc:Container left="0" top="35" bottom="bottom -1" width="100%" borderwidth="1" bordercolor="#cccccc">
+			<fmc:BorderNavigation listento="map" top="0" width="100%" height="100%" skin="f1"/>
+			<fmc:Map id="map" width="100%" height="100%" top="0" holdonidentify="true" fadesteps="2" maptipdelay="200" movetime="200" movesteps="5" holdonupdate="false" minscale="0.25" fullextent="178000,458500,271000,541800" extenthistory="10" extent="178000,458500,271000,541800">
+				<fmc:LayerIdentifyIcon id="identifyicon" skin="heartbeat"/>
+				
+				<!-- ============= EINDE OMGEVINGSVISIE EN -VERORDENING  ============== -->
+				
+			</fmc:Map>
+		</fmc:Container>
+	</fmc:Container>
+	<fmc:Container left="75%" top="0" height="100%" width="25%">
+		<!--legend-->
+		<fmc:Legend id="legend" skin="f2" symbolpath="../atlasoverijssel/images" shadowsymbols="false" groupdy="0" groupdx="5" itemdy="0" itemdx="0" hrdx="15" hrdy="0" symboldx="0" symboldy="0" outofscale="test" listento="map" height="100%">
+			<!-- <fmc:Legend-ov  id="legend" skin="f3" symbolpath="../atlasoverijssel/images" shadowsymbols="false" left="752" top="185" bottom="top +737" width="238" groupdy="0" groupdx="5" itemdy="0" itemdx="0" hrdx="15" hrdy="0" symboldx="0" symboldy="0" outofscale="test" listento="map" > -->
+			<!-- <string id="outofscale" nl="buiten schaalbereik;&lt;br&gt;zoom naar deze laag..." en="Outside range;&lt;br&gt;zoom to layer" de="Auerhalb des Mastabsbereichs;&lt;br&gt;vergrern" fr="Hors chelle..." /> -->
+			<string id="outofscale" nl="zoom in om zichtbaar te maken..." en="Outside range;&lt;br&gt;zoom to layer" de="Auerhalb des Mastabsbereichs;&lt;br&gt;vergrern" fr="Hors chelle..."/>
+			<style id=".group" font-family="verdana" font-size="10px" color="#808080" display="block" font-weight="bold"/>
+			<style id=".group_mouseover" font-family="verdana" font-size="10px" color="#000000" display="block" font-weight="bold"/>
+			<!--<style id=".group" font-family="verdana" font-size="12px" color="#333333" display="block" font-weight="bold" />
+	<style id=".group_mouseover" font-family="verdana" font-size="12px" color="#333333" display="block" font-weight="bold" />-->
+			<style id=".item" font-family="arial,verdana" font-size="10px" color="#333333" display="block" font-weight="normal"/>
+			<style id=".item_link" font-family="verdana" font-size="10px" color="#02A0C5" display="block" font-weight="normal" text-decoration="normal"/>
+			<style id=".symbol" font-family="verdana" font-size="9px" color="#333333" display="block" font-weight="normal"/>
+			<style id=".symbol_link" font-family="verdana" font-size="9px" color="#02A0C5" display="block" font-weight="normal" text-decoration="normal"/>
+			<style id=".outofscale" font-family="verdana" font-size="10px" color="#0066cc" display="block" font-style="italic"/>
+			<style id=".text" font-family="verdana" font-size="12px" color="#333333" display="block" font-style="normal" font-weight="bold"/>
+			<style id=".subtext" font-family="arial,verdana" font-size="9px" color="#808080" display="block" font-style="normal" font-weight="normal"/>
+			<!-- ALGEMEEN ====================================================================================================-->
+			<ITEM canhide="true" label="Kanoroute" symbolposition="left" listento="routes6">			
+        </ITEM>
+			<ITEM canhide="true" label="Mountainbikeroute" symbolposition="left" listento="routes5">			
+        </ITEM>
+			<ITEM canhide="true" label="Knelpunten Lange-afstand-wandelpad" symbolposition="left" listento="knelpunt1">			
+        </ITEM>
+			<ITEM canhide="true" label="Knelpunten Landelijke fietsroute" symbolposition="left" listento="knelpunt2">			
+        </ITEM>
+			<ITEM canhide="true" open="true" label="Regio-indeling RTV-Oost" symbolposition="left" listento="avo25.regio_tvoost">
+        </ITEM>
+			<ITEM dy="5" canhide="true" label="COROP-gebied" symbolposition="left" listento="avo18.corop">
+        </ITEM>
+			<ITEM canhide="true" label="Rayonindeling wegen en kanalen" symbolposition="left" listento="avo7.rayonwk_polygon">
+        </ITEM>
+			<ITEM canhide="true" open="true" label="Waterschappen" symbolposition="left" listento="avo16.watschap_ned_polygon">
+        </ITEM>
+			<ITEM canhide="true" label="Provinciegrens" symbolposition="left" listento="avo.prov_overlay">
+        </ITEM>
+			<ITEM canhide="true" label="Gemeentegrenzen" symbolposition="left" listento="label_overlay.gem_label,avo.gem_overlay">
+				<ITEM canhide="true" dx="35" dy="" open="true" label="labels weergeven" symbolposition="left" listento="label_overlay.gem_label"/>
+			</ITEM>
+			<ITEM canhide="true" label="Wijkgrenzen" symbolposition="left" listento="label_overlay.wijken_label,avo.wijken">
+				<ITEM canhide="true" dx="35" dy="" open="true" label="labels weergeven" symbolposition="left" listento="label_overlay.wijken_label"/>
+			</ITEM>
+			<ITEM canhide="true" label="Buurtgrenzen" symbolposition="left" listento="label_overlay.buurten_label,avo.buurten">
+				<ITEM canhide="true" dx="35" dy="" open="true" label="labels weergeven" symbolposition="left" listento="label_overlay.buurten_label"/>
+			</ITEM>
+			<ITEM dy="5" canhide="true" label="Topografische kaart 1900" symbolposition="left" listento="avo.topo1900">
+        </ITEM>
+			<ITEM canhide="true" label="Topografische kaart 1950" symbolposition="left" listento="avo.topo1950">
+        </ITEM>
+			<ITEM dy="5" canhide="true" label="Panden, lig- en standplaatsen {F}" symbolposition="left" listento="bag.bag_pand,bag.bag_adres,avo.bag_adres_ligplaats,bag_adres_standplaats,avo.bag_ligplaats,avo.bag_standplaats">
+				<!--<ITEM  canhide="true" label="Verblijfsobjecten" symbolposition="left" listento="avo.bag_verblijfsobject" />-->
+			</ITEM>
+			<ITEM dy="5" canhide="true" label="Treinstation {B}" symbolposition="left" listento="avo20.station">
+        </ITEM>
+			<ITEM dy="5" canhide="true" label="Strooiroute provincie" symbolposition="left" listento="avo22.strooi_prov">
+        </ITEM>
+			<ITEM canhide="true" label="Wegen in beheer bij het rijk {B}" symbolposition="left" listento="wegen.rijkswegen">
+        </ITEM>
+			<ITEM canhide="true" label="Wegen in beheer bij de provincie {B}" symbolposition="left" listento="wegen.provwegen">
+        </ITEM>
+			<ITEM canhide="true" label="Vaarwegen in beheer bij de provincie {B}" symbolposition="left" listento="wegen.vaarwegen">
+        </ITEM>
+			<ITEM dy="5" canhide="true" label="Wegontwerp N340 (23 dec. 2010)" symbolposition="left" listento="avo.N340_1,avo.N340_2,avo.N340_3,avo.N340_4,avo.N340_5,avo.N340_6,avo.N340_7,avo.N340_8,avo.N340_9,avo.N340_10,avo.N340_11,avo.N340_12,avo.N340_13,avo.N340_14,avo.N340_15,avo.N340_16,avo.N340_17,avo.N340_18,avo.N340_19">
+        </ITEM>
+			<!-- <ITEM canhide="true" label="Provinciaal inpassingsplan" symbolposition="left" listento="N340,avo.N340_bpEnkel" infourl="javascript:popWin('http://www.overijssel.nl/N340','legwin','')" >
+			</ITEM>	-->
+			<ITEM canhide="true" dy="5" label="Asbestkaart" symbolposition="left" listento="asbest.stortplaats,asbest.asbest_loc,asbest.bouwarchief_niet_gem,asbest.bouwarchief_gem,asbest.bodemarchief">
+        </ITEM>
+			<ITEM canhide="true" dx="10" label="Locaties bodemarchief provincie" symbolposition="left" listento="asbest.stortplaats,asbest.asbest_loc">
+        </ITEM>
+			<ITEM canhide="true" dx="10" label="Locaties bodemarchief gemeenten" symbolposition="left" listento="asbest.bodemarchief">
+        </ITEM>
+			<ITEM canhide="true" dx="10" label="Locaties bouwarchief gemeenten" symbolposition="left" listento="asbest.bouwarchief_gem,asbest.bouwarchief_niet_gem">
+        </ITEM>
+			<ITEM canhide="true" label="Grondgebruik" symbolposition="left" listento="avo.LGN6">
+        </ITEM>
+			<text dx="5" dy="5">
+				<string id="text">
+					<nl><![CDATA[<span class='subtext'>meer bodemkaarten vind je</span>
+]]></nl>
+				</string>
+			</text>
+			<text dx="5" dy="-20">
+				<string id="text">
+					<nl><![CDATA[<span class='subtext'>in de <a href="http://gisopenbaar.toverijs3.nl/website/bodematlas/bodematlas.html" target="_blank"><font color="#02A0C5">bodematlas</font></a></span>
+]]></nl>
+				</string>
+			</text>
+			<ITEM label="Rijksmonumenten {B}" canhide="true" listento="monument.rijksmonumenten">
+        </ITEM>
+			<ITEM label="Gemeentelijke monumenten {B}" canhide="true" listento="monument.gemeentelijkemonumenten">
+        </ITEM>
+			<ITEM dy="5" canhide="true" label="Bedrijventerreinen {B}" symbolposition="left" open="false" listento="avo14.ibis">
+        </ITEM>
+			<ITEM canhide="true" label="Werkgelegenheid" symbolposition="left" open="false" listento="avo24.biro2010">
+        </ITEM>
+			<item dx="5" dy="5" canhide="true" label="Geluidsniveau provinciale wegen etmaal" listento="geluid.overijssel_geluid_lden_provw_2006">
+        </item>
+			<item dx="5" canhide="true" label="Geluidsniveau provinciale wegen nachtperiode" listento="geluid.overijssel_geluid_lnight_provw_2006">	
+        </item>
+			<item dx="5" canhide="true" label="Geluidsniveau rijkswegen etmaal" listento="geluid.overijssel_geluid_lden_rijksw_2006">	
+        </item>
+			<item dx="5" canhide="true" label="Geluidsniveau rijkswegen nachtperiode" listento="geluid.overijssel_geluid_lnight_rijksw_2006">	
+        </item>
+			<ITEM dy="5" canhide="true" label="Hemelhelderheid" symbolposition="left" open="true" listento="avo5.hemelhelderheid_polygon">
+        </ITEM>
+			<ITEM dx="5" canhide="true" label="Concentratie fijn stof langs wegen" listento="lukwa.luchtkwaliteit_2008_P">
+        </ITEM>
+			<ITEM dx="5" canhide="true" label="Concentratie stikstofdioxide langs wegen" listento="lukwa.luchtkwaliteit_2008_N">
+        </ITEM>
+			<text dx="5" dy="5">
+				<string id="text">
+					<nl><![CDATA[<span class='subtext'><b>energiekaarten</b> vind je</span>
+]]></nl>
+				</string>
+			</text>
+			<text dx="5" dy="-20">
+				<string id="text">
+					<nl><![CDATA[<span class='subtext'>in de <a href="http://gisopenbaar.toverijs3.nl/website/energieatlas/energieatlas.html" target="_blank"><font color="#02A0C5">energieatlas</font></a></span>
+]]></nl>
+				</string>
+			</text>
+			<ITEM dy="5" canhide="true" label="Nationaal landschap" symbolposition="left" listento="nat.natlands">
+        </ITEM>
+			<ITEM canhide="true" label="Nationaal Park" symbolposition="left" listento="nat.natpark">
+        </ITEM>
+			<ITEM canhide="true" open="false" label="Ecologische Hoofdstructuur (EHS) {B}" symbolposition="left" listento="ehs.ehs,ehs.evz,ehs.rvz" infourl="ehs.html','legwin','')">
+        </ITEM>
+			<ITEM canhide="true" label="Kwetsbare gebieden (WAV) {B}" open="false" listento="avo12.wav_polygon">
+        </ITEM>
+			<ITEM canhide="true" label="Concept habitattypenkaart {B}" symbolposition="left" listento="arcgis_habitattypen.0,avo19.habitattypen_id">				
+        </ITEM>
+			<ITEM canhide="true" label="Reconstructiezonering" listento="avo13.recon_zone_polygon">
+        </ITEM>
+			<ITEM canhide="true" label="Wildbeheereenheden" symbolposition="left" listento="avo6.wbe_polygon">
+        </ITEM>
+			<ITEM canhide="true" label="Natura2000 gebied {B}" symbolposition="left" listento="avo15.nat2000">				
+        </ITEM>
+			<ITEM canhide="true" label="Beschermde natuurmonumenten" symbolposition="left" listento="monument.nb_wet">
+        </ITEM>
+			<ITEM canhide="true" label="Ontwikkelingsperspectieven" symbolposition="left" listento="op.op_kenniscentra,op.op_waterberging,op.op_buitenplaats,op.op_landelijk_wonenwerken,op.op_stadsas,op.op_buitendijks,op.op_veenweidegebied,op.op_drinkwaterwinning,op.op_stadsranden,op.op_natlandschap,op.op_fietssnelweg,op.op_hist_kern,op.op_buitengebied,op.op_luchthaven_airside,op.op_luchthaven_overgang,op.op_luchthaven_overgang_diagon,op.op_luchthaven_bedr,op.op_log,op.op_groene_hoofdstr,op.op_buitengebied_zoekEHS,op.op_windenergie,op.op_steden_als_motor,op.op_glastuinbouw,op.op_EHS_lijn_RVZ_ntb_2,op.op_EHS_lijn_EVZ_2,op.op_vervoersnetwerk,op.op_vervoersnetwerk2,op.op_spoor,op.op_water1,op.op_water2,op.op_water3,op.op_water5,op.op_vaarweg,op.op_airport_twente,op.op_overslagcentrum,op.op_stationsgebied,op.op_opafritten">
+        </ITEM>
+			<ITEM canhide="true" label="Natuurlijke laag" symbolposition="left" listento="ov17.natuurlijke_laag,omgevingsvisie.watervlak1,omgevingsvisie.waterloop1,omgevingsvisie.ruggen,ov18.beken,omgevingsvisie.bron">
+        </ITEM>
+			<ITEM canhide="true" label="Laag van het agrarisch cultuurlandschap" symbolposition="left" listento="ov25.agrarisch_cultuurlandschap,omgevingsvisie.watervlak2,omgevingsvisie.waterloop2">
+        </ITEM>
+			<ITEM canhide="true" label="Stedelijke laag" symbolposition="left" listento="ov41.wegencategorisering,ov38.historische_kern,ov39.stedelijke_laag_area,ov40.s_vervoersnetwerk,ov40.s_vervoersnetwerk2,ov42.vaarten_Water_arc,ov42.dedemsvaart,ov43.infrastructuur_spoor_lijn,ov44.stations">
+        </ITEM>
+			<ITEM canhide="true" label="Lust- en leisurelaag" symbolposition="left" listento="ov93.stadsranden,ov19.verblijfsrecreatie_lust,ov24.attracties,ov23.buitenplaats,ov26.vaarweg_lenl,ov20.lawroute,ov20.lfroute,ov21.fronten,ov22.donkerte">
+        </ITEM>
+			<ITEM canhide="true" label="continu en herkenbaar watersysteem" symbolposition="left" dx="5" listento="ov96.hoofdsysteem,ov95.krw,ov95.krw_vlak,ov94.kleinewateren,ov94.kleinewateren_wfk">
+        </ITEM>
+			<ITEM canhide="true" label="waterveiligheid" symbolposition="left" dx="5" listento="ov96.primairewatkeer_wfk,ov96.regionalewatkeer_wfk,ov96.dijkringgebieden_wfk,ov85.ruimtevdrivier,ov97.buitendijksgebied,ov98.bypass">
+        </ITEM>
+			<ITEM canhide="true" label="grondwater" symbolposition="left" dx="5" listento="ov99.innamezone,ov32.grwbesgebied_wfk,ov100.intrekgebieden_wfk,ov100.salland_wfk">
+        </ITEM>
+			<ITEM canhide="true" label="waterberging" symbolposition="left" dx="5" listento="ov102.primaire_watergebieden_wfk,ov102.primaire_watergeb_lijn_wfk,ov102.waterberging_vlak_wfk,omgevingsvisie.waterberging_lijn_wfk,ov101.wb_zoeklocatie">
+        </ITEM>
+			<ITEM canhide="true" label="overig" symbolposition="left" dx="5" listento="ov103.vaarweg_wfk,ov103.recreatievaart,ov103.wateraanvoer,ov103.zwemplas_wfk,ov103.zwemplassen_beschermingsgebied">
+        </ITEM>
+			<ITEM canhide="true" label="Ontwikkelingsperspectieven" dx="5" symbolposition="left" listento="ov12.hist_kern,ov1.buitengebied,ov2.groene_hoofdstr,ov1.buitengebied_zoekEHS,ov3.log,ov7.windenergie,ov4.steden_als_motor,ov5.glastuinbouw,ov6.EHS_lijn_RVZ_ntb_2,ov6.EHS_lijn_EVZ_2,ov10.vervoersnetwerk,ov10.vervoersnetwerk2,ov9.spoor,ov8.water1,ov8.water2,ov8.water3,ov8.water5,ov11.vaarweg,ov14.airport_twente,ov16.overslagcentrum,ov15.stationsgebied">
+        </ITEM>
+			<ITEM canhide="true" label="EHS" dx="5" symbolposition="left" listento="ov6.EHS_lijn_RVZ_ntb,ov6.EHS_lijn_EVZ,ov37.EHS">
+        </ITEM>
+			<ITEM canhide="true" label="Nationale landschappen" dx="5" symbolposition="left" listento="ov37.nationale_landschappen,omgevingsvisie.natlandschap">
+        </ITEM>
+			<ITEM canhide="true" label="Recreatie" symbolposition="left" dx="5" listento="ov30.froutenetwerk,ov27.lfroute_arc,ov27.lawroute_arc,ov28.rec_steenwijk,omgevingsvisie.kleinschalige_VerblMogSteenw,ov27.wandelnetwerk_twente">
+        </ITEM>
+			<ITEM canhide="true" label="Externe veiligheid" symbolposition="left" dx="5" listento="ov47.laagvliegroute,ov48.buisleiding,ov49.rgsweg">
+        </ITEM>
+			<ITEM canhide="true" label="Drinkwatervoorziening" symbolposition="left" dx="5" listento="ov31.waterwin_polygon,ov32.grwbesgebied,ov32.sted_grwbesgebied,ov34.intrekgebieden,ov34.sted_intrekgebieden,ov33.salland,ov35.boringsvrij">
+        </ITEM>
+			<ITEM canhide="true" label="Waterveiligheid" symbolposition="left" dx="5" listento="ov45.dijkringgebieden,ov46.primaire_watergebieden,ov46.waterberging_vlak,omgevingsvisie.waterberging_lijn,ov46.waterberging_corr,ov46.ess_waterlopen,omgevingsvisie.watkeer">
+        </ITEM>
+			<ITEM canhide="true" label="Regionale waterkeringen" symbolposition="left" dx="5" listento="ov52.primwatkeer,ov52.regwatkeer">
+        </ITEM>
+			<ITEM canhide="true" label="Peilbesluiten" symbolposition="left" dx="5" listento="ov50.peilbesluiten">
+        </ITEM>
+			<ITEM canhide="true" label="Vaarwegnummering" symbolposition="left" dx="5" listento="ov51.vaarwegnrs,ov51.vaarwegnr_polygon">
+        </ITEM>
+			<ITEM canhide="true" dy="5" label="Lange-afstand-wandelpad (LAW)" symbolposition="left" listento="routes2">			
+        </ITEM>
+			<ITEM canhide="true" label="Landelijke fietsroute (LF-route)" symbolposition="left" listento="routes1">				
+        </ITEM>
+			<ITEM canhide="true" label="Fietsroutenetwerk" symbolposition="left" listento="routes3">			
+        </ITEM>			
+        <ITEM canhide="true" label="Fietsrouteknooppunten" symbolposition="left" listento="routes4">			
+        </ITEM>
+			<ITEM canhide="true" label="Toeristisch overstappunt (TOP)" symbolposition="left" listento="avo3.top">			
+        </ITEM>
+			<ITEM dy="5" dx="-2" canhide="true" label="Type accommodatie:">
+        </ITEM>
+			<ITEM canhide="true" label="Camping {F} {B}" symbolposition="left" open="false" listento="recreatie.rec_camping">		
+        </ITEM>
+			<ITEM canhide="true" label="Bungalowpark {F} {B}" symbolposition="left" open="false" listento="recreatie.rec_bungalowpark">			
+        </ITEM>
+			<ITEM canhide="true" label="Jachthaven {F} {B}" symbolposition="left" open="false" listento="recreatie.rec_jachthaven">
+        </ITEM>
+			<ITEM canhide="true" label="Groepsaccommodatie {F} {B}" symbolposition="left" open="false" listento="recreatie.rec_groepsaccommodatie">
+        </ITEM>
+			<ITEM canhide="true" label="">
+        </ITEM>
+			<ITEM label="website Risicokaart" canhide="false"/>
+			<ITEM canhide="true" dy="5" open="true" label="Waterwingebied {B}" symbolposition="left" listento="avo10.waterwin_polygon">
+        </ITEM>
+			<ITEM canhide="true" open="true" label="Grondwaterbeschermingsgebied {B}" symbolposition="left" listento="avo8.grwbes_polygon">
+        </ITEM>
+			<ITEM canhide="true" open="true" label="Boringsvrije zone {B}" symbolposition="left" listento="boring.boringvrij,boring.salland">
+        </ITEM>
+			<ITEM canhide="true" open="true" label="Intrekgebied {B}" symbolposition="left" listento="avo9.intrekgebied">	
+        </ITEM>
+			<ITEM canhide="true" dy="5" open="true" label="Zwemplas - openbaar {B}" symbolposition="left" listento="zwemwater.zwemwater_o,avo.zwemwater_o_krw,avo.zwemwater_o_q">
+				<ITEM canhide="true" open="true" label="labels weergeven" symbolposition="left" listento="avo.zwemwater_o_lbl" maxscale="13.25"/>
+				<ITEM canhide="true" dx="30" dy="" open="true" label="labels weergeven" symbolposition="left" listento="label_overlay.zwemwater_o_lbl" maxscale="1325" minscale="13.25"/>
+			</ITEM>
+			<ITEM canhide="true" open="true" label="Zwemplas - semi-openbaar {B}" symbolposition="left" listento="zwemwater.zwemwater_no,avo.zwemwater_no_krw,avo.zwemwater_no_q">
+				<ITEM canhide="true" open="true" label="labels weergeven" symbolposition="left" listento="avo.zwemwater_no_lbl" maxscale="13.25"/>
+				<ITEM canhide="true" dx="30" dy="" open="true" label="labels weergeven" symbolposition="left" listento="label_overlay.zwemwater_no_lbl" maxscale="1325" minscale="13.25"/>
+			</ITEM>
+			<ITEM dy="5" canhide="true" label="Kulturhus initiatief {F} {B}" open="true" listento="avo2.kulturhus_mfa">
+        </ITEM>
+		</fmc:Legend>
+	</fmc:Container>
+</FLAMINGO>

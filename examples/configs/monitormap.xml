@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FLAMINGO xmlns:fmc="fmc" id="flamingo" lang="nl" languages="en,nl" tooltipdelay="300" commtojava="true" preloadtitle="Prototypemap" useexternalinterface="true">
+	<style id=".tooltip" font-family="arial, sans-serif" font-size="11" color="#880000" display="block"/>
+	<fmc:Container left="0" top="0" height="100%" width="100%">
+		<fmc:MonitorMap id="monitorl" left="37%" top="50%" width="50%" listento="map">
+			<string id="waiting" en="Making... [layer] [percentage]%..." nl="Kaart aan het maken..."/>
+			<string id="loading" en="Making... [layer] [percentage]%..." nl="Kaart aan het laden. [percentage]%"/>
+		</fmc:MonitorMap>
+		<fmc:ToolGroup id="toolgroup" tool="zoomout" listento="map" width="100%" borderwidth="1" bordercolor="#FF0000" height="100" left="100" top="10">	
+			<fmc:ToolZoomout id="zoomout" left="30" skin="f2"/>		
+			<fmc:ToolZoomin id="zoom" skin="f2"/>			
+			<fmc:ToolPan left="60" skin="f2"/>
+			<fmc:ToolSuperPan id="superPan" left="90" skin="f2"/>
+			<fmc:ToolMeasure left="120" skin="f2"/>
+			<fmc:ToolIdentify left="150" skin="f2"/>
+		</fmc:ToolGroup>
+		<fmc:Coordinates id="awerwe" listento="map" left="100" top="600"
+				decimals="6">
+					<style id=".xy" font-family="verdana" font-size="10px" color="#ff5555" display="block" font-weight="normal"/>
+			<string id="xy" nl="X: [x]     Y: [y]" />
+			
+		</fmc:Coordinates>
+		<fmc:BorderNavigation listento="map" top="0%" width="100%" height="100%" skin="f1"/>		
+		<fmc:Map id="map" left="0" top="0%" height="100%" width="100%" bottom="bottom" visible="true" extent="12000,304000,280000,620000" fullextent="12000,304000,280000,620000" zoomscalefactor="3" minscale="0.16666666669999999" extenthistory="10">
+			<fmc:LayerIdentifyIcon id="identifyicon"/>
+			<fmc:LayerGrid visible="true" id="grid" gridwidth="10000" gridheight="10000"/>
+				<fmc:LayerImage visible="true" id="imageLayer" imageurl="../images/limburg2010.swf" extent="168000,307000,214000,421000" listento="map"/>
+				<fmc:LayerOGWMS visible="true" id="layer2" url="http://public-wms.kaartenbalie.nl/wms/nederland?Styles=" srs="EPSG:28992" query_layers="gemeenten_2006" layers="plannen,gemeenten_2006,buurten_2006,wijken_2006,water,wegen,basis" showerrors="true"/>
+				<!--fmc:LayerArcIMS id="esri" identifyall="true" server="http://groningen.esrinl.com" mapservice="SNN" hiddenids="3,ongevallena,ongevallen,telpunten,telpuntena,nwb_frgrdr,intensiteit_capaciteit,intensiteit_01_05,intensiteit_04_05" visibleids=""/-->
+				<fmc:LayerArcServer id="carnavalskaart" server="atlas.brabant.nl" dataframe="layers" visible="true" mapservice="carnavalskaart" identifyall="true" identifyids="0" maptipids="0" hiddenids="4,7,8" esriArcServerVersion="9.3"><layer id="0" maptipfields="CARNAVALSNAAM"><string id="maptip" nl="[CARNAVALSNAAM]" en="Municipality [GEMEENTE]" de="Gemeinde [GEMEENTE]" fr="Commune [GEMEENTE]"/></layer></fmc:LayerArcServer>				
+				<fmc:LayerOGWMS id="layer1" url="http://osm.kaartenbalie.nl/wms/mapserver-scale" srs="EPSG:28992" layers="#ALL#" showerrors="true" visible="true">
+				</fmc:LayerOGWMS>
+				<fmc:LayerOGWMS id="layer3" url="http://afnemers.ruimtelijkeplannen.nl/afnemers/services?Styles=" srs="EPSG:28992" query_layers="#ALL#" layers="#ALL#" showerrors="true" visible="true"/>
+					
+			<fmc:TilingLayer id="metacarta" serviceurl="http://geoserver.nl/tiles/tilecache.aspx/1.0.0/ipolufo2009/" resolutions="3276,1092,364,122,40.5,13.5,4.5,1.5,0.5,0.16666666669999999" serviceenvelope="0,300000,300000,620000">
+				<TilingParam name="USERID">0cc72c2d32d2f0b9fde2ad09521a4de0ipolufo</TilingParam>
+			</fmc:TilingLayer>
+		</fmc:Map>
+	</fmc:Container>	
+</FLAMINGO>

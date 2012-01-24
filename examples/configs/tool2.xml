@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 
+-->
+
+<FLAMINGO xmlns:fmc="fmc" xmlns:tpc="tpc" lang="nl">
+	<fmc:ToolGroup id="tools" tool="identify" listento="map" width="178" height="65" left="left 530" top="38">
+			<fmc:ToolIdentify skin="f2" id="identify" listento="map" >                                                    
+				   <string id="tooltip" nl="Informatie opvragen: klik op een object op de kaart" en="identify" du="information aufvragen"/>
+			</fmc:ToolIdentify>
+			  <fmc:ToolZoomin skin="f2" id="zoom" left="30" listento="map" clickdelay="0">
+			<string id="tooltip" nl="Inzoomen" en="zoom in" du="bild vergrossern"/>      
+			  </fmc:ToolZoomin>
+			  <fmc:ToolZoomout skin="f2" left="65" listento="map" clickdelay="0"> 
+			<string id="tooltip" nl="Uitzoomen" en="zoom out" du="bild verkleinern"/>          
+			  </fmc:ToolZoomout>
+			  <!-- <fmc:ToolSuperPan skin="f2" left="105" >
+			   </fmc:ToolSuperPan> -->
+			<fmc:ToolPan skin="f2" left="100" pandelay="0" clickdelay="0">
+			  <string id="tooltip" nl="Kaart verslepen: klik op de kaart en houd uw linkermuisknop ingedrukt" en="Drag map" du="Karte verschieben"/>
+			   </fmc:ToolPan> 
+			  <fmc:ButtonPrev skin="f2" left="135" listento="map" >
+				<string id="tooltip"  en="previous extent" nl="Stap terug" du="vorigem bereich"/>
+			  </fmc:ButtonPrev>
+			  <fmc:ButtonNext skin="f2" left="170" listento="map" >
+				<string id="tooltip"  en="next extent" nl="Stap vooruit" du="nachsten bereich"/>
+			  </fmc:ButtonNext>
+			  <fmc:ButtonFull skin="f2" left="205" top="2" listento="map" >       
+				<string id="tooltip" du="zoom zum vollem bereich" en="zoom to extent" nl="Zoom naar volledig kaartbeeld"/>
+			  </fmc:ButtonFull> 
+			<fmc:ToolMeasure skin="f2" left="260" units=" m" magicnumber="1" decimals="0" listento="map">
+				<string id="tooltip" nl="Afstand meten (meters): klik op de kaart en houd uw linkermuisknop ingedrukt" en="measure meters" du="distanz messen"/>
+			</fmc:ToolMeasure>		
+
+		</fmc:ToolGroup>
+			<fmc:Map id="map" left="0" top="0%" height="100%" width="100%" bottom="bottom" visible="true" extent="12000,304000,280000,620000">
+			<fmc:LayerIdentifyIcon id="identifyicon"/>
+			<fmc:LayerOGWMS id="layer1" url="http://osm.kaartenbalie.nl/wms/mapserver-scale" srs="EPSG:28992" layers="#ALL#" showerrors="true">
+				</fmc:LayerOGWMS>
+		</fmc:Map>
+
+</FLAMINGO>

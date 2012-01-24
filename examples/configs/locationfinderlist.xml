@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Document   : config.xml
+    Created on : 24 januari 2007, 11:16
+    Author     : Roy
+    Description:
+        Configuration of the flamingo viewer.
+-->
+<FLAMINGO xmlns:fmc="fmc" id="flamingo" lang="nl" languages="en,nl" tooltipdelay="300" commtojava="true" preloadtitle="Prototypemap" useexternalinterface="true">
+	<style id=".tooltip" font-family="arial, sans-serif" font-size="11" color="#880000" display="block"/>
+	<fmc:Container left="0" top="0" height="100%" width="60%">
+		<fmc:MonitorLayer id="monitorl" left="37%" top="50%" width="50%" listento="map">
+			<string id="waiting" en="Making... [layer] [percentage]%..." nl="Kaart aan het maken..."/>
+			<string id="loading" en="Making... [layer] [percentage]%..." nl="Kaart aan het laden. [percentage]%"/>
+		</fmc:MonitorLayer>
+		<!--fmc:Container backgroundcolor="#E8F3EB" left="0" top="0" height="6%" width="100%"-->
+		<fmc:ToolGroup tool="zoom" listento="map" width="100%" height="100" left="10" top="10">
+			<fmc:ToolZoomin id="zoom" skin="f2"/>
+			<fmc:ToolZoomout left="30" skin="f2"/>
+			<fmc:ToolPan left="60" skin="f2"/>
+			<fmc:ToolMeasure left="90" skin="f2"/>
+			<fmc:ToolIdentify left="120" skin="f2"/>
+		</fmc:ToolGroup>
+		<fmc:Coordinates listento="map" left="80%" top="95%" decimals="6">
+			<style id=".xy" font-family="arial, sans-serif" font-size="11"/>
+			<string id="xy" nl="X: [x]     Y: [y]"/>
+		</fmc:Coordinates>
+		<!--/fmc:Container-->
+		<fmc:BorderNavigation listento="map" top="0%" width="100%" height="100%" skin="f1"/>
+		<fmc:EditMap id="editMap" editable="true" left="0" top="0%" height="100%" width="100%" bottom="bottom" listento="gis,map"/>
+		<fmc:GIS id="gis" geometryeditable="yes" alwaysdrawpoints="no">
+			<fmc:Layer name="gemeenten_2006" title="gemeenten_2006" visible="true" wfsurl="wfs::http://public-wms.kaartenbalie.nl/wms/nederland" version="1.0.0" featuretypename="gemeenten_2006" geometrytypes="Polygon,LineString,Point" loadfeaturesonstart="false">
+				<fmc:Style fillcolor="0x0000FF" fillopacity="30" strokecolor="0x0000FF" strokeopacity="50" strokeWidth="1"/>
+			</fmc:Layer>
+		</fmc:GIS>
+		<fmc:Map id="map" left="0" top="0%" height="100%" width="100%" bottom="bottom" visible="true" extent="12000,304000,280000,620000">
+			<fmc:LayerIdentifyIcon id="identifyicon"/>
+			<fmc:LayerOGWMS id="layer2" url="http://public-wms.kaartenbalie.nl/wms/nederland?Styles=" srs="EPSG:28992" query_layers="gemeenten_2006" layers="gemeenten_2006" showerrors="true" visible="true"/>
+			<fmc:LayerOGWMS id="layer1" url="http://osm.kaartenbalie.nl/wms/mapserver-scale" srs="EPSG:28992" layers="#ALL#" showerrors="true">
+				</fmc:LayerOGWMS>
+			<fmc:LayerOGWMS id="layer3" url="http://afnemers.ruimtelijkeplannen.nl/afnemers/services?Styles=" srs="EPSG:28992" query_layers="#ALL#" layers="#ALL#" showerrors="true" visible="true"/>
+		</fmc:Map>
+	</fmc:Container>
+	<fmc:Container left="60%" width="40%" height="100%" top="0%" backgroundcolor="#FFFFFF">
+		<fmc:LocationFinder id="locationfinder" listento="map" left="0%" top="0%" width="90%" height="100%">
+			<string id="label" nl="zoek..." en="search..." de="suche..." fr="recherche..."/>
+			<string id="busy" nl="zoeken..." en="searching..." de="suchen..." fr="rechercher..."/>
+			<string id="nohit" nl="Geen gegevens gevonden..." en="No data found..." de="Keine Daten gefunden..." fr="Pas de données trouvées..."/>
+			<string id="prev" nl="vorige   " en="previous   " de="zurück   " fr="précédent   "/>
+			<string id="next" nl="volgende" en="next" de="weiter" fr="suivant"/>
+			<LOCATIONS id="provincie">
+				<string id="label" nl="Zoek een provincie" en="Search a province" de="Bezirk suchen" fr="Recherche d'une province"/>
+				<string id="hint" nl="Kies een provincie..." en="Choose a province..." de="Bezirk wahlen" fr="Prendre une province"/>
+				<LOCATION LABEL="Drenthe" extent="204348,514313,269919,580256"/>
+				<LOCATION LABEL="Flevoland" extent="136946,473788,195389,539705"/>
+				<LOCATION LABEL="Fryslân" extent="119175,534942,224893,613959"/>
+				<LOCATION LABEL="Gelderland" extent="127900,416114,254331,503929"/>
+				<LOCATION LABEL="Groningen" extent="206912,540354,278026,619132"/>
+				<LOCATION LABEL="Limburg" extent="167508,306839,213448,421214"/>
+				<LOCATION LABEL="Noord-Brabant" extent="72158,359069,200808,426909"/>
+				<LOCATION LABEL="Noord-Holland" extent="94075,464238,153240,577602"/>
+				<LOCATION LABEL="Overijssel" extent="182509,459721,269799,541038"/>
+				<LOCATION LABEL="Utrecht" extent="114243,438336,171507,479600"/>
+				<LOCATION LABEL="Zeeland" extent="13565,357829,77880,419938"/>
+				<LOCATION LABEL="Zuid-Holland" extent="48164,407972,138649,482642"/>
+			</LOCATIONS>
+		</fmc:LocationFinder>
+	</fmc:Container>
+</FLAMINGO>

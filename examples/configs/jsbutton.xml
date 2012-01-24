@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Used javascript in html file
+	
+    //capture the onEvent of the jsbutton with the id="b_legend"
+    function flamingo_b_legend_onEvent(id, event) {
+        if (event["down"]) {
+            if( event["selected"]) {
+               flamingo.callMethod("drawWindow", "setVisible", true)
+            }
+            else {
+               flamingo.callMethod("drawWindow", "setVisible", false)
+            }
+        }
+    }		
+-->
+<FLAMINGO xmlns:fmc="fmc" id="flamingo" lang="nl" languages="en,nl" tooltipdelay="300" commtojava="true" preloadtitle="Prototypemap" useexternalinterface="true">
+	<style id=".tooltip" font-family="arial, sans-serif" font-size="11" color="#880000" display="block"/>
+	<fmc:Container id="mapcon" left="0" top="0" height="100%" width="100%">
+		<fmc:MonitorLayer id="monitorl" left="37%" top="50%" width="50%" listento="map">
+			<string id="waiting" en="Making... [layer] [percentage]%..." nl="Kaart aan het maken..."/>
+			<string id="loading" en="Making... [layer] [percentage]%..." nl="Kaart aan het laden. [percentage]%"/>
+		</fmc:MonitorLayer>
+		<fmc:ToolGroup tool="zoom" listento="map" width="100%" height="100" left="10" top="10">
+			<fmc:ToolZoomin id="zoom" skin="f1"/>
+			<fmc:ToolZoomout left="30" skin="f1"/>
+			<fmc:ToolPan left="60" skin="f1"/>
+			<fmc:ToolMeasure left="90" skin="f1"/>
+			<fmc:ToolIdentify left="120" skin="f1"/>
+			<fmc:JsButton id="b_legend" left="150" width="25" height="25" iconurl_up="images/c_legend.png" iconurl_over="images/c_legend_down.png" iconurl_sel="images/c_legend_down.png" iconurl_dis="images/c_legend_dis.png" label="" toggle="true" visible="true" enabled="true" selected="true">
+			<string id="tooltip" en="Legend on/off" nl="Legenda aan/uit"/>
+			</fmc:JsButton>			
+		</fmc:ToolGroup>
+		<fmc:Coordinates listento="map" left="80%" top="95%" decimals="6">
+			<style id=".xy" font-family="arial, sans-serif" font-size="11"/>
+			<string id="xy" nl="X: [x]     Y: [y]"/>
+		</fmc:Coordinates>
+		<!--/fmc:Container-->
+		<fmc:BorderNavigation listento="map" top="0%" width="100%" height="100%" skin="f1"/>
+		<fmc:Map id="map" left="0" top="0%" height="100%" width="100%" bottom="bottom" visible="true" extent="12000,304000,280000,620000">
+			<fmc:LayerIdentifyIcon id="identifyicon"/>
+			<fmc:LayerOGWMS id="layer1" url="http://osm.kaartenbalie.nl/wms/mapserver-scale" srs="EPSG:28992" layers="#ALL#" showerrors="true">
+				</fmc:LayerOGWMS>
+		</fmc:Map>
+	</fmc:Container>	
+	<fmc:Window id="drawWindow" title="Legend" visible="true" canclose="false" backgroundcolor="#E3EDF5" skin="g" canresize="true" defocusalpha="100" width="250" height="600" left="right -350" top="45"> 
+	<fmc:Container width="100%" height="100%" backgroundcolor="#E3EDF5">
+		<fmc:Legend id="legend" top="0" left="0" height="100%" width="100%" listento="map">
+			<string id="outofscale" nl="Buiten schaalbereik;&lt;br&gt;zoom naar deze laag..." en="Outside range;&lt;br&gt;zoom to layer" de="Auerhalb des Mastabsbereichs;&lt;br&gt;vergrern" fr="Hors chelle..." />
+			<style id=".group" font-family="arial,verdana" font-size="12px" color="#000000" display="block" font-weight="normal" />
+			<style id=".group_mouseover" font-family="arial,verdana" font-size="12px" color="#000000" display="block" font-weight="normal" />
+			<style id=".item" font-family="arial,verdana" font-size="12px" color="#333333" display="block" font-weight="normal" />
+			<style id=".item_link" font-family="arial,verdana" font-size="12px" color="#0033cc" display="block" font-weight="normal" text-decoration="underline" />
+			<style id=".symbol" font-family="arial,verdana" font-size="12px" color="#333333" display="block" font-weight="normal" />
+			<style id=".symbol_link" font-family="arial,verdana" font-size="12px" color="#0033cc" display="block" font-weight="normal" text-decoration="underline" />
+			<style id=".outofscale" font-family="arial,verdana" font-size="10px" color="#0066cc" display="block" font-style="italic" />
+			<style id=".text" font-family="arial,verdana" font-size="12px" color="#333333" display="block" font-weight="normal" />
+		</fmc:Legend>						
+	</fmc:Container>	
+</fmc:Window> 
+	
+</FLAMINGO>

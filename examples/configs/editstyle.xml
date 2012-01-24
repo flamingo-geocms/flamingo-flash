@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FLAMINGO xmlns:fmc="fmc" id="flamingo" lang="nl" languages="en,nl" tooltipdelay="300" commtojava="true" preloadtitle="Prototypemap" useexternalinterface="true">
+	<style id=".tooltip" font-family="arial, sans-serif" font-size="11" color="#880000" display="block"/>
+	<fmc:Container left="0" top="0" height="100%" width="75%">
+		<fmc:MonitorLayer id="monitorl" left="37%" top="50%" width="50%" listento="map">
+			<string id="waiting" en="Making... [layer] [percentage]%..." nl="Kaart aan het maken..."/>
+			<string id="loading" en="Making... [layer] [percentage]%..." nl="Kaart aan het laden. [percentage]%"/>
+		</fmc:MonitorLayer>
+		<fmc:ToolGroup tool="zoom" listento="map" width="100%" height="100" left="10" top="10">
+			<fmc:ToolZoomin id="zoom" skin="f2"/>
+			<fmc:ToolZoomout left="30" skin="f2"/>
+			<fmc:ToolPan left="60" skin="f2"/>
+			<fmc:ToolMeasure left="90" skin="f2"/>
+			<fmc:ToolIdentify left="120" skin="f2"/>
+		</fmc:ToolGroup>
+		<fmc:Coordinates listento="map" left="80%" top="95%" decimals="6">
+			<style id=".xy" font-family="arial, sans-serif" font-size="11"/>
+			<string id="xy" nl="X: [x]     Y: [y]"/>
+		</fmc:Coordinates>
+		<fmc:BorderNavigation listento="map" top="0%" width="100%" height="100%" skin="f1"/>
+		 <fmc:EditMap id="editMap" editable="true" left="0" top="0%" height="100%" width="100%" bottom="bottom" listento="gis,map"/>
+        <fmc:GIS id="gis" geometryeditable="yes" alwaysdrawpoints="no">
+            <fmc:Layer name="layer1" title="Layer 1" visible="true" geometrytypes="Polygon,LineString,Point"  >
+                <fmc:Style fillcolor="0x000000" fillopacity="30" strokecolor="0xcc0000" strokeopacity="100" strokeWidth="1"/>
+                <fmc:GeometryProperty name="ms:icon" title="Puntikoon" propertytype="pointicon" type="IconPicker" defaultvalue="images/icon1.png" nrtileshor="4" nrtilesver="2" ingeometrytypes="Point">
+                    <fmc:availableIcon title="geest" name="icon1" pickiconurl="flamingo/assets/icons/icon1.png" value="images/icon1.png"/>
+                    <fmc:availableIcon title="ovaal" name="icon2" pickiconurl="flamingo/assets/icons/icon2.png" value="images/icon2.png"/>
+                    <fmc:availableIcon title="driehoek" name="icon3" pickiconurl="flamingo/assets/icons/icon3.png" value="images/icon3.png"/>
+                    <fmc:availableIcon title="tijgervoetafdruk" name="icon4" pickiconurl="flamingo/assets/icons/icon4.png" value="images/icon4.png"/>
+                    <fmc:availableIcon title="balk" name="icon5" pickiconurl="flamingo/assets/icons/icon5.png" value="images/icon5.png"/>
+                </fmc:GeometryProperty>
+                <fmc:GeometryProperty name="ms:text" title="Punttekst" propertytype="pointtext" type="PointTextEditor" defaultvalue="" ingeometrytypes="Point">
+                </fmc:GeometryProperty>
+                <fmc:GeometryProperty name="ms:strokecolor" propertytype="strokecolor" title="Lijnkleur  " type="ColorPalettePicker" defaultvalue="255 255 255" nrtileshor="2" nrtilesver="4" ingeometrytypes="Polygon,LineString">
+                    <fmc:availableColor title="Zwart" name="color1" pickcolor="0x000000" value="0 0 0"/>
+                    <fmc:availableColor title="Rood" name="color1" pickcolor="0xff0000" value="255 0 0"/>
+                    <fmc:availableColor title="Groen" name="color2" pickcolor="0x00ffff" value="0 255 255"/>
+                    <fmc:availableColor title="Blauw" name="color3" pickcolor="0x0000ff" value="0 0 255"/>
+                    <fmc:availableColor title="Wit" name="color4" pickcolor="0xffffff" value="255 255 255"/>
+                </fmc:GeometryProperty>
+                <fmc:GeometryProperty name="ms:strokecolor" propertytype="strokecolor" title="Letter kleur" type="ColorPalettePicker" defaultvalue="0 0 0" nrtileshor="2" nrtilesver="4" ingeometrytypes="Point">
+                    <fmc:availableColor title="Zwart" name="color1" pickcolor="0x000000" value="0 0 0"/>
+                    <fmc:availableColor title="Rood" name="color1" pickcolor="0xff0000" value="255 0 0"/>
+                    <fmc:availableColor title="Groen" name="color2" pickcolor="0x00ffff" value="0 255 255"/>
+                    <fmc:availableColor title="Blauw" name="color3" pickcolor="0x0000ff" value="0 0 255"/>
+                    <fmc:availableColor title="Wit" name="color4" pickcolor="0xffffff" value="255 255 255"/>
+                </fmc:GeometryProperty>
+                <fmc:GeometryProperty name="ms:strokeopacity" title="Lijnkleurdekking" propertytype="strokeopacity" type="OpacityPicker" defaultvalue="50" minvalue="25" maxvalue="100" nrtileshor="2" nrtilesver="2" ingeometrytypes="Polygon,LineString">
+                </fmc:GeometryProperty>
+                <fmc:GeometryProperty name="ms:linestyle" propertytype="linestyle" title="Lijnstijl " type="LineTypePicker" defaultvalue="solid" ingeometrytypes="LineString">
+                </fmc:GeometryProperty>
+                <fmc:GeometryProperty name="ms:fillcolor" title="Oppervlaktekleur" propertytype="fillcolor" type="ColorPalettePicker" defaultvalue="0 0 0" nrtileshor="2" nrtilesver="4" ingeometrytypes="Polygon">
+                    <fmc:availableColor title="Zwart" name="color1" pickcolor="0x000000" value="0 0 0"/>
+                    <fmc:availableColor title="Rood" name="color1" pickcolor="0xff0000" value="255 0 0"/>
+                    <fmc:availableColor title="Groen" name="color2" pickcolor="0x00ffff" value="0 255 255"/>
+                    <fmc:availableColor title="Blauw" name="color3" pickcolor="0x0000ff" value="0 0 255"/>
+                    <fmc:availableColor title="Wit" name="color4" pickcolor="0xffffff" value="255 255 255"/>
+                </fmc:GeometryProperty>
+                <fmc:GeometryProperty name="ms:fillopacity" propertytype="fillopacity" title="Oppervlaktekleurdekking" type="OpacityPicker" defaultvalue="30" minvalue="0" maxvalue="100" nrtileshor="2" nrtilesver="3" ingeometrytypes="Polygon">
+                </fmc:GeometryProperty>
+            </fmc:Layer>            
+        </fmc:GIS>		
+        <fmc:Map id="map" left="0" top="0%" height="100%" width="100%" bottom="bottom" visible="true" extent="12000,304000,280000,620000">
+			<fmc:LayerIdentifyIcon id="identifyicon"/>
+			<fmc:LayerOGWMS id="layer1" url="http://osm.kaartenbalie.nl/wms/mapserver-scale" srs="EPSG:28992" layers="#ALL#" showerrors="true">
+				</fmc:LayerOGWMS>
+		</fmc:Map>
+	</fmc:Container>
+	<fmc:Container left="77%" width="25%" height="25%" top="10%" backgroundcolor="#FFFFFF">
+		<fmc:EditLegend id="editLegend" left="0%" top="0" listento="editMap" expandable="true" popwindow="true"/>
+		<fmc:Container width="100%" bottom="bottom" top="200" borderwidth="1">
+			<fmc:EditProperties id="editProperties" top="0" left="5" right="right" bottom="bottom" visible="false" bordercolor="#ffffff" listento="editMap" okbutton="true" applybutton="false">
+				<string id="okbuttonlabel" en="OK" nl="OK"/>
+				<string id="applybuttonlabel" en="Apply" nl="Apply"/>
+			</fmc:EditProperties>
+		</fmc:Container>    
+	</fmc:Container>
+</FLAMINGO>

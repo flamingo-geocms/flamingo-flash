@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FLAMINGO xmlns:fmc="fmc" id="flamingo" lang="nl" languages="en,nl" tooltipdelay="300" commtojava="true" preloadtitle="Prototypemap" useexternalinterface="true">
+	<style id=".tooltip" font-family="arial, sans-serif" font-size="11" color="#880000" display="block"/>
+	<fmc:Container left="0" top="0" height="100%" width="100%">
+		<fmc:MonitorLayer id="monitorl" left="37%" top="50%" width="50%" listento="map">
+			<string id="waiting" en="Making... [layer] [percentage]%..." nl="Kaart aan het maken..."/>
+			<string id="loading" en="Making... [layer] [percentage]%..." nl="Kaart aan het laden. [percentage]%"/>
+		</fmc:MonitorLayer>
+		<fmc:ToolGroup tool="zoom" listento="map" width="100%" height="100" left="10" top="10">
+			<fmc:ToolZoomin id="zoom" skin="f2"/>
+			<fmc:ToolZoomout left="30" skin="f2"/>
+			<fmc:ToolPan left="60" skin="f2"/>
+			<fmc:ToolMeasure left="90" skin="f2"/>
+			<fmc:ToolIdentify left="120" skin="f2"/>
+		</fmc:ToolGroup>
+		<fmc:Coordinates listento="map" left="80%" top="95%" decimals="6">
+			<style id=".xy" font-family="arial, sans-serif" font-size="11"/>
+			<string id="xy" nl="X: [x]     Y: [y]"/>
+		</fmc:Coordinates>
+		<fmc:BorderNavigation listento="map" top="0%" width="100%" height="100%" skin="f1"/>
+		<fmc:Maptip id="maptipId" listento="map"/>
+		<fmc:Map id="map" left="0" top="0%" height="100%" width="100%" bottom="bottom" visible="true" extent="12000,304000,280000,620000" maptipdelay="200">
+			<fmc:LayerIdentifyIcon id="identifyicon"/>
+			<fmc:LayerArcServer id="carnavalskaart" server="atlas.brabant.nl" dataframe="layers" mapservice="carnavalskaart" identifyall="true" identifyids="0" maptipids="0" hiddenids="4,7,8" esriArcServerVersion="9.3">
+				<layer id="0" maptipfields="CARNAVALSNAAM">
+					<string id="maptip" nl="[CARNAVALSNAAM]" en="Municipality [GEMEENTE]" de="Gemeinde [GEMEENTE]" fr="Commune [GEMEENTE]"/>
+				</layer>
+			</fmc:LayerArcServer>			
+		</fmc:Map>
+	</fmc:Container>
+</FLAMINGO>

@@ -1,0 +1,588 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FLAMINGO xmlns:fmc="fmc" id="flamingo" lang="nl" languages="en,nl" tooltipdelay="300" commtojava="true" preloadtitle="Prototypemap" useexternalinterface="true">
+	<style id=".tooltip" font-family="arial, sans-serif" font-size="11" color="#880000" display="block"/>
+	<fmc:Container left="0" top="0" height="100%" width="75%">
+		<fmc:MonitorLayer id="monitorl" left="37%" top="50%" width="50%" listento="map">
+			<string id="waiting" en="Making... [layer] [percentage]%..." nl="Kaart aan het maken..."/>
+			<string id="loading" en="Making... [layer] [percentage]%..." nl="Kaart aan het laden. [percentage]%"/>
+		</fmc:MonitorLayer>
+		<!--fmc:Container backgroundcolor="#E8F3EB" left="0" top="0" height="6%" width="100%"-->
+		<fmc:ToolGroup id="toolgroup" tool="zoomout" listento="map" width="100%" height="100" left="10" top="10">
+			<fmc:ToolZoomout id="zoomout" left="30" skin="f2"/>
+			<fmc:ToolZoomin id="zoom" skin="f2"/>
+			<fmc:ToolPan left="60" skin="f2"/>
+			<fmc:ToolMeasure left="120" skin="f2"/>
+			<fmc:ToolIdentify left="150" skin="f2"/>
+			<fmc:ButtonFull left="180" listento="map">
+				<string id="tooltip" nl="Zoom naar volledig kaartbeeld"/>
+			</fmc:ButtonFull>
+			<fmc:ButtonPrev left="210" listento="map">
+				<string id="tooltip" nl="Stap terug"/>
+			</fmc:ButtonPrev>
+			<fmc:ButtonNext left="240" listento="map">
+				<string id="tooltip" nl="Stap vooruit"/>
+			</fmc:ButtonNext>
+		</fmc:ToolGroup>
+		<!--/fmc:Container-->
+		<fmc:Coordinates id="awerwe" listento="map" left="100" top="600" decimals="6">
+			<style id=".xy" font-family="arial, sans-serif" font-size="11"/>
+			<string id="xy" nl="dfsg: [x]     Y: [y]"/>
+		</fmc:Coordinates>
+		<fmc:Container left="0" top="35" bottom="bottom -1" width="100%" borderwidth="1" bordercolor="#cccccc">
+			<fmc:BorderNavigation listento="map" top="0" width="100%" height="100%" skin="f1"/>
+			<fmc:Map id="map" width="100%" height="100%" top="0" holdonidentify="true" fadesteps="2" maptipdelay="200" movetime="200" movesteps="5" holdonupdate="false" minscale="0.25" fullextent="178000,458500,271000,541800" extenthistory="10" extent="178000,458500,271000,541800">
+				<fmc:LayerIdentifyIcon id="identifyicon" skin="heartbeat"/>
+
+				<fmc:LayerArcIMS id="routes5" name="atlasoverijssel" timeout="50" server="gisopenbaar.toverijs3.nl" servlet="GeoJuli2008/ims" mapservice="atlasoverijssel" visible="true" hiddenids="streetview,streetview_prov,acetate_streetview" visibleids="kanoroute" identifyall="true" legend="false" hidelegendids="" backgroundcolor="#fbfbfb" transcolor="#fbfbfb" alpha="85" fullextent="160000,457560,287864,543013" identifydistance="20" maptipdistance="20">
+					<layer id="kanoroute" maptipfields="B5.KROUTE_TABEL.KORT_NA,B5.KROUTE_TABEL.LANG_NA" maptip="Kanoroute: [B5.KROUTE_TABEL.KORT_NA][B5.KROUTE_TABEL.LANG_NA]"/>
+				</fmc:LayerArcIMS>
+				<fmc:LayerArcIMS id="routes6" name="atlasoverijssel" timeout="50" server="gisopenbaar.toverijs3.nl" servlet="GeoJuli2008/ims" mapservice="atlasoverijssel" visible="true" hiddenids="streetview,streetview_prov,acetate_streetview" visibleids="mtbroute" identifyall="true" legend="false" hidelegendids="" backgroundcolor="#fbfbfb" transcolor="#fbfbfb" alpha="85" fullextent="160000,457560,287864,543013" identifydistance="20" maptipdistance="20">
+					<layer id="mtbroute" maptipfields="LEGENDA" maptip="Mountainbikeroute: [LEGENDA]"/>
+				</fmc:LayerArcIMS>
+				<fmc:LayerArcIMS id="avo25" name="atlasoverijssel" timeout="50" server="gisopenbaar.toverijs3.nl" servlet="GeoJuli2008/ims" mapservice="atlasoverijssel" visible="true" hiddenids="streetview,streetview_prov,acetate_streetview" visibleids="regio_tvoost" identifyall="true" legend="false" hidelegendids="" backgroundcolor="#fbfbfb" transcolor="#fbfbfb" alpha="85" fullextent="160000,457560,287864,543013" identifydistance="20" maptipdistance="20">
+					<layer id="regio_tvoost" maptipfields="NAAM" maptip="Regio-indeling RTV Oost: [NAAM]"/>
+				</fmc:LayerArcIMS>
+				<fmc:LayerArcIMS id="knelpunt1" name="atlasoverijssel" timeout="50" server="gisopenbaar.toverijs3.nl" servlet="GeoJuli2008/ims" mapservice="atlasoverijssel" visible="true" hiddenids="streetview,streetview_prov,acetate_streetview" visibleids="lf_knelpt" identifyall="true" legend="false" hidelegendids="" backgroundcolor="#fbfbfb" transcolor="#fbfbfb" alpha="85" fullextent="160000,457560,287864,543013" identifydistance="20" maptipdistance="20">
+					<layer id="lf_knelpt" maptipfields="LF_NUMMER_,SOORT_KNEL" maptip="Knelpunt: [SOORT_KNEL]; [LF_NUMMER_]"/>
+				</fmc:LayerArcIMS>
+				<fmc:LayerArcIMS id="knelpunt2" name="atlasoverijssel" timeout="50" server="gisopenbaar.toverijs3.nl" servlet="GeoJuli2008/ims" mapservice="atlasoverijssel" visible="true" hiddenids="streetview,streetview_prov,acetate_streetview" visibleids="law_knelpt" identifyall="true" legend="false" hidelegendids="" backgroundcolor="#fbfbfb" transcolor="#fbfbfb" alpha="85" fullextent="160000,457560,287864,543013" identifydistance="20" maptipdistance="20">
+					<layer id="law_knelpt" maptipfields="LAW_NUMMER,SOORT_KNEL" maptip="Knelpunt: [SOORT_KNEL]; [LAW_NUMMER]"/>
+				</fmc:LayerArcIMS>
+				<fmc:LayerArcIMS id="avo1" name="atlasoverijssel" timeout="50" server="gisopenbaar.toverijs3.nl" servlet="GeoJuli2008/ims" mapservice="atlasoverijssel" visible="false" hiddenids="" visibleids="bvb,kulturhus_mfa,top,energie_pro_biomassa,energie_pro_besparing,energie_pro_kwo,energie_pro_wind,energie_pro_zon,energie_pro_overig,provwegen,rijkswegen,vaarwegen" identifyall="true" identifyids="#ALL#" legend="false" hidelegendids="" backgroundcolor="#fbfbfb" transcolor="#fbfbfb" alpha="85" fullextent="160000,457560,287864,543013" identifydistance="20" maptipdistance="20">
+					<layer id="bvb" maptipfields="CATEGORIE" maptip="Veehouderij: [CATEGORIE]"/>
+					<layer id="kulturhus_mfa" maptipfields="NAAM" maptip="Naam: [NAAM]"/>
+					<layer id="top" maptipfields="NAAM" maptip="Toeristisch overstappunt: [NAAM]"/>
+					<layer id="energie_pro_biomassa" maptipfields="NAAM" maptip="Energieproject: [NAAM]"/>
+					<layer id="energie_pro_besparing" maptipfields="NAAM" maptip="Energieproject: [NAAM]"/>
+					<layer id="energie_pro_kwo" maptipfields="NAAM" maptip="Energieproject: [NAAM]"/>
+					<layer id="energie_pro_wind" maptipfields="NAAM" maptip="Energieproject: [NAAM]"/>
+					<layer id="energie_pro_zon" maptipfields="NAAM" maptip="Energieproject: [NAAM]"/>
+					<layer id="energie_pro_overig" maptipfields="NAAM" maptip="Energieproject: [NAAM]"/>
+					<layer id="stortplaats" maptipfields="LOCATIENAA STRAATNAAM HUISNUMMER" maptip="Asbestkaart: [LOCATIENAA], Adres: [STRAATNAAM] [HUISNUMMER]"/>
+					<layer id="asbest_loc" maptipfields="LOCATIENAA STRAATNAAM HUISNUMMER" maptip="Asbestkaart: [LOCATIENAA], Adres: [STRAATNAAM] [HUISNUMMER]"/>
+					<layer id="bouwarchief_niet_gem" maptipfields="LOCATIENAA STRAATNAAM HUISNUMMER" maptip="Asbestkaart: [LOCATIENAA], Adres: [STRAATNAAM] [HUISNUMMER]"/>
+					<layer id="bouwarchief_gem" maptipfields="LOCATIENAA STRAATNAAM HUISNUMMER" maptip="Asbestkaart: [LOCATIENAA], Adres: [STRAATNAAM] [HUISNUMMER]"/>
+					<layer id="bodemarchief" maptipfields="LOCATIENAA STRAATNAAM HUISNUMMER" maptip="Asbestkaart: [LOCATIENAA], Adres: [STRAATNAAM] [HUISNUMMER]"/>
+					<layer id="biro" maptipfields="SBI_HOOFD_VERKLAAR,SBI93ENQ,NAAM" maptip="[NAAM] - Branche: [SBI93ENQ] ([SBI_HOOFD_VERKLAAR])"/>
+					<layer id="vaarwegen" maptipfields="NAAM" maptip="Vaarweg: [NAAM]"/>
+					<layer id="rijkswegen" maptipfields="WEGNUMMER" maptip="Rijksweg: [WEGNUMMER]"/>
+					<layer id="provwegen" maptipfields="WEGNUMMER" maptip="Provinciale weg: [WEGNUMMER]"/>
+					<layer id="hemelhelderheid_polygon" maptipfields="I_E1_V6_5K" maptip="Mate van hemelhelderheid: [I_E1_V6_5K]"/>
+					<layer id="wbe_polygon" maptipfields="WBENAAM" maptip="Wildbeheereenheid: [WBENAAM]"/>
+					<layer id="rayonwk_polygon" maptipfields="RAYONNAAM" maptip="Rayon: [RAYONNAAM]"/>
+					<layer id="grwbes_polygon" maptipfields="NAAM" maptip="Grondwaterbeschermingsgebied: [NAAM]"/>
+					<layer id="intrekgebied" maptipfields="NAAM" maptip="Intrekgebied: [NAAM]"/>
+					<layer id="waterwin_polygon" maptipfields="NAAM" maptip="Waterwingebied: [NAAM]"/>
+					<layer id="verzuur_polygon" maptipfields="CODE" maptip="voor verzuring gevoelig gebied"/>
+					<layer id="wav_polygon" maptipfields="INDELING" maptip="[INDELING]"/>
+					<layer id="recon_zone_polygon" maptipfields="OMSCHR" maptip="Reconstructiezonering: [OMSCHR]"/>
+					<layer id="ibis" maptipfields="PLANNAAM" maptip="Bedrijventerrein: [PLANNAAM]"/>
+					<layer id="rec_camping" maptipfields="NAAM,TYPE" maptip="Verblijfsrecreatie: [NAAM] ([TYPE])"/>rec_camping,rec_bungalowpark,rec_jachthaven,rec_groepsaccommodatie
+ 					<layer id="rec_bungalowpark" maptipfields="NAAM,TYPE" maptip="Verblijfsrecreatie: [NAAM] ([TYPE])"/>
+					<layer id="rec_jachthaven" maptipfields="NAAM,TYPE" maptip="Verblijfsrecreatie: [NAAM] ([TYPE])"/>
+					<layer id="rec_groepsaccommodatie" maptipfields="NAAM,TYPE" maptip="Verblijfsrecreatie: [NAAM] ([TYPE])"/>
+					<layer id="nat2000" maptipfields="NAAM_N2K" maptip="Natura 2000: [NAAM_N2K]"/>
+					<layer id="lfroute" maptipfields="LF_NUMMER_" maptip="Fietsroute: [LF_NUMMER_]"/>
+					<layer id="lawroute" maptipfields="LAW_NUMMER" maptip="Wandelroute: [LAW_NUMMER]"/>
+					<layer id="froutenetwerk" maptipfields="REGIO" maptip="Fietsroutenetwerk: [REGIO]"/>
+					<layer id="fknooppunt" maptipfields="KNP_NR,ROUTENETWERK" maptip="Knooppunt (routenetwerk): [KNP_NR] ([ROUTENETWERK])"/>
+					<layer id="natlands" maptipfields="NAAM" maptip="Nationaal landschap: [NAAM]"/>
+					<layer id="natpark" maptipfields="NAAM" maptip="Nationaal park: [NAAM]"/>
+					<layer id="luchtkwaliteit_2008_N" maptipfields="N" maptip="Luchtkwaliteit stikstof: [N] g/m"/>
+					<layer id="luchtkwaliteit_2008_P" maptipfields="P" maptip="Luchtkwaliteit fijnstof: [P] g/m"/>
+					<layer id="overijssel_geluid_lden_rijksw_2006" maptipfields="CATEGORIE_DAG" maptip="Geluidsbelasting 2006 Rijksweg (lden): [CATEGORIE_DAG] dB(A)"/>
+					<layer id="overijssel_geluid_lnight_rijksw_2006" maptipfields="CATEGORIE_NACHT" maptip="Geluidsbelasting 2006 Rijksweg (lnight): [CATEGORIE_NACHT] dB(A)"/>
+					<layer id="overijssel_geluid_lden_provw_2006" maptipfields="CATEGORIE_DAG" maptip="Geluidsbelasting 2006 provinciale weg (lden): [CATEGORIE_DAG] dB(A)"/>
+					<layer id="overijssel_geluid_lnight_provw_2006" maptipfields="CATEGORIE_NACHT" maptip="Geluidsbelasting 2006 provinciale weg (lnight): [CATEGORIE_NACHT] dB(A)"/>
+					<layer id="watschap_ned_polygon" maptipfields="TYPE,NAAM" maptip="[TYPE]: [NAAM]"/>
+					<layer id="geomorfologie" identifydistance="5" maptipdistance="5" maptipfields="B4.GEOMORF_DBF.CODE_DESC" maptip="Geomorfologische beschrijving: [B4.GEOMORF_DBF.CODE_DESC]"/>
+					<layer id="corop" maptipfields="B1.COROP2009.NAAM_COROP" maptip="Corop gebied: [B1.COROP2009.NAAM_COROP]"/>
+					<layer id="habitattypen_id" identifydistance="4" maptipdistance="10" featurelimit="99" maptipfields="LEGENDA" maptip="Habitattype: [LEGENDA]"/>
+					<layer id="ehs" maptipfields="OMSCHRIJVI" maptip="Ecologische hoofdstructuur:[OMSCHRIJVI]"/>
+					<layer id="evz" maptipfields="VERKLAAR" maptip="Ecologische verbindingszone: [VERKLAAR]"/>
+					<layer id="rvz" maptipfields="BEGRENSD" maptip="Robuuste verbindingszone"/>
+					<layer id="zwemwater_o" maptipfields="NAAMPLAS,TYPE" maptip="Zwemplas: [NAAMPLAS] ( [TYPE] )"/>
+					<layer id="zwemwater_no" maptipfields="NAAMPLAS,TYPE" maptip="Zwemplas: [NAAMPLAS] ( [TYPE] )"/>
+					<layer id="zwemwater_kand_o" maptipfields="NAAMPLAS,TYPE" maptip="Kandidaat zwemplas: [NAAMPLAS] ( [TYPE] )"/>
+					<layer id="zwemwater_kand_no" maptipfields="NAAMPLAS,TYPE" maptip="Kandidaat zwemplas: [NAAMPLAS] ( [TYPE] )"/>
+					<layer id="station" maptipfields="NAAM" maptip="Treinstation: [NAAM]"/>
+					<layer id="nb_wet" maptipfields="NAAM" maptip="Beschermd natuurmonument: [NAAM]"/>
+					<layer id="rijksmonumenten" maptipfields="OBJECTNAAM STRAATNAAM HUISNUMMERS" maptip="Rijksmonument: [OBJECTNAAM] [STRAATNAAM] [HUISNUMMERS]"/>
+					<layer id="gemeentelijkemonumenten" maptipfields="OBJECTNAAM STRAATNAAM HUISNUMMERS" maptip="Gemeentelijk monument: [OBJECTNAAM] [STRAATNAAM] [HUISNUMMERS]"/>
+					<layer id="salland" maptipfields="LEGENDA" maptip="Boringsvrije zone: [LEGENDA]"/>
+					<layer id="boringvrij" maptipfields="LEGENDA,NAAM" maptip="Boringsvrije zone: [LEGENDA] [NAAM]"/>
+					<layer id="strooi_prov" maptipfields="LABEL" maptip="Strooiroute provincie: [LABEL]"/>
+					<layer id="N340_bpEnkel" maptipfields="NAAM" maptip="N340: [NAAM]"/>
+					<layer id="biro2010" maptipfields="B6.BIRO2010.GEMEENTE" maptip="Werkgelegenheid 2010: [B6.BIRO2010.GEMEENTE]"/>
+					<layer id="bag_pand" identifydistance="4" maptipdistance="10" featurelimit="99"/>
+					<layer id="bag_adres" identifydistance="4" maptipdistance="10" featurelimit="99"/>
+					<layer id="bag_verblijfsobject" identifydistance="4" maptipdistance="10" featurelimit="99" maptipfields="OPENBARERUIMTENAAM HUISNUMMER HUISNUMMERTOEVOEGING HUISLETTER WOONPLAATSNAAM" maptip="[OPENBARERUIMTENAAM] [HUISNUMMER][HUISNUMMERTOEVOEGING] [HUISLETTER] ([WOONPLAATSNAAM])"/>
+				<!--   BEHEERTYPENKAART -->
+					<layer id="groenloket_natuurbeheertypen" maptipfields="B4.B46_NATUURBHP_DOM_DBF.DESCRIPTION" maptip="BEHEERTYPENKAART | Natuurbeheertype: [B4.B46_NATUURBHP_DOM_DBF.DESCRIPTION]"/>
+					<layer id="groenloket_landschapselementen_beh" maptipfields="B4.B46_NATUURBHP_DOM_DBF.DESCRIPTION" maptip="BEHEERTYPENKAART | Beheertype landschapselementen: [B4.B46_NATUURBHP_DOM_DBF.DESCRIPTION]"/>
+					<layer id="groenloket_agrbeh_weidevogel_beh" maptipfields="B4.B46_NATUURBHP_DOM_DBF.DESCRIPTION" maptip="BEHEERTYPENKAART | Agrarisch Natuurbeheertype: [B4.B46_NATUURBHP_DOM_DBF.DESCRIPTION]"/>
+					<layer id="groenloket_agrbeh_botgrasland_beh" maptipfields="B4.B46_NATUURBHP_DOM_DBF.DESCRIPTION" maptip="BEHEERTYPENKAART | Agrarisch Natuurbeheertype: [B4.B46_NATUURBHP_DOM_DBF.DESCRIPTION]"/>
+					<layer id="groenloket_agrbeh_botakkerland_beh" maptipfields="B4.B46_NATUURBHP_DOM_DBF.DESCRIPTION" maptip="BEHEERTYPENKAART | Agrarisch Natuurbeheertype: [B4.B46_NATUURBHP_DOM_DBF.DESCRIPTION]"/>
+					<layer id="groenloket_ganzen_beh" maptipfields="B4.B46_NATUURBHP_DOM_DBF.DESCRIPTION" maptip="BEHEERTYPENKAART | Agrarisch Natuurbeheertype: [B4.B46_NATUURBHP_DOM_DBF.DESCRIPTION]"/>
+					<layer id="groenloket_schaapskudde_toeslag" maptipfields="B4.B46_NATUURBHP_DOM_DBF.DESCRIPTION" maptip="BEHEERTYPENKAART | Toeslagen: [B4.B46_NATUURBHP_DOM_DBF.DESCRIPTION]"/>
+					<layer id="groenloket_evz" maptipfields="NR" maptip="BEHEERTYPENKAART | Ecologische verbindingszone: nr.[NR]"/>
+					<layer id="groenloket_rvz_beh" maptipfields="NR" maptip="BEHEERTYPENKAART | Robuuste verbindingszone: nr.[NR]"/>
+					<!--   AMBITIEKAART -->
+					<layer id="groenloket_natuurbeheertypen_amb" maptipfields="B4.B46_NATUURBHP_DOM_DBF.DESCRIPTION" maptip="AMBITIEKAART | Natuurbeheertype: [B4.B46_NATUURBHP_DOM_DBF.DESCRIPTION]"/>
+					<layer id="groenloket_landschapselementen_amb" maptipfields="B4.B46_NATUURBHP_DOM_DBF.DESCRIPTION" maptip="AMBITIEKAART | Beheertype landschapselementen: [B4.B46_NATUURBHP_DOM_DBF.DESCRIPTION]"/>
+					<layer id="groenloket_agrbeh_weidevogel_amb" maptipfields="B4.B46_NATUURBHP_DOM_DBF.DESCRIPTION" maptip="AMBITIEKAART | Agrarisch Natuurbeheertype: [B4.B46_NATUURBHP_DOM_DBF.DESCRIPTION]"/>
+					<layer id="groenloket_agrbeh_botgrasland_amb" maptipfields="B4.B46_NATUURBHP_DOM_DBF.DESCRIPTION" maptip="AMBITIEKAART | Agrarisch Natuurbeheertype: [B4.B46_NATUURBHP_DOM_DBF.DESCRIPTION]"/>
+					<layer id="groenloket_agrbeh_botakkerland_amb" maptipfields="B4.B46_NATUURBHP_DOM_DBF.DESCRIPTION" maptip="AMBITIEKAART | Agrarisch Natuurbeheertype: [B4.B46_NATUURBHP_DOM_DBF.DESCRIPTION]"/>
+					<layer id="groenloket_ganzen_amb" maptipfields="B4.B46_NATUURBHP_DOM_DBF.DESCRIPTION" maptip="AMBITIEKAART | Agrarisch Natuurbeheertype: [B4.B46_NATUURBHP_DOM_DBF.DESCRIPTION]"/>
+					<layer id="groenloket_evz_amb" maptipfields="NR" maptip="AMBITIEKAART | Ecologische verbindingszone: nr.[NR]"/>
+					<layer id="groenloket_rvz_amb" maptipfields="NR" maptip="AMBITIEKAART | Robuuste verbindingszone: nr.[NR]"/>
+				</fmc:LayerArcIMS>
+				<!-- =============  OMGEVINGSVISIE EN -VERORDENING ================= -->
+				<fmc:LayerArcIMS id="ov1" name="omgevingsvisie" server="gisopenbaar.toverijs3.nl" servlet="GeoJuli2008/ims" mapservice="omgevingsvisie" visible="false" hiddenids="" visibleids="" identifyall="true" identifyids="#ALL#" maptipids="buitengebied,groene_hoofdstr,log,steden_als_motor,glastuinbouw,vaarweg,EHS_lijn_EVZ_2,EHS_lijn_RVZ_ntb_2,windenergie,water5,water1,water2,water3,spoor,vervoersnetwerk,vervoersnetwerk2,hist_kern,op_kenniscentra,airport_twente,stationsgebied,overslagcentrum,natuurlijke_laag,beken,agrarisch_cultuurlandschap,verblijfsrecreatie_lust,vaarweg_lenl,lfroute,lawroute,fronten,donkerte,buitenplaats,attracties,lfroute_arc,lawroute_arc,wandelnetwerk_twente,rec_steenwijk,water_arc_recr,froutenetwerk,intrekgebieden,sted_intrekgebieden,salland,boringsvrij,waterwin_polygon,sted_grwbesgebied,grwbesgebied,nationale_landschappen,EHS_lijn_RVZ_ntb,EHS_lijn_EVZ,EHS,historische_kern,stedelijke_laag_area,s_vervoersnetwerk,s_vervoersnetwerk2,vaarten_Water_arc,dedemsvaart,infrastructuur_spoor_lijn,stations,dijkringgebieden,waterberging_vlak,primaire_watergeb_vhPunt,primaire_watergebieden,waterberging_corr,ess_waterlopen,funnel_twente,laagvliegroute,wegencategorisering,buisleiding,rgsweg,peilbesluiten,vaarwegnrs,vaarwegnr_polygon,primwatkeer,regwatkeer,top_toer,verblijfsrecreatie_punt,lfr,lawr,frn,water_arc_verbl,veenweidegebied,reconzone,behgebied_weidevog,ganzengebied,natpark,natlandschap_visie,hemelhelderheid,zwemplas,stortplaatsen,bodemsan,gem_bodemsanering,zandwinzone,zandwin,zoutwin,zoek_zand,zoek_zout,ibis,zachtplan,wegcat,spoor_visie,weg_visie,water_visie,overslag_visie,fietssnelweg,kwo,kwo_niettot,avk,essen,arch_gebied,EHS_nbk,EHS_nbk_evz,EHS_nbk_rvz,nat2000,TOP,wav,salland_dww,innamezone_dww,intrekgebieden_dww,grwbesgebied_dww,vechtdal_visie,hoofdsysteem_wv,vechte,dijkringgebieden_wv,bypass_wv,winterbed_wv,ruimtevdrivier_wv,wind,uitsl_laagvlieg,uitsl_natlandschap,EHS_wind,EHS_rvz_wind,EHS_evz_wind,blauwehoofdstructuur,waterlopen_wind1,waterlopen_wind2,waterlopen_wind3,kleinewateren_wlwb,hoofdsysteem_wlwb,krw_wlwb,essentielewaterloop_wlwb,primaire_watergebieden_wlwb,primaire_watergeb_vhpunt_wlwb,primaire_watergeb_lijn_wlwb,waterberging_vlak_wlwb,waterberging_lijn_wlwb,wb_zoeklocatie_wlwb,ovnet,bevoegdheidsregios,busWestOv,syntus,connexxion,stadsvervoer,EHS_faunakp,EHS_rvz_faunakp,EHS_evz_faunakp,faunaknelpunten,stadsranden,kleinewateren_wfk,essentielewaterloop_wfk,krw_vlak,krw_vlak1,krw_vlak2,krw,hoofdsysteem,dijkringgebieden_wfk,primairewatkeer_wfk,regionalewatkeer_wfk,ruimtevdrivier,buitendijksgebied,bypass,innamezone,intrekgebieden_wfk,grwbesgebied_wfk,salland_wfk,wb_zoeklocatie,primaire_watergebieden_wfk,primaire_watergeb_vhpunt,primaire_watergeb_lijn_wfk,waterberging_vlak_wfk,waterberging_lijn_wfk,wateraanvoer,zwemplassen_beschermingsgebied,zwemplas_wfk,vaarweg_wfk,recreatievaart,op_groene_hoofdstr,op_kenniscentra,op_waterberging,op_buitenplaats,op_stadsas,op_buitendijks,op_veenweidegebied,op_beekdal,op_drinkwaterwinning,op_stadsranden,op_natlandschap,op_fietssnelweg,op_hist_kern,op_buitengebied,op_log,op_buitengebied_zoekEHS,op_windenergie,op_steden_als_motor,op_glastuinbouw,op_EHS_lijn_RVZ_ntb_2,op_EHS_lijn_EVZ_2,op_vervoersnetwerk,op_spoor,op_luchthaven_airside,op_luchthaven_overgang,op_luchthaven_bedr,op_landelijk_wonenwerken,op_water1,op_water2,op_water3,op_water5,op_vaarweg,op_airport_twente,op_overslagcentrum,op_stationsgebied" legend="false" hidelegendids="" backgroundcolor="#fbfbfb" transcolor="#fbfbfb" alpha="60" fullextent="180000,459500,270000,542500">
+					<layer id="buitengebied" maptipfields="OVERZICHT,OMSCHR" maptip="Ontwikkelingsperspectief: [OVERZICHT] ([OMSCHR])"/>
+					<layer id="groene_hoofdstr" maptipfields="OMSCHRIJVI" maptip="EHS: [OMSCHRIJVI]"/>
+					<layer id="log" maptipfields="OMSCHR" maptip="buitengebied accent productie: [OMSCHR]"/>
+					<layer id="steden_als_motor" maptipfields="PLANNAAM_1" maptip="Bebouwing: [PLANNAAM_1]"/>
+					<layer id="glastuinbouw" maptipfields="OMSCHR" maptip="Glastuinbouw: [OMSCHR]"/>
+					<layer id="EHS_lijn_EVZ_2" maptipfields="VERKLAAR" maptip="EVZ: [VERKLAAR]"/>
+					<layer id="EHS_lijn_RVZ_ntb_2" maptipfields="BEGRENSD" maptip="RVZ [BEGRENSD]"/>
+					<layer id="windenergie" maptipfields="OMSCHR" maptip="Windenergie: [OMSCHR]"/>
+					<layer id="water1" maptipfields="NAAM" maptip="continu en herkenbaar watersysteem: [NAAM]"/>
+					<layer id="water2" maptipfields="NAAM" maptip="continu en herkenbaar watersysteem: [NAAM]"/>
+					<layer id="water5" maptipfields="HOOFDSYST" maptip="continu en herkenbaar watersysteem: [HOOFDSYST]"/>
+					<layer id="water3" maptipfields="NAAM" maptip="continu en herkenbaar watersysteem: [NAAM]"/>
+					<layer id="spoor" maptipfields="OMSCHR" maptip="Spoorlijn: [OMSCHR]"/>
+					<layer id="vervoersnetwerk" maptipfields="WEGSOORT" maptip="Vervoersnetwerk: [WEGSOORT]"/>
+					<layer id="vervoersnetwerk2" maptipfields="WEGSOORT" maptip="Vervoersnetwerk: [WEGSOORT]"/>
+					<layer id="vaarweg" maptipfields="VAARWEG" maptip="Vaarweg: [VAARWEG]"/>
+					<layer id="hist_kern" maptipfields="NAAM" maptip="Historische kern: [NAAM]"/>
+					<layer id="op_kenniscentra" maptipfields="NAAM" maptip="Kenniscentrum: [NAAM]"/>
+					<layer id="airport_twente" maptipfields="OMSCHR" maptip="Vliegveld: [OMSCHR]"/>
+					<layer id="stationsgebied" maptipfields="OMSCHR" maptip="Stationsgebied: [OMSCHR]"/>
+					<layer id="overslagcentrum" maptipfields="VERKLARING" maptip="Regionaal overslagcentrum: [VERKLARING]"/>
+					<layer id="natuurlijke_laag" maptipfields="LEGENDA" maptip="Natuurlijke laag: [LEGENDA]"/>
+					<layer id="beken" maptipfields="NAAM" maptip="Beek: [NAAM]"/>
+					<layer id="verblijfsrecreatie_lust" maptipfields="NAAM" maptip="Verblijfsrecreatie: [NAAM]"/>
+					<layer id="lfroute" maptipfields="LF_NUMMER_" maptip="Fietsroute: [LF_NUMMER_]"/>
+					<layer id="lawroute" maptipfields="LAW_NUMMER" maptip="Wandelroute: [LAW_NUMMER]"/>
+					<layer id="fronten" maptipfields="OMSCHR" maptip="Stads- en dorpsfront: [OMSCHR]"/>
+					<layer id="donkerte" maptipfields="DONKERTE" maptip="Donkerte [DONKERTE]"/>
+					<layer id="buitenplaats" maptipfields="OBJECTNAAM" maptip="Buitenplaats: [OBJECTNAAM]"/>
+					<layer id="attracties" maptipfields="OMSCHR" maptip="Attracties: [OMSCHR]"/>
+					<layer id="agrarisch_cultuurlandschap" maptipfields="LEGENDA" maptip="Agrarisch cultuurlandschap: [LEGENDA]"/>
+					<layer id="vaarweg_lenl" maptipfields="NAAM" maptip="Vaarweg: [NAAM]"/>
+					<layer id="lfroute_arc" maptipfields="LF_NUMMER_" maptip="Fietsroute: [LF_NUMMER_]"/>
+					<layer id="lawroute_arc" maptipfields="LAW_NUMMER" maptip="Wandelroute: [LAW_NUMMER]"/>
+					<layer id="wandelnetwerk_twente" maptipfields="BLAUW,GEEL,GROEN,ORANJE,PAARS,ROOD" maptip="Wandelnetwerk Twente: [BLAUW] [GEEL] [GROEN] [ORANJE] [PAARS] [ROOD]"/>
+					<layer id="rec_steenwijk" maptipfields="NAAM,OMSCHR" maptip="Verblijfsrecreatieve mogelijkheden: [NAAM], [OMSCHR]"/>
+					<layer id="water_arc_recr" maptipfields="NAAM" maptip="toervaartnet: [NAAM]"/>
+					<layer id="froutenetwerk" maptipfields="REGIO" maptip="Fietsroutenetwerk: [REGIO]"/>
+					<layer id="waterwin_polygon" maptipfields="NAAM" maptip="Waterwingebied: [NAAM]"/>
+					<layer id="grwbesgebied" maptipfields="NAAM" maptip="Grondwaterbeschermingsgebied: [NAAM]"/>
+					<layer id="sted_grwbesgebied" maptipfields="NAAM" maptip="Grondwaterbeschermingsgebied met stedelijke functies: [NAAM]"/>
+					<layer id="salland" maptipfields="NAAM" maptip="Boringsvrije zone diep pakket: [NAAM]"/>
+					<layer id="intrekgebieden" maptipfields="NAAM" maptip="Intrekgebied: [NAAM]"/>
+					<layer id="sted_intrekgebieden" maptipfields="NAAM" maptip="Intrekgebied met stedelijke functies: [NAAM]"/>
+					<layer id="boringsvrij" maptipfields="NAAM" maptip="Boringsvrije zone: [NAAM]"/>
+					<layer id="nationale_landschappen" maptipfields="NAAM" maptip="Nationaal landschap: [NAAM]"/>
+					<layer id="EHS_lijn_EVZ" maptipfields="VERKLAAR" maptip="EVZ: [VERKLAAR]"/>
+					<layer id="EHS_lijn_RVZ_ntb" maptipfields="PO" maptip="Robuuste verbindingszone [PO]"/>
+					<layer id="EHS" maptipfields="OMSCHRIJVI" maptip="EHS: [OMSCHRIJVI]"/>
+					<layer id="historische_kern" maptipfields="NAAM" maptip="Historische kern: [NAAM]"/>
+					<layer id="stedelijke_laag_area" maptipfields="LEGENDA1" maptip="Bebouwing: [LEGENDA1]"/>
+					<layer id="s_vervoersnetwerk" maptipfields="WEGSOORT" maptip="Infrastructuur: [WEGSOORT]"/>
+					<layer id="s_vervoersnetwerk2" maptipfields="WEGSOORT" maptip="Infrastructuur: [WEGSOORT]"/>
+					<layer id="wegencategorisering" maptipfields="WEGENCATEG" maptip="Gebiedsontsluitings- of erftoegangsweg: [WEGENCATEG]"/>
+					<layer id="vaarten_Water_arc" maptipfields="NAAM" maptip="Kanalen en vaarten: [NAAM]"/>
+					<layer id="dedemsvaart" maptipfields="NAAM" maptip="Kanalen en vaarten: [NAAM]"/>
+					<layer id="infrastructuur_spoor_lijn" maptipfields="OMSCHR" maptip="Spoorlijn: [OMSCHR]"/>
+					<layer id="stations" maptipfields="OMSCHR" maptip="Stationsgebied: [OMSCHR]"/>
+					<layer id="dijkringgebieden" maptipfields="DIJKRING,DIJKRINGNR" maptip="Dijkringgebied: [DIJKRING], nummer [DIJKRINGNR]"/>
+					<layer id="waterberging_vlak" maptipfields="NAAM" maptip="Waterbergingsgebied: [NAAM]"/>
+					<layer id="primaire_watergebieden" maptipfields="VERKLAAR" maptip="Primair watergebied: [VERKLAAR]"/>
+					<layer id="waterberging_corr" maptipfields="NAAM" maptip="Primair watergebied: [NAAM]"/>
+					<layer id="ess_waterlopen" maptipfields="NAAM" maptip="Essentiele waterloop: [NAAM]"/>
+					<layer id="laagvliegroute" maptipfields="OMSCHR" maptip="Laagvliegroute: [OMSCHR]"/>
+					<layer id="buisleiding" maptipfields="VERKLAAR" maptip="Buisleiding: [VERKLAAR]"/>
+					<layer id="rgsweg" maptipfields="WEGNUMMER,WEGBEHEER" maptip="Route gevaarlijke stoffen: [WEGNUMMER], [WEGBEHEER]"/>
+					<layer id="peilbesluiten" maptipfields="OMSCHR" maptip="[OMSCHR]"/>
+					<layer id="vaarwegnrs" maptipfields="VAARW_NR" maptip="Vaarwegnummer: [VAARW_NR]"/>
+					<layer id="vaarwegnr_polygon" maptipfields="VAARW_NR" maptip="Vaarwegnummer: [VAARW_NR]"/>
+					<layer id="primwatkeer" maptipfields="PRIMAIR" maptip="Primaire waterkering [PRIMAIR]"/>
+					<layer id="regwatkeer" maptipfields="FREQUENTIE" maptip="Overschrijdingsfrequentie: 1:[FREQUENTIE]"/>
+					<layer id="top_toer" maptipfields="NAAM" maptip="Toeristisch overstappunt: [NAAM]"/>
+					<layer id="verblijfsrecreatie_punt" maptipfields="NAAM" maptip="Verblijfsrecreatie: [NAAM]"/>
+					<layer id="lfr" maptipfields="LF_NUMMER_" maptip="Fietsroute: [LF_NUMMER_]"/> 
+					<layer id="lawr" maptipfields="LAW_NUMMER" maptip="Wandelroute: [LAW_NUMMER]"/>
+					<layer id="frn" maptipfields="REGIO" maptip="Fietsroutenetwerk: [REGIO]"/>
+					<layer id="water_arc_verbl" maptipfields="NAAM" maptip="toervaartnet: [NAAM]"/>
+		<layer id="veenweidegebied" maptipfields="OMSCHR" maptip="[OMSCHR]"/>
+		<layer id="reconzone" maptipfields="OMSCHR" maptip="Reconstructieplan: [OMSCHR]" />
+		<layer id="behgebied_weidevog" maptipfields="LEGENDA" maptip="[LEGENDA]"/>
+		<layer id="ganzengebied" maptipfields="GANZEN" maptip="Ganzengebied [GANZEN]"/>
+		<layer id="natpark" maptipfields="NAAM" maptip="Nationaal park: [NAAM]"/>
+		<layer id="natlandschap_visie" maptipfields="NAAM" maptip="Nationaal landschap: [NAAM]"/>
+		<layer id="hemelhelderheid" maptipfields="IDW_E1_V6" maptip="mcd/m2: [IDW_E1_V6]"/>
+		<layer id="zwemplas" maptipfields="NAAMPLAS TYPE" maptip="Zwemwater: [NAAMPLAS], [TYPE]"/>
+		<layer id="bodemsan" maptipfields="LABEL" maptip="Bodemsanering: [LABEL]"/>
+		<layer id="gem_bodemsanering" maptipfields="GEMNAAM" maptip="Gemeente zelf verantwoordelijk voor gegevens: [GEMNAAM]"/>
+		<layer id="zandwinzone" maptipfields="NAAM" maptip="Zandwinzone: [NAAM]"/>
+		<layer id="zandwin" maptipfields="NAAM" maptip="Zandwinplas: [NAAM]"/>
+		<layer id="zoutwin" maptipfields="OMSCHR" maptip="[OMSCHR]"/>
+		<layer id="stortplaatsen" maptipfields="LEGENDA" maptip="[LEGENDA]"/>
+		<layer id="zoek_zand" maptipfields="LEGENDA" maptip="[LEGENDA]"/>
+		<layer id="zoek_zout" maptipfields="ZOEKGEBIED" maptip="[ZOEKGEBIED]"/>
+		<layer id="ibis" maptipfields="NAAM" maptip="Bedrijventerrein: [NAAM]"/>
+		<layer id="zachtplan" maptipfields="NAAM" maptip="Pijplijnplan: [NAAM]"/>
+		<layer id="wegcat" maptipfields="WEGENCATEG,WEGNUMMER" maptip="[WEGNUMMER] Wegencategorisering: [WEGENCATEG] "/>
+		<layer id="weg_visie" maptipfields="WEGNUMMER" maptip="Weg: [WEGNUMMER]"/>
+		<layer id="spoor_visie" maptipfields="OMSCHR" maptip="Spoor: [OMSCHR]"/>
+		<layer id="water_visie" maptipfields="VAARWEG" maptip="Water: [VAARWEG]"/>
+		<layer id="overslag_visie" maptipfields="VERKLARING" maptip="Regionaal overslagcentrum: [VERKLARING]"/>
+		<layer id="fietssnelweg" maptipfields="OMSCHR" maptip="[OMSCHR]"/>
+		<layer id="kwo" maptipfields="LEGENDA" maptip="Geschiktheid koude-warmte opslag: [LEGENDA]"/>
+		<layer id="kwo_niettot" maptipfields="KWO,DIEPTE" maptip="koude-warmte opslag [KWO]: [DIEPTE] m"/>
+		<layer id="avk" maptipfields="VERWACHTIN" maptip="Archeologische verwachtingskaart: [VERWACHTIN]"/>
+		<layer id="essen" maptipfields="KLASSE" maptip="Archeologisch gebied (es): [KLASSE]"/>
+		<layer id="arch_gebied" maptipfields="WAARDE" maptip="Archeologisch gebied: [WAARDE]"/>
+		<layer id="EHS_nbk_evz" maptipfields="NR" maptip="EVZ: [NR]"/>
+		<layer id="EHS_nbk_rvz" maptipfields="BEGRENSD" maptip="RVZ: [BEGRENSD]"/>
+		<layer id="EHS_nbk" maptipfields="OMSCHRIJVI" maptip="EHS: [OMSCHRIJVI]"/>
+		<layer id="nat2000" maptipfields="NAAM_N2K" maptip="Natura 2000: [NAAM_N2K]"/>
+		<layer id="TOP" maptipfields="NAAM_N2K" maptip="TOP-gebied voor aanpak verdroging: [NAAM_N2K]"/>
+		<layer id="wav" maptipfields="ZR_KWETSB" maptip="Zeer kwetsbaar gebied in EHS [ZR_KWETSB]"/>
+		<layer id="grwbesgebied_dww" maptipfields="LEGENDA,NAAM" maptip="[LEGENDA]: [NAAM]"/>
+		<layer id="salland_dww" maptipfields="NAAM" maptip="Boringsvrije zone diep pakket: [NAAM]"/>
+		<layer id="intrekgebieden_dww" maptipfields="NAAM" maptip="Intrekgebied: [NAAM]"/>
+		<layer id="innamezone_dww" maptipfields="NAAM" maptip="Innamezone waterwinning: [NAAM]"/>
+		<layer id="hoofdsysteem_wv" maptipfields="HOOFDSYST" maptip="Hoofdsysteem: [HOOFDSYST]"/>
+		<layer id="bypass_wv" maptipfields="HOOFDSYST" maptip="Project Ruimte voor de Rivier: [HOOFDSYST]"/>
+		<layer id="vechtdal_visie" maptipfields="OMSCHR" maptip="[OMSCHR]"/>
+		<layer id="vechte" maptipfields="NAAM" maptip="Hoofdsysteem: [NAAM]"/>
+					<layer id="dijkringgebieden_wv" maptipfields="DIJKRING,DIJKRINGNR" maptip="Dijkringgebied: [DIJKRING], nummer [DIJKRINGNR]"/>
+					<layer id="winterbed_wv" maptipfields="NAAM" maptip="Winterbed: [NAAM]"/>
+					<layer id="ruimtevdrivier_wv" maptipfields="PROJECT" maptip="Project Ruimte voor de Rivier: [PROJECT]"/>
+		<layer id="wind" maptipfields="OMSCHR" maptip="Zoekgebied windenergie: [OMSCHR]"/>
+		<layer id="uitsl_laagvlieg" maptipfields="OMSCHR" maptip="Uitsluitingsgebied: [OMSCHR]"/>
+		<layer id="uitsl_natlandschap" maptipfields="NAAM" maptip="Uitsluitingsgebied Nationaal landschap: [NAAM]"/>
+		<layer id="EHS_wind" maptipfields="OMSCHRIJVI" maptip="Uitsluitingsgebied groenblauwe hoofdstructuur: [OMSCHRIJVI]"/>
+		<layer id="EHS_rvz_wind" maptipfields="BEGRENSD" maptip="Uitsluitingsgebied Robuuste verbindingszone (EHS) [BEGRENSD]"/>
+		<layer id="EHS_evz_wind" maptipfields="VERKLAAR" maptip="Uitsluitingsgebied groenblauwe hoofdstructuur [VERKLAAR]"/>
+		<layer id="blauwehoofdstructuur" maptipfields="NAAM" maptip="Uitsluitingsgebied groenblauwe hoofdstructuur: [NAAM]"/>
+		<layer id="waterlopen_wind1" maptipfields="NAAM" maptip="Uitsluitingsgebied groenblauwe hoofdstructuur: [NAAM]"/>
+		<layer id="waterlopen_wind2" maptipfields="NAAM" maptip="Uitsluitingsgebied groenblauwe hoofdstructuur: [NAAM]"/>
+		<layer id="waterlopen_wind3" maptipfields="NAAM" maptip="Uitsluitingsgebied groenblauwe hoofdstructuur: [NAAM]"/>
+		<layer id="primaire_watergebieden_wlwb" maptipfields="VERKLAAR" maptip="Primair watergebied: [VERKLAAR]"/>
+		<layer id="essentielewaterloop_wlwb" maptipfields="NAAM" maptip="Essentiele waterloop: [NAAM]"/>
+		<layer id="waterberging_vlak_wlwb" maptipfields="NAAM" maptip="Waterbergingsgebied: [NAAM]"/>
+		<layer id="wb_zoeklocatie_wlwb" maptipfields="OMSCHR" maptip="[OMSCHR]"/>
+		<layer id="krw_wlwb" maptipfields="OVWL_NAAM" maptip="KRW: [OVWL_NAAM]"/>
+		<layer id="hoofdsysteem_wlwb" maptipfields="NAAM" maptip="Hoofdsysteem: [NAAM]"/>
+		<layer id="primaire_watergeb_lijn_wlwb" maptipfields="NAAM" maptip="Primair Watergebied: [NAAM]"/>
+		<layer id="waterberging_lijn_wlwb" maptipfields="NAAM" maptip="Waterbergingsgebied: [NAAM]"/>
+		<layer id="ovnet" maptipfields="LEGENDA" maptip="Kernnet spoor: [LEGENDA]"/>
+		<layer id="bevoegdheidsregios" maptipfields="B1.INDELING_PROV_DBF.OV_AUTOR" maptip="bevoegdheid [B1.INDELING_PROV_DBF.OV_AUTOR]"/>
+		<layer id="busWestOv" maptipfields="BUS_OMSCHR" maptip="[BUS_OMSCHR]"/>
+		<layer id="syntus" maptipfields="BUS_OMSCHR" maptip="[BUS_OMSCHR]"/>
+		<layer id="stadsvervoer" maptipfields="STADSVERV,NAAM" maptip="[STADSVERV], [NAAM]"/>
+		<layer id="EHS_faunakp" maptipfields="OMSCHRIJVI" maptip="[OMSCHRIJVI]"/>
+		<layer id="EHS_rvz_faunakp" maptipfields="BEGRENSD" maptip="RVZ [BEGRENSD]"/>
+		<layer id="EHS_evz_faunakp" maptipfields="VERKLAAR" maptip="EVZ [VERKLAAR]"/>
+		<layer id="faunaknelpunten" maptipfields="SOORT,WEGNR,TRACE" maptip="[SOORT]; [WEGNR] [TRACE]"/>
+					<layer id="stadsranden" maptipfields="OMSCHR" maptip="Stadsrandgebied: [OMSCHR]"/>
+					<layer id="kleinewateren_wfk" maptipfields="NAAM" maptip="Klein water: [NAAM]"/>
+					<layer id="essentielewaterloop_wfk" maptipfields="NAAM" maptip="Essentiele waterloop: [NAAM]"/>
+					<layer id="krw_vlak" maptipfields="NAAM" maptip="KRW oppervlaktewaterlichaam [NAAM]"/>
+					<layer id="krw_vlak1" maptipfields="NAAM" maptip="KRW oppervlaktewaterlichaam [NAAM]"/>
+					<layer id="krw_vlak2" maptipfields="omschr" maptip="KRW oppervlaktewaterlichaam [omschr]"/>
+					<layer id="krw" maptipfields="OVWL_NAAM" maptip="KRW oppervlaktewaterlichaam: [OVWL_NAAM]"/>
+					<layer id="hoofdsysteem" maptipfields="HOOFDSYST" maptip="Hoofdsysteem: [HOOFDSYST]"/>
+					<layer id="dijkringgebieden_wfk" maptipfields="DIJKRINGNR,DIJKRING" maptip="Dijkring: [DIJKRINGNR] - [DIJKRING]"/>
+					<layer id="primairewatkeer_wfk" maptipfields="PRIMAIR" maptip="Primaire waterkering [PRIMAIR]"/>
+					<layer id="regionalewatkeer_wfk" maptipfields="FREQUENTIE" maptip="Regionale waterkering - Overstromingsfrequentie: 1:[FREQUENTIE]"/>
+					<layer id="ruimtevdrivier" maptipfields="PROJECT" maptip="Project Ruimte voor de Rivier: [PROJECT]"/>
+					<layer id="buitendijksgebied" maptipfields="NAAM" maptip="Buitendijksgebied: [NAAM]"/>
+					<layer id="bypass" maptipfields="HOOFDSYST" maptip="[HOOFDSYST]"/>
+					<layer id="innamezone" maptipfields="NAAM" maptip="Innamezone waterwinning: [NAAM]"/>
+					<layer id="intrekgebieden_wfk" maptipfields="NAAM" maptip="Intrekgebied: [NAAM]"/>
+					<layer id="grwbesgebied_wfk" maptipfields="LEGENDA, NAAM" maptip="[LEGENDA]: [NAAM]"/>
+					<layer id="salland_wfk" maptipfields="OMSCHR" maptip="[OMSCHR]"/>
+					<layer id="wb_zoeklocatie" maptipfields="OMSCHR" maptip="[OMSCHR]"/>
+				</fmc:LayerArcIMS>
+				<fmc:LayerArcIMS id="ov102" name="omgevingsvisie" server="gisopenbaar.toverijs3.nl" servlet="GeoJuli2008/ims" mapservice="omgevingsvisie" visible="false" hiddenids="" visibleids="" identifyall="true" identifyids="#ALL#" maptipids="buitengebied,groene_hoofdstr,log,steden_als_motor,glastuinbouw,vaarweg,EHS_lijn_EVZ_2,EHS_lijn_RVZ_ntb_2,windenergie,water5,water1,water2,water3,spoor,vervoersnetwerk,vervoersnetwerk2,hist_kern,op_kenniscentra,airport_twente,stationsgebied,overslagcentrum,natuurlijke_laag,beken,agrarisch_cultuurlandschap,verblijfsrecreatie_lust,vaarweg_lenl,lfroute,lawroute,fronten,donkerte,buitenplaats,attracties,lfroute_arc,lawroute_arc,wandelnetwerk_twente,rec_steenwijk,water_arc_recr,froutenetwerk,intrekgebieden,sted_intrekgebieden,salland,boringsvrij,waterwin_polygon,sted_grwbesgebied,grwbesgebied,nationale_landschappen,EHS_lijn_RVZ_ntb,EHS_lijn_EVZ,EHS,historische_kern,stedelijke_laag_area,s_vervoersnetwerk,s_vervoersnetwerk2,vaarten_Water_arc,dedemsvaart,infrastructuur_spoor_lijn,stations,dijkringgebieden,waterberging_vlak,primaire_watergeb_vhPunt,primaire_watergebieden,waterberging_corr,ess_waterlopen,funnel_twente,laagvliegroute,wegencategorisering,buisleiding,rgsweg,peilbesluiten,vaarwegnrs,vaarwegnr_polygon,primwatkeer,regwatkeer,top_toer,verblijfsrecreatie_punt,lfr,lawr,frn,water_arc_verbl,veenweidegebied,reconzone,behgebied_weidevog,ganzengebied,natpark,natlandschap_visie,hemelhelderheid,zwemplas,stortplaatsen,bodemsan,gem_bodemsanering,zandwinzone,zandwin,zoutwin,zoek_zand,zoek_zout,ibis,zachtplan,wegcat,spoor_visie,weg_visie,water_visie,overslag_visie,fietssnelweg,kwo,kwo_niettot,avk,essen,arch_gebied,EHS_nbk,EHS_nbk_evz,EHS_nbk_rvz,nat2000,TOP,wav,salland_dww,innamezone_dww,intrekgebieden_dww,grwbesgebied_dww,vechtdal_visie,hoofdsysteem_wv,vechte,dijkringgebieden_wv,bypass_wv,winterbed_wv,ruimtevdrivier_wv,wind,uitsl_laagvlieg,uitsl_natlandschap,EHS_wind,EHS_rvz_wind,EHS_evz_wind,blauwehoofdstructuur,waterlopen_wind1,waterlopen_wind2,waterlopen_wind3,kleinewateren_wlwb,hoofdsysteem_wlwb,krw_wlwb,essentielewaterloop_wlwb,primaire_watergebieden_wlwb,primaire_watergeb_vhpunt_wlwb,primaire_watergeb_lijn_wlwb,waterberging_vlak_wlwb,waterberging_lijn_wlwb,wb_zoeklocatie_wlwb,ovnet,bevoegdheidsregios,busWestOv,syntus,connexxion,stadsvervoer,EHS_faunakp,EHS_rvz_faunakp,EHS_evz_faunakp,faunaknelpunten,stadsranden,kleinewateren_wfk,essentielewaterloop_wfk,krw_vlak,krw_vlak1,krw_vlak2,krw,hoofdsysteem,dijkringgebieden_wfk,primairewatkeer_wfk,regionalewatkeer_wfk,ruimtevdrivier,buitendijksgebied,bypass,innamezone,intrekgebieden_wfk,grwbesgebied_wfk,salland_wfk,wb_zoeklocatie,primaire_watergebieden_wfk,primaire_watergeb_vhpunt,primaire_watergeb_lijn_wfk,waterberging_vlak_wfk,waterberging_lijn_wfk,wateraanvoer,zwemplassen_beschermingsgebied,zwemplas_wfk,vaarweg_wfk,recreatievaart,op_groene_hoofdstr,op_kenniscentra,op_waterberging,op_buitenplaats,op_stadsas,op_buitendijks,op_veenweidegebied,op_beekdal,op_drinkwaterwinning,op_stadsranden,op_natlandschap,op_fietssnelweg,op_hist_kern,op_buitengebied,op_log,op_buitengebied_zoekEHS,op_windenergie,op_steden_als_motor,op_glastuinbouw,op_EHS_lijn_RVZ_ntb_2,op_EHS_lijn_EVZ_2,op_vervoersnetwerk,op_spoor,op_luchthaven_airside,op_luchthaven_overgang,op_luchthaven_bedr,op_landelijk_wonenwerken,op_water1,op_water2,op_water3,op_water5,op_vaarweg,op_airport_twente,op_overslagcentrum,op_stationsgebied" legend="false" hidelegendids="" backgroundcolor="#fbfbfb" transcolor="#fbfbfb" alpha="60" fullextent="180000,459500,270000,542500">
+					<layer id="primaire_watergebieden_wfk" maptipfields="VERKLAAR" maptip="[VERKLAAR]"/>
+					<layer id="primaire_watergeb_lijn_wfk" maptipfields="NAAM" maptip="Primair Watergebied: [NAAM]"/>
+					<layer id="waterberging_vlak_wfk" maptipfields="NAAM" maptip="Waterbergingsgebied: [NAAM]"/>
+				</fmc:LayerArcIMS>
+				<fmc:LayerArcIMS id="ov103" name="omgevingsvisie" server="gisopenbaar.toverijs3.nl" servlet="GeoJuli2008/ims" mapservice="omgevingsvisie" visible="false" hiddenids="" visibleids="" identifyall="true" identifyids="#ALL#" maptipids="buitengebied,groene_hoofdstr,log,steden_als_motor,glastuinbouw,vaarweg,EHS_lijn_EVZ_2,EHS_lijn_RVZ_ntb_2,windenergie,water5,water1,water2,water3,spoor,vervoersnetwerk,vervoersnetwerk2,hist_kern,op_kenniscentra,airport_twente,stationsgebied,overslagcentrum,natuurlijke_laag,beken,agrarisch_cultuurlandschap,verblijfsrecreatie_lust,vaarweg_lenl,lfroute,lawroute,fronten,donkerte,buitenplaats,attracties,lfroute_arc,lawroute_arc,wandelnetwerk_twente,rec_steenwijk,water_arc_recr,froutenetwerk,intrekgebieden,sted_intrekgebieden,salland,boringsvrij,waterwin_polygon,sted_grwbesgebied,grwbesgebied,nationale_landschappen,EHS_lijn_RVZ_ntb,EHS_lijn_EVZ,EHS,historische_kern,stedelijke_laag_area,s_vervoersnetwerk,s_vervoersnetwerk2,vaarten_Water_arc,dedemsvaart,infrastructuur_spoor_lijn,stations,dijkringgebieden,waterberging_vlak,primaire_watergeb_vhPunt,primaire_watergebieden,waterberging_corr,ess_waterlopen,funnel_twente,laagvliegroute,wegencategorisering,buisleiding,rgsweg,peilbesluiten,vaarwegnrs,vaarwegnr_polygon,primwatkeer,regwatkeer,top_toer,verblijfsrecreatie_punt,lfr,lawr,frn,water_arc_verbl,veenweidegebied,reconzone,behgebied_weidevog,ganzengebied,natpark,natlandschap_visie,hemelhelderheid,zwemplas,stortplaatsen,bodemsan,gem_bodemsanering,zandwinzone,zandwin,zoutwin,zoek_zand,zoek_zout,ibis,zachtplan,wegcat,spoor_visie,weg_visie,water_visie,overslag_visie,fietssnelweg,kwo,kwo_niettot,avk,essen,arch_gebied,EHS_nbk,EHS_nbk_evz,EHS_nbk_rvz,nat2000,TOP,wav,salland_dww,innamezone_dww,intrekgebieden_dww,grwbesgebied_dww,vechtdal_visie,hoofdsysteem_wv,vechte,dijkringgebieden_wv,bypass_wv,winterbed_wv,ruimtevdrivier_wv,wind,uitsl_laagvlieg,uitsl_natlandschap,EHS_wind,EHS_rvz_wind,EHS_evz_wind,blauwehoofdstructuur,waterlopen_wind1,waterlopen_wind2,waterlopen_wind3,kleinewateren_wlwb,hoofdsysteem_wlwb,krw_wlwb,essentielewaterloop_wlwb,primaire_watergebieden_wlwb,primaire_watergeb_vhpunt_wlwb,primaire_watergeb_lijn_wlwb,waterberging_vlak_wlwb,waterberging_lijn_wlwb,wb_zoeklocatie_wlwb,ovnet,bevoegdheidsregios,busWestOv,syntus,connexxion,stadsvervoer,EHS_faunakp,EHS_rvz_faunakp,EHS_evz_faunakp,faunaknelpunten,stadsranden,kleinewateren_wfk,essentielewaterloop_wfk,krw_vlak,krw_vlak1,krw_vlak2,krw,hoofdsysteem,dijkringgebieden_wfk,primairewatkeer_wfk,regionalewatkeer_wfk,ruimtevdrivier,buitendijksgebied,bypass,innamezone,intrekgebieden_wfk,grwbesgebied_wfk,salland_wfk,wb_zoeklocatie,primaire_watergebieden_wfk,primaire_watergeb_vhpunt,primaire_watergeb_lijn_wfk,waterberging_vlak_wfk,waterberging_lijn_wfk,wateraanvoer,zwemplassen_beschermingsgebied,zwemplas_wfk,vaarweg_wfk,recreatievaart,op_groene_hoofdstr,op_kenniscentra,op_waterberging,op_buitenplaats,op_stadsas,op_buitendijks,op_veenweidegebied,op_beekdal,op_drinkwaterwinning,op_stadsranden,op_natlandschap,op_fietssnelweg,op_hist_kern,op_buitengebied,op_log,op_buitengebied_zoekEHS,op_windenergie,op_steden_als_motor,op_glastuinbouw,op_EHS_lijn_RVZ_ntb_2,op_EHS_lijn_EVZ_2,op_vervoersnetwerk,op_spoor,op_luchthaven_airside,op_luchthaven_overgang,op_luchthaven_bedr,op_landelijk_wonenwerken,op_water1,op_water2,op_water3,op_water5,op_vaarweg,op_airport_twente,op_overslagcentrum,op_stationsgebied" legend="false" hidelegendids="" backgroundcolor="#fbfbfb" transcolor="#fbfbfb" alpha="60" fullextent="180000,459500,270000,542500">
+					<layer id="wateraanvoer" maptipfields="NAAM" maptip="Wateraanvoer: [NAAM]"/>
+					<layer id="zwemplassen_beschermingsgebied" maptipfields="NAAMPLAS" maptip="Zwemplasbeschermingsgebied"/>
+					<layer id="zwemplas_wfk" maptipfields="NAAMPLAS" maptip="Zwemplas: [NAAMPLAS]"/>
+					<layer id="vaarweg_wfk" maptipfields="NAAM" maptip="Vaarweg: [NAAM]"/>
+					<layer id="recreatievaart" maptipfields="NAAM" maptip="Recreatievaart: [NAAM]"/>
+				</fmc:LayerArcIMS>
+				<fmc:LayerArcIMS id="op" name="omgevingsvisie" server="gisopenbaar.toverijs3.nl" servlet="GeoJuli2008/ims" mapservice="omgevingsvisie" visible="false" hiddenids="" visibleids="" identifyall="true" identifyids="#ALL#" maptipids="buitengebied,groene_hoofdstr,log,steden_als_motor,glastuinbouw,vaarweg,EHS_lijn_EVZ_2,EHS_lijn_RVZ_ntb_2,windenergie,water5,water1,water2,water3,spoor,vervoersnetwerk,vervoersnetwerk2,hist_kern,op_kenniscentra,airport_twente,stationsgebied,overslagcentrum,natuurlijke_laag,beken,agrarisch_cultuurlandschap,verblijfsrecreatie_lust,vaarweg_lenl,lfroute,lawroute,fronten,donkerte,buitenplaats,attracties,lfroute_arc,lawroute_arc,wandelnetwerk_twente,rec_steenwijk,water_arc_recr,froutenetwerk,intrekgebieden,sted_intrekgebieden,salland,boringsvrij,waterwin_polygon,sted_grwbesgebied,grwbesgebied,nationale_landschappen,EHS_lijn_RVZ_ntb,EHS_lijn_EVZ,EHS,historische_kern,stedelijke_laag_area,s_vervoersnetwerk,s_vervoersnetwerk2,vaarten_Water_arc,dedemsvaart,infrastructuur_spoor_lijn,stations,dijkringgebieden,waterberging_vlak,primaire_watergeb_vhPunt,primaire_watergebieden,waterberging_corr,ess_waterlopen,funnel_twente,laagvliegroute,wegencategorisering,buisleiding,rgsweg,peilbesluiten,vaarwegnrs,vaarwegnr_polygon,primwatkeer,regwatkeer,top_toer,verblijfsrecreatie_punt,lfr,lawr,frn,water_arc_verbl,veenweidegebied,reconzone,behgebied_weidevog,ganzengebied,natpark,natlandschap_visie,hemelhelderheid,zwemplas,stortplaatsen,bodemsan,gem_bodemsanering,zandwinzone,zandwin,zoutwin,zoek_zand,zoek_zout,ibis,zachtplan,wegcat,spoor_visie,weg_visie,water_visie,overslag_visie,fietssnelweg,kwo,kwo_niettot,avk,essen,arch_gebied,EHS_nbk,EHS_nbk_evz,EHS_nbk_rvz,nat2000,TOP,wav,salland_dww,innamezone_dww,intrekgebieden_dww,grwbesgebied_dww,vechtdal_visie,hoofdsysteem_wv,vechte,dijkringgebieden_wv,bypass_wv,winterbed_wv,ruimtevdrivier_wv,wind,uitsl_laagvlieg,uitsl_natlandschap,EHS_wind,EHS_rvz_wind,EHS_evz_wind,blauwehoofdstructuur,waterlopen_wind1,waterlopen_wind2,waterlopen_wind3,kleinewateren_wlwb,hoofdsysteem_wlwb,krw_wlwb,essentielewaterloop_wlwb,primaire_watergebieden_wlwb,primaire_watergeb_vhpunt_wlwb,primaire_watergeb_lijn_wlwb,waterberging_vlak_wlwb,waterberging_lijn_wlwb,wb_zoeklocatie_wlwb,ovnet,bevoegdheidsregios,busWestOv,syntus,connexxion,stadsvervoer,EHS_faunakp,EHS_rvz_faunakp,EHS_evz_faunakp,faunaknelpunten,stadsranden,kleinewateren_wfk,essentielewaterloop_wfk,krw_vlak,krw_vlak1,krw_vlak2,krw,hoofdsysteem,dijkringgebieden_wfk,primairewatkeer_wfk,regionalewatkeer_wfk,ruimtevdrivier,buitendijksgebied,bypass,innamezone,intrekgebieden_wfk,grwbesgebied_wfk,salland_wfk,wb_zoeklocatie,primaire_watergebieden_wfk,primaire_watergeb_vhpunt,primaire_watergeb_lijn_wfk,waterberging_vlak_wfk,waterberging_lijn_wfk,wateraanvoer,zwemplassen_beschermingsgebied,zwemplas_wfk,vaarweg_wfk,recreatievaart,op_groene_hoofdstr,op_kenniscentra,op_waterberging,op_buitenplaats,op_stadsas,op_buitendijks,op_veenweidegebied,op_beekdal,op_drinkwaterwinning,op_stadsranden,op_natlandschap,op_fietssnelweg,op_hist_kern,op_buitengebied,op_log,op_buitengebied_zoekEHS,op_windenergie,op_steden_als_motor,op_glastuinbouw,op_EHS_lijn_RVZ_ntb_2,op_EHS_lijn_EVZ_2,op_vervoersnetwerk,op_spoor,op_luchthaven_airside,op_luchthaven_overgang,op_luchthaven_bedr,op_landelijk_wonenwerken,op_water1,op_water2,op_water3,op_water5,op_vaarweg,op_airport_twente,op_overslagcentrum,op_stationsgebied" legend="false" hidelegendids="" backgroundcolor="#fbfbfb" transcolor="#fbfbfb" alpha="60" fullextent="180000,459500,270000,542500">
+					<layer id="op_groene_hoofdstr" maptipfields="OMSCHRIJVI" maptip="EHS: [OMSCHRIJVI]"/>
+					<layer id="op_log" maptipfields="OMSCHR" maptip="buitengebied accent productie: [OMSCHR]"/>
+					<layer id="op_luchthaven_airside" maptipfields="NAAM" maptip="breed spectrum woon-, werk- en mixmilieu: [NAAM]"/>
+					<layer id="op_luchthaven_bedr" maptipfields="NAAM" maptip="breed spectrum woon-, werk- en mixmilieu: [NAAM]"/>
+					<layer id="op_luchthaven_overgang" maptipfields="OMSCHR" maptip="breed spectrum woon-, werk- en mixmilieu: [OMSCHR]"/>
+					<layer id="op_kenniscentra" maptipfields="NAAM" maptip="Kenniscentrum: [NAAM]"/>
+					<layer id="op_waterberging" maptipfields="OMSCHR" maptip="Waterberging of primair watergebied: [OMSCHR]"/>
+					<layer id="op_buitenplaats" maptipfields="OBJECTNAAM" maptip="Buitenplaats: [OBJECTNAAM]"/>
+					<layer id="op_stadsas" maptipfields="OMSCHR" maptip="Stadsas: [OMSCHR]"/>
+					<layer id="op_buitendijks" maptipfields="NAAM" maptip="Buitendijksgebied: [NAAM]"/>
+					<layer id="op_veenweidegebied" maptipfields="OMSCHR" maptip="Overige beleidsaanduiding: [OMSCHR]"/>
+					<layer id="op_drinkwaterwinning" maptipfields="OMSCHRIJVI" maptip="[OMSCHRIJVI]"/>
+					<layer id="op_stadsranden" maptipfields="OMSCHR" maptip="Stadsrandgebied: [OMSCHR]"/>
+					<layer id="op_natlandschap" maptipfields="NAAM" maptip="Nationaal landschap: [NAAM]"/>
+					<layer id="op_fietssnelweg" maptipfields="OMSCHR" maptip="Hoofdinfrastructuur: [OMSCHR]"/>
+					<layer id="op_hist_kern" maptipfields="NAAM" maptip="Historische kern: [NAAM]"/>
+					<layer id="op_buitengebied" maptipfields="OVERZICHT,OMSCHR" maptip="Ontwikkelingsperspectief: [OVERZICHT] ([OMSCHR])"/>
+					<layer id="op_buitengebied_zoekEHS" maptipfields="CODE" maptip="EHS zoekgebied"/>
+					<layer id="op_windenergie" maptipfields="OMSCHR" maptip="Windenergie: [OMSCHR]"/>
+					<layer id="op_steden_als_motor" maptipfields="PLANNAAM_1" maptip="Dorpen en kernen: [PLANNAAM_1]"/>
+					<layer id="op_glastuinbouw" maptipfields="OMSCHR" maptip="Glastuinbouw: [OMSCHR]"/>
+					<layer id="op_EHS_lijn_RVZ_ntb_2" maptipfields="BEGRENSD" maptip="zoekgebied robuuste verbindingszone: [BEGRENSD]"/>
+					<layer id="op_EHS_lijn_EVZ_2" maptipfields="VERKLAAR" maptip="zoekgebied ecologische verbindingszone: [VERKLAAR]"/>
+					<layer id="op_vervoersnetwerk" maptipfields="WEGSOORT" maptip="Vervoersnetwerk: [WEGSOORT]"/>
+					<layer id="op_spoor" maptipfields="OMSCHR" maptip="Spoorlijn: [OMSCHR]"/>
+					<layer id="op_landelijk_wonenwerken" maptipfields="OMSCHR" maptip="breed spectrum woon-, werk- en mixmilieu: [OMSCHR]"/>
+					<layer id="op_water1" maptipfields="NAAM" maptip="continu en herkenbaar watersysteem: [NAAM]"/>
+					<layer id="op_water2" maptipfields="NAAM" maptip="continu en herkenbaar watersysteem: [NAAM]"/>
+					<layer id="op_water5" maptipfields="HOOFDSYST" maptip="continu en herkenbaar watersysteem: [HOOFDSYST]"/>
+					<layer id="op_water3" maptipfields="NAAM" maptip="continu en herkenbaar watersysteem: [NAAM]"/>
+					<layer id="op_vaarweg" maptipfields="VAARWEG" maptip="Vaarweg: [VAARWEG]"/>
+					<layer id="op_airport_twente" maptipfields="OMSCHR" maptip="Vliegveld: [OMSCHR]"/>
+					<layer id="op_overslagcentrum" maptipfields="VERKLARING" maptip="Regionaal overslagcentrum: [VERKLARING]"/>
+					<layer id="op_stationsgebied" maptipfields="OMSCHR" maptip="Stationsgebied: [OMSCHR]"/>
+				</fmc:LayerArcIMS>
+				<!-- ============= EINDE OMGEVINGSVISIE EN -VERORDENING  ============== -->
+				<fmc:LayerArcIMS id="ondergrond_lf" name="ondergrond_lf" timeout="50" server="gisopenbaar.toverijs3.nl" servlet="GeoJuli2008/ims" mapservice="ondergrond_lf" forceidentifyids="5" visible="true" hiddenids="" visibleids="" identifyall="true" identifyids="" maptipids="" legend="false" hidelegendids="" fullextent="160000,457560,287864,543013" alpha="85"/>
+			</fmc:Map>
+		</fmc:Container>
+	</fmc:Container>
+	<fmc:Container left="75%" top="0" height="100%" width="25%">
+		<!--legend-->
+		<fmc:Legend id="legend" skin="f2" symbolpath="../atlasoverijssel/images" shadowsymbols="false" groupdy="0" groupdx="5" itemdy="0" itemdx="0" hrdx="15" hrdy="0" symboldx="0" symboldy="0" outofscale="test" listento="map" height="100%">
+			<!-- <fmc:Legend-ov  id="legend" skin="f3" symbolpath="../atlasoverijssel/images" shadowsymbols="false" left="752" top="185" bottom="top +737" width="238" groupdy="0" groupdx="5" itemdy="0" itemdx="0" hrdx="15" hrdy="0" symboldx="0" symboldy="0" outofscale="test" listento="map" > -->
+			<!-- <string id="outofscale" nl="buiten schaalbereik;&lt;br&gt;zoom naar deze laag..." en="Outside range;&lt;br&gt;zoom to layer" de="Auerhalb des Mastabsbereichs;&lt;br&gt;vergrern" fr="Hors chelle..." /> -->
+			<string id="outofscale" nl="zoom in om zichtbaar te maken..." en="Outside range;&lt;br&gt;zoom to layer" de="Auerhalb des Mastabsbereichs;&lt;br&gt;vergrern" fr="Hors chelle..."/>
+			<style id=".group" font-family="verdana" font-size="10px" color="#808080" display="block" font-weight="bold"/>
+			<style id=".group_mouseover" font-family="verdana" font-size="10px" color="#000000" display="block" font-weight="bold"/>
+			<!--<style id=".group" font-family="verdana" font-size="12px" color="#333333" display="block" font-weight="bold" />
+	<style id=".group_mouseover" font-family="verdana" font-size="12px" color="#333333" display="block" font-weight="bold" />-->
+			<style id=".item" font-family="arial,verdana" font-size="10px" color="#333333" display="block" font-weight="normal"/>
+			<style id=".item_link" font-family="verdana" font-size="10px" color="#02A0C5" display="block" font-weight="normal" text-decoration="normal"/>
+			<style id=".symbol" font-family="verdana" font-size="9px" color="#333333" display="block" font-weight="normal"/>
+			<style id=".symbol_link" font-family="verdana" font-size="9px" color="#02A0C5" display="block" font-weight="normal" text-decoration="normal"/>
+			<style id=".outofscale" font-family="verdana" font-size="10px" color="#0066cc" display="block" font-style="italic"/>
+			<style id=".text" font-family="verdana" font-size="12px" color="#333333" display="block" font-style="normal" font-weight="bold"/>
+			<style id=".subtext" font-family="arial,verdana" font-size="9px" color="#808080" display="block" font-style="normal" font-weight="normal"/>
+			<!-- ALGEMEEN ====================================================================================================-->
+			<ITEM canhide="true" label="Kanoroute" symbolposition="left" listento="routes6">			
+        </ITEM>
+			<ITEM canhide="true" label="Mountainbikeroute" symbolposition="left" listento="routes5">			
+        </ITEM>
+			<ITEM canhide="true" label="Knelpunten Lange-afstand-wandelpad" symbolposition="left" listento="knelpunt1">			
+        </ITEM>
+			<ITEM canhide="true" label="Knelpunten Landelijke fietsroute" symbolposition="left" listento="knelpunt2">			
+        </ITEM>
+			<ITEM canhide="true" open="true" label="Regio-indeling RTV-Oost" symbolposition="left" listento="avo25.regio_tvoost">
+        </ITEM>
+			<ITEM dy="5" canhide="true" label="COROP-gebied" symbolposition="left" listento="avo18.corop">
+        </ITEM>
+			<ITEM canhide="true" label="Rayonindeling wegen en kanalen" symbolposition="left" listento="avo7.rayonwk_polygon">
+        </ITEM>
+			<ITEM canhide="true" open="true" label="Waterschappen" symbolposition="left" listento="avo16.watschap_ned_polygon">
+        </ITEM>
+			<ITEM canhide="true" label="Provinciegrens" symbolposition="left" listento="avo.prov_overlay">
+        </ITEM>
+			<ITEM canhide="true" label="Gemeentegrenzen" symbolposition="left" listento="label_overlay.gem_label,avo.gem_overlay">
+				<ITEM canhide="true" dx="35" dy="" open="true" label="labels weergeven" symbolposition="left" listento="label_overlay.gem_label"/>
+			</ITEM>
+			<ITEM canhide="true" label="Wijkgrenzen" symbolposition="left" listento="label_overlay.wijken_label,avo.wijken">
+				<ITEM canhide="true" dx="35" dy="" open="true" label="labels weergeven" symbolposition="left" listento="label_overlay.wijken_label"/>
+			</ITEM>
+			<ITEM canhide="true" label="Buurtgrenzen" symbolposition="left" listento="label_overlay.buurten_label,avo.buurten">
+				<ITEM canhide="true" dx="35" dy="" open="true" label="labels weergeven" symbolposition="left" listento="label_overlay.buurten_label"/>
+			</ITEM>
+			<ITEM dy="5" canhide="true" label="Topografische kaart 1900" symbolposition="left" listento="avo.topo1900">
+        </ITEM>
+			<ITEM canhide="true" label="Topografische kaart 1950" symbolposition="left" listento="avo.topo1950">
+        </ITEM>
+			<ITEM dy="5" canhide="true" label="Panden, lig- en standplaatsen {F}" symbolposition="left" listento="bag.bag_pand,bag.bag_adres,avo.bag_adres_ligplaats,bag_adres_standplaats,avo.bag_ligplaats,avo.bag_standplaats">
+				<!--<ITEM  canhide="true" label="Verblijfsobjecten" symbolposition="left" listento="avo.bag_verblijfsobject" />-->
+			</ITEM>
+			<ITEM dy="5" canhide="true" label="Treinstation {B}" symbolposition="left" listento="avo20.station">
+        </ITEM>
+			<ITEM dy="5" canhide="true" label="Strooiroute provincie" symbolposition="left" listento="avo22.strooi_prov">
+        </ITEM>
+			<ITEM canhide="true" label="Wegen in beheer bij het rijk {B}" symbolposition="left" listento="wegen.rijkswegen">
+        </ITEM>
+			<ITEM canhide="true" label="Wegen in beheer bij de provincie {B}" symbolposition="left" listento="wegen.provwegen">
+        </ITEM>
+			<ITEM canhide="true" label="Vaarwegen in beheer bij de provincie {B}" symbolposition="left" listento="wegen.vaarwegen">
+        </ITEM>
+			<ITEM dy="5" canhide="true" label="Wegontwerp N340 (23 dec. 2010)" symbolposition="left" listento="avo.N340_1,avo.N340_2,avo.N340_3,avo.N340_4,avo.N340_5,avo.N340_6,avo.N340_7,avo.N340_8,avo.N340_9,avo.N340_10,avo.N340_11,avo.N340_12,avo.N340_13,avo.N340_14,avo.N340_15,avo.N340_16,avo.N340_17,avo.N340_18,avo.N340_19">
+        </ITEM>
+			<!-- <ITEM canhide="true" label="Provinciaal inpassingsplan" symbolposition="left" listento="N340,avo.N340_bpEnkel" infourl="javascript:popWin('http://www.overijssel.nl/N340','legwin','')" >
+			</ITEM>	-->
+			<ITEM canhide="true" dy="5" label="Asbestkaart" symbolposition="left" listento="asbest.stortplaats,asbest.asbest_loc,asbest.bouwarchief_niet_gem,asbest.bouwarchief_gem,asbest.bodemarchief">
+        </ITEM>
+			<ITEM canhide="true" dx="10" label="Locaties bodemarchief provincie" symbolposition="left" listento="asbest.stortplaats,asbest.asbest_loc">
+        </ITEM>
+			<ITEM canhide="true" dx="10" label="Locaties bodemarchief gemeenten" symbolposition="left" listento="asbest.bodemarchief">
+        </ITEM>
+			<ITEM canhide="true" dx="10" label="Locaties bouwarchief gemeenten" symbolposition="left" listento="asbest.bouwarchief_gem,asbest.bouwarchief_niet_gem">
+        </ITEM>
+			<ITEM canhide="true" label="Grondgebruik" symbolposition="left" listento="avo.LGN6">
+        </ITEM>
+			<text dx="5" dy="5">
+				<string id="text">
+					<nl><![CDATA[<span class='subtext'>meer bodemkaarten vind je</span>
+]]></nl>
+				</string>
+			</text>
+			<text dx="5" dy="-20">
+				<string id="text">
+					<nl><![CDATA[<span class='subtext'>in de <a href="http://gisopenbaar.toverijs3.nl/website/bodematlas/bodematlas.html" target="_blank"><font color="#02A0C5">bodematlas</font></a></span>
+]]></nl>
+				</string>
+			</text>
+			<ITEM label="Rijksmonumenten {B}" canhide="true" listento="monument.rijksmonumenten">
+        </ITEM>
+			<ITEM label="Gemeentelijke monumenten {B}" canhide="true" listento="monument.gemeentelijkemonumenten">
+        </ITEM>
+			<ITEM dy="5" canhide="true" label="Bedrijventerreinen {B}" symbolposition="left" open="false" listento="avo14.ibis">
+        </ITEM>
+			<ITEM canhide="true" label="Werkgelegenheid" symbolposition="left" open="false" listento="avo24.biro2010">
+        </ITEM>
+			<item dx="5" dy="5" canhide="true" label="Geluidsniveau provinciale wegen etmaal" listento="geluid.overijssel_geluid_lden_provw_2006">
+        </item>
+			<item dx="5" canhide="true" label="Geluidsniveau provinciale wegen nachtperiode" listento="geluid.overijssel_geluid_lnight_provw_2006">	
+        </item>
+			<item dx="5" canhide="true" label="Geluidsniveau rijkswegen etmaal" listento="geluid.overijssel_geluid_lden_rijksw_2006">	
+        </item>
+			<item dx="5" canhide="true" label="Geluidsniveau rijkswegen nachtperiode" listento="geluid.overijssel_geluid_lnight_rijksw_2006">	
+        </item>
+			<ITEM dy="5" canhide="true" label="Hemelhelderheid" symbolposition="left" open="true" listento="avo5.hemelhelderheid_polygon">
+        </ITEM>
+			<ITEM dx="5" canhide="true" label="Concentratie fijn stof langs wegen" listento="lukwa.luchtkwaliteit_2008_P">
+        </ITEM>
+			<ITEM dx="5" canhide="true" label="Concentratie stikstofdioxide langs wegen" listento="lukwa.luchtkwaliteit_2008_N">
+        </ITEM>
+			<text dx="5" dy="5">
+				<string id="text">
+					<nl><![CDATA[<span class='subtext'><b>energiekaarten</b> vind je</span>
+]]></nl>
+				</string>
+			</text>
+			<text dx="5" dy="-20">
+				<string id="text">
+					<nl><![CDATA[<span class='subtext'>in de <a href="http://gisopenbaar.toverijs3.nl/website/energieatlas/energieatlas.html" target="_blank"><font color="#02A0C5">energieatlas</font></a></span>
+]]></nl>
+				</string>
+			</text>
+			<ITEM dy="5" canhide="true" label="Nationaal landschap" symbolposition="left" listento="nat.natlands">
+        </ITEM>
+			<ITEM canhide="true" label="Nationaal Park" symbolposition="left" listento="nat.natpark">
+        </ITEM>
+			<ITEM canhide="true" open="false" label="Ecologische Hoofdstructuur (EHS) {B}" symbolposition="left" listento="ehs.ehs,ehs.evz,ehs.rvz" infourl="ehs.html','legwin','')">
+        </ITEM>
+			<ITEM canhide="true" label="Kwetsbare gebieden (WAV) {B}" open="false" listento="avo12.wav_polygon">
+        </ITEM>
+			<ITEM canhide="true" label="Concept habitattypenkaart {B}" symbolposition="left" listento="arcgis_habitattypen.0,avo19.habitattypen_id">				
+        </ITEM>
+			<ITEM canhide="true" label="Reconstructiezonering" listento="avo13.recon_zone_polygon">
+        </ITEM>
+			<ITEM canhide="true" label="Wildbeheereenheden" symbolposition="left" listento="avo6.wbe_polygon">
+        </ITEM>
+			<ITEM canhide="true" label="Natura2000 gebied {B}" symbolposition="left" listento="avo15.nat2000">				
+        </ITEM>
+			<ITEM canhide="true" label="Beschermde natuurmonumenten" symbolposition="left" listento="monument.nb_wet">
+        </ITEM>
+			<ITEM canhide="true" label="Ontwikkelingsperspectieven" symbolposition="left" listento="op.op_kenniscentra,op.op_waterberging,op.op_buitenplaats,op.op_landelijk_wonenwerken,op.op_stadsas,op.op_buitendijks,op.op_veenweidegebied,op.op_drinkwaterwinning,op.op_stadsranden,op.op_natlandschap,op.op_fietssnelweg,op.op_hist_kern,op.op_buitengebied,op.op_luchthaven_airside,op.op_luchthaven_overgang,op.op_luchthaven_overgang_diagon,op.op_luchthaven_bedr,op.op_log,op.op_groene_hoofdstr,op.op_buitengebied_zoekEHS,op.op_windenergie,op.op_steden_als_motor,op.op_glastuinbouw,op.op_EHS_lijn_RVZ_ntb_2,op.op_EHS_lijn_EVZ_2,op.op_vervoersnetwerk,op.op_vervoersnetwerk2,op.op_spoor,op.op_water1,op.op_water2,op.op_water3,op.op_water5,op.op_vaarweg,op.op_airport_twente,op.op_overslagcentrum,op.op_stationsgebied,op.op_opafritten">
+        </ITEM>
+			<ITEM canhide="true" label="Natuurlijke laag" symbolposition="left" listento="ov17.natuurlijke_laag,omgevingsvisie.watervlak1,omgevingsvisie.waterloop1,omgevingsvisie.ruggen,ov18.beken,omgevingsvisie.bron">
+        </ITEM>
+			<ITEM canhide="true" label="Laag van het agrarisch cultuurlandschap" symbolposition="left" listento="ov25.agrarisch_cultuurlandschap,omgevingsvisie.watervlak2,omgevingsvisie.waterloop2">
+        </ITEM>
+			<ITEM canhide="true" label="Stedelijke laag" symbolposition="left" listento="ov41.wegencategorisering,ov38.historische_kern,ov39.stedelijke_laag_area,ov40.s_vervoersnetwerk,ov40.s_vervoersnetwerk2,ov42.vaarten_Water_arc,ov42.dedemsvaart,ov43.infrastructuur_spoor_lijn,ov44.stations">
+        </ITEM>
+			<ITEM canhide="true" label="Lust- en leisurelaag" symbolposition="left" listento="ov93.stadsranden,ov19.verblijfsrecreatie_lust,ov24.attracties,ov23.buitenplaats,ov26.vaarweg_lenl,ov20.lawroute,ov20.lfroute,ov21.fronten,ov22.donkerte">
+        </ITEM>
+			<ITEM canhide="true" label="continu en herkenbaar watersysteem" symbolposition="left" dx="5" listento="ov96.hoofdsysteem,ov95.krw,ov95.krw_vlak,ov94.kleinewateren,ov94.kleinewateren_wfk">
+        </ITEM>
+			<ITEM canhide="true" label="waterveiligheid" symbolposition="left" dx="5" listento="ov96.primairewatkeer_wfk,ov96.regionalewatkeer_wfk,ov96.dijkringgebieden_wfk,ov85.ruimtevdrivier,ov97.buitendijksgebied,ov98.bypass">
+        </ITEM>
+			<ITEM canhide="true" label="grondwater" symbolposition="left" dx="5" listento="ov99.innamezone,ov32.grwbesgebied_wfk,ov100.intrekgebieden_wfk,ov100.salland_wfk">
+        </ITEM>
+			<ITEM canhide="true" label="waterberging" symbolposition="left" dx="5" listento="ov102.primaire_watergebieden_wfk,ov102.primaire_watergeb_lijn_wfk,ov102.waterberging_vlak_wfk,omgevingsvisie.waterberging_lijn_wfk,ov101.wb_zoeklocatie">
+        </ITEM>
+			<ITEM canhide="true" label="overig" symbolposition="left" dx="5" listento="ov103.vaarweg_wfk,ov103.recreatievaart,ov103.wateraanvoer,ov103.zwemplas_wfk,ov103.zwemplassen_beschermingsgebied">
+        </ITEM>
+			<ITEM canhide="true" label="Ontwikkelingsperspectieven" dx="5" symbolposition="left" listento="ov12.hist_kern,ov1.buitengebied,ov2.groene_hoofdstr,ov1.buitengebied_zoekEHS,ov3.log,ov7.windenergie,ov4.steden_als_motor,ov5.glastuinbouw,ov6.EHS_lijn_RVZ_ntb_2,ov6.EHS_lijn_EVZ_2,ov10.vervoersnetwerk,ov10.vervoersnetwerk2,ov9.spoor,ov8.water1,ov8.water2,ov8.water3,ov8.water5,ov11.vaarweg,ov14.airport_twente,ov16.overslagcentrum,ov15.stationsgebied">
+        </ITEM>
+			<ITEM canhide="true" label="EHS" dx="5" symbolposition="left" listento="ov6.EHS_lijn_RVZ_ntb,ov6.EHS_lijn_EVZ,ov37.EHS">
+        </ITEM>
+			<ITEM canhide="true" label="Nationale landschappen" dx="5" symbolposition="left" listento="ov37.nationale_landschappen,omgevingsvisie.natlandschap">
+        </ITEM>
+			<ITEM canhide="true" label="Recreatie" symbolposition="left" dx="5" listento="ov30.froutenetwerk,ov27.lfroute_arc,ov27.lawroute_arc,ov28.rec_steenwijk,omgevingsvisie.kleinschalige_VerblMogSteenw,ov27.wandelnetwerk_twente">
+        </ITEM>
+			<ITEM canhide="true" label="Externe veiligheid" symbolposition="left" dx="5" listento="ov47.laagvliegroute,ov48.buisleiding,ov49.rgsweg">
+        </ITEM>
+			<ITEM canhide="true" label="Drinkwatervoorziening" symbolposition="left" dx="5" listento="ov31.waterwin_polygon,ov32.grwbesgebied,ov32.sted_grwbesgebied,ov34.intrekgebieden,ov34.sted_intrekgebieden,ov33.salland,ov35.boringsvrij">
+        </ITEM>
+			<ITEM canhide="true" label="Waterveiligheid" symbolposition="left" dx="5" listento="ov45.dijkringgebieden,ov46.primaire_watergebieden,ov46.waterberging_vlak,omgevingsvisie.waterberging_lijn,ov46.waterberging_corr,ov46.ess_waterlopen,omgevingsvisie.watkeer">
+        </ITEM>
+			<ITEM canhide="true" label="Regionale waterkeringen" symbolposition="left" dx="5" listento="ov52.primwatkeer,ov52.regwatkeer">
+        </ITEM>
+			<ITEM canhide="true" label="Peilbesluiten" symbolposition="left" dx="5" listento="ov50.peilbesluiten">
+        </ITEM>
+			<ITEM canhide="true" label="Vaarwegnummering" symbolposition="left" dx="5" listento="ov51.vaarwegnrs,ov51.vaarwegnr_polygon">
+        </ITEM>
+			<ITEM canhide="true" dy="5" label="Lange-afstand-wandelpad (LAW)" symbolposition="left" listento="routes2">			
+        </ITEM>
+			<ITEM canhide="true" label="Landelijke fietsroute (LF-route)" symbolposition="left" listento="routes1">				
+        </ITEM>
+			<ITEM canhide="true" label="Fietsroutenetwerk" symbolposition="left" listento="routes3">			
+        </ITEM>			
+        <ITEM canhide="true" label="Fietsrouteknooppunten" symbolposition="left" listento="routes4">			
+        </ITEM>
+			<ITEM canhide="true" label="Toeristisch overstappunt (TOP)" symbolposition="left" listento="avo3.top">			
+        </ITEM>
+			<ITEM dy="5" dx="-2" canhide="true" label="Type accommodatie:">
+        </ITEM>
+			<ITEM canhide="true" label="Camping {F} {B}" symbolposition="left" open="false" listento="recreatie.rec_camping">		
+        </ITEM>
+			<ITEM canhide="true" label="Bungalowpark {F} {B}" symbolposition="left" open="false" listento="recreatie.rec_bungalowpark">			
+        </ITEM>
+			<ITEM canhide="true" label="Jachthaven {F} {B}" symbolposition="left" open="false" listento="recreatie.rec_jachthaven">
+        </ITEM>
+			<ITEM canhide="true" label="Groepsaccommodatie {F} {B}" symbolposition="left" open="false" listento="recreatie.rec_groepsaccommodatie">
+        </ITEM>
+			<ITEM canhide="true" label="">
+        </ITEM>
+			<ITEM label="website Risicokaart" canhide="false"/>
+			<ITEM canhide="true" dy="5" open="true" label="Waterwingebied {B}" symbolposition="left" listento="avo10.waterwin_polygon">
+        </ITEM>
+			<ITEM canhide="true" open="true" label="Grondwaterbeschermingsgebied {B}" symbolposition="left" listento="avo8.grwbes_polygon">
+        </ITEM>
+			<ITEM canhide="true" open="true" label="Boringsvrije zone {B}" symbolposition="left" listento="boring.boringvrij,boring.salland">
+        </ITEM>
+			<ITEM canhide="true" open="true" label="Intrekgebied {B}" symbolposition="left" listento="avo9.intrekgebied">	
+        </ITEM>
+			<ITEM canhide="true" dy="5" open="true" label="Zwemplas - openbaar {B}" symbolposition="left" listento="zwemwater.zwemwater_o,avo.zwemwater_o_krw,avo.zwemwater_o_q">
+				<ITEM canhide="true" open="true" label="labels weergeven" symbolposition="left" listento="avo.zwemwater_o_lbl" maxscale="13.25"/>
+				<ITEM canhide="true" dx="30" dy="" open="true" label="labels weergeven" symbolposition="left" listento="label_overlay.zwemwater_o_lbl" maxscale="1325" minscale="13.25"/>
+			</ITEM>
+			<ITEM canhide="true" open="true" label="Zwemplas - semi-openbaar {B}" symbolposition="left" listento="zwemwater.zwemwater_no,avo.zwemwater_no_krw,avo.zwemwater_no_q">
+				<ITEM canhide="true" open="true" label="labels weergeven" symbolposition="left" listento="avo.zwemwater_no_lbl" maxscale="13.25"/>
+				<ITEM canhide="true" dx="30" dy="" open="true" label="labels weergeven" symbolposition="left" listento="label_overlay.zwemwater_no_lbl" maxscale="1325" minscale="13.25"/>
+			</ITEM>
+			<ITEM dy="5" canhide="true" label="Kulturhus initiatief {F} {B}" open="true" listento="avo2.kulturhus_mfa">
+        </ITEM>
+		</fmc:Legend>
+	</fmc:Container>
+</FLAMINGO>

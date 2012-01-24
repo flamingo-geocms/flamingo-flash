@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FLAMINGO xmlns:fmc="fmc" id="flamingo" lang="nl" languages="en,nl" tooltipdelay="300" commtojava="true" preloadtitle="Prototypemap" useexternalinterface="true">
+	<style id=".tooltip" font-family="arial, sans-serif" font-size="11" color="#880000" display="block"/>
+	<fmc:Container left="0" top="0" height="100%" width="100%">
+		<fmc:MonitorLayer id="monitorl" left="37%" top="50%" width="50%" listento="map">
+			<string id="waiting" en="Making... [layer] [percentage]%..." nl="Kaart aan het maken..."/>
+			<string id="loading" en="Making... [layer] [percentage]%..." nl="Kaart aan het laden. [percentage]%"/>
+		</fmc:MonitorLayer>
+		<fmc:ButtonFull right="0" top="10" listento="map"/>
+		<fmc:ButtonNext left="30" top="10" listento="map"/>
+		<fmc:ButtonPrev left="60" top="10" listento="map"/>           
+		<fmc:ToolGroup id="toolgroup" tool="zoomout" listento="map" width="100%" height="100" left="100" top="10">	
+			<fmc:ToolZoomout id="zoomout" left="30" skin="f2"/>		
+			<fmc:ToolZoomin id="zoom" skin="f2"/>			
+			<fmc:ToolPan left="60" skin="f2"/>
+			<fmc:ToolSuperPan id="superPan" left="90" skin="f2"/>
+			<fmc:ToolMeasure left="120" skin="f2"/>
+			<fmc:ToolIdentify left="150" skin="f2"/>
+		</fmc:ToolGroup>
+		      <fmc:Coordinates id="awerwe" listento="map" left="100" top="600"
+				decimals="6">
+                <style id=".xy" font-family="arial, sans-serif" font-size="11" />
+                <string id="xy" nl="dfsg: [x]     Y: [y]" />
+            </fmc:Coordinates>
+		<fmc:BorderNavigation listento="map" top="0%" width="100%" height="100%" skin="f1"/>
+		<fmc:EditMap id="editMap" editable="true" left="0" top="0%" height="100%" width="100%" bottom="bottom" listento="gis,map"/>
+		<fmc:GIS id="gis" geometryeditable="yes" alwaysdrawpoints="no">
+		<fmc:Layer name="layer1" title="Layer 1" visible="true" geometrytypes="LineString" loadfeaturesonstart="false">
+		<fmc:Style fillcolor="0xFF0000" fillopacity="50" strokecolor="0xFF0000" strokeopacity="50" strokeWidth="11"/></fmc:Layer>
+		</fmc:GIS>
+		<fmc:Map id="map" left="0" top="0%" height="100%" width="100%" bottom="bottom" visible="true" extent="12000,304000,280000,620000" fullextent="12000,304000,280000,620000" zoomscalefactor="3" minscale="0.16666666669999999" extenthistory="10">
+			<fmc:LayerIdentifyIcon id="identifyicon"/>
+			<fmc:TilingLayer id="metacarta" serviceurl="http://geoserver.nl/tiles/tilecache.aspx/1.0.0/ipolufo2009/" resolutions="3276,1092,364,122,40.5,13.5,4.5,1.5,0.5,0.16666666669999999" serviceenvelope="0,300000,300000,620000">
+				<TilingParam name="USERID">0cc72c2d32d2f0b9fde2ad09521a4de0ipolufo</TilingParam>
+			</fmc:TilingLayer>
+		</fmc:Map>
+	</fmc:Container>	
+</FLAMINGO>

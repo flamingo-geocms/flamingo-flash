@@ -1,0 +1,332 @@
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>Flamingo Demo's</title>
+<link rel="stylesheet" href="style.css">
+    </head>
+    <body style="min-height: 800px; min-width: 1000px;">
+        <h1>Here you can view some flamingo demo's</h1>
+		<div class="main">
+			<div class="componentGroup">
+				<h2>Mapservices and Protocols</h2>
+				<div class="component">
+					<strong>Tiling based on a TMS service - Test a1</strong><br/>
+					Tiling based on a TMS service served by geoserver.nl<br/>
+					<a href="flamingo.html?config=tiling_tms2.xml">Select</a>
+				</div>
+				<div class="component">
+					<strong>Tiling based on a WMS service - Test a2</strong><br/>
+					Tiling based on a WMS service. Be aware: The service is not optimized for tiling usages.<br/>
+					<a href="flamingo.html?config=tiling_wms.xml">Select</a>
+				</div>
+				<div class="component">
+					<strong>Tiling based on a ArcGis 9.3 map cache tiling service (REST) - Test a3</strong><br/>
+					Tiling based on a ArcGis 9.3 map cache tiling.<br/>
+					<a href="flamingo.html?config=tiling_arc.xml">Select</a>
+				</div>
+				<div class="component">
+					<strong>Tiling based on a Open Street Map service - Test a4</strong><br/>
+					Service is served by Open Street Map <a href="http://openstreetmap.org">http://www.openstreetmap.org</a><br/>
+					<a href="flamingo.html?config=tiling_osm.xml">Select</a>
+				</div>
+				<div class="component">
+					<strong>OGC WMS Service - Test a5</strong><br/>
+					<a href="flamingo.html?config=ogcwms.xml">Select</a>
+				</div>
+				<div class="component">
+					<strong>Test ArcIms service - Test a6</strong><br/>
+					Test for arcims service<br/>
+					<a href="flamingo.html?config=arcimsservice.xml">Select</a>
+				</div>
+				<div class="component">
+					<strong>Test ArcServer service - Test a7</strong><br/>
+					Test for ArcServer service<br/>
+					<a href="flamingo.html?config=arcserverservice.xml">Select</a>
+				</div>
+				<div class="component">
+					<strong>Test LayerImage - Test a8</strong><br/>
+					Test for LayerImage service<br/>
+					<a href="flamingo.html?config=imagelayer.xml">Select</a>
+				</div>
+				<div class="component">
+					<strong>Test LayerGrid - Test a9</strong><br/>
+					Test for LayerGrid service<br/>
+					<a href="flamingo.html?config=layergrid.xml">Select</a>
+				</div>
+				<div class="component">
+					<strong>ArcIms & OgWMS initservice = false - Test a10</strong><br/>
+					Don't do a getService/getCapabilities request on startup. If set to true, you can't use #ALL# but must define all the wanted layers.
+					<br/>
+					<a href="flamingo.html?config=initservice.xml">Select</a>
+				</div>
+				<div class="component">
+					<strong>LayerOverview test - Test a11</strong><br/>
+					Test for the LayerOverview (small map at the side)
+					<br/>
+					<a href="flamingo.html?config=layeroverview.xml">Select</a>
+				</div>
+			</div>
+			<div class="componentGroup">
+				<h2>Control and buttons</h2>
+				<div class="component">
+					<strong>Using Tools - Test b1 t/m b7</strong><br/>
+					Howto use the different tools in flamingo
+					<br/>
+					<a href="jsbutton.html?config=buttontools.xml">Select</a>
+				</div>
+				<div class="component">
+					<strong>Zoom with slider - Test b8</strong><br/>
+					Zoom in and out with a slider
+					<br/>
+					<a href="jsbutton.html?config=zoomerV.xml">Select</a>
+				</div>
+				<div class="component">
+					<strong>Change map values with slider - Test b9</strong><br/>
+					Change the map values like alpha with a slider
+					<br/>
+					<a href="jsbutton.html?config=alpha_slider.xml">Select</a>
+				</div>
+				<div class="component">
+					<strong>JS button - Test b10</strong><br/>
+					  Use a flash button to execute a javascript function
+					<br/>
+					<a href="jsbutton.html?config=jsbutton.xml">Select</a>
+				</div>
+				<div class="component">
+					<strong>Print button - Test b11</strong><br/>
+					  Open a print window with a button
+					<br/>
+					<a href="flamingo.html?config=printbutton.xml">Select</a>
+				</div>
+				<div class="component">
+					<strong>Map with fixed resolutions - Test b12</strong><br/>
+					  Map only zooms to fixed resolutions
+					<br/>
+					<a href="flamingo.html?config=fixedmapresolutions.xml">Select</a>
+				</div>
+				<div class="component">
+					<strong>Hotlink - Test b13</strong><br/>
+					  Executes a command after a identify
+					<br/>
+					<a href="flamingo.html?config=hotlink.xml">Select</a>
+				</div>
+				<div class="component">
+					<strong>Legend test - Test b14</strong><br/>
+					  Test if the legend works
+					<br/>
+					<a href="flamingo.html?config=legend.xml">Select</a>
+				</div>
+				<div class="component">
+					<strong>LayerSwitch - Test b15</strong><br/>
+					  Test if the LayerSwitch works
+					<br/>
+					<a href="flamingo.html?config=layerswitch.xml">Select</a>
+				</div>
+				<div class="component">
+					<strong>Buffer - Test b16</strong><br/>
+					  Buffertool
+					<br/>
+					<a href="flamingo.html?config=buffer.xml">Select</a>
+				</div>
+				<div class="component">
+					<strong>Filter - Test b17</strong><br/>
+					  Filtertool
+					<br/>
+					<a href="flamingo.html?config=filter.xml">Select</a>
+				</div>
+			</div>
+			<div class="componentGroup">
+				<h2>Draw and figures on the map</h2>
+				<div class="component">
+					<strong>Draw point, linstring, polygon, circle, point at distance - Test c1</strong><br/>
+					You can draw a point at a distance<br/>
+					<a href="flamingo.html?config=drawing.xml">Select</a>
+				</div>
+				<div class="component">
+					<strong>Add a label - Test c2</strong><br/>
+					Add a label to a geometry that is drawn on the map<br/>
+					<a href="flamingo.html?config=drawing.xml">Select</a>
+				</div>
+				<div class="component">
+					<strong>Select single feature - Test c3</strong><br/>
+					Select a single wfs feature instead of all the features are loaded on init. With the EditMapSelectFeature<br/>
+					<a href="flamingo.html?config=editmapselectfeature.xml">Select</a>
+				</div>
+				<div class="component">
+					<strong>Edit info panel - Test c4</strong><br/>
+					A info panel that shows information of the geometry you are drawing/editing<br/>
+					<a href="flamingo.html?config=editinfopanel.xml">Select</a>
+				</div>
+				<div class="component">
+					<strong>Edit style - Test c5</strong><br/>
+					Edit the style of your drawn object<br/>
+					<a href="flamingo.html?config=editstyle.xml">Select</a>
+				</div>
+				<div class="component">
+					<strong>Marker - Test c6</strong><br/>
+					Set a marker on the map<br/>
+					<a href="marker.html?config=marker.xml">Select</a>
+				</div>
+				<div class="component">
+					<strong>Field of View Marker - Test c7</strong><br/>
+					Set a marker on the map that indicates the FOV. For example to indicate a Field of View of a street view.<br/>
+					<a href="fovmarker.html?config=fovmarker.xml">Select</a>
+				</div>
+				<div class="component">
+					<strong>Show the units of the drawn geometry - Test c8</strong><br/>
+					Show the units of the drawn geometry<br/>
+					<a href="flamingo.html?config=drawingunits.xml">Select</a>
+				</div>
+			</div>
+			<div class="componentGroup">
+				<h2>Information from the map</h2>
+				<div class="component">
+					<strong>Maptip - Test d1</strong><br/>
+					Do a maptiprequest on points<br/>
+					<a href="flamingo.html?config=maptip.xml">Select</a>
+				</div>
+				<div class="component">
+					<strong>Identify results - Test d2</strong><br/>
+					Identify results<br/>
+					<a href="flamingo.html?config=identifyresult.xml">Select</a>
+				</div>
+				<div class="component">
+					<strong>Identify results in htmllayout- Test d3</strong><br/>
+					Identify results in htmllayout<br/>
+					<a href="flamingo.html?config=identifyresultshtml.xml">Select</a>
+				</div>
+				<div class="component">
+					<strong>Monitormap - Test d4</strong><br/>
+					Monitor the progress of loading the map<br/>
+					<a href="flamingo.html?config=monitormap.xml">Select</a>
+				</div>
+
+			</div>
+			<div class="componentGroup">
+				<h2>Meta info from the map</h2>
+				 <div class="component">
+					<strong>Scalebar with a TMS Tiling Service - Test e1</strong><br/>
+					Tiling based on a TMS service served by geoserver.nl<br/>
+					<a href="flamingo.html?config=scalebar.xml">Select</a>
+				</div>
+				 <div class="component">
+					<strong>Coordinates of the cursor with a TMS Tiling Service - Test e2</strong><br/>
+					Tiling based on a TMS service served by geoserver.nl<br/>
+					<a href="flamingo.html?config=coordinate.xml">Select</a>
+				</div>
+			</div>
+			<div class="componentGroup">
+				<h2>Search</h2>
+				<div class="component">
+					<strong>Search on a WFS service - Test f1</strong><br/>
+					Search for a geometry on a WFS service. (afnemers.ruimtelijkeplannen.nl)<br/>
+					<a href="flamingo.html?config=locationfinderwfs.xml">Select</a>
+				</div>
+				<div class="component">
+					<strong>Search on a Arc service - Test f2</strong><br/>
+					Search for a geometry on a arc service. <br/>
+					<a href="flamingo.html?config=locationfinderarc.xml">Select</a>
+				</div>
+				<div class="component">
+					<strong>Search on a predefined list - Test f3</strong><br/>
+					Search on a predefined list. <br/>
+					<a href="flamingo.html?config=locationfinderlist.xml">Select</a>
+				</div>
+			</div>
+			<div class="componentGroup">
+				<h2>Javascript</h2>
+				<div class="component">
+					<strong>Catch a request - Test g1</strong><br/>
+						How to catch a request when its done by the layer.
+					<br/>
+					<a href="jsfunction.html?config=catch_getmap.xml">Select</a>
+				</div>
+				<div class="component">
+					<strong>Catch the click point of a Identify - Test g2</strong><br/>
+						How to catch the x and y point of a identify click before the identify is done. The x and y are alerted by javascript.
+					<br/>
+					<a href="jsfunction.html?config=catch_identify.xml">Select</a>
+				</div>
+				<div class="component">
+					<strong>Catch the data of a identify in JavaScript - Test g3</strong><br/>
+						How to catch the data of a identify in JavaScript. When the server returns the data the javascript function "onIdentifyData" is called and alerts the data.
+					<br/>
+					<a href="jsfunction.html?config=catch_identify_data.xml">Select</a>
+				</div>
+				<div class="component">
+					<strong>Toggle a window with javascript - Test g4</strong><br/>
+					Set the visibility of a window with javascript
+					<br/>
+					<a href="togglewindow.html?config=togglewindow.xml">Select</a>
+				</div>
+				<div class="component">
+					<strong>Javascript functions edit flamingo - Test g5</strong><br/>
+					Some javascript functions for edit part of flamingo<br/>
+					<a href="editFlamingo.html?config=edit.xml">Select</a>
+				</div>
+				<div class="component">
+					<strong>Allow / Deny individual external calls - Test g6</strong><br/>
+					In this example all the 'map' calls are denied except the .onidentify
+					<br/>
+					<a href="allowDenyFlamingo.html?config=allow_deny.xml">Select</a>
+				</div>
+			</div>
+			<div class="componentGroup">
+				<h2>Layout</h2>
+				<div class="component">
+					<strong>Test Container - Test h1</strong><br/>
+					Test for Container<br/>
+					<a href="flamingo.html?config=container.xml">Select</a>
+				</div>
+				<div class="component">
+					<strong>Border around the container - Test h2</strong><br/>
+					Test for Container<br/>
+					<a href="flamingo.html?config=containerborder.xml">Select</a>
+				</div>
+				<div class="component">
+					<strong>A window - Test h3</strong><br/>
+					A window
+					<br/>
+					<a href="flamingo.html?config=window.xml">Select</a>
+				</div>
+				<div class="component">
+					<strong>Tabcontrol- Test h4</strong><br/>
+					A tabcontrol
+					<br/>
+					<a href="flamingo.html?config=tabcontrol.xml">Select</a>
+				</div>
+				<div class="component">
+					<strong>Veil- Test h5</strong><br/>
+					A veil
+					<br/>
+					<a href="flamingo.html?config=veil.xml">Select</a>
+				</div>
+			</div>
+			<div class="componentGroup">
+				<h2>Other</h2>
+				<div class="component">
+					<strong>Multiple configs - Test i1</strong><br/>
+					Test for multiple xml configurations<br/>
+					<a href="flamingo.html?config=tool1.xml,tool2.xml">Select</a>
+				</div>
+			</div>
+			<div class="componentGroup">
+				<h2>Performance</h2>
+				<div class="component">
+					<strong>Performance test 100-10 - Performance test 1</strong><br/>
+					To test the performance with 100 layers from 10 services<br/>
+					<a href="flamingo.html?config=performanceOverrijssel_10.xml">Select</a>
+				</div>
+				<div class="component">
+					<strong>Performance test 100-100 - Performance test 2</strong><br/>
+					To test the performance with 100 layers from 100 services<br/>
+					<a href="flamingo.html?config=performanceOverrijssel.xml">Select</a>
+				</div>
+				<div class="component">
+					<strong>Performance test 0-0 - Performance test 3</strong><br/>
+					To test the performance with no layers or services<br/>
+					<a href="flamingo.html?config=performanceOverrijssel_geen.xml">Select</a>
+				</div>
+			</div>
+	</body>
+</html>

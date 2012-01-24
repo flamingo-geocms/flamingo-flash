@@ -1,0 +1,84 @@
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>Flamingo Demo</title>
+    </head>
+    <body style="min-height: 600px; min-width: 1000px;">
+        <script type="text/javascript" src="scripts/swfobject.js"></script>
+		<script type="text/javascript" src="scripts/proj4js-compressed.js"></script>
+
+        <div id="flashcontent" style="width: 100%; height: 90%">
+            <font color="red"><strong>For some reason the Flamingo mapviewer can not be shown. Please contact the website administrator.</strong></font>
+        </div>
+        <a id="configLink" href="" target="_blank">Config file</a>
+        <div>
+        	You can set the x and y both in EPSG:28992 and in Lat Lon. For reprojection the proj4js lib is used.<br>
+        	x:<input id="inputX" type="text" value="4.008772623588018"/> y:<input id="inputY" type="text" value="52.07226205033684"/> direction: <input id="inputDir" type="text" value="0"/> view angle: <input id="inputFov" type="text" value="90"/>
+        	<a href="#" onclick="drawFov()">draw FOV</a>
+        </div>
+        <script type="text/javascript" src="scripts/loadConfig.js"></script>
+        <script type="text/javascript">
+
+        	function drawFov(){
+        		var x=document.getElementById("inputX").value;
+        		var y=document.getElementById("inputY").value;
+        		var dir=document.getElementById("inputDir").value;
+        		var fov=document.getElementById("inputFov").value;
+        		if (isNaN(x)){
+        			alert("X is not a number");
+        			return;
+				}
+				if (isNaN(y)){
+					alert("y is not a number");
+					return;
+				}
+				if (isNaN(dir)){
+					alert("Direction is not a number");
+					return;
+				}
+				if (isNaN(fov)){
+					alert("FOV is not a number");
+					return;
+				}
+				if (x < 180 && y < 180){
+					var point = transformLatLon(Number(x),Number(y));
+					x=point.x;
+					y=point.y;
+					//alert("x: "+point.x+" y:"+point.y);
+				}
+				flamingo.call("map","setFovMarker",x,y,dir,fov);
+        	}
+
+        	function transformLatLon(x,y){
+        		var source = new Proj4js.Proj("EPSG:4236");
+				var dest = new Proj4js.Proj("EPSG:28992");
+				var point = new Proj4js.Point(x,y);
+				Proj4js.transform(source,dest,point);
+				return point;
+        	}
+
+			function fovTest(x,y,direction,fov){
+				if (fov<=180){
+					flamingo.call("map","setFovMarker",x,y,direction,fov);
+					fov+=1;
+					setTimeout(function(){
+						fovTest(x,y,direction,fov);
+					},100);
+				}
+			}
+			function rotateTest(x,y,direction,fov){
+				if (direction<=360){
+					flamingo.call("map","setFovMarker",x,y,direction,fov)
+					direction+=1;
+					setTimeout(function(){
+						rotateTest(x,y,direction,fov)
+					},100);
+				}
+			}
+			Proj4js.reportError = function(msg) {alert(msg);}
+			//Proj4js.defs["EPSG:28992"] = "+proj=sterea +lat_0=52.15616055555555 +lon_0=5.38763888888889 +k=0.9999079 +x_0=155000 +y_0=463000 +ellps=bessel +units=m +no_defs";
+			Proj4js.defs["EPSG:28992"] = "+proj=sterea +lat_0=52.15616055555555 +lon_0=5.38763888888889 +k=0.9999079 +x_0=155000 +y_0=463000 +ellps=bessel +towgs84=565.237,50.0087,465.658,-0.406857,0.350733,-1.87035,4.0812 +units=m +no_defs";
+			Proj4js.defs["EPSG:4236"] = "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs "
+        </script>
+    </body>
+</html>

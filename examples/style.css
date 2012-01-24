@@ -1,0 +1,31 @@
+body {
+	font-family: Verdana, Arial, sans-serif;
+	font-size: 11px;
+}
+.component{
+	border: 2px solid #cccccc;
+	width: 30%;
+	float: left;
+	margin-left: 8px;
+	margin-top: 4px;
+	margin-bottom: 4px;
+	height: 75px;
+	padding: 2px;
+	background-color: #e2e2e2;
+}
+
+.componentGroup{
+border: 2px dashed #CCCCCC;
+float: left;
+margin-top: 10px;
+width: 85%;
+padding: 4px;
+background-color: #F5F5F5;
+}
+
+
+.main{
+    margin-left: auto;
+    margin-right: auto;
+
+}

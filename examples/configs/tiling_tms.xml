@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FLAMINGO xmlns:fmc="fmc" id="flamingo" lang="nl" languages="en,nl" tooltipdelay="300" commtojava="true" preloadtitle="Prototypemap" useexternalinterface="true">
+	<style id=".tooltip" font-family="arial, sans-serif" font-size="11" color="#880000" display="block"/>
+	<fmc:Container left="0" top="0" height="100%" width="100%">
+		<fmc:MonitorLayer id="monitorl" left="37%" top="50%" width="50%" listento="map">
+			<string id="waiting" en="Making... [layer] [percentage]%..." nl="Kaart aan het maken..."/>
+			<string id="loading" en="Making... [layer] [percentage]%..." nl="Kaart aan het laden. [percentage]%"/>
+		</fmc:MonitorLayer>
+		<fmc:ToolGroup tool="zoom" listento="map" width="100%" height="100" left="10" top="10">
+			<fmc:ToolZoomin id="zoom" skin="f2"/>
+			<fmc:ToolZoomout left="30" skin="f2"/>
+			<fmc:ToolPan left="60" skin="f2"/>
+			<fmc:ToolMeasure left="90" skin="f2"/>
+			<fmc:ToolIdentify left="120" skin="f2"/>
+		</fmc:ToolGroup>
+		<fmc:Coordinates listento="map" left="80%" top="95%" decimals="6">
+			<style id=".xy" font-family="arial, sans-serif" font-size="11"/>
+			<string id="xy" nl="X: [x]     Y: [y]"/>
+		</fmc:Coordinates>
+		<fmc:BorderNavigation listento="map" top="0%" width="100%" height="100%" skin="f1"/>
+		<fmc:Map id="map" left="0" top="0%" height="100%" width="100%" bottom="bottom" visible="true" extent="-180.000000,-90.000000,180.000000,90.000000" zoomscalefactor="2" minscale="0.00000134110450744629">
+			<fmc:LayerIdentifyIcon id="identifyicon"/>
+			<fmc:TilingLayer id="metacarta" serviceurl="http://labs.metacarta.com/wms-c/Basic.py/1.0.0/basic/" resolutions="0.70312500000000000000,0.35156250000000000000,0.17578125000000000000,0.08789062500000000000,0.04394531250000000000,0.02197265625000000000,0.01098632812500000000,0.00549316406250000000,0.00274658203125000000,0.00137329101562500000,0.00068664550781250000,0.00034332275390625000,0.00017166137695312500,0.00008583068847656250,0.00004291534423828125,0.00002145767211914062,0.00001072883605957031,0.00000536441802978516,0.00000268220901489258,0.00000134110450744629" serviceenvelope="-180.000000,-90.000000,180.000000,90.000000">
+			</fmc:TilingLayer>
+		</fmc:Map>
+	</fmc:Container>	
+</FLAMINGO>

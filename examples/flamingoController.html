@@ -1,0 +1,73 @@
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>Flamingo Demo</title>
+    </head>
+    <body style="min-height: 600px; min-width: 1000px;">
+        <script type="text/javascript" src="scripts/swfobject.js"></script>
+		<script type="text/javascript" src="scripts/FlamingoController.js"></script>
+        <div id="flashcontent" style="width: 100%; height: 90%">
+            <font color="red"><strong>For some reason the Flamingo mapviewer can not be shown. Please contact the website administrator.</strong></font>
+        </div>
+        <a id="configLink" href="" target="_blank">Config file</a><br>
+        <a href="javascript: var s=addLayer1()">AddLayer1</a><br>
+        <a href="javascript: var s=addLayer2()">AddLayer2</a><br>
+        <a href="javascript: var s=removeLayerById('newWion')">Remove layer 1</a><br>
+		<a href="javascript: var s=removeLayerById('layer2')">Remove layer 2</a>
+
+
+        <script type="text/javascript" src="scripts/loadConfig.js"></script>
+        <script type="text/javascript">
+			var fc = new FlamingoController(flamingo,'fc');
+			fc.initMap('map1');
+
+			function addLayer1(){
+				var newLayer= new FlamingoWMSLayer("newWion");
+			    newLayer.setTimeOut("30");
+			    newLayer.setRetryOnError("10");
+			    newLayer.setFormat("image/png")
+			    newLayer.setTransparent(true);
+			    newLayer.setUrl("http://portal.prvlimburg.nl/geoservices/wion");
+			    newLayer.setExceptions("application/vnd.ogc.se_inimage");
+			    newLayer.setGetcapabilitiesUrl("http://portal.prvlimburg.nl/geoservices/wion");
+			    newLayer.setSrs("EPSG:28992");
+			    newLayer.setVersion("1.1.1");
+    			newLayer.setShowerros(true);
+
+    			newLayer.setMinScale(0.000498902848429637);
+    			newLayer.setMaxScale(4.98902848429637);
+    			newLayer.setLayers("wion");
+
+    			fc.getMap().addLayer(newLayer,false,true,false);
+
+    			//<fmc:LayerOGWMS id="layer2" url="http://public-wms.kaartenbalie.nl/wms/nederland?Styles=" srs="EPSG:28992" query_layers="gemeenten_2006" layers="gemeenten_2006" showerrors="true" visible="true"/>
+			}
+			function addLayer2(){
+				var newLayer= new FlamingoWMSLayer("layer2");
+				newLayer.setTimeOut("30");
+				newLayer.setRetryOnError("10");
+				newLayer.setFormat("image/png")
+				newLayer.setTransparent(true);
+				newLayer.setUrl("http://osm.kaartenbalie.nl/wms/mapserver-scale");
+				newLayer.setExceptions("application/vnd.ogc.se_inimage");
+				newLayer.setGetcapabilitiesUrl("http://osm.kaartenbalie.nl/wms/mapserver-scale");
+				newLayer.setSrs("EPSG:28992");
+				newLayer.setVersion("1.1.1");
+				newLayer.setShowerros(true);
+
+				newLayer.setLayers("#ALL#");
+
+				fc.getMap().addLayer(newLayer,false,true,false);
+
+				//<fmc:LayerOGWMS id="layer1" url="http://osm.kaartenbalie.nl/wms/mapserver-scale" srs="EPSG:28992" layers="#ALL#" showerrors="true">
+
+
+			}
+			function removeLayerById(id){
+				fc.getMap().removeLayerById(id, false);
+			}
+
+        </script>
+
+    </body>
+</html>
