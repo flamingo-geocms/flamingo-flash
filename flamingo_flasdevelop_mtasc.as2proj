@@ -4,7 +4,7 @@
   <output>
     <movie disabled="False" />
     <movie input="" />
-    <movie path="..\..\..\Program Files (x86)\Apache Software Foundation\Apache2.2\htdocs\flamingo_dev_new\flamingo\flamingo.swf" />
+    <movie path="build\release\flamingo\flamingo.swf" />
     <movie fps="25" />
     <movie width="800" />
     <movie height="600" />

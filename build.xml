@@ -8,10 +8,11 @@
 	<tstamp>
 		<format property="date" pattern="dd/MM/yyyy hh:mm aa"/>
 	</tstamp>
-	<property name="version" value="3.3 r1338"/>
+	<property name="version" value="4.0"/>
 	<property name="build" location="build"/>
 	<property name="dist" location="../dist"/>
 	<property name="srcDir" location="src"/>
+	<property name="examplesDir" location="examples"/>
 	<property name="flashPath" location="C:/Program Files (x86)/Adobe/Adobe Flash CS3"/>
 	<property name="perlPath" value="perl"/>
 	<property name="naturalDocsPath" location="C:/tools/NaturalDocs 1.52/NaturalDocs"/>
@@ -130,17 +131,23 @@
 		<delete dir="${build}/release/flamingo/tpc"/>
 		<echo file="${build}/release/flamingo/version.txt" append="false">version: ${version} date: ${date}</echo>
 		<antcall target="doc"/>
+		<echo message="--------------- Copy Documentation ---------------"/>
 		<copy todir="${build}/release/docs">
 			<fileset dir="${build}/docs"/>
+		</copy>
+		<echo message="--------------- Copy Examples ---------------"/>
+		<copy todir="${build}/release/examples">
+			<fileset dir="${examplesDir}" excludes="*.svn*"/>
 		</copy>
 		<zip destfile="${build}/release/flamingo_${version}.zip" basedir="${build}/release"/>
 	</target>
 	<target name="doc" depends="init-dirs">
-		<echo message=" --------------- Building docs ---------------"/>
+		<echo message=" --------------- Building Documentation ---------------"/>
 		<mkdir dir="${build}/docs"/>
 		<copy todir="${build}/docs">
 			<fileset dir="${docDir}" excludes="*.svn*"/>
 		</copy>
+		<echo message="--------------- Create index page ---------------"/>
 		<echo file="${build}/docs/index.html" append="false"><![CDATA[
 			<html>
 				<head>
@@ -151,16 +158,16 @@
 					<h1>Flamingo-MC Documentation (Version: ${version})</h1>
 					<div class="blockContent">
 						<p>
-							<a href="conf-doc/">Configuration Documentation</a>
+							<a href="conf-doc/index.html">Configuration Documentation</a>
 						</p>
 						<p>
-							<a href="ref-doc">Reference Documentation (API docs)</a>
+							<a href="ref-doc/index.html">Reference Documentation (API docs)</a>
 						</p>
 					</div>
 				</body>
 				</html>
 			]]></echo>
-		<echo message=" --------------- Building reference docs ---------------"/>
+		<echo message=" --------------- Building Reference Documentation ---------------"/>
 		<mkdir dir="${naturalDocsProjectPath}"/>
 		<exec executable="${perlPath}">
 			<arg line="'${naturalDocsPath}'"/>
@@ -168,7 +175,7 @@
 			<arg line="-o HTML  ${build}\docs\ref-doc"/>
 			<arg line="-p ${naturalDocsProjectPath}"/>
 		</exec>
-		<echo message="--------------- Building configuration docs ---------------"/>
+		<echo message="--------------- Building Configuration Documentation ---------------"/>
 		<mkdir dir="${build}/docs"/>
 		<mkdir dir="${build}/docs/conf-doc"/>
 		<java jar="${CDGPath}/Configuration_Documentation_Generator.jar" fork="true">
