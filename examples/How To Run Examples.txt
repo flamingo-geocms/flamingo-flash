@@ -1,0 +1,22 @@
+To run the flamingo examples you need to do 2 things.
+1) Copy the examples to a http accessible folder
+2) Copy the flamingo build in the flamingo folder.
+
+
+1)
+To run the flamingo examples you need to make sure the examples directory is accessible through http protocol.
+To accomplish this you need to place content of the example directory in a web folder.
+
+For example:
+/<Apache Directory>/htdocs/flamingo_examples/
+So the examples index page is accessible through the following url:
+http://localhost/flamingo_examples/
+
+
+2)
+The examples folder is missing the flamingo build. You need to copy that from the zip file you downloaded.
+Normally its located in the <zip file root>/flamingo
+Copy the content of that directory to the flamingo directory in the example folder that's created in step 1.
+
+For example:
+/<Apache Directory>/htdocs/flamingo_examples/flamingo
