@@ -70,7 +70,7 @@ import gui.layers.AbstractLayer;
 * @attr visible default:true if set to false this component will be set to invisible but also all the layers will be set to visible=false;
 * @attr visible_layers Comma seperated list of layers that must be visible. If omitted all layers are visible.
 * @attr updateWhenEmpty deafult:true If set to false the layer will not get updated when the layerstring is empty(no sublayers), although the sld parameter may be set. The layer will be set invisible instead. 
-* @attr identPerLayer When true, an identify request will be sent for each sublayer seperately when sending the identify request per sublayer you know the sublayer name when handling the response. The FeatureInfo response of ArcGisServer WMS often doesn't contain the 
+* @attr identifyperlayer When true, an identify request will be sent for each sublayer seperately when sending the identify request per sublayer you know the sublayer name when handling the response. The FeatureInfo response of ArcGisServer WMS often doesn't contain the 
 * faeturetype (or sublayer) name.  
 * @attr initService (default="true") if set to false the service won't do a getCap request to init the service. If set to false all parameters must be filled, and no #ALL# can be used.
 */
