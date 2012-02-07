@@ -43,9 +43,7 @@ import core.AbstractPositionable;
 
 /** @tag <fmc:ZoomerV>  
  * This tag defines a vertical zoombar. It listens to 1 or more maps.
- * @example
- * <fmc:Window top="100" left="100" width="300" bottom="bottom" canresize="true" canclose="true" title="Identify results">
- * @example
+ * @example 
  * <fmc:ZoomerV left="10" top="10" height="300" listento="map">
  *    <string id="tooltip_zoomin" en="zoomin" nl="inzoomen"/>
  *    <string id="tooltip_zoomout" en="zoomout" nl="uitzoomen"/>
@@ -53,6 +51,7 @@ import core.AbstractPositionable;
  * </fmc:ZoomerV>
  * @hierarchy childnode of <flamingo> or a container component. e.g. <fmc:Window>
  * @attr updatedelay (defaultvalue="500") Amount of time in milliseconds(1000 = 1 second) between releasing the zoomin/out and slider buttons and the update of a map.
+ * @attr listento the map that needs to change the extent on a change of this zoomer
  */
 /**
  * A vertical zoombar
