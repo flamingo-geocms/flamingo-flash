@@ -70,9 +70,9 @@ class gui.tools.ToolSuperPan extends AbstractTool{
 	 */
 	public function ToolSuperPan(id:String, toolGroup:ToolGroup ,container:MovieClip) {
 		super(id, toolGroup, container);		
-		toolDownSettings = new SpriteSettings(3, 1045, 24, 23, 0, 0, true, 100);
-		toolOverSettings = new SpriteSettings(49, 1045, 24, 23, 0, 0, true, 100);
-		toolUpSettings = new SpriteSettings(97, 1046, 20, 18, 0, 0, true, 100);
+		toolDownSettings = new SpriteSettings(0, 14*SpriteSettings.buttonSize, SpriteSettings.buttonSize, SpriteSettings.buttonSize, 0, 0, true, 100);
+		toolOverSettings = new SpriteSettings(SpriteSettings.buttonSize, 14*SpriteSettings.buttonSize, SpriteSettings.buttonSize, SpriteSettings.buttonSize, 0, 0, true, 100);
+		toolUpSettings = new SpriteSettings(2*SpriteSettings.buttonSize, 14*SpriteSettings.buttonSize, SpriteSettings.buttonSize, SpriteSettings.buttonSize, 0, 0, true, 100);			
 		
 		this.defaultXML = "<?xml version='1.0' encoding='UTF-8'?>" +
 							"<ToolSuperPan>" +

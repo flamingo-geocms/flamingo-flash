@@ -38,9 +38,9 @@ class gui.button.IncreaseButton extends AbstractButton
 	public function IncreaseButton(id:String, container:MovieClip, sliderHor:SliderHor) 
 	{
 		super(id, container);
-		toolDownSettings = new SpriteSettings(143, 1093, 20, 20, -4, -9, true, 100);
-		toolOverSettings = new SpriteSettings(185, 1093, 20, 20, -4, -9, true, 100);
-		toolUpSettings = new SpriteSettings(229, 1094, 16, 17, -4, -9, true, 100);
+		toolDownSettings = new SpriteSettings(3*SpriteSettings.buttonSize, SpriteSettings.sliderSize, SpriteSettings.sliderSize, SpriteSettings.sliderSize, 0, 0, true, 100);
+		toolOverSettings = new SpriteSettings(3*SpriteSettings.buttonSize+SpriteSettings.sliderSize, SpriteSettings.sliderSize, SpriteSettings.sliderSize, SpriteSettings.sliderSize, 0, 0, true, 100);
+		toolUpSettings = new SpriteSettings(3*SpriteSettings.buttonSize+2*SpriteSettings.sliderSize, SpriteSettings.sliderSize, SpriteSettings.sliderSize, SpriteSettings.sliderSize, 0, 0, true, 100);
 		this.sliderHor = sliderHor;
 		this.parent = sliderHor;
 	}

@@ -55,9 +55,9 @@ class gui.button.ButtonFull extends AbstractButton{
 	 */
 	public function ButtonFull(id:String, container:MovieClip) {		
 		super(id, container);
-		toolDownSettings = new SpriteSettings(4, 360, 22, 22, 0, 0, true, 100);
-		toolOverSettings = new SpriteSettings(50, 360, 22, 22, 0, 0, true, 100);
-		toolUpSettings = new SpriteSettings(99, 360, 22, 22, 0, 0, true, 100);
+		toolDownSettings = new SpriteSettings(0, 8*SpriteSettings.buttonSize, SpriteSettings.buttonSize, SpriteSettings.buttonSize, 0, 0, true, 100);
+		toolOverSettings = new SpriteSettings(SpriteSettings.buttonSize, 8*SpriteSettings.buttonSize, SpriteSettings.buttonSize, SpriteSettings.buttonSize, 0, 0, true, 100);
+		toolUpSettings = new SpriteSettings(2*SpriteSettings.buttonSize, 8*SpriteSettings.buttonSize, SpriteSettings.buttonSize, SpriteSettings.buttonSize, 0, 0, true, 100);
 		
 		this.defaultXML = "<?xml version='1.0' encoding='UTF-8'?>" +
 							"<ButtonFull>" +

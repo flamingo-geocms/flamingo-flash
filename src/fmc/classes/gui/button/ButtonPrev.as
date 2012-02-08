@@ -54,9 +54,9 @@ class gui.button.ButtonPrev extends AbstractButton{
 	public function ButtonPrev(id:String, container:MovieClip) 
 	{
 		super(id, container);
-		toolDownSettings = new SpriteSettings(4, 452, 22, 22, 0, 0, true, 100);
-		toolOverSettings = new SpriteSettings(50, 452, 22, 22, 0, 0, true, 100);
-		toolUpSettings = new SpriteSettings(99, 452, 22, 22, 0, 0, true, 100);
+		toolDownSettings = new SpriteSettings(0, 10*SpriteSettings.buttonSize, SpriteSettings.buttonSize, SpriteSettings.buttonSize, 0, 0, true, 100);
+		toolOverSettings = new SpriteSettings(SpriteSettings.buttonSize, 10*SpriteSettings.buttonSize, SpriteSettings.buttonSize, SpriteSettings.buttonSize, 0, 0, true, 100);
+		toolUpSettings = new SpriteSettings(2*SpriteSettings.buttonSize, 10*SpriteSettings.buttonSize, SpriteSettings.buttonSize, SpriteSettings.buttonSize, 0, 0, true, 100);
 		
 		this.defaultXML = "<?xml version='1.0' encoding='UTF-8'?>" +
 						"<ButtonPrev>" +

@@ -80,9 +80,9 @@ class gui.tools.ToolMeasure extends AbstractTool{
 	 */
 	public function ToolMeasure(id:String, toolGroup:ToolGroup ,container:MovieClip) {		
 		super(id, toolGroup, container);		
-		toolDownSettings = new SpriteSettings(4, 951, 23, 23, 0, 0, true, 100);
-		toolOverSettings = new SpriteSettings(49, 951, 23, 23, 0, 0, true, 100);
-		toolUpSettings = new SpriteSettings(97, 953, 20, 20, 0, 0, true, 100);
+		toolDownSettings = new SpriteSettings(0, 13*SpriteSettings.buttonSize, SpriteSettings.buttonSize, SpriteSettings.buttonSize, 0, 0, true, 100);
+		toolOverSettings = new SpriteSettings(SpriteSettings.buttonSize, 13*SpriteSettings.buttonSize, SpriteSettings.buttonSize, SpriteSettings.buttonSize, 0, 0, true, 100);
+		toolUpSettings = new SpriteSettings(2*SpriteSettings.buttonSize, 13*SpriteSettings.buttonSize, SpriteSettings.buttonSize, SpriteSettings.buttonSize, 0, 0, true, 100);
 		
 		this.defaultXML = "<?xml version='1.0' encoding='UTF-8'?>" +
 						"<ToolMeasure>" +

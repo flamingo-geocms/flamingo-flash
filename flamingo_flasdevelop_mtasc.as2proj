@@ -1,14 +1,16 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<project>
+<project version="2">
   <!-- Output SWF options -->
   <output>
-    <movie disabled="False" />
+    <movie outputType="Application" />
     <movie input="" />
-    <movie path="build\release\flamingo\flamingo.swf" />
+    <movie path="..\..\..\..\Program Files (x86)\Apache Software Foundation\Apache2.2\htdocs\fmc_examples\flamingo\flamingo.swf" />
     <movie fps="25" />
     <movie width="800" />
     <movie height="600" />
     <movie version="8" />
+    <movie minorVersion="0" />
+    <movie platform="Flash Player" />
     <movie background="#FFFFFF" />
   </output>
   <!-- Other classes to be compiled into your SWF -->
@@ -54,4 +56,6 @@
     <option showHiddenPaths="False" />
     <option testMovie="NewTab" />
   </options>
+  <!-- Plugin storage -->
+  <storage />
 </project>

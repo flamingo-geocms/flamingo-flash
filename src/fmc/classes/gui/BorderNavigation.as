@@ -159,64 +159,64 @@ class gui.BorderNavigation extends AbstractPositionable
 		{
 			var pos = buttons[i];
 			var moveExtentButton:MoveExtentButton = new MoveExtentButton(this.id + pos, this.container.createEmptyMovieClip("m" + pos, i), this);
-			var offsetx = 15;
-			var offsety = 22; 
+			var offsetx = SpriteSettings.buttonSize/2;
+			var offsety = SpriteSettings.buttonSize/2; 
 			switch(pos){
 				case "W":
 					moveExtentButton.setDirectionMatrix(- 1, 0);
 					moveExtentButton.tooltipId = "";
-					moveExtentButton.toolDownSettings = new SpriteSettings(4, 313, 12, 19, 5, offsety, true, 100);
-					moveExtentButton.toolOverSettings = new SpriteSettings(44, 313, 12, 19, 5, offsety, true, 100);
-					moveExtentButton.toolUpSettings = new SpriteSettings(85, 313, 12, 19, 5, offsety, true, 100);
+					moveExtentButton.toolDownSettings = new SpriteSettings(0, 7*SpriteSettings.buttonSize, SpriteSettings.buttonSize, SpriteSettings.buttonSize, 0, offsety, true, 100);
+					moveExtentButton.toolOverSettings = new SpriteSettings(1*SpriteSettings.buttonSize, 7*SpriteSettings.buttonSize, SpriteSettings.buttonSize, SpriteSettings.buttonSize, 0, offsety, true, 100);
+					moveExtentButton.toolUpSettings = new SpriteSettings(2*SpriteSettings.buttonSize, 7*SpriteSettings.buttonSize, SpriteSettings.buttonSize, SpriteSettings.buttonSize, 0, offsety, true, 100);
 					break;
 				case "E":
 					moveExtentButton.setDirectionMatrix(1, 0);
 					moveExtentButton.tooltipId = "tooltip_east";
-					moveExtentButton.toolDownSettings = new SpriteSettings(4, 2, 12, 19, offsetx, offsety, true, 100);
-					moveExtentButton.toolOverSettings = new SpriteSettings(44, 2, 12, 19, offsetx, offsety, true, 100);
-					moveExtentButton.toolUpSettings = new SpriteSettings(85, 2, 12, 19, offsetx, offsety, true, 100);
+					moveExtentButton.toolDownSettings = new SpriteSettings(0, 0, SpriteSettings.buttonSize, SpriteSettings.buttonSize, 0, offsety, true, 100);
+					moveExtentButton.toolOverSettings = new SpriteSettings(1*SpriteSettings.buttonSize, 0, SpriteSettings.buttonSize, SpriteSettings.buttonSize, 0, offsety, true, 100);
+					moveExtentButton.toolUpSettings = new SpriteSettings(2*SpriteSettings.buttonSize, 0, SpriteSettings.buttonSize, SpriteSettings.buttonSize, 0, offsety, true, 100);
 					break;
 				case "N":
 					moveExtentButton.setDirectionMatrix(0, 1);
 					moveExtentButton.tooltipId = "tooltip_north";
-					moveExtentButton.toolDownSettings = new SpriteSettings(4,48, 19, 12, 25, 0, true, 100);
-					moveExtentButton.toolOverSettings = new SpriteSettings(49, 50, 19, 12, 25, 0, true, 100);
-					moveExtentButton.toolUpSettings = new SpriteSettings(96, 50, 19, 12, 25, 0, true, 100);
+					moveExtentButton.toolDownSettings = new SpriteSettings(0,SpriteSettings.buttonSize, SpriteSettings.buttonSize, SpriteSettings.buttonSize, offsetx, 0, true, 100);
+					moveExtentButton.toolOverSettings = new SpriteSettings(1*SpriteSettings.buttonSize, SpriteSettings.buttonSize, SpriteSettings.buttonSize, SpriteSettings.buttonSize, offsetx, 0, true, 100);
+					moveExtentButton.toolUpSettings = new SpriteSettings(2*SpriteSettings.buttonSize, SpriteSettings.buttonSize, SpriteSettings.buttonSize, SpriteSettings.buttonSize, offsetx, 0, true, 100);
 					break;
 				case "S":
 					moveExtentButton.setDirectionMatrix(0, - 1);
 					moveExtentButton.tooltipId = "tooltip_south";
-					moveExtentButton.toolDownSettings = new SpriteSettings(4,183, 19, 12, 25, 19, true, 100);
-					moveExtentButton.toolOverSettings = new SpriteSettings(49, 183, 19, 12, 25, 19, true, 100);
-					moveExtentButton.toolUpSettings = new SpriteSettings(96, 183, 19, 12, 25, 19, true, 100);
+					moveExtentButton.toolDownSettings = new SpriteSettings(0,4*SpriteSettings.buttonSize, SpriteSettings.buttonSize, SpriteSettings.buttonSize, offsetx, 0, true, 100);
+					moveExtentButton.toolOverSettings = new SpriteSettings(1*SpriteSettings.buttonSize, 4*SpriteSettings.buttonSize, SpriteSettings.buttonSize, SpriteSettings.buttonSize, offsetx, 0, true, 100);
+					moveExtentButton.toolUpSettings = new SpriteSettings(2*SpriteSettings.buttonSize, 4*SpriteSettings.buttonSize, SpriteSettings.buttonSize, SpriteSettings.buttonSize, offsetx, 0, true, 100);
 					break;
 				case "NE":
 					moveExtentButton.setDirectionMatrix(1, 1);
 					moveExtentButton.tooltipId = "tooltip_northeast";
-					moveExtentButton.toolOverSettings = new SpriteSettings(4, 2, 11, 11, offsetx, offsety, true, 100);
-					moveExtentButton.toolDownSettings = new SpriteSettings(44, 2, 11, 11, offsetx, offsety, true, 100);
-					moveExtentButton.toolUpSettings = new SpriteSettings(85, 2, 11, 11, offsetx, offsety, true, 100);
+					moveExtentButton.toolDownSettings = new SpriteSettings(0, 2*SpriteSettings.buttonSize, SpriteSettings.buttonSize, SpriteSettings.buttonSize, offsetx, offsety, true, 100);
+					moveExtentButton.toolOverSettings = new SpriteSettings(1*SpriteSettings.buttonSize, 2*SpriteSettings.buttonSize, SpriteSettings.buttonSize, SpriteSettings.buttonSize, offsetx, offsety, true, 100);
+					moveExtentButton.toolUpSettings = new SpriteSettings(2*SpriteSettings.buttonSize, 2*SpriteSettings.buttonSize, SpriteSettings.buttonSize, SpriteSettings.buttonSize, offsetx, offsety, true, 100);
 					break;
 				case "SE":
 					moveExtentButton.setDirectionMatrix(1, - 1);
 					moveExtentButton.tooltipId = "tooltip_southeast";
-					moveExtentButton.toolDownSettings = new SpriteSettings(4, 2, 12, 19, offsetx, offsety, true, 100);
-					moveExtentButton.toolOverSettings = new SpriteSettings(44, 2, 12, 19, offsetx, offsety, true, 100);
-					moveExtentButton.toolUpSettings = new SpriteSettings(85, 2, 12, 19, offsetx, offsety, true, 100);
+					moveExtentButton.toolDownSettings = new SpriteSettings(0, 5*SpriteSettings.buttonSize, SpriteSettings.buttonSize, SpriteSettings.buttonSize, offsetx, offsety, true, 100);
+					moveExtentButton.toolOverSettings = new SpriteSettings(1*SpriteSettings.buttonSize, 5*SpriteSettings.buttonSize, SpriteSettings.buttonSize, SpriteSettings.buttonSize, offsetx, offsety, true, 100);
+					moveExtentButton.toolUpSettings = new SpriteSettings(2*SpriteSettings.buttonSize, 5*SpriteSettings.buttonSize, SpriteSettings.buttonSize, SpriteSettings.buttonSize, offsetx, offsety, true, 100);
 					break;
 				case "SW":
 					moveExtentButton.setDirectionMatrix(- 1, - 1);
 					moveExtentButton.tooltipId = "tooltip_southwest";
-					moveExtentButton.toolDownSettings = new SpriteSettings(5, 271, 16, 15, offsetx, offsety, true, 100);
-					moveExtentButton.toolOverSettings = new SpriteSettings(44, 2, 12, 19, offsetx, offsety, true, 100);
-					moveExtentButton.toolUpSettings = new SpriteSettings(85, 2, 12, 19, offsetx, offsety, true, 100);
+					moveExtentButton.toolDownSettings = new SpriteSettings(0, 6*SpriteSettings.buttonSize, SpriteSettings.buttonSize, SpriteSettings.buttonSize, offsetx, offsety, true, 100);
+					moveExtentButton.toolOverSettings = new SpriteSettings(1*SpriteSettings.buttonSize, 6*SpriteSettings.buttonSize, SpriteSettings.buttonSize, SpriteSettings.buttonSize, offsetx, offsety, true, 100);
+					moveExtentButton.toolUpSettings = new SpriteSettings(2*SpriteSettings.buttonSize, 6*SpriteSettings.buttonSize, SpriteSettings.buttonSize, SpriteSettings.buttonSize, offsetx, offsety, true, 100);
 					break;
 				case "NW":
 					moveExtentButton.setDirectionMatrix(- 1, 1);
 					moveExtentButton.tooltipId = "tooltip_northwest";
-					moveExtentButton.toolDownSettings = new SpriteSettings(4, 2, 12, 19, offsetx, offsety, true, 100);
-					moveExtentButton.toolOverSettings = new SpriteSettings(44, 2, 12, 19, offsetx, offsety, true, 100);
-					moveExtentButton.toolUpSettings = new SpriteSettings(85, 2, 12, 19, offsetx, offsety, true, 100);
+					moveExtentButton.toolDownSettings = new SpriteSettings(0, 3*SpriteSettings.buttonSize, SpriteSettings.buttonSize, SpriteSettings.buttonSize, offsetx, offsety, true, 100);
+					moveExtentButton.toolOverSettings = new SpriteSettings(1*SpriteSettings.buttonSize, 3*SpriteSettings.buttonSize,SpriteSettings.buttonSize, SpriteSettings.buttonSize, offsetx, offsety, true, 100);
+					moveExtentButton.toolUpSettings = new SpriteSettings(2*SpriteSettings.buttonSize, 3*SpriteSettings.buttonSize, SpriteSettings.buttonSize, SpriteSettings.buttonSize, offsetx, offsety, true, 100);
 					break;
 			};
 			this.extentButtons[pos] = moveExtentButton;
@@ -237,26 +237,26 @@ class gui.BorderNavigation extends AbstractPositionable
 		var top = r.y - offset;*/
 		var left = 0;
 		var top = 0;
-		var right = left + r.width + offset;
-		var bottom = top + r.height + offset;
-		var xcenter = (right + left) / 2;
-		var ycenter = (top + bottom) / 2;
-		
+		var right = left + r.width - SpriteSettings.buttonSize + offset;
+		var bottom = top + r.height - SpriteSettings.buttonSize + offset;
+		var xcenter = (r.width/ 2) - SpriteSettings.buttonSize;
+		var ycenter = (r.height/ 2) - SpriteSettings.buttonSize;
+		//var offset = SpriteSettings.buttonSize / 2;
 		for(var pos in extentButtons)
 		{			
 			//Logger.console("Resize pos: "+pos);			
 			switch(pos){
 				case "W":
-					extentButtons[pos].move(left, ycenter - 33);
+					extentButtons[pos].move(left, ycenter);
 					break;
 				case "E":
-					extentButtons[pos].move(right - 31, ycenter - 33);
+					extentButtons[pos].move(right, ycenter);
 					break;
 				case "N":
-					extentButtons[pos].move(xcenter - 33, top);
+					extentButtons[pos].move(xcenter, top);
 					break;
 				case "S":
-					extentButtons[pos].move(xcenter - 33, bottom - 31);
+					extentButtons[pos].move(xcenter, bottom);
 					break;
 				case "NE":
 					extentButtons[pos].move(right, top);

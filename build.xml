@@ -19,6 +19,7 @@
 	<property name="naturalDocsProjectPath" location="NaturalDocsProj"/>
 	<property name="CDGPath" location="CDGProj"/>
 	<property name="docDir" location="doc"/>
+	<property name="imagesDir" location="images"/>
 	<target name="init-dirs">
 		<mkdir dir="${build}"/>
 		<mkdir dir="${build}/dist"/>
@@ -186,6 +187,108 @@
 				<pathelement path="${CDGPath}/libs"/>
 			</classpath>
 		</java>
+	</target>
+	<target name="sprite" depends="init-dirs">
+		<mkdir dir="${build}/sprite"/>
+		<exec executable="montage">
+			<arg line="${imagesDir}/001aBorderNavigation_edown.png"/>
+			<arg line="${imagesDir}/001bBorderNavigation_eover.png"/>
+			<arg line="${imagesDir}/001cBorderNavigation_eup.png"/>
+			<arg line="${imagesDir}/002aBorderNavigation_ndown.png"/>
+			<arg line="${imagesDir}/002bBorderNavigation_nover.png"/>
+			<arg line="${imagesDir}/002cBorderNavigation_nup.png"/>
+			<arg line="${imagesDir}/003aBorderNavigation_nedown.png"/>
+			<arg line="${imagesDir}/003bBorderNavigation_neover.png"/>
+			<arg line="${imagesDir}/003cBorderNavigation_neup.png"/>
+			<arg line="${imagesDir}/004aBorderNavigation_nwdown.png"/>
+			<arg line="${imagesDir}/004bBorderNavigation_nwover.png"/>
+			<arg line="${imagesDir}/004cBorderNavigation_nwup.png"/>
+			<arg line="${imagesDir}/005aBorderNavigation_sdown.png"/>
+			<arg line="${imagesDir}/005bBorderNavigation_sover.png"/>
+			<arg line="${imagesDir}/005cBorderNavigation_sup.png"/>
+			<arg line="${imagesDir}/006aBorderNavigation_sedown.png"/>
+			<arg line="${imagesDir}/006bBorderNavigation_seover.png"/>
+			<arg line="${imagesDir}/006cBorderNavigation_seup.png"/>
+			<arg line="${imagesDir}/007aBorderNavigation_swdown.png"/>
+			<arg line="${imagesDir}/007bBorderNavigation_swover.png"/>
+			<arg line="${imagesDir}/007cBorderNavigation_swup.png"/>
+			<arg line="${imagesDir}/008aBorderNavigation_wdown.png"/>
+			<arg line="${imagesDir}/008bBorderNavigation_wover.png"/>
+			<arg line="${imagesDir}/008cBorderNavigation_wup.png"/>
+			<arg line="${imagesDir}/009aButtonFull_down.png"/>
+			<arg line="${imagesDir}/009bButtonFull_over.png"/>
+			<arg line="${imagesDir}/009cButtonFull_up.png"/>
+			<arg line="${imagesDir}/010aButtonNext_down.png"/>
+			<arg line="${imagesDir}/010bButtonNext_over.png"/>
+			<arg line="${imagesDir}/010cButtonNext_up.png"/>
+			<arg line="${imagesDir}/011aButtonPrev_down.png"/>
+			<arg line="${imagesDir}/011bButtonPrev_over.png"/>
+			<arg line="${imagesDir}/011cButtonPrev_up.png"/>
+			<arg line="${imagesDir}/012aJsButton_dis.png"/>
+			<arg line="${imagesDir}/012bJsButton_over.png"/>
+			<arg line="${imagesDir}/012cJsButton_up.png"/>			
+			<arg line="${imagesDir}/018aToolIdentify_identifydown.png"/>
+			<arg line="${imagesDir}/018bToolIdentify_identifyover.png"/>
+			<arg line="${imagesDir}/018cToolIdentify_identifyup.png"/>
+			<arg line="${imagesDir}/020aToolMeasure_measuredown.png"/>
+			<arg line="${imagesDir}/020bToolMeasure_measureover.png"/>
+			<arg line="${imagesDir}/020cToolMeasure_measureup.png"/>
+			<arg line="${imagesDir}/021aToolPan_pandown.png"/>
+			<arg line="${imagesDir}/021bToolPan_panover.png"/>
+			<arg line="${imagesDir}/021cToolPan_panup.png"/>
+			<arg line="${imagesDir}/025aToolZoomin_zoomindown.png"/>
+			<arg line="${imagesDir}/025bToolZoomin_zoominover.png"/>
+			<arg line="${imagesDir}/025cToolZoomin_zoominup.png"/>
+			<arg line="${imagesDir}/026aToolZoomout_zoomoutdown.png"/>
+			<arg line="${imagesDir}/026bToolZoomout_zoomoutover.png"/>
+			<arg line="${imagesDir}/026cToolZoomout_zoomoutup.png"/>
+			<arg line="-tile 3x"/>
+			<!-- If you change the dimension, make sure you set the demension of the SpriteSettings.buttonSize the same -->
+			<arg line="-geometry 24x24+0+0"/>
+			<arg line="-background none"/>			
+			<arg line="-gravity NorthWest"/>
+			<arg line="${build}/sprite/temp_sprite_buttons.png"/>
+		</exec>
+		<exec executable="montage">
+			<arg line="${imagesDir}/014aSliderHor_decreaseover.png"/>
+			<arg line="${imagesDir}/014bSliderHor_decreaseup.png"/>
+			<arg line="${imagesDir}/014SliderHor_decreasedown.png"/>
+			<arg line="${imagesDir}/015aSliderHor_increasedown.png"/>
+			<arg line="${imagesDir}/015bSliderHor_increaseover.png"/>
+			<arg line="${imagesDir}/015cSliderHor_increaseup.png"/>
+			<arg line="${imagesDir}/017aSliderHor_sliderdown.png"/>
+			<arg line="${imagesDir}/017bSliderHor_sliderover.png"/>
+			<arg line="${imagesDir}/017cSliderHor_sliderup.png"/>
+			<arg line="${imagesDir}/022aZoomerV_sliderdown.png"/>
+			<arg line="${imagesDir}/022bZoomerV_sliderover.png"/>
+			<arg line="${imagesDir}/022cZoomerV_sliderup.png"/>
+			<arg line="${imagesDir}/030aZoomerV_sliderbar.png"/>
+			<arg line="${imagesDir}/030cSliderHor_sliderbar.png"/>
+			<arg line="${imagesDir}/030cSliderHor_sliderbar.png"/>
+			<arg line="-tile 3x"/>
+			<!-- If you change the dimension, make sure you set the demension of the SpriteSettings.sliderSize the same -->
+			<arg line="-geometry 22x22+0+0"/>
+			<arg line="-background none"/>			
+			<arg line="-gravity NorthWest"/>
+			<arg line="${build}/sprite/temp_sprite_sliderButtons.png"/>			
+		</exec>
+		<exec executable="montage">
+			<arg line="${imagesDir}/030bScalebar.png"/>
+			<arg line="-geometry +0+0"/>
+			<arg line="-background none"/>
+			<arg line="-gravity West"/>			
+			<arg line="${build}/sprite/temp_sprite_bars.png"/>
+		</exec>
+		<exec executable="montage">
+			<arg line="${build}/sprite/temp_sprite_buttons.png"/>
+			<arg line="${build}/sprite/temp_sprite_sliderButtons.png"/>
+			<arg line="${build}/sprite/temp_sprite_bars.png"/>
+			<arg line="-tile x1"/>
+			<arg line="-geometry +0+0"/>
+			<arg line="-background none"/>
+			<arg line="-gravity NorthWest"/>			
+			<arg line="${build}/sprite/sprite.png"/>
+		</exec>
 	</target>
 	<target name="clean">
 		<delete dir="${build}"/>

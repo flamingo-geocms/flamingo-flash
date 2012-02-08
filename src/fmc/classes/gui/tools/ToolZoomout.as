@@ -68,9 +68,9 @@ class gui.tools.ToolZoomout extends AbstractTool
 	 */
 	public function ToolZoomout(id:String, toolGroup:ToolGroup ,container:MovieClip) {	
 		super(id, toolGroup, container);		
-		toolDownSettings = new SpriteSettings(2, 1209, 25, 23, 0, 0, true, 100);
-		toolOverSettings = new SpriteSettings(48, 1209, 25, 23, 0, 0, true, 100);
-		toolUpSettings = new SpriteSettings(97, 1210, 22, 19, 0, 0, true, 100);
+		toolDownSettings = new SpriteSettings(0, 16*SpriteSettings.buttonSize, SpriteSettings.buttonSize, SpriteSettings.buttonSize, 0, 0, true, 100);
+		toolOverSettings = new SpriteSettings(SpriteSettings.buttonSize,  16*SpriteSettings.buttonSize, SpriteSettings.buttonSize, SpriteSettings.buttonSize, 0, 0, true, 100);
+		toolUpSettings = new SpriteSettings(2*SpriteSettings.buttonSize,  16*SpriteSettings.buttonSize, SpriteSettings.buttonSize, SpriteSettings.buttonSize, 0, 0, true, 100);
 		
 		this.defaultXML = "<?xml version='1.0' encoding='UTF-8'?>" +
 							"<ToolZoomout>" +

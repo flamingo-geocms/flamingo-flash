@@ -9,6 +9,8 @@ class display.spriteloader.SpriteSettings extends Object
 	public var mapOffsetY:Number = 0;
 	public var mapAreaWidth:Number = 0;
 	public var mapAreaHeight:Number = 0;
+	static public var sliderSize = 22;
+	static public var buttonSize = 24;
 	
 	/**
 	 * 
@@ -23,6 +25,7 @@ class display.spriteloader.SpriteSettings extends Object
 	 */
 	public function SpriteSettings(mapOffsetX:Number,mapOffsetY:Number,mapAreaWidth:Number,mapAreaHeight:Number,_x:Number,_y:Number,_visible:Boolean, _alpha:Number) 
 	{
+		
 		var props:Array = ['mapOffsetX', 'mapOffsetY', 'mapAreaWidth', 'mapAreaHeight','_x', '_y','_visible','_alpha'];
 		var argIndex:Number = arguments.length-1;
 		while (argIndex > -1)

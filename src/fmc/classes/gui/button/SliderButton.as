@@ -42,9 +42,9 @@ class gui.button.SliderButton extends AbstractButton
 	public function SliderButton(id:String, container:MovieClip, zoomerV:ZoomerV)
 	{
 		super(id, container);
-		toolOverSettings = new SpriteSettings(22, 1090, 21, 12, 0, 0, true, 100);
-		toolDownSettings  = new SpriteSettings(62, 1089, 21, 12, 0, 0, true, 100);
-		toolUpSettings = new SpriteSettings(103, 1091, 17, 8, 0, 0, true, 100);
+		toolOverSettings = new SpriteSettings(3*SpriteSettings.buttonSize, 3*SpriteSettings.sliderSize, SpriteSettings.sliderSize, SpriteSettings.sliderSize, 0, 0, true, 100);
+		toolDownSettings  = new SpriteSettings(3*SpriteSettings.buttonSize+SpriteSettings.sliderSize, 3*SpriteSettings.sliderSize, SpriteSettings.sliderSize, SpriteSettings.sliderSize, 0, 0, true, 100);
+		toolUpSettings = new SpriteSettings(3*SpriteSettings.buttonSize+2*SpriteSettings.sliderSize, 3*SpriteSettings.sliderSize, SpriteSettings.sliderSize, SpriteSettings.sliderSize , 0, 0, true, 100);
 		this.zoomerV = zoomerV;
 		this.parent = zoomerV;
 	}
@@ -52,9 +52,9 @@ class gui.button.SliderButton extends AbstractButton
 	function onPress()	{
 		zoomerV.cancelUpdate();
 		var l = this.container._x;
-		var t = zoomerV.sliderBar._y;
+		var t = zoomerV.sliderBar._y-(this.height/2);
 		var r = this.container._x;
-		var b = zoomerV.sliderBar._y + zoomerV.sliderBar._height;
+		var b = zoomerV.sliderBar._y + zoomerV.sliderBar._height-(this.height/2);
 		
 		this.container.startDrag(false, l, t, r, b);
 		var thisObj = this;

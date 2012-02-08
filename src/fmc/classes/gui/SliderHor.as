@@ -102,7 +102,7 @@ class gui.SliderHor extends AbstractPositionable{
 		sliderBar = this.container.createEmptyMovieClip("sliderBar", this.container.getNextHighestDepth());
 		var offsetX = 0;
 		var offsetY = -2;
-		spriteMap.attachSpriteTo(sliderBar, new SpriteSettings(0, 762, 50, 2, offsetX, offsetY, true, 100) );
+		spriteMap.attachSpriteTo(sliderBar, new SpriteSettings(3*SpriteSettings.buttonSize+SpriteSettings.sliderSize, 4*SpriteSettings.sliderSize , SpriteSettings.sliderSize, SpriteSettings.sliderSize, 0, 0, true, 100) );
 		sliderButton = new HorSliderButton("sliderButton", this.container.createEmptyMovieClip("sliderButton_container", this.container.getNextHighestDepth()), this);
 		increaseButton = new IncreaseButton("increaseButton", this.container.createEmptyMovieClip("increaseButton_container", this.container.getNextHighestDepth()), this);
 		decreaseButton = new DecreaseButton("decreaseButton", this.container.createEmptyMovieClip("decreaseButton _container", this.container.getNextHighestDepth()), this);
@@ -235,7 +235,8 @@ class gui.SliderHor extends AbstractPositionable{
 		if (sliderButton.bSlide) {
 			return;
 		}
-		sliderButton.container._x = sliderBar._x + (sliderBar._width * Math.abs(minimum - currentValue) / Math.abs(maximum - minimum));// - sliderButton.width;
+		sliderButton.container._x = sliderBar._x + (sliderBar._width * Math.abs(minimum - currentValue) / Math.abs(maximum - minimum)) - sliderButton.width/2;
+		
 	}
 	/**
 	 * Resize the component according the set values and parent
@@ -253,13 +254,13 @@ class gui.SliderHor extends AbstractPositionable{
 		
 		var sliderbarX = r.x + decreaseButton.width + sliderButton.width/2;
 		var sliderbarY = r.y;
-		var sliderbarWidth = r.width - decreaseButton.width - increaseButton.width  - sliderButton.width;
+		var sliderbarWidth = r.width - decreaseButton.width - increaseButton.width;
 		sliderBar._width = sliderbarWidth;
-		sliderBar._x = sliderbarX +3;
+		sliderBar._x = sliderbarX;
 		sliderBar._y = sliderbarY;
 		
-		var sliderButtonX = sliderBar._x;
-		var sliderbuttonY = r.y - sliderBar._height * 2;
+		var sliderButtonX = sliderBar._x+sliderButton.width/2;
+		var sliderbuttonY = r.y /*- sliderBar._height * 2*/;
 		sliderButton.move(sliderButtonX, sliderbuttonY);
 		
 		if (mLabel != undefined) {
