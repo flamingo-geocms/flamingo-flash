@@ -114,6 +114,9 @@
 		</move>
 		<copy file="ReadMe.txt" todir="${build}/dist"/>
 		<echo file="${build}/dist/flamingo/version.txt" append="false">version: ${version} date: ${date}</echo>
+		<antcall target="sprite"/>
+		<copy file="${build}/sprite/sprite.png" todir="${build}/dist/flamingo/assets/img"/>
+		<delete dir="${build}/sprite"/>
 		<zip destfile="${dist}/flamingo_client.zip" basedir="${build}/dist"/>
 	</target>
 	<target name="release" depends="compile">
@@ -189,6 +192,7 @@
 		</java>
 	</target>
 	<target name="sprite" depends="init-dirs">
+		<echo message=" --------------- Building Sprite ---------------"/>
 		<mkdir dir="${build}/sprite"/>
 		<exec executable="montage">
 			<arg line="${imagesDir}/BorderNavigation_edown.png"/>
@@ -273,7 +277,7 @@
 			<arg line="${build}/sprite/temp_sprite_sliderButtons.png"/>			
 		</exec>
 		<exec executable="montage">
-			<arg line="${imagesDir}/030bScalebar.png"/>
+			<arg line="${imagesDir}/Scalebar.png"/>
 			<arg line="-geometry +0+0"/>
 			<arg line="-background none"/>
 			<arg line="-gravity West"/>			
@@ -289,6 +293,9 @@
 			<arg line="-gravity NorthWest"/>			
 			<arg line="${build}/sprite/sprite.png"/>
 		</exec>
+		<delete dir="${build}/sprite/temp_sprite_buttons.png"/>
+		<delete dir="${build}/sprite/temp_sprite_sliderButtons.png"/>
+		<delete dir="${build}/sprite/temp_sprite_bars.png"/>
 	</target>
 	<target name="clean">
 		<delete dir="${build}"/>
