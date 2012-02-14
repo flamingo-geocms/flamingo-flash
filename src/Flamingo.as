@@ -1089,6 +1089,8 @@ class Flamingo {
 							tool = new ToolSuperPan(targetid, toolGroup, mc);							
 						}else if (file == "ToolIdentify") {						
 							tool = new ToolIdentify(targetid, toolGroup, mc);							
+						}else if (file == "ToolDefault") {						
+							tool = new ToolDefault(targetid, toolGroup, mc);							
 						}
 						tool.setConfig(xmlNode);						
 						toolGroup.addTool(tool);
@@ -1203,6 +1205,7 @@ class Flamingo {
 	private function isTool(file:String):Boolean {
 		switch(file) {
 			case "ToolIdentify":
+			case "ToolDefault":
 			case "ToolMeasure":
 			case "ToolZoomin":
 			case "ToolZoomout":
