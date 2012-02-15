@@ -10,7 +10,7 @@ class display.spriteloader.SpriteSettings extends Object
 	public var mapAreaWidth:Number = 0;
 	public var mapAreaHeight:Number = 0;
 	static public var sliderSize = 22;
-	static public var buttonSize = 24;
+	static public var buttonSize = 28;
 	
 	/**
 	 * 

@@ -126,7 +126,7 @@ class gui.Scalebar extends AbstractPositionable {
 		mHolder = this.container.createEmptyMovieClip("mHolder", this.container.getNextHighestDepth());
 		mBar = mHolder.createEmptyMovieClip("mBar", mHolder.getNextHighestDepth());
 		
-		var value:SpriteSettings = new SpriteSettings(4*SpriteSettings.buttonSize, 0, 200, 50, 25, 25, true, 100);
+		var value:SpriteSettings = new SpriteSettings(3*SpriteSettings.buttonSize+3*SpriteSettings.sliderSize, 0, 200, 50, 0, 25, true, 100);
 		flamingo.spriteMap.attachSpriteTo(mBar,value);
 		resize()
 		flamingo.raiseEvent(this, "onInit", this);

@@ -14,12 +14,23 @@
 	<property name="srcDir" location="src"/>
 	<property name="examplesDir" location="examples"/>
 	<property name="flashPath" location="C:/Program Files (x86)/Adobe/Adobe Flash CS3"/>
+	<!--property name="flashPath" location="D:/Program Files (x86)/Adobe/Adobe Flash CS3"/-->
+	
+	<!-- settings for docs -->	
 	<property name="perlPath" value="perl"/>
 	<property name="naturalDocsPath" location="C:/tools/NaturalDocs 1.52/NaturalDocs"/>
 	<property name="naturalDocsProjectPath" location="NaturalDocsProj"/>
 	<property name="CDGPath" location="CDGProj"/>
 	<property name="docDir" location="doc"/>
+	
+	<!-- settings for sprite: -->
 	<property name="imagesDir" location="images"/>
+	<property name="spriteWorkingDir" location="${build}/sprite"/>
+	<!-- If you change the dimension, make sure you set the demension of the SpriteSettings.buttonSize is the same -->
+	<property name="buttonSize" value="28"/>
+	<!-- If you change the dimension, make sure you set the demension of the SpriteSettings.sliderSize is the same -->
+	<property name="sliderSize" value="22"/>
+	
 	<target name="init-dirs">
 		<mkdir dir="${build}"/>
 		<mkdir dir="${build}/dist"/>
@@ -115,8 +126,8 @@
 		<copy file="ReadMe.txt" todir="${build}/dist"/>
 		<echo file="${build}/dist/flamingo/version.txt" append="false">version: ${version} date: ${date}</echo>
 		<antcall target="sprite"/>
-		<copy file="${build}/sprite/sprite.png" todir="${build}/dist/flamingo/assets/img"/>
-		<delete dir="${build}/sprite"/>
+		<copy file="${spriteWorkingDir}/sprite.png" todir="${build}/dist/flamingo/assets/img"/>
+		<delete dir="${spriteWorkingDir}"/>
 		<zip destfile="${dist}/flamingo_client.zip" basedir="${build}/dist"/>
 	</target>
 	<target name="release" depends="compile">
@@ -143,6 +154,10 @@
 		<copy todir="${build}/release/examples">
 			<fileset dir="${examplesDir}" excludes="*.svn*"/>
 		</copy>
+		<antcall target="sprite"/>
+		<copy file="${spriteWorkingDir}/sprite.png" todir="${build}/release/flamingo/assets/img"/>
+		<delete dir="${spriteWorkingDir}"/>
+		<delete file="${build}/release/*.zip"/>
 		<zip destfile="${build}/release/flamingo_${version}.zip" basedir="${build}/release"/>
 	</target>
 	<target name="doc" depends="init-dirs">
@@ -193,7 +208,7 @@
 	</target>
 	<target name="sprite" depends="init-dirs">
 		<echo message=" --------------- Building Sprite ---------------"/>
-		<mkdir dir="${build}/sprite"/>
+		<mkdir dir="${spriteWorkingDir}"/>
 		<exec executable="montage">
 			<arg line="${imagesDir}/BorderNavigation_edown.png"/>
 			<arg line="${imagesDir}/BorderNavigation_eover.png"/>
@@ -247,11 +262,10 @@
 			<arg line="${imagesDir}/ToolZoomout_zoomoutover.png"/>
 			<arg line="${imagesDir}/ToolZoomout_zoomoutup.png"/>
 			<arg line="-tile 3x"/>
-			<!-- If you change the dimension, make sure you set the demension of the SpriteSettings.buttonSize the same -->
-			<arg line="-geometry 24x24+0+0"/>
+			<arg line="-geometry ${buttonSize}x${buttonSize}+0+0"/>
 			<arg line="-background none"/>			
 			<arg line="-gravity NorthWest"/>
-			<arg line="${build}/sprite/temp_sprite_buttons.png"/>
+			<arg line="${spriteWorkingDir}/temp_sprite_buttons.png"/>
 		</exec>
 		<exec executable="montage">
 			<arg line="${imagesDir}/SliderHor_decreaseover.png"/>
@@ -270,32 +284,31 @@
 			<arg line="${imagesDir}/SliderHor_sliderbar.png"/>
 			<arg line="${imagesDir}/SliderHor_sliderbar.png"/>
 			<arg line="-tile 3x"/>
-			<!-- If you change the dimension, make sure you set the demension of the SpriteSettings.sliderSize the same -->
-			<arg line="-geometry 22x22+0+0"/>
+			<arg line="-geometry ${sliderSize}x${sliderSize}+0+0"/>
 			<arg line="-background none"/>			
 			<arg line="-gravity NorthWest"/>
-			<arg line="${build}/sprite/temp_sprite_sliderButtons.png"/>			
+			<arg line="${spriteWorkingDir}/temp_sprite_sliderButtons.png"/>			
 		</exec>
 		<exec executable="montage">
 			<arg line="${imagesDir}/Scalebar.png"/>
 			<arg line="-geometry +0+0"/>
 			<arg line="-background none"/>
 			<arg line="-gravity West"/>			
-			<arg line="${build}/sprite/temp_sprite_bars.png"/>
+			<arg line="${spriteWorkingDir}/temp_sprite_bars.png"/>
 		</exec>
 		<exec executable="montage">
-			<arg line="${build}/sprite/temp_sprite_buttons.png"/>
-			<arg line="${build}/sprite/temp_sprite_sliderButtons.png"/>
-			<arg line="${build}/sprite/temp_sprite_bars.png"/>
+			<arg line="${spriteWorkingDir}/temp_sprite_buttons.png"/>
+			<arg line="${spriteWorkingDir}/temp_sprite_sliderButtons.png"/>
+			<arg line="${spriteWorkingDir}/temp_sprite_bars.png"/>
 			<arg line="-tile x1"/>
 			<arg line="-geometry +0+0"/>
 			<arg line="-background none"/>
 			<arg line="-gravity NorthWest"/>			
-			<arg line="${build}/sprite/sprite.png"/>
+			<arg line="${spriteWorkingDir}/sprite.png"/>
 		</exec>
-		<delete dir="${build}/sprite/temp_sprite_buttons.png"/>
-		<delete dir="${build}/sprite/temp_sprite_sliderButtons.png"/>
-		<delete dir="${build}/sprite/temp_sprite_bars.png"/>
+		<delete file="${spriteWorkingDir}/temp_sprite_buttons.png"/>
+		<delete file="${spriteWorkingDir}/temp_sprite_sliderButtons.png"/>
+		<delete file="${spriteWorkingDir}/temp_sprite_bars.png"/>
 	</target>
 	<target name="clean">
 		<delete dir="${build}"/>

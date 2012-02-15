@@ -1,4 +1,4 @@
-import display.spriteloader.event.Event;
+﻿import display.spriteloader.event.Event;
 
 class display.spriteloader.event.SpriteMapEvent extends Event
 {
@@ -10,8 +10,8 @@ class display.spriteloader.event.SpriteMapEvent extends Event
 	
 	public function SpriteMapEvent(type:String,target:Object, data:Object) 
 	{
-		_data = data;
-		super(type, target);
+		super(type, target)
+		_data = data;;
 	}
 	
 	public function get data():Object 

@@ -391,6 +391,7 @@ Group: Fmc  {
          Group: Tools  {
 
             File: AbstractTool  (fmc\classes\gui\tools\AbstractTool.as)
+            File: ToolDefault  (fmc\classes\gui\tools\ToolDefault.as)
             File: ToolGroup  (fmc\classes\gui\tools\ToolGroup.as)
             File: ToolIdentify  (fmc\classes\gui\tools\ToolIdentify.as)
             File: ToolMeasure  (fmc\classes\gui\tools\ToolMeasure.as)
