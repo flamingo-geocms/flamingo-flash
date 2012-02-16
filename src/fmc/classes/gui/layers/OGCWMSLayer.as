@@ -170,6 +170,10 @@ class gui.layers.OGCWMSLayer extends AbstractLayer{
 	* Be carefull with this, because flamingo adds listeners etc. and replaces #ALL# with all layers while doing a getCap request.
 	*/
 	function setConfig(xml:Object, dontGetCap:Boolean) {
+		if (xml.toString()=="undefined"){
+			return null;
+		}			
+		
 		if (typeof (xml) == "string") {
 			xml = new XML(String(xml));
 			xml= xml.firstChild;
