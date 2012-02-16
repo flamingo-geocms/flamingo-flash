@@ -30,6 +30,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 import core.AbstractConfigurable;
 import gui.button.MoveExtentButton;
 import gui.Map;
+import gui.ZoomerV;
 import mx.data.encoders.Num;
 import tools.Logger;
 import display.spriteloader.SpriteSettings;
@@ -40,6 +41,7 @@ import display.spriteloader.SpriteMap;
  */
 class gui.NavigationControl extends AbstractConfigurable
 {	
+	private var _firstTime:Boolean;
 	private var _map:Map;
 	
 	private var _mcloader:MovieClipLoader;
@@ -55,6 +57,8 @@ class gui.NavigationControl extends AbstractConfigurable
 	private var _swCorner:MovieClip;
 	private var _nwCorner:MovieClip;
 	private var _mid:MovieClip;
+	//zoomerv
+	private var _zoomer:ZoomerV;
 	
 	//var moveExtentButton:MoveExtentButton = new MoveExtentButton(this.id + pos, this.container.createEmptyMovieClip("m" + pos, i), this);
 	/**
@@ -67,12 +71,16 @@ class gui.NavigationControl extends AbstractConfigurable
 		super(id, container);	
 		spriteMap = flamingo.spriteMapFactory.obtainSpriteMap(flamingo.correctUrl( "assets/img/sprite.png"));
 		this.mcloader = new MovieClipLoader();
+		this.firstTime = true;
 	}	
-	public function setConfig(xml:XMLNode) {
+	public function setConfig(xml:XMLNode) {		
 		super.setConfig(xml);
-		map = flamingo.getComponent(this.listento[0]);	
-		Logger.console("Map: " + map);
-		addMoveExtentButtons();
+		if (firstTime) {
+			firstTime = false;
+			map = flamingo.getComponent(this.listento[0]);
+			addMoveExtentButtons();
+			addZoomerV();		
+		}
 		resize();
 	}
 	/**
@@ -89,7 +97,10 @@ class gui.NavigationControl extends AbstractConfigurable
 	 */
 	function resize(){		
 		super.resize();
-		var r = flamingo.getPosition(this);	
+		flamingo.position(this);
+		var r = flamingo.getPosition(this);			
+		this.container._x = r.x;
+		this.container._y = r.y;
 		
 		//calculate the button positions
 		var x:Number = r.x;
@@ -118,9 +129,18 @@ class gui.NavigationControl extends AbstractConfigurable
 		nwCorner._y = y;
 		mid._x = x + SpriteSettings.buttonSize;
 		mid._y = y + SpriteSettings.buttonSize;
+		
+		zoomer.top = ""+(y+3 * SpriteSettings.buttonSize);
+		zoomer.left = ""  + (x+SpriteSettings.buttonSize+(SpriteSettings.buttonSize-SpriteSettings.sliderSize)/2);		
+		zoomer.height = "" + (r.height - 3 * SpriteSettings.buttonSize);
+		//zoomer.top = "" + (5 * SpriteSettings.buttonSize);
+		zoomer.resize();
+		//position zoomer
+		//zoomer.container._x = SpriteSettings.buttonSize;
+		//zoomer.container._y = 3 * SpriteSettings.buttonSize;
+		
 	}	
-	public function addMoveExtentButtons() {		
-		Logger.console("addMoveExtentButtons");
+	public function addMoveExtentButtons() {	
 		var offset = SpriteSettings.buttonSize/2;		
 		
 		westButton = new MoveExtentButton(this.id + "_west", this.container.createEmptyMovieClip("m" + "_west", this.container.getNextHighestDepth()), this,this.map);
@@ -167,6 +187,12 @@ class gui.NavigationControl extends AbstractConfigurable
 		mid = this.container.createEmptyMovieClip("mid", this.container.getNextHighestDepth());		
 		spriteMap.attachSpriteTo(mid,
 			new SpriteSettings(SpriteSettings.buttonSize, 22 * SpriteSettings.buttonSize, SpriteSettings.buttonSize, SpriteSettings.buttonSize, 0, 0, true, 100));
+	}
+	
+	public function addZoomerV():Void {
+		zoomer = new ZoomerV(this.id + "_zoomer", this.container.createEmptyMovieClip(this.id + "_zoomer", this.container.getNextHighestDepth()));						
+		zoomer.listento = this.listento;
+		zoomer.setConfig(null);
 	}
 	
 	/** Getters and setters */
@@ -257,6 +283,22 @@ class gui.NavigationControl extends AbstractConfigurable
 	public function set mid(value:MovieClip):Void 
 	{
 		_mid = value;
+	}
+	public function get zoomer():ZoomerV 
+	{
+		return _zoomer;
+	}
+	public function set zoomer(value:ZoomerV):Void 
+	{
+		_zoomer = value;
+	}
+	public function get firstTime():Boolean 
+	{
+		return _firstTime;
+	}
+	public function set firstTime(value:Boolean):Void 
+	{
+		_firstTime = value;
 	}
 	/** 
 	 * Dispatched when a component is up and ready to run.
