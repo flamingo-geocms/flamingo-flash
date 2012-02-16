@@ -562,9 +562,10 @@ class gui.layers.OGCWMSLayer extends AbstractLayer{
 			return;
 		}
 		//only one request will be fired at once                                                                                    
-		if (this.updating) {
+		/*xxx Why? The latest update must be done, not the first!
+		 * if (this.updating) {
 			return;
-		}
+		}*/
 		if (this.url == undefined) {
 			return;
 		}
