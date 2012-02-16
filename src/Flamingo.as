@@ -52,6 +52,7 @@ import gui.layers.GridLayer;
 import gui.layers.AbstractLayer;
 import gui.Map;
 import gui.MapTip;
+import gui.NavigationControl;
 import gui.Scalebar;
 import gui.SliderHor;
 import gui.ZoomerV;
@@ -64,7 +65,7 @@ import display.spriteloader.SpriteMapFactory;
 import core.loading.LoadComponentQueue;
 
 class Flamingo {
-	private var version:String = "4.0";
+	private var version:String = "4.0_r1703";
 	//reference to main movie from which this class is loaded
 	//at the main movie the components are loaded at 'moviedepth'--  ;moviedepth starts by 10000
 	//at the main movie a cursor movie is loaded at depth 50005
@@ -1031,6 +1032,10 @@ class Flamingo {
 						var maptip:MapTip = new MapTip(targetid, mc);
 						this.components[targetid] = maptip;
 						maptip.setConfig(xmlNode);		
+					}else if (file == "NavigationControl") {
+						var navigationControl:NavigationControl = new NavigationControl(targetid, mc);
+						this.components[targetid] = navigationControl;
+						navigationControl.setConfig(xmlNode);		
 					} else if (isLayer(file)) {
 						var foundMap:Map;
 						//first try to get it with the layer id
@@ -1195,6 +1200,7 @@ class Flamingo {
 			case "Scalebar":
 			case "ZoomerV":
 			case "SliderHor":
+			case "NavigationControl":
 			case "Maptip":
 				return true;
 				break;

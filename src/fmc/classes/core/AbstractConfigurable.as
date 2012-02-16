@@ -71,6 +71,7 @@ class core.AbstractConfigurable extends AbstractPositionable{
         }	
 		//set the custom composites
 		addComposites(xml);
+		resize();
 	}
 	/**
 	 * Set the composites (with the child xml nodes) for this object.

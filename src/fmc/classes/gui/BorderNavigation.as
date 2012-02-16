@@ -158,13 +158,14 @@ class gui.BorderNavigation extends AbstractPositionable
 		for(var i = 0; i < buttons.length; i++)
 		{
 			var pos = buttons[i];
-			var moveExtentButton:MoveExtentButton = new MoveExtentButton(this.id + pos, this.container.createEmptyMovieClip("m" + pos, i), this);
+			var map = flamingo.getComponent(listento[0]);
+			var moveExtentButton:MoveExtentButton = new MoveExtentButton(this.id + pos, this.container.createEmptyMovieClip("m" + pos, i), this,map);
 			var offsetx = SpriteSettings.buttonSize/2;
 			var offsety = SpriteSettings.buttonSize/2; 
 			switch(pos){
 				case "W":
 					moveExtentButton.setDirectionMatrix(- 1, 0);
-					moveExtentButton.tooltipId = "";
+					moveExtentButton.tooltipId = "tooltip_west";
 					moveExtentButton.toolDownSettings = new SpriteSettings(0, 7*SpriteSettings.buttonSize, SpriteSettings.buttonSize, SpriteSettings.buttonSize, 0, offsety, true, 100);
 					moveExtentButton.toolOverSettings = new SpriteSettings(1*SpriteSettings.buttonSize, 7*SpriteSettings.buttonSize, SpriteSettings.buttonSize, SpriteSettings.buttonSize, 0, offsety, true, 100);
 					moveExtentButton.toolUpSettings = new SpriteSettings(2*SpriteSettings.buttonSize, 7*SpriteSettings.buttonSize, SpriteSettings.buttonSize, SpriteSettings.buttonSize, 0, offsety, true, 100);
@@ -276,8 +277,7 @@ class gui.BorderNavigation extends AbstractPositionable
 	/**
 	 * Update the maps in the listento
 	 */
-	public function updateMaps()
-	{
+	public function updateMaps(){
 		var map = flamingo.getComponent(listento[0]);
 		map.update(updatedelay);
 		for(var i:Number = 1; i < listento.length; i++)

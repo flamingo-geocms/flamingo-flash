@@ -8,11 +8,12 @@
 	<tstamp>
 		<format property="date" pattern="dd/MM/yyyy hh:mm aa"/>
 	</tstamp>
-	<property name="version" value="4.0"/>
+	<property name="version" value="4.0_r1694"/>
 	<property name="build" location="build"/>
-	<property name="dist" location="../dist"/>
+	<property name="dist" location="${build}/dist"/>
 	<property name="srcDir" location="src"/>
 	<property name="examplesDir" location="examples"/>
+	<property name="flashPath" location="D:/Program Files (x86)/Adobe/Adobe Flash CS3"/>
 	<property name="flashPath" location="C:/Program Files (x86)/Adobe/Adobe Flash CS3"/>
 	<!--property name="flashPath" location="D:/Program Files (x86)/Adobe/Adobe Flash CS3"/-->
 	
@@ -213,54 +214,95 @@
 			<arg line="${imagesDir}/BorderNavigation_edown.png"/>
 			<arg line="${imagesDir}/BorderNavigation_eover.png"/>
 			<arg line="${imagesDir}/BorderNavigation_eup.png"/>
+			
 			<arg line="${imagesDir}/BorderNavigation_ndown.png"/>
 			<arg line="${imagesDir}/BorderNavigation_nover.png"/>
 			<arg line="${imagesDir}/BorderNavigation_nup.png"/>
+			
 			<arg line="${imagesDir}/BorderNavigation_nedown.png"/>
 			<arg line="${imagesDir}/BorderNavigation_neover.png"/>
 			<arg line="${imagesDir}/BorderNavigation_neup.png"/>
+			
 			<arg line="${imagesDir}/BorderNavigation_nwdown.png"/>
 			<arg line="${imagesDir}/BorderNavigation_nwover.png"/>
 			<arg line="${imagesDir}/BorderNavigation_nwup.png"/>
+			
 			<arg line="${imagesDir}/BorderNavigation_sdown.png"/>
 			<arg line="${imagesDir}/BorderNavigation_sover.png"/>
 			<arg line="${imagesDir}/BorderNavigation_sup.png"/>
+			
 			<arg line="${imagesDir}/BorderNavigation_sedown.png"/>
 			<arg line="${imagesDir}/BorderNavigation_seover.png"/>
 			<arg line="${imagesDir}/BorderNavigation_seup.png"/>
+			
 			<arg line="${imagesDir}/BorderNavigation_swdown.png"/>
 			<arg line="${imagesDir}/BorderNavigation_swover.png"/>
 			<arg line="${imagesDir}/BorderNavigation_swup.png"/>
+			
 			<arg line="${imagesDir}/BorderNavigation_wdown.png"/>
 			<arg line="${imagesDir}/BorderNavigation_wover.png"/>
 			<arg line="${imagesDir}/BorderNavigation_wup.png"/>
+			
 			<arg line="${imagesDir}/ButtonFull_down.png"/>
 			<arg line="${imagesDir}/ButtonFull_over.png"/>
 			<arg line="${imagesDir}/ButtonFull_up.png"/>
+			
 			<arg line="${imagesDir}/ButtonNext_down.png"/>
 			<arg line="${imagesDir}/ButtonNext_over.png"/>
 			<arg line="${imagesDir}/ButtonNext_up.png"/>
+			
 			<arg line="${imagesDir}/ButtonPrev_down.png"/>
 			<arg line="${imagesDir}/ButtonPrev_over.png"/>
 			<arg line="${imagesDir}/ButtonPrev_up.png"/>
+			
 			<arg line="${imagesDir}/JsButton_dis.png"/>
 			<arg line="${imagesDir}/JsButton_over.png"/>
-			<arg line="${imagesDir}/JsButton_up.png"/>			
+			<arg line="${imagesDir}/JsButton_up.png"/>	
+					
 			<arg line="${imagesDir}/ToolIdentify_identifydown.png"/>
 			<arg line="${imagesDir}/ToolIdentify_identifyover.png"/>
 			<arg line="${imagesDir}/ToolIdentify_identifyup.png"/>
+			
 			<arg line="${imagesDir}/ToolMeasure_measuredown.png"/>
 			<arg line="${imagesDir}/ToolMeasure_measureover.png"/>
 			<arg line="${imagesDir}/ToolMeasure_measureup.png"/>
+			
 			<arg line="${imagesDir}/ToolPan_pandown.png"/>
 			<arg line="${imagesDir}/ToolPan_panover.png"/>
 			<arg line="${imagesDir}/ToolPan_panup.png"/>
+			
 			<arg line="${imagesDir}/ToolZoomin_zoomindown.png"/>
 			<arg line="${imagesDir}/ToolZoomin_zoominover.png"/>
 			<arg line="${imagesDir}/ToolZoomin_zoominup.png"/>
+			
 			<arg line="${imagesDir}/ToolZoomout_zoomoutdown.png"/>
 			<arg line="${imagesDir}/ToolZoomout_zoomoutover.png"/>
 			<arg line="${imagesDir}/ToolZoomout_zoomoutup.png"/>
+			<!--NavigationControl-->
+			<arg line="${imagesDir}/NavigationControl_edown.png"/>
+			<arg line="${imagesDir}/NavigationControl_eover.png"/>
+			<arg line="${imagesDir}/NavigationControl_eup.png"/>
+			
+			<arg line="${imagesDir}/NavigationControl_ndown.png"/>
+			<arg line="${imagesDir}/NavigationControl_nover.png"/>
+			<arg line="${imagesDir}/NavigationControl_nup.png"/>
+			
+			<arg line="${imagesDir}/NavigationControl_sdown.png"/>
+			<arg line="${imagesDir}/NavigationControl_sover.png"/>
+			<arg line="${imagesDir}/NavigationControl_sup.png"/>
+			
+			<arg line="${imagesDir}/NavigationControl_wdown.png"/>
+			<arg line="${imagesDir}/NavigationControl_wover.png"/>
+			<arg line="${imagesDir}/NavigationControl_wup.png"/>
+			
+			<arg line="${imagesDir}/NavigationControl_necorner.png"/>
+			<arg line="${imagesDir}/NavigationControl_nwcorner.png"/>
+			<arg line="${imagesDir}/NavigationControl_secorner.png"/>
+			
+			<arg line="${imagesDir}/NavigationControl_swcorner.png"/>
+			<arg line="${imagesDir}/NavigationControl_mid.png"/>
+			<arg line="${imagesDir}/empty.png"/>
+			
 			<arg line="-tile 3x"/>
 			<arg line="-geometry ${buttonSize}x${buttonSize}+0+0"/>
 			<arg line="-background none"/>			

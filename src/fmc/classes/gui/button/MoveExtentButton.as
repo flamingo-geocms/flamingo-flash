@@ -17,7 +17,9 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 -----------------------------------------------------------------------------*/
+import core.AbstractPositionable;
 import gui.BorderNavigation;
+import gui.Map;
 import gui.button.AbstractButton;
 import tools.Logger;
 /**
@@ -29,7 +31,8 @@ class gui.button.MoveExtentButton extends AbstractButton {
 	
 	private var _xDirection:Number;
 	private var _yDirection:Number;
-	private var _borderNavigation:BorderNavigation = null;
+	
+	private var _map:Map;
 	
 	/**
 	 * Constructor for MoveExtentButton. Creates a button and loads the images for the button stages.
@@ -38,10 +41,11 @@ class gui.button.MoveExtentButton extends AbstractButton {
 	 * @param	the bordernavigation component where this button is in
 	 * @see 	gui.button.AbstractButton
 	 */	
-	public function MoveExtentButton(id:String, container:MovieClip, borderNavigation:BorderNavigation) {
+	public function MoveExtentButton(id:String, container:MovieClip, parent:AbstractPositionable, map:Map) {
 		super(id, container);
-		this.borderNavigation = borderNavigation;		
-		this.parent = borderNavigation;		
+		//this.borderNavigation = borderNavigation;		
+		this.parent = parent;	
+		this.map = map;		
 	}
 	/**
 	 * Set the direction (vector) of the map if clicked on this button
@@ -75,7 +79,7 @@ class gui.button.MoveExtentButton extends AbstractButton {
 		dx = this.xDirection * map.__width / 40 * msx;
 		
 		var obj:Object = new Object();
-		obj.map = map;
+		obj.map = this.map;
 		obj.dx = dx;
 		obj.dy = dy;
 		_moveId = setInterval(this, "_move", 10, obj);
@@ -86,13 +90,14 @@ class gui.button.MoveExtentButton extends AbstractButton {
 	 */
 	public function stopMove() {
 		clearInterval(_moveId);
-		this.borderNavigation.updateMaps();
+		map.update();
 	}
 	/**
 	 * Do the move
 	 * @param	obj the direction for moving the map
 	 */
 	function _move(obj:Object) {
+		Logger.console("Move");
 		var e = obj.map.getCurrentExtent();
 		e.minx = e.minx+obj.dx;
 		e.miny = e.miny+obj.dy;
@@ -110,12 +115,9 @@ class gui.button.MoveExtentButton extends AbstractButton {
 	 * @return the real parent. In this case its always the borderNavigation
 	 */
 	public function getParent():Object {
-		return this._borderNavigation;
+		return this.parent;
 	}
-	/*********************** Getters and Setters ***********************/
-	public function get map():Object {
-		return flamingo.getComponent(this.borderNavigation.listento[0]);
-	}
+	/*********************** Getters and Setters ***********************/	
 	public function get xDirection():Number {
 		return _xDirection;
 	}
@@ -130,13 +132,13 @@ class gui.button.MoveExtentButton extends AbstractButton {
 	
 	public function set yDirection(value:Number):Void {
 		_yDirection = value;
+	}	
+	public function get map():Map 
+	{
+		return _map;
 	}
-	
-	public function get borderNavigation():BorderNavigation {
-		return _borderNavigation;
-	}
-	
-	public function set borderNavigation(value:BorderNavigation):Void {
-		_borderNavigation = value;
+	public function set map(value:Map):Void 
+	{
+		_map = value;
 	}
 }
