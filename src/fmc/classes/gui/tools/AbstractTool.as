@@ -108,9 +108,9 @@ class gui.tools.AbstractTool extends AbstractButton
 	 * @param	b true(enable) or false(disable
 	 */
 	public function setEnabled(b:Boolean):Void{
-		if (!b && this._active) {
-			this.toolGroup.setCursor(undefined);				
+		if (!b && this._active) {			
 			this.setActive(false);
+			this.toolGroup.setCursor(undefined);	
 		}
 		super.setEnabled(b);
 	}

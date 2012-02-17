@@ -72,9 +72,9 @@ class gui.tools.ToolDefault extends AbstractTool{
 	 */
 	public function ToolDefault(id:String, toolGroup:ToolGroup ,container:MovieClip) {	
 		super(id, toolGroup, container);			
-		toolDownSettings = new SpriteSettings(0, 14*SpriteSettings.buttonSize, SpriteSettings.buttonSize, SpriteSettings.buttonSize, 0, 0, true, 100);
-		toolOverSettings = new SpriteSettings(SpriteSettings.buttonSize, 14*SpriteSettings.buttonSize, SpriteSettings.buttonSize, SpriteSettings.buttonSize, 0, 0, true, 100);
-		toolUpSettings = new SpriteSettings(2*SpriteSettings.buttonSize, 14*SpriteSettings.buttonSize, SpriteSettings.buttonSize, SpriteSettings.buttonSize, 0, 0, true, 100);			
+		toolDownSettings = new SpriteSettings(0, 17*SpriteSettings.buttonSize, SpriteSettings.buttonSize, SpriteSettings.buttonSize, 0, 0, true, 100);
+		toolOverSettings = new SpriteSettings(SpriteSettings.buttonSize, 17*SpriteSettings.buttonSize, SpriteSettings.buttonSize, SpriteSettings.buttonSize, 0, 0, true, 100);
+		toolUpSettings = new SpriteSettings(2*SpriteSettings.buttonSize, 17*SpriteSettings.buttonSize, SpriteSettings.buttonSize, SpriteSettings.buttonSize, 0, 0, true, 100);			
 		
 		this.defaultXML = "<?xml version='1.0' encoding='UTF-8'?>" +
 						"<ToolDefault>" +
@@ -197,7 +197,7 @@ class gui.tools.ToolDefault extends AbstractTool{
 		mouseDown = false;
 		delete this.lMap.onMouseMove;
 		map.setCursor(this.cursors["cursor"]);
-		if(map.isEqualExtent(mouseDownCoord.extent,map.getCurrentExtent())){
+		if (map.isEqualExtent(mouseDownCoord.extent, map.getCurrentExtent())) {
 			clickCounter++;
 			var doubleClick:Boolean = false;
 			if (clickCounter == 1) {
@@ -209,9 +209,12 @@ class gui.tools.ToolDefault extends AbstractTool{
 						thisObj.doIdentify(map,xmouse,ymouse,coord);
 				}, 250);
 			}else if (clickCounter == 2) {
+				this.clickCounter = 0; 
 				doubleClick = true;
 				clearInterval(clickTimerId);
 				this.doZoomIn(map,xmouse,ymouse,coord);
+			}else {
+				this.clickCounter = 0;
 			}
 		}
 		else{
