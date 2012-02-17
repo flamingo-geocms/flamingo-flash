@@ -278,6 +278,10 @@
 			<arg line="${imagesDir}/ToolZoomout_zoomoutdown.png"/>
 			<arg line="${imagesDir}/ToolZoomout_zoomoutover.png"/>
 			<arg line="${imagesDir}/ToolZoomout_zoomoutup.png"/>
+			
+			<arg line="${imagesDir}/ToolDefault_down.png"/>
+			<arg line="${imagesDir}/ToolDefault_over.png"/>
+			<arg line="${imagesDir}/ToolDefault_up.png"/>
 			<!--NavigationControl-->
 			<arg line="${imagesDir}/NavigationControl_edown.png"/>
 			<arg line="${imagesDir}/NavigationControl_eover.png"/>
@@ -301,6 +305,10 @@
 			
 			<arg line="${imagesDir}/NavigationControl_swcorner.png"/>
 			<arg line="${imagesDir}/NavigationControl_mid.png"/>
+			<arg line="${imagesDir}/empty.png"/>
+			
+			<arg line="${imagesDir}/SliderBackground.png"/>
+			<arg line="${imagesDir}/SliderBackground_bottom.png"/>
 			<arg line="${imagesDir}/empty.png"/>
 			
 			<arg line="-tile 3x"/>

@@ -3020,7 +3020,8 @@ class Flamingo {
 		else if (mc.left.length>0) {
 			//if (mc.id == testId) Logger.console("x7");
 			pt.x = convertPosition(mc.left, pw, parent.guides.x);
-			pt.width = mc._width;
+			//xxx Why? The width cant be calculated now
+			//pt.width = mc._width;
 		}
 		else if (mc.right.length>0) {
 			//if (mc.id == testId) Logger.console("x8")

@@ -17,6 +17,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 -----------------------------------------------------------------------------*/
 /** @component NavigationControl
 * Navigation control
+* @file flamingo/classes/gui/NavigationControl.as (sourcefile)
+* @file flamingo/classes/core/AbstractConfigurable.as
+* @file flamingo/classes/core/AbstractPositionable.as
+* @file flamingo/classes/gui/Button/MoveExtentButton.as 
+* @file flamingo/classes/gui/Button/ZoomerV.as 
 * @configstring tooltip_north tooltiptext of north button
 * @configstring tooltip_south tooltiptext of south button
 * @configstring tooltip_west tooltiptext of west button
@@ -24,10 +29,16 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 /** @tag <fmc:NavigationControl>  
 * This tag defines navigation control with border panning and a zoomer.
-* @hierarchy childnode of <flamingo> or a container component. e.g. <fmc:Window>
-* @example 
+* @hierarchy childnode of <flamingo> or a container component. e.g. <fmc:Window>* 
+* @example <fmc:NavigationControl top="50" left="20" height="300" listento="map" showfullextent="true" zoomeroffset="5" zoomerbackgroundoffset="-5" />
+* @attr listento the id of the map that must be controlled.
+* @attr zoomeroffset (optional; default 7) The y offset in pixels of the move extent buttons.
+* @attr zoomerbackgroundoffset (optional; default -5) The y offset of the background of the zoomer
+* @attr showFullExtent (optional; default true) if set to true the fullextent button wil be added. 
+* But only if there is a full extent set on the map.
 */
 import core.AbstractConfigurable;
+import gui.button.ButtonFull;
 import gui.button.MoveExtentButton;
 import gui.Map;
 import gui.ZoomerV;
@@ -36,11 +47,14 @@ import tools.Logger;
 import display.spriteloader.SpriteSettings;
 import display.spriteloader.SpriteMap;
 /**
- * Navigation control
+ * Navigation control. Creates a navigation control that can move the extent and has a zoomslider.
  * @author <a href="mailto:roybraam@b3partners.nl">Roy Braam</a>
  */
 class gui.NavigationControl extends AbstractConfigurable
 {	
+	private var ZOOMER_OFFSET_PARAM:String = "zoomeroffset"; 
+	private var ZOOMER_BACKGROUND_OFFSET_PARAM:String = "zoomerbackgroundoffset"; 
+	private var SHOW_FULLEXTENT_PARAM:String = "showfullextent";
 	private var _firstTime:Boolean;
 	private var _map:Map;
 	
@@ -57,8 +71,15 @@ class gui.NavigationControl extends AbstractConfigurable
 	private var _swCorner:MovieClip;
 	private var _nwCorner:MovieClip;
 	private var _mid:MovieClip;
-	//zoomerv
+	//zoomerv	
+	private var _zoomerBackground:MovieClip;
+	private var _zoomerBackgroundBottom:MovieClip;
 	private var _zoomer:ZoomerV;
+	private var _zoomerOffset:Number;
+	private var _zoomerBackgroundOffset:Number;
+	//button full
+	private var _buttonFull:ButtonFull;
+	private var _showFullExtent:Boolean = true;
 	
 	//var moveExtentButton:MoveExtentButton = new MoveExtentButton(this.id + pos, this.container.createEmptyMovieClip("m" + pos, i), this);
 	/**
@@ -72,14 +93,26 @@ class gui.NavigationControl extends AbstractConfigurable
 		spriteMap = flamingo.spriteMapFactory.obtainSpriteMap(flamingo.correctUrl( "assets/img/sprite.png"));
 		this.mcloader = new MovieClipLoader();
 		this.firstTime = true;
+		this.zoomerOffset = 7;
+		this.zoomerBackgroundOffset = -5;
 	}	
+	/**
+	 * Overwrites the super.setConfig() to call some functions after the config is set.	
+	 * @param	xml The xml config
+	 * @see AbstractConfigurable#setConfig
+	 */
 	public function setConfig(xml:XMLNode) {		
 		super.setConfig(xml);
 		if (firstTime) {
 			firstTime = false;
 			map = flamingo.getComponent(this.listento[0]);
 			addMoveExtentButtons();
-			addZoomerV();		
+			addZoomerV();
+		}
+		if (this.showFullExtent && this.buttonFull==null) {					
+			addButtonFull();
+		}else if (!this.showFullExtent && this.buttonFull==null){
+			this.buttonFull.setVisible(false);
 		}
 		resize();
 	}
@@ -89,7 +122,18 @@ class gui.NavigationControl extends AbstractConfigurable
 	 * @param value value of the attribute
 	 */
     function setAttribute(name:String, value:String):Void {
-        var lowerName=name.toLowerCase();        
+        var lowerName = name.toLowerCase();        
+		if (lowerName == ZOOMER_OFFSET_PARAM) {
+			this.zoomerOffset = Number(value);
+		}else if (lowerName == ZOOMER_BACKGROUND_OFFSET_PARAM) {
+			this.zoomerBackgroundOffset = Number(value);
+		}else if (lowerName == SHOW_FULLEXTENT_PARAM) {
+			if (value=="true"){
+				this.showFullExtent = true;
+			}else {
+				this.showFullExtent = false;
+			}
+		}
     }
 	
 	/**
@@ -97,105 +141,170 @@ class gui.NavigationControl extends AbstractConfigurable
 	 */
 	function resize(){		
 		super.resize();
-		flamingo.position(this);
-		var r = flamingo.getPosition(this);			
+		//flamingo.position(this);
+		Logger.console("parent: "+this.parent);
+		var r = flamingo.getPosition(this,this.parent);			
 		this.container._x = r.x;
 		this.container._y = r.y;
+		
+		var buttonSize = SpriteSettings.buttonSize;
+		var sliderSize = SpriteSettings.sliderSize;		
+		if (3 * SpriteSettings.buttonSize > r.width) {
+			buttonSize = Math.floor(r.width / 3);
+			sliderSize = Math.floor(SpriteSettings.sliderSize * (r.width / 3) / SpriteSettings.buttonSize);
+			zoomerOffset = Math.floor(zoomerOffset * (r.width / 3) / SpriteSettings.buttonSize);
+			zoomerBackgroundOffset = Math.floor(zoomerBackgroundOffset * (r.width / 3) / SpriteSettings.buttonSize);
+		}
 		
 		//calculate the button positions
 		var x:Number = r.x;
 		var y:Number = r.y;
-		var navigationSize:Number = 3 * SpriteSettings.buttonSize;
+		var navigationSize:Number = 3 * buttonSize;
 		
-		var navBottom:Number = y + navigationSize - SpriteSettings.buttonSize;
-		var navRight:Number = x + navigationSize - SpriteSettings.buttonSize;
-		var navXCenter = x + navigationSize / 2 -SpriteSettings.buttonSize;
-		var navYCenter = y + navigationSize / 2 -SpriteSettings.buttonSize;
+		var navBottom:Number = y + navigationSize - buttonSize;
+		var navRight:Number = x + navigationSize - buttonSize;
+		var navXCenter = x + navigationSize / 2 -buttonSize;
+		var navYCenter = y + navigationSize / 2 -buttonSize;
 		
 		//set the buttons.
 		northButton.move(navXCenter, y);
+		northButton.container._height = buttonSize;
+		northButton.container._width = buttonSize;
 		eastButton.move(navRight,navYCenter);
+		eastButton.container._height = buttonSize;
+		eastButton.container._width = buttonSize;
 		southButton.move(navXCenter, navBottom);
+		southButton.container._height = buttonSize;
+		southButton.container._width = buttonSize;
 		westButton.move(x, navYCenter);		
+		westButton.container._height = buttonSize;
+		westButton.container._width = buttonSize;
 		
 		//position the corners
-		neCorner._x = x+2 * SpriteSettings.buttonSize;
+		neCorner._x = x+2 * buttonSize;
 		neCorner._y = y;
-		seCorner._x = x+2 * SpriteSettings.buttonSize;
-		seCorner._y = y+2 * SpriteSettings.buttonSize;
+		neCorner._height = buttonSize;
+		neCorner._width = buttonSize;
+		seCorner._x = x+2 * buttonSize;
+		seCorner._y = y+2 * buttonSize;
+		seCorner._height = buttonSize;
+		seCorner._width = buttonSize;
 		swCorner._x = x;
-		swCorner._y = y+2 * SpriteSettings.buttonSize;
+		swCorner._y = y+2 * buttonSize;
+		swCorner._height = buttonSize;
+		swCorner._width = buttonSize;
 		nwCorner._x = x;
 		nwCorner._y = y;
-		mid._x = x + SpriteSettings.buttonSize;
-		mid._y = y + SpriteSettings.buttonSize;
+		nwCorner._height = buttonSize;
+		nwCorner._width = buttonSize;
+		mid._x = x + buttonSize;
+		mid._y = y + buttonSize;
+		mid._height = buttonSize;
+		mid._width = buttonSize;
 		
-		zoomer.top = ""+(y+3 * SpriteSettings.buttonSize);
-		zoomer.left = ""  + (x+SpriteSettings.buttonSize+(SpriteSettings.buttonSize-SpriteSettings.sliderSize)/2);		
-		zoomer.height = "" + (r.height - 3 * SpriteSettings.buttonSize);
-		//zoomer.top = "" + (5 * SpriteSettings.buttonSize);
+		//button full extent
+		buttonFull.top = "" +(y + buttonSize);
+		buttonFull.left = "" +(x + buttonSize);
+		buttonFull.width = "" +buttonSize;
+		buttonFull.height = "" +buttonSize;
+		buttonFull.resize();
+		//set zoomer background
+		zoomerBackground._x = x+buttonSize;
+		zoomerBackground._y = y + 3 * buttonSize + zoomerBackgroundOffset;
+		zoomerBackground._width = buttonSize;
+		zoomerBackground._height = r.height -4 * buttonSize;		
+		zoomerBackgroundBottom._x = x+buttonSize;
+		zoomerBackgroundBottom._y = y + r.height - buttonSize + zoomerBackgroundOffset;
+		zoomerBackgroundBottom._width = buttonSize;
+		zoomerBackgroundBottom._height = buttonSize;
+				
+		//set position zomer
+		zoomer.top = ""+(y+3 * buttonSize+zoomerBackgroundOffset+zoomerOffset);
+		zoomer.left = ""  + (x+buttonSize+(buttonSize-sliderSize)/2);		
+		zoomer.height = "" + (r.height - 3 * buttonSize-zoomerOffset * 2);
+		zoomer.width = "" + sliderSize;
+		//zoomer.top = "" + (5 * buttonSize);
 		zoomer.resize();
 		//position zoomer
-		//zoomer.container._x = SpriteSettings.buttonSize;
-		//zoomer.container._y = 3 * SpriteSettings.buttonSize;
-		
+		//zoomer.container._x = buttonSize;
+		//zoomer.container._y = 3 * buttonSize;		
 	}	
+	/**
+	 * Creates and adds the moveExtent buttons.
+	 */
 	public function addMoveExtentButtons() {	
 		var offset = SpriteSettings.buttonSize/2;		
 		
 		westButton = new MoveExtentButton(this.id + "_west", this.container.createEmptyMovieClip("m" + "_west", this.container.getNextHighestDepth()), this,this.map);
 		westButton.setDirectionMatrix(- 1, 0);
 		westButton.tooltipId = "tooltip_west";
-		westButton.toolDownSettings = new SpriteSettings(0, 20*SpriteSettings.buttonSize, SpriteSettings.buttonSize, SpriteSettings.buttonSize, 0, offset, true, 100);
-		westButton.toolOverSettings = new SpriteSettings(1*SpriteSettings.buttonSize, 20*SpriteSettings.buttonSize, SpriteSettings.buttonSize, SpriteSettings.buttonSize, 0, offset, true, 100);
-		westButton.toolUpSettings = new SpriteSettings(2*SpriteSettings.buttonSize, 20*SpriteSettings.buttonSize, SpriteSettings.buttonSize, SpriteSettings.buttonSize, 0, offset, true, 100);
+		westButton.toolDownSettings = new SpriteSettings(0, 21*SpriteSettings.buttonSize, SpriteSettings.buttonSize, SpriteSettings.buttonSize, 0, offset, true, 100);
+		westButton.toolOverSettings = new SpriteSettings(1*SpriteSettings.buttonSize, 21*SpriteSettings.buttonSize, SpriteSettings.buttonSize, SpriteSettings.buttonSize, 0, offset, true, 100);
+		westButton.toolUpSettings = new SpriteSettings(2*SpriteSettings.buttonSize, 21*SpriteSettings.buttonSize, SpriteSettings.buttonSize, SpriteSettings.buttonSize, 0, offset, true, 100);
 		
 		eastButton = new MoveExtentButton(this.id + "_east", this.container.createEmptyMovieClip("m" + "_east", this.container.getNextHighestDepth()), this,map);
 		eastButton.setDirectionMatrix(1, 0);
 		eastButton.tooltipId = "tooltip_east";
-		eastButton.toolDownSettings = new SpriteSettings(0, 0, SpriteSettings.buttonSize, SpriteSettings.buttonSize, 0, offset, true, 100);
-		eastButton.toolOverSettings = new SpriteSettings(1*SpriteSettings.buttonSize, 17*SpriteSettings.buttonSize, SpriteSettings.buttonSize, SpriteSettings.buttonSize, 0, offset, true, 100);
-		eastButton.toolUpSettings = new SpriteSettings(2*SpriteSettings.buttonSize, 17*SpriteSettings.buttonSize, SpriteSettings.buttonSize, SpriteSettings.buttonSize, 0, offset, true, 100);
+		eastButton.toolDownSettings = new SpriteSettings(0, 18*SpriteSettings.buttonSize, SpriteSettings.buttonSize, SpriteSettings.buttonSize, 0, offset, true, 100);
+		eastButton.toolOverSettings = new SpriteSettings(1*SpriteSettings.buttonSize, 18*SpriteSettings.buttonSize, SpriteSettings.buttonSize, SpriteSettings.buttonSize, 0, offset, true, 100);
+		eastButton.toolUpSettings = new SpriteSettings(2*SpriteSettings.buttonSize, 18*SpriteSettings.buttonSize, SpriteSettings.buttonSize, SpriteSettings.buttonSize, 0, offset, true, 100);
 		
 		northButton = new MoveExtentButton(this.id + "_north", this.container.createEmptyMovieClip("m" + "_north", this.container.getNextHighestDepth()), this,map);
 		northButton.setDirectionMatrix(0, 1);
 		northButton.tooltipId = "tooltip_north";
-		northButton.toolDownSettings = new SpriteSettings(0,SpriteSettings.buttonSize, 18*SpriteSettings.buttonSize, SpriteSettings.buttonSize, offset, 0, true, 100);
-		northButton.toolOverSettings = new SpriteSettings(1*SpriteSettings.buttonSize, 18*SpriteSettings.buttonSize, SpriteSettings.buttonSize, SpriteSettings.buttonSize, offset, 0, true, 100);
-		northButton.toolUpSettings = new SpriteSettings(2*SpriteSettings.buttonSize, 18*SpriteSettings.buttonSize, SpriteSettings.buttonSize, SpriteSettings.buttonSize, offset, 0, true, 100);
+		northButton.toolDownSettings = new SpriteSettings(0,19*SpriteSettings.buttonSize, SpriteSettings.buttonSize, SpriteSettings.buttonSize, offset, 0, true, 100);
+		northButton.toolOverSettings = new SpriteSettings(1*SpriteSettings.buttonSize, 19*SpriteSettings.buttonSize, SpriteSettings.buttonSize, SpriteSettings.buttonSize, offset, 0, true, 100);
+		northButton.toolUpSettings = new SpriteSettings(2*SpriteSettings.buttonSize, 19*SpriteSettings.buttonSize, SpriteSettings.buttonSize, SpriteSettings.buttonSize, offset, 0, true, 100);
 
 		southButton = new MoveExtentButton(this.id + "_north", this.container.createEmptyMovieClip("m" + "_north", this.container.getNextHighestDepth()), this,map);
 		southButton.setDirectionMatrix(0, - 1);
 		southButton.tooltipId = "tooltip_south";
-		southButton.toolDownSettings = new SpriteSettings(0,19*SpriteSettings.buttonSize, SpriteSettings.buttonSize, SpriteSettings.buttonSize, offset, 0, true, 100);
-		southButton.toolOverSettings = new SpriteSettings(1*SpriteSettings.buttonSize, 19*SpriteSettings.buttonSize, SpriteSettings.buttonSize, SpriteSettings.buttonSize, offset, 0, true, 100);
-		southButton.toolUpSettings = new SpriteSettings(2 * SpriteSettings.buttonSize, 19 * SpriteSettings.buttonSize, SpriteSettings.buttonSize, SpriteSettings.buttonSize, offset, 0, true, 100);
+		southButton.toolDownSettings = new SpriteSettings(0,20*SpriteSettings.buttonSize, SpriteSettings.buttonSize, SpriteSettings.buttonSize, offset, 0, true, 100);
+		southButton.toolOverSettings = new SpriteSettings(1*SpriteSettings.buttonSize, 20*SpriteSettings.buttonSize, SpriteSettings.buttonSize, SpriteSettings.buttonSize, offset, 0, true, 100);
+		southButton.toolUpSettings = new SpriteSettings(2 * SpriteSettings.buttonSize, 20 * SpriteSettings.buttonSize, SpriteSettings.buttonSize, SpriteSettings.buttonSize, offset, 0, true, 100);
 		
 		//add the corners
 		neCorner = this.container.createEmptyMovieClip("neCorner", this.container.getNextHighestDepth());		
 		spriteMap.attachSpriteTo(neCorner,
-			new SpriteSettings(0, 21 * SpriteSettings.buttonSize, SpriteSettings.buttonSize, SpriteSettings.buttonSize, 0, 0, true, 100));
+			new SpriteSettings(0, 22 * SpriteSettings.buttonSize, SpriteSettings.buttonSize, SpriteSettings.buttonSize, 0, 0, true, 100));
 		seCorner = this.container.createEmptyMovieClip("seCorner", this.container.getNextHighestDepth());		
 		spriteMap.attachSpriteTo(seCorner,
-			new SpriteSettings(2*SpriteSettings.buttonSize, 21 * SpriteSettings.buttonSize, SpriteSettings.buttonSize, SpriteSettings.buttonSize, 0, 0, true, 100));
+			new SpriteSettings(2*SpriteSettings.buttonSize, 22 * SpriteSettings.buttonSize, SpriteSettings.buttonSize, SpriteSettings.buttonSize, 0, 0, true, 100));
 		swCorner = this.container.createEmptyMovieClip("swCorner", this.container.getNextHighestDepth());		
 		spriteMap.attachSpriteTo(swCorner,
-			new SpriteSettings(0, 22 * SpriteSettings.buttonSize, SpriteSettings.buttonSize, SpriteSettings.buttonSize, 0, 0, true, 100));
+			new SpriteSettings(0, 23 * SpriteSettings.buttonSize, SpriteSettings.buttonSize, SpriteSettings.buttonSize, 0, 0, true, 100));
 		nwCorner = this.container.createEmptyMovieClip("nwCorner", this.container.getNextHighestDepth());		
 		spriteMap.attachSpriteTo(nwCorner,
-			new SpriteSettings(SpriteSettings.buttonSize, 21 * SpriteSettings.buttonSize, SpriteSettings.buttonSize, SpriteSettings.buttonSize, 0, 0, true, 100));
+			new SpriteSettings(SpriteSettings.buttonSize, 22 * SpriteSettings.buttonSize, SpriteSettings.buttonSize, SpriteSettings.buttonSize, 0, 0, true, 100));
 		mid = this.container.createEmptyMovieClip("mid", this.container.getNextHighestDepth());		
 		spriteMap.attachSpriteTo(mid,
-			new SpriteSettings(SpriteSettings.buttonSize, 22 * SpriteSettings.buttonSize, SpriteSettings.buttonSize, SpriteSettings.buttonSize, 0, 0, true, 100));
+			new SpriteSettings(SpriteSettings.buttonSize, 23 * SpriteSettings.buttonSize, SpriteSettings.buttonSize, SpriteSettings.buttonSize, 0, 0, true, 100));
+			
+		//zoomer background
+		zoomerBackground = this.container.createEmptyMovieClip("zoomerBackground", this.container.getNextHighestDepth());
+		spriteMap.attachSpriteTo(zoomerBackground,
+			new SpriteSettings(0, 24 * SpriteSettings.buttonSize, SpriteSettings.buttonSize, SpriteSettings.buttonSize, 0, 0, true, 100));
+		zoomerBackgroundBottom = this.container.createEmptyMovieClip("zoomerBackgroundBottom", this.container.getNextHighestDepth());
+		spriteMap.attachSpriteTo(zoomerBackgroundBottom,
+			new SpriteSettings(SpriteSettings.buttonSize, 24 * SpriteSettings.buttonSize, SpriteSettings.buttonSize, SpriteSettings.buttonSize, 0, 0, true, 100));
 	}
-	
+	public function addButtonFull():Void {
+		if (map!=undefined && map.getFullExtent()!=null){
+			buttonFull = new ButtonFull(this.id + "_full", this.container.createEmptyMovieClip(this.id + "_full", this.container.getNextHighestDepth()));
+			buttonFull.listento = this.listento;	
+			buttonFull.setConfig(null);
+		}
+	}
+	/**
+	 * Create and adds the zoomerV object.
+	 */
 	public function addZoomerV():Void {
 		zoomer = new ZoomerV(this.id + "_zoomer", this.container.createEmptyMovieClip(this.id + "_zoomer", this.container.getNextHighestDepth()));						
 		zoomer.listento = this.listento;
 		zoomer.setConfig(null);
 	}
 	
-	/** Getters and setters */
+	/** Getters and setters **/
 	public function get northButton():MoveExtentButton{
 		return _northButton;
 	}
@@ -300,6 +409,55 @@ class gui.NavigationControl extends AbstractConfigurable
 	{
 		_firstTime = value;
 	}
+	public function get zoomerBackground():MovieClip 
+	{
+		return _zoomerBackground;
+	}
+	public function set zoomerBackground(value:MovieClip):Void 
+	{
+		_zoomerBackground = value;
+	}
+	public function get zoomerBackgroundBottom():MovieClip 
+	{
+		return _zoomerBackgroundBottom;
+	}
+	public function set zoomerBackgroundBottom(value:MovieClip):Void 
+	{
+		_zoomerBackgroundBottom = value;
+	}
+	public function get zoomerOffset():Number 
+	{
+		return _zoomerOffset;
+	}
+	public function set zoomerOffset(value:Number):Void 
+	{
+		_zoomerOffset = value;
+	}
+	public function get zoomerBackgroundOffset():Number 
+	{
+		return _zoomerBackgroundOffset;
+	}
+	public function set zoomerBackgroundOffset(value:Number):Void 
+	{
+		_zoomerBackgroundOffset = value;
+	}
+	public function get buttonFull():ButtonFull 
+	{
+		return _buttonFull;
+	}
+	public function set buttonFull(value:ButtonFull):Void 
+	{
+		_buttonFull = value;
+	}
+	public function get showFullExtent():Boolean 
+	{
+		return _showFullExtent;
+	}
+	public function set showFullExtent(value:Boolean):Void 
+	{
+		_showFullExtent = value;
+	}
+	/** Events **/
 	/** 
 	 * Dispatched when a component is up and ready to run.
 	 * @param comp:MovieClip a reference to the component.

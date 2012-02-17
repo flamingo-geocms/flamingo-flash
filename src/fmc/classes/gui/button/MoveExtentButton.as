@@ -97,7 +97,6 @@ class gui.button.MoveExtentButton extends AbstractButton {
 	 * @param	obj the direction for moving the map
 	 */
 	function _move(obj:Object) {
-		Logger.console("Move");
 		var e = obj.map.getCurrentExtent();
 		e.minx = e.minx+obj.dx;
 		e.miny = e.miny+obj.dy;

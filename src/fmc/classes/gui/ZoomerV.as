@@ -207,12 +207,19 @@ class gui.ZoomerV  extends AbstractPositionable{
 	 */
 	function resize() {
 		var r = flamingo.getPosition(this);
-		zoomIn.move(r.x, r.y);
-		zoomOut.move(r.x, (r.y + r.height-zoomOut.height));
-		sliderBar._x = r.x + zoomIn.width/2-sliderBar._width/2;
-		sliderBar._y = r.y + zoomIn.height + sliderButton.height/2;
-		Logger.console(sliderButton.height);
-		sliderBar._height = r.height - zoomOut.height - zoomIn.height - sliderButton.height;
+		zoomIn._width = r.width;
+		zoomIn._height = r.width;
+		zoomIn.move(r.x, r.y);		
+		zoomOut._width = r.width;
+		zoomOut._height = r.width;
+		zoomOut.move(r.x, (r.y + r.height - zoomOut.height));
+		
+		sliderBar._width = r.width;
+		sliderBar._x = r.x;
+		sliderBar._y = r.y + r.width + sliderButton.height/2;
+		sliderBar._height = r.height - zoomIn._height - zoomOut._height - sliderButton.height;
+		sliderButton._width = r.width;
+		sliderButton._height = r.width;
 		sliderButton.move(sliderBar._x, sliderBar._y);
 		refresh()
 	}

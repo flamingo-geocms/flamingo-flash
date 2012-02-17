@@ -320,6 +320,13 @@ class core.AbstractPositionable extends AbstractListenerRegister
 		return this.container._width;
 	}
 	
+	public function set _height(value:Number) {
+		this.container._height=value;
+	}
+	public function set _width(value:Number) {
+		this.container._width=value;
+	}
+	
 		
 	public function get id():String 
 	{		
