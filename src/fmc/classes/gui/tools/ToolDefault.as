@@ -167,7 +167,8 @@ class gui.tools.ToolDefault extends AbstractTool{
 	
 	var mouseDownCoord = new Object();
 	var mouseDown:Boolean = false;
-	
+	var msx;
+	var msy;
 	public function onMouseDown(map:MovieClip, xmouse:Number, ymouse:Number, coord:Object) {
 		mouseDownCoord.x = xmouse;
 		mouseDownCoord.y = ymouse;
@@ -176,23 +177,29 @@ class gui.tools.ToolDefault extends AbstractTool{
 		if (! this._parent.updating) {
 			this._parent.cancelAll();
 			var e = map.getCurrentExtent();
-			var msx = (e.maxx-e.minx)/map.getMovieClipWidth();
-			var msy = (e.maxy-e.miny)/map.getMovieClipHeight();
+			msx = (e.maxx-e.minx)/map.getMovieClipWidth();
+			msy = (e.maxy-e.miny)/map.getMovieClipHeight();
 			var x = mouseDownCoord.x;
 			var y = mouseDownCoord.y;
 			//onmove do PAN
 			var thisObj:ToolDefault = this;
 			this.lMap.onMouseMove = function(mapMove:MovieClip, xmouseMove:Number, ymouseMove:Number, coordMove:Object) {
-				clearInterval(thisObj.clickTimerId);				
-				mapMove.setCursor(thisObj.cursors["grab"]);
-				var dx = (x-xmouseMove)*msx;
-				var dy = (ymouseMove-y)*msy;
-				mapMove.moveToExtent({minx:e.minx+dx, miny:e.miny+dy, maxx:e.maxx+dx, maxy:e.maxy+dy}, -1, 0,true,false);
+				thisObj.onMouseMove(mapMove, xmouseMove, ymouseMove, coordMove);
 				//updateAfterEvent();
 			};
 		}
 	}	
-	
+	public function onMouseMove(mapMove:MovieClip, xmouseMove:Number, ymouseMove:Number, coordMove:Object) {
+		if (this.mouseDown){
+			clearInterval(this.clickTimerId);				
+			mapMove.setCursor(this.cursors["grab"]);
+			var dx = (mouseDownCoord.x-xmouseMove)*msx;
+			var dy = (ymouseMove-mouseDownCoord.y) * msy;
+			var e = mouseDownCoord.extent;
+			mapMove.moveToExtent({minx:e.minx+dx, miny:e.miny+dy, maxx:e.maxx+dx, maxy:e.maxy+dy}, -1, 0,true,false);
+			//updateAfterEvent();
+		};
+	}
 	public function onMouseUp(map:MovieClip, xmouse:Number, ymouse:Number, coord:Object) {
 		mouseDown = false;
 		delete this.lMap.onMouseMove;

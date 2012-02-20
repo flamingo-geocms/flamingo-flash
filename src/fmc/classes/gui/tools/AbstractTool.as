@@ -59,31 +59,36 @@ class gui.tools.AbstractTool extends AbstractButton
 		var thisObj:AbstractTool = this;
 		//add mousewheel event to tool:
 		this.lMap.onMouseWheel = function(map:MovieClip, delta:Number, xmouse:Number, ymouse:Number, coord:Object) {
-			if (thisObj.zoomscroll) {
-				if (!thisObj._parent.updating) {
-					thisObj._parent.cancelAll();
-					var zoom;
-					if (delta<=0) {
-						zoom = 80;
-					} else {
-						zoom = 120;
-					}
-					var w = map.getWidth();
-					var h = map.getHeight();
-					var c = map.getCenter();
-					var cx = (w/2)-((w/2)/(zoom/100));
-					var cy = (h/2)-((h/2)/(zoom/100));
-					var px = (coord.x-c.x)/(w/2);
-					var py = (coord.y-c.y)/(h/2);
-					coord.x = c.x+(px*cx);
-					coord.y = c.y+(py*cy);
-					map.moveToPercentage(zoom, coord, 500, 0);
-					thisObj._parent.updateOther(map, 500);
-				}
-			}
+			thisObj.onMouseWheel(map, delta, xmouse, ymouse, coord);
+			
 		};
 			
 	}	
+	public function onMouseWheel(map:MovieClip, delta:Number, xmouse:Number, ymouse:Number, coord:Object) {
+		var thisObj:AbstractTool = this;
+		if (thisObj.zoomscroll) {
+			if (!thisObj._parent.updating) {
+				thisObj._parent.cancelAll();
+				var zoom;
+				if (delta<=0) {
+					zoom = 80;
+				} else {
+					zoom = 120;
+				}
+				var w = map.getWidth();
+				var h = map.getHeight();
+				var c = map.getCenter();
+				var cx = (w/2)-((w/2)/(zoom/100));
+				var cy = (h/2)-((h/2)/(zoom/100));
+				var px = (coord.x-c.x)/(w/2);
+				var py = (coord.y-c.y)/(h/2);
+				coord.x = c.x+(px*cx);
+				coord.y = c.y+(py*cy);
+				map.moveToPercentage(zoom, coord, 500, 0);
+				thisObj._parent.updateOther(map, 500);
+			}
+		}
+	}
 	
 	/***********************************************************
 	 * Special getters / setters.... TODO: Still needed or implement in the other setters and getters?
@@ -101,7 +106,15 @@ class gui.tools.AbstractTool extends AbstractButton
 	 */
 	public function get listento():Array 
 	{
-		return this.toolGroup.listento;
+		if (this.toolGroup != null) {
+			return this.toolGroup.listento;
+		}else {
+			return this._listento;
+		}
+	}
+	
+	public function set listento(listenTo:Array):Void {
+		_listento = listenTo;
 	}
 	/**
 	 * Enable/disable (grayout) the tool
@@ -121,16 +134,18 @@ class gui.tools.AbstractTool extends AbstractButton
 	public function setActive(active:Boolean):Void {
 		//turn off
 		if (this.active && !active) {
-			flamingo.removeListener(this.lMap, this.listento, this.toolGroup);		
-			this.toolGroup.setCursor(undefined);
+			flamingo.removeListener(this.lMap, this.listento, this.listento);		
+			if (toolGroup!=null)
+				this.toolGroup.setCursor(undefined);
 			this.mcDown._visible = false;
 			this.mcOver._visible = false;
 			this.mcUp._visible = true;
 			//TODO: Set correct cursor this.setCursor(mc.cursors[cursorid]);
 		}//turn on
 		else if (!this.active && active) {
-			flamingo.addListener(this.lMap, this.listento, this.toolGroup);
-			this.toolGroup.setCursor(this.cursors[this.cursorId]);
+			flamingo.addListener(this.lMap, this.listento, this.listento);
+			if (toolGroup != null)
+				this.toolGroup.setCursor(this.cursors[this.cursorId]);
 			this.mcUp._visible = false;
 			this.mcOver._visible = false;
 			this.mcDown._visible = true;		

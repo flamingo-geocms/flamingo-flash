@@ -146,7 +146,7 @@ dynamic class gui.tools.ToolGroup extends AbstractPositionable
 		delete xmls;
 		//remove xml from repository
 		flamingo.deleteXML(this);
-		this.container._visible = this.visible;
+		this.container._visible = this.visible;		
 		flamingo.raiseEvent(this, "onInit", this.id);		
 	}
 	/**********************************************************************************
@@ -188,7 +188,13 @@ dynamic class gui.tools.ToolGroup extends AbstractPositionable
 			for (var i:Number = xTools.length-1; i>=0; i--) {
 				addComposite(xTools[i]);
 			}
-		}		
+			//deactivate the default tool on the map
+			if (this.listento != undefined) {
+				for (var i = 0; i < this.listento.length; i++){
+					flamingo.getComponent(this.listento[i]).activateDefaultTool(false);
+				}
+			}
+		}
 		flamingo.addListener(lMap, listento, this);
 		resize();
 		flamingo.position(this.container);

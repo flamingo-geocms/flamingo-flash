@@ -17,6 +17,7 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 -----------------------------------------------------------------------------*/
+import gui.tools.ToolDefault;
 import tools.Logger;
 import gui.marker.DefaultMarker;
 import gui.marker.FOVMarker;
@@ -134,6 +135,9 @@ class gui.Map extends AbstractPositionable implements PersistableComponent{
 	private var mAcetate:MovieClip;
 	//update time
 	private var startupdatetime:Date;
+	//default tool
+	private var _defaultTool:ToolDefault;
+	private var _useDefaultTool:Boolean = true;
 	
 	/**
 	 * Constructor for creating a Map component
@@ -231,9 +235,13 @@ class gui.Map extends AbstractPositionable implements PersistableComponent{
 				thisObj.moveToExtent(e, 0);
 			}
 			flamingo.deleteArgument(this, "extent");*/
+			
 		};
 		flamingo.addListener(lFlamingo, "flamingo", this);
-		//
+		if (this.useDefaultTool){
+			this.activateDefaultTool(true);
+		}
+		
 		//special listener for mousewheel
 		//TODO Still needed? Expensive....
 		var lMouse:Object = new Object();
@@ -352,6 +360,7 @@ class gui.Map extends AbstractPositionable implements PersistableComponent{
 		//flamingo.deleteXML(this);
 		this._visible = this.visible;
 		flamingo.raiseEvent(this, "onInit", this);
+		defaultTool.setActive(true);
 	}
 	
 	/**
@@ -369,8 +378,7 @@ class gui.Map extends AbstractPositionable implements PersistableComponent{
 		clearlayers = false;
 		//load default attributes, strings, styles and cursors 
 		flamingo.parseXML(this, xml);
-		this.parseCustomAttr(xml);
-		
+		this.parseCustomAttr(xml);		
 	}
 	/**
 	 * Parse custom attr for this object
@@ -2592,6 +2600,18 @@ class gui.Map extends AbstractPositionable implements PersistableComponent{
 			_global.flamingo.addListener (listener, componentId, this);
 		}
 	}
+	public function activateDefaultTool(activate:Boolean) {
+		useDefaultTool = activate;
+		if (activate) {
+			if (defaultTool == null){
+				defaultTool = new ToolDefault("theDefaulltTool", null, this.container);
+			}
+			flamingo.addListener(defaultTool, this, this);
+		}else {
+			if (defaultTool != null)
+				flamingo.removeListener(defaultTool, this.id, this);				
+		}		
+	}
 	/*********************** Getters and Setters ***********************/
 	public function get mBG():MovieClip {
 		return _mBG;
@@ -2607,6 +2627,22 @@ class gui.Map extends AbstractPositionable implements PersistableComponent{
 	
 	public function set mLayers(value:MovieClip):Void {
 		_mLayers = value;
+	}
+	public function get defaultTool():ToolDefault 
+	{
+		return _defaultTool;
+	}
+	public function set defaultTool(value:ToolDefault):Void 
+	{
+		_defaultTool = value;
+	}
+	public function get useDefaultTool():Boolean 
+	{
+		return _useDefaultTool;
+	}
+	public function set useDefaultTool(value:Boolean):Void 
+	{
+		_useDefaultTool = value;
 	}
 	/*********************** Events ***********************/
 	/** 
