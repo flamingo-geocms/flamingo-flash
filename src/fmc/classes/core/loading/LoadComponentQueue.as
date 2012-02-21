@@ -43,6 +43,8 @@ class core.loading.LoadComponentQueue{
 	public function onLoadComponent(mc):Void {			
 		var tokens:Array = mc._name.split(".");
 		var mcId = tokens[tokens.length - 1];		
+		if (mcId == undefined)
+			mcId = mc.id;		
 		if (queue[mcId] != undefined) {
 			var execArray:Array = queue[mcId];
 			while (execArray.length > 0) {				

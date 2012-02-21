@@ -190,14 +190,24 @@ dynamic class gui.tools.ToolGroup extends AbstractPositionable
 			}
 			//deactivate the default tool on the map
 			if (this.listento != undefined) {
-				for (var i = 0; i < this.listento.length; i++){
-					flamingo.getComponent(this.listento[i]).activateDefaultTool(false);
+				for (var i = 0; i < this.listento.length; i++) {
+					if (!_global.flamingo.isLoaded(listento[i])) {
+						_global.flamingo.loadCompQueue.executeAfterLoad(listento[i], this, deactivateDefaultTool);
+					}else {
+						_global.flamingo.getComponent(this.listento[i]).activateDefaultTool(false)
+					}
+					
 				}
 			}
 		}
 		flamingo.addListener(lMap, listento, this);
 		resize();
 		flamingo.position(this.container);
+	}
+	function deactivateDefaultTool():Void {
+		for (var i = 0; i < this.listento.length; i++) {
+			_global.flamingo.getComponent(this.listento[i]).activateDefaultTool(false);
+		}
 	}
 	/** 
 	* Load the part of the xml in flamingo

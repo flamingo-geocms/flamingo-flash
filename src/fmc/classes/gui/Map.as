@@ -2600,9 +2600,9 @@ class gui.Map extends AbstractPositionable implements PersistableComponent{
 			_global.flamingo.addListener (listener, componentId, this);
 		}
 	}
-	public function activateDefaultTool(activate:Boolean) {
-		useDefaultTool = activate;
-		if (activate) {
+	public function activateDefaultTool(act:Boolean) {
+		useDefaultTool = act;
+		if (act) {
 			if (defaultTool == null){
 				defaultTool = new ToolDefault("theDefaulltTool", null, this.container);
 			}
