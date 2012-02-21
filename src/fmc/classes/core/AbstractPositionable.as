@@ -95,7 +95,7 @@ class core.AbstractPositionable extends AbstractListenerRegister
 		
 		//init vars
 		this.cursorId = "cursor";
-		this.loaded = true;
+		this._loaded = true;
 		this.visible = true;
 		this.strings = new Object();
 		this.cursors = new Object();

@@ -78,7 +78,7 @@ class gui.tools.ToolDefault extends AbstractTool{
 		
 		this.defaultXML = "<?xml version='1.0' encoding='UTF-8'?>" +
 						"<ToolDefault>" +
-						"<string id='tooltip' nl='kaartbeeld slepen' en='pan'/>" +
+						"<string id='tooltip' nl='Pan(slepen),zoom(dubbel klik) en identify(enkel klik)' en='Pan(drag),zoom(dubble click) and identify (single click)'/>" +
 				        "<cursor id='busy' url='fmc/CursorsMap.swf' linkageid='busy'/>" +
 				        "<cursor id='default'/>" +
 				        "<cursor id='grab' url='fmc/CursorsMap.swf' linkageid='grab_wrinkle'/>" +

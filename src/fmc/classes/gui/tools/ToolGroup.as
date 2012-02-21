@@ -187,24 +187,27 @@ dynamic class gui.tools.ToolGroup extends AbstractPositionable
 		if (xTools.length>0) {
 			for (var i:Number = xTools.length-1; i>=0; i--) {
 				addComposite(xTools[i]);
-			}
-			//deactivate the default tool on the map
-			if (this.listento != undefined) {
-				for (var i = 0; i < this.listento.length; i++) {
-					if (!_global.flamingo.isLoaded(listento[i])) {
-						_global.flamingo.loadCompQueue.executeAfterLoad(listento[i], this, deactivateDefaultTool);
-					}else {
-						_global.flamingo.getComponent(this.listento[i]).activateDefaultTool(false)
-					}
-					
-				}
-			}
+			}			
 		}
+		//deactivate the default tool on the map
+		deactivateDefaultTool();
 		flamingo.addListener(lMap, listento, this);
 		resize();
 		flamingo.position(this.container);
 	}
 	function deactivateDefaultTool():Void {
+		if (this.listento != undefined) {
+			for (var i = 0; i < this.listento.length; i++) {
+				if (!_global.flamingo.isLoaded(this.listento[i])) {
+					_global.flamingo.loadCompQueue.executeAfterLoad(this.listento[i], this, deactivateDefaultToolAfterLoad);
+				}else {
+					_global.flamingo.getComponent(this.listento[i]).activateDefaultTool(false)
+				}
+				
+			}
+		}
+	}
+	function deactivateDefaultToolAfterLoad():Void {
 		for (var i = 0; i < this.listento.length; i++) {
 			_global.flamingo.getComponent(this.listento[i]).activateDefaultTool(false);
 		}
@@ -382,6 +385,7 @@ dynamic class gui.tools.ToolGroup extends AbstractPositionable
 	* @param toolid:String Id of tool that has to be set.
 	*/
 	function setTool(toolid:String):Void {
+		deactivateDefaultTool();
 		if (toolid == undefined) {
 			return;
 		}
