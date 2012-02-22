@@ -322,17 +322,7 @@ class gui.layers.OGCWMSLayer extends AbstractLayer{
 				styles = val;			
 				break;
 			case "maptip_layers" :
-				this.canmaptip = true;
-				if (val.toUpperCase() == "#ALL#") {
-					val = "#ALL#";
-				}
-				var lyrs:Array = new Array();
-				lyrs = val.split(",");
-				this.maptip_layers  = "";
-				for (var n:Number=0;n<lyrs.length;n++){
-					this.maptip_layers  += trim(lyrs[n]) + ",";
-				}
-				this.maptip_layers  = this.maptip_layers.substr(0,maptip_layers.length - 1);			
+				this.setMaptipLayers(val);						
 				break;
 			case "query_layers" :
 				if (val.toUpperCase() == "#ALL#") {
@@ -1372,6 +1362,23 @@ class gui.layers.OGCWMSLayer extends AbstractLayer{
 			a.push(id);
 		}
 		return a;
+	}
+	/**
+	 * Set the maptiplayers 
+	 * @param	val a comma seperated list
+	 */
+	function setMaptipLayers(val) {
+		this.canmaptip = true;
+		if (val.toUpperCase() == "#ALL#") {
+			val = "#ALL#";
+		}
+		var lyrs:Array = new Array();
+		lyrs = val.split(",");
+		this.maptip_layers  = "";
+		for (var n:Number=0;n<lyrs.length;n++){
+			this.maptip_layers  += trim(lyrs[n]) + ",";
+		}
+		this.maptip_layers  = this.maptip_layers.substr(0, maptip_layers.length - 1);
 	}
 	/** 
 	* Moves the map to a scale where the (map)layer is visible.
