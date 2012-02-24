@@ -278,7 +278,7 @@ class gui.Map extends AbstractPositionable implements PersistableComponent{
 					var coord = thisObj.point2Coordinate( { x:x, y:y } );
 					thisObj.flamingo.raiseEvent(thisObj, "onMouseMove", thisObj, x, y, coord);
 					// the following is for maptips
-					if (thisObj.maptipdelay>0) {
+					if (thisObj.maptipdelay > 0) {
 						if (!this.md) {
 							if (!thisObj.moving) {
 								if (Math.abs(thisObj.maptipcoord.x-x)>thisObj.maptipresolution || Math.abs(thisObj.maptipcoord.y-y)>thisObj.maptipresolution) {
@@ -2643,6 +2643,13 @@ class gui.Map extends AbstractPositionable implements PersistableComponent{
 	public function set useDefaultTool(value:Boolean):Void 
 	{
 		_useDefaultTool = value;
+	}
+	
+	public function setMaptipdelay(value:Number) {
+		this.maptipdelay = value;
+	}
+	public function getMaptipdelay():Number {
+		return this.maptipdelay;
 	}
 	/*********************** Events ***********************/
 	/** 

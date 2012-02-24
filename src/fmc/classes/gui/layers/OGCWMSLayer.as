@@ -983,13 +983,15 @@ class gui.layers.OGCWMSLayer extends AbstractLayer{
 		lConn.onGetFeatureInfo = function(features:Object, obj:Object, requestid:String) {
 			if (thisObj.showmaptip) {
 				if (thisObj.map.isEqualExtent(thisObj.maptipextent, obj)) {
+					//raise a maptip event with the raw data
+					_global.flamingo.raiseEvent(thisObj, "onMaptipData", thisObj, features, obj);
 					var combinedMaptip="";
 					for (var layer in features) {
 						var id = thisObj.aka[layer];
 						if (id == undefined) {
 							id = layer;
 						}
-				
+						
 						var maptip = thisObj._getString(thisObj.layers[id], "maptip");
 						
 						if (maptip.length>0) {
@@ -1005,7 +1007,7 @@ class gui.layers.OGCWMSLayer extends AbstractLayer{
 							combinedMaptip+=maptip;
 						}
 					}
-					_global.flamingo.raiseEvent(thisObj, "onMaptipData", thisObj, combinedMaptip);				
+					_global.flamingo.raiseEvent(thisObj, "onMaptipMarkedUpData", thisObj, combinedMaptip);				
 				}
 			}
 		};
@@ -1674,9 +1676,17 @@ class gui.layers.OGCWMSLayer extends AbstractLayer{
 	/**
 	* Dispatched when a layer has data for a maptip.
 	* @param layer:MovieClip A reference to the layer.
-	* @param maptip:String  the maptip
+	* @param data:Object data object with the information 
+	* @param identifyextent:Object the original extent that is identified 
 	*/
-	//public function onMaptipData(layer:MovieClip, maptip:String):Void {
+	//public function onMaptipData(layer:MovieClip, data:Object,identifyextent:Object):Void {}
+	//
+	/**
+	* Dispatched when a layer has data for a maptip.
+	* @param layer:MovieClip A reference to the layer.
+	* @param maptip:String  the maptip that is marked up like configured.
+	*/
+	//public function onMaptipMarkedUpData(layer:MovieClip, maptip:String):Void {}
 	//
 		
 	/*Getters and setters*/	

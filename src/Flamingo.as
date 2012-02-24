@@ -65,7 +65,7 @@ import display.spriteloader.SpriteMapFactory;
 import core.loading.LoadComponentQueue;
 
 class Flamingo {
-	private var version:String = "4.0_r1727";
+	private var version:String = "4.0_r1765";
 	//reference to main movie from which this class is loaded
 	//at the main movie the components are loaded at 'moviedepth'--  ;moviedepth starts by 10000
 	//at the main movie a cursor movie is loaded at depth 50005
@@ -2577,6 +2577,31 @@ class Flamingo {
 		return allowExternalInterface;
 	}
 	/**
+	 * Add the items in the comma seperated list as allowed to do external calls.
+	 * @param	commaSeperatedString
+	 */
+	public function addAllowExternalInterface(commaSeperatedString:String) {
+		if (this.allowExternalInterface == undefined) {
+			this.allowExternalInterface = new Array();
+		}
+		var addArray:Array = commaSeperatedString.split(",");
+		for (var i = 0; i < addArray.length; i++) {
+			var found = false;
+			for (var f = 0; f < this.allowExternalInterface.length; f++) {
+				if (addArray[i] == this.allowExternalInterface[f]) {
+					found = true;
+					break;
+				}
+			}
+			if (!found) {
+				Logger.console("Add the event: "+addArray[i]);
+				this.allowExternalInterface.push(addArray[i]);
+			}else {
+				Logger.console("dont Add the event: "+addArray[i]);
+			}
+		}
+	}
+	/**
 	* Set the denyExternalInterface param
 	* @param commaSeperatedString: a commasperated string with component/component.events
 	*/
@@ -2588,6 +2613,28 @@ class Flamingo {
 	*/
 	public function getDenyExternalInterface():Array{
 		return this.denyExternalInterface;
+	}
+	/**
+	 * Add the items in the comma seperated list as deny to do external calls.
+	 * @param	commaSeperatedString
+	 */
+	public function addDenyExternalInterface(commaSeperatedString:String) {
+		if (this.denyExternalInterface == undefined) {
+			this.denyExternalInterface = new Array();
+		}
+		var addArray:Array = commaSeperatedString.split(",");
+		for (var i = 0; i < addArray.length; i++) {
+			var found = false;
+			for (var f = 0; f < this.denyExternalInterface.length; f++) {
+				if (addArray[i] == this.denyExternalInterface[f]) {
+					found = true;
+					break;
+				}
+			}
+			if (!found) {
+				this.denyExternalInterface.push(addArray[i]);
+			}
+		}
 	}
 	/** 
 	* Fires an event for a component.

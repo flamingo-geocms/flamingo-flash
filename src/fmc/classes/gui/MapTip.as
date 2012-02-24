@@ -98,7 +98,7 @@ class gui.MapTip extends AbstractPositionable {
 			thisObj.flamingo.hideTooltip();
 		}
 		
-		lLayer.onMaptipData = function(layer:MovieClip, maptip:String){
+		lLayer.onMaptipMarkedUpData = function(layer:MovieClip, maptip:String){
 			thisObj.flamingo.showTooltip(maptip, layer.map, 0, false);
 		}
 		if (listento!=undefined){

@@ -1429,7 +1429,7 @@ class gui.layers.ArcServerLayer extends AbstractLayer{
 							}
 						}
 						if (maptip.length>=0) {
-							thisObj.flamingo.raiseEvent(thisObj, "onMaptipData", thisObj, maptip);
+							thisObj.flamingo.raiseEvent(thisObj, "onMaptipMarkedUpData", thisObj, maptip);
 						}
 					}
 				}
@@ -1573,7 +1573,7 @@ class gui.layers.ArcServerLayer extends AbstractLayer{
 					var maptip = thisObj._getString(thisObj.layers[layerid], "maptip");
 					maptip = thisObj._makeMaptip(layerid, maptip, data[0]);
 					if (maptip.length>=0) {
-						thisObj.flamingo.raiseEvent(thisObj, "onMaptipData", thisObj, maptip);
+						thisObj.flamingo.raiseEvent(thisObj, "onMaptipMarkedUpData", thisObj, maptip);
 						if (!thisObj.maptipall) {
 							return;
 						}
@@ -1589,11 +1589,14 @@ class gui.layers.ArcServerLayer extends AbstractLayer{
 				if (count>0) {
 					if (thisObj.maptipcoordinate.x == objecttag.x and thisObj.maptipcoordinate.y == objecttag.y) {
 						//Does not exists
-						//thisObj._completeWithMydata(layerid, data);
+						//thisObj._completeWithMydata(layerid, data);		
+						var features = new Object();
+						features[layerid] = data;
+						_global.flamingo.raiseEvent(thisObj, "onMaptipData", thisObj, features, objecttag);
 						var maptip = thisObj._getString(thisObj.layers[layerid], "maptip");
 						maptip = thisObj._makeMaptip(layerid, maptip, data[0]);
 						if (maptip.length>=0) {
-							thisObj.flamingo.raiseEvent(thisObj, "onMaptipData", thisObj, maptip);
+							thisObj.flamingo.raiseEvent(thisObj, "onMaptipMarkedUpData", thisObj, maptip);
 							if (!thisObj.maptipall) {
 								return;
 							}
@@ -1887,9 +1890,16 @@ class gui.layers.ArcServerLayer extends AbstractLayer{
 	/**
 	* Dispatched when a layer has data for a maptip.
 	* @param layer:MovieClip A reference to the layer.
+	* @param data:Object data object with the information 
+	* @param identifyextent:Object the original extent that is identified 
+	*/
+	//public function onMaptipData(layer:MovieClip, data:Object,identifyextent:Object):Void {}
+	/**
+	* Dispatched when a layer has data for a maptip.
+	* @param layer:MovieClip A reference to the layer.
 	* @param maptip:String  the maptip
 	*/
-	//public function onMaptipData(layer:MovieClip, maptip:String):Void {
+	//public function onMaptipMarkedUpData(layer:MovieClip, maptip:String):Void {
 	//
 
 	
