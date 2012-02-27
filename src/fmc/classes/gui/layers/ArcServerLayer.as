@@ -1397,8 +1397,8 @@ class gui.layers.ArcServerLayer extends AbstractLayer{
 		var lConn = new Object();
 		lConn.onGetFeatures = function(layerid:String, data:Array, count:Number, hasmore:Boolean, objecttag:Object) {
 			if (thisObj.showmaptip) {
-				if (count>0) {
-					if (thisObj.map.isEqualExtent(thisObj.maptipextent, objecttag)) {
+				if (count > 0) {
+					if (thisObj.map.isEqualExtent(thisObj.maptipextent, objecttag)) {						
 						var maptip = thisObj._getString(thisObj.layers[layerid], "maptip");
 						if (maptip.length == 0) {
 							for (var field in data[0]) {
@@ -1428,7 +1428,7 @@ class gui.layers.ArcServerLayer extends AbstractLayer{
 								}
 							}
 						}
-						if (maptip.length>=0) {
+						if (maptip.length >= 0) {
 							thisObj.flamingo.raiseEvent(thisObj, "onMaptipMarkedUpData", thisObj, maptip);
 						}
 					}
@@ -1454,6 +1454,7 @@ class gui.layers.ArcServerLayer extends AbstractLayer{
 		}
 		//No geometry needed for maptip
 		conn.includeGeometry = false;
+					
 		conn.getFeatures(mapservice, layeridString, maptipextent, maptipfields, query, this.map.copyExtent(this.maptipextent));
 	}
 	//custom functions 
@@ -1587,7 +1588,7 @@ class gui.layers.ArcServerLayer extends AbstractLayer{
 		lConn.onGetFeatures = function(layerid:String, data:Array, count:Number, hasmore:Boolean, objecttag:Object) {
 			if (thisObj.showmaptip) {
 				if (count>0) {
-					if (thisObj.maptipcoordinate.x == objecttag.x and thisObj.maptipcoordinate.y == objecttag.y) {
+					if (thisObj.maptipcoordinate.x == objecttag.x && thisObj.maptipcoordinate.y == objecttag.y) {
 						//Does not exists
 						//thisObj._completeWithMydata(layerid, data);		
 						var features = new Object();
@@ -1625,7 +1626,6 @@ class gui.layers.ArcServerLayer extends AbstractLayer{
 			thisObj._maptipXY(x, y);
 			return;
 		}
-
 		switch (layers[layerid].type) {
 		case "Feature Layer" :
 			var query:String = layers[layerid].query;
@@ -1634,14 +1634,6 @@ class gui.layers.ArcServerLayer extends AbstractLayer{
 			if (_maptipdistance == undefined) {
 				_maptipdistance = this.maptipdistance;
 			}
-			var _maptipextent = new Object();
-			var w = map.getScale()*_maptipdistance;
-			var h = map.getScale()*_maptipdistance;
-			_maptipextent.minx = x-(w/2);
-			_maptipextent.miny = y-(h/2);
-			_maptipextent.maxx = _maptipextent.minx+w;
-			_maptipextent.maxy = _maptipextent.miny+h;
-
 			//add escapes
 				for(var i in layers)
 			{
@@ -1650,7 +1642,7 @@ class gui.layers.ArcServerLayer extends AbstractLayer{
 			}
 			//No geometry needed for maptip
 			conn.includeGeometry = false;
-			conn.getFeatures(mapservice, layerid, _maptipextent, flds, query, {x:x, y:y});
+			conn.getFeatures(mapservice, layerid, this.maptipextent, flds, query, {x:x, y:y});
 			break;
 		case "image" :
 	//		conn.getRasterInfo(mapservice, layerid, {x:x, y:y}, layers[layerid].coordsys, {x:x, y:y});
