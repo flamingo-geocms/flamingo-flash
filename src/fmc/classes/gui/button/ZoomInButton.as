@@ -21,6 +21,7 @@ import gui.ZoomerV;
 import tools.Logger;
 import gui.button.AbstractButton;
 import display.spriteloader.SpriteSettings;
+import gui.Map;
 
 /**
  * Zoomin button for ZoomerV component
@@ -56,20 +57,16 @@ class gui.button.ZoomInButton extends AbstractButton
 	}
 	
 	/************* event handlers **************/
-	public function onPress()
-	{
-		zoomerV.cancelUpdate();
-		_zoomid = setInterval(zoomerV, "_zoom", 10, map, 105);
-	}
-	
 	public function onRelease()
 	{
-		clearInterval(_zoomid);
+		zoomerV.cancelUpdate();
+		//_zoomid = setInterval(zoomerV, "_zoom", 10, map, 105);
+		zoomerV._zoom(map, 105);
+		//clearInterval(_zoomid);
 		this.zoomerV.updateMaps();
 	}
 	
-	public function onReleaseOutside()
-	{
+	public function onReleaseOutside(){
 		clearInterval(_zoomid);
 		this.zoomerV.updateMaps();
 	}
@@ -84,7 +81,7 @@ class gui.button.ZoomInButton extends AbstractButton
 	}
 	
 	/*********************** Getters and Setters ***********************/
-	public function get map():Object
+	public function get map():Map
 	{
 		return flamingo.getComponent(this.zoomerV.listento[0]);
 	}

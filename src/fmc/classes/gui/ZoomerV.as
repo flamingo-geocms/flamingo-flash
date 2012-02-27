@@ -28,6 +28,7 @@ import display.spriteloader.SpriteSettings;
 import display.spriteloader.event.SpriteMapEvent;
 import display.spriteloader.SpriteMap;
 import core.AbstractPositionable;
+import gui.Map;
 
 /** @component ZoomerV
  * A vertical zoombar.
@@ -207,6 +208,10 @@ class gui.ZoomerV  extends AbstractPositionable{
 	 */
 	function resize() {
 		var r = flamingo.getPosition(this);
+		//if width is NaN then make default: SpriteSettings.sliderSize		
+		if (isNaN(r.width)) {
+			r.width = SpriteSettings.sliderSize;
+		}
 		zoomIn._width = r.width;
 		zoomIn._height = r.width;
 		zoomIn.move(r.x, r.y);		
@@ -230,7 +235,7 @@ class gui.ZoomerV  extends AbstractPositionable{
 	 * @param	perc percentage of zooming.
 	 * @see 	gui.Map#moveToPercentage
 	 */
-	function _zoom(map:MovieClip, perc:Number) {
+	function _zoom(map:Map, perc:Number) {
 		if (map.getScale() == 0) {
 			if (perc>100) {
 				clearInterval(_zoomid);
@@ -240,6 +245,7 @@ class gui.ZoomerV  extends AbstractPositionable{
 				//zoomout
 			}
 		}
+		Logger.console("Zoomerv move to percentage: "+perc);
 		map.moveToPercentage(perc, undefined, -1, 0);
 	}
 	

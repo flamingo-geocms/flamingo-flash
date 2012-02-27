@@ -21,6 +21,7 @@ import gui.ZoomerV;
 import tools.Logger;
 import gui.button.AbstractButton;
 import display.spriteloader.SpriteSettings;
+import gui.Map;
 
 /**
  * Zoomout Button that is used in the ZoomerV component
@@ -54,16 +55,12 @@ class gui.button.ZoomOutButton extends AbstractButton
 		return this.zoomerV;
 	}
 	/************* event handlers **************/
-	public function onPress()
-	{
+	public function onRelease()	{
 		zoomerV.cancelUpdate();
-		_zoomid = setInterval(zoomerV, "_zoom", 10, map, 95);
-	}
-	
-	public function onRelease()
-	{
-		clearInterval(_zoomid);
-		zoomerV.updateMaps();
+		//_zoomid = setInterval(zoomerV, "_zoom", 10, map, 105);
+		zoomerV._zoom(map, 95);
+		//clearInterval(_zoomid);
+		this.zoomerV.updateMaps();		
 	}
 	
 	public function onReleaseOutside()
@@ -81,7 +78,7 @@ class gui.button.ZoomOutButton extends AbstractButton
 		//don't do anything on resize. The parent is positioning this object.
 	}
 	/*********************** Getters and Setters ***********************/
-	public function get map():Object
+	public function get map():Map
 	{
 		return flamingo.getComponent(this.zoomerV.listento[0]);
 	}
