@@ -525,9 +525,7 @@ class gui.layers.ArcIMSLayer extends AbstractLayer{
 			}
 			break;
 		case "maptipids" :
-			this.canmaptip = true;
-			setLayerProperty(val, "maptipable", true);
-			this.maptipids = val;
+			this.setMaptipLayers(val);
 			break;		
 		case "colorids" :
 			this.colorIds= val;						
@@ -1731,11 +1729,9 @@ class gui.layers.ArcIMSLayer extends AbstractLayer{
 				var id = a_ids[i];
 				//don't check for initialized because maybe the getServiceInfo is not done.
 				if (layers[id] == undefined /*&& !initialized*/) {
-					layers[id] = new Object();
-					layers[id][field] = value;
-				} else {
-					layers[id][field] = value;
-				}
+					layers[id] = new Object();					
+				} 
+				layers[id][field] = value;
 			}
 		}
 		flamingo.raiseEvent(this, "onSetLayerProperty", this, ids, field);
@@ -1989,7 +1985,7 @@ class gui.layers.ArcIMSLayer extends AbstractLayer{
 	 * @param	x x coord
 	 * @param	y y coord
 	 */
-	function startMaptip(x:Number, y:Number) {
+	function startMaptip(x:Number, y:Number) {	
 		this._maptiplayers = new Array();
 		this.maptipcoordinate = new Object();
 		if (!this.canmaptip) {
@@ -1998,7 +1994,7 @@ class gui.layers.ArcIMSLayer extends AbstractLayer{
 		if (!this.initialized) {
 			return;
 		}
-		if (maptipids.length<=0) {
+		if (maptipids.length <= 0) {
 			return;
 		}
 		if (!visible || !_visible) {
@@ -2011,10 +2007,10 @@ class gui.layers.ArcIMSLayer extends AbstractLayer{
 			return;
 		}
 		if (this.fullextent != undefined) {
-			if (!this.map.isHit({x:x, y:y}, this.fullextent)) {
+			if (!this.map.isHit( { x:x, y:y }, this.fullextent)) {				
 				return;
 			}
-		}
+		}				
 		this.maptipcoordinate.x = x;
 		this.maptipcoordinate.y = y;
 		this.showmaptip = true;
@@ -2106,10 +2102,10 @@ class gui.layers.ArcIMSLayer extends AbstractLayer{
 		conn.featurelimit = 1;
 		
 		var maptip = _getString(layers[layerid], "maptip");
-		var maptipfields = _getMaptipFields(layerid, maptip);
-		if (maptipfields == undefined || maptipfields.length == 0) {
-			thisObj._maptip(x, y);
-			return;
+		var maptipfields = _getMaptipFields(layerid, maptip);		
+		// if the type of the layer is unknown, make it the default. This can occur when there is no getcap done.
+		if (layers[layerid].type == undefined) {
+			layers[layerid].type = "featureclass";
 		}
 		switch (layers[layerid].type) {
 		case "featureclass" :
@@ -2129,7 +2125,6 @@ class gui.layers.ArcIMSLayer extends AbstractLayer{
 			_maptipextent.miny = tempy-(h/2);
 			_maptipextent.maxx = _maptipextent.minx+w;
 			_maptipextent.maxy = _maptipextent.miny + h;
-		
 			conn.getFeatures(mapservice, layerid, _maptipextent, flds, query, {x:x, y:y});
 			break;
 		case "image" :
@@ -2234,6 +2229,15 @@ class gui.layers.ArcIMSLayer extends AbstractLayer{
 		} else {
 			return "";
 		}
+	}
+	/**
+	 * Set the maptip layers with a comma seperated string
+	 */
+	function setMaptipLayers(val) {
+		this.canmaptip = true;
+		this.setLayerProperty(val, "maptipable", true);
+		this.setLayerProperty(val, "queryable", true);		
+		this.maptipids = val;
 	}
 	/**
 	* Sets (overwrites) the recorded (object that needs to be colored) of this layer

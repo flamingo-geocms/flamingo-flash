@@ -984,6 +984,8 @@ class gui.layers.OGCWMSLayer extends AbstractLayer{
 			if (thisObj.showmaptip) {
 				if (thisObj.map.isEqualExtent(thisObj.maptipextent, obj)) {
 					//raise a maptip event with the raw data
+					obj.x = x;
+					obj.y = y;
 					_global.flamingo.raiseEvent(thisObj, "onMaptipData", thisObj, features, obj);
 					var combinedMaptip="";
 					for (var layer in features) {

@@ -2594,10 +2594,7 @@ class Flamingo {
 				}
 			}
 			if (!found) {
-				Logger.console("Add the event: "+addArray[i]);
 				this.allowExternalInterface.push(addArray[i]);
-			}else {
-				Logger.console("dont Add the event: "+addArray[i]);
 			}
 		}
 	}
