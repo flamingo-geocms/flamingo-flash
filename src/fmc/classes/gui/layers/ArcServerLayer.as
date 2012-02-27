@@ -1640,9 +1640,20 @@ class gui.layers.ArcServerLayer extends AbstractLayer{
 				query = searchAndReplace(query, "<", "&lt;");
 				query = searchAndReplace(query, ">", "&gt;");
 			}
+			var _maptipextent = new Object();
+			var w = map.getScale()*_maptipdistance;
+			var h = map.getScale() * _maptipdistance;
+			var coord = map.point2Coordinate( { x:x, y:y } );
+			var tempX = coord.x;
+			var tempy = coord.y;
+			_maptipextent.minx = tempX-(w/2);
+			_maptipextent.miny = tempy-(h/2);
+			_maptipextent.maxx = _maptipextent.minx+w;
+			_maptipextent.maxy = _maptipextent.miny + h;
+			
 			//No geometry needed for maptip
 			conn.includeGeometry = false;
-			conn.getFeatures(mapservice, layerid, this.maptipextent, flds, query, {x:x, y:y});
+			conn.getFeatures(mapservice, layerid, _maptipextent, flds, query, {x:x, y:y});
 			break;
 		case "image" :
 	//		conn.getRasterInfo(mapservice, layerid, {x:x, y:y}, layers[layerid].coordsys, {x:x, y:y});
