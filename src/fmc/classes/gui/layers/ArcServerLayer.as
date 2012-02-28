@@ -381,9 +381,7 @@ class gui.layers.ArcServerLayer extends AbstractLayer{
 			this.forceidentifyids = val;
 			break;
 		case "maptipids" :
-			this.canmaptip = true;
-			setLayerProperty(val, "maptip", true);
-			this.maptipids = val;
+			this.setMaptipLayers(val);			
 			break;
 		case "dataframe" :
 			dataframe = val;
@@ -1622,10 +1620,6 @@ class gui.layers.ArcServerLayer extends AbstractLayer{
 
 		var maptipfields = _getMaptipFields(layerid, maptip);
 		
-		if (maptipfields == undefined || maptipfields.length == 0) {
-			thisObj._maptipXY(x, y);
-			return;
-		}
 		switch (layers[layerid].type) {
 		case "Feature Layer" :
 			var query:String = layers[layerid].query;
@@ -1747,6 +1741,15 @@ class gui.layers.ArcServerLayer extends AbstractLayer{
 		} else {
 			return "";
 		}
+	}
+	/**
+	 * Set the maptip layers with a comma seperated string
+	 */
+	function setMaptipLayers(val) {
+		this.canmaptip = true;
+		this.setLayerProperty(val, "maptipable", true);
+		this.setLayerProperty(val, "queryable", true);		
+		this.maptipids = val;
 	}
 	//added
 	function setMapservice(new_mapservice:String, new_dataframe:String):Void
