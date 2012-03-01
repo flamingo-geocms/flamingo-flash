@@ -245,7 +245,6 @@ class gui.ZoomerV  extends AbstractPositionable{
 				//zoomout
 			}
 		}
-		Logger.console("Zoomerv move to percentage: "+perc);
 		map.moveToPercentage(perc, undefined, -1, 0);
 	}
 	

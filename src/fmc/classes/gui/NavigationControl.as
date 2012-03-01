@@ -142,7 +142,7 @@ class gui.NavigationControl extends AbstractConfigurable
 	function resize(){		
 		super.resize();
 		//flamingo.position(this);
-		Logger.console("parent: "+this.parent);
+		//Logger.console("parent: "+this.parent);
 		var r = flamingo.getPosition(this,this.parent);			
 		this.container._x = r.x;
 		this.container._y = r.y;
