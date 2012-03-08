@@ -20,7 +20,7 @@
 		<fmc:BorderNavigation listento="map" top="0%" width="100%" height="100%" skin="f1"/>
 		<fmc:Map id="map" left="0" top="0%" height="100%" width="100%" bottom="bottom" visible="true" extent="12000,304000,280000,620000" maptipdelay="200" fullextent="12000,304000,280000,620000" zoomscalefactor="3" minscale="0.16666666669999999" extenthistory="10">
 			<fmc:LayerIdentifyIcon id="identifyicon"/>
-			<fmc:LayerArcIMS id="avo"  name="atlasoverijssel" timeout="50" server="gisopenbaar.toverijs3.nl" servlet="GeoJuli2008/ims" mapservice="atlasoverijssel" visible="true" hiddenids="" visibleids="watschap_ned_polygon" identifyall="true" identifyids="watschap_ned_polygon" maptipids="watschap_ned_polygon" legend="false" hidelegendids="" backgroundcolor="#fbfbfb" transcolor="#fbfbfb" alpha="85" fullextent="160000,457560,287864,543013" identifydistance="20" maptipdistance="20">
+			<fmc:LayerArcIMS id="avo"  name="atlasoverijssel" timeout="50" server="gisopenbaar.overijssel.nl" servlet="GeoJuli2008/ims" mapservice="atlasoverijssel" visible="true" hiddenids="" visibleids="watschap_ned_polygon" identifyall="true" identifyids="watschap_ned_polygon" maptipids="watschap_ned_polygon" legend="false" hidelegendids="" backgroundcolor="#fbfbfb" transcolor="#fbfbfb" alpha="85" fullextent="160000,457560,287864,543013" identifydistance="20" maptipdistance="20">
 				<layer id="watschap_ned_polygon" maptipfields="TYPE,NAAM" maptip="[TYPE]: [NAAM]"/>
 
 			</fmc:LayerArcIMS>

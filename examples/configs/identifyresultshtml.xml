@@ -3,11 +3,11 @@
 	<!-- printwindow -->
 
 	
-	<fmc:ToolGroup listento="map" left="225" top="0" tool="zoom">
+	<fmc:ToolGroup listento="map" left="225" top="0" tool="tid">
 		<fmc:ToolZoomin id="zoom" left="0" zoomdelay="0" clickdelay="0" skin="f1"/>
 		<fmc:ToolZoomout left="30" zoomdelay="0" clickdelay="0" skin="f1"/>
 		<fmc:ToolPan left="60" clickdelay="0" pandelay="0" skin="f1"/>
-		<fmc:ToolIdentify left="90" clickdelay="0" pandelay="0" skin="f1"/>
+		<fmc:ToolIdentify id="tid" left="90" clickdelay="0" pandelay="0" skin="f1"/>
 		<fmc:ToolMeasure left="120" units=" m" magicnumber="1" decimals="0" skin="f1"/>
 		<fmc:PrintButton left="155" top="2" listento="print" visible="true">
 			<string id="tooltip" nl="printvenster openen/ sluiten" en="open/ close the print window" de="Schritt weiter" fr="Suivant"/>

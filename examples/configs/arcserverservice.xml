@@ -25,7 +25,8 @@
 				<layer id="0" maptipfields="CARNAVALSNAAM">
 					<string id="maptip" nl="[CARNAVALSNAAM]" en="Municipality [GEMEENTE]" de="Gemeinde [GEMEENTE]" fr="Commune [GEMEENTE]"/>
 				</layer>
-			</fmc:LayerArcServer>			
+			</fmc:LayerArcServer>
+			<fmc:LayerArcServer id="b0" timeout="30" showerrors="true"  visibleids="0" esriArcServerVersion="9.3" dataframe="layers" name="0" server="http://gisopenbaar.toverijs3.nl" mapservice="VenB/vergunningen_bekendmakingen"></fmc:LayerArcServer>
 		</fmc:Map>
 	</fmc:Container>
 </FLAMINGO>
