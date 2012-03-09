@@ -205,8 +205,8 @@ class gui.NavigationControl extends AbstractConfigurable
 		//button full extent
 		buttonFull.top = "" +(y + buttonSize);
 		buttonFull.left = "" +(x + buttonSize);
-		buttonFull.width = "" +buttonSize;
-		buttonFull.height = "" +buttonSize;
+		buttonFull.width =  buttonSize;
+		buttonFull.height = buttonSize;
 		buttonFull.resize();
 		//set zoomer background
 		zoomerBackground._x = x+buttonSize;
