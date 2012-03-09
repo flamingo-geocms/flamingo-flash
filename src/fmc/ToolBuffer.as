@@ -111,6 +111,9 @@ init();
 * @attr boundarywidth (default value="1") the width of the border of the buffer
 */
 
+/**
+ * This tag defines a tool for buffering features in a map. 
+ */
 function init() {
 	if (flamingo == undefined) {
 		var t:TextField = this.createTextField("readme", 0, 0, 0, 550, 400);
@@ -144,7 +147,7 @@ function init() {
 
 /**
 * Configurates a component by setting a xml.
-* @attr xml:Object Xml or string representation of a xml.
+* @param xml:Object Xml or string representation of a xml.
 */
 function setConfig(xml:Object) {
 	if (typeof (xml) == "string") {
@@ -187,6 +190,16 @@ function setConfig(xml:Object) {
 	flamingo.position(this);
 }
 
+/**
+ * initTool
+ * @param	uplink
+ * @param	overlink
+ * @param	downlink
+ * @param	hitlink
+ * @param	maplistener
+ * @param	cursorid
+ * @param	tooltipid
+ */
 function initTool( uplink:String, overlink:String, downlink:String, hitlink:String, maplistener:Object, cursorid:String, tooltipid:String) {
 	flamingo.getParent(this).resize();
 	this._pressed = false;
@@ -252,7 +265,10 @@ function initTool( uplink:String, overlink:String, downlink:String, hitlink:Stri
 		}
 	};
 }
-
+/**
+ * setConfig2
+ * @param	xml
+ */
 function setConfig2(xml:Object) {
 		if (typeof (xml) == "string") {
 		xml = new XML(String(xml)).firstChild;
@@ -358,7 +374,12 @@ function setConfig2(xml:Object) {
 	this.setVisible(visible);
 	flamingo.position(this);
 }
-
+/**
+ * onLayerAvailable
+ * @param	layerId
+ * @param	callback
+ * @param	args
+ */
 function onLayerAvailable (layerId: String, callback: Function, args: Object): Void {
 	var layerComponentId: String = this.parent.listento[0] + '_' + this.layers[layerId].mapServiceID,
 		mapService: MovieClip = _global.flamingo.getComponent (layerComponentId);
@@ -379,7 +400,11 @@ function onLayerAvailable (layerId: String, callback: Function, args: Object): V
 		_global.flamingo.addListener (listener, layerComponentId, this);
 	}
 }
-
+/**
+ * generateBuffer
+ * @param	layerIndex
+ * @param	radius
+ */
 function generateBuffer(layerIndex:String, radius:Number){
 	var layerComponent:String = this.parent.listento[0]+"_"+this.layers[layerIndex].mapServiceID;
 	var mapService = flamingo.getComponent(layerComponent);
@@ -399,7 +424,10 @@ function generateBuffer(layerIndex:String, radius:Number){
 	}, 1);
 	flamingo.getComponent(this.parent.listento[0]).refresh();
 }
-
+/**
+ * removeBuffer
+ * @param	layerIndex
+ */
 function removeBuffer(layerIndex:String){	
 	
 	var layerComponent:String = this.parent.listento[0]+"_"+this.layers[layerIndex].mapServiceID;//this._parent.listento[0]+"_"+mapServiceID;
@@ -410,7 +438,10 @@ function removeBuffer(layerIndex:String){
 	mapService.setLayerProperty(this.layers[layerIndex].layerID ,"buffer");
 	flamingo.getComponent(this.parent.listento[0]).refresh();	
 }
-
+/**
+ * getBuffers
+ * @return
+ */
 function getBuffers (): Object {
 	var result: Object = { };
 	
@@ -423,7 +454,9 @@ function getBuffers (): Object {
 	
 	return result;
 }
-
+/**
+ * initWindow
+ */
 function initWindow(){
 	window.content.cmb_layers.removeAll();
 	window.content.ta_radius.text =" ";
@@ -437,7 +470,9 @@ function initWindow(){
 	}
 	initControls();
 }
-
+/**
+ * initControls
+ */
 function initControls() {
 	window.content._lockroot = true;	
 	//Initialize controls
@@ -498,7 +533,11 @@ function initControls() {
 	};
 }
 
-//check if the layer is visible
+/**
+ * check if the layer is visible
+ * @param	layerIndex
+ * @return
+ */
 function isVisible(layerIndex:String):Boolean{
 	var layerComponent:String = this.parent.listento[0]+"_"+this.layers[layerIndex].mapServiceID;
 	var layer = flamingo.getComponent(layerComponent);
@@ -507,7 +546,11 @@ function isVisible(layerIndex:String):Boolean{
 	else if(layer.getVisible(layerIndex) > 0)
 		return true;
 }	
-//shows the window in the center of the map
+/**
+ * shows the window in the center of the map
+ * @param	screenWidth
+ * @param	screenHeight
+ */
 function showWindow(screenWidth:Number, screenHeight:Number){
 	var oldX = window._x;
 	var oldY = window._y;
@@ -517,6 +560,9 @@ function showWindow(screenWidth:Number, screenHeight:Number){
 
 	window.visible = true;
 }
+/**
+ * setWindowLabels
+ */
 function setWindowLabels()
 {
 	window.content.lbl_mapLayer.text = flamingo.getString(this, "maplayerLabel");
@@ -528,6 +574,11 @@ function setWindowLabels()
 	window.content.lbl_error.text = flamingo.getString(this, "notvalidLabel");	
 	window.title = flamingo.getString(this, "title", title);
 }
+/**
+ * persistState
+ * @param	document
+ * @param	node
+ */
 function persistState (document: XML, node: XMLNode): Void {
 	var buffers: Object = getBuffers (),
 		buffersNode: XMLNode = document.createElement ('Buffers');
@@ -543,6 +594,10 @@ function persistState (document: XML, node: XMLNode): Void {
 	
 	node.appendChild (buffersNode);
 }
+/**
+ * restoreState
+ * @param	node
+ */
 function restoreState (node: XMLNode): Void {
 	var buffersNode: XMLNode = node.firstChild,
 		doUpdate: Boolean = false,
@@ -571,22 +626,39 @@ function restoreState (node: XMLNode): Void {
 	}
 }
 //default functions-------------------------------
+/**
+ * startIdentifying stub
+ */
 function startIdentifying() {
 }
+/**
+ * stopIdentifying stub
+ */
 function stopIdentifying() {	
 }
+/**
+ * startUpdating
+ */
 function startUpdating() {
 	_parent.setCursor(this.cursors["busy"]);
 }
+/**
+ * stopUpdating
+ */
 function stopUpdating() {
 	_parent.setCursor(this.cursors["pan"]);	
 }
+/**
+ * releaseTool
+ */
 function releaseTool() {
 	window.visible = false;
 }
+/**
+ * pressTool
+ * the toolgroup sets default a cursor, override this default if a map is busy
+ */
 function pressTool() {
-	//the toolgroup sets default a cursor
-	//override this default if a map is busy
 	if (_parent.updating) {
 		_parent.setCursor(this.cursors["busy"]);
 	}
@@ -595,22 +667,3 @@ function pressTool() {
 	var rect = map.extent2Rect(map._extent);
 	showWindow(rect.width, rect.height);
 }
-//---------------------------------
-/**
-* Disable or enable a tool.
-* @param enable:Boolean true or false
-*/
-//public function setEnabled(enable:Boolean):Void {
-//}
-/**
-* Shows or hides a tool.
-* @param visible:Boolean true or false
-*/
-//public function setVisible(visible:Boolean):Void {
-//}
-/** 
- * Dispatched when a component is up and ready to run.
- * @param comp:MovieClip a reference to the component.
- */
-//public function onInit(comp:MovieClip):Void {
-//}

@@ -137,8 +137,11 @@ class Flamingo {
 	
 	private var _loadCompQueue:LoadComponentQueue;
 		 
-	//Flamingo class constructor
-	//@param mc MovieClip 
+	/**
+	* Flamingo class constructor
+	* @param mc MovieClip 
+	* @return type value
+	*/
 	public function Flamingo(mc:MovieClip) {
 		
 		System.security.allowDomain("*");
@@ -202,17 +205,6 @@ class Flamingo {
 		cm.hideBuiltInItems();
 		cm.customItems.push(new ContextMenuItem("About Flamingo MapComponents "+this.version+"...", about));
 		_root.menu = cm;
-		//
-		//var keyListener:Object = new Object();
-		//keyListener.onKeyDown = function() {
-		// 55 is key code for 7
-		//if (Key.getCode() == 116) {
-		//flamingo.loadConfig(flamingo.configfile);
-		//}
-		//};
-		//Key.addListener(keyListener);
-		//finally load default flamingo.xml
-		//create movie for cursors
 		this.init();
 	}
 	private function init() {
@@ -833,6 +825,11 @@ class Flamingo {
 			this.doneLoading();
 		}
 	}
+	/**
+	* ToDo
+	* @param type name
+	* @return type value
+	*/
 	public function addComponents(xml:Object):Void {
 		if (typeof (xml) == "string") {
 			xml = new XML(String(xml));
@@ -1932,6 +1929,10 @@ class Flamingo {
 		}
 		return (b);
 	}
+	/**
+	 * getTooltipText
+	 * @return
+	 */
 	public function getTooltipText():String {
 		return this.tiptext;
 	}
@@ -3542,6 +3543,15 @@ class Flamingo {
 		a.reverse();
 		return a;
 	}
+	/**
+	* ToDo
+	* @param type name
+	* @return type value
+	*/
+
+	/**
+	 * print
+	 */
 	public function print() {
 		//point=0.35mm
 		//pixel=0.28mm
@@ -3804,52 +3814,83 @@ class Flamingo {
 		}
 	}
 	/*Getters and setters for logging.*/
+	/**
+	* gettter LogLevel
+	* @return
+	*/
 	public function getLogLevel():Number{
 		return this.logLevel;
 	}
+	/**
+	 * setter LogLevel
+	 * @param	logLevel
+	 */
 	public function setLogLevel(logLevel:Number):Void{
 		this.logLevel=logLevel;
 	}
+	/**
+	 * getter ScreenLogLevel
+	 * @return
+	 */
 	public function getScreenLogLevel():Number{
 		return this.screenLogLevel;
 	}
+	/**
+	 * setter ScreenLogLevel
+	 * @param	screenLogLevel
+	 */
 	public function setScreenLogLevel(screenLogLevel:Number):Void{
 		this.screenLogLevel=screenLogLevel;
 	}
 	
-	/* static func to enable default entry point for mtasc compilation.
+	/** 
+	 * static func to enable default entry point for mtasc compilation.
 	 * ( use mtasc 2009 forked version  (by google person) that enables mtasc to compile > 32KB code limit.
 	 * download forked mtasc compiler at http://sourceforge.net/projects/mtasc/files/ 
 	 * and replace mtasc.exe in 'DISK:\\Program Files (x86)\FlashDevelop\Tools\mtasc' program file folder
+	 * 
+	 * @param	mc
 	 */
 	static function main(mc) {
 		_global.flamingo = new Flamingo(mc);
 	}
-	
+	/**
+	 * getter spriteMapFactory
+	 */
 	public function get spriteMapFactory():SpriteMapFactory 
 	{
 		return _spriteMapFactory;
 	}
-	
+	/**
+	 * setter spriteMapFactory
+	 */
 	public function set spriteMapFactory(value:SpriteMapFactory):Void 
 	{
 		_spriteMapFactory = value;
 	}
-	
+	/**
+	 * getter spriteMap
+	 */
 	public function get spriteMap():SpriteMap 
 	{
 		return _spriteMap;
 	}
-	
+	/**
+	 * setter spriteMap
+	 */
 	public function set spriteMap(value:SpriteMap):Void 
 	{
 		_spriteMap = value;
 	}
-	
+	/**
+	 * getter loadCompQueue
+	 */
 	public function get loadCompQueue():LoadComponentQueue {
 		return _loadCompQueue;
 	}
-	
+	/**
+	 * setter loadCompQueue
+	 */
 	public function set loadCompQueue(value:LoadComponentQueue):Void {
 		_loadCompQueue = value;
 	}

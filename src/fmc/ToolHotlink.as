@@ -89,6 +89,10 @@ init();
 * @attr identifyall (defaultvalue="true") True: identify all maps. False: identify only the map that's being clicked on.
 * @attr skin (defaultvalue="") Available skins: "", "f2" 
 */
+
+/**
+ * This tag defines a tool for hotlinking the map.
+ */
 function init() {
 	if (flamingo == undefined) {
 		var t:TextField = this.createTextField("readme", 0, 0, 0, 550, 400);
@@ -121,7 +125,7 @@ function init() {
 }
 /**
 * Configurates a component by setting a xml.
-* @attr xml:Object Xml or string representation of a xml.
+* @param xml:Object Xml or string representation of a xml.
 */
 function setConfig(xml:Object) {
 	if (typeof (xml) == "string") {
@@ -166,44 +170,42 @@ function setConfig(xml:Object) {
 	flamingo.position(this);
 }
 //default functions-------------------------------
+/**
+ * startIdentifying
+ */
 function startIdentifying() {
 	
 		_parent.setCursor(this.cursors["busy"]);
 }
+/**
+ * stopIdentifying
+ */
 function stopIdentifying() {
 	
 		_parent.setCursor(this.cursors["cursor"]);
 }
+/**
+ * startUpdating stub
+ */
 function startUpdating() {
 }
+/**
+ * stopUpdating stub
+ */
 function stopUpdating() {
 }
+/**
+ * releaseTool stub
+ */
 function releaseTool() {
 }
+/**
+ * pressTool, the toolgroup sets default a cursor,
+ * override this default if a map is busy
+ */
 function pressTool() {
-	//the toolgroup sets default a cursor
-	//override this default if a map is busy
 	if (_parent.identifying) 
 	{
 		_parent.setCursor(this.cursors["busy"]);
 	}
 }
-//---------------------------------
-/**
-* Disable or enable a tool.
-* @param enable:Boolean true or false
-*/
-//public function setEnabled(enable:Boolean):Void {
-//}
-/**
-* Shows or hides a tool.
-* @param visible:Boolean true or false
-*/
-//public function setVisible(visible:Boolean):Void {
-//}
-/** 
- * Dispatched when a component is up and ready to run.
- * @param comp:MovieClip a reference to the component.
- */
-//public function onInit(comp:MovieClip):Void {
-//}

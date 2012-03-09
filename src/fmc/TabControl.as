@@ -69,6 +69,12 @@ init();
 * @attr tab2Id Id of the second tabpage's component
 * @attr tab2Label Title of the second tabpage. With a String tag you can add multilanguage support.
 */
+
+/**
+ * This tag defines a tabcontrol with two tabpages. The component must be defined at the same level as the two tabcontrols for example if the
+ * two tabpages are set in a container then the tabControl must also be set in the same container. It is also important to define the TabControl component
+ * after the two tabpages are defined.
+ */
 function init():Void {
 	if (flamingo == undefined) {
 		var t:TextField = this.createTextField("readme", 0, 0, 0, 550, 400);
@@ -100,6 +106,9 @@ function init():Void {
 	initTabs();
 }
 
+/**
+ * initTabs
+ */
 function initTabs(){
 	//Init tabpages
 	var tab1Content = flamingo.getComponent(tab1Id);
@@ -127,7 +136,9 @@ function initTabs(){
 		}
 	}
 }
-
+/**
+ * setTabLabels
+ */
 function setTabLabels()
 {
 	tab1.lbl.text = flamingo.getString(this, "tab1Label", tab1Label);
@@ -137,6 +148,11 @@ function setTabLabels()
 /**
 * Configurates a component by setting a xml.
 * @attr xml:Object Xml or string representation of a xml.
+*/
+
+/**
+* Configurates a component by setting a xml.
+* @param xml:Object Xml or string representation of a xml.
 */
 function setConfig(xml:Object) {
 	if (typeof (xml) == "string") {
@@ -187,9 +203,15 @@ function setConfig(xml:Object) {
 	flamingo.position(this);
 }
 
+/**
+ * refresh does resize
+ */
 function refresh() {
 	resize();
 }
+/**
+ * resize
+ */
 function resize() {
 	var rect:Object = flamingo.getPosition(this)
 	this._x = rect.x

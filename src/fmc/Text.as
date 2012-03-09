@@ -57,6 +57,10 @@ init();
 * </string>
 * </fmc:Text>
 */
+
+/**
+ * This tag defines a text. 
+ */
 function init():Void {	
 	if (flamingo == undefined) {
 		var t:TextField = this.createTextField("readme", 0, 0, 0, 550, 400);
@@ -87,7 +91,7 @@ function init():Void {
 }
 /**
 * Configurates a component by setting a xml.
-* @attr xml:Object Xml or string representation of a xml.
+* @param xml:Object Xml or string representation of a xml.
 */
 function setConfig(xml:Object) {
 	if (typeof (xml) == "string") {
@@ -120,9 +124,15 @@ function setConfig(xml:Object) {
 	resize();
 }
 //------------------------
+/**
+ * refresh
+ */
 function refresh() {
 	this.setText(flamingo.getString(this, "text"));
 }
+/**
+ * resize
+ */
 function resize() {
 	var r = flamingo.getPosition(this);
 	this._x = r.x;
@@ -151,11 +161,14 @@ function hide() {
 	_visible = false;
 }
 /**
-* Showes a Text component.
+* Shows a Text component.
 */
 function show() {
 	_visible = true;
 }
+/**
+ * resize
+ */
 function resize() {
 	var r = flamingo.getPosition(this);
 	this._x = r.x;
@@ -167,6 +180,11 @@ function resize() {
 		ta._height = r.height;
 	}
 }
+/**
+ * trimL
+ * @param	txt
+ * @return
+ */
 function trimL(txt:String):String {
 	for (var i = 0; i<txt.length; i++) {
 		if (txt.charCodeAt(i)>32) {
@@ -175,6 +193,11 @@ function trimL(txt:String):String {
 	}
 	return txt;
 }
+/**
+ * trimR
+ * @param	txt
+ * @return
+ */
 function trimR(txt:String):String {
 	for (var i = txt.length; i>0; i--) {
 		if (txt.charCodeAt(i)>32) {
@@ -183,13 +206,12 @@ function trimR(txt:String):String {
 	}
 	return txt;
 }
+/**
+ * trim left and right
+ * @param	txt
+ * @return
+ */
 function trim(txt:String):String {
 	txt = trimL(txt);
 	return trimR(txt);
 }
-/** 
- * Dispatched when a text component is up and ready to run.
- * @param comp:MovieClip a reference to the component.
- */
-//public function onInit(comp:MovieClip):Void {
-//}

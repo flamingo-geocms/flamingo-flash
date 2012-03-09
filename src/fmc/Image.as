@@ -67,6 +67,10 @@ init();
 * @attr shadow (defaultvalue = "false") True or false.
 * @attr scale9 A comma seperated list of four numbers. e.g. scale9="10,10,10,10" Defines the scale behaviour of the image.
 */
+
+/**
+ * init
+ */
 function init() {
 	if (flamingo == undefined) {
 		var t:TextField = this.createTextField("readme", 0, 0, 0, 550, 400);
@@ -101,6 +105,10 @@ function init() {
 * Configurates a component by setting a xml.
 * @attr xml:Object Xml or string representation of a xml.
 */
+/**
+ * Configurates a component by setting a xml.
+ * @param xml:Object Xml or string representation of a xml.
+ */
 function setConfig(xml:Object) {
 	if (typeof (xml) == "string") {
 		xml = new XML(String(xml)).firstChild;
@@ -193,6 +201,9 @@ function setImage(url:String) {
 	mcl.addListener(listener);
 	mcl.loadClip(url, mHolder);
 }
+/**
+ * resize
+ */
 function resize() {
 	var r = flamingo.getPosition(this);
 	this._x = r.x;
@@ -223,6 +234,10 @@ function resize() {
 		_dropShadow(this.mHolder);
 	}
 }
+/**
+ * _dropShadow
+ * @param	mc
+ */
 function _dropShadow(mc:MovieClip) {
 	import flash.filters.DropShadowFilter;
 	var distance:Number = 2;

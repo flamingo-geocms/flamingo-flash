@@ -70,6 +70,10 @@ init();
 * @example
 * <fmc:NamedExtentViewer  xcenter="50%"  width="400" height="50" bottom="95" listento="themap" />
 */
+
+/**
+ * This tag defines an NamedExtentViewer. It listens to just one map.
+ */
 function init():Void {
 	if (flamingo == undefined) {
 		var t:TextField = this.createTextField("readme", 0, 0, 0, 550, 400);
@@ -110,9 +114,9 @@ function init():Void {
 
 }
 /**
-* Configurates a component by setting a xml.
-* @attr xml:Object Xml or string representation of a xml.
-*/
+ * Configurates a component by setting a xml.
+ * @param xml:Object Xml or string representation of a xml.
+ */
 function setConfig(xml:Object) {
 	if (typeof (xml) == "string") {
 		xml = new XML(String(xml)).firstChild;
@@ -125,6 +129,9 @@ function setConfig(xml:Object) {
 	flamingo.addListener(lMap, listento[0], this);
 	resize();
 }
+/**
+ * resize
+ */
 function resize() {
 	var r = flamingo.getPosition(this);
 	tExtent._x = r.x;
@@ -132,9 +139,3 @@ function resize() {
 	tExtent._width = r.width;
 	tExtent._height = r.height;
 }
-/** 
- * Dispatched when a component is up and ready to run.
- * @param comp:MovieClip a reference to the component.
- */
-//public function onInit(comp:MovieClip):Void {
-//}

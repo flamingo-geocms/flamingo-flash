@@ -128,6 +128,10 @@ init();
 * by filling in a second constraint. 
 * @attr includeValues the path to the field where the attribute values are defined.
 */
+
+/**
+ * This tag defines a tool that filters the data from the layer according to specific attributes.
+ */
 function init() {
 	if (flamingo == undefined) {
 		var t:TextField = this.createTextField("readme", 0, 0, 0, 550, 400);
@@ -159,7 +163,7 @@ function init() {
 }
 /**
 * Configurates a component by setting a xml.
-* @attr xml:Object Xml or string representation of a xml.
+* @param xml:Object Xml or string representation of a xml.
 */
 function setConfig(xml:Object) {
 	if (typeof (xml) == "string") {
@@ -277,7 +281,16 @@ function setConfig(xml:Object) {
 	flamingo.position(this);
 }
 
-
+/**
+ * initTool
+ * @param	uplink
+ * @param	overlink
+ * @param	downlink
+ * @param	hitlink
+ * @param	maplistener
+ * @param	cursorid
+ * @param	tooltipid
+ */
 function initTool( uplink:String, overlink:String, downlink:String, hitlink:String, maplistener:Object, cursorid:String, tooltipid:String) {
 	flamingo.getParent(this).resize();
 	this._pressed = false;
@@ -344,7 +357,12 @@ function initTool( uplink:String, overlink:String, downlink:String, hitlink:Stri
 	};
 }
 
-
+/**
+ * loadXML
+ * @param	file
+ * @param	fieldIndex
+ * @param	layerIndex
+ */
 function loadXML(file:String, fieldIndex:Number, layerIndex:Number) {
 	if (file == undefined) {
 		return;
@@ -384,6 +402,9 @@ function loadXML(file:String, fieldIndex:Number, layerIndex:Number) {
 	xml.load(file);
 }
 //-------------------------------
+/**
+ * initWindow
+ */
 function initWindow() {
 	//if (noSelection) {
 		window.content.cmb_layers.removeAll();
@@ -408,7 +429,9 @@ function initWindow() {
 	setWindowLabels();	
 	initControls();
 }
-
+/**
+ * initControls
+ */
 function initControls() {
 	window.content._lockroot = true;
 	//Initialize controls
@@ -587,7 +610,9 @@ function initControls() {
 		alert_window.visible = false;
 	};
 }
-
+/**
+ * setWindowLabels
+ */
 function setWindowLabels()
 {
 	alert_window.title = flamingo.getString(this, "alertWindowTitle", "Melding");
@@ -603,6 +628,11 @@ function setWindowLabels()
 	window.content.btn_ok.label = flamingo.getString(this, "ok", "Selecteren");
 	window.content.lbl_error.text = flamingo.getString(this, "notvalidLabel");		
 }
+/**
+ * isVisible
+ * @param	layerIndex
+ * @return
+ */
 function isVisible(layerIndex:String):Boolean {
 	//get the mapserver from the layer
 	var layerComponent:String = this.parent.listento[0]+"_"+this.layers[layerIndex].mapServiceID;
@@ -616,6 +646,10 @@ function isVisible(layerIndex:String):Boolean {
 		return true;
 	}
 }
+/**
+ * updateFields
+ * @param	layerIndex
+ */
 function updateFields(layerIndex:String) {
 	var layerComponent:String = this.parent.listento[0]+"_"+this.layers[layerIndex].mapServiceID;
 	var mapService = flamingo.getComponent(layerComponent);
@@ -630,6 +664,11 @@ function updateFields(layerIndex:String) {
 		window.content.cmb_fields.addItem(fields[i].fieldName,i);
 	}
 }
+/**
+ * updateOperations
+ * @param	layerIndex
+ * @param	fieldIndex
+ */
 function updateOperations(layerIndex:String, fieldIndex:String) {
 	window.content.cmb_operations.removeAll();
 	var fields:Array = this.layers[layerIndex].field;
@@ -647,6 +686,11 @@ function updateOperations(layerIndex:String, fieldIndex:String) {
 		}
 	}
 }
+/**
+ * updateValues
+ * @param	layerIndex
+ * @param	fieldIndex
+ */
 function updateValues(layerIndex:String, fieldIndex:String) {
 	window.content.cmb_values.removeAll();
 	var fields:Array = this.layers[layerIndex].field;
@@ -656,7 +700,11 @@ function updateValues(layerIndex:String, fieldIndex:String) {
 		window.content.cmb_values.addItem(valueArray[i]);
 	}		
 }
-
+/**
+ * updateValues2
+ * @param	layerIndex
+ * @param	fieldIndex
+ */
 function updateValues2(layerIndex:String, fieldIndex:String) {
 	window.content.cmb_values2.removeAll();
 	var fields:Array = this.layers[layerIndex].field;
@@ -669,7 +717,12 @@ function updateValues2(layerIndex:String, fieldIndex:String) {
 		}
 	}
 }
-
+/**
+ * setSelectQuery
+ * @param	layerIndex
+ * @param	query
+ * @param	queryLabel
+ */
 function setSelectQuery(layerIndex:String, query:String, queryLabel:String) {
 	this.query = query;
 	this.queryLabel = queryLabel;
@@ -682,7 +735,10 @@ function setSelectQuery(layerIndex:String, query:String, queryLabel:String) {
 		alert_window.visible = true;
 	}
 }
-
+/**
+ * selectQuery
+ * @param	layerIndex
+ */
 function selectQuery(layerIndex:String) {
 	//get the mapserver from the layer
 	var layerComponent:String = this.parent.listento[0]+"_"+this.layers[layerIndex].mapServiceID;
@@ -695,6 +751,10 @@ function selectQuery(layerIndex:String) {
 	mapService.setLayerProperty(this.layers[layerIndex].layerID,"query",this.query);
 	flamingo.getComponent(this.parent.listento[0]).refresh();
 }
+/**
+ * removeSelectQuery
+ * @param	layerIndex
+ */
 function removeSelectQuery(layerIndex:String) {
 	//get the mapserver from the layer       
 	var layerComponent:String = this.parent.listento[0]+"_"+this.layers[layerIndex].mapServiceID;
@@ -708,8 +768,11 @@ function removeSelectQuery(layerIndex:String) {
 	flamingo.getComponent(this.parent.listento[0]).refresh();
 }
 
-
-//shows the window in the center of the map
+/**
+ * shows the window in the center of the map
+ * @param	screenWidth
+ * @param	screenHeight
+ */
 function showWindow(screenWidth:Number, screenHeight:Number) {
 	var oldX = window._x;
 	var oldY = window._y;
@@ -727,22 +790,39 @@ function showWindow(screenWidth:Number, screenHeight:Number) {
 }
 
 //default functions-------------------------------
+/**
+ * startIdentifying stub
+ */
 function startIdentifying() {
 }
+/**
+ * stopIdentifying stub
+ */
 function stopIdentifying() {
 }
+/**
+ * startUpdating
+ */
 function startUpdating() {
 	_parent.setCursor(this.cursors["busy"]);
 }
+/**
+ * stopUpdating
+ */
 function stopUpdating() {
 	_parent.setCursor(this.cursors["pan"]);
 }
+/**
+ * releaseTool
+ */
 function releaseTool() {
 	window.visible = false;
 }
+/**
+ * pressTool, the toolgroup sets default a cursor, 
+ * override this default if a map is busy
+ */
 function pressTool() {
-	//the toolgroup sets default a cursor
-	//override this default if a map is busy
 	if (_parent.updating) {
 		_parent.setCursor(this.cursors["busy"]);
 	}
@@ -751,22 +831,3 @@ function pressTool() {
 	var rect = map.extent2Rect(map._extent);
 	showWindow(rect.width,rect.height);
 }
-//---------------------------------
-/**
-* Disable or enable a tool.
-* @param enable:Boolean true or false
-*/
-//public function setEnabled(enable:Boolean):Void {
-//}
-/**
-* Shows or hides a tool.
-* @param visible:Boolean true or false
-*/
-//public function setVisible(visible:Boolean):Void {
-//}
-/** 
- * Dispatched when a component is up and ready to run.
- * @param comp:MovieClip a reference to the component.
- */
-//public function onInit(comp:MovieClip):Void {
-//}

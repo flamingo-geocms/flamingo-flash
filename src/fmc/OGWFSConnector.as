@@ -58,12 +58,24 @@ dynamic class OGWFSConnector {
 
 	
 	//-----------------------------------
+	/**
+	 * addListener
+	 * @param	listener
+	 */
 	function addListener(listener:Object) {
 		events.addListener(listener);
 	}
+	/**
+	 * removeListener
+	 * @param	listener
+	 */
 	function removeListener(listener:Object) {
 		events.removeListener(listener);
 	}
+	/**
+	 * constructor OGWFSConnector
+	 * @param	server
+	 */
 	function OGWFSConnector(server:String) {
 		setWfsUrl(server);
 		this.url=server;
@@ -418,24 +430,52 @@ dynamic class OGWFSConnector {
 		reqXml.parseXML(reqString);
 		return reqXml;
 	}
+	/**
+	 * setter WfsVersion
+	 * @param	s
+	 */
 	function setWfsVersion(s:String){
 		wfsVersion=s;
 	}
+	/**
+	 * setter GeomName
+	 * @param	s
+	 */
 	function setGeomName(s:String){
 		geomName=s;
 	}
+	/**
+	 * setter Srs
+	 * @param	s
+	 */
 	function setSrs(s:String){
 		srs=s;
 	}
+	/**
+	 * setter MaxFeatures
+	 * @param	s
+	 */
 	function setMaxFeatures(s:String){
 		maxFeatures=s;
 	}
+	/**
+	 * setter WfsLayers
+	 * @param	s
+	 */
 	function setWfsLayers(s:String){
 		wfsLayers=s;
 	}
+	/**
+	 * setter WfsUrl
+	 * @param	s
+	 */
 	function setWfsUrl(s:String){
 		wfsUrl=s;
 	}
+	/**
+	 * setter Namespaces
+	 * @param	n
+	 */
 	function setNamespaces(n:Object){
 		namespaces=n;
 	}
@@ -545,6 +585,11 @@ dynamic class OGWFSConnector {
 			return original;
 		}
 	}
+	/**
+	 * string2Extent
+	 * @param	str
+	 * @return
+	 */
 	function string2Extent(str:Object):Object {
 		var extent:Object = new Object();
 		var a:Array = str.split(",");

@@ -87,6 +87,10 @@ init();
 * @hierarchy childnode of <flamingo> or a container component. e.g. <fmc:Window>.
 * @attr skin (defaultvalue="") Skin. Available skins: "", "f1".
 */
+
+/**
+ * This tag defines a monitor.  Listens to 1 or more maps
+ */
 function init():Void {
 	if (flamingo == undefined) {
 		var t:TextField = this.createTextField("readme", 0, 0, 0, 550, 400);
@@ -116,9 +120,9 @@ function init():Void {
 	flamingo.raiseEvent(this, "onInit", this);
 }
 /**
-* Configurates a component by setting a xml.
-* @attr xml:Object Xml or string representation of a xml.
-*/
+ * Configurates a component by setting a xml.
+ * @param xml:Object Xml or string representation of a xml.
+ */
 function setConfig(xml:Object) {
 	if (typeof (xml) == "string") {
 		xml = new XML(String(xml)).firstChild;
@@ -138,9 +142,17 @@ function setConfig(xml:Object) {
 	flamingo.addListener(lMap, listento, this);
 	resize();
 }
+/**
+ * resize
+ */
 function resize() {
 	flamingo.position(this);
 }
+/**
+ * monitor
+ * @param	perc
+ * @param	map
+ */
 function monitor(perc:Number, map:MovieClip) {
 	var mapname = map.name;
 	if (mapname == undefined or mapname.length == 0) {
@@ -183,6 +195,9 @@ function monitor(perc:Number, map:MovieClip) {
 	}
 	return;
 }
+/**
+ * setter skin
+ */
 function setSkin() {
 	this.useHandCursor = false;
 	var mc:MovieClip = attachMovie(skin+"_progress", "mProgress", 0);
@@ -194,9 +209,3 @@ function setSkin() {
 	mc._visible = false;
 	mc.stop();
 }
-/** 
- * Dispatched when a component is up and ready to run.
- * @param comp:MovieClip a reference to the component.
- */
-//public function onInit(comp:MovieClip):Void {
-//}

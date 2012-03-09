@@ -112,6 +112,10 @@ init();
 * @attr minwidth(defaultvalue = "18") Minimum width (in pixels) of overview rectangle before turning into the crosshair.
 * @attr usehandle (defaultvalue="true") True or false. True: a resize button is shown in the lower right corner to drag the overview. False: The complete overview can be dragged.
 */
+
+/**
+ * This tag defines an overview layer
+ */
 function init():Void {
 	if (flamingo == undefined) {
 		var t:TextField = this.createTextField("readme", 0, 0, 0, 550, 400);
@@ -140,9 +144,9 @@ function init():Void {
 	flamingo.raiseEvent(this, "onInit", this);
 }
 /**
-* Configurates a component by setting a xml.
-* @attr xml:Object Xml or string representation of a xml.
-*/
+ * Configurates a component by setting a xml.
+ * @param	xml:Object Xml or string representation of a xml.
+ */
 function setConfig(xml:Object) {
 	if (typeof (xml) == "string") {
 		xml = new XML(String(xml)).firstChild;
@@ -209,6 +213,11 @@ function setConfig(xml:Object) {
 	_visible = false;
 	updateOverview();
 }
+/**
+ * initMc
+ * @param	mc
+ * @param	target
+ */
 function initMc(mc:MovieClip, target:MovieClip) {
 	mc.useHandCursor = false;
 	mc.onPress = function() {
@@ -288,6 +297,9 @@ function initMc(mc:MovieClip, target:MovieClip) {
 		}
 	};
 }
+/**
+ * updateOverviewMap
+ */
 function updateOverviewMap() {
 	// the next update sequence of the overviewmap must not affect this layer
 	var map = flamingo.getParent(this);
@@ -313,6 +325,9 @@ function updateOverviewMap() {
 	}
 	updateoverview = false;
 }
+/**
+ * update
+ */
 function update() {
 	// this function reposition this layer in the parent map based on its extent
 	//var map = flamingo.getParent(this);
@@ -376,6 +391,9 @@ function update() {
 	}
 	_visible = true;
 }
+/**
+ * followOverview
+ */
 function followOverview() {
 	// this function zooms the parent map based on the extent of the overview and the followfactor
 	if (followfactor == undefined) {
@@ -390,6 +408,12 @@ function followOverview() {
 	followext.maxy = followext.miny+nh;
 	flamingo.getParent(this).moveToExtent(followext, 1000, 0);
 }
+/**
+ * dragOverview
+ * @param	map
+ * @param	dx
+ * @param	dy
+ */
 function dragOverview(map:MovieClip, dx, dy) {
 	var e = map.getCurrentExtent();
 	var msx = (e.maxx-e.minx)/map.__width;
@@ -399,6 +423,9 @@ function dragOverview(map:MovieClip, dx, dy) {
 	map.moveToExtent({minx:e.minx+dx, miny:e.miny+dy, maxx:e.maxx+dx, maxy:e.maxy+dy}, -1, 0);
 	//updateAfterEvent();
 }
+/**
+ * checkFinishUpdate
+ */
 function checkFinishUpdate() {
 	for (var i:Number = 0; i<listento.length; i++) {
 		var c = flamingo.getComponent(listento[i]);
@@ -409,8 +436,3 @@ function checkFinishUpdate() {
 	}
 	updating = false;
 }
-/**
-* Dispatched when a the layer is up and running.
-* @param layer:MovieClip a reference to the layer.
-*/
-//public function onInit(layer:MovieClip):Void {
