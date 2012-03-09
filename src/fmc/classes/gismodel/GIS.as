@@ -281,7 +281,15 @@ class gismodel.GIS extends AbstractComponent {
 		}
         super.setAttribute(name, value);
     }
-    
+    function addLayerAsString(xmlString:String) {
+		Logger.console("AddLayerAsString: "+xmlString);
+		var xml:XML = new XML(xmlString);		
+		var xmlNode:XMLNode = xml.firstChild;
+		var name:String = xmlNode.localName;
+		Logger.console("Name: " + name + " xmlNode: " + xmlNode);
+		addComposite(name, xmlNode);
+	}
+	
     function addComposite(name:String, xmlNode:XMLNode):Void {
         if (name == "Layer") {
 			var layer:Layer = new Layer(this,xmlNode);
