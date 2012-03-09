@@ -11,12 +11,10 @@ class gui.tools.ToolMapClick extends AbstractTool
 	private var previousTool;
 	
 	public function ToolMapClick(id:String, toolGroup:ToolGroup ) {
-		Logger.console("Constructor TMC");
 		super(id, toolGroup, null);		
 		this.defaultXML = "<?xml version='1.0' encoding='UTF-8'?>" +
-						"	" +
+						"<fmc:ToolMapClick id='toolmapclick' listento='map'/>" +
 				        "</ToolPan>"; 
-		
 		init();
 	}
 	
@@ -28,7 +26,8 @@ class gui.tools.ToolMapClick extends AbstractTool
 
 			//Logger.console("coord1x", coord.x);
 			//Logger.console("coord1y", coord.y);
-			thisObj.flamingo.raiseEvent(thisObj, "onMapClicked",thisObj,coord);	
+			thisObj.flamingo.raiseEvent(thisObj, "onMapClicked", thisObj, coord);	
+			thisObj.deactivate();
 		};
 	}
 	
@@ -64,12 +63,14 @@ class gui.tools.ToolMapClick extends AbstractTool
 	function activate() {
 		this.previousTool = toolGroup.tool;
 		this.toolGroup.setTool(this.id);
-		Logger.console("activeer:");
 	}
 	
 	function deactivate() {
-		Logger.console("deactiveer:");
-		this.toolGroup.setTool(this.previousTool);
+		var tool = this.previousTool;
+		if (tool == undefined) {
+			tool = "";
+		}
+		this.toolGroup.setTool(tool);
 	}
 	
 }
