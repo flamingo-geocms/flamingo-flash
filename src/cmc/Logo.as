@@ -96,7 +96,7 @@ function init():Void {
  * Configurates a component by setting a xml.
  * @param	xml:Object Xml or string representation of a xml.
 */
- */
+
 function setConfig(xml:Object) {
 	if (typeof (xml) == "string") {
 		xml = new XML(String(xml)).firstChild;

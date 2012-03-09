@@ -145,6 +145,7 @@
 		</copy>
 		<copy file="changelog.txt" todir="${build}/dist"/>
 		<delete dir="${build}/release/flamingo/tpc"/>
+		<delete dir="${build}/release/flamingo/cmc"/>
 		<echo file="${build}/release/flamingo/version.txt" append="false">version: ${version} date: ${date}</echo>
 		<antcall target="doc"/>
 		<echo message="--------------- Copy Documentation ---------------"/>
@@ -191,7 +192,9 @@
 		<mkdir dir="${naturalDocsProjectPath}"/>
 		<exec executable="${perlPath}">
 			<arg line="'${naturalDocsPath}'"/>
+			<arg line="-do"/>
 			<arg line="-i ${srcDir}"/>
+			<arg line="-xi ${srcDir}/tpc"/>
 			<arg line="-o HTML  ${build}\docs\ref-doc"/>
 			<arg line="-p ${naturalDocsProjectPath}"/>
 		</exec>
