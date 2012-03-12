@@ -539,13 +539,29 @@ class gismodel.GIS extends AbstractComponent {
 			layer.getFeatureWithGeometry(extent);			
 		}		
 	}
-	
+	/**
+	 * Remove all features from all layers
+	 */
 	function removeAllFeatures(){
 		var layer:Layer = null;
         for (var i:String in layers) {
             layer = Layer(layers[i]);
 			layer.removeFeatures(layer.getFeatures(),false);			
 		}		 
+	}
+	/**
+	 * Remove all features for layer with name: 'name'
+	 * @param	name the name of the layer
+	 * @param	addOperation if set to true, a operation is created to remove features from service (if supported)
+	 */
+	function removeAllLayerFeatures(name:String, addOperation:Boolean) {
+		var layer:Layer = null;
+		for (var i:String in layers) {
+			layer = Layer(layers[i]);
+			if (layer.getName() == name) {
+				layer.removeFeatures(layer.getFeatures(),addOperation);
+			}
+		}
 	}
 	
 	function raiseFeatureRemoved(removedFeature:Feature){
