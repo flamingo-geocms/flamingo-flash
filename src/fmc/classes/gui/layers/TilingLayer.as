@@ -64,6 +64,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 * @attr extension: the extension of the tiles.
 * @attr tileheight: the height of the tiles in pixels (default 256)
 * @attr tilewidth: the width of the tiles in pixels (default 256)
+* @attr visible: (optional, default true) sets the layer visible (true) invisible (false)
 **/
 /** @tag <TilingParam>
 * With this tag you can define extra parameters for the tilingFactory
