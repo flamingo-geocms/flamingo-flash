@@ -1,10 +1,10 @@
+import tools.Logger;
+import core.loading.FunctionCall;
+import core.AbstractComponent;
 /**
  * Class that is used to hold a queue of Function calls that will be executed when the object is loaded.
  * @author Roy Braam
  */
-import tools.Logger;
-import core.loading.FunctionCall;
-import core.AbstractComponent;
 class core.loading.LoadComponentQueue{
 	
 	var queue:Object = null;
@@ -56,6 +56,9 @@ class core.loading.LoadComponentQueue{
 		
     }
 	
+	/**
+	 * logQueue
+	 */
 	public function logQueue():Void {
 		var noc:Number = 0;
 		var log:String = "";

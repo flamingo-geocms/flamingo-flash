@@ -27,7 +27,11 @@ import tools.Logger;
  * @author Roy Braam
  */
 class core.AbstractConfigurable extends AbstractPositionable{
-	
+	/**
+	 * AbstractConfigurable
+	 * @param	id
+	 * @param	container
+	 */
 	public function AbstractConfigurable(id:String, container:MovieClip) {
 		super(id, container);	
 		init();

@@ -39,6 +39,9 @@
 import coregui.*;
 import core.AbstractComponent;
 
+/**
+ *  A component for a button with javascript API, and xml configurable behaviour and styling.
+ */
 class coregui.js.JsButton extends AbstractComponent {
     
     private var id:String = ""; 			// Set by xml config file
@@ -63,6 +66,11 @@ class coregui.js.JsButton extends AbstractComponent {
 	private var mIcon_dis:MovieClip;
 	private var mIcon_sel:MovieClip;
     
+	/**
+	 * setAttribute
+	 * @param	name
+	 * @param	value
+	 */
 	function setAttribute(name:String, value:String):Void {
 		if (name == "id") {
 			if (value!=null){
@@ -98,7 +106,9 @@ class coregui.js.JsButton extends AbstractComponent {
 			}
 		}
 	}
-	
+	/**
+	 * init
+	 */
     function init():Void {
 		super.init();
 		//make the button invisible untill all images are loaded

@@ -3,11 +3,16 @@
 * Author: Michiel J. van Heek.
 * IDgis bv
  -----------------------------------------------------------------------------*/
-
+/**
+ * core.AbstractComposite
+ */
 class core.AbstractComposite {
 
 	private var name:String = null;
-	
+	/**
+	 * parseConfig
+	 * @param	xmlNode
+	 */
     function parseConfig(xmlNode:XMLNode):Void {
         this.name = xmlNode.attributes["name"];
         
@@ -29,13 +34,24 @@ class core.AbstractComposite {
             addComposite(name, childNode);
         }
     }
-    
+    /**
+     * getName
+     * @return
+     */
     function getName():String {
         return name;
     }
-    
+    /**
+     * setAttribute
+     * @param	name
+     * @param	value
+     */
     function setAttribute(name:String, value:String):Void { }
-    
+    /**
+     * addComposite
+     * @param	name
+     * @param	xmlNode
+     */
     function addComposite(name:String, xmlNode:XMLNode):Void { }
 	
 	

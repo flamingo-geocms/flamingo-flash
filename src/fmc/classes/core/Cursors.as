@@ -27,6 +27,9 @@
 */
 
 
+/**
+* The Cursors component is a container for map cursors.
+*/
 class core.Cursors extends AbstractComponent {
 	var version:String = "1.0";
 	/**

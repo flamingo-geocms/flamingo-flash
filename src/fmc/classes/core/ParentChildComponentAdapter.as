@@ -6,18 +6,28 @@ import tools.Logger;
 * IDgis bv
  -----------------------------------------------------------------------------*/
 
+ /**
+  * core.ParentChildComponentAdapter
+  */
 class core.ParentChildComponentAdapter {
 
 	private var listener:AbstractComponent = null;
-    
+    /**
+     * ParentChildComponentAdapter
+     * @param	listener
+     */
     function ParentChildComponentAdapter(listener:AbstractComponent) {
         this.listener = listener;
     }
-    
+    /**
+     * onInit
+     */
     function onInit():Void {
         listener.go();
     }
-    
+    /**
+     * onResize
+     */
     function onResize():Void {
 		//Logger.console("On resize "+listener.id);
         var bounds:Object = _global.flamingo.getPosition(listener);

@@ -17,19 +17,22 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 -----------------------------------------------------------------------------*/
+import core.AbstractPositionable;
+import tools.Logger;
 /**
  * Abstract for registers of listeners. If killed the listener must be removed.
  * @author Roy Braam
  * @author Meine Toonen
  */
-import core.AbstractPositionable;
-import tools.Logger;
-
 class core.AbstractListenerRegister extends Object
 {	
 	//the listeners that are added by this listenercreator
 	private var _registerdListeners:Object;
-	
+	/**
+	 * constructor AbstractListenerRegister
+	 * @param	id
+	 * @param	container
+	 */
 	public function AbstractListenerRegister (id:String, container:MovieClip) {
 		super(id, container);
 	}
@@ -66,18 +69,25 @@ class core.AbstractListenerRegister extends Object
 		}
 	}
 	
-	//fallback for old flamingo classes that are using the comp._addedlisteners
+	/**
+	 * get _addedlisteners
+	 * fallback for old flamingo classes that are using the comp._addedlisteners
+	 */
 	public function get _addedlisteners():Object {
 		return this.registerdListeners;
 	}
 	
 	/******************** getter and setters *******/
-	
+	/**
+	 * getter registerdListeners
+	 */
 	public function get registerdListeners():Object 
 	{
 		return _registerdListeners;
 	}
-	
+	/**
+	 * setter registerdListeners
+	 */
 	public function set registerdListeners(value:Object):Void 
 	{
 		_registerdListeners = value;

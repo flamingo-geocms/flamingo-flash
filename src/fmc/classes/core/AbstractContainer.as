@@ -6,6 +6,10 @@ import tools.Logger;
 * Author: Michiel J. van Heek.
 * IDgis bv
  -----------------------------------------------------------------------------*/
+ 
+ /**
+  * core.AbstractContainer
+  */
 class core.AbstractContainer extends AbstractComponent {
     
     private var componentID:String = "AbstractContainer 1.0";
@@ -28,6 +32,10 @@ class core.AbstractContainer extends AbstractComponent {
     * Abstract superclass for all containers.
     * @file AbstractContainer.as (sourcefile)
     */
+	
+	/**
+	 * Abstract superclass for all containers.
+	 */
     function AbstractContainer() {
         if (_global.flamingo == null) {
             var textField:TextField = createTextField("mTextField", 0, 0, 0, 550, 400);
@@ -37,7 +45,9 @@ class core.AbstractContainer extends AbstractComponent {
             return;
         }
     }
-    
+    /**
+     * onLoad
+     */
     function onLoad():Void {
         if (_global.flamingo == null) {
             return;
@@ -53,18 +63,25 @@ class core.AbstractContainer extends AbstractComponent {
         contentPane.guides = guides;
         
     }
-    
+    /**
+     * setConfig
+     */
     function setConfig(){
     	setBaseConfig();
         setCompoConfig();
         setCustomConfig();
         wait();
     }
-    
+    /**
+     * getContentPane
+     * @return MovieClip
+     */
     function getContentPane():MovieClip {
         return contentPane;
     }
-    
+    /**
+     * setCompoConfig
+     */
     function setCompoConfig():Void {
         // Retrieves the default configuration for the component, in order to set the "compo" properties.
         var defaultConfig:XMLNode = new XML(defaultXML);
@@ -78,8 +95,11 @@ class core.AbstractContainer extends AbstractComponent {
         listento = listento.concat(getComponents()); // Makes the container wait for its child components to be ready.
     }
     
-    // Parses the xml child nodes to components. A container has no other composites than components.
-    function setCompoProperties(config:XMLNode):Void {
+    /**
+     * Parses the xml child nodes to components. A container has no other composites than components.
+     * @param	config
+     */
+	function setCompoProperties(config:XMLNode):Void {
         for (var i:Number = 0; i < config.childNodes.length; i++) {
             var xmlNode:XMLNode = config.childNodes[i];
             var nodeName:String = xmlNode.nodeName;
@@ -90,7 +110,10 @@ class core.AbstractContainer extends AbstractComponent {
         }
     }
     
-    // Parses the xml attributes to object attributes. They can be either attributes on the abstract container level or attributes on the "really custom" level.
+	/**
+	 * Parses the xml attributes to object attributes. They can be either attributes on the abstract container level or attributes on the "really custom" level.
+	 * @param	config
+	 */
     function setCustomProperties(config:XMLNode):Void {
         for (var attributeName:String in config.attributes) {
             var value:String = config.attributes[attributeName];
@@ -98,7 +121,11 @@ class core.AbstractContainer extends AbstractComponent {
             setAttribute(attributeName, value);
         }
     }
-    
+    /**
+     * setContainerAttribute
+     * @param	name
+     * @param	value
+     */
     function setContainerAttribute(name:String, value:String):Void {
         if (name == "bordercolor") {
             if (value.charAt(0) == "#") {
@@ -124,7 +151,11 @@ class core.AbstractContainer extends AbstractComponent {
             mask = value.toLowerCase() == "true"? true : false;
         }
     }
-
+	/**
+	 * addComponent
+	 * @param	name
+	 * @param	config
+	 */
     function addComponent(name:String, config:XMLNode):Void {
         if (config.prefix.length > 0) {
             var id:String;
@@ -149,7 +180,9 @@ class core.AbstractContainer extends AbstractComponent {
             //return id;
         }
     }
-    
+    /**
+     * clear component
+     */
     function clear():Void {
         for (var id in contentPane) {
             if (typeof (contentPane[id]) == "movieclip") {
@@ -157,16 +190,20 @@ class core.AbstractContainer extends AbstractComponent {
             }
         }
     }
-    
+    /**
+     * removeComponent
+     * @param	id
+     */
     function removeComponent(id:String):Void {
         _global.flamingo.killComponent(id);
         _global.flamingo.raiseEvent(this, "onRemoveComponent", this, id);
     }
     
-    /**
-    * Returns the ids of all direct child components within the container. Does not return any grandchildren.
-    * DEPRECATED  Use getChildComponents() instead.
-    */
+	/**
+	 * getComponents
+	 * @return the ids of all direct child components within the container. Does not return any grandchildren.
+	 * @deprecated Use getChildComponents() instead.
+	 */
     function getComponents():Array {
         var comps:Array = new Array();
         for (var id in contentPane) {
@@ -177,9 +214,10 @@ class core.AbstractContainer extends AbstractComponent {
         return comps;
     }
     
-    /**
-    * Returns all direct child components within the container. Does not return any grandchildren.
-    */
+ 	/**
+	 * getChildComponents
+	 * @return all direct child components within the container. Does not return any grandchildren.
+	 */
     function getChildComponents():Array {
         var comps:Array = new Array();
         for (var id in contentPane) {
@@ -190,11 +228,11 @@ class core.AbstractContainer extends AbstractComponent {
         return comps;
     }
     
-    /**
-    * Shows the container.
-    * This will raise the onShow event.
-    * DEPRECATED  Use setVisible(true) instead.
-    */
+ 	/**
+     * Shows the container.
+     * This will raise the onShow event.
+     * @deprecated Use setVisible(true) instead.
+	 */
     function show():Void {
         setVisible(true);
         _global.flamingo.raiseEvent(this, "onShow", this);
@@ -203,7 +241,7 @@ class core.AbstractContainer extends AbstractComponent {
     /**
     * Hides the container.
     * This will raise the onHide event.
-    * DEPRECATED  Use setVisible(false) instead.
+    * @deprecated  Use setVisible(false) instead.
     */
     function hide():Void {
         setVisible(false);
@@ -223,7 +261,9 @@ class core.AbstractContainer extends AbstractComponent {
         contentPane.__height = height;
         super.setBounds(x, y, width, height);
     }
-    
+    /**
+     * layout
+     */
     function layout():Void {
         _alpha = alpha;
         

@@ -11,6 +11,9 @@ import core.InitAdapter;
 * IDgis bv
  -----------------------------------------------------------------------------*/
 
+ /**
+  * core.AbstractComponent
+  */
 class core.AbstractComponent extends MovieClip {
     
     private var componentID:String = "AbstractComponent 1.0";
@@ -60,6 +63,10 @@ class core.AbstractComponent extends MovieClip {
     * @file ParentChildComponentAdapter.as (sourcefile)
     * @file VisibleAdapter.as (sourcefile)
     */
+	
+	/**
+	 * Abstract superclass for all components.
+	 */
     function AbstractComponent() {
         if (_parent._parent == null) {
             var textField:TextField = createTextField("mTextField", 0, 0, 0, 550, 400);
@@ -78,6 +85,9 @@ class core.AbstractComponent extends MovieClip {
 		_global.flamingo.correctTarget(_parent, this);
     }
     
+	/**
+	 * onLoad
+	 */
     function onLoad():Void {		
 		clearInterval(intervalId);
         if (_parent._parent == null) {
@@ -104,7 +114,9 @@ class core.AbstractComponent extends MovieClip {
         setConfig();
     }
     
-    
+    /**
+     * setConfig
+     */
     function setConfig():Void {		
     	setBaseConfig();		
         setCustomConfig();
@@ -133,7 +145,11 @@ class core.AbstractComponent extends MovieClip {
             listento = new Array();
         }
     }
-	
+	/**
+	 * setAttribute
+	 * @param	name
+	 * @param	value
+	 */
 	function setAttribute(name:String, value:String):Void {
 	}
 	
@@ -158,7 +174,10 @@ class core.AbstractComponent extends MovieClip {
             afterLoad();
         }
     }
-   
+   /**
+    * onLoadComponent
+    * @param	mc
+    */
 	public function onLoadComponent(mc):Void {	
 		var tokens:Array = mc._name.split(".");
 		var mcId = tokens[tokens.length - 1];
@@ -172,9 +191,10 @@ class core.AbstractComponent extends MovieClip {
 		
     }
 
-    /**
-    * 
-    */
+ 	/**
+	 * addInitAdapters
+	 * @param	ids2WaitFor
+	 */
     private function addInitAdapters(ids2WaitFor:Array):Void {
         var component:Object = null;
         var initAdapter:InitAdapter = null;
@@ -191,7 +211,7 @@ class core.AbstractComponent extends MovieClip {
     
     /**
     * Removes a listener to a "listento" component after that "listento" component has raised an init event.
-    * @attr initAdapter:InitAdapter Listener to be removed.
+    * @param initAdapter:InitAdapter Listener to be removed.
     */
     function removeInitAdapter(initAdapter:InitAdapter):Void {
         for (var i:String in initAdapters) {
@@ -254,7 +274,7 @@ class core.AbstractComponent extends MovieClip {
     
     /**
     * Sets the component's custom properties. Properties can be attributes and composites.
-    * @attr config:XMLNode Configuration in the form of an xml.
+    * @param config:XMLNode Configuration in the form of an xml.
     */
     function setCustomProperties(config:XMLNode):Void {
         // Parses the xml attributes to object attributes.
@@ -281,7 +301,11 @@ class core.AbstractComponent extends MovieClip {
         }
     }    
 
-    
+    /**
+     * addComposite: empty stub
+     * @param	name
+     * @param	config
+     */
     function addComposite(name:String, config:XMLNode):Void { }
     
     /**
@@ -332,24 +356,39 @@ class core.AbstractComponent extends MovieClip {
 		
         _global.flamingo.raiseEvent(this, "onResize", this);
     }
-    
+    /**
+     * empty stub
+     */
     function init():Void { }
     
-    /**
-    * Returns true if the component has finished the init phase. In other words: the component's init() method has run and the onInit event been fired.
-    */
+	/**
+	 * 
+	 * @return true if the component has finished the init phase. In other words: the component's init() method has run and the onInit event been fired.
+	 */
     function isInited():Boolean {
         return inited;
     }
     
+	/**
+	 * empty stub
+	 */
     function layout():Void { }
     
+	/**
+	 * empty stub
+	 */
     function go():Void { }
-    
+    /**
+     * getComponentName
+     * @return name of component
+     */
     function getComponentName():String {
         return componentID.split(" ")[0];
     }
-    
+    /**
+     * getParent
+     * @param	componentName
+     */
     function getParent(componentName:String) {
         if (componentName == null) {
             return _global.flamingo.getParent(this);
@@ -411,14 +450,21 @@ class core.AbstractComponent extends MovieClip {
         _global.flamingo.tracer("__WIDTH " + __width);
         _global.flamingo.tracer("__HEIGHT " + __height);
     }
-	
+	/**
+	 * get id
+	 */
 	public function get id():String {
 		return _id;
 	}
-	
+	/**
+	 * set id
+	 */
 	public function set id(value:String):Void {
 		_id = value;
 	}    
+	/**
+	 * get type
+	 */
 	public function get type():String {
 		return getComponentName();
 	}

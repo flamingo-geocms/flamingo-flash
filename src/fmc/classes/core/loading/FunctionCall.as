@@ -18,26 +18,44 @@ class core.loading.FunctionCall{
 		this.funcOwner = funcOwner;
 	}
 	/*Getters and setters*/
+	/**
+	 * func
+	 */
 	public function get func():Function {
 		return _func;
 	}
 	
+	/**
+	 * func
+	 */
 	public function set func(value:Function):Void {
 		_func = value;
 	}
 	
+	/**
+	 * arg
+	 */
 	public function get arg():FunctionArguments {
 		return _arg;
 	}
 	
+	/**
+	 * arg
+	 */
 	public function set arg(value:FunctionArguments):Void {
 		_arg = value;
 	}
 	
+	/**
+	 * funcOwner
+	 */
 	public function get funcOwner():Object {
 		return _funcOwner;
 	}
 	
+	/**
+	 * funcOwner
+	 */
 	public function set funcOwner(value:Object):Void {
 		_funcOwner = value;
 	}

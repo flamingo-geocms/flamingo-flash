@@ -196,16 +196,19 @@ class core.AbstractPositionable extends AbstractListenerRegister
 		this.visible = vis;
 		flamingo.raiseEvent(this, "onSetVisible", this, vis);
 	}
-	/*public function setCursor(cursor:String):Void {			
-		flamingo.showCursor(cursor);		
-	}*/
 	
 	/***********************************************************************
 	*functions that are needed to work with old (not OO) flamingo code
 	*/
+	/**
+	 * getter target
+	 */
 	public function get target():String {
 		return this.container._target;
 	}
+	/**
+	 * getter _target
+	 */
 	public function get _target():String {
 		return this.container._target;
 	}
@@ -282,29 +285,51 @@ class core.AbstractPositionable extends AbstractListenerRegister
 		return _global.flamingo;
 	}
 	
-	/*Both _visible (getter and setter) are forwarded to the container _visible(getter and setter)*/	
+	/**
+	 * Both _visible (getter and setter) are forwarded to the container _visible(getter and setter)
+	 */	
 	public function set _visible(value:Boolean) {
 		this.container._visible = value;
 	}
+	/**
+	 * Both _visible (getter and setter) are forwarded to the container _visible(getter and setter)
+	 */	
 	public function get _visible():Boolean {
 		return this.container._visible;
 	}
-	
+	/**
+	 * setter _alpha
+	 */
 	public function set _alpha(value:Number) {
 		this.container._alpha=value;
 	}
+	/**
+	 * getter _alpha
+	 */
 	public function get _alpha():Number {
 		return this.container._alpha;
 	}	
+	/**
+	 * getter __width
+	 */
 	public function get __width():Number {
 		return this._width2;
 	}
+	/**
+	 * setter __width
+	 */
 	public function set __width(value:Number):Void {
 		this._width2 = value;
 	}
+	/**
+	 * getter __height
+	 */
 	public function get __height():Number {
 		return this._height2;
 	}
+	/**
+	 * setter __height
+	 */
 	public function set __height(value:Number):Void {
 		this._height2=value;
 	}
@@ -312,42 +337,63 @@ class core.AbstractPositionable extends AbstractListenerRegister
 	/***********************************************************************
 	 * Getters and Setters.
 	 */
-	
+	/**
+	 * getter _height
+	 */
 	public function get _height():Number {
 		return this.container._height;
 	}
+	/**
+	 * getter _width
+	 */
 	public function get _width():Number {
 		return this.container._width;
 	}
-	
+	/**
+	 * setter _height
+	 */
 	public function set _height(value:Number) {
 		this.container._height=value;
 	}
+	/**
+	 * setter _width
+	 */
 	public function set _width(value:Number) {
 		this.container._width=value;
 	}
 	
-		
+	/**
+	 * getter id
+	 */	
 	public function get id():String 
 	{		
 		return _id;
 	}
-	
+	/**
+	 * setter id
+	 */
 	public function set id(value:String):Void 
 	{
 		_id = value;
 	}
-	
+	/**
+	 * getter container
+	 * the movieclip that contains the visible part of the component.
+	 */
 	public function get container():MovieClip 
 	{
 		return _container;
 	}
-	
+	/**
+	 * setter container
+	 */
 	public function set container(value:MovieClip):Void 
 	{
 		_container = value;
 	}
-	
+	/**
+	 * getter loaded
+	 */
 	public function get loaded():Boolean 
 	{
 		return _loaded;
@@ -357,233 +403,407 @@ class core.AbstractPositionable extends AbstractListenerRegister
 	{
 		//_loaded = value;
 	}
+	/**
+	 * getter type
+	 */
 	public function get type():String 
 	{
 		return _type;
 	}
 	
+	/**
+	 * setter type
+	 */
 	public function set type(value:String):Void 
 	{
 		_type = value;
 	}
 	
+	/**
+	 * getter visible
+	 */
 	public function get visible():Boolean { 		
 		return configVisible;
 	}
 	
+	/**
+	 * setter visible
+	 */
 	public function set visible(value:Boolean):Void {
 		this.configVisible = value;
 	}
 		
+	/**
+	 * getter strings
+	 * The strings that are used in this component
+	 */
 	public function get strings():Object 
 	{
 		return _strings;
 	}
 	
+	/**
+	 * setter strings
+	 * The strings that are used in this component
+	 */
 	public function set strings(value:Object):Void 
 	{
 		_strings = value;
 	}
 	
+	/**
+	 * getter version
+	 */
 	public function get version():String {
 		return _version;
 	}
 	
+	/**
+	 * setter version
+	 */
 	public function set version(value:String):Void {
 		_version = value;
 	}
 	
+	/**
+	 * getter cursors
+	 */
 	public function get cursors():Object {
 		return _cursors;
 	}
 	
+	/**
+	 * setter cursors
+	 */
 	public function set cursors(value:Object):Void {
 		_cursors = value;
 	}
 	
+	/**
+	 * getter styles
+	 */
 	public function get styles():TextField.StyleSheet {
 		return _styles;
 	}
 	
+	/**
+	 * setter styles
+	 */
 	public function set styles(value:TextField.StyleSheet):Void {
 		_styles = value;
 	}
 		
+	/**
+	 * getter cursorId
+	 * the id of the cursor (default: 'cursor');
+	 */
 	public function get cursorId():String {
 		return _cursorId;
 	}
 	
+	/**
+	 * setter cursorId
+	 * the id of the cursor (default: 'cursor');
+	 */
 	public function set cursorId(value:String):Void {
 		_cursorId = value;
 	}
 	
-	
+	/**
+	 * getter listento
+	 */
 	public function get listento():Array 
 	{
 		return _listento;
 	}
 	
+	/**
+	 * setter listento
+	 */
 	public function set listento(value:Array):Void 
 	{
 		_listento = value;
 	}
 	
+	/**
+	 * getter defaultXML
+	 */
 	public function get defaultXML():String {
 		return _defaultXML;
 	}
 	
+	/**
+	 * setter defaultXML
+	 */
 	public function set defaultXML(value:String):Void {
 		_defaultXML = value;
 	}
 	
+	/**
+	 * getter minheight
+	 */
 	public function get minheight():Number {
 		return _minheight;
 	}
 	
+	/**
+	 * setter minheight
+	 */
 	public function set minheight(value:Number):Void {
 		_minheight = value;
 	}
 	
+	/**
+	 * getter maxheight
+	 */
 	public function get maxheight():Number {
 		return _maxheight;
 	}
 	
+	/**
+	 * setter maxheight
+	 */
 	public function set maxheight(value:Number):Void {
 		_maxheight = value;
 	}
 	
+	/**
+	 * getter minwidth
+	 */
 	public function get minwidth():Number {
 		return _minwidth;
 	}
 	
+	/**
+	 * setter minwidth
+	 */
 	public function set minwidth(value:Number):Void {
 		_minwidth = value;
 	}
 	
+	/**
+	 * getter maxwidth
+	 */
 	public function get maxwidth():Number {
 		return _maxwidth;
 	}
 	
+	/**
+	 * setter maxwidth
+	 */
 	public function set maxwidth(value:Number):Void {
 		_maxwidth = value;
 	}
 	
+	/**
+	 * getter ycenter
+	 */
 	public function get ycenter():String {
 		return _ycenter;
 	}
 	
+	/**
+	 * setter ycenter
+	 */
 	public function set ycenter(value:String):Void {
 		_ycenter = value;
 	}
 	
+	/**
+	 * getter xcenter
+	 */
 	public function get xcenter():String {
 		return _xcenter;
 	}
 	
+	/**
+	 * setter xcenter
+	 */
 	public function set xcenter(value:String):Void {
 		_xcenter = value;
 	}
 	
+	/**
+	 * getter bottom
+	 */
 	public function get bottom():String {
 		return _bottom;
 	}
 	
+	/**
+	 * setter bottom
+	 */
 	public function set bottom(value:String):Void {
 		_bottom = value;
 	}
 	
+	/**
+	 * getter top
+	 */
 	public function get top():String {
 		return _top;
 	}
 	
+	/**
+	 * setter top
+	 */
 	public function set top(value:String):Void {
 		_top = value;
 	}
 	
+	/**
+	 * getter right
+	 */
 	public function get right():String {
 		return _right;
 	}
 	
+	/**
+	 * setter right
+	 */
 	public function set right(value:String):Void {
 		_right = value;
 	}
 	
+	/**
+	 * getter left
+	 */
 	public function get left():String {
 		return _left;
 	}
 	
+	/**
+	 * setter left
+	 */
 	public function set left(value:String):Void {
 		_left = value;
 	}
 	
+	/**
+	 * getter height
+	 */
 	public function get height():String {
 		return _heightSetting;
 	}
 	
+	/**
+	 * setter height
+	 */
 	public function set height(value:String):Void {
 		_heightSetting = value;
 	}
 	
+	/**
+	 * getter width
+	 */
 	public function get width():String {
 		return _widthSetting;
 	}
 	
+	/**
+	 * setter width
+	 */
 	public function set width(value:String):Void {
 		_widthSetting = value;
 	}
 	
+	/**
+	 * getter name
+	 */
 	public function get name():String {
 		return _name;
 	}
 	
+	/**
+	 * setter name
+	 */
 	public function set name(value:String):Void {
 		_name = value;
 	}
 	
+	/**
+	 * getter mBorder
+	 * Border movieclip
+	 */
 	public function get mBorder():MovieClip {
 		return _mBorder;
 	}
 	
+	/**
+	 * setter mBorder
+	 * Border movieclip
+	 */
 	public function set mBorder(value:MovieClip):Void {
 		_mBorder = value;
 	}
 	
+	/**
+	 * getter bordercolor setting
+	 */
 	public function get bordercolor():Number {
 		return _bordercolor;
 	}
 	
+	/**
+	 * setter bordercolor setting
+	 */
 	public function set bordercolor(value:Number):Void {
 		_bordercolor = value;
 	}
 	
+	/**
+	 * getter borderwidth setting
+	 */
 	public function get borderwidth():Number {
 		return _borderwidth;
 	}
 	
+	/**
+	 * setter borderwidth setting
+	 */
 	public function set borderwidth(value:Number):Void {
 		_borderwidth = value;
 	}
 	
+	/**
+	 * getter borderalpha setting
+	 */
 	public function get borderalpha():Number {
 		return _borderalpha;
 	}
 	
+	/**
+	 * setter borderalpha setting
+	 */
 	public function set borderalpha(value:Number):Void {
 		_borderalpha = value;
 	}
 	
+	/**
+	 * getter guides 
+	 */
 	public function get guides():Object {
 		return _guides;
 	}
-	
+	/**
+	 * setter guides 
+	 */
 	public function set guides(value:Object):Void {
 		_guides = value;
 	}
 	
+	/**
+	 * getter parentObject
+	 * if the parent is a AbstractPositionable
+	 */
 	public function get parentObject():AbstractPositionable {
 		return _parentObject;
 	}
 	
+	/**
+	 * setter parentObject
+	 * if the parent is a AbstractPositionable
+	 */
 	public function set parentObject(value:AbstractPositionable):Void {
 		_parentObject = value;
 	}
