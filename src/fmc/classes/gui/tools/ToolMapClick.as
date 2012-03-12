@@ -26,8 +26,7 @@ class gui.tools.ToolMapClick extends AbstractTool
 
 			//Logger.console("coord1x", coord.x);
 			//Logger.console("coord1y", coord.y);
-			thisObj.flamingo.raiseEvent(thisObj, "onMapClicked", thisObj, coord);	
-			thisObj.deactivate();
+			thisObj.flamingo.raiseEvent(thisObj, "onMapClicked", thisObj, coord);
 		};
 	}
 	
