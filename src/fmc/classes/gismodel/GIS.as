@@ -282,11 +282,9 @@ class gismodel.GIS extends AbstractComponent {
         super.setAttribute(name, value);
     }
     function addLayerAsString(xmlString:String) {
-		Logger.console("AddLayerAsString: "+xmlString);
 		var xml:XML = new XML(xmlString);		
 		var xmlNode:XMLNode = xml.firstChild;
-		var name:String = xmlNode.localName;
-		Logger.console("Name: " + name + " xmlNode: " + xmlNode);
+		var name:String = xmlNode.localName;		
 		addComposite(name, xmlNode);
 	}
 	
@@ -397,7 +395,54 @@ class gismodel.GIS extends AbstractComponent {
     function getActiveFeature():Feature {
         return activeFeature;
     }
-    
+    /**
+	 *Gets the active feature as a object (see Feature.toObject() for details of the object)
+	*/
+	public function getActiveFeatureAsObject():Object{
+		if (this.getActiveFeature()!=null){
+			return this.getActiveFeature().toObject();							
+		}
+		return null;
+	}
+	
+	/**
+	 * Get the features of layers  as objects(usable objects for javascript, see Feature#toObject for details of the object)
+	 * @param	includePrefix include prefix in features (@see Feature#toObject)
+	 * @param	layerName the name of the layer. If ommitted all features of all the layers will return. 
+	 * Otherwise only the features from the layer with name== layername are returned.
+	*/
+	public function getFeaturesAsObject(includePrefix: Boolean, layerName:String):Array {
+		if (layerName == undefined){
+			layerName = null;
+		}
+		var returnValue:Array=new Array();
+		var layers:Array=this.getLayers();
+		for (var i=0; i < layers.length; i++){
+			var layer = Layer(layers[i]);
+			if (layerName==null || layer.getName() == layerName) {
+				var lFeatures:Array=layer.getFeatures();
+				for (var l=0; l < lFeatures.length; l++){
+					var oFeature:Object=Feature(lFeatures[l]).toObject(includePrefix);
+					if (oFeature!=undefined && oFeature!=null){					
+						oFeature["flamingoLayerName"]=layer.getName();
+						returnValue.push(oFeature);
+					}
+				}	
+			}
+		}
+		return returnValue;
+	}
+	
+	/**
+	 * Get all features of all the layers in this EditMap as objects(usable objects for javascript, see Feature.toObject() for details of the object)
+	 * @param	includePrefix include prefix in features (@see Feature#toObject)
+	 * @deprecated use GIS#getFeaturesAsObject
+	 */
+	public function getAllFeaturesAsObject(includePrefix:Boolean) {
+		return getFeaturesAsObject(includePrefix,null);
+		
+	}
+	
     function setCreateGeometry(createGeometry:CreateGeometry):Void {
         this.createGeometry = createGeometry;
             
