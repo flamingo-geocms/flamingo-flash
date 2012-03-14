@@ -3400,7 +3400,7 @@ class Flamingo {
 		arguments.shift();	
 		var comp = this.components[id].target;
 		if (this.components[id] instanceof AbstractPositionable) {
-			comp = this.components[id]
+			comp = this.components[id];
 		}
 		if (comp == undefined) {
 			return null;

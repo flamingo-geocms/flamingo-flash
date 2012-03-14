@@ -323,6 +323,28 @@ class gismodel.GIS extends AbstractComponent {
         layers.push(layer);
         stateEventDispatcher.dispatchEvent(new AddRemoveEvent(this, "GIS", "layers", new Array(layer), null));
     }
+	
+	/**
+	 * Sets the composite at the given layer
+	 * @param	xmlString The string containing the xml to be setted at the layer
+	 * @param	compositeName The string denoting the name of the composite to be setted
+	 * @param	layerName the name of the layer. 
+	*/
+	public function setCompositeInLayer(xmlString: String, compositeName: String, layerName:String):Void {
+		if (layerName == undefined){
+			return;
+		}
+		var returnValue:Array=new Array();
+		var layers:Array=this.getLayers();
+		for (var i=0; i < layers.length; i++){
+			var layer = Layer(layers[i]);
+			if (layerName != null && layer.getName() == layerName) {
+				var xml:XML = new XML(xmlString);		
+				var xmlNode:XMLNode = xml.firstChild;
+				layer.addComposite(compositeName, xmlNode);
+			}
+		}
+	}
     
     function getLayers():Array {
         return layers.concat();
@@ -441,6 +463,27 @@ class gismodel.GIS extends AbstractComponent {
 	public function getAllFeaturesAsObject(includePrefix:Boolean) {
 		return getFeaturesAsObject(includePrefix,null);
 		
+	}
+	
+	/**
+	 * Set the value of a feature in a given layer
+	 * @param	layerName the name of the layer.
+	 * @param	featureId The id of the property
+	 * @param	propertyName the name of the property
+	 * @param	value Value of the property
+	*/
+	public function setFeatureValue(layerName:String, featureId: Number, propertyName:String, value:String):Void {
+		if (layerName == undefined){
+			return;
+		}
+		var layers:Array=this.getLayers();
+		for (var i=0; i < layers.length; i++){
+			var layer = Layer(layers[i]);
+			if (layer.getName() == layerName) {
+				var feature:Feature = layer.getFeature(featureId);
+				feature.setValue(propertyName, value);
+			}
+		}
 	}
 	
     function setCreateGeometry(createGeometry:CreateGeometry):Void {
