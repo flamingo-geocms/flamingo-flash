@@ -123,9 +123,17 @@ Group: Cmc  {
    File: HotlinkResults.as  (cmc\HotlinkResults.as)
    File: IdentifyResults.as  (cmc\IdentifyResults.as)
    File: IdentifyResultsHTML.as  (cmc\IdentifyResultsHTML.as)
+   File: Image.as  (cmc\Image.as)
    File: LanguagePicker.as  (cmc\LanguagePicker.as)
    File: Legend.as  (cmc\Legend.as)
    File: LocationFinder.as  (cmc\LocationFinder.as)
+   File: Logo.as  (cmc\Logo.as)
+   File: NamedExtentViewer.as  (cmc\NamedExtentViewer.as)
+   File: TabControl.as  (cmc\TabControl.as)
+   File: TextArea.as  (cmc\TextArea.as)
+   File: ToolBuffer.as  (cmc\ToolBuffer.as)
+   File: ToolDataFilter.as  (cmc\ToolDataFilter.as)
+   File: ToolHotlink.as  (cmc\ToolHotlink.as)
    File: Window.as  (cmc\Window.as)
    }  # Group: Cmc
 
@@ -268,20 +276,11 @@ Group: Fmc  {
       File: tools.Base64  (fmc\classes\tools\Base64.as)
       }  # Group: Classes
 
-   File: Image.as  (fmc\Image.as)
    File: LayerIdentifyIcon.as  (fmc\LayerIdentifyIcon.as)
    File: LayerOverview.as  (fmc\LayerOverview.as)
-   File: Logo.as  (fmc\Logo.as)
    File: MonitorLayer.as  (fmc\MonitorLayer.as)
    File: MonitorMap.as  (fmc\MonitorMap.as)
-   File: NamedExtentViewer.as  (fmc\NamedExtentViewer.as)
-   File: OGWFSConnector.as  (fmc\OGWFSConnector.as)
-   File: TabControl.as  (fmc\TabControl.as)
    File: Text.as  (fmc\Text.as)
-   File: TextArea.as  (fmc\TextArea.as)
-   File: ToolBuffer.as  (fmc\ToolBuffer.as)
-   File: ToolDataFilter.as  (fmc\ToolDataFilter.as)
-   File: ToolHotlink.as  (fmc\ToolHotlink.as)
    }  # Group: Fmc
 
 Group: Index  {

@@ -632,7 +632,8 @@ class gui.layers.OGCWMSLayer extends AbstractLayer{
 		//listener for OGWMSConnector	
 		var lConn:Object = new Object();
 		lConn.onRequest = function(connector:OGWMSConnector) {
-			//_global.flamingo.tracer(requestobject.url);
+			//_global.flamingo.tracer(requestobject.url);			
+			thisObj.setLastGetMapRequest(connector.url,null);
 			_global.flamingo.raiseEvent(thisObj, "onRequest", thisObj, "update", connector);
 		};
 		lConn.onResponse = function(connector:OGWMSConnector) {

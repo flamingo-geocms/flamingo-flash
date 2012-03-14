@@ -23,6 +23,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 import core.AbstractPositionable;
 import core.AbstractConfigurable;
+import coremodel.service.HttpRequest;
 import tools.Logger;
 import tools.Utils;
 import gui.Map;
@@ -44,6 +45,8 @@ class gui.layers.AbstractLayer extends AbstractConfigurable{
     private var minScale:Number=null;
     private var maxScale:Number=null;
     private var grayscale:Boolean = false;
+	
+	private var _lastGetMapRequest:HttpRequest = null;
     
 	/**
 	 * Constructor for creating this layer
@@ -258,5 +261,23 @@ class gui.layers.AbstractLayer extends AbstractConfigurable{
 	public function set map(value:Map):Void {
 		_map = value;		
         flamingo.addListener(this, _map, this);
+	}
+	public function get lastGetMapRequest():HttpRequest 
+	{
+		return _lastGetMapRequest;
+	}
+	public function set lastGetMapRequest(request:HttpRequest):Void 
+	{
+		_lastGetMapRequest = request;
+	}
+	public function setLastGetMapRequest(url:String, body:String):Void {
+		if (lastGetMapRequest == null) {
+			lastGetMapRequest = new HttpRequest();
+		}
+		lastGetMapRequest.setUrl(url);
+		lastGetMapRequest.setBody(body);
+	}
+	public function getLastGetMapRequest():HttpRequest {
+		return lastGetMapRequest;
 	}
 }
