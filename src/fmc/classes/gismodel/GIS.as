@@ -481,7 +481,33 @@ class gismodel.GIS extends AbstractComponent {
 			var layer = Layer(layers[i]);
 			if (layer.getName() == layerName) {
 				var feature:Feature = layer.getFeature(featureId);
+				if (value == "null") {
+					value = "";
+				}
 				feature.setValue(propertyName, value);
+			}
+		}
+	}
+	
+	/**
+	 * Set the value of a feature in a given layer
+	 * @param	layerName the name of the layer.
+	 * @param	featureId The id of the property
+	 * @param	propertyName the name of the property
+	 * @param	value Value of the property
+	*/
+	public function getFeature(layerName:String, featureId: Number) : Object {
+		if (layerName == undefined){
+			return null;
+		}
+		var layers:Array=this.getLayers();
+		for (var i=0; i < layers.length; i++){
+			var layer = Layer(layers[i]);
+			if (layer.getName() == layerName) {
+				var feature:Feature = layer.getFeature(featureId);
+				if (feature != null) {
+					return feature.toObject();
+				}
 			}
 		}
 	}
@@ -637,6 +663,7 @@ class gismodel.GIS extends AbstractComponent {
 			layer.removeFeatures(layer.getFeatures(),false);			
 		}		 
 	}
+	
 	/**
 	 * Remove all features for layer with name: 'name'
 	 * @param	name the name of the layer
@@ -648,6 +675,28 @@ class gismodel.GIS extends AbstractComponent {
 			layer = Layer(layers[i]);
 			if (layer.getName() == name) {
 				layer.removeFeatures(layer.getFeatures(),addOperation);
+			}
+		}
+	}
+	
+	/**
+	 * Remove all features for layer with name: 'name'
+	 * @param	layerName the name of the layer
+	 * @param	featureId The id of the feature
+	 * @param	addOperation if set to true, a operation is created to remove features from service (if supported)
+	 */
+	function removeLayerFeatureById(layerName:String, featureId:String, addOperation:Boolean) {
+		Logger.console("removeLayerFeatureById",layerName, featureId);
+		var layer:Layer = null;
+		for (var i:String in layers) {
+			layer = Layer(layers[i]);
+			Logger.console("Layer", layer.getName());
+			if (layer.getName() == layerName) {
+				Logger.console("Layer found");
+				var feat = layer.getFeature(featureId);
+				if (feat != null) {
+					layer.removeFeature(feat, addOperation);
+				}
 			}
 		}
 	}

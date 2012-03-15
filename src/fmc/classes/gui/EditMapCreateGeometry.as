@@ -114,7 +114,7 @@ class gui.EditMapCreateGeometry extends MovieClip {
 			}
 			
 			//API event onGeometryDrawFinished();
-			_global.flamingo.raiseEvent(this._parent,"onGeometryDrawFinished",this._parent,gis.getActiveFeature().getGeometry().toWKT());			
+			_global.flamingo.raiseEvent(this._parent,"onGeometryDrawFinished",this._parent,gis.getActiveFeature().toObject());			
 			gis.setCreateGeometry(null);
         } else {	
 			var pixel:Pixel = new Pixel(_xmouse, _ymouse);
@@ -125,7 +125,7 @@ class gui.EditMapCreateGeometry extends MovieClip {
                 createGeometry.getLayer().addFeature(geometry);
                 if (geometry instanceof geometrymodel.Point) {
 					//API event onGeometryDrawFinished();
-					_global.flamingo.raiseEvent(this._parent,"onGeometryDrawFinished",this._parent,gis.getActiveFeature().getGeometry().toWKT());
+					_global.flamingo.raiseEvent(this._parent,"onGeometryDrawFinished",this._parent,gis.getActiveFeature().toObject());
                     gis.setCreateGeometry(null);
                 }
             } else {
