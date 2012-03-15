@@ -145,14 +145,19 @@ Group: Fmc  {
 
       Group: Core  {
 
-         File: AbstractComponent.as  (fmc\classes\core\AbstractComponent.as)
+         File: AbstractComponent  (fmc\classes\core\AbstractComponent.as)
+         File: AbstractComposite  (fmc\classes\core\AbstractComposite.as)
          File: AbstractConfigurable  (fmc\classes\core\AbstractConfigurable.as)
-         File: AbstractContainer.as  (fmc\classes\core\AbstractContainer.as)
+         File: AbstractContainer  (fmc\classes\core\AbstractContainer.as)
          File: AbstractListenerRegister  (fmc\classes\core\AbstractListenerRegister.as)
          File: AbstractPositionable  (fmc\classes\core\AbstractPositionable.as)
          File: Cursors  (fmc\classes\core\Cursors.as)
+         File: InitAdapter  (fmc\classes\core\InitAdapter.as)
          File: loading.FunctionCall  (fmc\classes\core\loading\FunctionCall.as)
          File: loading.LoadComponentQueue  (fmc\classes\core\loading\LoadComponentQueue.as)
+         File: ParentChildComponentAdapter  (fmc\classes\core\ParentChildComponentAdapter.as)
+         File: PersistableComponent  (fmc\classes\core\PersistableComponent.as)
+         File: VisibleAdapter  (fmc\classes\core\VisibleAdapter.as)
          }  # Group: Core
 
       Group: Coregui  {
@@ -276,6 +281,7 @@ Group: Fmc  {
       File: tools.Base64  (fmc\classes\tools\Base64.as)
       }  # Group: Classes
 
+   File: HttpRequest  (fmc\classes\coremodel\service\HttpRequest.as)
    File: LayerIdentifyIcon.as  (fmc\LayerIdentifyIcon.as)
    File: LayerOverview.as  (fmc\LayerOverview.as)
    File: MonitorLayer.as  (fmc\MonitorLayer.as)
