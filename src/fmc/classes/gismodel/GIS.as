@@ -686,13 +686,10 @@ class gismodel.GIS extends AbstractComponent {
 	 * @param	addOperation if set to true, a operation is created to remove features from service (if supported)
 	 */
 	function removeLayerFeatureById(layerName:String, featureId:String, addOperation:Boolean) {
-		Logger.console("removeLayerFeatureById",layerName, featureId);
 		var layer:Layer = null;
 		for (var i:String in layers) {
 			layer = Layer(layers[i]);
-			Logger.console("Layer", layer.getName());
 			if (layer.getName() == layerName) {
-				Logger.console("Layer found");
 				var feat = layer.getFeature(featureId);
 				if (feat != null) {
 					layer.removeFeature(feat, addOperation);
