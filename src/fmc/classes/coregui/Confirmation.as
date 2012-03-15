@@ -49,6 +49,9 @@ import core.AbstractComponent;
 
 import tools.Logger;
 
+/** 
+* A component that pops-up to ask the user for confirmation. It gives the user two options: confirm or deny.
+*/
 class coregui.Confirmation extends AbstractComponent {
     
     private var veil:MovieClip = null;
@@ -59,6 +62,9 @@ class coregui.Confirmation extends AbstractComponent {
     						"<string id='yes' en='Yes' nl='Ja'/>" +
     						"<string id='no' en='No' nl='Nee'/>" +
     						"</Confirmation>";
+    /**
+     * init
+     */								
     function init():Void {
 		//wait for veil and actionEventListener to be loaded
         if (!_global.flamingo.isLoaded(listento[0],true)) {			
@@ -96,13 +102,19 @@ class coregui.Confirmation extends AbstractComponent {
         var noButton:Button = Button(attachMovie("Button", "mNoButton", 2, initObject));
         noButton.addEventListener("click", Delegate.create(this, onClickNoButton));
 	    }
-    
+    /**
+     * setVisible
+     * @param	visible
+     */
     function setVisible(visible:Boolean):Void {
         super.setVisible(visible);
         
         veil.setVisible(this.visible);
     }
-    
+    /**
+     * onClickYesButton
+     * @param	eventObject
+     */
     function onClickYesButton(eventObject:Object):Void {
         setVisible(false);
         
@@ -113,7 +125,10 @@ class coregui.Confirmation extends AbstractComponent {
         		_global.flamingo.raiseEvent(this,"onActionEvent",id + "," + actionEvent.toString());
             }
     }
-    
+    /**
+     * onClickNoButton
+     * @param	eventObject
+     */
     function onClickNoButton(eventObject:Object):Void {
         setVisible(false);
     }

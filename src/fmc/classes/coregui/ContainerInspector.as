@@ -8,13 +8,17 @@ import coregui.*;
 
 import mx.controls.CheckBox;
 import mx.utils.Delegate;
-
+/**
+ * coregui.ContainerInspector
+ */
 class coregui.ContainerInspector extends MovieClip {
     
     private var container:MovieClip = null; // Set by init object.
     
     private var depth:Number = 0;
-    
+    /**
+     * onLoad
+     */
     function onLoad():Void {
         addCheckBoxes(container, 0);
     }
@@ -57,7 +61,10 @@ class coregui.ContainerInspector extends MovieClip {
             }
         }
     }
-    
+    /**
+     * onClickCheckBox
+     * @param	eventObject
+     */
     function onClickCheckBox(eventObject:Object):Void {
         var component:MovieClip = eventObject.target["component"];
         if (component.setVisible == undefined) {

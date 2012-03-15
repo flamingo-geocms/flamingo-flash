@@ -207,7 +207,9 @@ class coregui.js.JsButton extends AbstractComponent {
 		drawButton();
 	}
 		
-	//process events
+	/**
+	 * process event onPress
+	 */
     function onPress():Void {
 		if (bToggle) {
 			bSelected = !bSelected;
@@ -219,6 +221,9 @@ class coregui.js.JsButton extends AbstractComponent {
 		onDispatchJsButtonEvent();
     }
     
+	/**
+	 * process event onRollOver
+	 */
     function onRollOver():Void {
 		bRollOver = true;
 		bDown = false;
@@ -228,6 +233,9 @@ class coregui.js.JsButton extends AbstractComponent {
 		_global.flamingo.showTooltip(tooltipText, this);
     }
     
+	/**
+	 * process event onRollOut
+	 */
     function onRollOut():Void {
 		bRollOver = false;
 		bDown = false;
@@ -236,6 +244,9 @@ class coregui.js.JsButton extends AbstractComponent {
 		onDispatchJsButtonEvent();
     }
     
+	/**
+	 * process event onRelease
+	 */
     function onRelease():Void {
 		bRollOver = false;
 		bDown = false;
@@ -244,6 +255,9 @@ class coregui.js.JsButton extends AbstractComponent {
 		onDispatchJsButtonEvent();
     }
     
+	/**
+	 * process event onReleaseOutside
+	 */
     function onReleaseOutside():Void {
 		bRollOver = false;
 		bDown = false;
@@ -252,6 +266,9 @@ class coregui.js.JsButton extends AbstractComponent {
 		onDispatchJsButtonEvent();
     }
 	
+	/**
+	 * drawButton
+	 */
 	function drawButton():Void{
 		//trace("drawButton() id = "+id+" bVisible = "+bVisible+" bEnabled = "+bEnabled+" bRollOver = "+bRollOver+" bToggle = "+bToggle+" bSelected = "+bSelected);
 		if (!bVisible) {
@@ -288,8 +305,8 @@ class coregui.js.JsButton extends AbstractComponent {
         return id;
     }
     /**
-	Sets the toggle state of the button. If false the selected state will also be set to false.
-	@param toggle Boolean, toggle state of the button.
+	 * Sets the toggle state of the button. If false the selected state will also be set to false.
+	 * @param toggle Boolean, toggle state of the button.
 	*/
 	function setToggleState(toggle:Boolean):Void {
 		this.bToggle = toggle;
@@ -300,29 +317,29 @@ class coregui.js.JsButton extends AbstractComponent {
 		drawButton();
 	}
     /**
-	Returns the toggle state of the button: Boolean.
+	 * @return the toggle state of the button: Boolean.
 	*/
 	function getToggleState():Boolean {
 		return bToggle;
 	}
 	/**
-	Sets the selected state of the button
-	@param selected Boolean, selected state of the button.
+	 * Sets the selected state of the button
+	 * @param selected Boolean, selected state of the button.
 	*/
 	function setSelectedState(selected:Boolean):Void {
 		this.bSelected = selected;
 		
 		drawButton();
 	}
-     /**
-	Returns the selected state of the button: Boolean.
+    /**
+	 * @return the selected state of the button: Boolean.
 	*/
 	function getSelectedState():Boolean {
 		return bSelected;
 	}
 	/**
-	Sets the enabled state of the button
-	@param enabled Boolean, enabled state of the button.
+	 * Sets the enabled state of the button
+	 * @param enabled Boolean, enabled state of the button.
 	*/
 	function setEnabledState(bEnabled:Boolean):Void {
 		this.bEnabled = bEnabled;
@@ -330,12 +347,14 @@ class coregui.js.JsButton extends AbstractComponent {
 		drawButton();
 	}
     /**
-	Returns the enabled state of the button: Boolean.
+	 * @return the enabled state of the button: Boolean.
 	*/
 	function getEnabledState():Boolean {
 		return bEnabled;
 	}
-	
+	/**
+	 * onDispatchJsButtonEvent
+	 */
 	function onDispatchJsButtonEvent():Void {
 		var jsButtonEvent:Object = new Object;
 		jsButtonEvent["id"] = id;

@@ -33,10 +33,12 @@ import event.ActionEvent;
 import event.ActionEventListener;
 import core.AbstractComponent;
 
+/** 
+* A base class for a button with default behaviour
+*/
 class coregui.BaseButton extends AbstractComponent {
     
 	private var id:Number = -1; // Set by init object.
-    //private var tooltipText:String = "";
 	private var tooltipText:String = null; // Set by init object.
     private var actionEventListener:ActionEventListener = null;
 	private var actionEventListeners:Array = null;
@@ -47,20 +49,17 @@ class coregui.BaseButton extends AbstractComponent {
     private var uplink:String = null;
     private var overlink:String = null;
     private var downlink:String = null;
-	//*** graphical buttonstates
-	//frame 1: up
-	//frame 2: over
-	//frame 3: down
-	//Optional:
-	//frame 4: selected_up
-	//frame 5: selected_over
-	//frame 6: selected_down
 	
+	/**
+	 * constructor
+	 */
 	function BaseButton(){
 		actionEventListeners = new Array();
 		setActionEventListener(this.actionEventListener);
 	}
-	
+	/**
+	 * init
+	 */
     function init():Void {
         useHandCursor = false;
 		
@@ -69,7 +68,11 @@ class coregui.BaseButton extends AbstractComponent {
 			tooltipText = _global.flamingo.getString(this, "tooltip");
 		}
     }
-    
+    /**
+     * setAttribute
+     * @param	name
+     * @param	value
+     */
     function setAttribute(name:String, value:String):Void {
     	if(name=="skin"){
     		uplink = value + "_up";
@@ -77,24 +80,36 @@ class coregui.BaseButton extends AbstractComponent {
     		overlink = value + "_over";	
     	}
 	}
-	
+	/**
+	 * getID
+	 * @return id
+	 */
 	function getID():Number {
         return id;
     }
-    
+    /**
+     * setActionEventListener
+     * @param	actionEventListener
+     */
     function setActionEventListener(actionEventListener:ActionEventListener):Void {
 		actionEventListeners = new Array();	//delete former listeners!
 		if (actionEventListener != null) { 
 			actionEventListeners.push(actionEventListener);
 		}
     }
-	
+	/**
+	 * addActionEventListener
+	 * @param	actionEventListener
+	 */
 	function addActionEventListener(actionEventListener:ActionEventListener):Void {
 		if (actionEventListener != null) { 
 			actionEventListeners.push(actionEventListener);
 		}
     }
-	
+	/**
+	 * setSelectedState
+	 * @param	selected
+	 */
 	function setSelectedState(selected:Boolean):Void {
 		this.selected = selected;
 		
@@ -108,11 +123,16 @@ class coregui.BaseButton extends AbstractComponent {
 			gotoAndStop(1);			//up
 		}
 	}
-    
+    /**
+     * getSelectedState
+     * @return state
+     */
 	function getSelectedState():Boolean {
 		return selected;
 	}
-	
+	/**
+	 * process onPress
+	 */
     function onPress():Void {
         if (selected) {
 			if (_totalframes > 5) {
@@ -136,6 +156,9 @@ class coregui.BaseButton extends AbstractComponent {
 		}
     }
     
+	/**
+	 * process onRollOver
+	 */
     function onRollOver():Void {
         if (selected) {
 			if (_totalframes > 4) {
@@ -149,6 +172,9 @@ class coregui.BaseButton extends AbstractComponent {
 		_global.flamingo.showTooltip(tooltipText, this);
     }
     
+	/**
+	 * process onRollOut
+	 */
     function onRollOut():Void {
         if (selected) {
 			if (_totalframes > 3) {
@@ -160,6 +186,9 @@ class coregui.BaseButton extends AbstractComponent {
 		}
     }
     
+	/**
+	 * process onRelease
+	 */
     function onRelease():Void {
         if (selected) {
 			if (_totalframes > 3) {
@@ -171,6 +200,9 @@ class coregui.BaseButton extends AbstractComponent {
 		}
     }
     
+	/**
+	 * process onReleaseOutside
+	 */
     function onReleaseOutside():Void {
         if (selected) {
 			if (_totalframes > 3) {

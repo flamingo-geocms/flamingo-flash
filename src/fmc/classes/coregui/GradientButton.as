@@ -9,7 +9,9 @@ import coregui.GradientFill;
 import mx.controls.Label;
 
 import gui.URL;
-
+/**
+ * coregui.GradientButton
+ */
 class coregui.GradientButton extends AbstractComponent{
 	private var buttonLabel:Label;
 	private var cSize:Number = 6;
@@ -19,7 +21,9 @@ class coregui.GradientButton extends AbstractComponent{
 	private var disabled:Boolean = false;
 	private var tooltipText:String = null;
 	
-	
+	/**
+	 * init
+	 */
 	function init(){
 		if (tooltipText == null) {
 			tooltipText = _global.flamingo.getString(this, "tooltip");
@@ -35,7 +39,9 @@ class coregui.GradientButton extends AbstractComponent{
         buttonLabel.setStyle("textAlign", "center");
     	draw();
 	}
-	
+	/**
+	 * draw
+	 */
 	function draw(){
 		if(disabled){
 			gradientDisabled.draw(this);
@@ -47,34 +53,45 @@ class coregui.GradientButton extends AbstractComponent{
 		}
 	}
 	
-
+    /**
+     * getLabel
+     * @return
+     */
 	function getLabel():String {
         return _global.flamingo.getString(this,"label");
     }  
 	
 
-    
+    /**
+     * process onReleaseOutside
+     */
     function onReleaseOutside():Void {
     	if(!disabled){
 	    	gradient1.draw(this);
     	}
 
     }
-    
+    /**
+     * process onRollOver
+     */
     function onRollOver():Void {
     	if(!disabled){
 			gradient2.draw(this);
 			_global.flamingo.showTooltip(tooltipText, this);
     	}
     }
-    
+    /**
+     * process onRollOut
+     */
     function onRollOut():Void {
     	if(!disabled){
 			gradient1.draw(this);
     	}
     }
        
-       
+    /**
+     * resize
+     */   
     function resize() {
         _global.flamingo.position(this);
     }

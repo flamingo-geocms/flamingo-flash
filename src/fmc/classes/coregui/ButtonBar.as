@@ -43,7 +43,9 @@ class coregui.ButtonBar extends MovieClip implements ActionEventListener{
 	private var popUpWindowVisible:Boolean = false;
 	
 	private var setXIntervalId;
-	
+	/**
+	 * onLoad
+	 */
     function onLoad():Void {
 		//try to get some sort of id...
 		id = this._target.split("/")[this._target.split("/").length - 2];
@@ -75,7 +77,10 @@ class coregui.ButtonBar extends MovieClip implements ActionEventListener{
 
 		
     }
-	
+	/**
+	 * onActionEvent
+	 * @param	actionEvent
+	 */
 	function onActionEvent(actionEvent:ActionEvent):Void {
         var sourceClassName:String = actionEvent.getSourceClassName();
         var actionType:Number = actionEvent.getActionType();
@@ -179,7 +184,9 @@ class coregui.ButtonBar extends MovieClip implements ActionEventListener{
 	private function removeBarBackground():Void {
 		barbackground.removeMovieClip();
 	}
-	
+	/**
+	 * process onMouseMove
+	 */
     function onMouseMove():Void {
 		if (!expandable) {
 			return;
@@ -226,6 +233,9 @@ class coregui.ButtonBar extends MovieClip implements ActionEventListener{
 		}
 	
     }
+	/**
+	 * showPopUpWindowBar
+	 */
 	function showPopUpWindowBar():Void{
 		_x = default_xpos + popUpWindowDX;
 		_y = default_ypos + popUpWindowDY;
@@ -237,7 +247,10 @@ class coregui.ButtonBar extends MovieClip implements ActionEventListener{
 			clearInterval(intervalId);
 		}
 	}
-	
+	/**
+	 * removePopUpWindow
+	 * @param	afterMouseDown
+	 */
 	function removePopUpWindow(afterMouseDown:Boolean):Void{
 		if (afterMouseDown==null) {
 			afterMouseDown = false;
