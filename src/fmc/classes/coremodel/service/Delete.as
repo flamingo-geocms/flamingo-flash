@@ -8,12 +8,21 @@ import coremodel.service.*;
 
 import coremodel.service.wfs.*;
 
+/**
+ * coremodel.service.Delete
+ */
 class coremodel.service.Delete extends Operation {
-    
+    /**
+     * constructor
+     * @param	serviceFeature
+     */
     function Delete(serviceFeature:ServiceFeature) {
         super(serviceFeature);
     }
-    
+    /**
+     * toXMLString
+     * @return
+     */
     function toXMLString():String {
         var requestString:String = "";
         var serviceLayer:ServiceLayer = serviceFeature.getServiceLayer();
@@ -26,7 +35,10 @@ class coremodel.service.Delete extends Operation {
         
         return requestString;
     }
-    
+    /**
+     * toString
+     * @return
+     */
     function toString():String {
         return "Delete(" + serviceFeature.getID() + ")";
     }

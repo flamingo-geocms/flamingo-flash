@@ -8,8 +8,15 @@ import coremodel.service.wfs.*;
 
 import coremodel.service.ServiceProperty;
 
+/**
+ * coremodel.service.wfs.WFSProperty
+ */
 class coremodel.service.wfs.WFSProperty extends ServiceProperty {
-    
+    /**
+     * constructor
+     * @param	rootNode
+     * @param	namespacePrefix
+     */
     function WFSProperty(rootNode:XMLNode, namespacePrefix:String) {
         name = namespacePrefix + ":" + rootNode.attributes["name"];
         if (name == null) {
@@ -35,7 +42,10 @@ class coremodel.service.wfs.WFSProperty extends ServiceProperty {
             optional = true;
         }
     }
-    
+    /**
+     * toString
+     * @return
+     */
     function toString():String {
         return "WFSProperty(" + name + ", " + type + ")";
     }

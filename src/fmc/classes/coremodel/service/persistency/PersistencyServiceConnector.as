@@ -6,24 +6,37 @@
 import mx.utils.Delegate;
 
 import coremodel.service.persistency.AbstractPersistencyServiceConnector;
-
+/**
+ * coremodel.service.persistency.PersistencyServiceConnector
+ */
 class coremodel.service.persistency.PersistencyServiceConnector extends AbstractPersistencyServiceConnector {
 	
 	public static var STATUS_SUCCESS: String = 'success';
 	public static var STATUS_INVALID_CODE: String = 'invalid_code';
 	
 	private var _baseURL: String;
-	
+	/**
+	 * getter baseURL
+	 */
 	public function get baseURL (): String {
 		return _baseURL;
 	}
-	
+	/**
+	 * PersistencyServiceConnector
+	 * @param	baseURL
+	 * @param	applicationIdentifier
+	 */
 	public function PersistencyServiceConnector (baseURL: String, applicationIdentifier: String) {
 		super (applicationIdentifier);
 		
 		_baseURL = baseURL;
 	}
-
+    /**
+     * persistDocument
+     * @param	document
+     * @param	documentIdentifier
+     * @param	callback
+     */
 	public function persistDocument (document: XML, documentIdentifier: String, callback: Function): Void {
 		var responseDocument: XML = new XML (),
 			httpStatus: Number = 0;
@@ -46,7 +59,11 @@ class coremodel.service.persistency.PersistencyServiceConnector extends Abstract
 		document.contentType = "text/xml";
 		document.sendAndLoad (buildURL ('persist', parameters), responseDocument);
 	}
-	
+	/**
+	 * getDocument
+	 * @param	documentIdentifier
+	 * @param	callback
+	 */
 	public function getDocument (documentIdentifier: String, callback: Function): Void {
 		var responseDocument: XML = new XML ();
 		responseDocument.ignoreWhite = true;

@@ -29,11 +29,17 @@ import geometrymodel.Envelope;
  */
 class coremodel.service.tiling.factory.WMScTileFactory extends AbstractTileFactory implements TileFactoryInterface{
     
-    /*Constructor*/
+    /**
+     * Constructor
+     * @param	r
+     * @param	e
+     * @param	url
+     * @param	map
+     */
     function WMScTileFactory(r:Array,e:Envelope,url:String,map:Object){         
         super(r,e,url,map);     
     }   
-    /*Create a WMSc tile
+    /** Create a WMSc tile
      * @param xIndex the x index of this tile
      * @param yIndex the y index of this tile
      * @param zoomLevel the zoomlevel index (index to resolution) of this tile.

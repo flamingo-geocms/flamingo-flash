@@ -28,20 +28,34 @@ class coremodel.service.tiling.connector.WMScConnector {
 	var requestid:String;
 	var busy:Boolean;
     private var log:Logger = null;
-    
+    /**
+     * addListener
+     * @param	listener
+     */
     function addListener(listener:Object) {
         events.addListener(listener);
     }
+	/**
+	 * removeListener
+	 * @param	listener
+	 */
     function removeListener(listener:Object) {
         events.removeListener(listener);
     }
-
+    /**
+     * constructor
+     */
     function WMScConnector() {
         events = new Object();
         AsBroadcaster.initialize(events);
         this.log = new Logger("coremodel.service.tiling.connector.WMScConnector",_global.flamingo.getLogLevel(),_global.flamingo.getScreenLogLevel());
     }
-    
+    /**
+     * getFeatureInfo
+     * @param	url
+     * @param	args
+     * @param	obj
+     */
     function getFeatureInfo(url:String, args:Object, obj:Object) {
         args.REQUEST = "GetFeatureInfo";
         var xrequest:XML = new XML();

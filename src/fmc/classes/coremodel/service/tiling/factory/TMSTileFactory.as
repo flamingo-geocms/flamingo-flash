@@ -28,7 +28,13 @@ import geometrymodel.Envelope;
  * @author Linda Vels
  */
 class coremodel.service.tiling.factory.TMSTileFactory extends AbstractTileFactory implements TileFactoryInterface{
-    /*Constructor*/
+    /**
+     * Constructor
+     * @param	r
+     * @param	e
+     * @param	url
+     * @param	map
+     */
     function TMSTileFactory(r:Array,e:Envelope,url:String,map:Object){      
         super(r,e,url,map);
     }

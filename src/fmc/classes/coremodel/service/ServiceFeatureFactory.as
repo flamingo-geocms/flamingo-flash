@@ -6,8 +6,15 @@
 
 import coremodel.service.*;
 
+/**
+ * coremodel.service.ServiceFeatureFactory
+ */
 class coremodel.service.ServiceFeatureFactory {
-    
+    /**
+     * createServiceFeature
+     * @param	serviceLayer
+     * @return always null
+     */
     function createServiceFeature(serviceLayer:ServiceLayer):ServiceFeature { return null; }
     
 }

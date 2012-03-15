@@ -6,14 +6,22 @@
 
 import coremodel.service.*;
 
+/**
+ * coremodel.service.Transaction
+ */
 class coremodel.service.Transaction {
     
     private var operations:Array = null;
-    
+    /**
+     * constructor
+     */
     function Transaction() {
         operations = new Array();
     }
-    
+    /**
+     * addOperation
+     * @param	operation
+     */
     function addOperation(operation:Operation):Void {
         var existingOperation:Operation = getOperation(operation.getFeatureID());
         
@@ -31,7 +39,10 @@ class coremodel.service.Transaction {
             operations.push(operation);
         }
     }
-    
+    /**
+     * removeOperation
+     * @param	operation
+     */
     function removeOperation(operation:Operation):Void {
         for (var i:Number = 0; i < operations.length; i++) {
             if (operations[i] == operation) {
@@ -40,11 +51,18 @@ class coremodel.service.Transaction {
             }
         }
     }
-    
+    /**
+     * getOperations
+     * @return Array
+     */
     function getOperations():Array {
         return operations.concat();
     }
-    
+    /**
+     * getOperation
+     * @param	featureID
+     * @return Operation
+     */
     function getOperation(featureID:String):Operation {
         var operation:Operation = null;
         for (var i:String in operations) {
@@ -55,7 +73,10 @@ class coremodel.service.Transaction {
         }
         return null;
     }
-    
+    /**
+     * toString
+     * @return
+     */
     function toString():String {
         return "Transaction(" + operations.length + ")";
     }

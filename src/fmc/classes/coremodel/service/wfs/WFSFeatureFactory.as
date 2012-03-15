@@ -11,8 +11,15 @@ import coremodel.service.ServiceFeatureFactory;
 import coremodel.service.ServiceLayer;
 import tools.Randomizer;
 
+/**
+ * coremodel.service.wfs.WFSFeatureFactory
+ */
 class coremodel.service.wfs.WFSFeatureFactory extends ServiceFeatureFactory {
-    
+    /**
+     * createServiceFeature
+     * @param	serviceLayer
+     * @return
+     */
     function createServiceFeature(serviceLayer:ServiceLayer):ServiceFeature {
         var id:String = "WFSFF_" + Randomizer.getNumber();
         var serviceProperties:Array = serviceLayer.getServiceProperties();

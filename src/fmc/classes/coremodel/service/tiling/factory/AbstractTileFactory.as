@@ -65,55 +65,119 @@ class coremodel.service.tiling.factory.AbstractTileFactory{
     }
     
     /*********************** Getters and Setters ***********************/
-    public function setServiceBBox(b:Envelope){
+    /**
+     * setter ServiceBBox
+     * @param	b
+     */
+	public function setServiceBBox(b:Envelope){
         this.serviceBBox=b;
     }
+	/**
+	 * getter ServiceBBox
+	 * @return
+	 */
     public function getServiceBBox():Envelope{
         return serviceBBox;
     }
+	/**
+	 * setter ServiceUrl
+	 * @param	url
+	 */
     public function setServiceUrl(url:String){
         this.serviceUrl=url;
     }
+	/**
+	 * getter ServiceUrl
+	 * @return
+	 */
     public function getServiceUrl():String{
         return this.serviceUrl;
     }
+	/**
+	 * setter Resolutions
+	 * @param	r
+	 */
     public function setResolutions(r:Array):Void{
         this.resolutions=r;
     }
+	/**
+	 * getResolutions
+	 * @return
+	 */
     public function getResolutions():Array{
         return resolutions;
     }
+	/**
+	 * setTileWidth
+	 * @param	w
+	 */
     public function setTileWidth(w:Number):Void{
         this.tileWidth=w;
-    }   
+    }
+	/**
+	 * getTileWidth
+	 * @return
+	 */
     public function getTileWidth():Number{
         return this.tileWidth;
     }
+	/**
+	 * setTileHeight
+	 * @param	h
+	 */
     public function setTileHeight(h:Number):Void{
         this.tileHeight=h;
     }
+	/**
+	 * getTileHeight
+	 * @return
+	 */
     public function getTileHeight():Number{
         return this.tileHeight;
     }
+	/**
+	 * setTileExtension
+	 * @param	ext
+	 */
     public function setTileExtension(ext:String):Void{
         this.tileExtension= ext;
     }
+	/**
+	 * getTileExtension
+	 * @return
+	 */
     public function getTileExtension():String{
         return this.tileExtension;
     }
+	/**
+	 * setMap
+	 * @param	map
+	 */
     public function setMap(map:Object):Void{
         this.map=map;
     }
+	/**
+	 * getMap
+	 * @return
+	 */
     public function getMap():Object{
         return this.map;
-    }   
+    }
+	/**
+	 * setExtraParams
+	 * @param	paramsObject
+	 */
     public function setExtraParams(paramsObject:Object):Void{
         this.extraUrlParams=paramsObject;
     }
+	/**
+	 * getExtraParams
+	 * @return
+	 */
     public function getExtraParams():Object{
         return this.extraUrlParams;
     }
-    /* Create a 'empty' tile: A tile without url and screen coordinates. (setTileScreen location not called)
+    /** Create a 'empty' tile: A tile without url and screen coordinates. (setTileScreen location not called)
      * @param xIndex the x index of this tile
      * @param yIndex the y index of this tile
      * @param zoomLevel the zoomlevel index (index to resolution) of this tile.
@@ -145,7 +209,7 @@ class coremodel.service.tiling.factory.AbstractTileFactory{
         return tile;
     }   
     
-    /*Get the index number X of the tile on coordinate 'xCoord'.
+    /** Get the index number X of the tile on coordinate 'xCoord'.
      * @param xCoord The x coord.
      * @param zoomLevel the zoomLevel of the server.
 	 * @see coremodel.service.tiling.factory.TileFactoryInterface#getTileIndexX
@@ -163,7 +227,7 @@ class coremodel.service.tiling.factory.AbstractTileFactory{
         }
         return tileIndexX;
     }
-    /*Get the index number Y of the tile on coordinate 'yCoord' on zoomlevel 'zoomLevel'.
+    /** Get the index number Y of the tile on coordinate 'yCoord' on zoomlevel 'zoomLevel'.
      * @param yCoord The y coord.
      * @param zoomLevel the zoomLevel of the server.
 	 * @see coremodel.service.tiling.factory.TileFactoryInterface#getTileIndexY
@@ -183,7 +247,7 @@ class coremodel.service.tiling.factory.AbstractTileFactory{
     }
     
 	
-	/*Get the fixed zoomlevel of the given Resolution from this service: 'res'
+	/** Get the fixed zoomlevel of the given Resolution from this service: 'res'
      * @param res The resolution resolution
 	 * @see coremodel.service.tiling.factory.TileFactoryInterface#getZoomLevel
      */	

@@ -14,10 +14,17 @@ import event.ActionEventListener;
 import geometrymodel.Geometry;
 import tools.XMLTools;
 
+/**
+ * coremodel.service.ServiceConnector
+ */
 class coremodel.service.ServiceConnector {
     
     static private var instances:Object = new Object(); // Associative array;
-    
+    /**
+     * getInstance
+     * @param	url
+     * @return
+     */
     static function getInstance(url):ServiceConnector {
         if (url == null) {
             _global.flamingo.tracer("Exception in ServiceConnector.getInstance()\nNo url given.");
@@ -54,16 +61,47 @@ class coremodel.service.ServiceConnector {
     function getURL():String {
         return url;
     }
+	/**
+	 * stub
+	 * @param	serviceVersion
+	 */
     function setServiceVersion(serviceVersion):Void {}
-	
+	/**
+	 * stub
+	 * @param	srsName
+	 */
 	function setSrsName(srsName):Void {}
-
+    /**
+     * stub
+     * @param	featureTypeName
+     * @param	actionEventListener
+     */
     function performDescribeFeatureType(featureTypeName:String, actionEventListener:ActionEventListener):Void { }
-    
+    /**
+     * stub
+     * @param	serviceLayer
+     * @param	extent
+     * @param	whereClauses
+     * @param	notWhereClause
+     * @param	hitsOnly
+     * @param	actionEventListener
+     */
     function performGetFeature(serviceLayer:ServiceLayer, extent:Geometry, whereClauses:Array, notWhereClause:WhereClause, hitsOnly:Boolean, actionEventListener:ActionEventListener):Void { }
-    
+    /**
+     * stub
+     * @param	transaction
+     * @param	actionEventListener
+     */
     function performTransaction(transaction:Transaction, actionEventListener:ActionEventListener):Void { }
-    
+    /**
+     * request
+     * @param	url
+     * @param	requestString
+     * @param	processMethod
+     * @param	serviceLayer
+     * @param	actionEventListener
+     * @param	contextObject
+     */
     function request(url:String, requestString:String, processMethod:Function, serviceLayer:ServiceLayer, actionEventListener:ActionEventListener, contextObject:Object):Void {
         //_global.flamingo.tracer(url + "\n" + requestString);
 		
@@ -125,11 +163,28 @@ class coremodel.service.ServiceConnector {
             requestXML.sendAndLoad(url, responseXML);
         }
     }
-    
+    /**
+     * stub
+     * @param	responseXML
+     * @param	serviceLayer
+     * @param	actionEventListener
+     * @param	contextObject
+     */
     function processDescribeFeatureType(responseXML:XML, serviceLayer:ServiceLayer, actionEventListener:ActionEventListener, contextObject:Object):Void { }
-    
+    /**
+     * stub
+     * @param	responseXML
+     * @param	serviceLayer
+     * @param	actionEventListener
+     * @param	contextObject
+     */
     function processGetFeature(responseXML:XML, serviceLayer:ServiceLayer, actionEventListener:ActionEventListener, contextObject:Object):Void { }
-    
+    /**
+     * stub
+     * @param	responseXML
+     * @param	serviceLayer
+     * @param	actionEventListener
+     */
     function processTransaction(responseXML:XML, serviceLayer:ServiceLayer, actionEventListener:ActionEventListener):Void { }
     
 }

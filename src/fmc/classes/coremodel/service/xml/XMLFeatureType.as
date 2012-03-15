@@ -8,11 +8,19 @@ import coremodel.service.xml.*;
 import mx.xpath.XPathAPI;
 import tools.XMLSchema;
 
+/**
+ * coremodel.service.xml.XMLFeatureType
+ */
 class coremodel.service.xml.XMLFeatureType extends ServiceLayer {
 	
 	private var _connector: XMLConnector;
 	private var _namespace: String = "app=\"http://www.degree.org/app\"";
-	
+	/**
+	 * constructor
+	 * @param	connector
+	 * @param	name
+	 * @param	properties
+	 */
 	public function XMLFeatureType(connector: XMLConnector, name: String, properties: Array) {
 		_connector = connector;
 		this.name = name;
@@ -28,6 +36,8 @@ class coremodel.service.xml.XMLFeatureType extends ServiceLayer {
 	 * - name (string): The name of the property.
 	 * - type (string): The type of the property.
 	 * - path (string): XPath expression to extract the property from the XML document.
+	 * 
+	 * @param	properties
 	 */
 	public function setProperties (properties: Array): Void {
 		var i: Number,
@@ -43,7 +53,12 @@ class coremodel.service.xml.XMLFeatureType extends ServiceLayer {
 			addProperty (p.name, p.type, p.path);
 		}
 	}
-	
+	/**
+	 * addProperty
+	 * @param	name
+	 * @param	type
+	 * @param	path
+	 */
 	public function addProperty (name: String, type: String, path: String): Void {
 		var property: XMLProperty = new XMLProperty (name, type, path);
 		
@@ -52,11 +67,17 @@ class coremodel.service.xml.XMLFeatureType extends ServiceLayer {
 			geometryProperties.push (property);
 		}
 	}
-	
+	/**
+	 * getNamespace
+	 * @return
+	 */
 	function getNamespace():String {
         return _namespace;
     }
-    
+    /**
+     * getServiceFeatureFactory
+     * @return
+     */
     function getServiceFeatureFactory(): ServiceFeatureFactory {
         return null;//new XMLFeatureFactory ();
     }

@@ -26,11 +26,17 @@ import tools.Logger;
  */
 class coremodel.service.tiling.factory.TileFactoryFinder{
     private var log:Logger;
-    
+    /**
+     * constructor
+     */
     public function TileFactoryFinder(){
         this.log = new Logger("coremodel.service.tiling.factory.TileFactoryFinder",_global.flamingo.getLogLevel(),_global.flamingo.getScreenLogLevel());        
     }
-        
+    /**
+     * findFactory
+     * @param	options
+     * @return
+     */    
     public function findFactory(options:Object):TileFactoryInterface{
         log.debug("try to create tileFactory: "+options[AbstractTileFactory.TILINGTYPE_KEY]);
         if (options[AbstractTileFactory.SERVICEURL_KEY]==undefined){

@@ -55,12 +55,24 @@ class coremodel.service.arcgis.ArcServerConnector{
 	private var bufferInfoCache:Object;
 	//-----------------------
 	var starttime:Date;
+	/**
+	 * addListener
+	 * @param	listener
+	 */
 	function addListener(listener:Object) {
 		events.addListener(listener);
 	}
+	/**
+	 * removeListener
+	 * @param	listener
+	 */
 	function removeListener(listener:Object) {
 		events.removeListener(listener);
 	}
+	/**
+	 * ArcServerConnector
+	 * @param	server
+	 */
 	function ArcServerConnector(server:String) {
 		this.server = server;
 		events = new Object();
@@ -167,6 +179,11 @@ class coremodel.service.arcgis.ArcServerConnector{
 		xrequest.sendAndLoad(url, xresponse);
 		return (thisObj.requestid);
 	}
+	/**
+	 * getServices
+	 * @param	objecttag
+	 * @return
+	 */
 	function getServices(objecttag:Object):Number {
 		var sxml:String = this.xmlheader+"\n";
 		return (this._sendrequest(sxml, "getServices", objecttag));
@@ -188,6 +205,12 @@ class coremodel.service.arcgis.ArcServerConnector{
 		}
 		this.events.broadcastMessage("onGetServices", services, objecttag, requestid);
 	}
+	/**
+	 * getServiceInfo
+	 * @param	service
+	 * @param	objecttag
+	 * @return
+	 */
 	function getServiceInfo(service:String, objecttag:Object):Number {
 		if (service != undefined) {
 			this.service = service;
@@ -345,7 +368,15 @@ class coremodel.service.arcgis.ArcServerConnector{
 		}
 		this.events.broadcastMessage("onGetServiceInfo", extent, layers, objecttag, requestid);
 	}
-	
+	/**
+	 * getImage
+	 * @param	service
+	 * @param	extent
+	 * @param	size
+	 * @param	layers
+	 * @param	objecttag
+	 * @return
+	 */
 	function getImage(service:String, extent:Object, size:Object, layers:Object, objecttag:Object):Number {
 		
         var bufferLayers: Array = [ ];
@@ -586,7 +617,15 @@ class coremodel.service.arcgis.ArcServerConnector{
 
 		this.events.broadcastMessage("onGetImage", extent, imageurl , legendurl, objecttag, requestid);
 	}
-	//gets the id of features in a layer.
+	/**
+	 * gets the id of features in a layer.
+	 * @param	service
+	 * @param	layerid
+	 * @param	query
+	 * @param	objecttag
+	 * @param	extent
+	 * @param	callback
+	 */
 	function getQueryFeatureIDs(service:String, layerid:String, query:String, objecttag:Object, extent: Object, callback: Function){
 		if (service != undefined) {
 			this.service = service;
@@ -681,7 +720,16 @@ class coremodel.service.arcgis.ArcServerConnector{
 		}
 		this.events.broadcastMessage("onGetQueryFeatureIDs", selectedFID, objecttag, requestid);
 	}
-	
+	/**
+	 * getFeatures
+	 * @param	service
+	 * @param	layerid
+	 * @param	extent
+	 * @param	subfields
+	 * @param	query
+	 * @param	objecttag
+	 * @return
+	 */
 	function getFeatures(service:String, layerid:String, extent:Object, subfields:String, query:String, objecttag:Object):Number {
 		if(layerid == "undefined"){
 			return null;

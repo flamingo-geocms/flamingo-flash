@@ -10,12 +10,19 @@ import coremodel.service.*;
 import mx.xpath.XPathAPI;
 import tools.XMLSchema;
 
+/**
+ * coremodel.service.wfs.FeatureType
+ */
 class coremodel.service.wfs.FeatureType extends ServiceLayer {
     
     private var namespacePrefix:String = null;
 	private var ftNamespacePrefix:String = null;
     private var xmlSchema:XMLSchema = null;
-	
+	/**
+	 * constructor
+	 * @param	rootNode
+	 * @param	contextObject
+	 */
     function FeatureType(rootNode:XMLNode, contextObject:Object) {
 		xmlSchema = new XMLSchema(rootNode);
 		namespacePrefix = xmlSchema.getTargetNamespacePrefix(); 
@@ -91,15 +98,24 @@ class coremodel.service.wfs.FeatureType extends ServiceLayer {
             return;
         }
     }
-    
+    /**
+     * getNamespace
+     * @return
+     */
     function getNamespace():String {
         return "app=\"http://www.deegree.org/app\"";
     }
-    
+    /**
+     * getServiceFeatureFactory
+     * @return
+     */
     function getServiceFeatureFactory():ServiceFeatureFactory {
         return new WFSFeatureFactory();
     }
-    
+    /**
+     * toString
+     * @return
+     */
     function toString():String {
         return "FeatureType(" + name + ")";
     }

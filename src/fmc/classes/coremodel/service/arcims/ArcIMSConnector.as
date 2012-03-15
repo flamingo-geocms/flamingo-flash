@@ -17,6 +17,10 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 -----------------------------------------------------------------------------*/
+
+/**
+ * coremodel.service.arcims.ArcIMSConnector
+ */
 class coremodel.service.arcims.ArcIMSConnector {
 	//meta
 	var version:String = "2.0.1";
@@ -62,13 +66,6 @@ class coremodel.service.arcims.ArcIMSConnector {
 	private var busy:Boolean = false;
 	private var layerid:String;
 	private var events:Object;
-	//private var requesttype:String;
-	//private var url:String;
-	//private var xrequest:XML;
-	//private var xresponse:XML;
-	//private var error:String;
-	//private var time:Date;
-	//-----------------------
 	//-----------------------
 	private var DEBUG:Boolean = false;
 	private var recordedValues:Object = new Object();
@@ -78,18 +75,40 @@ class coremodel.service.arcims.ArcIMSConnector {
 	private var record:Boolean = false;
 	static var  serviceInfoResponses:Array = null;
 	static var  serviceInfoResponseListeners:Array = null;
+	/**
+	 * setIdentifyColorLayer
+	 * @param	s
+	 */
 	function setIdentifyColorLayer(s:String) {
 		this.identifyColorLayer = s;
 	}
+	/**
+	 * setIdentifyColorLayerKey
+	 * @param	s
+	 */
 	function setIdentifyColorLayerKey(s:String) {
 		this.identifyColorLayerKey = s;
 	}
+	/**
+	 * setRecord
+	 * @param	b
+	 */
 	function setRecord(b:Boolean) {
 		this.record = b;
 	}
+	/**
+	 * setVisualisationSelected
+	 * @param	visual
+	 */
 	function setVisualisationSelected(visual:Object) {
 		this.visualisationSelected = visual;
 	}
+	/**
+	 * setRecorded
+	 * @param	layerid
+	 * @param	layerkey
+	 * @param	values
+	 */
 	function setRecorded(layerid:String, layerkey:String, values:Array) {
 		if (this.recordedValues[layerid] == undefined) {
 			this.recordedValues[layerid] = new Object();
@@ -98,6 +117,12 @@ class coremodel.service.arcims.ArcIMSConnector {
 		this.recordedValues[layerid][layerkey] = values;
 
 	}
+	/**
+	 * addRecorded
+	 * @param	layerid
+	 * @param	layerkey
+	 * @param	values
+	 */
 	function addRecorded(layerid:String, layerkey:String, values:Array) {
 		log("addRecorded");
 		if (this.recordedValues[layerid] == undefined) {
@@ -121,29 +146,53 @@ class coremodel.service.arcims.ArcIMSConnector {
 			}
 		}
 	}
+	/**
+	 * setRecordedValues
+	 * @param	o
+	 */
 	function setRecordedValues(o:Object) {
 		this.recordedValues = o;
 	}
+	/**
+	 * getRecord
+	 */
 	function getRecord() {
 		return record;
 	}
+	/**
+	 * getVisualisationSelected
+	 */
 	function getVisualisationSelected() {
 		return visualisationSelected;
 	}
+	/**
+	 * addListener
+	 * @param	listener
+	 */
 	function addListener(listener:Object) {
 		events.addListener(listener);
 	}
-	
+	/**
+	 * addInfoReponseListener
+	 * @param	listener
+	 */
 	static function addInfoReponseListener(listener:Object) {
 		if(serviceInfoResponseListeners==null){
 			 serviceInfoResponseListeners = new Array();
 		}
 		serviceInfoResponseListeners.push(listener); 
 	}
-	
+	/**
+	 * removeListener
+	 * @param	listener
+	 */
 	function removeListener(listener:Object) {
 		events.removeListener(listener);
 	}
+	/**
+	 * ArcIMSConnector
+	 * @param	server
+	 */
 	function ArcIMSConnector(server:String) {
 		if(serviceInfoResponses==null){
 			serviceInfoResponses = new Array();
@@ -251,6 +300,11 @@ class coremodel.service.arcims.ArcIMSConnector {
 		xrequest.sendAndLoad(url,xresponse);
 		return (thisObj.requestid);
 	}
+	/**
+	 * getServices
+	 * @param	objecttag
+	 * @return
+	 */
 	function getServices(objecttag:Object):Number {
 		var sxml:String = this.xmlheader+"\n<GETCLIENTSERVICES/>";
 		return (this._sendrequest(sxml, "getServices", objecttag));
@@ -272,6 +326,12 @@ class coremodel.service.arcims.ArcIMSConnector {
 		}
 		this.events.broadcastMessage("onGetServices",services,objecttag,requestid);
 	}
+	/**
+	 * getServiceInfo
+	 * @param	service
+	 * @param	objecttag
+	 * @return
+	 */
 	function getServiceInfo(service:String, objecttag:Object):Number {
 		if (service != undefined) {
 			this.service = service;
@@ -296,7 +356,12 @@ class coremodel.service.arcims.ArcIMSConnector {
 			return (this._sendrequest(str, "getServiceInfo", objecttag));
 		}
 	}
-	
+	/**
+	 * getServiceInfoFromStore
+	 * @param	server
+	 * @param	service
+	 * @param	listener
+	 */
 	static function getServiceInfoFromStore(server:String,service:String, listener:Object):Void{
 		var infoResponseId:String = server + "_" + service;
 		if(serviceInfoResponses[infoResponseId].xml != null){
@@ -382,6 +447,15 @@ class coremodel.service.arcims.ArcIMSConnector {
 		listener.onGetServiceInfo(extent,layers);
 		//this.events.broadcastMessage("onGetServiceInfo",extent,layers,objecttag,requestid);
 	}
+	/**
+	 * getImage
+	 * @param	service
+	 * @param	extent
+	 * @param	size
+	 * @param	layers
+	 * @param	objecttag
+	 * @return
+	 */
 	function getImage(service:String, extent:Object, size:Object, layers:Object, objecttag:Object):Number {
 		if (service != undefined) {
 			this.service = service;
@@ -622,6 +696,15 @@ class coremodel.service.arcims.ArcIMSConnector {
 		}
 		this.events.broadcastMessage("onGetRasterInfo",this.layerid,data,objecttag,requestid);
 	}
+	/**
+	 * getRasterInfo
+	 * @param	service
+	 * @param	layerid
+	 * @param	point
+	 * @param	coordsys
+	 * @param	objecttag
+	 * @return
+	 */
 	function getRasterInfo(service:String, layerid:String, point:Object, coordsys:String, objecttag:Object):Number {
 		this.layerid = layerid;
 		if (service != undefined) {
@@ -640,6 +723,16 @@ class coremodel.service.arcims.ArcIMSConnector {
 		//trace(str);
 		return (this._sendrequest(str, "getRasterInfo", objecttag));
 	}
+	/**
+	 * getFeatures
+	 * @param	service
+	 * @param	layerid
+	 * @param	extent
+	 * @param	subfields
+	 * @param	query
+	 * @param	objecttag
+	 * @return
+	 */
 	function getFeatures(service:String, layerid:String, extent:Object, subfields:String, query:String, objecttag:Object):Number {
 		this.layerid = layerid;
 		if (service != undefined) {
@@ -810,6 +903,10 @@ class coremodel.service.arcims.ArcIMSConnector {
 	private function _getRGB(hex:Number):Object {
 		return ({r:hex >> 16, g:(hex & 0x00FF00) >> 8, b:hex & 0x0000FF});
 	}
+	/**
+	 * log
+	 * @param	stringtolog
+	 */
 	function log(stringtolog:Object) {
 		if (this.DEBUG) {
 			var newDate:Date = new Date();

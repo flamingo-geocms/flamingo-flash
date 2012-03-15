@@ -8,10 +8,16 @@ import coremodel.service.*;
 
 import tools.XMLTools;
 
+/**
+ * coremodel.service.TransactionResponse
+ */
 class coremodel.service.TransactionResponse {
     
     private var ids:Object = null; // Associative array.
-    
+    /**
+     * constructor
+     * @param	xmlNode
+     */
     function TransactionResponse(xmlNode:XMLNode) {
         ids = new Object();
         
@@ -28,7 +34,10 @@ class coremodel.service.TransactionResponse {
             }
         }
     }
-    
+    /**
+     * getPreviousIDs
+     * @return Array
+     */
     function getPreviousIDs():Array {
         var previousIDs:Array = new Array();
         
@@ -38,7 +47,11 @@ class coremodel.service.TransactionResponse {
         
         return previousIDs;
     }
-    
+    /**
+     * getID
+     * @param	previousID
+     * @return
+     */
     function getID(previousID:String):String {
         if (ids[previousID] == null) {
             _global.flamingo.tracer("Exception in TransactionResponse.getID(" + previousID + ")");
@@ -47,7 +60,10 @@ class coremodel.service.TransactionResponse {
         
         return ids[previousID];
     }
-    
+    /**
+     * toString
+     * @return
+     */
     function toString():String {
         return "TransactionResponse()"
     }

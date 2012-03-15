@@ -14,8 +14,18 @@ import coremodel.service.*;
 import geometrymodel.GeometryParser;
 import geometrymodel.GeometryTools;
 
+/**
+ * coremodel.service.wfs.WFSFeature
+ */
 class coremodel.service.wfs.WFSFeature extends ServiceFeature {
-    
+    /**
+     * constructor
+     * @param	xmlNode
+     * @param	id
+     * @param	values
+     * @param	serviceLayer
+     * @param	contextObject
+     */
     function WFSFeature(xmlNode:XMLNode, id:String, values:Array, serviceLayer:ServiceLayer, contextObject:Object) {
         if ((xmlNode == null) && (id == null) && (values == null)) {
             _global.flamingo.tracer("Exception in WFSFeature.<<init>>()");
@@ -90,7 +100,10 @@ class coremodel.service.wfs.WFSFeature extends ServiceFeature {
             this.values = values;
         }
     }
-    
+    /**
+     * toString
+     * @return
+     */
     function toString():String {
         return "WFSFeature(" + id + ")";
     }

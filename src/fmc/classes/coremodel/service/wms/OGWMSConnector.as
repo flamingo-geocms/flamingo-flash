@@ -1,4 +1,8 @@
 ﻿import tools.Logger;
+
+/**
+ * coremodel.service.wms.OGWMSConnector
+ */
 dynamic class coremodel.service.wms.OGWMSConnector {
 	//meta
 	var version:String = "2.0";
@@ -22,7 +26,11 @@ dynamic class coremodel.service.wms.OGWMSConnector {
 	var starttime:Date;
 	
 	static private var instances:Array = new Array();
-	
+	/**
+	 * getInstance
+	 * @param	url
+	 * @return
+	 */
 	static function getInstance(url:String):OGWMSConnector {
 		var instance:OGWMSConnector = null;
 		//_global.flamingo.tracer("getInstance, url = " + url);
@@ -39,24 +47,45 @@ dynamic class coremodel.service.wms.OGWMSConnector {
 	}
 	
 	//-----------------------------------
+	/**
+	 * addListener
+	 * @param	listener
+	 */
 	function addListener(listener:Object) {
 		events.addListener(listener);
 	}
+	/**
+	 * removeListener
+	 * @param	listener
+	 */
 	function removeListener(listener:Object) {
 		events.removeListener(listener);
 	}
-
+    /**
+     * constructor
+     * @param	capUrl
+     * @param	id
+     */
 	function OGWMSConnector(capUrl:String, id:Number) {
 		this.capUrl = capUrl;
 		this.instanceId = id;
 		events = new Object();
 		AsBroadcaster.initialize(events);
 	}
-	
+	/**
+	 * getCapUrl
+	 * @return
+	 */
 	function getCapUrl():String {
 	  return this.capUrl;
 	}
-
+    /**
+     * getCapabilities
+     * @param	url
+     * @param	args
+     * @param	responseHandler
+     * @return
+     */
 	function getCapabilities(url:String, args:Object, responseHandler:Object):Number {
 		if (this.capService == null && !this.busy) {
     		if (args == undefined) {
@@ -66,8 +95,15 @@ dynamic class coremodel.service.wms.OGWMSConnector {
     		return (this._request(url, args, null));
     } else if (!this.busy) {
 		    responseHandler.onGetCapabilities(this.capService, this.capLayers, this.capObj, this.capReqid);
-    }
+           }
 	}
+	/**
+	 * getMap
+	 * @param	url
+	 * @param	args
+	 * @param	obj
+	 * @return
+	 */
 	function getMap(url:String, args:Object, obj:Object):Number {
 		if (args == undefined) {
 			args = new Object();
@@ -76,6 +112,13 @@ dynamic class coremodel.service.wms.OGWMSConnector {
 		args.REQUEST = "GetMap";
 		return (this._request(url, args, obj));
 	}
+	/**
+	 * getFeatureInfo
+	 * @param	url
+	 * @param	args
+	 * @param	obj
+	 * @return
+	 */
 	function getFeatureInfo(url:String, args:Object, obj:Object):Number {
 		if (args == undefined) {
 			args = new Object();
@@ -479,8 +522,6 @@ dynamic class coremodel.service.wms.OGWMSConnector {
 		}
 		this.events.broadcastMessage("onGetFeatureInfo", features, obj, reqid);
 	}
-	//private function getFeatureMember(xml:XML):Object{
-	//}
 	private function _processCapabilities(xml:XML, obj, reqid) {
 		var service:Object = new Object();
 		//use an Array instead of an Object for layers

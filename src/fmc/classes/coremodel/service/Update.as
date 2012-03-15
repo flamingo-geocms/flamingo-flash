@@ -8,12 +8,21 @@ import coremodel.service.*;
 
 import coremodel.service.wfs.*;
 
+/**
+ * coremodel.service.Update
+ */
 class coremodel.service.Update extends Operation {
-    
+    /**
+     * constructor
+     * @param	serviceFeature
+     */
     function Update(serviceFeature:ServiceFeature) {
         super(serviceFeature);
     }
-    
+    /**
+     * toXMLString
+     * @return
+     */
     function toXMLString():String {
         var requestString:String = "";
         var featureType:FeatureType = FeatureType(serviceFeature.getServiceLayer());
@@ -45,7 +54,10 @@ class coremodel.service.Update extends Operation {
         requestString += "  </wfs:Update>\n";
         return requestString;
     }
-    
+    /**
+     * toString
+     * @return
+     */
     function toString():String {
         return "Update(" + serviceFeature.getID() + ")";
     }

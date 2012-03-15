@@ -9,12 +9,21 @@ import coremodel.service.*;
 import coremodel.service.wfs.*;
 import geometrymodel.Geometry;
 
+/**
+ * coremodel.service.Insert
+ */
 class coremodel.service.Insert extends Operation {
-    
+    /**
+     * Insert
+     * @param	serviceFeature
+     */
     function Insert(serviceFeature:ServiceFeature) {
         super(serviceFeature);
     }
-    
+    /**
+     * toXMLString
+     * @return
+     */
     function toXMLString():String {
         var requestString:String = "";
         var serviceLayer:ServiceLayer = serviceFeature.getServiceLayer();
@@ -48,7 +57,10 @@ class coremodel.service.Insert extends Operation {
         requestString += "  </wfs:Insert>\n";
         return requestString;
     }
-    
+    /**
+     * toString
+     * @return
+     */
     function toString():String {
         return "Insert(" + serviceFeature.getID() + ")";
     }

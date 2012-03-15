@@ -13,26 +13,41 @@ import event.ActionEventListener;
 import gismodel.Property;
 import gismodel.Feature;
 import geometrymodel.*;
-//import geometrymodel.Geometry;
-//import geometrymodel.Point;
 import tools.XMLTools;
 
+/**
+ * coremodel.service.wfs.WFSConnector
+ */
 class coremodel.service.wfs.WFSConnector extends ServiceConnector {
 	private var serviceVersion:String="1.1.0";
 	private var srsName:String = "urn:ogc:def:crs:EPSG::28992";
-	
+	/**
+	 * constructor
+	 * @param	url
+	 */
     function WFSConnector(url:String) {
         super(url);
     }
-	
+	/**
+	 * setServiceVersion
+	 * @param	serviceVersion
+	 */
 	function setServiceVersion(serviceVersion){
 		this.serviceVersion=serviceVersion;
 	}
-	
+	/**
+	 * setSrsName
+	 * @param	srsName
+	 */
 	function setSrsName(srsName){
 		this.srsName=srsName;
 	}
-    
+    /**
+     * performDescribeFeatureType
+     * @param	featureTypeName
+     * @param	actionEventListener
+     * @param	contextObject
+     */
     function performDescribeFeatureType(featureTypeName:String, actionEventListener:ActionEventListener, contextObject:Object):Void {
         var requestString:String = "";
         //requestString += "<wfs:DescribeFeatureType service=\"WFS\" version=\"1.1.0\"\n";
@@ -45,7 +60,17 @@ class coremodel.service.wfs.WFSConnector extends ServiceConnector {
         requestString += "</wfs:DescribeFeatureType>\n";
         request(url, requestString, processDescribeFeatureType, null, actionEventListener, contextObject);
     }
-    
+    /**
+     * performGetFeature
+     * @param	serviceLayer
+     * @param	extent
+     * @param	whereClauses
+     * @param	notWhereClause
+     * @param	hitsOnly
+     * @param	actionEventListener
+     * @param	requestProperties
+     * @param	contextObject
+     */
     function performGetFeature(serviceLayer:ServiceLayer, extent:Geometry, whereClauses:Array, notWhereClause:WhereClause, hitsOnly:Boolean, 
     							actionEventListener:ActionEventListener, requestProperties:Array, contextObject:Object):Void {
 		var numFilterElements:Number = ((extent == null)? 0: 1) + ((whereClauses == null)? 0: whereClauses.length) + ((notWhereClause == null)? 0: 1);
@@ -130,7 +155,11 @@ class coremodel.service.wfs.WFSConnector extends ServiceConnector {
         //_global.flamingo.tracer(url + "\n" + requestString);
         request(url, requestString, processGetFeature, serviceLayer, actionEventListener, contextObject);
     }
-    
+    /**
+     * performTransaction
+     * @param	transaction
+     * @param	actionEventListener
+     */
     function performTransaction(transaction:Transaction, actionEventListener:ActionEventListener):Void {
         if (transaction == null) {
             _global.flamingo.tracer("Exception in WFSConnector.performTransaction()\nNo transaction given.");
@@ -156,7 +185,13 @@ class coremodel.service.wfs.WFSConnector extends ServiceConnector {
         
         request(url, requestString, processTransaction, null, actionEventListener, 0);
     }
-    
+    /**
+     * processDescribeFeatureType
+     * @param	responseXML
+     * @param	givenServiceLayer
+     * @param	actionEventListener
+     * @param	contextObject
+     */
     function processDescribeFeatureType(responseXML:XML, givenServiceLayer:ServiceLayer, actionEventListener:ActionEventListener, contextObject:Object):Void {
 		var serviceLayer:ServiceLayer = new FeatureType(responseXML.firstChild, contextObject);
         var actionEvent:ActionEvent = new ActionEvent(this, "ServiceConnector", ActionEvent.LOAD);
@@ -167,7 +202,13 @@ class coremodel.service.wfs.WFSConnector extends ServiceConnector {
         		_global.flamingo.raiseEvent(this,"onActionEvent",id + "," + actionEvent.toString());
             }
     }
-    
+    /**
+     * processGetFeature
+     * @param	responseXML
+     * @param	serviceLayer
+     * @param	actionEventListener
+     * @param	contextObject
+     */
     function processGetFeature(responseXML:XML, serviceLayer:ServiceLayer, actionEventListener:ActionEventListener, contextObject:Object):Void {
 		var numFeatures:Number = Number(responseXML.firstChild.attributes["numberOfFeatures"]);
         var featureNodes:Array = XMLTools.getChildNodes("gml:featureMember", responseXML.firstChild);
@@ -181,7 +222,12 @@ class coremodel.service.wfs.WFSConnector extends ServiceConnector {
         actionEventListener.onActionEvent(actionEvent);
         
     }
-    
+    /**
+     * processTransaction
+     * @param	responseXML
+     * @param	serviceLayer
+     * @param	actionEventListener
+     */
     function processTransaction(responseXML:XML, serviceLayer:ServiceLayer, actionEventListener:ActionEventListener):Void {
         var transactionResponse:TransactionResponse = new TransactionResponse(responseXML.firstChild);
         
@@ -190,7 +236,10 @@ class coremodel.service.wfs.WFSConnector extends ServiceConnector {
         actionEventListener.onActionEvent(actionEvent);
         _global.flamingo.raiseEvent(this,"onActionEvent",this + actionEvent.toString());
     }
-    
+    /**
+     * toString
+     * @return
+     */
     function toString():String {
         return "WFSConnector(" + url + ")";
     }

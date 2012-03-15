@@ -30,7 +30,10 @@ class coremodel.service.xml.XMLConnector extends ServiceConnector {
 	
 	private var _featureTypes: Object;
 	private var _propertyTypeParsers: Object;
-	
+	/**
+	 * constructor
+	 * @param	url
+	 */
 	public function XMLConnector(url : String) {
 		super(url);
 		
@@ -46,9 +49,9 @@ class coremodel.service.xml.XMLConnector extends ServiceConnector {
 	 * Adds a new feature type to this connector. A feature type consists of a name and
 	 * an array of properties. Each property in the array is an object that has the following
 	 * attributes:
-	 * - name (string): The name of the property.
-	 * - type (string): The type of the property.
-	 * - path (string): An xpath expression that is used to extract feature values from source documents.
+	 * @param	name The name of the property.
+	 * @param	properties An xpath expression that is used to extract feature values from source documents.
+	 * @return
 	 */
 	public function addFeatureType (name: String, properties: Array): ServiceLayer {
 		
@@ -71,6 +74,9 @@ class coremodel.service.xml.XMLConnector extends ServiceConnector {
 	 * Performs a describe features request on this XML connection. The possible feature types are
 	 * known before invoking this method, therefore an event is fired immediately containing the
 	 * requested feature type, or an error in case the feature type does not exist.
+	 * 
+	 * @param	featureTypeName
+	 * @param	actionEventListener
 	 */
     function performDescribeFeatureType(featureTypeName:String, actionEventListener:ActionEventListener):Void {
     	
@@ -97,7 +103,15 @@ class coremodel.service.xml.XMLConnector extends ServiceConnector {
     		}
        	}
     }
-    
+    /**
+     * performGetFeature
+     * @param	serviceLayer
+     * @param	extent
+     * @param	whereClauses
+     * @param	notWhereClause
+     * @param	hitsOnly
+     * @param	actionEventListener
+     */
     function performGetFeature(serviceLayer:ServiceLayer, extent:Geometry, whereClauses:Array, notWhereClause:WhereClause, hitsOnly:Boolean, actionEventListener:ActionEventListener):Void {
     	
     	 //_global.flamingo.tracer ("XMLConnector::performGetFeature");
@@ -109,11 +123,19 @@ class coremodel.service.xml.XMLConnector extends ServiceConnector {
     
     /**
      * Dummy implementation, transactions are not supported by the XML service connector.
-     */
+	 * 
+	 * @param	transaction
+	 * @param	actionEventListener
+	 */
     function performTransaction(transaction:Transaction, actionEventListener:ActionEventListener):Void {
     	_global.flamingo.tracer ("Transactions are not supported on XML services.");
     }
-    
+    /**
+     * processGetFeature
+     * @param	responseXML
+     * @param	serviceLayer
+     * @param	actionEventListener
+     */
     function processGetFeature(responseXML:XML, serviceLayer:ServiceLayer, actionEventListener:ActionEventListener):Void {
     	
     	//_global.flamingo.tracer ("XMLConnector::processGetFeature");
