@@ -1,4 +1,5 @@
 /** 
+ * display.spriteloader.SpriteSettings
  * @author Stijn De Ryck 
  */
 class display.spriteloader.SpriteSettings extends Object
@@ -13,7 +14,7 @@ class display.spriteloader.SpriteSettings extends Object
 	static public var buttonSize = 28;
 	
 	/**
-	 * 
+	 * SpriteSettings
 	 * @param	mapOffsetX The horizontal position (of the top-left corner) of the Sprite's area located on the sprite map image. 
 	 * @param	mapOffsetY The vertical position (of the top-left corner) of the Sprite's area located on the sprite map image. 
 	 * @param	mapAreaWidth The width of the Sprite area the map-image.

@@ -6,6 +6,7 @@ import display.spriteloader.SpriteSettings;
 import flash.display.BitmapData;
 import tools.Logger;
 /** 
+ * display.spriteloader.SpriteMap
  * @author Stijn De Ryck 
  */
 class display.spriteloader.SpriteMap extends Object
@@ -24,7 +25,11 @@ class display.spriteloader.SpriteMap extends Object
     public var addEventListener:Function;
     public var removeEventListener:Function;
 
-	
+	/**
+	 * constructor
+	 * @param	spriteMapUrl
+	 * @param	tempClip
+	 */
 	public function SpriteMap(spriteMapUrl:String,tempClip:MovieClip) 
 	{
 		_tempClip = tempClip;
@@ -40,7 +45,14 @@ class display.spriteloader.SpriteMap extends Object
 		addEventListener(SpriteMapEvent.LOAD_PROGRESS, handleEvent);
 		loadSpriteMap();
 	}
-	
+	/**
+	 * attachSpriteTo
+	 * @param	attachTarget
+	 * @param	spriteSettings
+	 * @param	depth
+	 * @param	spriteName
+	 * @return
+	 */
 	public function attachSpriteTo(attachTarget:MovieClip,spriteSettings:SpriteSettings,depth:Number, spriteName:String):Sprite 
 	{
 		if (spriteName == undefined) {
@@ -50,15 +62,23 @@ class display.spriteloader.SpriteMap extends Object
 		_spriteIndex++;
 		return sprite;
 	}
-	
+	/**
+	 * getter url
+	 */
 	public function get url():String 
 	{
 		return _url;
 	}
+	/**
+	 * getter loaded
+	 */
 	public function get loaded():Boolean 
 	{
 		return _loaded;
 	}
+	/**
+	 * getter bitmapData
+	 */
 	public function get bitmapData():BitmapData 
 	{
 		return _bitmapData;

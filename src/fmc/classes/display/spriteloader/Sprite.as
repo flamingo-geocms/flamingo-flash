@@ -6,6 +6,7 @@ import flash.geom.Point;
 import flash.geom.Rectangle;
 import mx.utils.Delegate;
 /** 
+ * display.spriteloader.Sprite
  * @author Stijn De Ryck 
  */
 class display.spriteloader.Sprite extends MovieClip {
@@ -22,12 +23,22 @@ class display.spriteloader.Sprite extends MovieClip {
 	private var _mapAreaHeight:Number = 0;
 	private var thisObj:Sprite;
 	
-
+    /**
+     * constructor
+     */
 	public function Sprite() 
 	{
 			thisObj = this;
 	}
-	
+	/**
+	 * create
+	 * @param	spriteMap
+	 * @param	target
+	 * @param	instanceName
+	 * @param	settings
+	 * @param	depth
+	 * @return
+	 */
 	public static function create(spriteMap:SpriteMap, target:MovieClip,instanceName:String,settings:SpriteSettings,depth:Number):Sprite
 	{
 		var params:Object = (settings instanceof SpriteSettings) ? settings : new SpriteSettings();
@@ -51,7 +62,10 @@ class display.spriteloader.Sprite extends MovieClip {
 	}
 	
 	
-	
+	/**
+	 * applyNewSettings
+	 * @param	settings
+	 */
 	public function applyNewSettings(settings:SpriteSettings):Void 
 	{
 		for ( var prop:String in  settings)
@@ -74,11 +88,16 @@ class display.spriteloader.Sprite extends MovieClip {
 		
 	}
 	
-	
+	/**
+	 * getter spriteMap
+	 */
 	public function get spriteMap():SpriteMap 
 	{
 		return _spriteMap;
 	}
+	/**
+	 * setter spriteMap
+	 */
 	public function set spriteMap(value:SpriteMap):Void 
 	{
 		//only allow once from the create() function which does an attachMovie( with an initParamsObject ) that gets applied 
@@ -90,37 +109,61 @@ class display.spriteloader.Sprite extends MovieClip {
 		}
 		
 	}
+	/**
+	 * getter mapOffsetX
+	 */
 	public function get mapOffsetX():Number 
 	{
 		return _mapOffsetX;
 	}
+	/**
+	 * setter mapOffsetX
+	 */
 	public function set mapOffsetX(value:Number):Void 
 	{
 		_mapOffsetX = value;
 		invalidate();
 	}
+	/**
+	 * getter mapOffsetY
+	 */
 	public function get mapOffsetY():Number 
 	{
 		return _mapOffsetY;
 	}
+	/**
+	 * setter mapOffsetY
+	 */
 	public function set mapOffsetY(value:Number):Void 
 	{
 		_mapOffsetY = value;
 		invalidate();
 	}
+	/**
+	 * getter mapAreaWidth
+	 */
 	public function get mapAreaWidth():Number 
 	{
 		return _mapAreaWidth;
 	}
+	/**
+	 * setter mapAreaWidth
+	 */
 	public function set mapAreaWidth(value:Number):Void 
 	{
 		_mapAreaWidth = value;
 		invalidate();
 	}
+	/**
+	 * getter mapAreaHeight
+	 */
 	public function get mapAreaHeight():Number 
 	{
 		return _mapAreaHeight;
 	}
+	/**
+	 * setter mapAreaHeight
+	 */
 	public function set mapAreaHeight(value:Number):Void 
 	{
 		_mapAreaHeight = value;

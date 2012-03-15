@@ -1,5 +1,6 @@
 import display.spriteloader.SpriteMap;
 /** 
+ * display.spriteloader.SpriteMapFactory
  * @author Stijn De Ryck 
  */
 class display.spriteloader.SpriteMapFactory
@@ -20,7 +21,7 @@ class display.spriteloader.SpriteMapFactory
 	}
 	
 	/**
-	 * Staic singleton entrypoint to receive the SpriteMap instance.
+	 * Static singleton entrypoint to receive the SpriteMap instance.
 	 * @return
 	 */
 	public static function getInstance():SpriteMapFactory
@@ -34,7 +35,11 @@ class display.spriteloader.SpriteMapFactory
 		return _instance;
 	}
 	
-	
+	/**
+	 * obtainSpriteMap
+	 * @param	spriteMapUrl
+	 * @return
+	 */
 	public function obtainSpriteMap(spriteMapUrl:String):SpriteMap
 	{
 		var map:SpriteMap = _mapDictionary[spriteMapUrl];
