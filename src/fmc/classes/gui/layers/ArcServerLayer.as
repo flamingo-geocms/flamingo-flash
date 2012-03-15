@@ -559,7 +559,8 @@ class gui.layers.ArcServerLayer extends AbstractLayer{
 			thisObj.flamingo.raiseEvent(thisObj, "onResponse", thisObj, "update", connector);
 		};
 		lConn.onRequest = function(connector:ArcServerConnector) {
-			//trace(requestobject.request)
+			//trace(requestobject.request)			
+			thisObj.setLastGetMapRequest(connector.url,connector.request);	
 			thisObj.flamingo.raiseEvent(thisObj, "onRequest", thisObj, "update", connector);
 		};
 		lConn.onError = function(error:String, objecttag:Object, requestid:String) {

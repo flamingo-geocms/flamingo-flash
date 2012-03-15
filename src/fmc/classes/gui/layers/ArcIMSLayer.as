@@ -324,7 +324,7 @@ class gui.layers.ArcIMSLayer extends AbstractLayer{
 			//trace(connector.response)
 			thisObj.flamingo.raiseEvent(thisObj, "onResponse", thisObj, "init", connector);
 		};
-		lConn.onRequest = function(connector:ArcIMSConnector,requesttype:String) {
+		lConn.onRequest = function(connector:ArcIMSConnector, requesttype:String) {
 			thisObj.flamingo.raiseEvent(thisObj, "onRequest", thisObj, "init", connector);
 		};
 		lConn.onError = function(error:String, objecttag:Object, requestid:String) {
@@ -1069,12 +1069,13 @@ class gui.layers.ArcIMSLayer extends AbstractLayer{
 		var thisObj:ArcIMSLayer = this;
 		var lConn:Object = new Object();
 		lConn.onResponse = function(connector:ArcIMSConnector) {
-			thisObj._stoptimeout();
+			thisObj._stoptimeout();		
 			//trace(connector.response)
 			thisObj.flamingo.raiseEvent(thisObj, "onResponse", thisObj, "update", connector);
 		};
 		lConn.onRequest = function(connector:ArcIMSConnector) {
 			//trace(connector.request)
+			thisObj.setLastGetMapRequest(connector.url,connector.request);	
 			thisObj.flamingo.raiseEvent(thisObj, "onRequest", thisObj, "update", connector);
 		};
 		lConn.onError = function(error:String, objecttag:Object, requestid:String) {
