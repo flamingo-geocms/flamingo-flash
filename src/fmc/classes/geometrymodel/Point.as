@@ -38,7 +38,7 @@ class geometrymodel.Point extends Geometry implements GeometryListener {
     }
     
     function getCenterPoint():Point {
-        return new Point(x, y);
+        return this;
     }
     
      function getEnvelope():Envelope {

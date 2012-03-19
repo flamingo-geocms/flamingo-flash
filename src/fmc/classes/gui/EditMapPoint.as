@@ -17,6 +17,7 @@ import gismodel.Feature;
 import gismodel.Layer;
 import gismodel.GeometryProperty;
 import tools.Logger;
+import mx.controls.Label;
 
 class gui.EditMapPoint extends EditMapGeometry {
     private var m_pixel:Pixel = null;
@@ -141,7 +142,7 @@ class gui.EditMapPoint extends EditMapGeometry {
 			var x:Number = m_pixel.getX();
 			var y:Number = m_pixel.getY();
 			clear();
-			moveTo(x, y);
+			//moveTo(x, y);
 			if (type == ACTIVE) {
 				if(isChild){
 					lineStyle(strokeWidth * 4, strokeColor, strokeOpacity);
@@ -158,6 +159,27 @@ class gui.EditMapPoint extends EditMapGeometry {
 			lineTo(x + 0.15, y + 0.45);
 		}
 	}
+    
+    private function setLabel():Void {
+        if (labelText == null) {
+            if (label != null) {
+                label.removeMovieClip();
+                label = null;
+            }
+            return;
+        }
+
+        if (label == null) {
+            label = Label(attachMovie("Label", "mLabel", labelDepth, {autoSize: "center"}));
+			label._x -=(label.width / 2);
+        }
+        if (type == ACTIVE) {
+            label.setStyle("fontWeight", "bold");
+        } else {
+            label.setStyle("fontWeight", "none");
+        }
+        label.text = labelText;
+    }
     
     private function doDrawEditable():Void {
         var point:Point = Point(_geometry);
@@ -362,7 +384,6 @@ class gui.EditMapPoint extends EditMapGeometry {
 			
 		}
 		else { //point is not active
-		
 			if (drawIconGraph || drawPointText) {
 				this.mPointGraphic.clear();
 			} else {
@@ -445,7 +466,6 @@ class gui.EditMapPoint extends EditMapGeometry {
     }
 	
 	private function pixel2Point(pixel:Pixel):geometrymodel.Point {
-
 		var extent:Object = map.getCurrentExtent();
 		var minX:Number = extent.minx;
         var minY:Number = extent.miny;
@@ -457,6 +477,7 @@ class gui.EditMapPoint extends EditMapGeometry {
         
         return new geometrymodel.Point(pointX, pointY);
     }
+
 	
 	private function enablePseudoButtonEvents(target){
 		target.isPressed = false; // flag
