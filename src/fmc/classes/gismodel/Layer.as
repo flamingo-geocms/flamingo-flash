@@ -319,7 +319,7 @@ class gismodel.Layer extends AbstractComposite implements ActionEventListener {
         
         var feature:Feature = null;
         if (serviceFeature == null) {                                            // serviceFeature == null && geometry != null
-            var id:String = "T_" + Randomizer.getNumber();
+            var id:String = "T_" + features.length;
             feature = new Feature(this, null, id, geometry, null, null);
         } else if (geometry != null) {                                           // serviceFeature != null && geometry != null
             var id:String = serviceFeature.getID();
