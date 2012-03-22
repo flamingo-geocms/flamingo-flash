@@ -1003,7 +1003,7 @@ function _findLocationARC(locationdata:Object, search:String, nr:Number, updatef
 		}
 		map = flamingo.getComponent(this.listento[0]);			
 		connArcServer.dataframe = locationdata.dataframe;
-
+		connArcServer.includeGeometry = true;
 		connArcServer.getFeatures(service, layerid, extent, outputfields, query);
 		if (updatefeatures) {
 			var str:String ="<span class='busy'>"+flamingo.getString(thisObj, "busy")+"</span>";
