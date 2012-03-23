@@ -8,7 +8,7 @@
 	<tstamp>
 		<format property="date" pattern="dd/MM/yyyy hh:mm aa"/>
 	</tstamp>
-	<property name="version" value="4.0_r1799"/>
+	<property name="version" value="4.0_r2125"/>
 	<property name="build" location="build"/>
 	<property name="dist" location="${build}/dist"/>
 	<property name="srcDir" location="src"/>
@@ -144,8 +144,8 @@
 			<fileset dir="${srcDir}/assets/img" includes="*.*"/>
 		</copy>
 		<copy file="changelog.txt" todir="${build}/dist"/>
-		<delete dir="${build}/release/flamingo/tpc"/>
-		<delete dir="${build}/release/flamingo/cmc"/>
+		<!--delete dir="${build}/release/flamingo/tpc"/>
+		<delete dir="${build}/release/flamingo/cmc"/-->
 		<echo file="${build}/release/flamingo/version.txt" append="false">version: ${version} date: ${date}</echo>
 		<antcall target="doc"/>
 		<echo message="--------------- Copy Documentation ---------------"/>
