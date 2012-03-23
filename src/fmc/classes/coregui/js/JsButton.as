@@ -52,6 +52,7 @@ class coregui.js.JsButton extends AbstractComponent {
 	private var bEnabled:Boolean = true;	//
 	private var bVisible:Boolean = true;	//
 	private var bRollOver:Boolean = false;	//
+	private var bRollOff:Boolean = false;	//
 	private var bDown:Boolean = false;		//
 	
 	private var iconurl_up:String = "";
@@ -215,6 +216,7 @@ class coregui.js.JsButton extends AbstractComponent {
 			bSelected = !bSelected;
 		}
 		bRollOver = false;
+		bRollOff = false;
 		bDown = true;
 				
 		drawButton();
@@ -226,6 +228,7 @@ class coregui.js.JsButton extends AbstractComponent {
 	 */
     function onRollOver():Void {
 		bRollOver = true;
+		bRollOff = false;
 		bDown = false;
 		
 		drawButton();
@@ -238,6 +241,7 @@ class coregui.js.JsButton extends AbstractComponent {
 	 */
     function onRollOut():Void {
 		bRollOver = false;
+		bRollOff = true;
 		bDown = false;
 		
 		drawButton();
@@ -249,6 +253,7 @@ class coregui.js.JsButton extends AbstractComponent {
 	 */
     function onRelease():Void {
 		bRollOver = false;
+		bRollOff = false;
 		bDown = false;
 		
 		drawButton();
@@ -260,6 +265,7 @@ class coregui.js.JsButton extends AbstractComponent {
 	 */
     function onReleaseOutside():Void {
 		bRollOver = false;
+		bRollOff = false;
 		bDown = false;
 		
 		drawButton();
@@ -363,6 +369,7 @@ class coregui.js.JsButton extends AbstractComponent {
 		jsButtonEvent["enabled"] = bEnabled;
 		jsButtonEvent["toggle"] = bToggle;
 		jsButtonEvent["selected"] = bSelected;
+		jsButtonEvent["rolloff"] = bRollOff;
 	
 		//API event onEvent();
 		_global.flamingo.raiseEvent(this,"onEvent",id,jsButtonEvent);
