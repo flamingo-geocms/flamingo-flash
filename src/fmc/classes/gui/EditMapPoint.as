@@ -76,7 +76,7 @@ class gui.EditMapPoint extends EditMapGeometry {
 	}
 	
 	function doDraw():Void {
-		if (editMapEditable) {
+		if (editable) {
 			//*** strokeColor, strokeOpacity and fillColor are set by:
 			// 1. the initial value in the code in gui.EditMapGeometry.as These are values like -1, 2, etc.
 			// 2. (overwritten by) the corresponding <style attribute=".." in the xml config

@@ -163,17 +163,19 @@ Group: Fmc  {
       Group: Coregui  {
 
          File: BaseButton  (fmc\classes\coregui\BaseButton.as)
+         File: ButtonBar.as  (fmc\classes\coregui\ButtonBar.as)
+         File: ButtonConfig  (fmc\classes\coregui\ButtonConfig.as)
          File: Confirmation  (fmc\classes\coregui\Confirmation.as)
+         File: ContainerInspector  (fmc\classes\coregui\ContainerInspector.as)
          File: GradientButton  (fmc\classes\coregui\GradientButton.as)
+         File: GradientFill  (fmc\classes\coregui\GradientFill.as)
          File: js.JsButton  (fmc\classes\coregui\js\JsButton.as)
          File: Veil  (fmc\classes\coregui\Veil.as)
          }  # Group: Coregui
 
       Group: Coremodel  {
 
-         File: coremodel...arcgis.ArcServerConnector  (fmc\classes\coremodel\service\arcgis\ArcServerConnector.as)
-         File: coremodel...xml.XMLConnector  (fmc\classes\coremodel\service\xml\XMLConnector.as)
-         File: setProperties  (fmc\classes\coremodel\service\xml\XMLFeatureType.as)
+         File: ArcServerConnector  (fmc\classes\coremodel\service\arcgis\ArcServerConnector.as)
 
          Group: Tiling  {
 
@@ -191,14 +193,36 @@ Group: Fmc  {
             File: WMScConnector  (fmc\classes\coremodel\service\tiling\connector\WMScConnector.as)
             }  # Group: Tiling
 
-         File: toString  (fmc\classes\coremodel\service\wfs\WFSProperty.as)
+         Group: Wfs  {
+
+            File: FeatureType  (fmc\classes\coremodel\service\wfs\FeatureType.as)
+            File: WFSConnector  (fmc\classes\coremodel\service\wfs\WFSConnector.as)
+            File: WFSFeature  (fmc\classes\coremodel\service\wfs\WFSFeature.as)
+            File: WFSFeatureFactory  (fmc\classes\coremodel\service\wfs\WFSFeatureFactory.as)
+            File: WFSProperty  (fmc\classes\coremodel\service\wfs\WFSProperty.as)
+            }  # Group: Wfs
+
+         Group: Xml  {
+
+            File: XMLConnector  (fmc\classes\coremodel\service\xml\XMLConnector.as)
+            File: XMLFeature  (fmc\classes\coremodel\service\xml\XMLFeature.as)
+            File: XMLFeatureType  (fmc\classes\coremodel\service\xml\XMLFeatureType.as)
+            File: XMLProperty  (fmc\classes\coremodel\service\xml\XMLProperty.as)
+            }  # Group: Xml
+
          }  # Group: Coremodel
 
       Group: Display  {
 
          File: BitmapUtils  (fmc\classes\display\spriteloader\BitmapUtils.as)
-         File: event.Event  (fmc\classes\display\spriteloader\event\Event.as)
-         File: event.GDispatcher  (fmc\classes\display\spriteloader\event\GDispatcher.as)
+
+         Group: Event  {
+
+            File: Event  (fmc\classes\display\spriteloader\event\Event.as)
+            File: GDispatcher  (fmc\classes\display\spriteloader\event\GDispatcher.as)
+            File: SpriteMapEvent  (fmc\classes\display\spriteloader\event\SpriteMapEvent.as)
+            }  # Group: Event
+
          File: Sprite  (fmc\classes\display\spriteloader\Sprite.as)
          File: SpriteMap  (fmc\classes\display\spriteloader\SpriteMap.as)
          File: SpriteMapFactory  (fmc\classes\display\spriteloader\SpriteMapFactory.as)
@@ -281,7 +305,30 @@ Group: Fmc  {
       File: tools.Base64  (fmc\classes\tools\Base64.as)
       }  # Group: Classes
 
-   File: HttpRequest  (fmc\classes\coremodel\service\HttpRequest.as)
+   Group: Classes  {
+
+      File: arcims.ArcIMSConnector  (fmc\classes\coremodel\service\arcims\ArcIMSConnector.as)
+      File: Delete  (fmc\classes\coremodel\service\Delete.as)
+      File: HttpRequest  (fmc\classes\coremodel\service\HttpRequest.as)
+      File: Insert  (fmc\classes\coremodel\service\Insert.as)
+      File: js.JsFeature  (fmc\classes\coremodel\service\js\JsFeature.as)
+      File: Operation  (fmc\classes\coremodel\service\Operation.as)
+      File: persistency.AbstractPersistencyServiceConnector  (fmc\classes\coremodel\service\persistency\AbstractPersistencyServiceConnector.as)
+      File: persistency.PersistencyServiceConnector  (fmc\classes\coremodel\service\persistency\PersistencyServiceConnector.as)
+      File: ServiceConnector  (fmc\classes\coremodel\service\ServiceConnector.as)
+      File: ServiceFeature  (fmc\classes\coremodel\service\ServiceFeature.as)
+      File: ServiceFeatureFactory  (fmc\classes\coremodel\service\ServiceFeatureFactory.as)
+      File: ServiceLayer  (fmc\classes\coremodel\service\ServiceLayer.as)
+      File: ServiceProperty  (fmc\classes\coremodel\service\ServiceProperty.as)
+      File: tiling.Tile  (fmc\classes\coremodel\service\tiling\Tile.as)
+      File: tiling.TileListener  (fmc\classes\coremodel\service\tiling\TileListener.as)
+      File: Transaction  (fmc\classes\coremodel\service\Transaction.as)
+      File: TransactionResponse  (fmc\classes\coremodel\service\TransactionResponse.as)
+      File: Update  (fmc\classes\coremodel\service\Update.as)
+      File: WhereClause  (fmc\classes\coremodel\service\WhereClause.as)
+      File: wms.OGWMSConnector  (fmc\classes\coremodel\service\wms\OGWMSConnector.as)
+      }  # Group: Classes
+
    File: LayerIdentifyIcon.as  (fmc\LayerIdentifyIcon.as)
    File: LayerOverview.as  (fmc\LayerOverview.as)
    File: MonitorLayer.as  (fmc\MonitorLayer.as)

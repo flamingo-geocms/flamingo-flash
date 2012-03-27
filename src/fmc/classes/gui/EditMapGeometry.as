@@ -43,7 +43,6 @@ class gui.EditMapGeometry extends GeometryPane implements GeometryListener {
     private var type:Number = -1; // Set by init object.
     private var labelText:String = null; // Set by init object.
     private var isChild:Boolean = false; // Set by init object.
-	private var editMapEditable:Boolean = false; // Set by init object.
 	private var alwaysDrawPoints:Boolean = false; // Set by init object.
 	private var labelDepth:Number = 11000;
     private var label:Label = null;

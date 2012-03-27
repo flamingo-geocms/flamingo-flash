@@ -87,7 +87,7 @@ class gui.EditMap extends AbstractComponent implements StateEventListener, core.
 	private var style:Style=null;
 	
 	function setAttribute(name:String, value:String):Void {
-		  if (name == "editable") {
+		 if (name == "editable") {
 			if(value=="false"){
             	editable = false;
 			}
@@ -460,7 +460,7 @@ class gui.EditMap extends AbstractComponent implements StateEventListener, core.
         initObject["layer"] = layer;
         initObject["width"] = __width;
         initObject["height"] = __height;
-		initObject["editable"] = editable;		
+		initObject["editable"] = (editable && layer.getEditable());		
         editMapLayers.push(attachMovie("EditMapLayer", "mEditMapLayer" + depth, depth, initObject));
     }
     

@@ -65,7 +65,7 @@ class gui.EditMapFeature extends GeometryPane implements StateEventListener {
     function onPress():Void {
         if (gis.getActiveFeature() == feature) {
 			//Allow editing of the current active feature if the geometry is editable.
-			if (!gis.getEditMapEditable()){
+			if (!editable){
 				gis.setActiveFeature(null);
 			}
         } else {

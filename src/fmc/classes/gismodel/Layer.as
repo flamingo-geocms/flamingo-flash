@@ -36,6 +36,7 @@ class gismodel.Layer extends AbstractComposite implements ActionEventListener {
     private var transaction:Transaction = null;
     private var serverReady:Boolean = false;
     private var showMeasures:Boolean = false;
+	private var editable:Boolean = false;
     
     private var stateEventDispatcher:StateEventDispatcher = null;
     
@@ -107,7 +108,13 @@ class gismodel.Layer extends AbstractComposite implements ActionEventListener {
             ownerPropertyName = value;
         } else if (name == "roles") {
             roles = value.split(",");
-		} 
+		} else if (name == "editable") {
+			if (value.toLowerCase() == "true") {
+            	editable = true;
+            } else {
+            	editable = false;
+            }   
+		}
     }
     
     function addComposite(name:String, xmlNode:XMLNode):Void {
@@ -532,6 +539,9 @@ class gismodel.Layer extends AbstractComposite implements ActionEventListener {
     function showMeasure():Boolean{
     	return showMeasures;
     }
+	function getEditable():Boolean {
+		return this.editable;
+	}
     
     function toString():String {
         return "Layer(" + name + ", " + title + ")";

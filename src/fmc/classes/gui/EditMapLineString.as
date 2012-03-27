@@ -185,7 +185,7 @@ class gui.EditMapLineString extends EditMapGeometry implements GeometryListener 
 	}
 	
 	function doDraw():Void {
-		if (editMapEditable) {
+		if (editable) {
 			var feature:Feature = this.getFirstAncestor()._parent.getFeature();
 			var layer:Layer = feature.getLayer();
 			

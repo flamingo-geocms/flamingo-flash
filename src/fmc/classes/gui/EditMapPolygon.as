@@ -37,7 +37,7 @@ class gui.EditMapPolygon extends EditMapGeometry {
 	}
 	
     function doDraw():Void {
-		if (editMapEditable) {
+		if (editable) {
 			var feature:Feature = this.getFirstAncestor()._parent.getFeature();
 			var layer:Layer = feature.getLayer();
 			var flashValue:String;

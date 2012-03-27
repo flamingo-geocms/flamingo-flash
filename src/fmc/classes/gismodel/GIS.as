@@ -86,6 +86,7 @@
 * @attr showmeasures default=false If showmeasures=true the length of a line, the area of a polygon and the radius of a circle will be shown for the active feature
 * @attr version the version of the wfs service
 * @attr srsname the name of the srs (EPSG:28992)
+* @attr editable true if this layer is editable
 */
 
 /** @tag <fmc:Property>
