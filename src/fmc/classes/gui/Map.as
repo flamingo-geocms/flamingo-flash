@@ -2658,13 +2658,24 @@ class gui.Map extends AbstractPositionable implements PersistableComponent{
 	
 	public function setResolutions(newRes:Array):Void {
 		this.resolutions = newRes;
+		if (newRes != null) {			
+			var curScale = this.getCurrentScale();			
+			var currentResolutionIndex=0;
+			while (this.resolutions[currentResolutionIndex] > curScale+0.00000000001 && this.resolutions.length > currentResolutionIndex){
+				currentResolutionIndex++;
+			}
+			var newScale = this.resolutions[currentResolutionIndex];
+			this.minscale=Number(this.resolutions[resolutions.length-1]);
+			this.maxscale=Number(this.resolutions[0]);
+			this.moveToScale(newScale);
+		}
 	}
 	/**
 	 * Set the resolution with a string. The string is split on ','
 	 * @param	newRes the new res string
 	 */
-	public function setResolutionsByString(newRes:String):Void {
-		this.resolutions = newRes.split(",");
+	public function setResolutionsByString(newRes:String):Void {		
+		this.setResolutions(newRes.split(","));
 	}
 	/*********************** Events ***********************/
 	/** 
