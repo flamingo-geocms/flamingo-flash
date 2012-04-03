@@ -2659,23 +2659,29 @@ class gui.Map extends AbstractPositionable implements PersistableComponent{
 	public function setResolutions(newRes:Array):Void {
 		this.resolutions = newRes;
 		if (newRes != null) {			
-			var curScale = this.getCurrentScale();			
+			/*var curScale = this.getCurrentScale();			
 			var currentResolutionIndex=0;
 			while (this.resolutions[currentResolutionIndex] > curScale+0.00000000001 && this.resolutions.length > currentResolutionIndex){
 				currentResolutionIndex++;
 			}
-			var newScale = this.resolutions[currentResolutionIndex];
+			var newScale = Number(this.resolutions[currentResolutionIndex]);*/
 			this.minscale=Number(this.resolutions[resolutions.length-1]);
-			this.maxscale=Number(this.resolutions[0]);
-			this.moveToScale(newScale);
+			this.maxscale = Number(this.resolutions[0]);			
+			this.moveToExtent(this.getNearestExtent(this.getCurrentExtent()), 0, 1);
+			//this.moveToScale(newScale, undefined,0,1);
 		}
 	}
 	/**
 	 * Set the resolution with a string. The string is split on ','
 	 * @param	newRes the new res string
 	 */
-	public function setResolutionsByString(newRes:String):Void {		
-		this.setResolutions(newRes.split(","));
+	public function setResolutionsByString(newResString:String):Void {		
+		var tempArray:Array = newResString.split(",");
+		var newRes:Array = new Array();
+		for (var i = 0; i < tempArray.length; i++) {
+			newRes.push(Number(tempArray[i]));
+		}
+		this.setResolutions(newRes);
 	}
 	/*********************** Events ***********************/
 	/** 
