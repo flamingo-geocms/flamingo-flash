@@ -2651,6 +2651,21 @@ class gui.Map extends AbstractPositionable implements PersistableComponent{
 	public function getMaptipdelay():Number {
 		return this.maptipdelay;
 	}
+	
+	public function getResolutions():Array {
+		return this.resolutions;
+	}
+	
+	public function setResolutions(newRes:Array):Void {
+		this.resolutions = newRes;
+	}
+	/**
+	 * Set the resolution with a string. The string is split on ','
+	 * @param	newRes the new res string
+	 */
+	public function setResolutionsByString(newRes:String):Void {
+		this.resolutions = newRes.split(",");
+	}
 	/*********************** Events ***********************/
 	/** 
 	 * Dispatched when a map is up and ready to run.
