@@ -293,7 +293,9 @@ class gui.Container extends AbstractPositionable{
 			xml = new XML(String(xml));
 			xml = xml.firstChild;
 		}
-		if (xml.prefix.length>0) {
+		if (xml.prefix.length > 0) {
+			//while loading childs, component is not ready
+			this.loaded = false;
 			var id:String;
 			for (var attr in xml.attributes) {
 				if (attr.toLowerCase() == "id") {
@@ -315,6 +317,8 @@ class gui.Container extends AbstractPositionable{
 			if (flamingo.getComponent(id) instanceof AbstractPositionable) {
 				flamingo.getComponent(id).parent = this;				
 			}
+			//after loading childs, this component is loaded.
+			this.loaded = true;
 			return id;
 		}
 	}

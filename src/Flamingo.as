@@ -1130,13 +1130,13 @@ class Flamingo {
 						}
 					}
 					this.raiseEvent(this, "onLoadComponent", this.components[targetid]);	
-					/* Done loading can only work for external .swf files.
-					this.doneLoading();*/
+					
 				}	
 				if(this.components[targetid].xmls == undefined){
 					this.components[targetid].xmls = new Array();
 				}
 				this.components[targetid].xmls.push(xml);
+				this.doneLoading();
 			}else {
 				//component new or existing component has no setConfig, so treat as new component   
 				//add a reference for a component to the components object    

@@ -95,7 +95,7 @@ class core.AbstractPositionable extends AbstractListenerRegister
 		
 		//init vars
 		this.cursorId = "cursor";
-		this._loaded = true;
+		
 		this.visible = true;
 		this.strings = new Object();
 		this.cursors = new Object();
@@ -103,6 +103,7 @@ class core.AbstractPositionable extends AbstractListenerRegister
 		this.borderalpha = 100;
 		this.version = "2.0";
 		//this.height = "10";
+		this._loaded = true;
 		reassignListeners();		
 	}
 	/**
@@ -401,7 +402,7 @@ class core.AbstractPositionable extends AbstractListenerRegister
 	
 	public function set loaded(value:Boolean):Void 
 	{
-		//_loaded = value;
+		_loaded = value;
 	}
 	/**
 	 * getter type
