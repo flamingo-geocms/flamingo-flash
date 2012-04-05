@@ -3720,7 +3720,7 @@ class Flamingo {
 			mc.mWindow.mText.text = msg;
 			mc.mHeader.mText.text = "Flamingo tracer";
 		} else {
-			mc.mWindow.mText.text = mc.mWindow.mText.text+"\n"+msg;
+			mc.mWindow.mText.text +="\n"+msg;
 		}
 		mc.mWindow.mText.scroll = mc.mWindow.mText.maxscroll;
 	}

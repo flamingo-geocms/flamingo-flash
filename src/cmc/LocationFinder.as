@@ -95,6 +95,7 @@ import geometrymodel.Geometry;
 import gui.LocationPin;
 import coremodel.service.arcgis.ArcServerConnector;
 import coremodel.service.arcims.ArcIMSConnector;
+import tools.Logger;
 
 var lParent:Object = new Object();
 lParent.onResize = function(mc:MovieClip) {
@@ -1073,13 +1074,13 @@ function _zoom(index:Number) {
 			map = flamingo.getComponent(listento[i]);
 			
 			if (map != undefined) {
-				var location:Object = locationdata[mHolder.cbChoice.selectedIndex -1]
+				var location:Object = locationdata[mHolder.cbChoice.selectedIndex -1];
 				if(location.pinLocation){
 					coord = new Object();
 					coord.x = Number(ext.minx) + (Number(ext.maxx) - Number(ext.minx))/2;
 					coord.y = Number(ext.maxy) - (Number(ext.maxy) - Number(ext.miny))/2;
 					if(locationPin == null){
-						map.createEmptyMovieClip("mPin", map.getNextHighestDepth());
+						map.container.createEmptyMovieClip("mPin", map.container.getNextHighestDepth());
 						var thisObj:Object = this;
 						mc.createEmptyMovieClip("mSymbol", 2);
 						var listener:Object = new Object();
@@ -1094,7 +1095,7 @@ function _zoom(index:Number) {
 						};
 						var mcl:MovieClipLoader = new MovieClipLoader();
 						mcl.addListener(listener);
-						mcl.loadClip(_global.flamingo.correctUrl("fmc/LocationPin.swf"), map.mPin);	
+						mcl.loadClip(_global.flamingo.correctUrl("fmc/LocationPin.swf"), map.container.mPin);
 					} else {
 						locationPin.setCoord(coord);
 					}
