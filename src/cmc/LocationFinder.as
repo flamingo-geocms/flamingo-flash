@@ -1095,7 +1095,7 @@ function _zoom(index:Number) {
 						};
 						var mcl:MovieClipLoader = new MovieClipLoader();
 						mcl.addListener(listener);
-						mcl.loadClip(_global.flamingo.correctUrl("fmc/LocationPin.swf"), map.container.mPin);
+						mcl.loadClip(_global.flamingo.correctUrl("cmc/LocationPin.swf"), map.container.mPin);
 					} else {
 						locationPin.setCoord(coord);
 					}
