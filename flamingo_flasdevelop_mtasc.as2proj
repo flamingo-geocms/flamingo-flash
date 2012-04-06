@@ -4,7 +4,7 @@
   <output>
     <movie outputType="Application" />
     <movie input="" />
-    <movie path="..\viewer\build\web\flamingo\flamingo.swf" />
+    <movie path="..\..\java\viewer\build\web\flamingo\flamingo.swf" />
     <movie fps="25" />
     <movie width="800" />
     <movie height="600" />

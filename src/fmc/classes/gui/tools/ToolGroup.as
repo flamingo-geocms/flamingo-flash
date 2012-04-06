@@ -190,7 +190,7 @@ dynamic class gui.tools.ToolGroup extends AbstractPositionable
 			}			
 		}
 		//deactivate the default tool on the map
-		deactivateDefaultTool();
+		//deactivateDefaultTool();
 		flamingo.addListener(lMap, listento, this);
 		resize();
 		flamingo.position(this.container);
@@ -198,7 +198,7 @@ dynamic class gui.tools.ToolGroup extends AbstractPositionable
 	function deactivateDefaultTool():Void {
 		if (this.listento != undefined) {
 			for (var i = 0; i < this.listento.length; i++) {
-				if (!_global.flamingo.isLoaded(this.listento[i])) {
+				if (!_global.flamingo.isLoaded(this.listento[i])) {					
 					_global.flamingo.loadCompQueue.executeAfterLoad(this.listento[i], this, deactivateDefaultToolAfterLoad);
 				}else {
 					_global.flamingo.getComponent(this.listento[i]).activateDefaultTool(false)
@@ -238,11 +238,12 @@ dynamic class gui.tools.ToolGroup extends AbstractPositionable
 			var mc:MovieClip = this.container.createEmptyMovieClip(toolid, this.container.getNextHighestDepth());
 			flamingo.loadComponent(xml, mc, toolid);
 		}
-		var tool = flamingo.getComponent(toolid);
+		var tool = flamingo.getComponent(toolid);		
 		if (! tool instanceof AbstractTool) {
 			//tool._parent(this);
 			addOldTool(tool);
-			
+		}else if (tool.visible) {
+			deactivateDefaultTool();
 		}
 	}
 	
@@ -384,11 +385,11 @@ dynamic class gui.tools.ToolGroup extends AbstractPositionable
 	* Activates the tool and sets the active tool inactive.
 	* @param toolid:String Id of tool that has to be set.
 	*/
-	function setTool(toolid:String):Void {
-		deactivateDefaultTool();
+	function setTool(toolid:String):Void {		
 		if (toolid == undefined) {
 			return;
 		}
+		deactivateDefaultTool();
 		var toolComp = this.getTool(this.tool);
 		if(this.tool!=undefined){
 			flamingo.raiseEvent(this, "onReleaseTool", this, tool);
