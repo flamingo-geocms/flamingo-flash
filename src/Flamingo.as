@@ -65,12 +65,12 @@ import display.spriteloader.SpriteMapFactory;
 import core.loading.LoadComponentQueue;
 
 class Flamingo {
-	private var version:String = "4.0_r2336";
+	private var version:String = "4.0_r2348";
 	//reference to main movie from which this class is loaded
 	//at the main movie the components are loaded at 'moviedepth'--  ;moviedepth starts by 10000
 	//at the main movie a cursor movie is loaded at depth 50005
 	//at the main movie a tooltip movie can be loaded at depth 50004
-	//at the main movie an error movie can be loaded at depth 50003
+	//at the main movie an error movie can be loaded at depth 500039
 	//at the main movie a tracer movie can be loaded at depth 50002
 	//at the main movie a border movie can be loaded at depth 50001
 	//at the main movie a lock movie can be loaded at depth 50000
