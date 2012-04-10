@@ -3,7 +3,9 @@
 * Author: Erik Orbons
 * IDgis bv
  -----------------------------------------------------------------------------*/
-
+/**
+ * tools.Arrays
+ */
 class tools.Arrays {
 	
 	/**
@@ -15,7 +17,14 @@ class tools.Arrays {
 			callback (list[i], i);
 		}
 	}
-	
+	/**
+	 * eachAsync
+	 * @param	list
+	 * @param	callback
+	 * @param	blockSize
+	 * @param	delay
+	 * @param	continuation
+	 */
 	public static function eachAsync (list: Array, callback: Function, blockSize: Number, delay: Number, continuation: Function): Void {
 		var i: Number = 0,
             worker: Function;
@@ -43,7 +52,12 @@ class tools.Arrays {
             _global.setTimeout (worker, delay);
         }
 	}
-	
+	/**
+	 * map
+	 * @param	list
+	 * @param	callback
+	 * @return
+	 */
 	public static function map (list: Array, callback: Function): Array {
 		var result: Array = [ ];
 		for (var i: Number = 0; i < list.length; ++ i) {
@@ -51,7 +65,12 @@ class tools.Arrays {
 		}
 		return result;
 	}
-	
+	/**
+	 * filter
+	 * @param	list
+	 * @param	callback
+	 * @return
+	 */
 	public static function filter (list: Array, callback: Function): Array {
 		var result: Array = [ ],
             i: Number;

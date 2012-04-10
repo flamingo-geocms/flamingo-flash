@@ -5,9 +5,16 @@
  -----------------------------------------------------------------------------*/
 
 
-
+/**
+ * tools.XMLTools
+ */
 class tools.XMLTools {
-     
+    /**
+     * getChild
+     * @param	name
+     * @param	_xmlNode
+     * @return
+     */ 
     static function getChild(name:String, _xmlNode:XMLNode):XMLNode {
         for (var i:Number = 0; _xmlNode.childNodes[i] != null; i++) {
             if (_xmlNode.childNodes[i].nodeName.toUpperCase() == name.toUpperCase()) {
@@ -16,7 +23,12 @@ class tools.XMLTools {
         }
         return null;
     }
-    
+    /**
+     * getChildNodes
+     * @param	name
+     * @param	_xmlNode
+     * @return
+     */
     static function getChildNodes(name:String, _xmlNode:XMLNode):Array {
         var _array:Array = new Array();
         for (var i:Number = 0; _xmlNode.childNodes[i] != null; i++) {
@@ -26,7 +38,12 @@ class tools.XMLTools {
         }
         return _array;
     }
-    
+    /**
+     * getElementsByTagName
+     * @param	tagName
+     * @param	_xmlNode
+     * @return
+     */
   static function getElementsByTagName(tagName:String, _xmlNode:XMLNode):Array	{
 		var fringe: Array = [ _xmlNode ];
 		var results: Array = [ ];
@@ -43,7 +60,12 @@ class tools.XMLTools {
 	return results;	
 }
      
-    
+    /**
+     * getStringValue
+     * @param	name
+     * @param	_xmlNode
+     * @return
+     */
     static function getStringValue(name:String, _xmlNode:XMLNode):String {
         var valueNode:XMLNode = getChild(name, _xmlNode);
         var _string:String = null;
@@ -59,7 +81,12 @@ class tools.XMLTools {
         }
         return _string;
     }
-    
+    /**
+     * getStringValues
+     * @param	name
+     * @param	_xmlNode
+     * @return
+     */
     static function getStringValues(name:String, _xmlNode:XMLNode):Array {
         var subNodes:Array = getChildNodes(name, _xmlNode);
         var stringValues:Array = new Array();
@@ -68,7 +95,12 @@ class tools.XMLTools {
         }
         return stringValues;
     }
-    
+    /**
+     * getNumberValue
+     * @param	name
+     * @param	_xmlNode
+     * @return
+     */
     static function getNumberValue(name:String, _xmlNode:XMLNode):Number {
         var valueNode:XMLNode = getChild(name, _xmlNode);
         var number:Number = -1;
@@ -82,7 +114,12 @@ class tools.XMLTools {
         }
         return number;
     }
-    
+    /**
+     * getNumberValues
+     * @param	name
+     * @param	_xmlNode
+     * @return
+     */
     static function getNumberValues(name:String, _xmlNode:XMLNode):Array {
         var subNodes:Array = getChildNodes(name, _xmlNode);
         var numberValues:Array = new Array();
@@ -91,7 +128,12 @@ class tools.XMLTools {
         }
         return numberValues;
     }
-    
+    /**
+     * getBooleanValue
+     * @param	name
+     * @param	_xmlNode
+     * @return
+     */
     static function getBooleanValue(name:String, _xmlNode:XMLNode):Boolean {
         var valueNode:XMLNode = getChild(name, _xmlNode);
         var _string:String = null;
@@ -108,7 +150,11 @@ class tools.XMLTools {
         }
         return null;
     }
-    
+    /**
+     * xmlDecode
+     * @param	str
+     * @return
+     */
      static function xmlDecode(str:String):String {
         return str.split("&amp;").join("&").split("&lt;").join("<").split("&gt;").join(">").split("&quot;").join("\"").split("&apos;").join("\'");
     }

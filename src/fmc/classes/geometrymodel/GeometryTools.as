@@ -8,9 +8,15 @@ import geometrymodel.*;
 
 import tools.XMLTools;
 import tools.Utils;
-
+/**
+ * geometrymodel.GeometryTools
+ */
 class geometrymodel.GeometryTools {
-    
+    /**
+     * getGeometryClass
+     * @param	geometryType
+     * @return
+     */
     static function getGeometryClass(geometryType:String):Function {
         if (geometryType == "Point") {
             return Point;
@@ -28,7 +34,11 @@ class geometrymodel.GeometryTools {
         _global.flamingo.tracer("Exception in geometrymodel.GeometryTools.getGeometryClass(" + geometryType + ")");
         return null;
     }
-    
+    /**
+     * getEnvelopeFromGeometryNode
+     * @param	geometryNode
+     * @return
+     */
     static function getEnvelopeFromGeometryNode(geometryNode:XMLNode):Envelope {
     	var minX:Number;
     	var maxX:Number;

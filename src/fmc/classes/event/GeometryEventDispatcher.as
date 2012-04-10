@@ -6,19 +6,29 @@
  -----------------------------------------------------------------------------*/
 import geometrymodel.*;
 import event.GeometryListener;
-
+/**
+ * event.GeometryEventDispatcher
+ */
 class event.GeometryEventDispatcher {
 
 	private var geometryListeners:Array = null;
-
+	/**
+	 * constructor
+	 */
     function GeometryEventDispatcher() {
         geometryListeners = new Array();
     }
-
+	/**
+	 * addGeometryListener
+	 * @param	geometryListener
+	 */
     function addGeometryListener(geometryListener:GeometryListener):Void {
         geometryListeners.push(geometryListener);
     }
-
+	/**
+	 * removeGeometryListener
+	 * @param	geometryListener
+	 */
     function removeGeometryListener(geometryListener:GeometryListener):Void {
         for (var i:Number = 0; i < geometryListeners.length; i++) {
             if (geometryListener == geometryListeners[i]) {
@@ -26,21 +36,32 @@ class event.GeometryEventDispatcher {
             }
         }
     }
-
+	/**
+	 * changeGeometry
+	 * @param	geometry
+	 */
     function changeGeometry(geometry:Geometry):Void {
         updateListeners(geometryListeners);
         for (var i:Number = 0; i < geometryListeners.length; i++) {
             GeometryListener(geometryListeners[i]).onChangeGeometry(geometry);
         }
     }
-
+	/**
+	 * addChild
+	 * @param	geometry
+	 * @param	child
+	 */
     public function addChild(geometry:Geometry,child:Geometry) : Void {
 		updateListeners(geometryListeners);
         for (var i:Number = 0; i < geometryListeners.length; i++) {
             GeometryListener(geometryListeners[i]).onAddChild(geometry,child);
         }
 	}
-	
+	/**
+	 * removeChild
+	 * @param	geometry
+	 * @param	child
+	 */
 	public function removeChild(geometry:Geometry,child:Geometry) : Void {
 		updateListeners(geometryListeners);
         for (var i:Number = 0; i < geometryListeners.length; i++) {

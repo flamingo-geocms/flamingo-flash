@@ -5,13 +5,19 @@
  -----------------------------------------------------------------------------*/
 
 import geometrymodel.*;
-
+/**
+ * geometrymodel.Circle
+ */
 class geometrymodel.Circle extends Geometry {
     
     private var centerPoint:Point = null;
     private var circlePoint:Point = null;
 	private var numberOfSegments:Number=48;
-    
+    /**
+     * constructor
+     * @param	centerPoint
+     * @param	circlePoint
+     */
     function Circle(centerPoint:Point, circlePoint:Point) {
         if (centerPoint == null) {
             _global.flamingo.tracer("Exception in geometrymodel.Circle.<<init>>()");
@@ -23,23 +29,38 @@ class geometrymodel.Circle extends Geometry {
         this.centerPoint = centerPoint;
         this.circlePoint = circlePoint;
     }
-    
+    /**
+     * getChildGeometries
+     * @return
+     */
     function getChildGeometries():Array {
         return new Array(centerPoint, circlePoint);
     }
-    
+    /**
+     * getPoints
+     * @return
+     */
     function getPoints():Array {
         return new Array(centerPoint, circlePoint);
     }
-    
+    /**
+     * getEndPoint
+     * @return
+     */
     function getEndPoint():Point {
         return circlePoint;
     }
-    
+    /**
+     * getCenterPoint
+     * @return
+     */
     function getCenterPoint():Point {
         return centerPoint;
     }
-    
+    /**
+     * getEnvelope
+     * @return
+     */
     function getEnvelope():Envelope {
         var centerX:Number = centerPoint.getX();
         var centerY:Number = centerPoint.getY();
@@ -51,22 +72,35 @@ class geometrymodel.Circle extends Geometry {
         
         return new Envelope(minX, minY, maxX, maxY);
     }
-    
+    /**
+     * clone
+     * @return
+     */
     function clone():Geometry {
         return new Circle(Point(centerPoint.clone()), Point(circlePoint.clone()));
     }
-    
+    /**
+     * getRadius
+     * @return
+     */
     function getRadius():Number {
         var dx:Number = circlePoint.getX() - centerPoint.getX();
         var dy:Number = circlePoint.getY() - centerPoint.getY();
         
         return Math.sqrt((dx * dx) + (dy * dy));
     }
-    
+    /**
+     * getArea
+     * @return
+     */
     function getArea():Number {
     	return Math.PI * (getRadius()* getRadius());
 	}
-    
+    /**
+     * toGMLString
+     * @param	srsName
+     * @return
+     */
     function toGMLString(srsName:String):String {
         var gmlString:String = "";
         gmlString += "<gml:Circle>\n";
@@ -75,7 +109,10 @@ class geometrymodel.Circle extends Geometry {
         
         return gmlString;
     }
-    
+    /**
+     * toWKT
+     * @return
+     */
 	function toWKT():String{
 		var wktGeom:String="";
 		wktGeom+="POLYGON(";		
@@ -83,7 +120,10 @@ class geometrymodel.Circle extends Geometry {
 		wktGeom+=")";
 		return wktGeom;
 	}
-	
+	/**
+	 * toWKTPart
+	 * @return
+	 */
 	function toWKTPart():String{
 		var wktString:String="(";
 	    var startAngle:Number = 0;
@@ -109,7 +149,10 @@ class geometrymodel.Circle extends Geometry {
 		wktString+=")";
 		return wktString;
 	}
-	
+	/**
+	 * toString
+	 * @return
+	 */
     function toString():String {
         return "Circle(" + centerPoint.toString() + ", " + circlePoint.toString() + ")"; 
     }

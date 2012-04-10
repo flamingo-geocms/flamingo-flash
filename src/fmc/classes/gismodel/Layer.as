@@ -15,7 +15,9 @@ import geometrymodel.*;
 import tools.Randomizer;
 import core.AbstractComposite;
 import tools.Logger;
-
+/**
+ * gismodel.Layer
+ */
 class gismodel.Layer extends AbstractComposite implements ActionEventListener {
     
     private var gis:GIS = null;
@@ -41,7 +43,11 @@ class gismodel.Layer extends AbstractComposite implements ActionEventListener {
     private var stateEventDispatcher:StateEventDispatcher = null;
     
 	private var log:Logger=null;
-	
+	/**
+	 * constructor
+	 * @param	gis
+	 * @param	xmlNode
+	 */
     function Layer(gis:GIS, xmlNode:XMLNode) {
 		this.log = new Logger("gismodel.Layer",_global.flamingo.getLogLevel(),_global.flamingo.getScreenLogLevel());
         stateEventDispatcher = new StateEventDispatcher();
@@ -57,7 +63,11 @@ class gismodel.Layer extends AbstractComposite implements ActionEventListener {
         
         parseConfig(xmlNode);
     }
-    
+    /**
+     * setAttribute
+     * @param	name
+     * @param	value
+     */
     function setAttribute(name:String, value:String):Void {
         //_global.flamingo.tracer("name = " + name + " svalue = " + value);
         if (name == "title") {
@@ -116,7 +126,11 @@ class gismodel.Layer extends AbstractComposite implements ActionEventListener {
             }   
 		}
     }
-    
+    /**
+     * addComposite
+     * @param	name
+     * @param	xmlNode
+     */
     function addComposite(name:String, xmlNode:XMLNode):Void {
         if (name == "Property") {
             properties.push(new Property(xmlNode));
@@ -126,14 +140,24 @@ class gismodel.Layer extends AbstractComposite implements ActionEventListener {
             style = new Style(xmlNode);
         }
     }
-    
+    /**
+     * getTitle
+     * @return
+     */
     function getTitle():String {
         return title;
     }
-    
+    /**
+     * getName
+     * @return
+     */
 	function getName():String{ 
 		return name;
 	}
+	/**
+	 * setVisible
+	 * @param	visible
+	 */
     function setVisible(visible:Boolean):Void {
         if (this.visible == visible) {
             return;
@@ -143,31 +167,53 @@ class gismodel.Layer extends AbstractComposite implements ActionEventListener {
         gis.raiseLayerVisibility(this.getName(),this.visible);
         stateEventDispatcher.dispatchEvent(new StateEvent(this, "Layer", StateEvent.CHANGE, "visible", gis));
     }
-    
+    /**
+     * isVisible
+     * @return
+     */
     function isVisible():Boolean {
         return visible;
     }
-    
+    /**
+     * getServiceLayer
+     * @return
+     */
     function getServiceLayer():ServiceLayer {
         return serviceLayer;
     }
-    
+    /**
+     * getGeometryTypes
+     * @return
+     */
     function getGeometryTypes():Array {
         return geometryTypes.concat();
     }
-    
+    /**
+     * getLabelPropertyName
+     * @return
+     */
     function getLabelPropertyName():String {
         return labelPropertyName;
     }
-    
+    /**
+     * getOwnerPropertyName
+     * @return
+     */
     function getOwnerPropertyName():String {
         return ownerPropertyName;
     }
-    
+    /**
+     * getProperties
+     * @return
+     */
     function getProperties():Array {
         return properties.concat();
     }
-    
+    /**
+     * getProperty
+     * @param	name
+     * @return
+     */
     function getProperty(name:String):Property {
         var property:Property = null;
         for (var i:String in properties) {
@@ -178,7 +224,11 @@ class gismodel.Layer extends AbstractComposite implements ActionEventListener {
         }
         return null;
     }
-    
+    /**
+     * getPropertyIndex
+     * @param	name
+     * @return
+     */
     function getPropertyIndex(name:String):Number {
         for (var i:Number = 0; i < properties.length; i++) {
             if (Property(properties[i]).getName() == name) {
@@ -187,7 +237,11 @@ class gismodel.Layer extends AbstractComposite implements ActionEventListener {
         }
         return -1;
     }
-	
+	/**
+	 * getPropertyWithType
+	 * @param	propType
+	 * @return
+	 */
 	function getPropertyWithType(propType:String):GeometryProperty {
         for (var i:Number = 0; i < properties.length; i++) {
 			if (properties[i] instanceof GeometryProperty) {
@@ -198,7 +252,11 @@ class gismodel.Layer extends AbstractComposite implements ActionEventListener {
         }
         return null;
     }
-	
+	/**
+	 * getPropertyWithTypeIndex
+	 * @param	propType
+	 * @return
+	 */
 	function getPropertyWithTypeIndex(propType:String):Number {
         for (var i:Number = 0; i < properties.length; i++) {
             if (properties[i] instanceof GeometryProperty) {
@@ -209,19 +267,31 @@ class gismodel.Layer extends AbstractComposite implements ActionEventListener {
         }
         return -1;
     }
-	    
+	/**
+	 * getRoles
+	 * @return
+	 */    
     function getRoles():Array {
         return roles.concat();
     }
-    
+    /**
+     * getStyle
+     * @return
+     */
     function getStyle():Style {
         return style;
     }
-    
+    /**
+     * getGIS
+     * @return
+     */
     function getGIS():GIS {
     	return gis;
     }
-    
+    /**
+     * getEnvelope
+     * @return
+     */
     function getEnvelope():Envelope {
     	var feature:Feature = features[0];
     	 var minx:Number = feature.getEnvelope().getMinX();  
@@ -245,7 +315,10 @@ class gismodel.Layer extends AbstractComposite implements ActionEventListener {
     	 }	   	 
     	 return new Envelope(minx,miny,maxx,maxy);
     }
-    
+    /**
+     * addWhereClause
+     * @param	whereClause
+     */
     function addWhereClause(whereClause:WhereClause):Void {
         var whereClausePosition:Number = getWhereClausePosition(whereClause.getPropertyName());
         var notWhereClause:WhereClause = null;
@@ -272,7 +345,10 @@ class gismodel.Layer extends AbstractComposite implements ActionEventListener {
             serviceConnector.performGetFeature(serviceLayer, null, whereClauses, notWhereClause, false, this);
         }
     }
-    
+    /**
+     * removeWhereClause
+     * @param	propertyName
+     */
     function removeWhereClause(propertyName:String):Void {
         var whereClausePosition:Number = getWhereClausePosition(propertyName);
         if (whereClausePosition == -1) {
@@ -286,7 +362,10 @@ class gismodel.Layer extends AbstractComposite implements ActionEventListener {
             serviceConnector.performGetFeature(serviceLayer, null, whereClauses, notWhereClause, false, this);
         }
     }
-    
+    /**
+     * getWhereClauses
+     * @return
+     */
     function getWhereClauses():Array {
         return whereClauses.concat();
     }
@@ -299,7 +378,10 @@ class gismodel.Layer extends AbstractComposite implements ActionEventListener {
         }
         return -1;
     }
-    
+    /**
+     * addFeature
+     * @param	_object
+     */
     function addFeature(_object:Object):Void {
         if (_object == null) {
             _global.flamingo.tracer("Exception in gismodel.Layer.addFeature()\\No service feature or geometry given.");
@@ -362,7 +444,11 @@ class gismodel.Layer extends AbstractComposite implements ActionEventListener {
 			gis.setActiveFeature(feature);
 		}
     }
-    
+    /**
+     * removeFeatures
+     * @param	features
+     * @param	addOperation
+     */
     function removeFeatures(features:Array, addOperation:Boolean):Void {
         if (features == null) {
             _global.flamingo.tracer("Exception in gismodel.Layer.removeFeatures()");
@@ -375,7 +461,11 @@ class gismodel.Layer extends AbstractComposite implements ActionEventListener {
         
         stateEventDispatcher.dispatchEvent(new AddRemoveEvent(this, "Layer", "features", null, features));
     }
-    
+    /**
+     * removeFeature
+     * @param	feature
+     * @param	addOperation
+     */
     function removeFeature(feature:Feature, addOperation:Boolean):Void {
         if (feature == null) {
             _global.flamingo.tracer("Exception in gismodel.Layer.removeFeature()");
@@ -407,11 +497,18 @@ class gismodel.Layer extends AbstractComposite implements ActionEventListener {
             }
         }
     }
-    		
+    /**
+     * getFeatures
+     * @return
+     */		
     function getFeatures():Array {
         return features.concat();
     }
-    
+    /**
+     * getFeature
+     * @param	id
+     * @return
+     */
     function getFeature(id:String):Feature {
         var feature:Feature = null;
         for (var i:String in features) {
@@ -422,7 +519,11 @@ class gismodel.Layer extends AbstractComposite implements ActionEventListener {
         }
         return null;
     }
-    
+    /**
+     * getFeaturePosition
+     * @param	feature
+     * @return
+     */
     function getFeaturePosition(feature:Feature):Number {
         for (var i:Number = 0; i < features.length; i++) {
             if (features[i] == feature) {
@@ -431,17 +532,25 @@ class gismodel.Layer extends AbstractComposite implements ActionEventListener {
         }
         return -1;
     }
-    
+    /**
+     * getFeatureWithGeometry
+     * @param	extent
+     */
 	function getFeatureWithGeometry(extent:geometrymodel.Geometry):Void{
 		if (serviceConnector !=null){
 			serviceConnector.performGetFeature(serviceLayer, extent, whereClauses, null, false, this);			
 		}
 	}
-    
+    /**
+     * addOperation
+     * @param	operation
+     */
     function addOperation(operation:Operation):Void {
         transaction.addOperation(operation);
     }
-    
+    /**
+     * commit
+     */
     function commit():Void {
         if ((serverReady) && (transaction.getOperations().length > 0)) {
             serverReady = false;
@@ -450,7 +559,10 @@ class gismodel.Layer extends AbstractComposite implements ActionEventListener {
             gis.onServerReady();
         }
     }
-    
+    /**
+     * isTransactionProblematic4Server
+     * @return
+     */
     function isTransactionProblematic4Server():Boolean {
         if (transaction.getOperations().length == 0) {
             return false;
@@ -461,7 +573,10 @@ class gismodel.Layer extends AbstractComposite implements ActionEventListener {
         }
         return true;
     }
-    
+    /**
+     * onActionEvent
+     * @param	actionEvent
+     */
     function onActionEvent(actionEvent:ActionEvent):Void {
         var sourceClassName:String = actionEvent.getSourceClassName();
         var actionType:Number = actionEvent.getActionType();
@@ -509,7 +624,13 @@ class gismodel.Layer extends AbstractComposite implements ActionEventListener {
             }
         }
     }
-    
+    /**
+     * addEventListener
+     * @param	stateEventListener
+     * @param	sourceClassName
+     * @param	actionType
+     * @param	propertyName
+     */
     function addEventListener(stateEventListener:StateEventListener, sourceClassName:String, actionType:Number, propertyName:String):Void {
         if (
                 (sourceClassName + "_" + actionType + "_" + propertyName != "Layer_" + StateEvent.CHANGE + "_visible")
@@ -522,7 +643,13 @@ class gismodel.Layer extends AbstractComposite implements ActionEventListener {
         
         stateEventDispatcher.addEventListener(stateEventListener, sourceClassName, actionType, propertyName);
     }
-    
+    /**
+     * removeEventListener
+     * @param	stateEventListener
+     * @param	sourceClassName
+     * @param	actionType
+     * @param	propertyName
+     */
     function removeEventListener(stateEventListener:StateEventListener, sourceClassName:String, actionType:Number, propertyName:String):Void {
         if (
                 (sourceClassName + "_" + actionType + "_" + propertyName != "Layer_" + StateEvent.CHANGE + "_visible")
@@ -535,14 +662,24 @@ class gismodel.Layer extends AbstractComposite implements ActionEventListener {
         
         stateEventDispatcher.removeEventListener(stateEventListener, sourceClassName, actionType, propertyName);
     }
-     
+    /**
+     * showMeasure
+     * @return
+     */ 
     function showMeasure():Boolean{
     	return showMeasures;
     }
+	/**
+	 * getEditable
+	 * @return
+	 */
 	function getEditable():Boolean {
 		return this.editable;
 	}
-    
+    /**
+     * toString
+     * @return
+     */
     function toString():String {
         return "Layer(" + name + ", " + title + ")";
     }

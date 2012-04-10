@@ -6,7 +6,9 @@
 
 import event.*;
 import core.AbstractComponent;
-
+/**
+ * event.StateEvent
+ */
 class event.StateEvent {
     
     static var CHANGE:Number = 0;
@@ -18,7 +20,14 @@ class event.StateEvent {
     private var actionType:Number = -1;
     private var propertyName:String = null;
     private var eventComp:AbstractComponent = null;
-    
+    /**
+     * constructor
+     * @param	source
+     * @param	sourceClassName
+     * @param	actionType
+     * @param	propertyName
+     * @param	eventComp
+     */
     function StateEvent(source:Object, sourceClassName:String, actionType:Number, propertyName:String, eventComp:AbstractComponent) {
         if (source == null) {
             trace("Exception in event.StateEvent.<<init>>(" + sourceClassName + ", " + propertyName + ")");
@@ -35,23 +44,38 @@ class event.StateEvent {
         this.propertyName = propertyName;
         this.eventComp = eventComp;
     }
-    
+    /**
+     * getSource
+     * @return
+     */
     function getSource():Object {
         return source;
     }
-    
+    /**
+     * getSourceClassName
+     * @return
+     */
     function getSourceClassName():String {
         return sourceClassName;
     }
-    
+    /**
+     * getActionType
+     * @return
+     */
     function getActionType():Number {
         return actionType;
     }
-    
+    /**
+     * getPropertyName
+     * @return
+     */
     function getPropertyName():String {
         return propertyName;
     }
-    
+    /**
+     * toString
+     * @return
+     */
     function toString():String {
     	var actionTypeStr:String = "";
     	if(actionType==0){
@@ -67,7 +91,10 @@ class event.StateEvent {
     		
         return "StateEvent(" + sourceClassName + ", " + source + ", " + actionTypeStr + ", " + propertyName + ", " + _global.flamingo.getId(eventComp)+ ")";
 	}
-	
+	/**
+	 * getEventComp
+	 * @return
+	 */
 	public function getEventComp() : AbstractComponent {
 		return eventComp;
 	}

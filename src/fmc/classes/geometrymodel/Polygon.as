@@ -6,11 +6,17 @@
  -----------------------------------------------------------------------------*/
 import geometrymodel.*;
 import event.GeometryListener;
-
+/**
+ * geometrymodel.Polygon
+ */
 class geometrymodel.Polygon extends Geometry implements GeometryListener{
     
     private var exteriorRing:LinearRing = null;
-    private var interiorRings:Array=null;
+    private var interiorRings:Array = null;
+	/**
+	 * constructor
+	 * @param	exteriorRing
+	 */
     function Polygon(exteriorRing:LinearRing) {
         if (exteriorRing == null) {
             _global.flamingo.tracer("Exception in geometrymodel.Polygon.<<init>>(null)");
@@ -23,24 +29,42 @@ class geometrymodel.Polygon extends Geometry implements GeometryListener{
         addGeometryListener(exteriorRing);
         geometryEventDispatcher.addChild(this,exteriorRing);		
     }
+	/**
+	 * addInteriorRing
+	 * @param	interiorRing
+	 */
     function addInteriorRing(interiorRing:LinearRing){
         interiorRing.setParent(this);
 		interiorRings.push(interiorRing);		
 		addGeometryListener(interiorRing);
 		geometryEventDispatcher.addChild(this,interiorRing);
 	}
+	/**
+	 * getInteriorRings
+	 * @return
+	 */
 	function getInteriorRings():Array{
 		return interiorRings;
 	}
-	
+	/**
+	 * addPoint
+	 * @param	point
+	 */
     function addPoint(point:Point):Void {        
         exteriorRing.addPoint(point);
     }
-	
+	/**
+	 * insertPoint
+	 * @param	point
+	 * @param	insertIndex
+	 */
 	function insertPoint(point:Point, insertIndex:Number):Void {
         exteriorRing.insertPoint(point, insertIndex);
     }
-	
+	/**
+	 * getChildGeometries
+	 * @return
+	 */
     function getChildGeometries():Array {
         var rings:Array= new Array();
 		rings.push(exteriorRing);
@@ -49,28 +73,47 @@ class geometrymodel.Polygon extends Geometry implements GeometryListener{
 		}
 		return rings;
     }
-    
+    /**
+     * getPoints
+     * @return
+     */
     function getPoints():Array {
         return exteriorRing.getPoints();
     }
-    
+    /**
+     * getEndPoint
+     * @return
+     */
     function getEndPoint():Point {
         return exteriorRing.getEndPoint(); 
     }
-    
+    /**
+     * getCenterPoint
+     * @return
+     */
     function getCenterPoint():Point {
         return exteriorRing.getCenterPoint();
     }
-    
+    /**
+     * getExteriorRing
+     * @return
+     */
     function getExteriorRing():LinearRing {
         return exteriorRing;
     }
-    
+    /**
+     * getEnvelope
+     * @return
+     */
     function getEnvelope():Envelope{
     	return getExteriorRing().getEnvelope();
     }
     
-    
+    /**
+     * getArea
+     * @param	performSimpleTest
+     * @return
+     */
 	function getArea(performSimpleTest:Boolean):Number {
 		var points:Array = exteriorRing.getPoints();
 		var area:Number = 0;
@@ -94,7 +137,10 @@ class geometrymodel.Polygon extends Geometry implements GeometryListener{
 		area /= -2.0;
 		return area;
 	}
-	
+	/**
+	 * polygonIsSimpleTest
+	 * @return
+	 */
 	function polygonIsSimpleTest():Boolean {
         var polygonSimple:Boolean = true;
 		var points:Array = exteriorRing.getPoints();
@@ -138,7 +184,10 @@ class geometrymodel.Polygon extends Geometry implements GeometryListener{
 		}
 		return polygonSimple;
 	}
-    
+    /**
+     * selfIntersectionTest
+     * @return
+     */
 	function selfIntersectionTest():Boolean {
 		var intersection:Boolean = false;
 		
@@ -167,7 +216,14 @@ class geometrymodel.Polygon extends Geometry implements GeometryListener{
 		return intersection;
 	}
 	
-    
+    /**
+     * lineSegmentIntersectionTest
+     * @param	p1
+     * @param	p2
+     * @param	p3
+     * @param	p4
+     * @return
+     */
 	function lineSegmentIntersectionTest(p1:Point, p2:Point, p3:Point, p4:Point):String {
 		//Line Segment A: point p1 & p2
 		//Line Segment B: point p3 & p4
@@ -198,7 +254,11 @@ class geometrymodel.Polygon extends Geometry implements GeometryListener{
 	
 	}
 	
-	
+	/**
+	 * toGMLString
+	 * @param	srsName
+	 * @return
+	 */
 	function toGMLString(srsName:String):String {
         var points:Array = exteriorRing.getPoints();
         var point:Point = null;
@@ -232,7 +292,10 @@ class geometrymodel.Polygon extends Geometry implements GeometryListener{
         
         return gmlString;
     }
-	
+	/**
+	 * toWKT
+	 * @return
+	 */
 	function toWKT():String{
 		var wktGeom:String="";
 		wktGeom+="POLYGON(";		
@@ -240,7 +303,10 @@ class geometrymodel.Polygon extends Geometry implements GeometryListener{
 		wktGeom+=")";
 		return wktGeom;
 	}
-	
+	/**
+	 * toWKTPart
+	 * @return
+	 */
 	function toWKTPart():String{
 		var wktGeom:String="";
 		var points:Array = this.getPoints();
@@ -269,21 +335,35 @@ class geometrymodel.Polygon extends Geometry implements GeometryListener{
 		
 		return wktGeom;
 	}
-	
+	/**
+	 * toString
+	 * @return
+	 */
 	function toString():String {
         return ("Polygon (" + exteriorRing.toString() + ")");
     }
-	
+	/**
+	 * onChangeGeometry
+	 * @param	geometry
+	 */
 	function onChangeGeometry(geometry:Geometry):Void{
     	//parent changed
     	geometryEventDispatcher.changeGeometry(this);
     }
-    
+    /**
+     * onAddChild
+     * @param	geometry
+     * @param	child
+     */
     function onAddChild(geometry:Geometry,child:Geometry):Void{
     	//parent changed
     	geometryEventDispatcher.changeGeometry(this);
     }
-	
+	/**
+	 * onRemoveChild
+	 * @param	geometry
+	 * @param	child
+	 */
 	public function onRemoveChild(geometry:Geometry,child:Geometry) : Void {
 		//parent changed
     	geometryEventDispatcher.changeGeometry(this);

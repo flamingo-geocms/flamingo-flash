@@ -9,12 +9,17 @@ import geometrymodel.*;
 import event.AddRemoveEvent;
 import event.GeometryListener;
 import tools.Logger;
-
+/**
+ * geometrymodel.LineString
+ */
 class geometrymodel.LineString extends Geometry implements GeometryListener {
     
     private var points:Array = null;
     private var log:Logger=null;
-	
+	/**
+	 * constructor
+	 * @param	points
+	 */
     function LineString(points:Array) {
 		this.log = new Logger("geometrymodel.LineString",_global.flamingo.getLogLevel(),_global.flamingo.getScreenLogLevel());
         if ((points == null) || (points.length < 2)) {
@@ -27,7 +32,10 @@ class geometrymodel.LineString extends Geometry implements GeometryListener {
 			points[i].setParent(this);
         }
     }
-    
+    /**
+     * addPoint
+     * @param	point
+     */
     function addPoint(point:Point):Void {
  
         if (!isClosed()) {
@@ -50,7 +58,11 @@ class geometrymodel.LineString extends Geometry implements GeometryListener {
         geometryEventDispatcher.addChild(Geometry(this),Geometry(point));
         
     }
-	
+	/**
+	 * insertPoint
+	 * @param	point
+	 * @param	insertIndex
+	 */
 	function insertPoint(point:Point, insertIndex:Number):Void {
  
         if(!(this instanceof LinearRing)){
@@ -71,7 +83,10 @@ class geometrymodel.LineString extends Geometry implements GeometryListener {
 		geometryEventDispatcher.changeGeometry(this);
         
     }
-	
+	/**
+	 * removePoint
+	 * @param	point
+	 */
 	function removePoint(point:Point):Void {		
         if (points.length == 2) {
             if (isClosed()) {
@@ -109,7 +124,10 @@ class geometrymodel.LineString extends Geometry implements GeometryListener {
   		point = null;
 		getFirstAncestor().getGeometryEventDispatcher().changeGeometry(this);
     }
-	
+	/**
+	 * removePointNr
+	 * @param	pointNr
+	 */
 	function removePointNr(pointNr:Number):Void {
 		var point:Point = points[pointNr];
 		if ((points.length == 3) && (isClosed())) {
@@ -152,7 +170,10 @@ class geometrymodel.LineString extends Geometry implements GeometryListener {
 		geometryEventDispatcher.changeGeometry(this);
         
     }
-	    
+	/**
+	 * getChildGeometries
+	 * @return
+	 */    
 	function getChildGeometries():Array {
         var childGeometries:Array = points.concat();
         if (isClosed()) {
@@ -161,15 +182,24 @@ class geometrymodel.LineString extends Geometry implements GeometryListener {
         
         return childGeometries;
     }
-    
+    /**
+     * getPoints
+     * @return
+     */
     function getPoints():Array {
         return points.concat();
     }
-    
+    /**
+     * getEndPoint
+     * @return
+     */
     function getEndPoint():Point {
         return Point(points[points.length - 1]);
     }
-    
+    /**
+     * getCenterPoint
+     * @return
+     */
     function getCenterPoint():Point {
         var point:Point = null;
         var sumX:Number = 0;
@@ -183,7 +213,10 @@ class geometrymodel.LineString extends Geometry implements GeometryListener {
                
         return new Point(sumX / numPoints, sumY / numPoints);
     }
-    
+    /**
+     * getEnvelope
+     * @return
+     */
    function getEnvelope():Envelope {
         var points:Array = getChildGeometries();
         var point:Point = Point(points[0]);
@@ -223,7 +256,10 @@ class geometrymodel.LineString extends Geometry implements GeometryListener {
 			return false;
 		}
     }
-    
+    /**
+     * getLength
+     * @return
+     */
 	function getLength():Number {
         var point:Point = null;
         var nextPoint:Point = null;
@@ -241,14 +277,20 @@ class geometrymodel.LineString extends Geometry implements GeometryListener {
         
         return length;
     }
-    
+    /**
+     * toWKT
+     * @return
+     */
 	function toWKT():String{
 		var wktGeom:String="";
 		wktGeom+="LINESTRING";		
 		wktGeom+=toWKTPart();
 		return wktGeom;
 	}
-	
+	/**
+	 * toWKTPart
+	 * @return
+	 */
 	function toWKTPart():String{
 		var wktGeom:String="";
         var point:Point = null;
@@ -263,7 +305,11 @@ class geometrymodel.LineString extends Geometry implements GeometryListener {
 		wktGeom+=")";
 		return wktGeom;
 	}
-	
+	/**
+	 * toGMLString
+	 * @param	srsName
+	 * @return
+	 */
 	function toGMLString(srsName:String):String {
         var point:Point = null;
         
@@ -291,21 +337,35 @@ class geometrymodel.LineString extends Geometry implements GeometryListener {
         
         return gmlString;
     }
-    
+    /**
+     * toString
+     * @return
+     */
     function toString():String {
         return("LineString (" + points.toString() + ")");
 	}
-	
+	/**
+	 * onChangeGeometry
+	 * @param	geometry
+	 */
 	public function onChangeGeometry(geometry : Geometry) : Void {
 		//parent changed
 		geometryEventDispatcher.changeGeometry(this);
 	}
-	
+	/**
+	 * onAddChild
+	 * @param	geometry
+	 * @param	child
+	 */
 	public function onAddChild(geometry:Geometry,child:Geometry):Void {
 		//parent changed
     	geometryEventDispatcher.changeGeometry(this);
 	}
-	
+	/**
+	 * onRemoveChild
+	 * @param	geometry
+	 * @param	child
+	 */
 	public function onRemoveChild(geometry:Geometry,child:Geometry) : Void {
 		//parent changed
 		geometryEventDispatcher.changeGeometry(this);		

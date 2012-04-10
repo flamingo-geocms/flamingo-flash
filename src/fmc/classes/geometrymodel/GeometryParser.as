@@ -8,11 +8,17 @@ import geometrymodel.*;
 
 import tools.XMLTools;
 import tools.Logger;
-
+/**
+ * geometrymodel.GeometryParser
+ */
 class geometrymodel.GeometryParser {
     
 	private static var log:Logger= new Logger("gui.EditMapPolygon",_global.flamingo.getLogLevel(),_global.flamingo.getScreenLogLevel());
-	
+	/**
+	 * parseGeometry
+	 * @param	geometryNode
+	 * @return
+	 */
     static function parseGeometry(geometryNode:XMLNode):Geometry {		
         if ((geometryNode.nodeName != "gml:Point") && (geometryNode.nodeName != "gml:LinearRing")
                                                    && (geometryNode.nodeName != "gml:LineString")
@@ -153,7 +159,11 @@ class geometrymodel.GeometryParser {
         }
         return geometry;
     }
-	
+	/**
+	 * parseGeometryFromWkt
+	 * @param	wktGeom
+	 * @return
+	 */
 	static function parseGeometryFromWkt(wktGeom:String):Geometry {
 		
 		log.debug("GeometryParser.as parseGeometryFromWkt() wktGeom = "+wktGeom);
@@ -209,7 +219,11 @@ class geometrymodel.GeometryParser {
 		
 		return geometry;
 	}
-	
+	/**
+	 * createPoints
+	 * @param	coordinatePairs
+	 * @return
+	 */
 	static function createPoints(coordinatePairs:Array):Array{
 		var x:Number = 0;
 		var y:Number = 0;
@@ -226,7 +240,11 @@ class geometrymodel.GeometryParser {
 		}
 		return points;
 	}
-	
+	/**
+	 * parseWktLinearRing
+	 * @param	wktGeom
+	 * @return
+	 */
 	static function parseWktLinearRing(wktGeom):LinearRing{
 		log.debug("parseWktLinearRing: "+wktGeom);
 		var wktLinearRing=""+wktGeom;
@@ -241,7 +259,11 @@ class geometrymodel.GeometryParser {
 		points[points.length-1]=points[0];
 		return new LinearRing(points);
 	}
-    
+    /**
+     * parseWktPolygon
+     * @param	wktGeom
+     * @return
+     */
 	static function parseWktPolygon(wktGeom:String):Polygon{
 		log.debug("parseWktPolygon: "+wktGeom);
 		var wktPolygon:String=""+wktGeom;
@@ -273,7 +295,11 @@ class geometrymodel.GeometryParser {
 		}
 		return geometry;
 	}
-	
+	/**
+	 * parseWktMultiPolygon
+	 * @param	wktGeom
+	 * @return
+	 */
 	static function parseWktMultiPolygon(wktGeom:String):MultiPolygon{
 		log.debug("parseWktMultiPolygon: "+wktGeom);
 		var wktMultiPolygon:String=""+wktGeom;

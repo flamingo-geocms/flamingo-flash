@@ -14,7 +14,9 @@ import geometrymodel.GeometryTools;
 
 import geometrymodel.Envelope;
 import tools.Logger;
-
+/**
+ * gismodel.Feature
+ */
 class gismodel.Feature {
     
     private var layer:Layer = null;
@@ -24,7 +26,15 @@ class gismodel.Feature {
     private var values:Array = null;
     
     private var stateEventDispatcher:StateEventDispatcher = null;
-    
+    /**
+     * constructor
+     * @param	layer
+     * @param	serviceFeature
+     * @param	id
+     * @param	geometry
+     * @param	values
+     * @param	ownerName
+     */
     function Feature(layer:Layer, serviceFeature:ServiceFeature, id:String, geometry:Geometry, values:Array, ownerName:String) {
         if (layer == null) {
             _global.flamingo.tracer("Exception in gismodel.Feature.<<init>>(" + id + ")\nNo layer given.");
@@ -100,27 +110,45 @@ class gismodel.Feature {
         this.values = values;
         stateEventDispatcher = new StateEventDispatcher();
     }
-    
+    /**
+     * getLayer
+     * @return
+     */
     function getLayer():Layer {
         return layer;
     }
-    
+    /**
+     * getServiceFeature
+     * @return
+     */
     function getServiceFeature():ServiceFeature {
         return serviceFeature;
     }
-    
+    /**
+     * getID
+     * @return
+     */
     function getID():String {
         return id;
     }
-    
+    /**
+     * getGeometry
+     * @return
+     */
     function getGeometry():Geometry {
         return geometry;
     }
-    
+    /**
+     * getEnvelope
+     * @return
+     */
     function getEnvelope():Envelope {
     	return geometry.getEnvelope();
     }	
-    
+    /**
+     * setValues
+     * @param	values
+     */
     function setValues(values:Array):Void {
         var properties:Array = layer.getProperties();
         if ((values == null) || (values.length != properties.length)) {
@@ -149,7 +177,11 @@ class gismodel.Feature {
         }
         stateEventDispatcher.dispatchEvent(new StateEvent(this, "Feature", StateEvent.CHANGE, "values", layer.getGIS()));
     }
-    
+    /**
+     * setValue
+     * @param	name
+     * @param	value
+     */
     function setValue(name:String, value:String):Void {
         var propertyIndex:Number = layer.getPropertyIndex(name);
         if (propertyIndex == -1) {
@@ -171,11 +203,18 @@ class gismodel.Feature {
             stateEventDispatcher.dispatchEvent(new StateEvent(this, "Feature", StateEvent.CHANGE, "values", layer.getGIS()));
         }
     }
-    
+    /**
+     * getValues
+     * @return
+     */
     function getValues():Array {
         return values.concat();
     }
-    
+    /**
+     * getValue
+     * @param	propertyName
+     * @return
+     */
     function getValue(propertyName:String):String {
         var propertyIndex:Number = layer.getPropertyIndex(propertyName);
         if (propertyIndex == -1) {
@@ -185,7 +224,11 @@ class gismodel.Feature {
         
         return values[propertyIndex];
     }
-
+	/**
+	 * getValueWithPropType
+	 * @param	propType
+	 * @return
+	 */
     function getValueWithPropType(propType:String):String {
         var propertyIndex:Number = layer.getPropertyWithTypeIndex(propType);
         if (propertyIndex == -1) {
@@ -195,7 +238,10 @@ class gismodel.Feature {
         
         return values[propertyIndex];
     }
-	
+	/**
+	 * getLabelText
+	 * @return
+	 */
     function getLabelText():String {
         var labelPropertyName:String = layer.getLabelPropertyName();
         if (labelPropertyName == null) {
@@ -204,7 +250,13 @@ class gismodel.Feature {
         
         return getValue(labelPropertyName);
     }
-    
+    /**
+     * addEventListener
+     * @param	stateEventListener
+     * @param	sourceClassName
+     * @param	actionType
+     * @param	propertyName
+     */
     function addEventListener(stateEventListener:StateEventListener, sourceClassName:String, actionType:Number, propertyName:String):Void {
         if (sourceClassName + "_" + actionType + "_" + propertyName != "Feature_" + StateEvent.CHANGE + "_values") {
             _global.flamingo.tracer("Exception in gismodel.Feature.addEventListener(" + sourceClassName + ", " + propertyName + ")");
@@ -212,7 +264,13 @@ class gismodel.Feature {
         }
         stateEventDispatcher.addEventListener(stateEventListener, sourceClassName, actionType, propertyName);
     }
-    
+    /**
+     * removeEventListener
+     * @param	stateEventListener
+     * @param	sourceClassName
+     * @param	actionType
+     * @param	propertyName
+     */
     function removeEventListener(stateEventListener:StateEventListener, sourceClassName:String, actionType:Number, propertyName:String):Void {
         if (sourceClassName + "_" + actionType + "_" + propertyName != "Feature_" + StateEvent.CHANGE + "_values") {
             _global.flamingo.tracer("Exception in gismodel.Feature.removeEventListener(" + sourceClassName + ", " + propertyName + ")");
@@ -220,13 +278,15 @@ class gismodel.Feature {
         }
         stateEventDispatcher.removeEventListener(stateEventListener, sourceClassName, actionType, propertyName);
     }
-    /**
-	returns the feature as object. 
-	object["id"]= the id
-	object["wktgeom"]= the geometry in wkt text
-	object["fmc_layername"]= the layername from which the feature is given
-	object["<propertyname without prefix and ':'>"]= the property value
-	*/
+	/**
+	 * 
+	 * @param	includePrefix
+	 * @return the feature as object
+	 * 	object["id"]= the id
+	 * 	object["wktgeom"]= the geometry in wkt text
+	 * 	object["fmc_layername"]= the layername from which the feature is given
+	 * 	object["<propertyname without prefix and ':'>"]= the property value
+	 */
     function toObject(includePrefix: Boolean):Object{
     	var returnValue:Object = new Object();
     		returnValue["id"]=getID();
@@ -249,7 +309,10 @@ class gismodel.Feature {
     	return returnValue;
     }
 	
-    
+    /**
+     * toString
+     * @return
+     */
     function toString():String {
         return "Feature(" + id + ")";
     }

@@ -4,11 +4,16 @@
 * B3partners
  -----------------------------------------------------------------------------*/
 import geometrymodel.*;
-
+/**
+ * geometrymodel.MultiPolygon
+ */
 class geometrymodel.MultiPolygon extends Geometry {
     
     private var polygons:Array=null;
-    
+    /**
+     * constructor
+     * @param	polygon
+     */
     function MultiPolygon(polygon:Polygon) {
         if (polygon == null) {
             _global.flamingo.tracer("Exception in geometrymodel.MultiPolygon.<<init>>(null)");
@@ -21,23 +26,27 @@ class geometrymodel.MultiPolygon extends Geometry {
         addGeometryListener(polygon);
         geometryEventDispatcher.addChild(this,polygon);
     }
+	/**
+	 * addPolygon
+	 * @param	polygon
+	 */
     function addPolygon(polygon:Polygon):Void{
 		polygons.push(polygon);
 	}
-/*    function addPoint(polygonIndex:Number,point:Point):Void { 
-		Polygon(polygons[polygonIndex]).addPoint(point);
-    }
-	
-	function insertPoint(polygonIndex:Number,point:Point, insertIndex:Number):Void {
-        Polygon(polygons[polygonIndex]).insertPoint(point, insertIndex);
-    }*/
-	
+	/**
+	 * getChildGeometries
+	 * @return
+	 */
     function getChildGeometries():Array {
 		/*var childGeometries:Array = polygons.concat();
 		return childGeometries;*/
 		return polygons;
     }
-    
+    /**
+     * getArea
+     * @param	performSimpleTest
+     * @return
+     */
 	function getArea(performSimpleTest:Boolean):Number {
 		var area:Number = 0;
 		for (var i:Number = 0; i < polygons.length; i++){
@@ -45,7 +54,10 @@ class geometrymodel.MultiPolygon extends Geometry {
 		}
 		return area;
 	}
-		  
+	/**
+	 * selfIntersectionTest
+	 * @return
+	 */	  
 	function selfIntersectionTest():Boolean {
 		for (var i:Number = 0; i < polygons.length; i++){
 			if(Polygon(polygons[i]).selfIntersectionTest()){
@@ -54,7 +66,11 @@ class geometrymodel.MultiPolygon extends Geometry {
 		}
 		return false;
 	}	
-	    
+	/**
+	 * toGMLString
+	 * @param	srsName
+	 * @return
+	 */    
 	function toGMLString(srsName:String):String {
         var gmlString:String = "";
 		
@@ -71,7 +87,10 @@ class geometrymodel.MultiPolygon extends Geometry {
         gmlString += "</gml:Polygon>\n";        
         return gmlString;
     }
-	
+	/**
+	 * toWKT
+	 * @return
+	 */
 	function toWKT():String{
 		var wktGeom:String="";
 		wktGeom+="MULTIPOLYGON(";		
@@ -85,7 +104,10 @@ class geometrymodel.MultiPolygon extends Geometry {
 		return wktGeom;
 	}
 	
-	
+	/**
+	 * toString
+	 * @return
+	 */
 	function toString():String {
 		var s="MultiPolygon (";
 		for (var i=0; i < polygons.length; i++){

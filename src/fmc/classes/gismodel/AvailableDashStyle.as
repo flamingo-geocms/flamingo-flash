@@ -6,15 +6,24 @@
 
 
 import gismodel.*;
-
+/**
+ * gismodel.AvailableDashStyle
+ */
 class gismodel.AvailableDashStyle extends PropertyItem {
     
     private var pickDashStyle:String = null;
-    
+    /**
+     * constructor
+     * @param	xmlNode
+     */
 	function AvailableDashStyle(xmlNode:XMLNode) {
         super(xmlNode);
     }
-			
+	/**
+	 * setAttribute
+	 * @param	name
+	 * @param	value
+	 */		
     function setAttribute(name:String, value:String):Void {
 		super.setAttribute(name,value);
        if (name == "pickdashstyle") {
@@ -26,11 +35,17 @@ class gismodel.AvailableDashStyle extends PropertyItem {
 			}
         }
     }
-	
+	/**
+	 * getPickDashStyle
+	 * @return
+	 */
 	function getPickDashStyle():String {
         return pickDashStyle;
     }
-	    
+	/**
+	 * toString
+	 * @return
+	 */    
     function toString():String {
         return "Property(" + name + ", " + title + ", " + type + ", " + value + ", " + defaultValue + ", " + pickDashStyle + ")";
     }

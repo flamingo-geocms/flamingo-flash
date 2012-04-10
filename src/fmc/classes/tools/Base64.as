@@ -28,8 +28,10 @@ class tools.Base64 {
 	private static var base64chars:String = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
 
 	/**
-	* Encodes a base64 string.
-	*/
+	 * Encodes a base64 string.
+	 * @param	src
+	 * @return
+	 */
 	public static function encode(src:String):String {
 		var i:Number = 0;
 		var output:String = new String("");
@@ -52,8 +54,10 @@ class tools.Base64 {
 	}
 
 	/**
-	* Decodes a base64 string.
-	*/
+	 * Decodes a base64 string.
+	 * @param	src
+	 * @return
+	 */
 	public static function decode(src:String):String {
 		var i:Number = 0;
 		var output:String = new String("");
@@ -73,7 +77,11 @@ class tools.Base64 {
 		}
 		return output;
 	}
-
+	/**
+	 * decodeBinary
+	 * @param	src
+	 * @return
+	 */
 	public static function decodeBinary(src:String):Array {
 		var i:Number = 0;
 		var output:Array = new Array();

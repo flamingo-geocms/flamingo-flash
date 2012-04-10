@@ -4,13 +4,18 @@
 * IDgis bv
  -----------------------------------------------------------------------------*/
 
-
+/**
+ * tools.XMLSchema
+ */
 class tools.XMLSchema {
     
     private var targetNamespace:String = null;
     private var targetNamespacePrefix:String = null;
     private var schemaNamespacePrefix:String = null;
-    
+    /**
+     * constructor
+     * @param	rootNode
+     */
     function XMLSchema(rootNode:XMLNode) {
         targetNamespace = rootNode.attributes["targetNamespace"];
         var attr:String = null;
@@ -25,11 +30,17 @@ class tools.XMLSchema {
             }
         }
     }
-    
+    /**
+     * getTargetNamespacePrefix
+     * @return
+     */
     function getTargetNamespacePrefix():String {
         return targetNamespacePrefix;
     }
-    
+    /**
+     * getSchemaNamespacePrefix
+     * @return
+     */
     function getSchemaNamespacePrefix():String {
     	return schemaNamespacePrefix;
     }

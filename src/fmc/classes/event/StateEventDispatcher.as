@@ -9,15 +9,25 @@ import flash.external.ExternalInterface;
 
 import core.AbstractComponent;
 import tools.Logger;
-
+/**
+ * event.StateEventDispatcher
+ */
 class event.StateEventDispatcher {
     
     private var eventListeners:Object = null; // Associative array;
-    
+    /**
+     * constructor
+     */
     function StateEventDispatcher() {
         eventListeners = new Object();
     }
-    
+    /**
+     * addEventListener
+     * @param	stateEventListener
+     * @param	sourceClassName
+     * @param	actionType
+     * @param	propertyName
+     */
     function addEventListener(stateEventListener:StateEventListener, sourceClassName:String, actionType:Number, propertyName:String):Void {
         var key:String = sourceClassName.toUpperCase() + "_" + actionType + "_" + propertyName.toUpperCase();
         
@@ -34,7 +44,13 @@ class event.StateEventDispatcher {
         
         eventListeners[key].push(stateEventListener);
     }
-    
+    /**
+     * removeEventListener
+     * @param	stateEventListener
+     * @param	sourceClassName
+     * @param	actionType
+     * @param	propertyName
+     */
     function removeEventListener(stateEventListener:StateEventListener, sourceClassName:String, actionType:Number, propertyName:String):Void {
         var key:String = sourceClassName.toUpperCase() + "_" + actionType + "_" + propertyName.toUpperCase();
         
@@ -53,7 +69,10 @@ class event.StateEventDispatcher {
         trace("EXCEPTION in event.StateEventDispatcher.removeEventListener(" + sourceClassName + ", " + propertyName + ")");
         return;
     }
-    
+    /**
+     * dispatchEvent
+     * @param	stateEvent
+     */
     function dispatchEvent(stateEvent:StateEvent):Void {
         var sourceClassName:String = stateEvent.getSourceClassName();
         var actionType:Number = stateEvent.getActionType();

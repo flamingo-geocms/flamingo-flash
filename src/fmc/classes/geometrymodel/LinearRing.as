@@ -6,10 +6,15 @@
  -----------------------------------------------------------------------------*/
 import geometrymodel.*;
 import tools.Logger;
-
+/**
+ * geometrymodel.LinearRing
+ */
 class geometrymodel.LinearRing extends LineString {
 	private var log:Logger=null;
-    
+    /**
+     * constructor
+     * @param	points
+     */
     function LinearRing(points:Array) {
         super(points);
         this.log = new Logger("geometrymodel.LinearRing",_global.flamingo.getLogLevel(),_global.flamingo.getScreenLogLevel());
@@ -18,14 +23,24 @@ class geometrymodel.LinearRing extends LineString {
             return;
         }
     }
-    
+    /**
+     * getEnvelope
+     * @return
+     */
     function getEnvelope():Envelope{
     	return super.getEnvelope();
     }
-    
+    /**
+     * getEndPoint
+     * @return
+     */
      function getEndPoint():Point {
      	return Point(points[points.length - 2]);
      }
+	 /**
+	  * removePoint
+	  * @param	point
+	  */
 	 function removePoint(point:Point):Void {
 		if (points.length <=4) {
 			log.debug("Can not remove point. Linearring needs to have at least 3 points");
@@ -35,7 +50,9 @@ class geometrymodel.LinearRing extends LineString {
 		super.removePoint(point);
 	}
         
-	 
+	 /**
+	  * removeConsecutiveDoubles
+	  */
 	 function removeConsecutiveDoubles():Void {
 		if (points.length >=3) {
 			for (var i=0; i<points.length - 1; i++) {
@@ -46,7 +63,10 @@ class geometrymodel.LinearRing extends LineString {
 			}
 		}
 	}
-	 
+	 /**
+	  * toString
+	  * @return
+	  */
     function toString():String {
         return("LinearRing (" + points.toString() + ")");
     }

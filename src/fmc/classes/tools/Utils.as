@@ -1,5 +1,12 @@
-﻿class tools.Utils{
-	
+﻿/**
+ * tools.Utils
+ */
+class tools.Utils{
+	/**
+	 * trim
+	 * @param	str
+	 * @return
+	 */
 	public static function trim(str:String):String{
 		var stripCharCodes = {
 			code_9  : true, // tab

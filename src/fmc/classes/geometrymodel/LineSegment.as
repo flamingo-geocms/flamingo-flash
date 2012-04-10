@@ -4,13 +4,20 @@
 * IDgis bv
  -----------------------------------------------------------------------------*/
 import geometrymodel.*;
-
+/**
+ * geometrymodel.LineSegment
+ */
 class geometrymodel.LineSegment extends Geometry {
 
     private var point0:Point = null;
     private var point1:Point = null;
     private var n:Number = null;
-
+	/**
+	 * LineSegment
+	 * @param	point0
+	 * @param	point1
+	 * @param	n
+	 */
     function LineSegment(point0:Point, point1:Point, n:Number) {
         if (point0 == null) {
             _global.flamingo.tracer("Exception in geometrymodel.LineSegment.<<init>>(" + point0 + ", " + point1 + ")");
@@ -25,19 +32,31 @@ class geometrymodel.LineSegment extends Geometry {
         this.point1 = point1;
         this.n = n;
     }
-    
+    /**
+     * getChildGeometries
+     * @return
+     */
     function getChildGeometries():Array {
         return new Array(point0, point1);
     }
-    
+    /**
+     * getPoints
+     * @return
+     */
     function getPoints():Array {
         return new Array(point0, point1);
     }
-    
+    /**
+     * getEndPoint
+     * @return
+     */
     function getEndPoint():Point {
         return point1;
     }
-
+	/**
+	 * getCenterPoint
+	 * @return
+	 */
     function getCenterPoint():Point {
         var point0X:Number = point0.getX();
         var point0Y:Number = point0.getY();
@@ -48,7 +67,10 @@ class geometrymodel.LineSegment extends Geometry {
         
         return new Point(centerX, centerY);
     }
-    
+    /**
+     * getEnvelope
+     * @return
+     */
     function getEnvelope():Envelope {
         var minX:Number = point0.getX();
         var minY:Number = point0.getY();
@@ -68,14 +90,20 @@ class geometrymodel.LineSegment extends Geometry {
         return new Envelope(minX, minY, maxX, maxY);
     }
     
-
+	/**
+	 * clone
+	 * @return
+	 */
     function clone():Geometry {
         var clonedPoint0:Point = Point(point0.clone());
         var clonedPoint1:Point = Point(point1.clone());
         return new LineSegment(clonedPoint0, clonedPoint1, n);
     }
 
-
+	/**
+	 * toString
+	 * @return
+	 */
     function toString():String {
         return("LineSegment (" + point0.toString() + "," + point1.toString() + ")");
     }

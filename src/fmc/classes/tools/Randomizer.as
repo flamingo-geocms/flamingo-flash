@@ -5,11 +5,16 @@
  -----------------------------------------------------------------------------*/
 
 import tools.*;
-
+/**
+ * tools.Randomizer
+ */
 class tools.Randomizer {
     
     static private var number:Number = 0;
-    
+    /**
+     * getNumber
+     * @return
+     */
     static function getNumber():Number {
         return number++;
     }

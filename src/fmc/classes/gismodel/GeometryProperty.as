@@ -6,7 +6,9 @@
  -----------------------------------------------------------------------------*/
 import gismodel.*;
 import core.AbstractComposite;
-
+/**
+ * gismodel.GeometryProperty
+ */
 class gismodel.GeometryProperty extends Property {
     
     private var availableColors:Array = null;
@@ -20,14 +22,24 @@ class gismodel.GeometryProperty extends Property {
 	private var nrTilesVer:Number = null;
 	private var curColorName:String = null;
 	private var propertyType:String = null;
-	
+	/**
+	 * constructor
+	 * @param	xmlNode
+	 */
     function GeometryProperty(xmlNode:XMLNode) {
 		super(xmlNode);
     }
+	/**
+	 * onload
+	 */
 	function onload():Void{
 		inGeometryTypes = new Array();
 	}
-    
+    /**
+     * setAttribute
+     * @param	name
+     * @param	value
+     */
     function setAttribute(name:String, value:String):Void {
         super.setAttribute(name,value);
 		if (name == "ingeometrytypes") {
@@ -44,7 +56,11 @@ class gismodel.GeometryProperty extends Property {
             propertyType = String(value);
         }
     }
-	
+	/**
+	 * addComposite
+	 * @param	name
+	 * @param	xmlNode
+	 */
 	function addComposite(name:String, xmlNode:XMLNode):Void {
 		if (name == "availableColor") {
 			if (availableColors == null){
@@ -68,28 +84,53 @@ class gismodel.GeometryProperty extends Property {
 			availableDashStyles.push(new AvailableDashStyle(xmlNode));
         }
     }
-	
+	/**
+	 * getMinvalue
+	 * @return
+	 */
 	function getMinvalue():Number {
         return minvalue;
     }
+	/**
+	 * getMaxvalue
+	 * @return
+	 */
 	function getMaxvalue():Number {
         return maxvalue;
     }
+	/**
+	 * getNrTilesHor
+	 * @return
+	 */
 	function getNrTilesHor():Number {
         return nrTilesHor;
     }
+	/**
+	 * getNrTilesVer
+	 * @return
+	 */
 	function getNrTilesVer():Number {
         return nrTilesVer;
     }
-	
+	/**
+	 * getInGeometryTypes
+	 * @return
+	 */
 	function getInGeometryTypes():Array {
         return inGeometryTypes.concat();
     }
-	
+	/**
+	 * getPropertyType
+	 * @return
+	 */
 	function getPropertyType():String {
 		return propertyType;
 	}
-	
+	/**
+	 * getFlashValue
+	 * @param	val
+	 * @return
+	 */
 	function getFlashValue(val:String):String{
 		if (type == "ColorPalettePicker") {
 			for (var i:Number = 0; i<availableColors.length; i++) { 
@@ -131,31 +172,52 @@ class gismodel.GeometryProperty extends Property {
 		
 		return val;
 	}
-	          
+   /**
+	* getAvailableColors
+	* @return
+	*/       
 	function getAvailableColors():Array {
         return availableColors.concat();
     }
-	
+	/**
+	 * getAvailableIcons
+	 * @return
+	 */
 	function getAvailableIcons():Array {
         return availableIcons.concat();
     }
-	
+	/**
+	 * getAvailablePatterns
+	 * @return
+	 */
 	function getAvailablePatterns():Array {
         return availablePatterns.concat();
     }
-	
+	/**
+	 * getAvailableDashStyles
+	 * @return
+	 */
 	function getAvailableDashStyles():Array {
         return availableDashStyles.concat();
     }
-	
+	/**
+	 * setCurColorName
+	 * @param	curColorName
+	 */
 	function setCurColorName(curColorName:String):Void {
 		this.curColorName = curColorName;
 	}
-	
+	/**
+	 * getCurColorName
+	 * @return
+	 */
 	function getCurColorName():String {
         return curColorName;
     }
-	
+	/**
+	 * getCurColor
+	 * @return
+	 */
 	function getCurColor():AvailableColor{
 		for (var i:Number = 0; i < availableColors.length; i++) { 
 			if (availableColors[i].getName() == curColorName) {
@@ -163,11 +225,17 @@ class gismodel.GeometryProperty extends Property {
 			}
 		}
 	}
-		
+	/**
+	 * isImmutable
+	 * @return
+	 */	
     function isImmutable():Boolean {
         return immutable;
     }
-    
+    /**
+     * toString
+     * @return
+     */
     function toString():String {
         return "GeometryProperty(" + name + ", " + title + ", " + type + ")";
     }
