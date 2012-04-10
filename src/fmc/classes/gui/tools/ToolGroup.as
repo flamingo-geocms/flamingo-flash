@@ -190,26 +190,30 @@ dynamic class gui.tools.ToolGroup extends AbstractPositionable
 			}			
 		}
 		//deactivate the default tool on the map
-		//deactivateDefaultTool();
+		//activateDefaultTool(false);
 		flamingo.addListener(lMap, listento, this);
 		resize();
 		flamingo.position(this.container);
 	}
-	function deactivateDefaultTool():Void {
+	/**
+	 * Activate/DeActivate the defaulttool
+	 * @param	val true/false
+	 */
+	function activateDefaultTool(val:Boolean):Void {
 		if (this.listento != undefined) {
 			for (var i = 0; i < this.listento.length; i++) {
 				if (!_global.flamingo.isLoaded(this.listento[i])) {					
-					_global.flamingo.loadCompQueue.executeAfterLoad(this.listento[i], this, deactivateDefaultToolAfterLoad);
+					_global.flamingo.loadCompQueue.executeAfterLoad(this.listento[i], this, activateDefaultToolAfterLoad,val);
 				}else {
-					_global.flamingo.getComponent(this.listento[i]).activateDefaultTool(false)
+					_global.flamingo.getComponent(this.listento[i]).activateDefaultTool(val)
 				}
 				
 			}
 		}
 	}
-	function deactivateDefaultToolAfterLoad():Void {
+	function activateDefaultToolAfterLoad(val:Boolean):Void {
 		for (var i = 0; i < this.listento.length; i++) {
-			_global.flamingo.getComponent(this.listento[i]).activateDefaultTool(false);
+			_global.flamingo.getComponent(this.listento[i]).activateDefaultTool(val);
 		}
 	}
 	/** 
@@ -243,7 +247,7 @@ dynamic class gui.tools.ToolGroup extends AbstractPositionable
 			//tool._parent(this);
 			addOldTool(tool);
 		}else if (tool.visible) {
-			deactivateDefaultTool();
+			activateDefaultTool(false);
 		}
 	}
 	
@@ -389,7 +393,9 @@ dynamic class gui.tools.ToolGroup extends AbstractPositionable
 		if (toolid == undefined) {
 			return;
 		}
-		deactivateDefaultTool();
+		if (toolid!=""){
+			activateDefaultTool(false);
+		}
 		var toolComp = this.getTool(this.tool);
 		if(this.tool!=undefined){
 			flamingo.raiseEvent(this, "onReleaseTool", this, tool);

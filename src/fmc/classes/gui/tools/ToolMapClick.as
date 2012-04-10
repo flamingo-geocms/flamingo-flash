@@ -66,10 +66,13 @@ class gui.tools.ToolMapClick extends AbstractTool
 	
 	function deactivate() {
 		var tool = this.previousTool;
-		if (tool == undefined) {
-			tool = "";
+		if (tool == undefined || tool=="") {
+			//if no tool is previous, enable default tool.			
+			this.toolGroup.activateDefaultTool(true);
+			this.toolGroup.setTool("");
+		}else{
+			this.toolGroup.setTool(tool);		
 		}
-		this.toolGroup.setTool(tool);
 	}
 	
 }
