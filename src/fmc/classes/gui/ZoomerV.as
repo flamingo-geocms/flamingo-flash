@@ -52,6 +52,7 @@ import gui.Map;
  * </fmc:ZoomerV>
  * @hierarchy childnode of <flamingo> or a container component. e.g. <fmc:Window>
  * @attr updatedelay (defaultvalue="500") Amount of time in milliseconds(1000 = 1 second) between releasing the zoomin/out and slider buttons and the update of a map.
+ * @attr showbuttons (defaultvalue="true") If set to false the '+' and '-' buttons are not visible
  * @attr listento the map that needs to change the extent on a change of this zoomer
  */
 /**
@@ -65,6 +66,7 @@ class gui.ZoomerV  extends AbstractPositionable{
 	var _zoomid:Number;
 	var center:Object;
 	var updatedelay:Number = 500;
+	var _showButtons:Boolean = true;
 	//listeners
 	//zoomin button
 	var _zoomIn:ZoomInButton;
@@ -159,11 +161,17 @@ class gui.ZoomerV  extends AbstractPositionable{
 		for (var attr in xml.attributes) {
 			var val:String = xml.attributes[attr];
 
-			switch (attr.toLowerCase()) {
-	
-			case "updatedelay" :
-				updatedelay = Number(val);
-				break;
+			switch (attr.toLowerCase()) {	
+				case "updatedelay" :
+					updatedelay = Number(val);
+					break;
+				case "showbuttons" :
+					if (val.toLowerCase() == "true") {
+						this.showButtons = true;
+					} else {
+						this.showButtons = false;
+					}
+					break;	
 			}
 		}
 		flamingo.addListener(lMap, listento[0], this);
@@ -178,14 +186,24 @@ class gui.ZoomerV  extends AbstractPositionable{
 		if (sliderButton.bSlide) {
 			return;
 		}
-		var map = flamingo.getComponent(listento[0]);
+		//set visibility buttons;
+		if (this.zoomIn.visible != this.showButtons) {
+			this.zoomIn.setVisible(this.showButtons);
+			this.zoomOut.setVisible(this.showButtons);
+		}
+		
+		var map:Map = flamingo.getComponent(listento[0]);
 		var max = map.getMaxScale();
 		var min = map.getMinScale();
 		if (min == undefined) {
 			min = 0;
 		}
 		var p;
-		var scale = map.getScale();
+		var scale = map.getScale(map.getMapExtent());
+		/*Logger.console("*****");
+		Logger.console("Min: " + min);
+		Logger.console("Max: " + max);
+		Logger.console("Cur: " + scale);*/
 		if (scale == min) {
 			p = 0;
 		} else if (scale == max) {
@@ -201,6 +219,7 @@ class gui.ZoomerV  extends AbstractPositionable{
 				p = 0;
 			}
 		}
+		//Logger.console("P:  "+p);
 		sliderButton.move(flamingo.getPosition(sliderButton)._x, sliderBar._y+(sliderBar._height*p/100)-sliderButton.height/2);
 	}
 	/**
@@ -221,8 +240,20 @@ class gui.ZoomerV  extends AbstractPositionable{
 		
 		sliderBar._width = r.width;
 		sliderBar._x = r.x;
-		sliderBar._y = r.y + r.width + sliderButton.height/2;
-		sliderBar._height = r.height - zoomIn._height - zoomOut._height - sliderButton.height;
+		var y:Number = r.y + sliderButton.height / 2;
+		if (zoomIn.visible) {
+			y +=zoomIn._height;
+		}
+		sliderBar._y = y;
+		var sliderHeight:Number = r.height - sliderButton.height;
+		
+		if (zoomIn.visible){
+			sliderHeight -= zoomIn._height;
+		}		
+		if (zoomOut.visible) {
+			sliderHeight -= zoomOut._height;
+		}
+		sliderBar._height = sliderHeight;
 		sliderButton._width = r.width;
 		sliderButton._height = r.width;
 		sliderButton.move(sliderBar._x, sliderBar._y);
@@ -270,6 +301,13 @@ class gui.ZoomerV  extends AbstractPositionable{
 		{
 			var mc = flamingo.getComponent(listento[i]);
 			mc.cancelUpdate();
+		}
+	}
+	public function setShowButtons(value:Boolean) {
+		this.showButtons = value;
+		if (this.zoomIn.visible!=value){
+			this.zoomIn.setVisible(value);
+			this.zoomOut.setVisible(value);
 		}
 	}
 	/****** Getters and setters ****/
@@ -331,6 +369,14 @@ class gui.ZoomerV  extends AbstractPositionable{
 	public function set spriteMap(value:SpriteMap):Void 
 	{
 		_spriteMap = value;
+	}
+	public function get showButtons():Boolean 
+	{
+		return _showButtons;
+	}
+	public function set showButtons(value:Boolean):Void 
+	{
+		_showButtons = value;
 	}
 	/*********************** Events ***********************/
 	/** 

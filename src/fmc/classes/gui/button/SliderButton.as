@@ -66,8 +66,8 @@ class gui.button.SliderButton extends AbstractButton
 		};
 	}
 	
-	function onRelease()
-	{
+	function onRelease(){		
+		zoomSlider();
 		bSlide = false;
 		delete this.container.onMouseMove;
 		this.container.stopDrag();
@@ -104,8 +104,7 @@ class gui.button.SliderButton extends AbstractButton
 		{
 			min = 0.001;
 		}
-		
-		p = (this.container._y-zoomerV.sliderBar._y)/zoomerV.sliderBar._height*100;
+		p = (this.container._y-zoomerV.sliderBar._y+this._height/2)/zoomerV.sliderBar._height*100;
 		p = p/21.544347;
 		p = p*p*p;
 		p = Math.min(100, p);

@@ -34,7 +34,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 * @attr listento the id of the map that must be controlled.
 * @attr zoomeroffset (optional; default 7) The y offset in pixels of the move extent buttons.
 * @attr zoomerbackgroundoffset (optional; default -5) The y offset of the background of the zoomer
-* @attr showFullExtent (optional; default true) if set to true the fullextent button wil be added. 
+* @attr showFullExtent (optional; default true) if set to true the fullextent button will be added. 
+* @attr showZoomerButtons (optional; default true) if set to false the zoomerv buttons will be hidden
 * But only if there is a full extent set on the map.
 */
 import core.AbstractConfigurable;
@@ -55,6 +56,7 @@ class gui.NavigationControl extends AbstractConfigurable
 	private var ZOOMER_OFFSET_PARAM:String = "zoomeroffset"; 
 	private var ZOOMER_BACKGROUND_OFFSET_PARAM:String = "zoomerbackgroundoffset"; 
 	private var SHOW_FULLEXTENT_PARAM:String = "showfullextent";
+	private var SHOW_ZOOMER_BUTTONS:String = "showzoomerbuttons";
 	private var _firstTime:Boolean;
 	private var _map:Map;
 	
@@ -80,6 +82,7 @@ class gui.NavigationControl extends AbstractConfigurable
 	//button full
 	private var _buttonFull:ButtonFull;
 	private var _showFullExtent:Boolean = true;
+	private var _showZoomerButtons:Boolean = true;
 	
 	//var moveExtentButton:MoveExtentButton = new MoveExtentButton(this.id + pos, this.container.createEmptyMovieClip("m" + pos, i), this);
 	/**
@@ -108,6 +111,10 @@ class gui.NavigationControl extends AbstractConfigurable
 			map = flamingo.getComponent(this.listento[0]);
 			addMoveExtentButtons();
 			addZoomerV();
+		}else {
+			if (this.zoomer.showButtons != this.showZoomerButtons) {
+				this.zoomer.setShowButtons(this.showZoomerButtons);
+			}
 		}
 		if (this.showFullExtent && this.buttonFull==null) {					
 			addButtonFull();
@@ -128,10 +135,16 @@ class gui.NavigationControl extends AbstractConfigurable
 		}else if (lowerName == ZOOMER_BACKGROUND_OFFSET_PARAM) {
 			this.zoomerBackgroundOffset = Number(value);
 		}else if (lowerName == SHOW_FULLEXTENT_PARAM) {
-			if (value=="true"){
+			if (value.toLowerCase()=="true"){
 				this.showFullExtent = true;
 			}else {
 				this.showFullExtent = false;
+			}
+		}else if (lowerName == SHOW_ZOOMER_BUTTONS) {
+			if (value.toLowerCase()=="true"){
+				this.showZoomerButtons = true;
+			}else {
+				this.showZoomerButtons = false;
 			}
 		}
     }
@@ -301,6 +314,7 @@ class gui.NavigationControl extends AbstractConfigurable
 	public function addZoomerV():Void {
 		zoomer = new ZoomerV(this.id + "_zoomer", this.container.createEmptyMovieClip(this.id + "_zoomer", this.container.getNextHighestDepth()));						
 		zoomer.listento = this.listento;
+		zoomer.showButtons = this.showZoomerButtons;
 		zoomer.setConfig(null);
 	}
 	
@@ -456,6 +470,14 @@ class gui.NavigationControl extends AbstractConfigurable
 	public function set showFullExtent(value:Boolean):Void 
 	{
 		_showFullExtent = value;
+	}
+	public function get showZoomerButtons():Boolean 
+	{
+		return _showZoomerButtons;
+	}
+	public function set showZoomerButtons(value:Boolean):Void 
+	{
+		_showZoomerButtons = value;
 	}
 	/** Events **/
 	/** 
