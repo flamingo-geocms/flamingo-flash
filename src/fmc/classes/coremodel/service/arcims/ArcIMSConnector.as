@@ -61,6 +61,8 @@ class coremodel.service.arcims.ArcIMSConnector {
 	var requestid:Number = 0;
 	var requesttype:String;
 	
+	var layerOrder:Boolean = false;
+	
 	var starttime:Date;
 	//-----------------------
 	private var busy:Boolean = false;
@@ -75,6 +77,7 @@ class coremodel.service.arcims.ArcIMSConnector {
 	private var record:Boolean = false;
 	static var  serviceInfoResponses:Array = null;
 	static var  serviceInfoResponseListeners:Array = null;
+	
 	/**
 	 * setIdentifyColorLayer
 	 * @param	s
@@ -482,7 +485,7 @@ class coremodel.service.arcims.ArcIMSConnector {
 			str = str+this.layerliststring;
 		} else {
 			if (layers != undefined) {
-				str = str+"<LAYERLIST order=\"false\" >\n";
+				str = str+"<LAYERLIST order=\""+ this.layerOrder +"\" >\n";
 				for (var id in layers) {
 					if (layers[id].visible != undefined) {
 						if (!layers[id].visible) {
@@ -913,4 +916,9 @@ class coremodel.service.arcims.ArcIMSConnector {
 			trace(newDate+"ArcImsConnector: "+stringtolog);
 		}
 	}
+	
+	function setLayerOrder (layerOrder:Boolean) {
+		this.layerOrder = layerOrder;
+	}
+	
 }

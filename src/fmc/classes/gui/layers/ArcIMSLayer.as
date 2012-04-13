@@ -234,6 +234,7 @@ class gui.layers.ArcIMSLayer extends AbstractLayer{
 	var extent:Object;
 	var nrlayersqueried:Number;
 	var layerliststring:String;
+	var layerOrder:Boolean = false;
 	//***
 	var initService:Boolean=true;
 	//***
@@ -542,6 +543,13 @@ class gui.layers.ArcIMSLayer extends AbstractLayer{
 			break;
 		case "autorefreshdelay" :
 			setInterval(this, "autoRefresh", Number(val));
+			break;
+		case "layerorder":
+			if (val.toLowerCase()=="true"){
+				this.layerOrder=true;
+			}else{
+				this.layerOrder=false;
+			}
 			break;
 		}
 	}
@@ -1181,6 +1189,7 @@ class gui.layers.ArcIMSLayer extends AbstractLayer{
 		conn.legendcolor = this.legendcolor;
 		conn.outputtype = outputtype;
 		conn.legend = legend;
+		conn.setLayerOrder(this.layerOrder);
 		this.starttime = new Date();
 		vislayers = _getVisLayers();
 		flamingo.raiseEvent(this, "onUpdate", this, nrtry);
