@@ -53,7 +53,7 @@ import gui.layers.AbstractLayer;
 * @hierarchy childnode of <fmc:Map> 
 * @example 
 * <fmc:Map id="map"  left="5" top="5" bottom="bottom -5" right="right -5"  extent="13562,306839,278026,614073,Nederland" fullextent="13562,306839,278026,614073,Nederland">
-*   <fmc:LayerArcIMS  id="layer1" identifyall="true" server="www.mymap.com"  mapservice="mymap" identifyids="1,39" maptipids="1">
+*   <fmc:LayerArcIMS  id="layer1" identifyall="true" server="www.mymap.com"  mapservice="mymap" identifyids="1,39" maptipids="1" layerorder="false">
 *      <layer id="1" subfields="field1,field2"  maptip="name:[field3]" >
 *         <string id="maptip" en="name:[field3]" nl="naam:[field3]"/>
 *      </layer>
@@ -92,6 +92,7 @@ import gui.layers.AbstractLayer;
 * @attr autorefreshdelay  (optional; no defaultvalue) Time in miliseconds (1000 = 1 second) at which rate the layer automatically refreshes. If not given, the layer will not refresh automatically, unless at map level an automatic refresh delay is given.
 * @attr initService (default="true") if set to false the service won't do a getCap request to init the service. If set to false all parameters must be filled, and no #ALL# can be used.
 * @attr shadow (optional;) if set, container has a shadow drop
+* @attr layerorder (optional;) if set to true, not configured layers, are not shown. If set to false, if a layer is not configured it's shown.
 */
 /** @tag <layer>  
 * This defines a sublayer of an ArcIMS mapservice
