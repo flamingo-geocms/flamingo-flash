@@ -300,7 +300,6 @@ class gui.tools.ToolDefault extends AbstractTool{
 					map.update(0);			
 				}
 			}
-			
 		}
 	}		
 	/**
@@ -308,16 +307,16 @@ class gui.tools.ToolDefault extends AbstractTool{
 	 * @param	map the map
 	 */
 	function onRollOut(map:MovieClip) {
-		thisObj.maphit = false;
-		thisObj.cancel()
+		this.maphit = false;
+		this.cancel()
 	}	
 	/**
 	 * On mouse drag out
 	 * @param	map the map
 	 */
 	function onDragOut(map:MovieClip) {
-		thisObj.maphit = false;
-		thisObj.cancel()
+		this.maphit = false;
+		this.cancel()
 	}
 	/**
 	 * Auto pan functions
