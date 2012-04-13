@@ -18,6 +18,7 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 -----------------------------------------------------------------------------*/
 
+import gui.Map;
 import gui.tools.AbstractTool;
 import gui.tools.ToolGroup;
 import tools.Logger;
@@ -57,12 +58,31 @@ class gui.tools.ToolDefault extends AbstractTool{
 	var clickdelay:Number = 1000;
 	var xold:Number;
 	var yold:Number;	
+	var map:Map;
 		
 	var zoomfactor:Number = 200;
 	var zoomdelay:Number = 0;
 	
 	var clickCounter:Number = 0;
 	var clickTimerId:Number;
+	// use superpan. If false use pan.
+	var useSuperPan:Boolean = true;
+	//for superpan
+	var velocityid:Number;
+	var autopanid:Number;
+	var vx:Number;
+	var vy:Number;		
+	//maphit?
+	var maphit:Boolean=true;
+	var panning:Boolean;
+	//for counting the autopans
+	var autoPans:Number = 0;
+	var maxAutoPans:Number = 10;
+	//mouse values.
+	var mouseDownCoord = new Object();
+	var mouseDown:Boolean = false;
+	var msx;
+	var msy;
 	/**
 	 * Constructor for ToolDefault.
 	 * @param	id the id of the button
@@ -92,12 +112,21 @@ class gui.tools.ToolDefault extends AbstractTool{
 	 */
 	private function init() {
 		var thisObj:ToolDefault = this;
-		this.lMap.onMouseDown = function(map:MovieClip, xmouse:Number, ymouse:Number, coord:Object){
+		this.lMap.onMouseDown = function(map:MovieClip, xmouse:Number, ymouse:Number, coord:Object) {
+			thisObj.maphit = true;					
 			thisObj.onMouseDown(map, xmouse, ymouse, coord);
 		}
 		this.lMap.onMouseUp = function(map:MovieClip, xmouse:Number, ymouse:Number, coord:Object){
 			thisObj.onMouseUp(map, xmouse, ymouse, coord);
 		}
+		
+		this.lMap.onRollOut = function(map:MovieClip ){
+			thisObj.onRollOut(map);
+		}
+		this.lMap.onDragOut = function(map:MovieClip){
+			thisObj.onDragOut(map);
+		}
+		
 		this._visible = false;
 
 		//defaults
@@ -164,16 +193,22 @@ class gui.tools.ToolDefault extends AbstractTool{
 		this.setEnabled(enabled);
 		flamingo.position(this);
 	}	
-	
-	var mouseDownCoord = new Object();
-	var mouseDown:Boolean = false;
-	var msx;
-	var msy;
+	/**
+	 * On Mouse Down
+	 * @param	map the map
+	 * @param	xmouse x coord	
+	 * @param	ymouse y coord
+	 * @param	coord world coords
+	 */
 	public function onMouseDown(map:MovieClip, xmouse:Number, ymouse:Number, coord:Object) {
+		this.map = Map(map);		
+		clearInterval(this.autopanid);
+		this.cancel();
 		mouseDownCoord.x = xmouse;
 		mouseDownCoord.y = ymouse;
 		mouseDownCoord.extent= map.getCurrentExtent();
-		mouseDown = true;				
+		mouseDown = true;			
+		this.velocityid = setInterval(this,"velocity", 100, map);
 		if (! this._parent.updating) {
 			this._parent.cancelAll();
 			var e = map.getCurrentExtent();
@@ -189,6 +224,13 @@ class gui.tools.ToolDefault extends AbstractTool{
 			};
 		}
 	}	
+	/**
+	 * On mouse move
+	 * @param	mapMove the map
+	 * @param	xmouseMove x coord
+	 * @param	ymouseMove y coord
+	 * @param	coordMove world coords
+	 */
 	public function onMouseMove(mapMove:MovieClip, xmouseMove:Number, ymouseMove:Number, coordMove:Object) {
 		if (this.mouseDown){
 			clearInterval(this.clickTimerId);				
@@ -200,8 +242,16 @@ class gui.tools.ToolDefault extends AbstractTool{
 			//updateAfterEvent();
 		};
 	}
+	/**
+	 * On mouse up
+	 * @param	map
+	 * @param	xmouse
+	 * @param	ymouse
+	 * @param	coord
+	 */
 	public function onMouseUp(map:MovieClip, xmouse:Number, ymouse:Number, coord:Object) {
 		mouseDown = false;
+		clearInterval(this.velocityid);
 		delete this.lMap.onMouseMove;
 		map.setCursor(this.cursors["cursor"]);
 		if (map.isEqualExtent(mouseDownCoord.extent, map.getCurrentExtent())) {
@@ -224,23 +274,113 @@ class gui.tools.ToolDefault extends AbstractTool{
 				this.clickCounter = 0;
 			}
 		}
-		else{
-			var msx = (mouseDownCoord.extent.maxx-mouseDownCoord.extent.minx)/map.getMovieClipWidth();
-			var msy = (mouseDownCoord.extent.maxy - mouseDownCoord.extent.miny) / map.getMovieClipHeight();		
+		else {
+			if (!this.useSuperPan) {
+				var msx = (mouseDownCoord.extent.maxx-mouseDownCoord.extent.minx)/map.getMovieClipWidth();
 			
-			var dx = (mouseDownCoord.x-xmouse)*msx;
-			var dy = (ymouse-mouseDownCoord.y)*msy;
-			var extent={minx:mouseDownCoord.extent.minx+dx, miny:mouseDownCoord.extent.miny+dy, maxx:mouseDownCoord.extent.maxx+dx, maxy:mouseDownCoord.extent.maxy+dy};
-			if (!map.isEqualExtent(mouseDownCoord.extent, extent)) {
-				this.flamingo.raiseEvent(map, "onReallyChangedExtent", map, map.copyExtent(extent), 1);
-			}						
-			//_parent._cursorid = "cursor";
-			var delay = this.pandelay;
-			map.update(delay);
-			this._parent.updateOther(map, delay);					
+				var msy = (mouseDownCoord.extent.maxy - mouseDownCoord.extent.miny) / map.getMovieClipHeight();		
+				
+				var dx = (mouseDownCoord.x-xmouse)*msx;
+				var dy = (ymouse-mouseDownCoord.y)*msy;
+				var extent={minx:mouseDownCoord.extent.minx+dx, miny:mouseDownCoord.extent.miny+dy, maxx:mouseDownCoord.extent.maxx+dx, maxy:mouseDownCoord.extent.maxy+dy};
+				if (!map.isEqualExtent(mouseDownCoord.extent, extent)) {
+					this.flamingo.raiseEvent(map, "onReallyChangedExtent", map, map.copyExtent(extent), 1);
+				}						
+				//_parent._cursorid = "cursor";
+				var delay = this.pandelay;
+				map.update(delay);
+				this._parent.updateOther(map, delay);
+			}else{				
+				clearInterval(this.velocityid);
+				if ((Math.abs(this.vx)>10 || Math.abs(this.vy)>10) && this.maphit) {
+					this.vx = Math.round(this.vx/10);
+					this.vy = Math.round(this.vy/10);
+					startAutoPan();
+				}else{ 
+					map.update(0);			
+				}
+			}
+			
+		}
+	}		
+	/**
+	 * On mouse roll out
+	 * @param	map the map
+	 */
+	function onRollOut(map:MovieClip) {
+		thisObj.maphit = false;
+		thisObj.cancel()
+	}	
+	/**
+	 * On mouse drag out
+	 * @param	map the map
+	 */
+	function onDragOut(map:MovieClip) {
+		thisObj.maphit = false;
+		thisObj.cancel()
+	}
+	/**
+	 * Auto pan functions
+	 */
+	/**
+	 * Calculates the speed of dragging between 2 calls.
+	 * @param	map the movie clip that contains the map
+	 */
+	function velocity(map:MovieClip) {		
+		this.vx = this.xold-map.container._xmouse;
+		this.vy = this.yold - map.container._ymouse;
+		this.xold = map.container._xmouse;
+		this.yold = map.container._ymouse;
+	}
+	/**
+	 * Start the auto pan.
+	 */	
+	function startAutoPan() {
+		clearInterval(this.autopanid);
+		this.autoPans = 0;
+		this.autopanid = setInterval(this,"autoPan",100, map);				
+	}
+	/**
+	 * Auto pan
+	 * @param	map the movie clip that contains the map
+	 */
+	function autoPan(map:MovieClip) {
+		this.panning = true;
+		this.autoPans++;
+		var e = map.getCurrentExtent();
+		var msx = (e.maxx-e.minx)/map.__width;
+		var msy = (e.maxy-e.miny)/map.__height;
+		var dx = vx*msx;
+		var dy = -vy * msy;
+		map.moveToExtent({minx:e.minx+dx, miny:e.miny+dy, maxx:e.maxx+dx, maxy:e.maxy+dy}, -1, 0);
+		updateAfterEvent();
+		if (this.autoPans >= this.maxAutoPans) {
+			this.cancel();
+		}		
+		//slowly hit the breaks... 
+		this.vx = this.vx / 1.15;
+		this.vy = this.vy / 1.15;		
+	}
+	/**
+	 * Cancel the panning and dragging speed interval
+	 */
+	function cancel() {
+		//trace("CANCEL");
+		if (this.panning) {
+			this.map.update();
+			//_parent.updateOther(panmap, delay);
+			clearInterval(this.autopanid);
+			clearInterval(this.velocityid);
+			panning = false;
 		}
 	}
-	
+	/**
+	 * Do a identify
+	 * @param	map the map
+	 * @param	xmouse x pixel
+	 * @param	ymouse y pixel
+	 * @param	coord world coords
+	 */
 	public function doIdentify(map:MovieClip, xmouse:Number, ymouse:Number, coord:Object) {
 		if (this._parent.defaulttool==undefined){
 			map.setCursor(this.cursors["cursor"]);
@@ -249,7 +389,13 @@ class gui.tools.ToolDefault extends AbstractTool{
 			map.identify({minx:coord.x, miny:coord.y, maxx:coord.x, maxy:coord.y});			
 		}
 	}
-	
+	/**
+	 * do a zoomin
+	 * @param	map the map
+	 * @param	xmouse x pixel
+	 * @param	ymouse y pixel
+	 * @param	coord world coord
+	 */
 	public function doZoomIn(map:MovieClip, xmouse:Number, ymouse:Number, coord:Object) {
 		var x:Number;
 		var y:Number;
