@@ -495,9 +495,18 @@ class coremodel.service.arcims.ArcIMSConnector {
 							if (layers[id].layerdefstring.length>0) {
 								str = str+layers[id].layerdefstring;
 							}
-							if (layers[id].query.length>0) {
-								str = str+"<SPATIALQUERY where=\""+layers[id].query+"\" />";
+							if (layers[id].query.length > 0 || layers[id].spatialQuery.length > 0) {
+								str += "<SPATIALQUERY";
+								if (layers[id].query.length > 0){
+									str += " where=\"" + layers[id].query + "\"";
+								}
+								str += ">";
+								if (layers[id].spatialQuery.length > 0) {
+									str += layers[id].spatialQuery;
+								}
+								str += "</SPATIALQUERY>";								
 							}
+							
 						}
 						var otherPartAdded = false;
 						var keyCount:Number = 0;

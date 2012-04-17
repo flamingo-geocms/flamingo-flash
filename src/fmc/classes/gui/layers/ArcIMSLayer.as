@@ -1732,7 +1732,11 @@ class gui.layers.ArcIMSLayer extends AbstractLayer{
 	function setLayerProperty(ids:String, field:String, value:Object) {
 		if (ids.toUpperCase() == "#ALL#") {
 			for (var id in layers) {
-				layers[id][field] = value;
+				if (field.toLowerCase() == "query") {
+					this.setQuery(id, String(value));
+				}else{
+					layers[id][field] = value;
+				}
 			}
 		} else {
 			var a_ids = flamingo.asArray(ids);
@@ -1742,7 +1746,11 @@ class gui.layers.ArcIMSLayer extends AbstractLayer{
 				if (layers[id] == undefined /*&& !initialized*/) {
 					layers[id] = new Object();					
 				} 
-				layers[id][field] = value;
+				if (field.toLowerCase() == "query ") {
+					this.setQuery(id, String(value));
+				}else{
+					layers[id][field] = value;
+				}
 			}
 		}
 		flamingo.raiseEvent(this, "onSetLayerProperty", this, ids, field);
@@ -2286,6 +2294,36 @@ class gui.layers.ArcIMSLayer extends AbstractLayer{
 	
 	public function getParent():Object {
 		return this.map;
+	}
+	/**
+	 * Set the query for the layer with id 'layerId'
+	 * @param	layerId the id of the layer
+	 * @param	query the query. If its only a where statement it's stored in the layer.query. If its a full spatialquery
+	 * xml element the where and the spatial part are split. where is stored in layer.query spatialfilter in layer.spatialQuery
+	 */
+	public function setQuery(layerId:String, query:String) {
+		if (this.layers[layerId] == undefined) {
+			this.layers[layerId] = new Object();
+		}
+		if (query != undefined && 
+				query.length > 0) {
+			var newQuery:String = "" + query;
+			//if not a spatialquery xml fragment, make it:
+			if (query.toUpperCase().indexOf("<SPATIALQUERY") == 0) {	
+				var xml:XML = new XML(newQuery);
+				var spatialQueryNode:XMLNode = xml.firstChild;
+				newQuery = spatialQueryNode.attributes["where"];
+				for (var i = 0; i < spatialQueryNode.childNodes.length; i++) {
+					var childNode:XMLNode = spatialQueryNode.childNodes[i];
+					if (childNode.nodeName.toUpperCase() == "SPATIALFILTER") {
+						this.layers[layerId].spatialQuery = childNode.toString();
+					}
+				}
+			}
+			newQuery = newQuery.split("<").join("&lt;");
+			newQuery = newQuery.split(">").join("&gt;");			
+			this.layers[layerId].query = newQuery;
+		}
 	}
 	
 	/***********************************************************

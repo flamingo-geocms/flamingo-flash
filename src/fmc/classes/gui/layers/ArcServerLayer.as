@@ -218,7 +218,7 @@ class gui.layers.ArcServerLayer extends AbstractLayer{
 				}
 				for (var attr in servicelayers[id]) {
 					if (thisObj.layers[id][attr] == undefined) {
-						thisObj.layers[id][attr] = servicelayers[id][attr];
+						thisObj.setLayerProperty(id, attr, servicelayers[id][attr]);						
 					}
 				}
 				if (thisObj.layers[id].type == "Feature Layer") {
@@ -651,11 +651,11 @@ class gui.layers.ArcServerLayer extends AbstractLayer{
 		flamingo.raiseEvent(this, "onUpdate", this, nrtry);
 		
 		//add escapes
-		for(var i in layers)
+		/*for(var i in layers)
 		{
 			layers[i].query = searchAndReplace(layers[i].query, "<", "&lt;");
 			layers[i].query = searchAndReplace(layers[i].query, ">", "&gt;");
-		}
+		}*/
 		conn.getImage(mapservice, extent, {width:Math.ceil(map.__width), height:Math.ceil(map.__height), dpi:96}, layers);
 		this._starttimeout();
 	}
@@ -903,11 +903,11 @@ class gui.layers.ArcServerLayer extends AbstractLayer{
 			var subfields:String = layers[layerid].subfields.split(",").join(" ");
 			var query:String = layers[layerid].query;
 			//add escapes
-			for(var i in layers)
+			/*for(var i in layers)
 			{
 				query = searchAndReplace(query, "<", "&lt;");
 				query = searchAndReplace(query, ">", "&gt;");			
-			}
+			}*/
 			//No geometry needed for identify
 			conn.includeGeometry = false;
 			conn.getFeatures(mapservice, layerid, real_identifyextent, subfields, query, map.copyExtent(_identifyextent));
@@ -1073,11 +1073,11 @@ class gui.layers.ArcServerLayer extends AbstractLayer{
 			var subfields:String = layers[layerid].subfields.split(",").join(" ");
 			var query:String = layers[layerid].query;
 			//add escapes
-			for(var i in layers)
+			/*for(var i in layers)
 			{
 				query = searchAndReplace(query, "<", "&lt;");
 				query = searchAndReplace(query, ">", "&gt;");			
-			}
+			}*/
 			conn.includeGeometry = false;
 			conn.getFeatures(mapservice, layerid, real_identifyextent, subfields, query, map.copyExtent(_identifyextent));
 			break;
@@ -1108,11 +1108,10 @@ class gui.layers.ArcServerLayer extends AbstractLayer{
 				var id = a_ids[i];
 				//don't check for initialized because maybe the getServiceInfo is not done.
 				if (layers[id] == undefined /*and !initialized*/) {
-					layers[id] = new Object();
-					layers[id][field] = value;
-				} else {
-					layers[id][field] = value;
-				}
+					layers[id] = new Object();					
+				} 
+				layers[id][field] = value;
+				
 				//update feature id for buffer when the query is removed
 				if(field == "query" && value == ""){
 					updateLayerFID(id);
@@ -1446,11 +1445,11 @@ class gui.layers.ArcServerLayer extends AbstractLayer{
 		var query:String = layers[layeridString].query;
 		
 		//add escapes
-		for(var i in layers)
+		/*for(var i in layers)
 		{
 			query = searchAndReplace(query, "<", "&lt;");
 			query = searchAndReplace(query, ">", "&gt;");
-		}
+		}*/
 		//No geometry needed for maptip
 		conn.includeGeometry = false;
 					
@@ -1630,11 +1629,11 @@ class gui.layers.ArcServerLayer extends AbstractLayer{
 				_maptipdistance = this.maptipdistance;
 			}
 			//add escapes
-				for(var i in layers)
+				/*for(var i in layers)
 			{
 				query = searchAndReplace(query, "<", "&lt;");
 				query = searchAndReplace(query, ">", "&gt;");
-			}
+			}*/
 			var _maptipextent = new Object();
 			var w = map.getScale()*_maptipdistance;
 			var h = map.getScale() * _maptipdistance;
@@ -1767,6 +1766,37 @@ class gui.layers.ArcServerLayer extends AbstractLayer{
 		return this.map;
 	}
 	
+	
+	/**
+	 * Set the query for the layer with id 'layerId'
+	 * @param	layerId the id of the layer
+	 * @param	query the query. If its only a where statement it's stored in the layer.query. If its a full spatialquery
+	 * xml element the where and the spatial part are split. where is stored in layer.query spatialfilter in layer.spatialQuery
+	 */
+	public function setQuery(layerId:String, query:String) {
+		if (this.layers[layerId] == undefined) {
+			this.layers[layerId] = new Object();
+		}
+		if (query != undefined && 
+				query.length > 0) {
+			var newQuery:String = "" + query;
+			//if not a spatialquery xml fragment, make it:
+			if (query.toUpperCase().indexOf("<SPATIALQUERY") == 0) {	
+				var xml:XML = new XML(newQuery);
+				var spatialQueryNode:XMLNode = xml.firstChild;
+				newQuery = spatialQueryNode.attributes["where"];
+				for (var i = 0; i < spatialQueryNode.childNodes.length; i++) {
+					var childNode:XMLNode = spatialQueryNode.childNodes[i];
+					if (childNode.nodeName.toUpperCase() == "SPATIALFILTER") {
+						this.layers[layerId].spatialQuery = childNode.toString();
+					}
+				}
+			}
+			newQuery = newQuery.split("<").join("&lt;");
+			newQuery = newQuery.split(">").join("&gt;");
+			this.layers[layerId].query = newQuery;
+		}
+	}
 	/**********************************************************
 	 * Listener functions for map.
 	 */ 
