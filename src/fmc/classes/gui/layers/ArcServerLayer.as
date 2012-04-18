@@ -1766,20 +1766,25 @@ class gui.layers.ArcServerLayer extends AbstractLayer{
 		return this.map;
 	}
 	
-	
 	/**
 	 * Set the query for the layer with id 'layerId'
-	 * @param	layerId the id of the layer
+	 * @param	layer the id of the layer or #ALL# or a list of comma seperated layers
 	 * @param	query the query. If its only a where statement it's stored in the layer.query. If its a full spatialquery
 	 * xml element the where and the spatial part are split. where is stored in layer.query spatialfilter in layer.spatialQuery
 	 */
-	public function setQuery(layerId:String, query:String) {
-		if (this.layers[layerId] == undefined) {
-			this.layers[layerId] = new Object();
+	public function setQuery(layer:String, query:String) {	
+		var layerIds:Array = new Array();
+		if (layer == "#ALL#") {
+			for (var lId in this.layers) {
+				layerIds.push(lId);
+			}
+		}else if (layer.indexOf(",")>0){
+			layerIds = layer.split(",");
 		}
 		if (query != undefined && 
 				query.length > 0) {
 			var newQuery:String = "" + query;
+			var spatialQuery;
 			//if not a spatialquery xml fragment, make it:
 			if (query.toUpperCase().indexOf("<SPATIALQUERY") == 0) {	
 				var xml:XML = new XML(newQuery);
@@ -1788,13 +1793,25 @@ class gui.layers.ArcServerLayer extends AbstractLayer{
 				for (var i = 0; i < spatialQueryNode.childNodes.length; i++) {
 					var childNode:XMLNode = spatialQueryNode.childNodes[i];
 					if (childNode.nodeName.toUpperCase() == "SPATIALFILTER") {
-						this.layers[layerId].spatialQuery = childNode.toString();
+						spatialQuery = childNode.toString();
 					}
 				}
 			}
 			newQuery = newQuery.split("<").join("&lt;");
-			newQuery = newQuery.split(">").join("&gt;");
-			this.layers[layerId].query = newQuery;
+			newQuery = newQuery.split(">").join("&gt;");			
+			for (var i = 0 ; i < layerIds.length; i++) {				
+				var layerId = layerIds[i];
+				Logger.console("Set query for layer: " + layerId);
+				Logger.console("Query: " + query);
+				Logger.console("Query: " + spatialQuery);
+				if (this.layers[layerId] == undefined) {
+					this.layers[layerId] = new Object();
+				}
+				this.layers[layerId].query = newQuery;
+				if (spatialQuery!=undefined){
+					this.layers[layerId].spatialQuery = spatialQuery;
+				}
+			}
 		}
 	}
 	/**********************************************************

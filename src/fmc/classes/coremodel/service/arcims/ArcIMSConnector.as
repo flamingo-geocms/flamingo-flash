@@ -17,7 +17,7 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 -----------------------------------------------------------------------------*/
-
+import tools.Logger;
 /**
  * coremodel.service.arcims.ArcIMSConnector
  */
@@ -495,7 +495,7 @@ class coremodel.service.arcims.ArcIMSConnector {
 							if (layers[id].layerdefstring.length>0) {
 								str = str+layers[id].layerdefstring;
 							}
-							if (layers[id].query.length > 0 || layers[id].spatialQuery.length > 0) {
+							if ((layers[id].query!=undefined && layers[id].query.length > 0) || (layers[id].spatialQuery!=undefined && layers[id].spatialQuery.length > 0)) {
 								str += "<SPATIALQUERY";
 								if (layers[id].query.length > 0){
 									str += " where=\"" + layers[id].query + "\"";
