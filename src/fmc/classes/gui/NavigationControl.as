@@ -251,6 +251,7 @@ class gui.NavigationControl extends AbstractConfigurable
 		westButton = new MoveExtentButton(this.id + "_west", this.container.createEmptyMovieClip("m" + "_west", this.container.getNextHighestDepth()), this,this.map);
 		westButton.setDirectionMatrix(- 1, 0);
 		westButton.tooltipId = "tooltip_west";
+		westButton.strings = this.strings;
 		westButton.toolDownSettings = new SpriteSettings(0, 21*SpriteSettings.buttonSize, SpriteSettings.buttonSize, SpriteSettings.buttonSize, 0, offset, true, 100);
 		westButton.toolOverSettings = new SpriteSettings(1*SpriteSettings.buttonSize, 21*SpriteSettings.buttonSize, SpriteSettings.buttonSize, SpriteSettings.buttonSize, 0, offset, true, 100);
 		westButton.toolUpSettings = new SpriteSettings(2*SpriteSettings.buttonSize, 21*SpriteSettings.buttonSize, SpriteSettings.buttonSize, SpriteSettings.buttonSize, 0, offset, true, 100);
@@ -258,6 +259,7 @@ class gui.NavigationControl extends AbstractConfigurable
 		eastButton = new MoveExtentButton(this.id + "_east", this.container.createEmptyMovieClip("m" + "_east", this.container.getNextHighestDepth()), this,map);
 		eastButton.setDirectionMatrix(1, 0);
 		eastButton.tooltipId = "tooltip_east";
+		eastButton.strings = this.strings;
 		eastButton.toolDownSettings = new SpriteSettings(0, 18*SpriteSettings.buttonSize, SpriteSettings.buttonSize, SpriteSettings.buttonSize, 0, offset, true, 100);
 		eastButton.toolOverSettings = new SpriteSettings(1*SpriteSettings.buttonSize, 18*SpriteSettings.buttonSize, SpriteSettings.buttonSize, SpriteSettings.buttonSize, 0, offset, true, 100);
 		eastButton.toolUpSettings = new SpriteSettings(2*SpriteSettings.buttonSize, 18*SpriteSettings.buttonSize, SpriteSettings.buttonSize, SpriteSettings.buttonSize, 0, offset, true, 100);
@@ -265,6 +267,7 @@ class gui.NavigationControl extends AbstractConfigurable
 		northButton = new MoveExtentButton(this.id + "_north", this.container.createEmptyMovieClip("m" + "_north", this.container.getNextHighestDepth()), this,map);
 		northButton.setDirectionMatrix(0, 1);
 		northButton.tooltipId = "tooltip_north";
+		northButton.strings = this.strings;
 		northButton.toolDownSettings = new SpriteSettings(0,19*SpriteSettings.buttonSize, SpriteSettings.buttonSize, SpriteSettings.buttonSize, offset, 0, true, 100);
 		northButton.toolOverSettings = new SpriteSettings(1*SpriteSettings.buttonSize, 19*SpriteSettings.buttonSize, SpriteSettings.buttonSize, SpriteSettings.buttonSize, offset, 0, true, 100);
 		northButton.toolUpSettings = new SpriteSettings(2*SpriteSettings.buttonSize, 19*SpriteSettings.buttonSize, SpriteSettings.buttonSize, SpriteSettings.buttonSize, offset, 0, true, 100);
@@ -272,6 +275,7 @@ class gui.NavigationControl extends AbstractConfigurable
 		southButton = new MoveExtentButton(this.id + "_north", this.container.createEmptyMovieClip("m" + "_north", this.container.getNextHighestDepth()), this,map);
 		southButton.setDirectionMatrix(0, - 1);
 		southButton.tooltipId = "tooltip_south";
+		southButton.strings = this.strings;
 		southButton.toolDownSettings = new SpriteSettings(0,20*SpriteSettings.buttonSize, SpriteSettings.buttonSize, SpriteSettings.buttonSize, offset, 0, true, 100);
 		southButton.toolOverSettings = new SpriteSettings(1*SpriteSettings.buttonSize, 20*SpriteSettings.buttonSize, SpriteSettings.buttonSize, SpriteSettings.buttonSize, offset, 0, true, 100);
 		southButton.toolUpSettings = new SpriteSettings(2 * SpriteSettings.buttonSize, 20 * SpriteSettings.buttonSize, SpriteSettings.buttonSize, SpriteSettings.buttonSize, offset, 0, true, 100);
@@ -292,14 +296,6 @@ class gui.NavigationControl extends AbstractConfigurable
 		mid = this.container.createEmptyMovieClip("mid", this.container.getNextHighestDepth());		
 		spriteMap.attachSpriteTo(mid,
 			new SpriteSettings(SpriteSettings.buttonSize, 23 * SpriteSettings.buttonSize, SpriteSettings.buttonSize, SpriteSettings.buttonSize, 0, 0, true, 100));
-			
-		//zoomer background
-		zoomerBackground = this.container.createEmptyMovieClip("zoomerBackground", this.container.getNextHighestDepth());
-		spriteMap.attachSpriteTo(zoomerBackground,
-			new SpriteSettings(0, 24 * SpriteSettings.buttonSize, SpriteSettings.buttonSize, SpriteSettings.buttonSize, 0, 0, true, 100));
-		zoomerBackgroundBottom = this.container.createEmptyMovieClip("zoomerBackgroundBottom", this.container.getNextHighestDepth());
-		spriteMap.attachSpriteTo(zoomerBackgroundBottom,
-			new SpriteSettings(SpriteSettings.buttonSize, 24 * SpriteSettings.buttonSize, SpriteSettings.buttonSize, SpriteSettings.buttonSize, 0, 0, true, 100));
 	}
 	public function addButtonFull():Void {
 		if (map!=undefined && map.getFullExtent()!=null){
@@ -312,9 +308,18 @@ class gui.NavigationControl extends AbstractConfigurable
 	 * Create and adds the zoomerV object.
 	 */
 	public function addZoomerV():Void {
+		//zoomer background
+		zoomerBackground = this.container.createEmptyMovieClip("zoomerBackground", this.container.getNextHighestDepth());
+		spriteMap.attachSpriteTo(zoomerBackground,
+			new SpriteSettings(0, 24 * SpriteSettings.buttonSize, SpriteSettings.buttonSize, SpriteSettings.buttonSize, 0, 0, true, 100));
+		zoomerBackgroundBottom = this.container.createEmptyMovieClip("zoomerBackgroundBottom", this.container.getNextHighestDepth());
+		spriteMap.attachSpriteTo(zoomerBackgroundBottom,
+			new SpriteSettings(SpriteSettings.buttonSize, 24 * SpriteSettings.buttonSize, SpriteSettings.buttonSize, SpriteSettings.buttonSize, 0, 0, true, 100));
+			
 		zoomer = new ZoomerV(this.id + "_zoomer", this.container.createEmptyMovieClip(this.id + "_zoomer", this.container.getNextHighestDepth()));						
 		zoomer.listento = this.listento;
 		zoomer.showButtons = this.showZoomerButtons;
+		zoomer.strings = this.strings;
 		zoomer.setConfig(null);
 	}
 	

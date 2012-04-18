@@ -88,7 +88,11 @@ class core.AbstractConfigurable extends AbstractPositionable{
 			if (nodeName.indexOf(":") > -1) {
 				nodeName = nodeName.substr(nodeName.indexOf(":") + 1);
 			}
-			addComposite(nodeName, xmlNode);
+			if (nodeName.toLowerCase() == "string") {
+				flamingo.setString(config, this.strings);
+			}else {				
+				addComposite(nodeName, xmlNode);
+			}
 		}
 	}
 	/*********************************************************
@@ -112,7 +116,7 @@ class core.AbstractConfigurable extends AbstractPositionable{
 	 * @param config the xml child
 	 */ 
 	function addComposite(name:String, config:XMLNode):Void { 
-		Logger.console("!!!!!AbstractConfigurable.addComposite(name:String, config:XMLNode) must be implemented in subclass of component with id: "+id);
+		Logger.console("!!!!!AbstractConfigurable.addComposite(name:String, config:XMLNode) not implemented in component with id: "+id+ " can't set the composite for this object");
 	}
 	
 	

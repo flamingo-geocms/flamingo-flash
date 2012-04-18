@@ -65,7 +65,7 @@ import display.spriteloader.SpriteMapFactory;
 import core.loading.LoadComponentQueue;
 
 class Flamingo {
-	private var version:String = "4.0_r2432";
+	private var version:String = "4.0_r2440";
 	//reference to main movie from which this class is loaded
 	//at the main movie the components are loaded at 'moviedepth'--  ;moviedepth starts by 10000
 	//at the main movie a cursor movie is loaded at depth 50005
@@ -2858,8 +2858,13 @@ class Flamingo {
 	*/
 	public function getString(comp:Object, stringid:String, defaultstring:String, lang:String):String {
 		// this function gets a language string (if exists) from the language objects in the flamingo-core
-		var id:String = this.getId(comp);
-		var mc = this.getComponent(id);
+		var mc;
+		if (comp instanceof AbstractPositionable) {
+			mc = comp;
+		}else{
+			var id:String = this.getId(comp);		
+			mc = this.getComponent(id);
+		}
 		var s:String;
 		if (lang == undefined) {
 			lang = this.lang;

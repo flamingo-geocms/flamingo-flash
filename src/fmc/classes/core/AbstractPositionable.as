@@ -188,6 +188,16 @@ class core.AbstractPositionable extends AbstractListenerRegister
 	}
 	
 	/**
+	 * Add a string to this object.
+	 * @param	stringId the id of the string
+	 * @param	s the string object. Its a object with languages
+	 * Example:
+	 *      s["en"] = "foo"
+	 */
+	function addString(stringId:String, s:String) {
+		this.strings[stringId] = s;
+	}
+	/**
 	* Shows or hides the component.
 	* This will raise the onSetVisible event.
 	* @param vis:Boolean True or false.
