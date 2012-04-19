@@ -272,7 +272,7 @@ class gui.NavigationControl extends AbstractConfigurable
 		northButton.toolOverSettings = new SpriteSettings(1*SpriteSettings.buttonSize, 19*SpriteSettings.buttonSize, SpriteSettings.buttonSize, SpriteSettings.buttonSize, offset, 0, true, 100);
 		northButton.toolUpSettings = new SpriteSettings(2*SpriteSettings.buttonSize, 19*SpriteSettings.buttonSize, SpriteSettings.buttonSize, SpriteSettings.buttonSize, offset, 0, true, 100);
 
-		southButton = new MoveExtentButton(this.id + "_north", this.container.createEmptyMovieClip("m" + "_north", this.container.getNextHighestDepth()), this,map);
+		southButton = new MoveExtentButton(this.id + "_south", this.container.createEmptyMovieClip("m" + "_south", this.container.getNextHighestDepth()), this,map);
 		southButton.setDirectionMatrix(0, - 1);
 		southButton.tooltipId = "tooltip_south";
 		southButton.strings = this.strings;
