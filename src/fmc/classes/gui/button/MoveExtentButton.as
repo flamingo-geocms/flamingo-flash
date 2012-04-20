@@ -56,13 +56,21 @@ class gui.button.MoveExtentButton extends AbstractButton {
 		this.xDirection = x;
 		this.yDirection = y;
 	}
-	/************* event handlers **************/
+	/**
+	 * event handler
+	 */
 	public function onPress() {
 		this.startMove();
 	}
+	/**
+	 * event handler
+	 */
 	public function onRelease() {
 		this.stopMove();
 	}
+	/**
+	 * event handler
+	 */
 	public function onReleaseOutside() {
 		this.stopMove();		
 	}	
@@ -104,7 +112,9 @@ class gui.button.MoveExtentButton extends AbstractButton {
 		e.maxy = e.maxy+obj.dy;
 		obj.map.moveToExtent(e, -1, 0);
 	}
-	
+	/**
+	 * don't do anything on resize. The parent is positioning this object.
+	 */
 	function resize():Void {
 		//don't do anything on resize. The parent is positioning this object.
 	}
@@ -117,25 +127,40 @@ class gui.button.MoveExtentButton extends AbstractButton {
 		return this.parent;
 	}
 	/*********************** Getters and Setters ***********************/	
+	/**
+	 * get xDirection
+	 */
 	public function get xDirection():Number {
 		return _xDirection;
 	}
-	
+	/**
+	 * set xDirection
+	 */
 	public function set xDirection(value:Number):Void {
 		_xDirection = value;
 	}
-	
+	/**
+	 * get yDirection
+	 */
 	public function get yDirection():Number {
 		return _yDirection;
 	}
-	
+	/**
+	 * set yDirection
+	 */
 	public function set yDirection(value:Number):Void {
 		_yDirection = value;
 	}	
+	/**
+	 * get map
+	 */
 	public function get map():Map 
 	{
 		return _map;
 	}
+	/**
+	 * set map
+	 */
 	public function set map(value:Map):Void 
 	{
 		_map = value;

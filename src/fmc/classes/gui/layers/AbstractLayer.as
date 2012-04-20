@@ -100,33 +100,58 @@ class gui.layers.AbstractLayer extends AbstractConfigurable{
     }
         
     /*********************** Getters and Setters ***********************/
+	/**
+	 * getParent
+	 * @return
+	 */
 	function getParent():Object {
 		return this.map;
 	}
-        
+    /**
+     * setMaxScale
+     * @param	maxScale
+     */    
     function setMaxScale(maxScale:Number){
         this.maxScale=maxScale;
         if (isNaN(this.maxScale)){
             this.maxScale=null;
         }
     }
+	/**
+	 * getMaxScale
+	 * @return
+	 */
     function getMaxScale():Number{
         return this.maxScale;
     }
-    
+    /**
+     * setMinScale
+     * @param	minScale
+     */
     function setMinScale(minScale:Number){
         this.minScale=minScale;
         if (isNaN(this.minScale)){
             this.minScale=null;
         }
     }
+	/**
+	 * getMinScale
+	 * @return
+	 */
     function getMinScale():Number{
         return this.minScale;
     }
-    
+    /**
+     * setId
+     * @param	id
+     */
     function setId(id:String){
         this.id=id;
     }
+	/**
+	 * getId
+	 * @return
+	 */
     function getId():Object{
         return this.id;
     }
@@ -147,7 +172,9 @@ class gui.layers.AbstractLayer extends AbstractConfigurable{
 		}
         this.update(map);
     }
-
+	/**
+	 * getVisible
+	 */
     function getVisible(){
         return this.visible;
     }
@@ -190,7 +217,11 @@ class gui.layers.AbstractLayer extends AbstractConfigurable{
     function setGrayscale(grayscale:Boolean) {
         this.grayscale = grayscale;
         this.update();
-    }    
+    }  
+	/**
+     * Gets the grayscale property of a layer.
+ 	 * @return
+	 */
     function getGrayscale(): Boolean {
     	return this.grayscale;
     }
@@ -208,68 +239,130 @@ class gui.layers.AbstractLayer extends AbstractConfigurable{
     }
     
 	    
-    /*
-    Functions that will be called by the map (listento)
-    */
+    /**
+     * Function that will be called by the map (listento)
+     */
     function onUpdate(map:MovieClip):Void {
         update(map);
         
     }
+    /**
+     * Function that will be called by the map (listento)
+     */
     function onChangeExtent(map:MovieClip):Void{
         changeExtent(map);
     }
+    /**
+     * Function that will be called by the map (listento)
+     */
     function onIdentify(map:MovieClip, identifyextent:Object):Void  {
         identify(identifyextent);
     }
+    /**
+     * Function that will be called by the map (listento)
+     */
     function onIdentifyCancel(map:MovieClip):Void  {
         cancelIdentify();
     }
+    /**
+     * Function that will be called by the map (listento)
+     */
     function onMaptip(map:MovieClip, x:Number, y:Number, coord:Object):Void  {
         startMaptip(x, y);
     }
+    /**
+     * Function that will be called by the map (listento)
+     */
     function onMaptipCancel(map:MovieClip):Void  {
         stopMaptip();
     }
+    /**
+     * Function that will be called by the map (listento)
+     */
     function onHide(map:MovieClip):Void  {
         doHide();
     }
+    /**
+     * Function that will be called by the map (listento)
+     */
     function onShow(map:MovieClip):Void  {
         // doShow();
     }
 
-    /*Called when a 'onUpdate' event occured in the map object
-    * Update is called when the layer needs to be updated*/
+    /**
+     * Called when a 'onUpdate' event occured in the map object
+     * Update is called when the layer needs to be updated
+     * @param	map
+     */
     function update(map):Void{}
     function updateCaches():Void { };
-    /*Called on the 'onChangeExtent' event from the map.
-    change extent is called when the map zooms animated to the wished extent. With every stap this function is called*/
+    /**
+     * Called on the 'onChangeExtent' event from the map.
+     * change extent is called when the map zooms animated to the wished extent. 
+	 * With every stap this function is called
+	 */
     function changeExtent():Void{}
-    /*identify is called when the onIdentify event occured on the map*/
-    function identify(identifyextent:Object):Void{}
-    function cancelIdentify():Void{}
-    function stopMaptip() {}
-    function startMaptip(x:Number, y:Number) {}
-    function doHide():Void{}
+    /**
+     * identify is called when the onIdentify event occured on the map
+     * @param	identifyextent
+     */
+    function identify(identifyextent:Object):Void { }
+	/**
+	 * cancelIdentify
+	 */
+    function cancelIdentify():Void { }
+	/**
+	 * stopMaptip
+	 */
+    function stopMaptip() { }
+	/**
+	 * startMaptip
+	 * @param	x
+	 * @param	y
+	 */
+    function startMaptip(x:Number, y:Number) { }
+	/**
+	 * doHide
+	 */
+    function doHide():Void { }
+	/**
+	 * doShow
+	 */
     function doShow():Void{}
-    //function setLayerAttribute(name:String, value:String):Boolean{return false;}
 	
 	/*********************** Getters and Setters ***********************/
+	/**
+	 * get map
+	 */
 	public function get map():Map {
 		return _map;
 	}
-	
+	/**
+	 * set map
+	 */
 	public function set map(value:Map):Void {
 		_map = value;		
         flamingo.addListener(this, _map, this);
 	}
+	/**
+	 * get lastGetMapRequest
+	 */
 	public function get lastGetMapRequest():HttpRequest 
 	{
 		return _lastGetMapRequest;
 	}
+	/**
+	 * set lastGetMapRequest
+	 */
 	public function set lastGetMapRequest(request:HttpRequest):Void 
 	{
 		_lastGetMapRequest = request;
 	}
+	/**
+	 * setLastGetMapRequest
+	 * @param	url
+	 * @param	body
+	 */
 	public function setLastGetMapRequest(url:String, body:String):Void {
 		if (lastGetMapRequest == null) {
 			lastGetMapRequest = new HttpRequest();
@@ -277,6 +370,10 @@ class gui.layers.AbstractLayer extends AbstractConfigurable{
 		lastGetMapRequest.setUrl(url);
 		lastGetMapRequest.setBody(body);
 	}
+	/**
+	 * getLastGetMapRequest
+	 * @return
+	 */
 	public function getLastGetMapRequest():HttpRequest {
 		return lastGetMapRequest;
 	}

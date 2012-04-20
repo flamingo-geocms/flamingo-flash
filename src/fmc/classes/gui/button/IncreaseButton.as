@@ -44,32 +44,47 @@ class gui.button.IncreaseButton extends AbstractButton
 		this.sliderHor = sliderHor;
 		this.parent = sliderHor;
 	}
-	/************* event handlers **************/
+	/**
+	 * event handler
+	 */
 	public function onPress () {
 		sliderHor.cancelUpdate();
 	}
-	
+	/**
+	 * event handler
+	 */
 	public function onRelease () {
 		sliderHor.stepSlider(true);
 	}
-	
+	/**
+	 * event handler
+	 */
 	public function onReleaseOutside () {
 		sliderHor.stepSlider(true);
 	}
-	
+	/**
+	 * event handler
+	 */
 	public function onRollOver () {
 		flamingo.showTooltip(flamingo.getString(sliderHor, "tooltip_increase"), this);
 	}	
-	
+	/**
+	 * don't do anything on resize. The parent is positioning this object.
+	 */
 	function resize():Void {
 		//don't do anything on resize. The parent is positioning this object.
 	}
 	/*********************** Getters and Setters ***********************/
+	/**
+	 * get sliderHor
+	 */
 	public function get sliderHor():SliderHor 
 	{
 		return _sliderHor;
 	}
-	
+	/**
+	 * set sliderHor
+	 */
 	public function set sliderHor(value:SliderHor):Void 
 	{
 		_sliderHor = value;

@@ -270,32 +270,23 @@ class gui.layers.GridLayer extends AbstractLayer{
 			return -1;
 		}
 	}
-	/**************************************************
-	 * map listeners
+	/**
+	 * map listener
 	 */ 
 	public function onChangeExtent(map:MovieClip) {
 		update();
 	}
+	/**
+	 * map listener
+	 */ 
 	public function onHide(map:MovieClip):Void  {
 		update();
 	}
+	/**
+	 * map listener
+	 */ 
 	public function onShow(map:MovieClip):Void  {
 		update();
 	}
-	/*********************** Events ***********************/
-	/**
-	* Dispatched when  the layer is up and running and ready to update for the first time.
-	* @param layer:MovieClip a reference to the layer.
-	*/
-	//public function onInit(layer:MovieClip):Void {
-	/**
-	* Dispatched when the layer is hidden.
-	* @param layer:MovieClip a reference to the layer.
-	*/
-	//public function onHide(layer:MovieClip):Void {
-	/**
-	* Dispatched when the layer is shown.
-	* @param layer:MovieClip a reference to the layer.
-	*/
-	//public function onShow(layer:MovieClip):Void {
+
 }

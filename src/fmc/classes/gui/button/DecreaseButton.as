@@ -44,31 +44,47 @@ class gui.button.DecreaseButton extends AbstractButton
 		this.sliderHor = sliderHor;
 		this.parent = sliderHor;
 	}
-	/************* event handlers **************/
+	/**
+	 * event handler
+	 */
 	function onPress() {
 		sliderHor.cancelUpdate();
 	}
-	
+	/**
+	 * event handler
+	 */
 	function onRelease() {
 		sliderHor.stepSlider(false);
 	}
-	
+	/**
+	 * event handler
+	 */
 	function onReleaseOutside() {
 		sliderHor.stepSlider(false);
 	}
-	
+	/**
+	 * event handler
+	 */
 	function onRollOver () {
 		flamingo.showTooltip(flamingo.getString(sliderHor, "tooltip_decrease"), this);
 	}
+	/**
+	 * don't do anything on resize. The parent is positioning this object
+	 */
 	function resize():Void {
 		//don't do anything on resize. The parent is positioning this object.
 	}
 	/*********************** Getters and Setters ***********************/
+	/**
+	 * get sliderHor
+	 */
 	public function get sliderHor():SliderHor 
 	{
 		return _sliderHor;
 	}
-	
+	/**
+	 * set sliderHor
+	 */
 	public function set sliderHor(value:SliderHor):Void 
 	{
 		_sliderHor = value;

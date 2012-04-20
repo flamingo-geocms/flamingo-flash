@@ -64,6 +64,14 @@ class gui.tools.AbstractTool extends AbstractButton
 		};
 			
 	}	
+	/**
+	 * onMouseWheel
+	 * @param	map
+	 * @param	delta
+	 * @param	xmouse
+	 * @param	ymouse
+	 * @param	coord
+	 */
 	public function onMouseWheel(map:MovieClip, delta:Number, xmouse:Number, ymouse:Number, coord:Object) {
 		var thisObj:AbstractTool = this;
 		if (thisObj.zoomscroll) {
@@ -112,7 +120,9 @@ class gui.tools.AbstractTool extends AbstractButton
 			return this._listento;
 		}
 	}
-	
+	/**
+	 * Set the listento.
+	 */
 	public function set listento(listenTo:Array):Void {
 		_listento = listenTo;
 	}
@@ -173,41 +183,71 @@ class gui.tools.AbstractTool extends AbstractButton
 		this.toolGroup.setTool(this.id);
 	}
 	/*********************** Getters and Setters ***********************/
+	/**
+	 * getter  active
+	 */
 	public function get active():Boolean {
 		return this._active;
 	}
+	/**
+	 * setter  active
+	 */
 	public function set active(value:Boolean) {
 		this._active = value;
 	}
 	
+	/**
+	 * getter  toolGroup
+	 */
 	public function get toolGroup():ToolGroup {
 		return _toolGroup;
 	}
 	
+	/**
+	 * setter  toolGroup
+	 */
 	public function set toolGroup(value:ToolGroup):Void {
 		_toolGroup = value;
 	}
 	
+	/**
+	 * getter  enabled
+	 */
 	public function get enabled():Boolean {
 		return _enabled;
 	}
 	
+	/**
+	 * setter  enabled
+	 */
 	public function set enabled(value:Boolean) {
 		this._enabled = value;
 	}
 	
+	/**
+	 * getter  lMap
+	 */
 	public function get lMap():Object {
 		return _lMap;
 	}
 	
+	/**
+	 * setter  lMap
+	 */
 	public function set lMap(value:Object):Void {
 		_lMap = value;
 	}
 	
+	/**
+	 * getter  zoomscroll
+	 */
 	public function get zoomscroll():Boolean {
 		return _zoomscroll;
 	}
 	
+	/**
+	 * setter  zoomscroll
+	 */
 	public function set zoomscroll(value:Boolean):Void {
 		_zoomscroll = value;
 	}

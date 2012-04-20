@@ -169,6 +169,12 @@ class gui.layers.OGCWMSLayer extends AbstractLayer{
 	* @attr dontGetCap:Boolean default=false. If you dont want to let flamingo do a getCap request.
 	* Be carefull with this, because flamingo adds listeners etc. and replaces #ALL# with all layers while doing a getCap request.
 	*/
+	/**
+	 * Configurates a component by setting a xml.
+	 * Be carefull with this, because flamingo adds listeners etc. and replaces #ALL# with all layers while doing a getCap request.
+	 * @param	xml:Object Xml or string representation of a xml.
+	 * @param	dontGetCap:Boolean default=false. If you dont want to let flamingo do a getCap request.
+	 */
 	function setConfig(xml:Object, dontGetCap:Boolean) {
 		if (xml.toString()=="undefined"){
 			return null;
@@ -472,6 +478,11 @@ class gui.layers.OGCWMSLayer extends AbstractLayer{
 			}
 		}
 	}
+	/**
+	 * trim
+	 * @param	str
+	 * @return
+	 */
 	function trim(str:String):String {
 		var i = 0;
 		var j = str.length-1;
@@ -542,7 +553,7 @@ class gui.layers.OGCWMSLayer extends AbstractLayer{
 	* Updates a layer. Only one request will be fired at a time.
 	* After the image is loaded the function checks if the mapextent is changed meanwhile.
 	* If so, the function fires another request.
-	* @forceupdate forces a  update. A timestamp is added in seconds.
+	* @param forceupdate forces a  update. A timestamp is added in seconds.
 	*/
 	public function update(forceupdate:Boolean) {
 		_update(1,forceupdate);
@@ -818,6 +829,9 @@ class gui.layers.OGCWMSLayer extends AbstractLayer{
 		updating = false;
 		_global.flamingo.raiseEvent(thisObj, "onUpdateError", thisObj, "timeout, connection failed...");
 	}
+	/**
+	 * cancelIdentify
+	 */
 	function cancelIdentify() {
 		this.identifyextent = undefined;
 	}
@@ -905,7 +919,11 @@ class gui.layers.OGCWMSLayer extends AbstractLayer{
 			sendIdentifyRequest(args,lConn);
 		}	
 	}
-
+	/**
+	 * identifyPerLayer
+	 * @param	args
+	 * @param	lConn
+	 */
 	function identifyPerLayer(args:Object,lConn:Object) {
 			var querylayerstring = _getLayerlist(query_layers, "identify");
 			var qlayers:Array = querylayerstring.split(",");
@@ -917,7 +935,11 @@ class gui.layers.OGCWMSLayer extends AbstractLayer{
 			}
 	}
 
-
+	/**
+	 * sendIdentifyRequest
+	 * @param	args
+	 * @param	lConn
+	 */
 	function sendIdentifyRequest(args:Object, lConn:Object) {
 		var thisObj:OGCWMSLayer = this;
 		var cogwms:OGWMSConnector = new OGWMSConnector();
@@ -948,11 +970,18 @@ class gui.layers.OGCWMSLayer extends AbstractLayer{
 		}
 		return argsLocal;
 	}
-
+	/**
+	 * stopMaptip
+	 */
 	function stopMaptip() {
 		this.showmaptip = false;
 		this.maptipextent = undefined;
 	}
+	/**
+	 * startMaptip
+	 * @param	x
+	 * @param	y
+	 */
 	function startMaptip(x:Number, y:Number) {
 		var thisObj:OGCWMSLayer = this;
 		if (!this.canmaptip) {
@@ -1567,136 +1596,35 @@ class gui.layers.OGCWMSLayer extends AbstractLayer{
 	}
 	
 	
-	/*************************************************************
-	 * Overwrites of map listener functions in AbstractLayer
-	 **/
+	/**
+	 * Overwrite of map listener functions in AbstractLayer
+	 */
 	public function onChangeExtent(map:MovieClip):Void {
 		this.updateCaches();
 	}
+	/**
+	 * Overwrite of map listener functions in AbstractLayer
+	 */
 	public function onHide(map:MovieClip):Void  {
 		this.update();
 	}
+	/**
+	 * Overwrite of map listener functions in AbstractLayer
+	 */
 	public function onShow(map:MovieClip):Void  {
 		this.update();
 	}
-
-	/**
-	* Dispatched when the layer gets a request object from the connector.
-	* @param layer:MovieClip a reference to the layer.
-	* @param type:String "update", "identify" or "init"
-	* @param requestobject:Object the object returned from the OGWMSConnector, containing the raw requests and other properties.
-	*/
-	//public function onRequest(layer:MovieClip, type:String, requestobject:Object):Void {
-	//
-	/**
-	* Dispatched when the layer gets a response object from the connector.
-	* @param layer:MovieClip a reference to the layer.
-	* @param type:String "update", "identify" or "init"
-	* @param responseobject:Object the object returned from the OGWMSConnector, containing the raw response and other properties.
-	*/
-	//public function onResponse(layer:MovieClip, type:String, responseobject:Object):Void {
-	//
-	/**
-	* Dispatched when there is an error.
-	* @param layer:MovieClip a reference to the layer.
-	* @param type:String "update", "identify" or "init"
-	* @param error:String error message
-	*/
-	//public function onError(layer:MovieClip, type:String, error:String):Void {
-	/**
-	* Dispatched when the layer is identified.
-	* @param layer:MovieClip a reference to the layer.
-	* @param identifyextent:Object the extent that is identified
-	*/
-	//public function onIdentify(layer:MovieClip, identifyextent:Object):Void {
-	/**
-	* Dispatched when the layer is identified and data is returned
-	* @param layer:MovieClip a reference to the layer.
-	* @param data:Object data object with the information 
-	* @param identifyextent:Object the original extent that is identified 
-	* @param nridentified:Number Number of sublayers thas has already been identified.
-	* @param total:Number Total number of sublayers that has to be identified 
-	*/
-	//public function onIdentifyData(layer:MovieClip, data:Object, identifyextent:Object,nridentified:Number,total:Number):Void {
-	/**
-	* Dispatched when the identify is completed.
-	* @param layer:MovieClip a reference to the layer.
-	* @param identifytime:Number total time of the identify 
-	*/
-	//public function onIdentifyComplete(layer:MovieClip, identifytime:Number):Void {
-	/**
-	* Dispatched when the starts an update sequence.
-	* @param layer:MovieClip a reference to the layer.
-	* @param nrtry:Number   number of retry after an error. 
-	*/
-	//public function onUpdate(layer:MovieClip, nrtry):Void {
-	/**
-	* Dispatched when the layerimage is downloaded.
-	* @param layer:MovieClip a reference to the layer.
-	* @param bytesloaded:Number   Number of bytes already downloaded. 
-	* @param bytestotal:Number   Total of bytes to be downloaded.
-	*/
-	//public function onUpdateProgress(layer:MovieClip, bytesloaded:Number, bytestotal:Number):Void {
-	/**
-	* Dispatched when the layer is completely updated.
-	* @param layer:MovieClip a reference to the layer.
-	* @param updatetime:Object total time of the update sequence
-	*/
-	//public function onUpdateComplete(layer:MovieClip, updatetime:Number):Void {
-	/**
-	* Dispatched when the layer is hidden.
-	* @param layer:MovieClip a reference to the layer.
-	*/
-	//public function onHide(layer:MovieClip):Void {
-	/**
-	* Dispatched when the layer is shown.
-	* @param layer:MovieClip a reference to the layer.
-	*/
-	//public function onShow(layer:MovieClip):Void {
-	/**
-	* Dispatched when a legend is returned during an update sequence.
-	* @param layer:MovieClip a reference to the layer.
-	* @param legendurl:String the url of the legend.
-	*/
-	//public function onGetLegend(layer:MovieClip, legendurl:String):Void {
-	/**
-	* Dispatched when a the layer is up and running and ready to update for the first time.
-	* @param layer:MovieClip a reference to the layer.
-	*/
-	//public function onInit(layer:MovieClip):Void {
-	/**
-	* Dispatched when a the layer gets its initial information from the server.
-	* @param layer:MovieClip a reference to the layer.
-	*/
-	//public function onGetCapabilities(layer:MovieClip):Void {
-	//
-	/**
-	* Dispatched when a the layers collection is changed by setLayerProperty().
-	* @param layer:MovieClip A reference to the layer.
-	* @param ids:String  The affected layers.
-	*/
-	//public function onSetLayerProperty(layer:MovieClip, ids:String, prop:String):Void {
-	/**
-	* Dispatched when a layer has data for a maptip.
-	* @param layer:MovieClip A reference to the layer.
-	* @param data:Object data object with the information 
-	* @param identifyextent:Object the original extent that is identified 
-	*/
-	//public function onMaptipData(layer:MovieClip, data:Object,identifyextent:Object):Void {}
-	//
-	/**
-	* Dispatched when a layer has data for a maptip.
-	* @param layer:MovieClip A reference to the layer.
-	* @param maptip:String  the maptip that is marked up like configured.
-	*/
-	//public function onMaptipMarkedUpData(layer:MovieClip, maptip:String):Void {}
-	//
 		
 	/*Getters and setters*/	
+	/**
+	 * get updating
+	 */
 	public function get updating():Boolean {
 		return _updating;
 	}
-	
+	/**
+	 * set updating
+	 */
 	public function set updating(value:Boolean):Void {
 		_updating = value;
 	}

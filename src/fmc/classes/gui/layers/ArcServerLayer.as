@@ -166,6 +166,10 @@ class gui.layers.ArcServerLayer extends AbstractLayer{
 	* Configurates a component by setting a xml.
 	* @attr xml:Object Xml or string representation of a xml.
 	*/
+	/**
+	 * setConfig
+	 * @param	xml
+	 */
 	function setConfig(xml:Object) {
 		if (xml == undefined) {
 			return;
@@ -270,6 +274,10 @@ class gui.layers.ArcServerLayer extends AbstractLayer{
 		
 	}
 	/**
+	 * setAttribute
+	 * @param	name
+	 * @param	val
+	 * 
 	 * @see AbstractLayer#setAttribute
 	 */
 	function setAttribute(name:String, val:String):Void {
@@ -659,7 +667,13 @@ class gui.layers.ArcServerLayer extends AbstractLayer{
 		conn.getImage(mapservice, extent, {width:Math.ceil(map.__width), height:Math.ceil(map.__height), dpi:96}, layers);
 		this._starttimeout();
 	}
-
+	/**
+	 * searchAndReplace
+	 * @param	holder
+	 * @param	searchfor
+	 * @param	replacement
+	 * @return
+	 */
 	function searchAndReplace(holder, searchfor, replacement):String {
 		var temparray = holder.split(searchfor);
 		holder = temparray.join(replacement);
@@ -920,6 +934,9 @@ class gui.layers.ArcServerLayer extends AbstractLayer{
 			break;
 		}
 	}
+	/**
+	 * cancelHotlink
+	 */
 	function cancelHotlink() {
 		_hotlinklayers = new Array();
 		this.identifyextent = undefined;
@@ -1193,6 +1210,10 @@ class gui.layers.ArcServerLayer extends AbstractLayer{
 			map.moveToScale(zoomtoscale, coord, updatedelay, movetime);
 		}
 	}
+	/**
+	 * getLegend
+	 * @return
+	 */
 	function getLegend():String {
 		return legendurl;
 	}
@@ -1291,11 +1312,18 @@ class gui.layers.ArcServerLayer extends AbstractLayer{
 			}
 		}
 	}
+	/**
+	 * updateCaches
+	 */
 	function updateCaches() {
 		for (var nr in caches) {
 			updateCache(caches[nr]);
 		}
 	}
+	/**
+	 * updateCache
+	 * @param	layer
+	 */
 	function updateCache(layer:MovieClip) {
 		if (layer == undefined) {
 			return;
@@ -1322,9 +1350,10 @@ class gui.layers.ArcServerLayer extends AbstractLayer{
 			layer._height = r.height;
 		}
 	}
-	/** Gets the scale of the layer
-	* &return scale
-	*/
+	/**
+	 * Gets the scale of the layer
+	 * @return scale
+	 */
 	function getScale():Number {
 		return map.getScale(extent);
 	}
@@ -1340,46 +1369,6 @@ class gui.layers.ArcServerLayer extends AbstractLayer{
 		return s;
 	}
 	
-	/*Old, can be removedfunction stopMaptip() {
-		this.showmaptip = false;
-		this.maptipextent = undefined;
-		this._maptiplayers = new Array();
-	}*/
-	/*Old, can be removedfunction startMaptip(x:Number, y:Number) {
-		if (!this.canmaptip) {
-			return;
-		}
-		if (!this.initialized) {
-			return;
-		}
-		if (maptipids.length<=0) {
-			return;
-		}
-		if (!visible || !_visible) {
-			return;
-		}
-		if (server == undefined) {
-			return;
-		}
-		if (mapservice == undefined) {
-			return;
-		}
-		this.showmaptip = true;
-		var r = new Object();
-		r.x = x-this.identifydistance/2;
-		r.y = y-this.identifydistance/2;
-		r.width = this.identifydistance;
-		r.height = this.identifydistance;
-		this.maptipextent = this.map.rect2Extent(r);
-		if (this.fullextent != undefined) {
-			if (!this.map.isHit(this.fullextent, this.maptipextent)) {
-				return;
-			}
-		}
-		this._maptiplayers = new Array();
-		this._maptiplayers = _getLayerlist(maptipids, "maptip");
-		_maptip();
-	}*/
 	function _maptip() {
 		if (this._maptiplayers.length == 0) {
 			return;
@@ -1456,7 +1445,10 @@ class gui.layers.ArcServerLayer extends AbstractLayer{
 		conn.getFeatures(mapservice, layeridString, maptipextent, maptipfields, query, this.map.copyExtent(this.maptipextent));
 	}
 	//custom functions 
-	//gets the id's of the visible features in the layer.
+	/**
+	 * gets the id's of the visible features in the layer.
+	 * @param	layerId
+	 */
 	function updateLayerFID(layerId:String){
 		var conn:ArcServerConnector = new ArcServerConnector(server);	
 		var query:String = getLayerProperty(layerId, "query").toString();
@@ -1498,11 +1490,19 @@ class gui.layers.ArcServerLayer extends AbstractLayer{
 		//option D
 		return "";
 	}
+	/**
+	 * stopMaptip
+	 */
 	function stopMaptip() {
 		this.showmaptip = false;
 		this.maptipcoordinate = new Object();
 		this._maptiplayers = new Array();
 	}
+	/**
+	 * startMaptip
+	 * @param	x
+	 * @param	y
+	 */
 	function startMaptip(x:Number, y:Number) {
 		this._maptiplayers = new Array();
 		this.maptipcoordinate = new Object();
@@ -1751,17 +1751,28 @@ class gui.layers.ArcServerLayer extends AbstractLayer{
 		this.setLayerProperty(val, "queryable", true);		
 		this.maptipids = val;
 	}
-	//added
+	/**
+	 * setMapservice
+	 * @param	new_mapservice
+	 * @param	new_dataframe
+	 */
 	function setMapservice(new_mapservice:String, new_dataframe:String):Void
 	{
 		mapservice = new_mapservice;
 		dataframe = new_dataframe;
 	}
+	/**
+	 * getServer
+	 * @return
+	 */
 	function getServer():String
 	{
 		return server;
 	}
-	
+	/**
+	 * getParent
+	 * @return
+	 */
 	function getParent():Object {
 		return this.map;
 	}
@@ -1814,147 +1825,35 @@ class gui.layers.ArcServerLayer extends AbstractLayer{
 			}
 		}
 	}
-	/**********************************************************
-	 * Listener functions for map.
+	/**
+	 * Listener function for map.
 	 */ 
 	public function onChangeExtent(map:MovieClip):Void  {
 		this.updateCaches();
 	}
+	/**
+	 * Listener function for map.
+	 */ 
 	public function onHotlink(map:MovieClip, identifyextent:Object):Void  {
 		this.hotlink(identifyextent);
 	}
+	/**
+	 * Listener function for map.
+	 */ 
 	public function onHotlinkCancel(map:MovieClip):Void  {
 		this.cancelHotlink();
 	}
+	/**
+	 * Listener function for map.
+	 */ 
 	public function onHide(map:MovieClip):Void  {
 		this.update();
 	}
+	/**
+	 * Listener function for map.
+	 */ 
 	public function onShow(map:MovieClip):Void  {
 		this.update();
 	}
-	/*********************** Events ***********************/
-	/**
-	* Dispatched when the layer gets a request object from the connector.
-	* @param layer:MovieClip a reference to the layer.
-	* @param type:String "update", "identify" or "init"
-	* @param requestobject:Object the object returned from the ArcServerConnector, containing the raw requests and other properties.
-	*/
-	//public function onRequest(layer:MovieClip, type:String, requestobject:Object):Void {
-	//
-	/**
-	* Dispatched when the layer gets a response object from the connector.
-	* @param layer:MovieClip a reference to the layer.
-	* @param type:String "update", "identify" or "init"
-	* @param responseobject:Object the object returned from the ArcServerConnector, containing the raw response and other properties.
-	*/
-	//public function onResponse(layer:MovieClip, type:String, responseobject:Object):Void {
-	//
-	/**
-	* Dispatched when there is an error.
-	* @param layer:MovieClip a reference to the layer.
-	* @param type:String "update", "identify" or "init"
-	* @param error:String error message
-	*/
-	//public function onError(layer:MovieClip, type:String, error:String):Void {
-	//
-	/**
-	* Dispatched when the layer is identified.
-	* @param layer:MovieClip a reference to the layer.
-	* @param identifyextent:Object the extent that is identified
-	*/
-	//public function onIdentify(layer:MovieClip, identifyextent:Object):Void {
-	//
-	/**
-	* Dispatched when the layer is identified and data is returned
-	* @param layer:MovieClip a reference to the layer.
-	* @param data:Object data object with the information 
-	* @param identifyextent:Object the original extent that is identified 
-	* @param nridentified:Number Number of sublayers thas has already been identified.
-	* @param total:Number Total number of sublayers that has to be identified 
-	*/
-	//public function onIdentifyData(layer:MovieClip, data:Object, identifyextent:Object, nridentified:Number, total:Number):Void {
-	//
-	/**
-	* Dispatched when the identify is completed.
-	* @param layer:MovieClip a reference to the layer.
-	* @param identifytime:Number total time of the identify 
-	*/
-	//public function onIdentifyComplete(layer:MovieClip, identifytime:Number):Void {
-	//	
-	/**
-	* Dispatched when the starts an update sequence.
-	* @param layer:MovieClip a reference to the layer.
-	* @param nrtry:Number   number of retry after an error. 
-	*/
-	//public function onUpdate(layer:MovieClip, nrtry):Void {
-	//
-	/**
-	* Dispatched when the layerimage is downloaded.
-	* @param layer:MovieClip a reference to the layer.
-	* @param bytesloaded:Number   Number of bytes already downloaded. 
-	* @param bytestotal:Number   Total of bytes to be downloaded.
-	*/
-	//public function onUpdateProgress(layer:MovieClip, bytesloaded:Number, bytestotal:Number):Void {
-	//
-	/**
-	* Dispatched when the layer is completely updated.
-	* @param layer:MovieClip a reference to the layer.
-	* @param updatetime:Object total time of the update sequence
-	*/
-	//public function onUpdateComplete(layer:MovieClip, updatetime:Number):Void {
-	//
-	/**
-	* Dispatched when the layer is hidden.
-	* @param layer:MovieClip a reference to the layer.
-	*/
-	//public function onHide(layer:MovieClip):Void {
-	//
-	/**
-	* Dispatched when the layer is shown.
-	* @param layer:MovieClip a reference to the layer.
-	*/
-	//public function onShow(layer:MovieClip):Void {
-	//
-	/**
-	* Dispatched when a legend is returned during an update sequence.
-	* @param layer:MovieClip a reference to the layer.
-	* @param legendurl:String the url of the legend.
-	*/
-	//public function onGetLegend(layer:MovieClip, legendurl:String):Void {
-	//
-	/**
-	* Dispatched when a the layer is up and running and ready to update for the first time.
-	* @param layer:MovieClip a reference to the layer.
-	*/
-	//public function onInit(layer:MovieClip):Void {
-	//
-	/**
-	* Dispatched when a the layer gets its initial information from the server.
-	* @param layer:MovieClip a reference to the layer.
-	*/
-	//public function onGetServiceInfo(layer:MovieClip):Void {
-	//	
-	/**
-	* Dispatched when a the layers collection is changed by setLayerProperty().
-	* @param layer:MovieClip A reference to the layer.
-	* @param ids:String  The affected layers.
-	*/
-	//public function onSetLayerProperty(layer:MovieClip, ids:String, prop:String):Void {
-	//
-	/**
-	* Dispatched when a layer has data for a maptip.
-	* @param layer:MovieClip A reference to the layer.
-	* @param data:Object data object with the information 
-	* @param identifyextent:Object the original extent that is identified 
-	*/
-	//public function onMaptipData(layer:MovieClip, data:Object,identifyextent:Object):Void {}
-	/**
-	* Dispatched when a layer has data for a maptip.
-	* @param layer:MovieClip A reference to the layer.
-	* @param maptip:String  the maptip
-	*/
-	//public function onMaptipMarkedUpData(layer:MovieClip, maptip:String):Void {
-	//
 
-	
 }

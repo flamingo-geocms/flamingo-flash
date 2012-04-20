@@ -200,15 +200,31 @@ class gui.layers.TilingLayer extends AbstractLayer{
 
     }
     /*Getters and setters for configurable params*/
+	/**
+	 * getResolutions
+	 * @return
+	 */
     public function getResolutions():Array{
         return this.resolutions;
     }
+	/**
+	 * setResolutions
+	 * @param	resolutions
+	 */
     public function setResolutions(resolutions:Array):Void{
         this.resolutions=resolutions;
     }
+	/**
+	 * getTilingType
+	 * @return
+	 */
     public function getTilingType():String{
         return this.tilingType;
-    }                                        
+    } 
+	/**
+	 * setTilingType
+	 * @param	tt
+	 */
     public function setTilingType(tt:String):Void{
         if (tt.toLowerCase()==TMS_TILINGTYPE.toLowerCase()){
             this.tilingType=TMS_TILINGTYPE;         
@@ -223,29 +239,54 @@ class gui.layers.TilingLayer extends AbstractLayer{
             log.error("TilingType value not supported: "+tt+" the default: "+TMS_TILINGTYPE+" is used");
         }       
     }
+	/**
+	 * getExtraTiles
+	 * @return
+	 */
     public function getExtraTiles():Number{
         return this.extraTiles;
     }
+	/**
+	 * setExtraTiles
+	 * @param	extraTiles
+	 */
     public function setExtraTiles(extraTiles:Number):Void{
         if (!isNaN(extraTiles)){
             this.extraTiles=extraTiles;
         }
     }
-    
-
+    /**
+     * getTileHeight
+     * @return
+     */
 	public function getTileHeight():Number{
 		return this.tileHeight;
 	}
+	/**
+	 * setTileHeight
+	 * @param	tileHeight
+	 */
 	public function setTileHeight(tileHeight:Number):Void{
 		this.tileHeight=tileHeight;
 	}
+	/**
+	 * getTileWidth
+	 * @return
+	 */
 	public function getTileWidth():Number{
 		return this.tileWidth;
 	}
+	/**
+	 * setTileWidth
+	 * @param	tileWidth
+	 */
 	public function setTileWidth(tileWidth:Number):Void{
 		this.tileWidth=tileWidth;
 	}
-
+	/**
+	 * setLayers
+	 * @param	layers
+	 */
     public function setLayers(layers:String):Void {
     	
         var extraParams:Object = tileFactory.getExtraParams();
@@ -280,7 +321,10 @@ class gui.layers.TilingLayer extends AbstractLayer{
         tileFactory.setExtraParams(extraParams);
         clearAllTiles();
     }
-    
+    /**
+     * getLayers
+     * @return
+     */
     public function getLayers(): String {
     	var params: Object = tileFactory.getExtraParams ();
     	if (params["LAYERS"]) {
@@ -288,11 +332,18 @@ class gui.layers.TilingLayer extends AbstractLayer{
     	}
     	return "";
     }
-    
+    /**
+     * getLayersString
+     * @return
+     */
     public function getLayersString (): String {
     	return getLayers ();
     }
-    
+    /**
+     * getProperty
+     * @param	propertyName
+     * @return
+     */
     public function getProperty (propertyName: String): Object {
     	return _global.flamingo.getProperty (_global.flamingo.getId (this), propertyName);
     }
@@ -325,9 +376,12 @@ class gui.layers.TilingLayer extends AbstractLayer{
         //do the first update.
         update();       
     }
-    /**
-    The setAttribute is called for al custom layer attributes.
-    */
+	/**
+	 * The setAttribute is called for al custom layer attributes.
+	 * @param	name
+	 * @param	value
+	 * @return
+	 */
     function setAttribute(name:String, value:String):Boolean {
 		super.setAttribute(name, value);
         var lowerName=name.toLowerCase();
@@ -551,16 +605,23 @@ class gui.layers.TilingLayer extends AbstractLayer{
 
         //log.debug("identify called");                                                         
     }
-    
+    /**
+     * cancelIdentify
+     */
     function cancelIdentify():Void{
         this.identifyextent = undefined;
         //log.debug("cancelIdentify called");
     }
-
+	/**
+	 * enableMaptip
+	 * @param	onOff
+	 */
     function enableMaptip(onOff:Boolean) {
       this.maptipEnabled = onOff;
     }
-
+	/**
+	 * stopMaptip
+	 */
     function stopMaptip() {
         this.showmaptip = false;
         this.maptipextent = undefined;
@@ -624,11 +685,17 @@ class gui.layers.TilingLayer extends AbstractLayer{
 
         wmscConnector.getFeatureInfo(this.serviceUrl, args, this.map.copyExtent(maptipextent));
     }
+	/**
+	 * doHide
+	 */
     function doHide():Void{ 
         log.debug("doHide called");
         this.visible=false;
         _global.flamingo.raiseEvent(this, "onHide", this);
     }
+	/**
+	 * doShow
+	 */
     function doShow():Void{     
         log.debug("doShow called");
         this.visible=true;
@@ -680,7 +747,7 @@ class gui.layers.TilingLayer extends AbstractLayer{
             removeAllButZoomLevel(this.currentZoomLevel);
         }
     }
-    /**
+    /*
      * Create the new tile objects. Tiles that already exist won't be created again.
      * @param	viewExtent the tiles that hit this extent are loaded.
      * @param	zoomLevel the zoomlevel
@@ -794,8 +861,9 @@ class gui.layers.TilingLayer extends AbstractLayer{
      	
      }
      
-    
-    /*Remove all tiles and clear the tilestage.*/
+	/**
+	 * Remove all tiles and clear the tilestage
+	 */
     public function clearAllTiles():Void{
         log.debug("clearAllTiles is called");
         this.newTiles= new Array();     
@@ -839,9 +907,9 @@ class gui.layers.TilingLayer extends AbstractLayer{
         mcTiles=newTileArray;
     }
     /**
-    *Function that correct the extents of the loaded tiles
-    * @param extent a object with .minx , .miny etc. of the current map
-    */  
+     * Function that correct the extents of the loaded tiles
+     * @param extent a object with .minx , .miny etc. of the current map
+     */  
     function correctPosition(extent:Object):Void{       
         log.debug("correctPosition of the tiles");
         for (var m in this.mcTiles){
@@ -855,7 +923,7 @@ class gui.layers.TilingLayer extends AbstractLayer{
             }
         }
     }
-    /**
+    /*
      * This function loads the image and creates the movieclips
      */
     private function loadTiles(){   
@@ -886,7 +954,7 @@ class gui.layers.TilingLayer extends AbstractLayer{
         this.tileLoader.loadClip(url,holder); 
         //_global.flamingo.tracer("load tile = " + tile.getTileId() );               
     }
-    /**
+    /*
      * Stops the loading of the tiles.
      */
     private function stopLoading(){
@@ -926,7 +994,7 @@ class gui.layers.TilingLayer extends AbstractLayer{
         }           
     }
     
-    /**
+    /*
      * This function is added because not all tiles doe fire a onLoadInit and onLoadComplete event
      */
     private function checkLoadProgress():Void {
@@ -1003,60 +1071,5 @@ class gui.layers.TilingLayer extends AbstractLayer{
 		extent.maxy = Number(extent.maxy);
 		return extent;
 	}
-	/*********************** Events ***********************/
-	/**
-	 * Raised on the update of this layer
-	 * @param	layer this layer
-	 */
-	//public function onUpdate(layer:TilingLayer) { }
-	/**
-	 * Raised when the update is complete
-	 * @param	layer this layer
-	 */
-	//public function onUpdateComplete(layer:TilingLayer) { }
-	/**
-	 * Raised when there is a response
-	 * @param	layer this layer
-	 * @param	requestType the type of the response
-	 * @param	connector the connector that gives the response
-	 */
-	//public function onResponse(layer:TilingLayer, requestType:String, connector:WMScConnector) { }
-	/**
-	 * Raised when there is a request done
-	 * @param	layer this layer
-	 * @param	requestType the type of the response
-	 * @param	connector the connector that gives the response
-	 */
-	//public function onRequest(layer:TilingLayer, requestType:String, connector:WMScConnector) { }
-	/**
-	 * Raised when there is a error
-	 * @param	layer this layer
-	 * @param	requestType the type of the request
-	 * @param	error The error
-	 */
-	//public function onError(layer:TilingLayer, requestType:String, error:String) { }
-	/**
-	 * Raised when a identify is returned 
-	 * @param	layer this layer
-	 * @param	data the returned data features
-	 * @param	extent the extent
-	 */
-	//public function onIdentifyData(layer:TilingLayer, data:Object, extent:Object) { }
-	/**
-	 * raised when a identify is complete
-	 * @param	layer this layer
-	 * @param	timeInSec time it took in seconds
-	 */
-	//public function onIdentifyComplete(layer:TilingLayer, timeInSec:Number) { }
-	/**
-	 * Raised when a identify is done
-	 * @param	layer this layer
-	 * @param	identifyExtent the extent of the identify
-	 */
-	//public function onIdentify(layer:TilingLayer, identifyExtent:Object) { }
-	/**
-	 * Raised when the layer is hidden
-	 * @param	layer this layer
-	 */
-	//public function onHide(layer:TilingLayer) { }	
+
 }

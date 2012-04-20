@@ -123,6 +123,9 @@ class gui.button.ButtonFull extends AbstractButton{
 		resize();		
 	}
 	/************* event handlers **************/
+	/**
+	 * onRelease
+	 */
 	public function onRelease() {		
 		for (var i = 0; i<listento.length; i++) {
 			var map = flamingo.getComponent(listento[i]);

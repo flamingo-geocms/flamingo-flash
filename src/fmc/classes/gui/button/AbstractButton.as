@@ -199,13 +199,35 @@ class gui.button.AbstractButton extends AbstractPositionable{
 	 * Implement this function to handle the press of the button.
 	 */
 	public function onRelease() { }
+	/**
+	 * Implement this function to handle the press of the button.
+	 */
 	public function onPress() { }
+	/**
+	 * Implement this function to handle the press of the button.
+	 */
 	public function onRollOut() { }
+	/**
+	 * Implement this function to handle the press of the button.
+	 */
 	public function onRollOver() { }
+	/**
+	 * Implement this function to handle the press of the button.
+	 */
 	public function onReleaseOutside() { }
+	/**
+	 * Implement this function to handle the press of the button.
+	 */
 	public function onDragOver() { }
+	/**
+	 * Implement this function to handle the press of the button.
+	 */
 	public function onDragOut() { }
 	
+	/**
+	 * needs to be overwritten
+	 * @param	xml
+	 */
 	public function setConfig(xml:Object) {
 		Logger.console("!!!Function setConfig() needs to be overwritten in: "+this.id);
 	}
@@ -214,164 +236,230 @@ class gui.button.AbstractButton extends AbstractPositionable{
 	{
 		return _holder;
 	}
-	
+	/**
+	 * set holder
+	 */
 	public function set holder(value:MovieClip):Void 
 	{
 		_holder = value;
 	}
-	
+	/**
+	 * get enabled
+	 */
 	public function get enabled():Boolean{
 		return _enabled;
 	}
-	
+	/**
+	 * set enabled
+	 */
 	public function set enabled(value:Boolean) {
 		this._enabled = value;
 	}
-	
+	/**
+	 * get toolDownLink
+	 */
 	public function get toolDownLink():String{
 		return _toolDownLink;
 	}
-	
+	/**
+	 * set toolDownLink
+	 */
 	public function set toolDownLink(value:String):Void {
 		_toolDownLink = value;
 		this.mcloader.loadClip(_global.flamingo.correctUrl(this.toolDownLink), this.mcDown.createEmptyMovieClip("container",0));		
 	}
-	
+	/**
+	 * get toolUpLink
+	 */
 	public function get toolUpLink():String 
 	{
 		return _toolUpLink;
 	}
-	
+	/**
+	 * set toolUpLink
+	 */
 	public function set toolUpLink(value:String):Void{
 		_toolUpLink = value;
 		this.mcloader.loadClip(_global.flamingo.correctUrl(this.toolUpLink), this.mcUp.createEmptyMovieClip("container",0));		
 	}
-	
+	/**
+	 * get toolOverLink
+	 */
 	public function get toolOverLink():String 
 	{
 		return _toolOverLink;
 	}
-	
+	/**
+	 * set toolOverLink
+	 */
 	public function set toolOverLink(value:String):Void {
 		_toolOverLink = value;
 		this.mcloader.loadClip(_global.flamingo.correctUrl(this.toolOverLink), this.mcOver.createEmptyMovieClip("container",0));		
 	}
-	
+	/**
+	 * get tooltipId
+	 */
 	public function get tooltipId():String 
 	{
 		return _tooltipId;
 	}
-	
+	/**
+	 * set tooltipId
+	 */
 	public function set tooltipId(value:String):Void 
 	{
 		_tooltipId = value;
 	}
-	
+	/**
+	 * get mcUp
+	 */
 	public function get mcUp():MovieClip 
 	{
 		return _mcUp;
 	}
-	
+	/**
+	 * set mcUp
+	 */
 	public function set mcUp(value:MovieClip):Void 
 	{
 		_mcUp = value;
 	}
-	
+	/**
+	 * get mcOver
+	 */
 	public function get mcOver():MovieClip 
 	{
 		return _mcOver;
 	}
-	
+	/**
+	 * set mcOver
+	 */
 	public function set mcOver(value:MovieClip):Void 
 	{
 		_mcOver = value;
 	}
-	
+	/**
+	 * get mcDown
+	 */
 	public function get mcDown():MovieClip 
 	{
 		return _mcDown;
 	}
-	
+	/**
+	 * set mcDown
+	 */
 	public function set mcDown(value:MovieClip):Void 
 	{
 		_mcDown = value;
 	}
-	
+	/**
+	 * get mcloader
+	 */
 	public function get mcloader():MovieClipLoader {
 		return _mcloader;
 	}
-	
+	/**
+	 * set mcloader
+	 */
 	public function set mcloader(value:MovieClipLoader):Void {
 		_mcloader = value;
 	}
-	
+	/**
+	 * get pressed
+	 */
 	public function get pressed():Boolean {
 		return _pressed;
 	}
-	
+	/**
+	 * set pressed
+	 */
 	public function set pressed(value:Boolean):Void {
 		_pressed = value;
 	}
-	
+	/**
+	 * get toolDownSettings
+	 */
 	public function get toolDownSettings():SpriteSettings 
 	{
 		return _toolDownSettings;
 	}
-	
+	/**
+	 * set toolDownSettings
+	 */
 	public function set toolDownSettings(value:SpriteSettings):Void 
 	{
 		_toolDownSettings = value;
 		spriteMap.attachSpriteTo(this.mcDown.createEmptyMovieClip("container", this.mcDown.getNextHighestDepth()),value);
 	}
-	
+	/**
+	 * get toolUpSettings
+	 */
 	public function get toolUpSettings():SpriteSettings 
 	{
 		return _toolUpSettings;
 	}
-	
+	/**
+	 * set toolUpSettings
+	 */
 	public function set toolUpSettings(value:SpriteSettings):Void 
 	{
 		_toolUpSettings = value;
 		spriteMap.attachSpriteTo(this.mcUp.createEmptyMovieClip("container", this.mcUp.getNextHighestDepth()),value);
 	}
-	
+	/**
+	 * get toolOverSettings
+	 */
 	public function get toolOverSettings():SpriteSettings 
 	{
 		return _toolOverSettings;
 	}
-	
+	/**
+	 * set toolOverSettings
+	 */
 	public function set toolOverSettings(value:SpriteSettings):Void 
 	{
 		_toolOverSettings = value;
 		spriteMap.attachSpriteTo(this.mcOver.createEmptyMovieClip("container", this.mcOver.getNextHighestDepth()),value);
 	}
-	
+	/**
+	 * get spriteMap
+	 */
 	public function get spriteMap():SpriteMap 
 	{
 		return _spriteMap;
 	}
-	
+	/**
+	 * set spriteMap
+	 */
 	public function set spriteMap(value:SpriteMap):Void 
 	{
 		_spriteMap = value;
 	}
-	
+	/**
+	 * set width
+	 */
 	public function set width(value:Number) {
 		mcUp._width = value;
 		mcDown._width = value;
 		mcOver._width = value;	
 	}
-	
+	/**
+	 * set height
+	 */
 	public function set height(value:Number) {
 		mcUp._height = value;
 		mcDown._height = value;
 		mcOver._height = value;
 	}
-	
+	/**
+	 * get width
+	 */
 	public function get width():Number {
 		return mcUp._width;
 	}
-	
+	/**
+	 * get height
+	 */
 	public function get height():Number {
 		return mcUp._height;
 	}

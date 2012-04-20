@@ -45,13 +45,17 @@ class gui.button.HorSliderButton extends AbstractButton
 		this.sliderHor = sliderHor;
 		this.parent = sliderHor;
 	}
-	
+	/**
+	 * slide
+	 */
 	function slide() {
 		sliderHor.currentValue = sliderHor.minimum + ((this.container._x-sliderHor.sliderBar._x+this.width/2) / sliderHor.sliderBar._width) * (sliderHor.maximum - sliderHor.minimum);
 		sliderHor.updateListeners();
 	}
 	
-	/************* event handlers **************/
+	/**
+	 * event handler
+	 */
 	function onPress() {
 		sliderHor.cancelUpdate();		
 		var l = sliderHor.sliderBar._x-(this.width/2);
@@ -65,34 +69,47 @@ class gui.button.HorSliderButton extends AbstractButton
 			thisObj.slide();
 		};
 	}
-	
+	/**
+	 * event handler
+	 */
 	function onRelease () {
 		bSlide = false;
 		delete this.container.onMouseMove;
 		this.container.stopDrag();
 		slide();
 	}	
-	
+	/**
+	 * event handler
+	 */
 	function onReleaseOutside() {
 		bSlide = false;
 		delete this.container.onMouseMove;
 		this.container.stopDrag();
 		slide();
 	}
-	
+	/**
+	 * event handler
+	 */
 	function onRollOver () {
 		flamingo.showTooltip(flamingo.getString(sliderHor, "tooltip_slider"), this);
 	}
-	
+	/**
+	 * don't do anything on resize. The parent is positioning this object.
+	 */
 	function resize():Void {
 		//don't do anything on resize. The parent is positioning this object.
 	}
 	/*********************** Getters and Setters ***********************/
+	/**
+	 * get sliderHor
+	 */
 	public function get sliderHor():SliderHor 
 	{
 		return _sliderHor;
 	}
-	
+	/**
+	 * set sliderHor
+	 */
 	public function set sliderHor(value:SliderHor):Void 
 	{
 		_sliderHor = value;

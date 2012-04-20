@@ -2,8 +2,9 @@
 // Author: Roy Braam
 import tools.Logger;
 import gui.Map;
-/**A abstarct marker class. Implement bij all markers
-*/
+/**
+ * A abstarct marker class. Implement bij all markers
+ */
 class gui.marker.AbstractMarker extends MovieClip {
 	//logging:
 	private var log:Logger=null;
@@ -24,8 +25,8 @@ class gui.marker.AbstractMarker extends MovieClip {
 	
 	private var mcMarker:MovieClip=null;
 	/**
-	Constructor
-	*/
+	 * Constructor
+	 */
 	function AbstractMarker(){
 		super();
 		this.log = new Logger("gui.marker.AbstractMarker",_global.flamingo.getLogLevel(),_global.flamingo.getScreenLogLevel());		
@@ -40,8 +41,8 @@ class gui.marker.AbstractMarker extends MovieClip {
 	}
 	*/
 	/**
-	Draw the marker on the map
-	*/
+	 * Draw the marker on the map
+	 */
 	function draw():Void {
 		if (this.mcMarker==null){					
 			createMarker();
@@ -57,7 +58,7 @@ class gui.marker.AbstractMarker extends MovieClip {
 		this._y = (extent.maxy-this.y)/msy;*/		
 	}
 	/**
-	Redraw the marker on the map (reposition)
+	 * Redraw the marker on the map (reposition)
 	*/
 	function redraw():Void{
 		var p:Object = this.map.coordinate2Point({x:this.x,y:this.y});
@@ -65,7 +66,7 @@ class gui.marker.AbstractMarker extends MovieClip {
 		this.mcMarker._y=p.y+this.offsetY;
 	}
 	/**
-	Create the movieclip that contains the marker
+	 * Create the movieclip that contains the marker
 	*/
 	public function createMarker(){
 		var depth:Number = this.map.getNextDepth()
@@ -85,15 +86,24 @@ class gui.marker.AbstractMarker extends MovieClip {
 	}
 	
 	//getters & setters
+	/**
+	 * setId
+	 * @param	id
+	 */
 	public function setId(id:String){
 		this.id=id;
 	}
+	/**
+	 * getId
+	 * @return
+	 */
 	public function getId():String{
 		return this.id;
 	}
 	/**
-	Set the map. Also sets a listener for onChangeExtent
-	*/
+	 * Set the map. Also sets a listener for onChangeExtent
+	 * @param	map
+	 */
 	public function setMap(map:Map) {
 		this.map=map;
 		//addListener for redrawing
@@ -108,28 +118,54 @@ class gui.marker.AbstractMarker extends MovieClip {
 		_global.flamingo.addListener(this.mapListener,this.map, this);
 		
 	}	
+	/**
+	 * getMap
+	 * @return
+	 */
 	public function getMap():Map{
 		return this.map;
 	}
-		
+	/**
+	 * setX
+	 * @param	x
+	 */	
 	public function setX(x:Number):Void{
 		this.x=x;
 	}
+	/**
+	 * getX
+	 * @return
+	 */
 	public function getX():Number{
 		return this.x;
 	}
+	/**
+	 * setY
+	 * @param	y
+	 */
 	public function setY(y:Number):Void{
 		this.y=y;
 	}
+	/**
+	 * getY
+	 * @return
+	 */
 	public function getY():Number{
 		return this.y;
 	}
+	/**
+	 * setVisible
+	 * @param	visible
+	 */
 	public function setVisible(visible:Boolean){
 		this.visible=visible;
 		if (this.mcMarker!=null){
 			this.mcMarker._visible=visible;
 		}
 	}
+	/**
+	 * getVisible
+	 */
 	public function getVisible(){		
 		if (this.mcMarker!=null){
 			return this.mcMarker._visible;
@@ -137,12 +173,20 @@ class gui.marker.AbstractMarker extends MovieClip {
 			return this.visible;
 		}
 	}
+	/**
+	 * setHeight
+	 * @param	height
+	 */
 	public function setHeight(height:Number){
 		this.height=height;
 		if (this.mcMarker!=null){
 			this.mcMarker._height=height;
 		}
 	}
+	/**
+	 * getHeight
+	 * @return
+	 */
 	public function getHeight():Number{
 		if (this.mcMarker!=null){
 			return this.mcMarker._height;
@@ -150,13 +194,20 @@ class gui.marker.AbstractMarker extends MovieClip {
 			return this.height;
 		}
 	}
-	
+	/**
+	 * setWidth
+	 * @param	width
+	 */
 	public function setWidth(width:Number){
 		this.width=width;
 		if(this.mcMarker!=null){
 			this.mcMarker._width=width;
 		}
 	}
+	/**
+	 * getWidth
+	 * @return
+	 */
 	public function getWidth():Number{
 		if (this.mcMarker!=null){
 			return this.mcMarker._width;
@@ -164,19 +215,29 @@ class gui.marker.AbstractMarker extends MovieClip {
 			return this.width;
 		}
 	}
-	
+	/**
+	 * getMarkerUrl
+	 * @return
+	 */
 	public function getMarkerUrl():String{
 		return this.markerUrl;
 	}
+	/**
+	 * setMarkerUrl
+	 * @param	markerUrl
+	 */
 	public function setMarkerUrl(markerUrl:String){
 		this.markerUrl=markerUrl;
 	}
+	/**
+	 * removeMovieClip
+	 */
 	public function removeMovieClip(){
 		this.destroy();
 		super.removeMovieChild();
 	}
 	/**
-	Destroy this marker and the listeners
+	 * Destroy this marker and the listeners
 	*/
 	public function destroy(){
 		_global.flamingo.removeListener(this.mapListener,this.map, this);

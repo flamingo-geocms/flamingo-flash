@@ -54,7 +54,9 @@ class gui.button.ZoomOutButton extends AbstractButton
 	public function getParent():Object {
 		return this.zoomerV;
 	}
-	/************* event handlers **************/
+	/**
+	 * event handler
+	 */
 	public function onRelease()	{
 		zoomerV.cancelUpdate();
 		//_zoomid = setInterval(zoomerV, "_zoom", 10, map, 105);
@@ -62,22 +64,31 @@ class gui.button.ZoomOutButton extends AbstractButton
 		//clearInterval(_zoomid);
 		this.zoomerV.updateMaps();		
 	}
-	
+	/**
+	 * event handler
+	 */
 	public function onReleaseOutside()
 	{
 		clearInterval(_zoomid);
 		zoomerV.updateMaps();
 	}
-	
+	/**
+	 * event handler
+	 */
 	public function onRollOver()
 	{
 		flamingo.showTooltip(flamingo.getString(zoomerV, "tooltip_zoomout"), this);
 	}
-	
+	/**
+	 * don't do anything on resize. The parent is positioning this object.
+	 */
 	public function resize():Void {
 		//don't do anything on resize. The parent is positioning this object.
 	}
 	/*********************** Getters and Setters ***********************/
+	/**
+	 * get map
+	 */
 	public function get map():Map
 	{
 		return flamingo.getComponent(this.zoomerV.listento[0]);

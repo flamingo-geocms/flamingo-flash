@@ -48,7 +48,9 @@ class gui.button.SliderButton extends AbstractButton
 		this.zoomerV = zoomerV;
 		this.parent = zoomerV;
 	}
-	/************* event handlers **************/
+	/**
+	 * event handler
+	 */
 	function onPress()	{
 		zoomerV.cancelUpdate();
 		var l = this.container._x;
@@ -65,7 +67,9 @@ class gui.button.SliderButton extends AbstractButton
 			thisObj.zoomSlider();
 		};
 	}
-	
+	/**
+	 * event handler
+	 */
 	function onRelease(){		
 		zoomSlider();
 		bSlide = false;
@@ -73,24 +77,32 @@ class gui.button.SliderButton extends AbstractButton
 		this.container.stopDrag();
 		zoomerV.updateMaps();
 	}
-	
+	/**
+	 * event handler
+	 */
 	function onDragOut()	{
 		bSlide = true;
 		zoomSlider();
 	}
-	
+	/**
+	 * event handler
+	 */
 	function onDragOver()	{
 		bSlide = true;
 		zoomSlider();
 	}
-	
+	/**
+	 * event handler
+	 */
 	function onReleaseOutside()	{
 		bSlide = false;
 		delete this.container.onMouseMove;
 		this.container.stopDrag();
 		zoomerV.updateMaps();
 	}
-	
+	/**
+	 * event handler
+	 */
 	function onRollOver()	{
 		flamingo.showTooltip(flamingo.getString(zoomerV, "tooltip_slider"), this);
 	}
@@ -112,11 +124,16 @@ class gui.button.SliderButton extends AbstractButton
 		var scale = min + ((max - min) * p / 100);
 		map.moveToScale(scale, center, -1, 0);
 	}
-	
+	/**
+	 * don't do anything on resize. The parent is positioning this object.
+	 */
 	function resize():Void {
 		//don't do anything on resize. The parent is positioning this object.
 	}
 	/*********************** Getters and Setters ***********************/
+	/**
+	 * get map
+	 */
 	public function get map():Object
 	{
 		return flamingo.getComponent(this.zoomerV.listento[0]);

@@ -69,6 +69,10 @@ class gui.layers.ImageLayer extends AbstractLayer{
 	* Configurates a component by setting a xml.
 	* @attr xml:Object Xml or string representation of a xml.
 	*/
+	/**
+	 * Configurates a component by setting a xml.
+	 * @param	xml:Object Xml or string representation of a xml.
+	 */
 	function setConfig(xml:Object) {
 		if (xml == undefined) {
 			return;
@@ -299,15 +303,21 @@ class gui.layers.ImageLayer extends AbstractLayer{
 		}
 	}
 
-	/**********************************************************
-	 * Map listeners
+	/**
+	 * Map listener
 	 */ 	
 	public function onChangeExtent(map:MovieClip):Void  {
 		this.update();
 	}
+	/**
+	 * Map listener
+	 */ 	
 	public function onHide(map:MovieClip):Void  {
 		this.update();
 	}
+	/**
+	 * Map listener
+	 */ 	
 	public function onShow(map:MovieClip):Void  {
 		if (!this.initialized) {
 			setImage(imageurl, extent);
@@ -316,10 +326,15 @@ class gui.layers.ImageLayer extends AbstractLayer{
 		}	
 	}	
 	/*********************** Getters and Setters ***********************/
+	/**
+	 * get extent
+	 */
 	public function get extent():Object {
 		return _extent;
 	}
-	
+	/**
+	 * set extent
+	 */
 	public function set extent(value:Object):Void {
 		/* Make backwards compatible:
 		 * pass the extent to the container so all the clickable overviews will still work....	
@@ -327,40 +342,5 @@ class gui.layers.ImageLayer extends AbstractLayer{
 		this.container.extent = value;
 		_extent = value;
 	}
-	/*********************** Events ***********************/
-	/**
-	* Dispatched when the layerimage is downloaded.
-	* @param layer:MovieClip a reference to the layer.
-	* @param bytesloaded:Number   Number of bytes already downloaded. 
-	* @param bytestotal:Number   Total of bytes to be downloaded.
-	*/
-	//public function onUpdateProgress(layer:MovieClip, bytesloaded:Number, bytestotal:Number):Void {
-	//
-	/**
-	* Dispatched when a the layer is up and running and ready to update for the first time.
-	* @param layer:MovieClip a reference to the layer.
-	*/
-	//public function onInit(layer:MovieClip):Void {
-	/** Dispatched when the layer is completely updated.
-	* @param layer:MovieClip a reference to the layer.
-	* @param updatetime:Object total time of the update sequence
-	*/
-	//public function onUpdateComplete(layer:MovieClip, updatetime:Number):Void {
-	/**
-	* Dispatched when the layer is updated and an error occurs.
-	* @param layer:MovieClip a reference to the layer.
-	* @param error:String error message
-	*/
-	//public function onUpdateError(layer:MovieClip, error:String):Void {
-	/**
-	* Dispatched when the layer is hidden.
-	* @param layer:MovieClip a reference to the layer.
-	*/
-	//public function onHide(layer:MovieClip):Void {
-	/**
-	* Dispatched when the layer is shown.
-	* @param layer:MovieClip a reference to the layer.
-	*/
-	//public function onShow(layer:MovieClip):Void {
-	
+
 }

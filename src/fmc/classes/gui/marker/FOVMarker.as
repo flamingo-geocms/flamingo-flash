@@ -2,7 +2,7 @@
 // Author: Roy Braam (B3Partners BV).
 import gui.marker.AbstractMarker;
 /**
-A Field of View marker. Indicates the direction and horizontal view angle for (by example) street view foto's.
+ * A Field of View marker. Indicates the direction and horizontal view angle for (by example) street view foto's.
 */
 class gui.marker.FOVMarker extends AbstractMarker {			
 	private var size:Number=20;	
@@ -10,8 +10,8 @@ class gui.marker.FOVMarker extends AbstractMarker {
 	private var directionAngle:Number=null;
 	private var viewAngle:Number=null;
 	/**
-	* Create a fov marker.	*/
-	
+	* Create a fov marker.	
+	*/
 	public function createMarker(){
 		super.createMarker();
 		//the direction line for the curve
@@ -49,23 +49,45 @@ class gui.marker.FOVMarker extends AbstractMarker {
 	}
 	
 	/*Getters and setters*/
-	
+	/**
+	 * setDirectionAngle
+	 * @param	directionAngle
+	 */
 	public function setDirectionAngle(directionAngle:Number){
 		this.directionAngle=directionAngle;
 	}
+	/**
+	 * getDirectionAngle
+	 * @return
+	 */
 	public function getDirectionAngle():Number{
 		return this.directionAngle;
 	}
-	
+	/**
+	 * setViewAngle
+	 * @param	viewAngle
+	 */
 	public function setViewAngle(viewAngle:Number){
 		this.viewAngle=viewAngle;
 	}
+	/**
+	 * getViewAngle
+	 * @return
+	 */
 	public function getViewAngle():Number{
 		return this.viewAngle;
 	}
+	/**
+	 * setSize
+	 * @param	size
+	 */
 	public function setSize(size:Number){
 		this.size=size;
 	}
+	/**
+	 * getSize
+	 * @return
+	 */
 	public function getSize():Number{
 		return this.size;
 	}
