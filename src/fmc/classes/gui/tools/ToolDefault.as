@@ -112,8 +112,7 @@ class gui.tools.ToolDefault extends AbstractTool{
 	 */
 	private function init() {
 		var thisObj:ToolDefault = this;
-		this.lMap.onMouseDown = function(map:MovieClip, xmouse:Number, ymouse:Number, coord:Object) {
-			thisObj.maphit = true;					
+		this.lMap.onMouseDown = function(map:MovieClip, xmouse:Number, ymouse:Number, coord:Object) {							
 			thisObj.onMouseDown(map, xmouse, ymouse, coord);
 		}
 		this.lMap.onMouseUp = function(map:MovieClip, xmouse:Number, ymouse:Number, coord:Object){
@@ -201,6 +200,7 @@ class gui.tools.ToolDefault extends AbstractTool{
 	 * @param	coord world coords
 	 */
 	public function onMouseDown(map:MovieClip, xmouse:Number, ymouse:Number, coord:Object) {
+		this.maphit = true;	
 		this.map = Map(map);		
 		clearInterval(this.autopanid);
 		this.cancel();
