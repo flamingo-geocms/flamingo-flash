@@ -150,6 +150,7 @@ class gui.tools.AbstractTool extends AbstractButton
 			this.mcDown._visible = false;
 			this.mcOver._visible = false;
 			this.mcUp._visible = true;
+			flamingo.raiseEvent(this, "onDeactivate", this);
 			//TODO: Set correct cursor this.setCursor(mc.cursors[cursorid]);
 		}//turn on
 		else if (!this.active && active) {
@@ -158,7 +159,8 @@ class gui.tools.AbstractTool extends AbstractButton
 				this.toolGroup.setCursor(this.cursors[this.cursorId]);
 			this.mcUp._visible = false;
 			this.mcOver._visible = false;
-			this.mcDown._visible = true;		
+			this.mcDown._visible = true;
+			flamingo.raiseEvent(this, "onActivate", this);
 			//TODO: Set correct cursor this.setCursor(mc.cursors[cursorid]);
 			//see toolgroup initTool
 		}
