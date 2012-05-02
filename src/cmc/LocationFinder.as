@@ -584,13 +584,7 @@ function findLocation(locationfinderid:String, search:String, nr:Number, zoom:Bo
 					_zoom(0);
 				}
 			} else {
-				//find a feature on a server
-				if (PARAM_PREPROCESS_TOUPPER==lf.preProcess) {
-					search=search.toUpperCase();
-				}
-				if (PARAM_PREPROCESS_TOLOWER==lf.preProcess) {
-					search=search.toLowerCase();
-				}
+				//find a feature on a server				
 				_findLocation(lf, search, nr, false, zoom);
 			}
 		}
@@ -612,7 +606,15 @@ function find():Void {
 function _findLocation(locationdata:Object, search:String, nr:Number, updatefeatures:Boolean, zoom:Boolean) {	
 	entersDone--;
 	//when a location is entered via the url the entersDone will be smaller than zero
-	if (entersDone<=0){
+	if (entersDone <= 0) {
+		//preprocess?
+		if (PARAM_PREPROCESS_TOUPPER==locationdata.preProcess) {
+			search=search.toUpperCase();
+		}
+		else if (PARAM_PREPROCESS_TOLOWER==locationdata.preProcess) {
+			search=search.toLowerCase();
+		}
+		
 		if (locationdata.type.toUpperCase()=='WFS'){
 			_findLocationWFS(locationdata,search,nr,updatefeatures,zoom);
 		}else{
