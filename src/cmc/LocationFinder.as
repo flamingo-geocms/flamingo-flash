@@ -46,6 +46,8 @@ Change: Added WFS search.
 * @configstyle .hint font-family="verdana" font-size="10px" color="#cccccc" display="block" font-weight="normal" font-style="italic"/>
 */
 var version:String = "2.0";
+var PARAM_PREPROCESS_TOUPPER = "toupper";
+var PARAM_PREPROCESS_TOLOWER = "tolower";
 //-------------------------------
 var defaultXML:String = "<?xml version='1.0' encoding='UTF-8'?>" +
 						"<LocationFinder>" +
@@ -338,6 +340,7 @@ function loadXML(file:String) {
 * @attr highlightmaxscale Scale to prevent highlighting of features when the mapscale is too large. 
 * If the currentmapscale is larger than the highlightmaxscale the Locationfinder will not send a GetMap request 
 * to the highlightwms but the BBox of found feature will be shown instead.
+* @attr preProcess (default none, possible: 'toupper', 'tolower') Pre process the search value
 */
 //
 /** @tag <location>  
@@ -472,7 +475,10 @@ function addLocation(xml:Object) {
 						} else {
 							location.matchCase = false;
 						}
-						break;		
+						break;	
+					case "preprocess":
+						location.preProcess = val.toLowerCase();
+						break;
 				    default: 
 						flamingo.tracer("unknown attribute in confige file for LocationFinder: "+attr);
 					}
@@ -579,6 +585,12 @@ function findLocation(locationfinderid:String, search:String, nr:Number, zoom:Bo
 				}
 			} else {
 				//find a feature on a server
+				if (PARAM_PREPROCESS_TOUPPER==lf.preProcess) {
+					search=search.toUpperCase();
+				}
+				if (PARAM_PREPROCESS_TOLOWER==lf.preProcess) {
+					search=search.toLowerCase();
+				}
 				_findLocation(lf, search, nr, false, zoom);
 			}
 		}

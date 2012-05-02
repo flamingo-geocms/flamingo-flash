@@ -51,7 +51,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 * @attr serviceUrl the url of the server that is serving tiles. 
 * For example for a TMS server http://host/tileservice/1.0.0/tilemapname/ (include the version and tileMap Name)
 * @attr resolutions the different resolutions with tiles that are served.
-* @attr tilingType (optional,default: TMS) the type of tiling service. Possible values(for now): WMSc, TMS, OSM
+* @attr tilingType (optional,default: TMS) the type of tiling service. Possible values(for now): WMSc, TMS, OSM, ArcGisRest
 * @attr serviceenvelope the envelope/bbox from the server. For example: "12000,304000,280000,620000"
 * @attr extratiles (optional, default: 1) the number of extra tiles that are loaded when a user start panning (changing the extent)
 * A circle of x tiles wil be loaded around the visible extent. This is not done when zooming! only when panning.
