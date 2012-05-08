@@ -244,14 +244,14 @@ class gui.Map extends AbstractPositionable implements PersistableComponent{
 		
 		//special listener for mousewheel
 		//TODO Still needed? Expensive....
-		/*var lMouse:Object = new Object();
+		var lMouse:Object = new Object();
 		lMouse.onMouseWheel = function(delta, target) {
 			if (thisObj.hit) {
 				var coord = thisObj.point2Coordinate({x:thisObj.container._xmouse, y:thisObj.container._ymouse});
 				thisObj.flamingo.raiseEvent(thisObj, "onMouseWheel", thisObj, delta, thisObj.container._xmouse, thisObj.container._ymouse, coord);
 			}
 		};
-		Mouse.addListener(lMouse);*/
+		Mouse.addListener(lMouse);
 		//
 		//------------------------------------------
 		// step2: Movies
