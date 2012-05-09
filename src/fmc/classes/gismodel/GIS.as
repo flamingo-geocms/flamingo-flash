@@ -53,6 +53,7 @@
 * @attr geometryeditable Switch, value = "yes" or "no". If yes the editMap geometries for the layer corresponding to this gis
 * are editable, i.e. the user can drag, add and remove vertices of the geometries.
 * @attr alwaysdrawpoints always draw points at the end of the lines.
+* @attr featuresDraggable True if polygons can be dragged, false if not. Defaults to false;
 */
 
 /** @tag <fmc:Layer>
