@@ -70,5 +70,11 @@ class geometrymodel.LinearRing extends LineString {
     function toString():String {
         return("LinearRing (" + points.toString() + ")");
     }
+	
+	public function translatePos(x:Number, y:Number):Void {
+		for (var i = 1 ; i < points.length ; i++ ){
+			points[i].translatePos(x, y);
+		}
+	}
     
 }

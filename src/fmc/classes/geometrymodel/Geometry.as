@@ -143,4 +143,8 @@ class geometrymodel.Geometry {
 			endPoint.setXY(mousePoint.getX(), mousePoint.getY(), pixel);
 			geometryEventDispatcher.changeGeometry(this);
 	}
+	
+	public function translatePos (x:Number, y:Number):Void {
+		super.translatePos(x, y);
+	}
 }

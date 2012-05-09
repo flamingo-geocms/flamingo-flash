@@ -369,4 +369,17 @@ class geometrymodel.Polygon extends Geometry implements GeometryListener{
     	geometryEventDispatcher.changeGeometry(this);
     }
     
+	public function translatePos(x:Number, y:Number):Void {
+		var polygon:Polygon = this;
+		var exteriorRing:LinearRing = polygon.getExteriorRing();
+		var interiorRings:Array = polygon.getInteriorRings();
+		var points:Array = exteriorRing.getPoints();
+		
+		exteriorRing.translatePos(x, y);
+		//walk over the interior rings
+		for (var i:Number =0; i <  interiorRings.length; i++){			
+			var interiorRing:LinearRing = LinearRing(interiorRings[i]);
+			interiorRing.translatePos(x, y);
+		}
+	}
 }

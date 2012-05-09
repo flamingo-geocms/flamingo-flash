@@ -179,4 +179,9 @@ class geometrymodel.Point extends Geometry implements GeometryListener {
     	geometryEventDispatcher.changeGeometry(this);
     }
 	
+	public function translatePos(dx:Number, dy:Number):Void {
+		this.x += dx;
+		this.y += dy;
+	}
+    
 }

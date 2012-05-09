@@ -15,17 +15,61 @@ import geometrymodel.LineString;
 import gismodel.Feature;
 import gismodel.Layer;
 import gismodel.GeometryProperty;
+import tools.Logger;
 
 class gui.EditMapPolygon extends EditMapGeometry {
 
 	private var intersectionPixel:Pixel;
 	private var drawFillPattern:Boolean;
+	var dragging:Boolean = false;
     
     function onLoad():Void { // This method is a stub. It is necessary though, because of the "super" bug in Flash.
         super.onLoad();
 		drawFillPattern = false;
-    }
+		var thisObj = this;
+		if(this.gis.getFeaturesDraggable()){
+			this.onMouseDown =  function() {
+				if(!thisObj.pointsPressed(thisObj)){
+					thisObj.dragging=true;
+					this.startDrag(false);
+				}
+			}
+			this.onMouseUp = function (){
+				if(thisObj.dragging){
+					this.stopDrag();
+					var displacementX = this.map.getMapScale()*thisObj._x;
+					var displacementY = -1* this.map.getMapScale()*thisObj._y;
+					var g = thisObj._geometry;
+					(thisObj._geometry).translatePos( displacementX, displacementY);
+					thisObj.dragging=false;
+					thisObj._x = 0;
+					thisObj._y = 0;
+					thisObj.reDraw();
+					thisObj.gis.geometryDragUpdate();
+				}
+			}
+		}
+    }	
     
+    
+	function pointsPressed(thisObj):Boolean {
+		var pointDragged = false;
+		for (var i:Number = 0; i < thisObj.editMapGeometries.length; i++) {
+			if (thisObj.editMapGeometries[i] instanceof EditMapPoint) {
+				if (thisObj.editMapGeometries[i].mPointGraphic.isPressed) {
+					pointDragged = true;
+					break;
+				}
+			}else {
+				pointDragged = pointsPressed(editMapGeometries[i]);
+				if (pointDragged) {
+					break;
+				}
+			}
+		}
+		return pointDragged;
+	}
+	
     function setSize(width:Number, height:Number):Void { // This method is a stub. It is necessary though, because of the "super" bug in Flash.
         super.setSize(width, height);
     }

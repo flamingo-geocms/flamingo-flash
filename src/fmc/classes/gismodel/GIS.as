@@ -242,7 +242,9 @@ class gismodel.GIS extends AbstractComponent {
 	
 	private var editMapEditable:Boolean = false;
 	private var alwaysDrawPoints:Boolean = true;
-	private var selectedEditTool:String= null;
+	private var selectedEditTool:String = null;
+	
+	private var featuresDraggable:Boolean = false;
     
 	private var log:Logger=null;
 	/**
@@ -291,6 +293,15 @@ class gismodel.GIS extends AbstractComponent {
 			}
 			else {
 				alwaysDrawPoints = true;
+			}
+		}
+		
+		if (name == "featuresDraggable") {
+			if (value.toLowerCase() == "no" || value.toLowerCase() == "false") {
+				featuresDraggable = false;
+			}
+			else {
+				featuresDraggable = true;
 			}
 		}
         super.setAttribute(name, value);
@@ -418,6 +429,10 @@ class gismodel.GIS extends AbstractComponent {
 	 */
 	function getAlwaysDrawPoints():Boolean {
 		return alwaysDrawPoints;
+	}
+	
+	function getFeaturesDraggable():Boolean {
+		return featuresDraggable;
 	}
 	/**
 	 * getEnvelope
