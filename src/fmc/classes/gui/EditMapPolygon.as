@@ -45,7 +45,7 @@ class gui.EditMapPolygon extends EditMapGeometry {
 					thisObj._x = 0;
 					thisObj._y = 0;
 					thisObj.reDraw();
-					thisObj.gis.geometryDragUpdate();
+					thisObj.gis.geometryUpdate();
 				}
 			}
 		}
