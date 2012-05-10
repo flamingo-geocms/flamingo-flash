@@ -5,6 +5,7 @@
 * Changes by author: Maurits Kelder, B3partners bv
  -----------------------------------------------------------------------------*/
 
+import geometrymodel.Polygon;
 import gui.*
 
 import event.StateEventListener;
@@ -63,6 +64,7 @@ class gui.EditMapFeature extends GeometryPane implements StateEventListener {
     }
     
     function onPress():Void {
+		
         if (gis.getActiveFeature() == feature) {
 			//Allow editing of the current active feature if the geometry is editable.
 			if (!editable){
@@ -71,6 +73,9 @@ class gui.EditMapFeature extends GeometryPane implements StateEventListener {
         } else {
             gis.setActiveFeature(feature);
         }
+		if (feature.getGeometry() instanceof Polygon ) {
+			editMapGeometries[0].dragFeature();
+		}
     }
     
 }
