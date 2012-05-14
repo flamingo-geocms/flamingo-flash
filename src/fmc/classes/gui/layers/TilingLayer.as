@@ -954,6 +954,20 @@ class gui.layers.TilingLayer extends AbstractLayer{
         this.tileLoader.loadClip(url,holder); 
         //_global.flamingo.tracer("load tile = " + tile.getTileId() );               
     }
+	/**
+	 * 
+	 */
+	public function getLastRequests() {
+		var request:Array = new Array();
+		for (var m in this.mcTiles) {
+			var tile:Tile= Tile(mcTiles[m].tile);
+			var req:Object = new Object();
+			req.url = tile.getImageUrl();
+			req.extent = tile.getBbox().toObject();
+			request.push(req);
+		}
+		return request;
+	}
     /*
      * Stops the loading of the tiles.
      */
@@ -1071,5 +1085,5 @@ class gui.layers.TilingLayer extends AbstractLayer{
 		extent.maxy = Number(extent.maxy);
 		return extent;
 	}
-
+	
 }

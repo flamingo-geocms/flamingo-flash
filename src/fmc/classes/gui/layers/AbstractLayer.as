@@ -377,4 +377,11 @@ class gui.layers.AbstractLayer extends AbstractConfigurable{
 	public function getLastGetMapRequest():HttpRequest {
 		return lastGetMapRequest;
 	}
+	/**
+	 * Get service Url
+	 * @return
+	 */
+	public function getServiceUrl():String {
+		return this.serviceUrl;
+	}
 }

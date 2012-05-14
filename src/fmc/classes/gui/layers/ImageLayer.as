@@ -45,7 +45,6 @@ import tools.Logger;
  */
 class gui.layers.ImageLayer extends AbstractLayer{
 	
-	var imageurl:String;
 	var _extent:Object;
 	var maxscale:Number;
 	var minscale:Number;
@@ -87,7 +86,7 @@ class gui.layers.ImageLayer extends AbstractLayer{
 		super.setConfig(XMLNode(xml));
 		
 		if(map.visible){
-			setImage(imageurl, extent);
+			setImage(this.serviceUrl, extent);
 		}	
 		/* Make backwards compatible
 		 * pass the listento to the container so all the clickable overviews will still work....
@@ -105,7 +104,7 @@ class gui.layers.ImageLayer extends AbstractLayer{
 		switch (name.toLowerCase()) {
 		case "url" :
 		case "imageurl" :
-			imageurl = val;
+			serviceUrl = val;
 			break;
 		case "alpha" :
 			this.container._alpha = Number(val);
@@ -128,7 +127,7 @@ class gui.layers.ImageLayer extends AbstractLayer{
 	 */
 	public function setImage(url:String, extent:Object) {
 		if (url != undefined and map.isValidExtent(extent)) {
-			imageurl = flamingo.getNocacheName(flamingo.correctUrl(url), "hour");
+			this.serviceUrl = flamingo.getNocacheName(flamingo.correctUrl(url), "hour");
 			extent = extent;
 			var listener:Object = new Object();
 			//
@@ -167,7 +166,7 @@ class gui.layers.ImageLayer extends AbstractLayer{
 			mcl.addListener(listener);
 			mHolder._alpha = 0;
 
-			mcl.loadClip(imageurl, mHolder);
+			mcl.loadClip(this.serviceUrl, mHolder);
 			this.starttime = new Date();
 			flamingo.raiseEvent(thisObj, "onUpdate", thisObj);
 			
@@ -320,7 +319,7 @@ class gui.layers.ImageLayer extends AbstractLayer{
 	 */ 	
 	public function onShow(map:MovieClip):Void  {
 		if (!this.initialized) {
-			setImage(imageurl, extent);
+			setImage(serviceUrl, extent);
 		} else {	
 			update();
 		}	

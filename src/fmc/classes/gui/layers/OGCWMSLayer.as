@@ -73,6 +73,8 @@ import gui.layers.AbstractLayer;
 * @attr identifyperlayer When true, an identify request will be sent for each sublayer seperately when sending the identify request per sublayer you know the sublayer name when handling the response. The FeatureInfo response of ArcGisServer WMS often doesn't contain the 
 * faeturetype (or sublayer) name.  
 * @attr initService (default="true") if set to false the service won't do a getCap request to init the service. If set to false all parameters must be filled, and no #ALL# can be used.
+* @attr zoomToLayer (default="false") if set to true the map will zoom to the boundingbox of this layer. This can only be done when there is a getCapabilities is done
+* (initService=true)
 */
 /** @tag <layer>  
 * This defines a sublayer of an OG-WMS service.
@@ -134,7 +136,9 @@ class gui.layers.OGCWMSLayer extends AbstractLayer{
 	var noCache:Boolean = false;
 	var visible_layers=null;
 	var initialized:Boolean = false;
-	var initService:Boolean= true;
+	var initService:Boolean = true;
+	var zoomToLayer:Boolean = true;
+	var serviceExtent:Object = null;
 
 	//When true, an identify request will be sent for each sublayer seperately
 	//when sending the identify request per sublayer you know the sublayer name when handling 
@@ -258,11 +262,16 @@ class gui.layers.OGCWMSLayer extends AbstractLayer{
 			if (thisObj.name == undefined) {
 				thisObj.name = service.title;
 			}
-	
+			if (servicelayers.length>0){
+				thisObj.serviceExtent = servicelayers[0].boundingbox;				
+			}			
 			thisObj._parseLayers(servicelayers);
 			thisObj.flamingo.raiseEvent(thisObj, "onGetCapabilities", thisObj);
 			//set initialized in analogy with LayerArcIMS and LayerArcServer.
 			thisObj.initialized = true;
+			if (thisObj.zoomToLayer && thisObj.serviceExtent != null) {
+				thisObj.map.moveToExtent(thisObj.serviceExtent,0);
+			}
 			//The update is done in the Map in lLayer.onGetCapabilities 
 			//if (thisObj.slayers == "#ALL#") {
 			//thisObj.update();
@@ -429,7 +438,14 @@ class gui.layers.OGCWMSLayer extends AbstractLayer{
 				}else {
 					this.initService  = true;
 				}
-				break;			
+				break;	
+			case "zoomtolayer" :			
+				if (val.toLowerCase() == "true") {
+					this.zoomToLayer  = true;
+				}else {
+					this.zoomToLayer  = false;
+				}
+				break;
 			default :
 				if (name.toLowerCase().indexOf("xmlns:", 0) == -1) {
 					this.attributes[name] = val;
