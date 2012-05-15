@@ -137,7 +137,7 @@ class gui.layers.OGCWMSLayer extends AbstractLayer{
 	var visible_layers=null;
 	var initialized:Boolean = false;
 	var initService:Boolean = true;
-	var zoomToLayer:Boolean = true;
+	var zoomToLayer:Boolean = false;
 	var serviceExtent:Object = null;
 
 	//When true, an identify request will be sent for each sublayer seperately
