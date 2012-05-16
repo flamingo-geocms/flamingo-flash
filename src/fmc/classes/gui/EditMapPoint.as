@@ -142,7 +142,7 @@ class gui.EditMapPoint extends EditMapGeometry {
 			var x:Number = m_pixel.getX();
 			var y:Number = m_pixel.getY();
 			clear();
-			//moveTo(x, y);
+			moveTo(x, y);
 			if (type == ACTIVE) {
 				if(isChild){
 					lineStyle(strokeWidth * 4, strokeColor, strokeOpacity);
