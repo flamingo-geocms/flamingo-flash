@@ -220,6 +220,7 @@ class gui.BorderNavigation extends AbstractPositionable
 					moveExtentButton.toolUpSettings = new SpriteSettings(2*SpriteSettings.buttonSize, 3*SpriteSettings.buttonSize, SpriteSettings.buttonSize, SpriteSettings.buttonSize, offsetx, offsety, true, 100);
 					break;
 			};
+			moveExtentButton.strings = this.strings;
 			this.extentButtons[pos] = moveExtentButton;
 		}
 			resize();
