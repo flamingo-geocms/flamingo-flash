@@ -4,12 +4,13 @@ Things you need for building Flamingo-mc:
 - Ant
 For documentation:
 - Natural docs & Perl
-
+For sprite:
+- Install image magic on your pc http://www.imagemagick.org/
 
 ------------Build Flamingo-------------
 How to build Flamingo-mc
 
-- Open te build.xml file and alter the property tags (version,flashPath,naturalDocsPath)
+- Open the build.xml file and alter the property tags (version,flashPath,naturalDocsPath)
 
 - if you want to have a clean build execute the following command in the console at the project root dir:
   @ ant clean
