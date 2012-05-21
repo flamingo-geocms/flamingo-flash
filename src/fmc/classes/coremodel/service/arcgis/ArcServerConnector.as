@@ -1,3 +1,5 @@
+
+import tools.Logger;
 /**
  * ArcGis Server connector
  * @author 
@@ -498,8 +500,11 @@ class coremodel.service.arcgis.ArcServerConnector{
         for(var i in layers){
             if(layers[i].id != undefined && layers[i].visible != undefined){
                 str +="<LayerDescription>\n<LayerID>"+layers[i].id+"</LayerID>\n";
-                str +="<Visible>"+layers[i].visible+"</Visible>\n<ShowLabels>true</ShowLabels>\n";
+                str += "<Visible>" + layers[i].visible + "</Visible>\n<ShowLabels>true</ShowLabels>\n";
                 
+				if (layers[i].definitionQuery != undefined) {
+					str += "<DefinitionExpression>"+ layers[i].definitionQuery + "</DefinitionExpression>";
+				}
                 // Include query info:
                 if(layers[i].query != undefined) {
                     str += "<ScaleSymbols>true</ScaleSymbols>";
@@ -912,5 +917,5 @@ class coremodel.service.arcgis.ArcServerConnector{
 	private function extentContains (a: Object, b: Object): Boolean {
 		return b.minx >= a.minx && b.maxx <= a.maxx && b.miny >= a.miny && b.maxy <= a.maxy;
 	}
-	
+		
 }

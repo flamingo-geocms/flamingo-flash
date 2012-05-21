@@ -19,6 +19,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 -----------------------------------------------------------------------------*/
 import coremodel.service.arcgis.ArcServerConnector;
 import core.AbstractPositionable;
+import mx.data.types.Int;
 import tools.Logger;
 import gui.Map;
 import gui.layers.AbstractLayer;
@@ -1854,6 +1855,10 @@ class gui.layers.ArcServerLayer extends AbstractLayer{
 	 */ 
 	public function onShow(map:MovieClip):Void  {
 		this.update();
+	}
+	
+	public function setDefinitionQuery(definitionQuery:String,id:Int):Void {
+		this.layers[id].definitionQuery = definitionQuery;
 	}
 
 }
