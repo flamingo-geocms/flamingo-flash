@@ -7,6 +7,17 @@ For documentation:
 For sprite:
 - Install image magic on your pc http://www.imagemagick.org/
 
+
+------------- Settings ----------------
+
+- Make sure that the classpaths are correctly defined in Flash:
+Edit -> Preferences -> ActionScript -> ActionScript 2.0:
+The following entries must be present:
+.
+$(LocalData)/Classes
+./classes
+./fmc/classes
+
 ------------Build Flamingo-------------
 How to build Flamingo-mc
 
