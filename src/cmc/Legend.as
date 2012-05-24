@@ -843,7 +843,6 @@ function refresh() {
 		_refreshItem(itemclips[i]);
 	}
 	resize();
-	resize();
 }
 function _refreshItem(mc:MovieClip, animate:Boolean) {
 	if (! mc._parent._visible) {
@@ -1240,7 +1239,6 @@ function drawLegend(list:Array, parent:MovieClip, _indent:Number) {
 								comp.updateCaches();
 								_global.flamingo.raiseEvent(comp, "onShow", comp);
 							}
-							trace("The layers to set visible: "+layers.concat(","));
 							comp.setLayerProperty(layers, "visible", checked);
 						}
 						//do update here to make sure that show/hide and setLayerProperty is done before update.
@@ -1344,7 +1342,7 @@ function loadSymbol(mc:MovieClip):Void{
 					mcsymbol.attachSymbol(mcsymbol["linkage"],1);
 				
 			}
-			thisObject._refreshItems(mcsymbol._parent);
+			thisObject.refresh();
 			mcsymbol.init();
 			
 		};
