@@ -55,7 +55,7 @@ class coremodel.service.tiling.factory.ArcGisRestTileFactory extends AbstractTil
 		tile.setBbox(tileBbox);			
 		
 		//create url
-		var url=serviceUrl+zoomLevel+"/"+yIndex+"/"+xIndex;	
+		var url=serviceUrl+zoomLevel+"/"+yIndex+"/"+xIndex+this.getTileExtension();	
 		if (this.getExtraParams()!=null){
 			url+=url.indexOf("?")>=0 ? "&" : "?";		
 			for (var paramName in extraUrlParams){

@@ -409,8 +409,12 @@ class gui.layers.TilingLayer extends AbstractLayer{
             this.tileHeight = Number(value);
         } else if (lowerName==TILE_WIDTH_ATTRNAME){         
             this.tileWidth = Number(value); 
-        } else if (lowerName==TILE_EXTENSION_ATTRNAME){ 
-            this.tileExtension = ("." + value);     
+        } else if (lowerName == TILE_EXTENSION_ATTRNAME) {
+			if (value.indexOf(".")!=0 && value.indexOf("?")!=0){
+				this.tileExtension = ("." + value);     
+			}else {
+				this.tileExtension = (value);
+			}
         } else if(lowerName == SHOWMAPTIPS_ATTRNAME) {
             this.canmaptip = true;
             if (value.toLowerCase() == "true") {

@@ -55,7 +55,7 @@ class coremodel.service.tiling.factory.OSMTileFactory extends AbstractTileFactor
 		tile.setBbox(tileBbox);			
 		
 		//create url
-		var url=serviceUrl+zoomLevel+"/"+xIndex+"/"+yIndex + this.getTileExtension();;	
+		var url=serviceUrl+zoomLevel+"/"+xIndex+"/"+yIndex + this.getTileExtension();	
 		if (this.getExtraParams()!=null){
 			url+=url.indexOf("?")>=0 ? "&" : "?";		
 			for (var paramName in extraUrlParams){
