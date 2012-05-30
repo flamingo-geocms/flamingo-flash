@@ -1554,7 +1554,7 @@ class gui.Map extends AbstractPositionable implements PersistableComponent{
 	*/
 	public function update(delay:Number, forceupdate:Boolean):Void {
 		var thisObj:Map = this;
-		if (this.holdonupdate&& this.updating) {
+		if (this.holdonupdate && this.updating) {
 			return;
 		}
 		clearInterval(this.updateid);

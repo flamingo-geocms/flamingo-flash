@@ -65,7 +65,7 @@ import display.spriteloader.SpriteMapFactory;
 import core.loading.LoadComponentQueue;
 
 class Flamingo {
-	private var version:String = "4.0_r2744";
+	private var version:String = "4.0_r2752";
 	//reference to main movie from which this class is loaded
 	//at the main movie the components are loaded at 'moviedepth'--  ;moviedepth starts by 10000
 	//at the main movie a cursor movie is loaded at depth 50005
@@ -334,6 +334,12 @@ class Flamingo {
 			this.raiseEvent(this, "onResize", mFlamingo);
 			//this.components.flamingo.broadcastMessage("onResize");
 		}
+	}
+	public function getWidth():Number {
+		return Stage.width;
+	}
+	public function getHeight():Number {
+		return Stage.height;
 	}
 	/**
 	* Checks if a configuration file is being loaded.
