@@ -27,7 +27,7 @@
 		<cmc:BitmapClone name="identify resultaten" width="40%" height="30%" right="right" listento="identify" refreshrate="2500"/>
 		...
 	</cmc:PrintTemplate>
-* @attr refreshrate	((default value: 7000) Time in milliseconds at which rate the visual copy be refreshed.
+* @attr refreshrate ((default value: 7000) Time in milliseconds at which rate the visual copy be refreshed.
 */
 
 

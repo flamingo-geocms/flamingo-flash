@@ -8,7 +8,7 @@
 * A component that shows a text in a certain layout, within a print template.
 * A user can change the text by clicking on it. 
 * The text "[scale]" is substituted for the current scale of the corresponding map.
-* @file flamingo/cmc/classes/flamingo/gui/PrintLabel.as  (sourcefile)
+* @file flamingo/cmc/classes/gui/PrintLabel.as  (sourcefile)
 * @file flamingo/cmc/PrintLabel.fla (sourcefile)
 * @file flamingo/cmc/PrintLabel.swf (compiled component, needed for publication on internet)
 */
@@ -26,12 +26,12 @@
 			<cmc:PrintLabel name="titel" top="20"  left="50%" listento="printMap0"
 			text="Grondwatergebieden (schaal: [scale])" fontfamily="arial" fontsize="60" alignment="center"/>
 	</cmc:PrintTemplate>
-* @attr text	(default value: "") Text to be displayed.
-* @attr fontfamily	("serif-embed", "sans-serif-embed", "monospace-embed", or any system font, default value: Flamingo's general style setting) 
+* @attr text (default value: "") Text to be displayed.
+* @attr fontfamily ("serif-embed", "sans-serif-embed", "monospace-embed", or any system font, default value: Flamingo's general style setting) 
 * Name of the font in which the text be displayed. If a system font is used instead of one of the three embedded  fonts, 
 * parts of the print label may not be visible on the print, despite the fact that they are visible in the preview.
-* @attr fontsize	(default value: Flamingo's general style setting) Size of the font in which the text be displayed.
-* @attr alignment	("left", "center", "right", default value: "left") Alignment of the text relative to the position of the print label component.
+* @attr fontsize (default value: Flamingo's general style setting) Size of the font in which the text be displayed.
+* @attr alignment ("left", "center", "right", default value: "left") Alignment of the text relative to the position of the print label component.
 */
 
 import gui.*;

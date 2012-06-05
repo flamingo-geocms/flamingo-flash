@@ -7,7 +7,7 @@
 /** @component DownloadSelector
 * This component is shown in the Window component of Flamingo and offers an user 
 * interface for configuring and sending an url to download a DDE layer to the client.  
-* @file flamingo/cmc/classes/flamingo/gui/dde/DownloadSelector.as  (sourcefile)
+* @file flamingo/cmc/classes/gui/dde/DownloadSelector.as  (sourcefile)
 * @file flamingo/cmc/DownloadSelector.fla (sourcefile)
 * @file flamingo/cmc/DownloadSelector.swf (compiled component, needed for publication on internet)
 * @file flamingo/cmc/DownloadSelector.xml (configurationfile, needed for publication on internet)
@@ -77,8 +77,8 @@
 * This tag defines a dde download format.
 * @hierarchy childnode of <cmc:DownloadSelector> 
 * @example
-	<fmc:outputFormat label="gif" data="2gif.fme"/>
-	<fmc:outputFormat label="Shapefile" data="2shp.fme"/>
+	<cmc:outputFormat label="gif" data="2gif.fme"/>
+	<cmc:outputFormat label="Shapefile" data="2shp.fme"/>
 * @attr label a name shown to the user
 * @attr data value used in the url 	
 */
