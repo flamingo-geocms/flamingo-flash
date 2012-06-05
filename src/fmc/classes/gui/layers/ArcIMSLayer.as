@@ -22,7 +22,7 @@ import core.AbstractPositionable;
 import tools.Logger;
 import gui.Map;
 import gui.layers.AbstractLayer;
-/** @component LayerArcIMS
+/** @component fmc:LayerArcIMS
 * ESRI arcims layer.
 * @version 2.0.4
 * @file ArcIMSConnector.as (sourcefile)

@@ -20,7 +20,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 import gui.button.AbstractButton;
 import display.spriteloader.SpriteSettings;
 import tools.Logger;
-/** @component ButtonFull
+/** @component fmc:ButtonFull
 * A button to zoom the map to the intial or full extent.
 * @file flamingo/fmc/classes/gui/button/ButtonFull.as (sourcefile)
 * @file flamingo/fmc/classes/gui/button/AbstractButton.as (extends)

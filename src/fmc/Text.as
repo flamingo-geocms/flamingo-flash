@@ -17,7 +17,7 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 -----------------------------------------------------------------------------*/
-/** @component Text
+/** @component fmc:Text
 * Text component. This component uses a standard Flash TextField with html support. 
 * When showing large amounts of text or when scrollbars are necesarry, use TextArea instead.
 * @file Text.fla (sourcefile)

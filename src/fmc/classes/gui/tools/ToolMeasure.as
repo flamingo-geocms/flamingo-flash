@@ -26,7 +26,7 @@ import gui.tools.ToolGroup;
 import tools.Logger;
 import display.spriteloader.SpriteSettings;
 
-/** @component ToolMeasure
+/** @component fmc:ToolMeasure
 * Tool for measuring a single distance on a map.
 * @file flamingo/classes/gui/tools/ToolMeasure.as (sourcefile)
 * @file flamingo/classes/gui/tools/AbstractTool.as

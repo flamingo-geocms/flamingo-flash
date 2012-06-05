@@ -6,7 +6,7 @@
  -----------------------------------------------------------------------------*/
 
 
-/** @component BaseButton
+/** @component fmc:BaseButton
 * A base class for a button with default behaviour
 * @file flamingo/fmc/classes/coregui/BaseButton.as  (sourcefile)
 * @file flamingo/fmc/CommitButton.fla  (sourcefile)

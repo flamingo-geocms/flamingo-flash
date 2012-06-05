@@ -22,7 +22,7 @@ import core.AbstractPositionable;
 import gui.tools.AbstractTool;
 import tools.Logger;
 
-/** @component Toolgroup
+/** @component fmc:Toolgroup
 * Container component for tools.
 * @file flamingo/classes/gui/tools/ToolGroup.as (sourcefile)
 * @file flamingo/classes/core/AbstractPositionable.as

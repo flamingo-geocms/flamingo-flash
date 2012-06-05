@@ -6,7 +6,7 @@
 * IDgis bv
  -----------------------------------------------------------------------------*/
 
-/** @component Cursors
+/** @component fmc:Cursors
 * The Cursors component is a container for map cursors.
 * This component is used when toolcomponents (with a cursor) are in a different flamingo instance as the map component. 
 * @file Cursors.as  (sourcefile)

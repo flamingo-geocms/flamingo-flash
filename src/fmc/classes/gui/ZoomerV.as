@@ -30,7 +30,7 @@ import display.spriteloader.SpriteMap;
 import core.AbstractPositionable;
 import gui.Map;
 
-/** @component ZoomerV
+/** @component fmc:ZoomerV
  * A vertical zoombar.
  * @file flamingo/classes/gui/ZoomerV.as 
  * @file flamingo/classes/gui/button/SliderButton.as

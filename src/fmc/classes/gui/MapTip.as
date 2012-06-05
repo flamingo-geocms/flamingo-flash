@@ -19,7 +19,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 -----------------------------------------------------------------------------*/
 import core.AbstractPositionable;
 import tools.Logger;
-/** @component Maptip
+/** @component fmc:Maptip
 * This component shows the result of a maptip request as a tooltip. 
 * The content of the maptips have to be configured at the layers. See documentation of LayerArcIMS, LayerOGWMS, etc.
 * Beware: a map will only display maptips when its 'maptipdelay' attribute is set.

@@ -17,7 +17,7 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 -----------------------------------------------------------------------------*/
-/** @component MonitorMap
+/** @component fmc:MonitorMap
 * This component will monitor the update progress of a map.
 * This component is very suitable for maps with more than one layer.
 * If a map has just one layer, use MonitorLayer instead.

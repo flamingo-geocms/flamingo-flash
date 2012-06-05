@@ -23,7 +23,7 @@ import tools.Logger;
 import gui.Map;
 import gui.layers.AbstractLayer;
 
-/** @component LayerOGWMS
+/** @component fmc:LayerOGWMS
 * Open Gis WMS layer. (Tested with Demis, Geoserver, Degree, Esri and Mapserver)
 * @file OGWMSConnector.as (sourcefile)
 * @file flamingo/fmc/classes/gui/layers/OGWMSLayer.as (sourcefile)

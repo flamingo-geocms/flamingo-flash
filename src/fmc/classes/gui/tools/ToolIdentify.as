@@ -22,7 +22,7 @@ import display.spriteloader.SpriteSettings;
 import gui.tools.AbstractTool;
 import gui.tools.ToolGroup;
 import tools.Logger;
-/** @component ToolIdentify
+/** @component fmc:ToolIdentify
 * Tool for identifying maps.
 * @file flamingo/classes/gui/tools/ToolIdentify.as (sourcefile)
 * @file flamingo/classes/gui/tools/AbstractTool.as

@@ -20,7 +20,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 import core.AbstractPositionable;
 import display.spriteloader.SpriteSettings;
 import tools.Logger;
-/** @component Scalebar
+/** @component fmc:Scalebar
 * Scalebar.
 * @file flamingo/classes/gui/Scalebar.as (sourcefile)
 * @file flamingo/classes/core/AbstractPositionable.as

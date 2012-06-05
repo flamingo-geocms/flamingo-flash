@@ -7,7 +7,7 @@
 
 
 
-/** @component EditBar
+/** @component fmc:EditBar
 * A container that holds the commit button. 
 * Flamingo has two buttons used for editing: the remove feature button, which removes the active feature from the feature model, 
 * and the commit button, which commits the changes made within the feature model to the server. Please refer to the GIS component.

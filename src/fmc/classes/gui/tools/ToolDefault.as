@@ -23,7 +23,7 @@ import gui.tools.AbstractTool;
 import gui.tools.ToolGroup;
 import tools.Logger;
 import display.spriteloader.SpriteSettings;
-/** @component ToolDefault
+/** @component fmc:ToolDefault
 * Tool for panning a map.
 * @file flamingo/classes/gui/tools/ToolDefault.as (sourcefile)
 * @file flamingo/classes/gui/tools/AbstractTool.as

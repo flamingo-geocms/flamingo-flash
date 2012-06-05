@@ -23,7 +23,7 @@ import mx.data.types.Int;
 import tools.Logger;
 import gui.Map;
 import gui.layers.AbstractLayer;
-/** @component LayerArcServer
+/** @component fmc:LayerArcServer
 * ESRI ArcGIS server layer.
 * @version 3.0
 * @file ArcServerConnector.as (sourcefile)

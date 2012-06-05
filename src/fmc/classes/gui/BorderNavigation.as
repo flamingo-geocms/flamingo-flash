@@ -21,7 +21,7 @@ import core.AbstractPositionable;
 import gui.button.MoveExtentButton;
 import tools.Logger;
 import display.spriteloader.SpriteSettings;
-/** @component BorderNavigation
+/** @component fmc:BorderNavigation
 * Navigation buttons at the border of a map.
 * @file flamingo/classes/gui/BorderNavigation.as (sourcefile)
 * @file flamingo/classes/core/AbstractPositionable.as

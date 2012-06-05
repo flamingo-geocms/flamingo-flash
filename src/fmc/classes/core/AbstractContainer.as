@@ -28,7 +28,7 @@ class core.AbstractContainer extends AbstractComponent {
     private var contentPane:MovieClip = null;
     private var border:MovieClip = null;
     
-    /** @component AbstractContainer
+    /** @component fmc:AbstractContainer
     * Abstract superclass for all containers.
     * @file AbstractContainer.as (sourcefile)
     */

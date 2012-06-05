@@ -4,7 +4,7 @@
 * B3partners bv
  -----------------------------------------------------------------------------*/
 
-/** @component JsButton
+/** @component fmc:JsButton
 * A component for a button with javascript API, and xml configurable behaviour and styling.
 * @file flamingo/fmc/classes/coregui/js/JsButton.as  (sourcefile)
 * @file flamingo/fmc/JsButton.fla  (sourcefile)

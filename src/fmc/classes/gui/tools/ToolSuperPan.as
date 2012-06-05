@@ -21,7 +21,7 @@ import gui.tools.AbstractTool;
 import gui.tools.ToolGroup;  
 import display.spriteloader.SpriteSettings;
 import tools.Logger;
-/** @component ToolSuperPan
+/** @component fmc:ToolSuperPan
 * Tool for zooming and panning a map like a 'google' way. The user can zoom, pan and throw the map.
 * Be very aware that this tool has a huge impact on ArcIMS and OG-WMS mapservices.
 * @file flamingo/classes/gui/tools/ToolSuperPan.as (sourcefile)

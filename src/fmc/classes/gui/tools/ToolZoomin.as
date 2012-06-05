@@ -23,7 +23,7 @@ import gui.tools.ToolGroup;
 import display.spriteloader.SpriteSettings;
 import tools.Logger;
 
-/** @component ToolZoomin
+/** @component fmc:ToolZoomin
 * Tool for zooming the a map by dragging a rectangle or just clicking the map
 * @file flamingo/classes/gui/tools/ToolZoomin.as (sourcefile)
 * @file flamingo/classes/gui/tools/AbstractTool.as

@@ -25,7 +25,7 @@ import core.PersistableComponent;
 import core.AbstractPositionable;
 import tools.XMLTools;
 
-/** @component Map
+/** @component fmc:Map
 * The Map is a container for layers.
 * Supported arguments: extent (comma seperated list of minx,miny,maxx,maxy)  eg. flamingo.swf?config=mymap.xml&amp;map.extent=100,123,124,156
 * @file flamingo/classes/gui/Map.as  (sourcefile)

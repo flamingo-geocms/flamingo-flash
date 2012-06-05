@@ -20,7 +20,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 import core.AbstractPositionable;
 import TextField.StyleSheet;
 import tools.Logger;
-/** @component Coordinates
+/** @component fmc:Coordinates
 * Shows coordinates when the mouse is moved over the map.
 * @file flamingo/classes/gui/Coordinates.as (sourcefile)
 * @file flamingo/classes/core/AbstractPositionable.as

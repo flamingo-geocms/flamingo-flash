@@ -23,7 +23,7 @@ import display.spriteloader.SpriteSettings;
 import display.spriteloader.SpriteMap;
 import TextField.StyleSheet;
 import tools.Logger;
-/** @component SliderHor
+/** @component fmc:SliderHor
 * A horizontal slider.
 * @file flamingo/classes/gui/SliderHor.as (sourcefile)
 * @file flamingo/classes/gui/button/IncreaseButton.as 

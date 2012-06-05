@@ -6,7 +6,7 @@
  -----------------------------------------------------------------------------*/
 
 
-/** @component EditLegend
+/** @component fmc:EditLegend
 * A component that lists the layers in the geometry model. And shows whether its feature geometries are visible in the edit map. 
 * A user can control this visibility using a check box. Every layer in the edit legend may have one or more buttons to bring 
 * the edit map in "drawing mode" for the user to draw a geometry and create a new feature. Please refer to the GIS component.

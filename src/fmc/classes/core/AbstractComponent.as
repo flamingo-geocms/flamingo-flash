@@ -56,7 +56,7 @@ class core.AbstractComponent extends MovieClip {
 	
 	private var _id:String;
 		
-    /** @component AbstractComponent
+    /** @component fmc:AbstractComponent
     * Abstract superclass for all components.
     * @file AbstractComponent.as (sourcefile)
     * @file InitAdapter.as (sourcefile)

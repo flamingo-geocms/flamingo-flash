@@ -4,7 +4,7 @@
 * IDgis bv
 * Changes by author: Maurits Kelder, B3partners bv
  -----------------------------------------------------------------------------*/
-/** @component GIS 
+/** @component fmc:GIS 
 * A component without a graphical user interface, that serves as a model for the editing components, such as the edit map and the edit legend. 
 * The feature model keeps the layer and feature data for all editing components that listen to this model.
 * A feature model is organized hierarchically. It consists of zero of more layers, which in turn consist of zero of more features per layer. 

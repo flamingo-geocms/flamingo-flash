@@ -4,7 +4,7 @@
 * IDgis bv
  -----------------------------------------------------------------------------*/
 
-/** @component Veil
+/** @component fmc:Veil
 * A component intended to cover off certain parts or the whole of the Flamingo user interface. 
 * A veil, when made visible, prevents all mouse events from going to the underlying components.
 * @file flamingo/fmc/classes/coregui/Veil.as  (sourcefile)

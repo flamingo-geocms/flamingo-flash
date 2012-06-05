@@ -17,7 +17,7 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 -----------------------------------------------------------------------------*/
-/** @component LayerOverview
+/** @component fmc:LayerOverview
 * This layer drawes an overview (rectangle) on a map. When the overview becomes too small, a crosshair will be displayed.
 * @file LayerOverview.fla (sourcefile)
 * @file LayerOverview.swf (compiled layer, needed for publication on internet)

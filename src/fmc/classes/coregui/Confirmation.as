@@ -4,7 +4,7 @@
 * IDgis bv
  -----------------------------------------------------------------------------*/
 
-/** @component Confirmation
+/** @component fmc:Confirmation
 * A component that pops-up to ask the user for confirmation. It gives the user two options: confirm or deny.
 * @file flamingo/fmc/classes/coregui/Confirmation.as  (sourcefile)
 * @file flamingo/fmc/Confirmation.fla (sourcefile)

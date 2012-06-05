@@ -5,7 +5,7 @@
 * Changes by author: Maurits Kelder, B3partners bv
  -----------------------------------------------------------------------------*/
 
-/** @component EditMap
+/** @component fmc:EditMap
 * A component that draws feature geometries within a certain zoom extent and at a certain scale. 
 * The edit map is also the component where the user draws a geometry when a new feature is created. 
 * Features and their geometries exist within the feature model. Please refer to the GIS component.

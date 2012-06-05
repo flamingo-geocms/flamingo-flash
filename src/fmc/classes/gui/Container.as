@@ -20,7 +20,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 import core.AbstractPositionable;
 import tools.Logger;
 
-/** @component Container
+/** @component fmc:Container
 * Container component for other components. Also suitable for drawing backgrounds and borders.
 * @file flamingo/classes/gui/Container.as (sourcefile)
 * @file flamingo/classes/core/AbstractPositionable.as 
