@@ -29,6 +29,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 * @configstyle .text Fontstyle of load and wait strings.
 */
 import tools.Logger;
+/**
+ * 
+ */
+//---------------------------------
 var log=new Logger("MonitorMap",_global.flamingo.getLogLevel(),_global.flamingo.getScreenLogLevel());;
 var version:String = "2.0";
 

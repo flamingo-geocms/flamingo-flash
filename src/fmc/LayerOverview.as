@@ -25,6 +25,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 * @configcursor pan 
 * @configcursor grab
 */
+/**
+ * 
+ */
+//----------------------------------------
 var version:String = "2.0";
 
 // this layer is rather complicated stuff because this layer can be updated by two different sources

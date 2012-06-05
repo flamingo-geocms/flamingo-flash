@@ -24,6 +24,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 * @file Text.swf (compiled component, needed for publication on internet)
 * @file Text.xml (configurationfile, needed for publication on internet)
 */
+/**
+ * 
+ */
+//------------------------
 var version:String = "2.0";
 //------------------------------------------
 

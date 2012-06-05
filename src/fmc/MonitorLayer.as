@@ -26,6 +26,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 * @configstring waiting String shown when a layer is waiting for response from the server. The string "[layer]" is replaced by the layer's name. The string "[percentage]" is replaced by actual percentage number.
 * @configstyle .text Fontstyle of load and wait strings.
 */
+/**
+ * 
+ */
+//----------------------------------
 var version:String = "2.0";
 //-------------------------------
 var defaultXML:String = '<?xml version="1.0" encoding="UTF-8"?>' +

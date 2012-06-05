@@ -23,6 +23,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 * @file LayerIdentifyIcon.swf (compiled layer, needed for publication on internet)
 * @file LayerIdentifyIcon.xml (configurationfile for layer, needed for publication on internet)
 */
+/**
+ * 
+ */
+//----------------------------
 var version:String = "2.0";
 
 //---------------------------------
@@ -75,6 +79,10 @@ init();
 * @hierarchy childnode of <fmc:Map> 
 * @attr skin  (defaultvalue "") Skin. Avaliable skins: "", "heartbeat", "f1"
 */
+
+/**
+ * init component
+ */
 function init():Void {
 	if (flamingo == undefined) {
 		var t:TextField = this.createTextField("readme", 0, 0, 0, 550, 400);
