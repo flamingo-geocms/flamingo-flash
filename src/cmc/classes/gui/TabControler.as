@@ -7,9 +7,9 @@
  /** @component TabControler
 * A component that can hold a number of Tab pages. This component replaces the old TabControl component
 * This component had a limitation of maximal 2 Tabs. 
-* @file flamingo/fmc/classes/flamingo/gui/TabControler.as  (sourcefile)
-* @file flamingo/fmc/TabControler.fla (sourcefile)
-* @file flamingo/fmc/TabControler.swf (compiled component, needed for publication on internet)
+* @file flamingo/cmc/classes/flamingo/gui/TabControler.as  (sourcefile)
+* @file flamingo/cmc/TabControler.fla (sourcefile)
+* @file flamingo/cmc/TabControler.swf (compiled component, needed for publication on internet)
 */
 
 /** @tag <fmc:TabControler> 

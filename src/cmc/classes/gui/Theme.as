@@ -12,9 +12,9 @@
 * Other preset Theme's are the themes with the name="none" and name="all". Theme "none" switches off all
 * the layers except the ones defined by the persistentlayerids attribute of the ThemeSelector. Theme "all"
 * switches on all layers of the map.
-* @file flamingo/tpc/classes/flamingo/gui/Theme.as  (sourcefile)
-* @file flamingo/fmc/Theme.fla (sourcefile)
-* @file flamingo/fmc/Theme.swf (compiled component, needed for publication on internet)
+* @file flamingo/cmc/classes/flamingo/gui/Theme.as  (sourcefile)
+* @file flamingo/cmc/Theme.fla (sourcefile)
+* @file flamingo/cmc/Theme.swf (compiled component, needed for publication on internet)
 * @configstring label Label text for the choices in the ThemeSelector combobox.
 */
 

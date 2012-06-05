@@ -7,9 +7,9 @@
 * A component that shows a visual copy of another component, but without the functionality of that component. 
 * A bitmap clone is especially useful for showing components on a print template which are actually too complex or in need of heavy configuration, 
 * such as  identify results or legends.
-* @file flamingo/fmc/classes/flamingo/gui/BitmapClone.as  (sourcefile)
-* @file flamingo/fmc/BitmapClone.fla (sourcefile)
-* @file flamingo/fmc/BitmapClone.swf (compiled component, needed for publication on internet)
+* @file flamingo/cmc/classes/gui/BitmapClone.as  (sourcefile)
+* @file flamingo/cmc/BitmapClone.fla (sourcefile)
+* @file flamingo/cmc/BitmapClone.swf (compiled component, needed for publication on internet)
 */
 
 

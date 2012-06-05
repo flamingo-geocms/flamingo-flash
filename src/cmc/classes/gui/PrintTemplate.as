@@ -11,9 +11,9 @@
 * Zoom and pan events in Flamingo's "main map" reflect on the first map in the template. 
 * Identify events also reflect on the first map in the template, provided that the map is configured to handle identifies, 
 * for example with an identify icon or with an identify results component that listens to the template's map.
-* @file flamingo/fmc/classes/flamingo/gui/PrintTemplate.as  (sourcefile)
-* @file flamingo/fmc/PrintTemplate.fla (sourcefile)
-* @file flamingo/fmc/PrintTemplate.swf (compiled component, needed for publication on internet)
+* @file flamingo/cmc/classes/flamingo/gui/PrintTemplate.as  (sourcefile)
+* @file flamingo/cmc/PrintTemplate.fla (sourcefile)
+* @file flamingo/cmc/PrintTemplate.swf (compiled component, needed for publication on internet)
 */
 
 

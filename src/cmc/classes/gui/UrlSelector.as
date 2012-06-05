@@ -10,9 +10,9 @@
 * is filled a second comboBox will be drawn above the URLSelector combobox. By selecting a group the choices 
 * in de URLSelector combobox will be limited. 
 * When the current extent should be passed the URLSelector should listen to the map component
-* @file flamingo/fmc/classes/flamingo/gui/URLSelector.as  (sourcefile)
-* @file flamingo/fmc/URLSelector.fla (sourcefile)
-* @file flamingo/fmc/URLSelector.swf (compiled component, needed for publication on internet)
+* @file flamingo/cmc/classes/flamingo/gui/URLSelector.as  (sourcefile)
+* @file flamingo/cmc/URLSelector.fla (sourcefile)
+* @file flamingo/cmc/URLSelector.swf (compiled component, needed for publication on internet)
 * @configstring urlsellabel Label text for the "first choice" in the URLSelectorcombobox.
 * @configstring groupsellabel Label text for the "first choice" in the group combobox.
 */

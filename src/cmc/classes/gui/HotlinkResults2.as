@@ -6,8 +6,8 @@
 
 /** @component HotlinkResults2
 * A component that opens a web page when a getFeatureInfo is done.
-* @file flamingo/fmc/classes/gui/HotlinkResults2.as (sourcefile)
-* @file flamingo/fmc/classes/gui/Hotlink.as (sourcefile)
+* @file flamingo/cmc/classes/gui/HotlinkResults2.as (sourcefile)
+* @file flamingo/cmc/classes/gui/Hotlink.as (sourcefile)
 */
 
 /** @tag <fmc:HotlinkResults2>

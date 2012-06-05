@@ -21,9 +21,9 @@
 * Every single pixel that will be sent to the printer is also as one pixel on screen then.
 *
 *
-* @file flamingo/tpc/classes/flamingo/gui/Print.as  (sourcefile)
-* @file flamingo/fmc/Print.fla (sourcefile)
-* @file flamingo/fmc/Print.swf (compiled component, needed for publication on internet)
+* @file flamingo/cmc/classes/flamingo/gui/Print.as  (sourcefile)
+* @file flamingo/cmc/Print.fla (sourcefile)
+* @file flamingo/cmc/Print.swf (compiled component, needed for publication on internet)
 * @configstring previewSize Label text for the check box that makes the current template preview show original size.
 * @configstring toPrinter Text on the button that sends the current template to the printer.
 * @configstring choseTemplate Text shown in the template comboBox.

@@ -8,9 +8,9 @@
 * A component that shows a text in a certain layout, within a print template.
 * A user can change the text by clicking on it. 
 * The text "[scale]" is substituted for the current scale of the corresponding map.
-* @file flamingo/tpc/classes/flamingo/gui/PrintLabel.as  (sourcefile)
-* @file flamingo/fmc/PrintLabel.fla (sourcefile)
-* @file flamingo/fmc/PrintLabel.swf (compiled component, needed for publication on internet)
+* @file flamingo/cmc/classes/flamingo/gui/PrintLabel.as  (sourcefile)
+* @file flamingo/cmc/PrintLabel.fla (sourcefile)
+* @file flamingo/cmc/PrintLabel.swf (compiled component, needed for publication on internet)
 */
 
 

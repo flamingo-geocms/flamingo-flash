@@ -6,9 +6,9 @@
 /** @component URL
 * An URL defines a url that can be opened from within flamingo. 
 * A URL can be set by selecting an url from the URLSelector Component. 
-* @file flamingo/tpc/classes/flamingo/gui/URL.as  (sourcefile)
-* @file flamingo/fmc/URL.fla (sourcefile)
-* @file flamingo/fmc/URL.swf (compiled component, needed for publication on internet)
+* @file flamingo/cmc/classes/flamingo/gui/URL.as  (sourcefile)
+* @file flamingo/cmc/URL.fla (sourcefile)
+* @file flamingo/cmc/URL.swf (compiled component, needed for publication on internet)
 * @configstring label Label text for the choices in the URLSelector combobox.
 * @configstring grouplabel Label text for the choices in the groupcombobox.
 */

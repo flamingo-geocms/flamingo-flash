@@ -9,9 +9,9 @@
 * An Extent defines an extent of a map, this can be f.i. the full extent or the current extent.  
 * The ExtentSelector can be used in combination with a locationFinder component.
 * The ExtentSelector should listento a mapComponent.
-* @file flamingo/tpc/classes/flamingo/gui/ExtentSelector.as  (sourcefile)
-* @file flamingo/fmc/ExtentSelector.fla (sourcefile)
-* @file flamingo/fmc/ExtentSelector.swf (compiled component, needed for publication on internet)
+* @file flamingo/cmc/classes/gui/ExtentSelector.as  (sourcefile)
+* @file flamingo/cmc/ExtentSelector.fla (sourcefile)
+* @file flamingo/cmc/ExtentSelector.swf (compiled component, needed for publication on internet)
 */
 
 /** @tag <fmc:ExtentSelector> 

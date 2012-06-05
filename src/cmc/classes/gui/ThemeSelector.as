@@ -10,9 +10,9 @@
 * All other layers will be switched off except the ones listed in the persitentlayerids attribute. 
 * A theme can also be set in the url (http://www.bla.nl?thema=all).  
 * The ThemeSelector should listento a mapComponent.
-* @file flamingo/fmc/classes/flamingo/gui/ThemeSelector.as  (sourcefile)
-* @file flamingo/fmc/ThemeSelector.fla (sourcefile)
-* @file flamingo/fmc/ThemeSelector.swf (compiled component, needed for publication on internet)
+* @file flamingo/cmc/classes/flamingo/gui/ThemeSelector.as  (sourcefile)
+* @file flamingo/cmc/ThemeSelector.fla (sourcefile)
+* @file flamingo/cmc/ThemeSelector.swf (compiled component, needed for publication on internet)
 * @configstring label Label text for the combobox.
 */
 

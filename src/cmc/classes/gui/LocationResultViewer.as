@@ -9,10 +9,10 @@
 * functionality (highlight locations in a highlightlayer component). By default the LocationFinder results are 
 * shown just under the comboboxes widthin the LocationFinder Component, with this LocationResultViewer 
 * the Location results can be shown anywhere in the flamingo viewer f.i. in a window. 
-* @file flamingo/fmc/classes/flamingo/gui/LocationResultViewer.as  (sourcefile)
-* @file flamingo/fmc/LocationResultViewer.swf (compiled component, needed for publication on internet)
-* @file flamingo/fmc/classes/flamingo/gui/LocationResults.as
-* @file flamingo/fmc/classes/flamingo/gui/LocationResult.as
+* @file flamingo/cmc/classes/flamingo/gui/LocationResultViewer.as  (sourcefile)
+* @file flamingo/cmc/LocationResultViewer.swf (compiled component, needed for publication on internet)
+* @file flamingo/cmc/classes/gui/LocationResults.as
+* @file flamingo/cmc/classes/gui/LocationResult.as
 * The last two classes are only used when rollover/highlight functionality is configured (in one of
 * the Locations of the LocationFinder component). For a more thourough explanation on how to configure
 * highlight functionality see the LocationFinder Component.

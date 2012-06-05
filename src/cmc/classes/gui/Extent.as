@@ -7,9 +7,9 @@
 * An Extent defines an extent of a map, this can be f.i. the full extent or the current extent.
 * An Extent can be set by selecting an extent from the ExtenSelector Component. 
 * The ExtentSelector can be used in combination with a locationFinder component.
-* @file flamingo/tpc/classes/flamingo/gui/Extent.as  (sourcefile)
-* @file flamingo/fmc/Extent.fla (sourcefile)
-* @file flamingo/fmc/Extent.swf (compiled component, needed for publication on internet)
+* @file flamingo/cmc/classes/flamingo/gui/Extent.as  (sourcefile)
+* @file flamingo/cmc/Extent.fla (sourcefile)
+* @file flamingo/cmc/Extent.swf (compiled component, needed for publication on internet)
 * @configstring label Label text for the label in the ExtentSelector radiobutton.
 */
 

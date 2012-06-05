@@ -8,9 +8,9 @@
 * A component that tells other Flamingo components which authorization roles the current authenticated user has. 
 * One component that uses the authentication component is the feature model. It does so to decide which layers 
 * should be kept away for the current user. Please refer to the GIS component.
-* @file flamingo/fmc/classes/flamingo/gui/Authentication.as  (sourcefile)
-* @file flamingo/fmc/Authentication.fla (sourcefile)
-* @file flamingo/fmc/Authentication.swf (compiled component, needed for publication on internet)
+* @file flamingo/cmc/classes/gui/Authentication.as  (sourcefile)
+* @file flamingo/cmc/Authentication.fla (sourcefile)
+* @file flamingo/cmc/Authentication.swf (compiled component, needed for publication on internet)
 */
 
 /** @tag <fmc:Authentication>  

@@ -6,11 +6,11 @@
 
 /** @component ComponentVisibleButton
 * A button intended to toggle the visibility of a certain component.
-* @file flamingo/fmc/classes/flamingo/coregui/ComponentVisibleButton.as  (sourcefile)
-* @file flamingo/fmc/PrintButton.fla  (sourcefile)
-* @file flamingo/fmc/PrintButton.swf (compiled component, needed for publication on internet)
-* @file flamingo/fmc/RemoveFeatureButton.fla  (sourcefile)
-* @file flamingo/fmc/RemoveFeatureButton.swf (compiled component, needed for publication on internet)
+* @file flamingo/cmc/classes/coregui/ComponentVisibleButton.as  (sourcefile)
+* @file flamingo/cmc/PrintButton.fla  (sourcefile)
+* @file flamingo/cmc/PrintButton.swf (compiled component, needed for publication on internet)
+* @file flamingo/cmc/RemoveFeatureButton.fla  (sourcefile)
+* @file flamingo/cmc/RemoveFeatureButton.swf (compiled component, needed for publication on internet)
 */
 
 /** @tag <fmc:PrintButton>

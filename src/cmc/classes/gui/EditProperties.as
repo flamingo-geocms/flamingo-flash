@@ -10,9 +10,9 @@
 * Edit properties component. A component that shows the properties of the active feature in the feature model, and their values. 
 * As a single line or multi line text inputs, or as drop down lists. The user can change the values for properties that are not immutable.
 * Changing values in the edit properties component means changing them in the feature model at the same time. Please refer to the GIS component.
-* @file flamingo/fmc/classes/flamingo/gui/EditProperties.as  (sourcefile)
-* @file flamingo/fmc/EditProperties.fla (sourcefile)
-* @file flamingo/fmc/EditProperties.swf (compiled component, needed for publication on internet)
+* @file flamingo/cmc/classes/gui/EditProperties.as  (sourcefile)
+* @file flamingo/cmc/EditProperties.fla (sourcefile)
+* @file flamingo/cmc/EditProperties.swf (compiled component, needed for publication on internet)
 */
 
 /** @tag <fmc:EditProperties>

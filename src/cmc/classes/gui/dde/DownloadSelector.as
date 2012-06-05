@@ -7,30 +7,30 @@
 /** @component DownloadSelector
 * This component is shown in the Window component of Flamingo and offers an user 
 * interface for configuring and sending an url to download a DDE layer to the client.  
-* @file flamingo/fmc/classes/flamingo/gui/dde/DownloadSelector.as  (sourcefile)
-* @file flamingo/fmc/DownloadSelector.fla (sourcefile)
-* @file flamingo/fmc/DownloadSelector.swf (compiled component, needed for publication on internet)
-* @file flamingo/fmc/DownloadSelector.xml (configurationfile, needed for publication on internet)
-* @file flamingo/fmc/classes/flamingo/gui/dde/DDEConnector.as (holds the model for the DDE download settings, compiles and sends  
+* @file flamingo/cmc/classes/flamingo/gui/dde/DownloadSelector.as  (sourcefile)
+* @file flamingo/cmc/DownloadSelector.fla (sourcefile)
+* @file flamingo/cmc/DownloadSelector.swf (compiled component, needed for publication on internet)
+* @file flamingo/cmc/DownloadSelector.xml (configurationfile, needed for publication on internet)
+* @file flamingo/cmc/classes/coremodel/service/dde/DDEConnector.as (holds the model for the DDE download settings, compiles and sends  
 * requests to a DDE servlet, dispatches an event to listeners when the request is returned)
-* @file flamingo/fmc/classes/flamingo/gui/dde/DDEConnectorListener.as (listener interface) 
-* @file flamingo/fmc/classes/flamingo/gui/dde/DownLoadLegend.as (Draws an (simplified) legend using the legendItems from the legend component
+* @file flamingo/cmc/classes/coremodel/service/dde/DDEConnectorListener.as (listener interface) 
+* @file flamingo/cmc/classes/gui/dde/DownLoadLegend.as (Draws an (simplified) legend using the legendItems from the legend component
 * matches the DDELayers from the servlet with the legendtems and is an user interface to select ddeLayers 
 * for downloading)
-* @file flamingo/fmc/classes/AbstractComponent.as (super class for components)
-* @file flamingo/fmc/classes/flamingo/geometrymodel/dde/Geometry.as (hierachical classes for the geometry model -> used for digitizing polygons, boxes and circles)
-* @file flamingo/fmc/classes/flamingo/geometrymodel/dde/LinearRing.as
-* @file flamingo/fmc/classes/flamingo/geometrymodel/dde/LineSegment.as
-* @file flamingo/fmc/classes/flamingo/geometrymodel/dde/LineString.as
-* @file flamingo/fmc/classes/flamingo/geometrymodel/dde/Point.as
-* @file flamingo/fmc/classes/flamingo/geometrymodel/dde/Square.as
-* @file flamingo/fmc/classes/flamingo/geometrymodel/dde/Envelope.as
-* @file flamingo/fmc/classes/flamingo/geometrymodel/dde/Circle.as
-* @file flamingo/fmc/classes/flamingo/geometrymodel/dde/GeometryEventDispatcher.as (eventdispatcher of a geometry, dispatches events to all listener when the geometry (model) changes)
-* @file flamingo/fmc/classes/flamingo/geometrymodel/dde/GeometryListener.as (geometry listener interface class)
-* @file flamingo/fmc/classes/flamingo/gui/dde/TraceLayer.as (dummy layer for tracing geometries in the mapviewer)
-* @file flamingo/fmc/classes/flamingo/gui/dde/TraceLinearRing.as (the representation of the traced geometry in the TraceLayer)
-* @file flamingo/fmc/classes/flamingo/gui/dde/DownloadArea.as (data class to store download area information)
+* @file flamingo/fmc/classes/core/AbstractComponent.as (super class for components)
+* @file flamingo/cmc/classes/geometrymodel/dde/Geometry.as (hierachical classes for the geometry model -> used for digitizing polygons, boxes and circles)
+* @file flamingo/cmc/classes/geometrymodel/dde/LinearRing.as
+* @file flamingo/cmc/classes/geometrymodel/dde/LineSegment.as
+* @file flamingo/cmc/classes/geometrymodel/dde/LineString.as
+* @file flamingo/cmc/classes/geometrymodel/dde/Point.as
+* @file flamingo/cmc/classes/geometrymodel/dde/Square.as
+* @file flamingo/cmc/classes/geometrymodel/dde/Envelope.as
+* @file flamingo/cmc/classes/geometrymodel/dde/Circle.as
+* @file flamingo/cmc/classes/geometrymodel/dde/GeometryEventDispatcher.as (eventdispatcher of a geometry, dispatches events to all listener when the geometry (model) changes)
+* @file flamingo/cmc/classes/geometrymodel/dde/GeometryListener.as (geometry listener interface class)
+* @file flamingo/cmc/classes/gui/dde/TraceLayer.as (dummy layer for tracing geometries in the mapviewer)
+* @file flamingo/cmc/classes/gui/dde/TraceLinearRing.as (the representation of the traced geometry in the TraceLayer)
+* @file flamingo/cmc/classes/gui/dde/DownloadAreas.as (data class to store download area information)
 * @configstring layers label above the layer legend
 * @configstring inArea radiobuttonlabel for selecting predefined areas (in a combobox)
 * @configstring inBox radiobuttonlabel for lowerleft and upperright coördinate input (in textinput fields)

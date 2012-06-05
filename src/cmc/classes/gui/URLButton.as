@@ -5,9 +5,9 @@
  -----------------------------------------------------------------------------*/
 /** @component URLButton
 * The URLButton Component is a google like button that opens a link.
-* @file flamingo/tpc/classes/flamingo/gui/URLButton.as  (sourcefile)
-* @file flamingo/fmc/URLButton.fla (sourcefile)
-* @file flamingo/fmc/URLButton.swf (compiled component, needed for publication on internet)
+* @file flamingo/cmc/classes/flamingo/gui/URLButton.as  (sourcefile)
+* @file flamingo/cmc/URLButton.fla (sourcefile)
+* @file flamingo/cmc/URLButton.swf (compiled component, needed for publication on internet)
 * @configstring label Button label.
 * @configstring tooltip Tooltip text for the button.
 */

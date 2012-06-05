@@ -5,9 +5,9 @@
  -----------------------------------------------------------------------------*/
 /** @component Tab
 * A Tab defines a Tab page in the TabControler.
-* @file flamingo/tpc/classes/flamingo/gui/Tab.as  (sourcefile)
-* @file flamingo/fmc/Tab.fla (sourcefile)
-* @file flamingo/fmc/Tab.swf (compiled component, needed for publication on internet)
+* @file flamingo/cmc/classes/flamingo/gui/Tab.as  (sourcefile)
+* @file flamingo/cmc/Tab.fla (sourcefile)
+* @file flamingo/cmc/Tab.swf (compiled component, needed for publication on internet)
 * @configstring buttonlabel Label text used for Tab title.
 */
 
