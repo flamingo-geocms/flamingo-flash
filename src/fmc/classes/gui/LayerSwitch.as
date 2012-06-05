@@ -6,7 +6,7 @@
 /** @component LayerSwitch
 * The LayerSwitch Component is a google like button that switches between layers (f.e. topographic layers vs. areal photographs).
 * The button is only enabled when (one of) the layer(s) in the layers1 resp layers2 list is (zoom)visible.
-* @file flamingo/tpc/classes/flamingo/gui/LayerSwitch.as  (sourcefile)
+* @file flamingo/tpc/classes/gui/LayerSwitch.as  (sourcefile)
 * @file flamingo/fmc/LayerSwitch.fla (sourcefile)
 * @file flamingo/fmc/LayerSwitch.swf (compiled component, needed for publication on internet)
 * @configstring label1 Button label shown when layers1 are visible.

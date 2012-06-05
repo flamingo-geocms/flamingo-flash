@@ -13,7 +13,7 @@
 * and the commit button, which commits the changes made within the feature model to the server. Please refer to the GIS component.
 * The CommitButton is an instance of BaseButton
 * The RemoveFeatureButton is an instance of ComponentVisibleButton. Configure it outside the EditBar tags
-* @file flamingo/fmc/classes/flamingo/gui/EditBar.as  (sourcefile)
+* @file flamingo/fmc/classes/gui/EditBar.as  (sourcefile)
 * @file flamingo/fmc/EditBar.fla (sourcefile)
 * @file flamingo/fmc/EditBar.swf (compiled component, needed for publication on internet)
 */

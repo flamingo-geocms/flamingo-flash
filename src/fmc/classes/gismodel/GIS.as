@@ -10,29 +10,29 @@
 * A feature model is organized hierarchically. It consists of zero of more layers, which in turn consist of zero of more features per layer. 
 * Every level in the hierarchy broadcasts its own events. 
 * For example: the feature model about adding and removing of layers, a layer about changing its visibility, and a feature about a change in its property values.
-* @file flamingo/fmc/classes/flamingo/gismodel/GIS.as  (sourcefile)
+* @file flamingo/fmc/classes/gismodel/GIS.as  (sourcefile)
 * @file flamingo/fmc/GIS.fla (sourcefile)
 * @file flamingo/fmc/GIS.swf (compiled component, needed for publication on internet)
-* @file flamingo/fmc/classes/flamingo/gismodel/Layer.as 
-* @file flamingo/fmc/classes/flamingo/gismodel/Property.as 
-* @file flamingo/fmc/classes/flamingo/gismodel/Feature.as
-* @file flamingo/fmc/classes/flamingo/gismodel/Style.as
-* @file flamingo/fmc/classes/flamingo/gismodel/CreateGeometry.as
-* @file flamingo/fmc/classes/flamingo/geometrymodel/GeometryTools.as
-* @file flamingo/fmc/classes/flamingo/geometrymodel/Geometry.as (hierachical classes for the geometry model -> used for digitizing polygons, boxes and circles)
-* @file flamingo/fmc/classes/flamingo/geometrymodel/GeometryFactory.as 
-* @file flamingo/fmc/classes/flamingo/geometrymodel/GeometryParser.as 
-* @file flamingo/fmc/classes/flamingo/geometrymodel/LinearRing.as
-* @file flamingo/fmc/classes/flamingo/geometrymodel/LineSegment.as
-* @file flamingo/fmc/classes/flamingo/geometrymodel/LineString.as
-* @file flamingo/fmc/classes/flamingo/geometrymodel/LineStringFactory.as
-* @file flamingo/fmc/classes/flamingo/geometrymodel/Point.as
-* @file flamingo/fmc/classes/flamingo/geometrymodel/PointFactory.as
-* @file flamingo/fmc/classes/flamingo/geometrymodel/Polygon.as
-* @file flamingo/fmc/classes/flamingo/geometrymodel/PolygonFactory.as
-* @file flamingo/fmc/classes/flamingo/geometrymodel/Envelope.as
-* @file flamingo/fmc/classes/flamingo/geometrymodel/Circle.as
-* @file flamingo/fmc/classes/flamingo/geometrymodel/CircleFactory.as
+* @file flamingo/fmc/classes/gismodel/Layer.as 
+* @file flamingo/fmc/classes/gismodel/Property.as 
+* @file flamingo/fmc/classes/gismodel/Feature.as
+* @file flamingo/fmc/classes/gismodel/Style.as
+* @file flamingo/fmc/classes/gismodel/CreateGeometry.as
+* @file flamingo/fmc/classes/geometrymodel/GeometryTools.as
+* @file flamingo/fmc/classes/geometrymodel/Geometry.as (hierachical classes for the geometry model -> used for digitizing polygons, boxes and circles)
+* @file flamingo/fmc/classes/geometrymodel/GeometryFactory.as 
+* @file flamingo/fmc/classes/geometrymodel/GeometryParser.as 
+* @file flamingo/fmc/classes/geometrymodel/LinearRing.as
+* @file flamingo/fmc/classes/geometrymodel/LineSegment.as
+* @file flamingo/fmc/classes/geometrymodel/LineString.as
+* @file flamingo/fmc/classes/geometrymodel/LineStringFactory.as
+* @file flamingo/fmc/classes/geometrymodel/Point.as
+* @file flamingo/fmc/classes/geometrymodel/PointFactory.as
+* @file flamingo/fmc/classes/geometrymodel/Polygon.as
+* @file flamingo/fmc/classes/geometrymodel/PolygonFactory.as
+* @file flamingo/fmc/classes/geometrymodel/Envelope.as
+* @file flamingo/fmc/classes/geometrymodel/Circle.as
+* @file flamingo/fmc/classes/geometrymodel/CircleFactory.as
 */
 
 /** @tag <fmc:GIS>  

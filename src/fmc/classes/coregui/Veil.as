@@ -7,7 +7,7 @@
 /** @component Veil
 * A component intended to cover off certain parts or the whole of the Flamingo user interface. 
 * A veil, when made visible, prevents all mouse events from going to the underlying components.
-* @file flamingo/fmc/classes/flamingo/coregui/Veil.as  (sourcefile)
+* @file flamingo/fmc/classes/coregui/Veil.as  (sourcefile)
 * @file flamingo/fmc/Veil.fla (sourcefile)
 * @file flamingo/fmc/Veil.swf (compiled component, needed for publication on internet)
 */

@@ -8,7 +8,7 @@
 
 /** @component BaseButton
 * A base class for a button with default behaviour
-* @file flamingo/fmc/classes/flamingo/coregui/BaseButton.as  (sourcefile)
+* @file flamingo/fmc/classes/coregui/BaseButton.as  (sourcefile)
 * @file flamingo/fmc/CommitButton.fla  (sourcefile)
 * @file flamingo/fmc/CommitButton.swf (compiled component, needed for publication on internet)
 */

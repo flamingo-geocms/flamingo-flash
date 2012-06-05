@@ -9,16 +9,16 @@
 * A component that draws feature geometries within a certain zoom extent and at a certain scale. 
 * The edit map is also the component where the user draws a geometry when a new feature is created. 
 * Features and their geometries exist within the feature model. Please refer to the GIS component.
-* @file flamingo/fmc/classes/flamingo/gui/EditMap.as  (sourcefile)
+* @file flamingo/fmc/classes/gui/EditMap.as  (sourcefile)
 * @file flamingo/fmc/EditMap.fla (sourcefile)
 * @file flamingo/fmc/EditMap.swf (compiled component, needed for publication on internet)
-* @file flamingo/fmc/classes/flamingo/gui/EditMapCircle.as (sourcefile)
-* @file flamingo/fmc/classes/flamingo/gui/EditMapCreateGeometry.as  (sourcefile)
-* @file flamingo/fmc/classes/flamingo/gui/EditMapFeature.as  (sourcefile)
-* @file flamingo/fmc/classes/flamingo/gui/EditMapGeometry.as  (sourcefile)
-* @file flamingo/fmc/classes/flamingo/gui/EditMapLayer.as  (sourcefile)
-* @file flamingo/fmc/classes/flamingo/gui/EditMapLineString.as  (sourcefile)
-* @file flamingo/fmc/classes/flamingo/gui/EditMapPolygon.as  (sourcefile)
+* @file flamingo/fmc/classes/gui/EditMapCircle.as (sourcefile)
+* @file flamingo/fmc/classes/gui/EditMapCreateGeometry.as  (sourcefile)
+* @file flamingo/fmc/classes/gui/EditMapFeature.as  (sourcefile)
+* @file flamingo/fmc/classes/gui/EditMapGeometry.as  (sourcefile)
+* @file flamingo/fmc/classes/gui/EditMapLayer.as  (sourcefile)
+* @file flamingo/fmc/classes/gui/EditMapLineString.as  (sourcefile)
+* @file flamingo/fmc/classes/gui/EditMapPolygon.as  (sourcefile)
 */
 
 /** @tag <fmc:EditMap>

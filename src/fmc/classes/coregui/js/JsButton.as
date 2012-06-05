@@ -6,7 +6,7 @@
 
 /** @component JsButton
 * A component for a button with javascript API, and xml configurable behaviour and styling.
-* @file flamingo/fmc/classes/flamingo/coregui/js/JsButton.as  (sourcefile)
+* @file flamingo/fmc/classes/coregui/js/JsButton.as  (sourcefile)
 * @file flamingo/fmc/JsButton.fla  (sourcefile)
 * @file flamingo/fmc/JsButton.swf (compiled component, needed for publication on internet)
 */

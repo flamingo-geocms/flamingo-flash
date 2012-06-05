@@ -6,7 +6,7 @@
 
 /** @component Confirmation
 * A component that pops-up to ask the user for confirmation. It gives the user two options: confirm or deny.
-* @file flamingo/fmc/classes/flamingo/coregui/Confirmation.as  (sourcefile)
+* @file flamingo/fmc/classes/coregui/Confirmation.as  (sourcefile)
 * @file flamingo/fmc/Confirmation.fla (sourcefile)
 * @file flamingo/fmc/Confirmation.swf (compiled component, needed for publication on internet)
 * @file flamingo/fmc/Confirmation.xml (configurationfile, needed for publication on internet)
