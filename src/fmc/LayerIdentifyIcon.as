@@ -17,16 +17,6 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 -----------------------------------------------------------------------------*/
-/** @component fmc:LayerIdentifyIcon
-* This layer shows an icon when the user performs an identify.
-* @file LayerIdentifyIcon.fla (sourcefile)
-* @file LayerIdentifyIcon.swf (compiled layer, needed for publication on internet)
-* @file LayerIdentifyIcon.xml (configurationfile for layer, needed for publication on internet)
-*/
-/**
- * 
- */
-//----------------------------
 var version:String = "2.0";
 
 //---------------------------------
@@ -74,6 +64,13 @@ flamingo.addListener(lMap, flamingo.getParent(this), this);
 //-----------------------------------------------------------------
 init();
 //-----------------------------------
+/** @component fmc:LayerIdentifyIcon
+* This layer shows an icon when the user performs an identify.
+* @file LayerIdentifyIcon.fla (sourcefile)
+* @file LayerIdentifyIcon.swf (compiled layer, needed for publication on internet)
+* @file LayerIdentifyIcon.xml (configurationfile for layer, needed for publication on internet)
+*/
+
 /** @tag <fmc:LayerIdentifyIcon>  
 * This tag defines an identifyicon layer
 * @hierarchy childnode of <fmc:Map> 

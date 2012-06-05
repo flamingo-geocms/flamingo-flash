@@ -17,18 +17,6 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 -----------------------------------------------------------------------------*/
-/** @component fmc:LayerOverview
-* This layer drawes an overview (rectangle) on a map. When the overview becomes too small, a crosshair will be displayed.
-* @file LayerOverview.fla (sourcefile)
-* @file LayerOverview.swf (compiled layer, needed for publication on internet)
-* @file LayerOverview.xml (configurationfile for layer, needed for publication on internet)
-* @configcursor pan 
-* @configcursor grab
-*/
-/**
- * 
- */
-//----------------------------------------
 var version:String = "2.0";
 
 // this layer is rather complicated stuff because this layer can be updated by two different sources
@@ -106,7 +94,17 @@ lMap.onStopMove = function(map:MovieClip) {
 flamingo.addListener(lMap, flamingo.getParent(this),this);
 //---------------------------------
 init();
+
 //-------------------------
+/** @component fmc:LayerOverview
+* This layer drawes an overview (rectangle) on a map. When the overview becomes too small, a crosshair will be displayed.
+* @file LayerOverview.fla (sourcefile)
+* @file LayerOverview.swf (compiled layer, needed for publication on internet)
+* @file LayerOverview.xml (configurationfile for layer, needed for publication on internet)
+* @configcursor pan 
+* @configcursor grab
+*/
+
 /** @tag <fmc:LayerOverview>  
 * This tag defines an overview layer
 * @hierarchy childnode of <fmc:Map>  

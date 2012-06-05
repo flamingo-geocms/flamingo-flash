@@ -17,19 +17,7 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 -----------------------------------------------------------------------------*/
-/** @component fmc:MonitorLayer
-* This component will monitor progress of single maplayers. Very suitable for maps with just one layer.
-* @file MonitorLayer.fla (sourcefile)
-* @file MonitorLayer.swf (compiled component, needed for publication on internet)
-* @file MonitorLayer.xml (configurationfile, needed for publication on internet)
-* @configstring loading String shown when a layer is downloading images. The string "[layer]" is replaced by the layer's name. The string "[percentage]" is replaced by actual percentage number. 
-* @configstring waiting String shown when a layer is waiting for response from the server. The string "[layer]" is replaced by the layer's name. The string "[percentage]" is replaced by actual percentage number.
-* @configstyle .text Fontstyle of load and wait strings.
-*/
-/**
- * 
- */
-//----------------------------------
+
 var version:String = "2.0";
 //-------------------------------
 var defaultXML:String = '<?xml version="1.0" encoding="UTF-8"?>' +
@@ -85,6 +73,17 @@ lParent.onResize = function(mc:MovieClip) {
 _global.flamingo.addListener(lParent, _global.flamingo.getParent(this), this);
 //----------------
 init();
+
+/** @component fmc:MonitorLayer
+* This component will monitor progress of single maplayers. Very suitable for maps with just one layer.
+* @file MonitorLayer.fla (sourcefile)
+* @file MonitorLayer.swf (compiled component, needed for publication on internet)
+* @file MonitorLayer.xml (configurationfile, needed for publication on internet)
+* @configstring loading String shown when a layer is downloading images. The string "[layer]" is replaced by the layer's name. The string "[percentage]" is replaced by actual percentage number. 
+* @configstring waiting String shown when a layer is waiting for response from the server. The string "[layer]" is replaced by the layer's name. The string "[percentage]" is replaced by actual percentage number.
+* @configstyle .text Fontstyle of load and wait strings.
+*/
+
 /** @tag <fmc:MonitorLayer>  
 * This tag defines a monitor. listens to 1 or more maps.
 * @hierarchy childnode of <flamingo> or a container component. e.g. <fmc:Window>

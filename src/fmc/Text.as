@@ -17,17 +17,6 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 -----------------------------------------------------------------------------*/
-/** @component fmc:Text
-* Text component. This component uses a standard Flash TextField with html support. 
-* When showing large amounts of text or when scrollbars are necesarry, use TextArea instead.
-* @file Text.fla (sourcefile)
-* @file Text.swf (compiled component, needed for publication on internet)
-* @file Text.xml (configurationfile, needed for publication on internet)
-*/
-/**
- * 
- */
-//------------------------
 var version:String = "2.0";
 //------------------------------------------
 
@@ -49,6 +38,15 @@ lFlamingo.onSetLanguage = function(lang:String) {
 flamingo.addListener(lFlamingo, "flamingo", this);
 //------------------------
 init();
+
+/** @component fmc:Text
+* Text component. This component uses a standard Flash TextField with html support. 
+* When showing large amounts of text or when scrollbars are necesarry, use TextArea instead.
+* @file Text.fla (sourcefile)
+* @file Text.swf (compiled component, needed for publication on internet)
+* @file Text.xml (configurationfile, needed for publication on internet)
+*/
+
 /** @tag <fmc:Text>  
 * This tag defines a text. Use standard string and style tags for configuring the text. The string tag has to have id="text".
 * Use <![CDATA[...]]> tags to configure html text and avoid interferance with the config xml. See example.

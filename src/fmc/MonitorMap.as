@@ -17,17 +17,6 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 -----------------------------------------------------------------------------*/
-/** @component fmc:MonitorMap
-* This component will monitor the update progress of a map.
-* This component is very suitable for maps with more than one layer.
-* If a map has just one layer, use MonitorLayer instead.
-* @file MonitorMap.fla (sourcefile)
-* @file MonitorMap.swf (compiled component, needed for publication on internet)
-* @file MonitorMap.xml (configurationfile, needed for publication on internet)
-* @configstring loading String shown when map is downloading images. The string "[percentage]" is replaced by actual percentage number. The string "[map" is replaced by the map's name.
-* @configstring waiting String shown when map is waiting for response from the server. The string "[percentage]" is replaced by actual percentage number. The string "[map" is replaced by the map's name.
-* @configstyle .text Fontstyle of load and wait strings.
-*/
 import tools.Logger;
 /**
  * 
@@ -86,6 +75,19 @@ lParent.onResize = function(mc:MovieClip ) {
 flamingo.addListener(lParent, flamingo.getParent(this), this);
 //----------------
 init();
+
+/** @component fmc:MonitorMap
+* This component will monitor the update progress of a map.
+* This component is very suitable for maps with more than one layer.
+* If a map has just one layer, use MonitorLayer instead.
+* @file MonitorMap.fla (sourcefile)
+* @file MonitorMap.swf (compiled component, needed for publication on internet)
+* @file MonitorMap.xml (configurationfile, needed for publication on internet)
+* @configstring loading String shown when map is downloading images. The string "[percentage]" is replaced by actual percentage number. The string "[map" is replaced by the map's name.
+* @configstring waiting String shown when map is waiting for response from the server. The string "[percentage]" is replaced by actual percentage number. The string "[map" is replaced by the map's name.
+* @configstyle .text Fontstyle of load and wait strings.
+*/
+
 /** @tag <fmc:MonitorMap>  
 * This tag defines a monitor.  Listens to 1 or more maps
 * @hierarchy childnode of <flamingo> or a container component. e.g. <fmc:Window>.
