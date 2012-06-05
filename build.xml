@@ -364,6 +364,11 @@
 	</target>
 	<target name="clean">
 		<delete dir="${build}"/>
+		<delete>
+			<fileset dir="${naturalDocsProjectPath}">
+			  <include name="*"/>
+		   </fileset>
+	   </delete>
 		<delete dir="${naturalDocsProjectPath}/Data"/>
 	</target>
 </project>
