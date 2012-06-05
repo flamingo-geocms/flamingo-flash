@@ -11,6 +11,9 @@ import geometrymodel.Point;
 import geometrymodel.Polygon;
 import geometrymodel.LineString;
 
+/**
+ * EditMapSelectFeature
+ */
 class gui.EditMapSelectFeature extends MovieClip {
     
     private var width:Number = -1; // Set by init object.
@@ -23,15 +26,23 @@ class gui.EditMapSelectFeature extends MovieClip {
     private var intervalID:Number = null;
 	private var ctrlKeyDown:Boolean = false;
     private var geometry:geometrymodel.Geometry = null;
-    
+    /**
+     * on Load
+     */
     function onLoad():Void {
         draw();
     }
-    
+    /**
+     * remove
+     */
     function remove():Void {
        this.removeMovieClip();
     }
-    
+    /**
+     * set Size
+     * @param	width
+     * @param	height
+     */
     function setSize(width:Number, height:Number):Void {
         this.width = width;
         this.height = height;
@@ -50,7 +61,9 @@ class gui.EditMapSelectFeature extends MovieClip {
         lineTo(0, height);
         endFill();
     }
-	
+	/**
+	 * on Press
+	 */
     function onPress():Void {
 		var pixel = new Pixel(_xmouse, _ymouse);
        	var mousePoint:Point = pixel2Point(pixel);

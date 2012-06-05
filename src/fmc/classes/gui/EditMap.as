@@ -71,6 +71,9 @@ import tools.Logger;
 
 import core.AbstractComponent;
 
+/**
+ * EditMap
+ */
 class gui.EditMap extends AbstractComponent implements StateEventListener, core.PersistableComponent {
     
     private var mask:MovieClip = null;
@@ -85,7 +88,11 @@ class gui.EditMap extends AbstractComponent implements StateEventListener, core.
 	private var ctrlKeyDown:Boolean = false;
 	private var log:Logger=null;
 	private var style:Style=null;
-	
+	/**
+	 * set Attribute
+	 * @param	name
+	 * @param	value
+	 */
 	function setAttribute(name:String, value:String):Void {
 		 if (name == "editable") {
 			if(value=="false"){
@@ -93,12 +100,23 @@ class gui.EditMap extends AbstractComponent implements StateEventListener, core.
 			}
 		 } 
 	}
+	/**
+	 * add Composite
+	 * @param	name
+	 * @param	xmlNode
+	 */
 	function addComposite(name:String, xmlNode:XMLNode):Void { 
         if (name == "Style") {
             style = new Style(xmlNode);
         }
     }
-	
+	/**
+	 * set Bounds
+	 * @param	x
+	 * @param	y
+	 * @param	width
+	 * @param	height
+	 */
     function setBounds(x:Number, y:Number, width:Number, height:Number):Void {
 	   if (mask == null) {
             mask = createEmptyMovieClip("mMask", editMapCreateGeometryDepth + 1);
@@ -116,7 +134,9 @@ class gui.EditMap extends AbstractComponent implements StateEventListener, core.
         
         super.setBounds(x, y, width, height);
     }
-    
+    /**
+     * init edit map
+     */
     function init():Void {
 		this.log = new Logger("gui.EditMap",_global.flamingo.getLogLevel(),_global.flamingo.getScreenLogLevel());
 		editMapLayers = new Array();
@@ -186,7 +206,9 @@ class gui.EditMap extends AbstractComponent implements StateEventListener, core.
 			Key.addListener(keyListener);
 		}
     }
-    
+    /**
+     * layout
+     */
     function layout():Void {
         for (var i:String in editMapLayers) {
             EditMapLayer(editMapLayers[i]).setSize(__width, __height);
@@ -195,7 +217,10 @@ class gui.EditMap extends AbstractComponent implements StateEventListener, core.
             editMapCreateGeometry.setSize(__width, __height);
         }
     }
-    
+    /**
+     * event handler state
+     * @param	stateEvent
+     */
     function onStateEvent(stateEvent:StateEvent):Void {
 		var sourceClassName:String = stateEvent.getSourceClassName();
         var actionType:Number = stateEvent.getActionType();
@@ -265,16 +290,19 @@ class gui.EditMap extends AbstractComponent implements StateEventListener, core.
 			}
 		}
     }
-    	
+    /**
+     * get GIS
+     * @return
+     */	
     function getGIS():GIS {
         return gis;
     }
 	
 	/**
-	Let the user draw the specified geometryType on the layer with specified layerName. 
-	@param layerName The name of the layer
-	@param geometryType The geometry type: Point, PointAtDistance, LineString, Polygon. Note: geometryType must correspond with the available types set in <fmc:Layer>
-	*/
+	 * Let the user draw the specified geometryType on the layer with specified layerName. 
+	 * @param layerName The name of the layer
+	 * @param geometryType The geometry type: Point, PointAtDistance, LineString, Polygon. Note: geometryType must correspond with the available types set in <fmc:Layer>
+	 */
 	function editMapDrawNewGeometry(layerName:String, geometryType:String):Void {
 		var editMapLayer:EditMapLayer = null;
 		var layer:Layer = null;
@@ -314,11 +342,10 @@ class gui.EditMap extends AbstractComponent implements StateEventListener, core.
 	}
 	
 	/**
-	Adds the specified featureObject to the layer with specified layerName and makes it the active feature. 
-	@param layerName The name of the layer
-	@param featureObject Javascript object with wkt describing the feature.
-	*/
-	
+	 * Adds the specified featureObject to the layer with specified layerName and makes it the active feature. 
+	 * @param layerName The name of the layer
+	 * @param featureObject Javascript object with wkt describing the feature.
+	 */
 	function addFeature(layerName:String, featureObject:Object):Void {
 		//haal layer op met layerName
 		var editMapLayer:EditMapLayer = null;
@@ -361,12 +388,11 @@ class gui.EditMap extends AbstractComponent implements StateEventListener, core.
 	}
 	
 	/**
-	Draws the specified geometryType on the layer with specified layerName. 
-	@param layerName The name of the layer
-	@param geometryType The geometry type: Point, PointAtDistance, LineString, Polygon. Note: geometryType must correspond with the available types set in <fmc:Layer>
-	@param coordinatePairs Array with the coordinate pairs
-	*/
-	    
+	 * Draws the specified geometryType on the layer with specified layerName. 
+	 * @param layerName The name of the layer
+	 * @param geometryType The geometry type: Point, PointAtDistance, LineString, Polygon. Note: geometryType must correspond with the available types set in <fmc:Layer>
+	 * @param coordinatePairs Array with the coordinate pairs
+	 */
 	function editMapCreateNewGeometry(layerName:String, geometryType:String, coordinatePairs:Array):Void {
 		var editMapLayer:EditMapLayer = null;
 		var layer:Layer = null;
@@ -547,11 +573,17 @@ class gui.EditMap extends AbstractComponent implements StateEventListener, core.
 		}
 		removeEditMapCreateGeometry();
 	}
-	
+	/**
+	 * on Show
+	 * @param	map
+	 */
 	public function onShow(map:Object){
 		setVisibility(true);
 	}
-	
+	/**
+	 * on Hide
+	 * @param	map
+	 */
 	public function onHide(map:Object){
 		setVisibility(false);	
 	}
@@ -571,8 +603,8 @@ class gui.EditMap extends AbstractComponent implements StateEventListener, core.
          }
 	}
 	/**
-	Gets the active feature as a object (see Feature.toObject() for details of the object)
-	*/
+	 * Gets the active feature as a object (see Feature.toObject() for details of the object)
+	 */
 	public function getActiveFeature():Object{
 		var returnValue:Object = new Object();
 		if (gis!=undefined || gis!=null){
@@ -583,21 +615,33 @@ class gui.EditMap extends AbstractComponent implements StateEventListener, core.
 		}
 		return null;
 	}
-	
+	/**
+	 * get Map
+	 * @return
+	 */
 	public function getMap():Object{
 		return map;
 	}
-	
+	/**
+	 * get CFullExtent
+	 * @return
+	 */
 	public function getCFullExtent():Object{
 		return _global.flamingo.getComponent(listento[0]).getCFullExtent();
 
 	}
-	
+	/**
+	 * get CurrentExtent
+	 * @return
+	 */
 	public function getCurrentExtent():Object{
 		return _global.flamingo.getComponent(listento[0]).getCurrentExtent();
 
 	}
-	
+	/**
+	 * move To Extent
+	 * @param	extendedExtent
+	 */
 	public function moveToExtent(extendedExtent:Object):Void{
 		_global.flamingo.getComponent(listento[0]).moveToExtent(extendedExtent);
 	}

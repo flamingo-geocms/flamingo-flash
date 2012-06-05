@@ -146,7 +146,7 @@ class gui.tools.ToolZoomin extends AbstractTool{
 	}
 	/**
 	* Configurates a component by setting a xml.
-	* @attr xml:Object Xml or string representation of a xml.
+	* @param xml:Object Xml or string representation of a xml.
 	*/
 	function setConfig(xml:Object) {
 		if (typeof (xml) == "string") {
@@ -196,9 +196,15 @@ class gui.tools.ToolZoomin extends AbstractTool{
 	}
 	
 	//default functions-------------------------------
+	/**
+	 * start Updating tool
+	 */
 	function startUpdating() {
 		parent.setCursor(this.cursors["busy"]);
 	}
+	/**
+	 * stop Updating tool
+	 */
 	function stopUpdating() {		
 		parent.setCursor(this.cursors["cursor"]);
 	}

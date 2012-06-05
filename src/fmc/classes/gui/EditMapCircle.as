@@ -11,18 +11,28 @@ import geometrymodel.Point;
 
 import mx.controls.Label;
 
+/**
+ * EditMapCircle
+ */
 class gui.EditMapCircle extends EditMapGeometry {
-    
+    /**
+     * on Load
+     */
     function onLoad():Void { // This method is a stub. It is necessary though, because of the "super" bug in Flash.
         super.onLoad();
 	}
 	
-
-
+	/**
+	 * set Size
+	 * @param	width
+	 * @param	height
+	 */
 	function setSize(width:Number, height:Number):Void { // This method is a stub. It is necessary though, because of the "super" bug in Flash.
         super.setSize(width, height);
     }
-    
+    /**
+     * do Draw
+     */
     function doDraw():Void {
     	
         var circle:Circle = Circle(_geometry);

@@ -144,7 +144,7 @@ class gui.Coordinates  extends AbstractPositionable{
 	}
 	/**
 	* Configurates a component by setting a xml.
-	* @attr xml:Object Xml or string representation of a xml.
+	* @param xml:Object Xml or string representation of a xml.
 	*/
 	function setConfig(xml:Object) {
 		if (typeof (xml) == "string") {
@@ -176,18 +176,30 @@ class gui.Coordinates  extends AbstractPositionable{
 	}
 	
 	/*********************** Getters and Setters *****************/
+	/**
+	 * getter tCoord
+	 */
 	public function get tCoord():TextField 
 	{
 		return _tCoord;
 	}
+	/**
+	 * setter tCoord
+	 */
 	public function set tCoord(value:TextField):Void 
 	{
 		_tCoord = value;
 	}
+	/**
+	 * getter lMap
+	 */
 	public function get lMap():Object 
 	{
 		return _lMap;
 	}
+	/**
+	 * setter lMap
+	 */
 	public function set lMap(value:Object):Void 
 	{
 		_lMap = value;

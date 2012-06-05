@@ -4,6 +4,9 @@
 * IDgis bv
  -----------------------------------------------------------------------------*/
 
+ /**
+  * GradientFill
+  */
 class gui.GradientFill {
 	private var color1 : Number = 0x000000;
 	private var color2 : Number = 0xffffff;
@@ -14,7 +17,18 @@ class gui.GradientFill {
 	private var alpha1 : Number;
 	private var alpha2 : Number;
 	private var linecolor : Number;
-
+	/**
+	 * constructor GradientFill
+	 * @param	color1
+	 * @param	color2
+	 * @param	alpha1
+	 * @param	alpha2
+	 * @param	roundedCorners
+	 * @param	gradientDirection
+	 * @param	cSize
+	 * @param	outline
+	 * @param	linecolor
+	 */
 	function GradientFill(color1:Number,color2:Number, alpha1:Number, alpha2:Number, 
 							roundedCorners:String, gradientDirection:String,cSize:Number, 
 							outline:Boolean,linecolor:Number){
@@ -28,7 +42,10 @@ class gui.GradientFill {
 		this.outline = outline;
 		this.linecolor = linecolor;
 	}
-	
+	/**
+	 * draw gradient
+	 * @param	parent
+	 */
 	function draw(parent:MovieClip):Void{
 		var color:Color = null;
         color = new Color(this["color1"]);

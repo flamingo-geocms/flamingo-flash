@@ -3,6 +3,9 @@
 
 import gui.*;
 
+/**
+ * EditMapSelectGeometry
+ */
 class gui.EditMapSelectGeometry extends gui.EditMapCreateGeometry {    
     function onLoad():Void {
         draw();

@@ -26,6 +26,9 @@ import mx.controls.Label;
 
 import tools.Logger;
 
+/**
+ * EditLegendLayer
+ */
 class gui.EditLegendLayer extends MovieClip implements StateEventListener, ActionEventListener {
     
     private var width:Number = -1; // Set by init object.
@@ -35,7 +38,9 @@ class gui.EditLegendLayer extends MovieClip implements StateEventListener, Actio
 	private var buttonBarProperties:Object = null; // Set by init object.
     
     private var checkBox:CheckBox = null;
-    
+    /**
+     * onLoad
+     */
     function onLoad():Void {
         layer.addEventListener(this, "Layer", StateEvent.CHANGE, "visible");
         drawBackGround();
@@ -44,14 +49,21 @@ class gui.EditLegendLayer extends MovieClip implements StateEventListener, Actio
         addLabel();
         addButtonBar();
     }
-    
+    /**
+     * set Size
+     * @param	width
+     * @param	height
+     */
     function setSize(width:Number, height:Number):Void {
         this.width = width;
         this.height = height;
         
         drawBackGround();
     }
-    
+    /**
+     * event handler state
+     * @param	stateEvent
+     */
     function onStateEvent(stateEvent:StateEvent):Void {
         var sourceClassName:String = stateEvent.getSourceClassName();
         var actionType:Number = stateEvent.getActionType();
@@ -60,7 +72,10 @@ class gui.EditLegendLayer extends MovieClip implements StateEventListener, Actio
             checkBox.selected = layer.isVisible();
         }
     }
-    
+    /**
+     * event handler action
+     * @param	actionEvent
+     */
     function onActionEvent(actionEvent:ActionEvent):Void {
         var sourceClassName:String = actionEvent.getSourceClassName();
         var actionType:Number = actionEvent.getActionType();
@@ -188,7 +203,9 @@ class gui.EditLegendLayer extends MovieClip implements StateEventListener, Actio
         initObject["buttonConfigs"] = buttonConfigs;
         attachMovie("ButtonBar", "mButtonBar", 3, initObject);
     }
-    
+    /**
+     * event handler click checkbox
+     */
     function onClickCheckBox():Void {
         var env:EditLegendLayer = EditLegendLayer(_parent); // The context of this method is not the EditLegendLayer object, but the check box.
         env.layer.setVisible(env.checkBox.selected);

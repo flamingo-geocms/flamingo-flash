@@ -17,6 +17,9 @@ import geometrymodel.Circle;
 import geometrymodel.LinearRing;
 import tools.Logger;
 
+/**
+ * GeometryPane
+ */
 class gui.GeometryPane extends MovieClip {
     
     private var gis:GIS = null; // Set by init object.
@@ -28,12 +31,18 @@ class gui.GeometryPane extends MovieClip {
 	private var log:Logger=null;
 	private var showMeasures:Boolean= false; // Set by init object.
     private var editable:Boolean = true; //Set by init object.
-	
+	/**
+	 * on Load
+	 */
     function onLoad():Void {
 		this.log = new Logger("gui.GeometryPane",_global.flamingo.getLogLevel(),_global.flamingo.getScreenLogLevel());
         editMapGeometries = new Array();
     }
-    
+    /**
+     * set Size
+     * @param	width
+     * @param	height
+     */
     function setSize(width:Number, height:Number):Void {
         this.width = width;
         this.height = height;

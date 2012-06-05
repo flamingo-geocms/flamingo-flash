@@ -11,11 +11,16 @@ import coregui.ButtonConfig;
 import gismodel.GIS;
 import gismodel.Layer;
 
+/**
+ * EditGeometryBar
+ */
 class gui.EditGeometryBar extends AbstractComponent implements StateEventListener, ActionEventListener {
     
     private var gis:GIS = null;
 	private var thisObj:Object;
-    
+    /**
+     * init edit geometry bar
+     */
     function init():Void {
         thisObj = this;
 		gis = _global.flamingo.getComponent(listento[0]).getGIS();		//the second item is always the gis 
@@ -43,7 +48,10 @@ class gui.EditGeometryBar extends AbstractComponent implements StateEventListene
         initObject["buttonConfigs"] = buttonConfigs;
         attachMovie("ButtonBar", "mButtonBar", 3, initObject);
     }
-	
+	/**
+	 * event handler state
+	 * @param	stateEvent
+	 */
 	function onStateEvent(stateEvent:StateEvent):Void {
         var sourceClassName:String = stateEvent.getSourceClassName();
         var actionType:Number = stateEvent.getActionType();
@@ -73,7 +81,10 @@ class gui.EditGeometryBar extends AbstractComponent implements StateEventListene
 
 		
     }
-
+	/**
+	 * event handler action
+	 * @param	actionEvent
+	 */
     function onActionEvent(actionEvent:ActionEvent):Void {
         var sourceClassName:String = actionEvent.getSourceClassName();
         var actionType:Number = actionEvent.getActionType();

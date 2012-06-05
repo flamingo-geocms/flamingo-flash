@@ -21,6 +21,9 @@ import tools.Logger;
 
 import gismodel.Layer;
 
+/**
+ * EditMapCreateGeometry
+ */
 class gui.EditMapCreateGeometry extends MovieClip {
     
     private var width:Number = -1; // Set by init object.
@@ -37,15 +40,23 @@ class gui.EditMapCreateGeometry extends MovieClip {
     private var pressTime:Number = 0;
     private var previousPressTime:Number = 0;
 	private var movePoint:Point = null;
-    
+    /**
+     * onLoad
+     */
     function onLoad():Void {
         draw();
     }
-    
+    /**
+     * remove
+     */
     function remove():Void {
         this.removeMovieClip();
     }
-    
+    /**
+     * set Size
+     * @param	width
+     * @param	height
+     */
     function setSize(width:Number, height:Number):Void {
         this.width = width;
         this.height = height;
@@ -69,7 +80,9 @@ class gui.EditMapCreateGeometry extends MovieClip {
         endFill();
     }
     
-	
+	/**
+	 * on Press
+	 */
     function onPress():Void {
 
     	var double:Boolean = false;	
@@ -135,7 +148,9 @@ class gui.EditMapCreateGeometry extends MovieClip {
 			gis.geometryUpdate();
         }
     }
-    
+    /**
+     * on Mouse Move
+     */
     function onMouseMove():Void {
  		if (geometry != null) {
 		   	var pixel = new Pixel(_xmouse, _ymouse);

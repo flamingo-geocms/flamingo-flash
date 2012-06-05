@@ -17,6 +17,9 @@ import gismodel.Feature;
 import gismodel.Layer;
 import gismodel.GeometryProperty;
 
+/**
+ * EditMapLineString
+ */
 class gui.EditMapLineString extends EditMapGeometry implements GeometryListener {
     
 	private var editMapLineStringGraphics:Array = null;
@@ -25,33 +28,55 @@ class gui.EditMapLineString extends EditMapGeometry implements GeometryListener 
 	private var drawSolidLine:Boolean = true;
 	
 	private var thisObj:Object;
-    
-    function onLoad():Void { // This method is a stub. It is necessary though, because of the "super" bug in Flash.
+    /**
+     * This method is a stub. It is necessary though, because of the "super" bug in Flash.
+     */
+    function onLoad():Void {  
         super.onLoad();
 		thisObj = this;
 		intersectionPoint = new Point(0,0);
 		intersectionPixel = new Pixel(0,0);
     }
-    
+    /**
+     * set Size
+     * @param	width
+     * @param	height
+     */
     function setSize(width:Number, height:Number):Void { // This method is a stub. It is necessary though, because of the "super" bug in Flash.
 		super.setSize(width, height);
     }
-	
+	/**
+	 * on Change Geometry
+	 * @param	geometry
+	 */
 	function onChangeGeometry(geometry:Geometry):Void {
 		cleanChildDrawing();
 		removeEditMapGeometries();
 		addChildGeometries();
 		draw();
  	}
-	
+	/**
+	 * on Add Child
+	 * @param	geometry
+	 * @param	child
+	 */
     function onAddChild(geometry:Geometry,child:Geometry):Void{
     	//do nothing
     }
-	
+	/**
+	 * on Remove Child
+	 * @param	geometry
+	 * @param	child
+	 */
 	function onRemoveChild(geometry:Geometry,child:Geometry) : Void {
 		//do nothing
     }
-    
+    /**
+     * self Intersection Test Drag Point
+     * @param	dragPointNr
+     * @param	testPoint
+     * @return
+     */
 	function selfIntersectionTestDragPoint(dragPointNr:Number, testPoint:Point):Boolean {
 		var intersection:Boolean = false;
 		
@@ -127,7 +152,11 @@ class gui.EditMapLineString extends EditMapGeometry implements GeometryListener 
 		//trace("*** Result Selfintersection test: selfintersection = "+intersection+"     polygonSimple = "+polygonSimple);
 		return intersection;
 	}
-	
+	/**
+	 * do Draw Point Drag
+	 * @param	dragPointNr
+	 * @param	dragPixel
+	 */
 	function doDrawPointDrag(dragPointNr:Number, dragPixel:Pixel):Void {
 		//trace("EditMapLineString.as doDrawPointDrag()");
 		var lineString:LineString = LineString(_geometry);
@@ -183,7 +212,9 @@ class gui.EditMapLineString extends EditMapGeometry implements GeometryListener 
 		}
 		return dashStyleArray;
 	}
-	
+	/**
+	 * do Draw
+	 */
 	function doDraw():Void {
 		if (editable) {
 			var feature:Feature = this.getFirstAncestor()._parent.getFeature();

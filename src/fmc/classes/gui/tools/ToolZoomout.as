@@ -150,7 +150,7 @@ class gui.tools.ToolZoomout extends AbstractTool
 	 */
 	/**
 	* Configurates a component by setting a xml.
-	* @attr xml:Object Xml or string representation of a xml.
+	* @param xml:Object Xml or string representation of a xml.
 	*/
 	function setConfig(xml:Object) {
 		if (typeof (xml) == "string") {
@@ -199,9 +199,15 @@ class gui.tools.ToolZoomout extends AbstractTool
 		flamingo.position(this);
 	}
 	//default functions-------------------------------	
+	/**
+	 * start Updating tool
+	 */
 	function startUpdating() {
 		this._parent.setCursor(this.cursors["busy"]);
 	}
+	/**
+	 * stop Updating tool
+	 */
 	function stopUpdating() {		
 		this._parent.setCursor(this.cursors["cursor"]);
 	}

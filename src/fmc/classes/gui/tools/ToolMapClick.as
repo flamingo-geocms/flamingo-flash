@@ -9,7 +9,11 @@ class gui.tools.ToolMapClick extends AbstractTool
 {
 	var defaultXML:String;
 	private var previousTool;
-	
+	/**
+	 * constructor ToolMapClick
+	 * @param	id
+	 * @param	toolGroup
+	 */
 	public function ToolMapClick(id:String, toolGroup:ToolGroup ) {
 		super(id, toolGroup, null);		
 		this.defaultXML = "<?xml version='1.0' encoding='UTF-8'?>" +
@@ -17,7 +21,9 @@ class gui.tools.ToolMapClick extends AbstractTool
 				        "</ToolPan>"; 
 		init();
 	}
-	
+	/**
+	 * init tool
+	 */
 	private function init() {
 		var thisObj = this;
 		lMap.onMouseUp = function(map:MovieClip, xmouse:Number, ymouse:Number, coord:Object) {
@@ -32,7 +38,7 @@ class gui.tools.ToolMapClick extends AbstractTool
 	
 	/**
 	* Configurates a component by setting a xml.
-	* @attr xml:Object Xml or string representation of a xml.
+	* @param xml:Object Xml or string representation of a xml.
 	*/
 	function setConfig(xml:Object) {
 		if (typeof (xml) == "string") {
@@ -58,12 +64,16 @@ class gui.tools.ToolMapClick extends AbstractTool
 		this.setEnabled(enabled);
 		flamingo.position(this);
 	}	
-	
+	/**
+	 * activate tool
+	 */
 	function activate() {
 		this.previousTool = toolGroup.tool;
 		this.toolGroup.setTool(this.id);
 	}
-	
+	/**
+	 * deactivate tool
+	 */
 	function deactivate() {
 		var tool = this.previousTool;
 		if (tool == undefined || tool=="") {

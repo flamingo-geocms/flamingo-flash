@@ -17,17 +17,25 @@ import gismodel.Layer;
 import gismodel.GeometryProperty;
 import tools.Logger;
 
+/**
+ * EditMapPolygon
+ */
 class gui.EditMapPolygon extends EditMapGeometry {
 
 	private var intersectionPixel:Pixel;
 	private var drawFillPattern:Boolean;
 	var dragging:Boolean = false;
 
-	function onLoad():Void {// This method is a stub. It is necessary though, because of the "super" bug in Flash.
+	/**
+	 * This method is a stub. It is necessary though, because of the "super" bug in Flash.
+	 */
+	function onLoad():Void {
 		super.onLoad();
 		drawFillPattern = false;
 	}
-	
+	/**
+	 * drag Feature
+	 */
 	function dragFeature():Void {
 		var thisObj = this;
 		if (this.gis.getFeaturesDraggable()) {
@@ -53,7 +61,11 @@ class gui.EditMapPolygon extends EditMapGeometry {
 		};
 		
 	}
-	
+	/**
+	 * points Pressed
+	 * @param	thisObj
+	 * @return
+	 */
 	function pointsPressed(thisObj):Boolean {
 		var pointDragged = false;
 		for (var i:Number = 0; i<thisObj.editMapGeometries.length; i++) {
@@ -71,7 +83,11 @@ class gui.EditMapPolygon extends EditMapGeometry {
 		}
 		return pointDragged;
 	}
-	
+	/**
+	 * set Size
+	 * @param	width
+	 * @param	height
+	 */
 	function setSize(width:Number, height:Number):Void {// This method is a stub. It is necessary though, because of the "super" bug in Flash.
 		super.setSize(width,height);
 	}
@@ -81,6 +97,9 @@ class gui.EditMapPolygon extends EditMapGeometry {
 		var val:String = feature.getValueWithPropType(propType);
 		return geometryProperty.getFlashValue(val);
 	}
+	/**
+	 * do Draw
+	 */
 	function doDraw():Void {
 		if (editable) {
 			var feature:Feature = this.getFirstAncestor()._parent.getFeature();

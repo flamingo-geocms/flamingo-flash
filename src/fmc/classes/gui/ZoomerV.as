@@ -148,7 +148,7 @@ class gui.ZoomerV  extends AbstractPositionable{
 	
 	/**
 	 * Configurates a component by setting a xml.
-	 * @attr xml:Object Xml or string representation of a xml.
+	 * @param xml:Object Xml or string representation of a xml.
 	 */
 	function setConfig(xml:Object) {
 		if (typeof (xml) == "string") {
@@ -303,6 +303,10 @@ class gui.ZoomerV  extends AbstractPositionable{
 			mc.cancelUpdate();
 		}
 	}
+	/**
+	 * set Show Buttons
+	 * @param	value
+	 */
 	public function setShowButtons(value:Boolean) {
 		this.showButtons = value;
 		if (this.zoomIn.visible!=value){
@@ -311,69 +315,111 @@ class gui.ZoomerV  extends AbstractPositionable{
 		}
 	}
 	/****** Getters and setters ****/
+	/**
+	 * getter zoomIn
+	 */
 	public function get zoomIn():ZoomInButton
 	{
 		return _zoomIn;
 	}
 	
+	/**
+	 * setter zoomIn
+	 */
 	public function set zoomIn(value:ZoomInButton):Void
 	{
 		_zoomIn = value;
 	}
 	
+	/**
+	 * getter zoomOut
+	 */
 	public function get zoomOut():ZoomOutButton
 	{
 		return _zoomOut;
 	}
 	
+	/**
+	 * setter zoomOut
+	 */
 	public function set zoomOut(value:ZoomOutButton):Void
 	{
 		_zoomOut = value;
 	}
 	
+	/**
+	 * getter sliderBar
+	 */
 	public function get sliderBar():MovieClip
 	{
 		return _sliderBar;
 	}
 	
+	/**
+	 * setter sliderBar
+	 */
 	public function set sliderBar(value:MovieClip):Void
 	{
 		_sliderBar = value;
 	}
 	
+	/**
+	 * getter sliderButton
+	 */
 	public function get sliderButton():SliderButton
 	{
 		return _sliderButton;
 	}
 	
+	/**
+	 * setter sliderButton
+	 */
 	public function set sliderButton(value:SliderButton):Void
 	{
 		_sliderButton = value;
 	}
 	
+	/**
+	 * getter lMap
+	 */
 	public function get lMap():Object 
 	{
 		return _lMap;
 	}
 	
+	/**
+	 * setter lMap
+	 */
 	public function set lMap(value:Object):Void 
 	{
 		_lMap = value;
 	}
 	
+	/**
+	 * getter spriteMap
+	 */
 	public function get spriteMap():SpriteMap 
 	{
 		return _spriteMap;
 	}
 	
+	/**
+	 * setter spriteMap
+	 */
 	public function set spriteMap(value:SpriteMap):Void 
 	{
 		_spriteMap = value;
 	}
+	/**
+	 * getter showButtons
+	 */
 	public function get showButtons():Boolean 
 	{
 		return _showButtons;
 	}
+	/**
+	 * setter showButtons
+	 */
 	public function set showButtons(value:Boolean):Void 
 	{
 		_showButtons = value;

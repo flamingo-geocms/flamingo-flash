@@ -110,7 +110,7 @@ class gui.BorderNavigation extends AbstractPositionable
 	
 	/**
 	 * Configurates a component by setting a xml.
-	 * @attr xml:Object Xml or string representation of a xml.
+	 * @param xml:Object Xml or string representation of a xml.
 	 */
 	function setConfig(xml:Object)
 	{

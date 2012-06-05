@@ -122,7 +122,7 @@ class gui.tools.ToolIdentify extends AbstractTool{
 	}
 	/**
 	* Configurates a component by setting a xml.
-	* @attr xml:Object Xml or string representation of a xml.
+	* @param xml:Object Xml or string representation of a xml.
 	*/
 	function setConfig(xml:Object) {
 		if (typeof (xml) == "string") {
@@ -167,9 +167,15 @@ class gui.tools.ToolIdentify extends AbstractTool{
 
 	}
 	//default functions-------------------------------
+	/**
+	 * start Identifying
+	 */
 	function startIdentifying() {		
 		_parent.setCursor(this.cursors["busy"]);
 	}
+	/**
+	 * stop Identifying
+	 */
 	function stopIdentifying() {
 		_parent.setCursor(this.cursors["cursor"]);
 	}

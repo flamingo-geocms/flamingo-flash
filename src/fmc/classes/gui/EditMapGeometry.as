@@ -24,6 +24,9 @@ import event.AddRemoveEvent;
 import event.GeometryListener;
 import tools.Logger;
 
+/**
+ * EditMapGeometry
+ */
 class gui.EditMapGeometry extends GeometryPane implements GeometryListener {
 	
 	
@@ -50,7 +53,9 @@ class gui.EditMapGeometry extends GeometryPane implements GeometryListener {
     private var showMeasures:Boolean = false; // Set by init object.
     private var measureLabel:Label = null;
     
-    
+    /**
+     * on Load
+     */
     function onLoad():Void {
         super.onLoad();
         _geometry.addGeometryListener(this);
@@ -64,21 +69,34 @@ class gui.EditMapGeometry extends GeometryPane implements GeometryListener {
         addChildGeometries();
 		draw();
     }
-    
+    /**
+     * remove
+     */
     function remove():Void { 
 		this.removeMovieClip(); // Keyword "this" is necessary here, because of the global function removeMovieClip.
     }
-    
+    /**
+     * set Size
+     * @param	width
+     * @param	height
+     */
     function setSize(width:Number, height:Number):Void {
         super.setSize(width, height);
         draw();
     }
-    
+    /**
+     * on Change Geometry
+     * @param	geometry
+     */
     function onChangeGeometry(geometry:Geometry):Void {
 		draw();
  	}
  	
-	
+	/**
+	 * on Add Child
+	 * @param	geometry
+	 * @param	child
+	 */
  	 function onAddChild(geometry:Geometry, child:Geometry):Void {
 		var childGeometries:Array = geometry.getChildGeometries();
 		var i:Number = childGeometries.length - 1;
@@ -104,12 +122,19 @@ class gui.EditMapGeometry extends GeometryPane implements GeometryListener {
         addEditMapGeometry(child, type, null, depth, true);
 		draw();
  	}
-	
+	/**
+	 * on Remove Child
+	 * @param	geometry
+	 * @param	child
+	 */
 	function onRemoveChild(geometry:Geometry,child:Geometry) : Void {
         removeEditMapGeometry(geometry, child);
 		draw();	
 	}
-	
+	/**
+	 * set Type
+	 * @param	type
+	 */
     function setType(type:Number):Void {
         if (this.type == type) {
             return;
@@ -120,7 +145,10 @@ class gui.EditMapGeometry extends GeometryPane implements GeometryListener {
         
         draw();
     }
-    
+    /**
+     * set LabelText
+     * @param	labelText
+     */
     function setLabelText(labelText:String):Void {		
         if (this.labelText == labelText) {
             return;
@@ -130,14 +158,19 @@ class gui.EditMapGeometry extends GeometryPane implements GeometryListener {
         
         setLabel();
     }
-    
+    /**
+     * on Change Extent
+     */
     function onChangeExtent():Void {
 		if(this instanceof EditMapPoint){
         	EditMapPoint(this).resetPixels();
 		}	
     	draw();
 	}
-	
+	/**
+	 * get First Ancestor
+	 * @return
+	 */
 	function getFirstAncestor():EditMapGeometry {
         if (this.isChild == null) {
             return this;

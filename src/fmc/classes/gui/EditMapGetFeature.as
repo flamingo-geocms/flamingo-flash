@@ -25,12 +25,17 @@ import coregui.ButtonConfig;
 import gismodel.GIS;
 import geometrymodel.Geometry;
 
+/**
+ * EditMapGetFeature
+ */
 class gui.EditMapGetFeature extends AbstractComponent implements ActionEventListener {
     
     private var gis:GIS = null;
 	private var editMap:Object = null;
 	private var thisObj:Object;
-    
+    /**
+     * init
+     */
     function init():Void {
         thisObj = this;
 		gis = _global.flamingo.getComponent(listento[0]);
@@ -52,7 +57,10 @@ class gui.EditMapGetFeature extends AbstractComponent implements ActionEventList
         initObject["buttonConfigs"] = buttonConfigs;
         attachMovie("ButtonBar", "mButtonBar", 3, initObject);
     }
-	
+	/**
+	 * on Action Event
+	 * @param	actionEvent
+	 */
     function onActionEvent(actionEvent:ActionEvent):Void {
         var sourceClassName:String = actionEvent.getSourceClassName();
         var actionType:Number = actionEvent.getActionType();

@@ -161,7 +161,7 @@ class gui.SliderHor extends AbstractPositionable{
 	}
 	/**
 	* Configurates a component by setting a xml.
-	* @attr xml:Object Xml or string representation of a xml.
+	* @param xml:Object Xml or string representation of a xml.
 	*/
 	function setConfig(xml:Object) {
 		if (typeof (xml) == "string") {
@@ -297,61 +297,97 @@ class gui.SliderHor extends AbstractPositionable{
 		}
 	}
 	/*********************** Getters / Setters *****************/
+	/**
+	 * getter sliderButton
+	 */
 	public function get sliderButton():HorSliderButton 
 	{
 		return _sliderButton;
 	}
 	
+	/**
+	 * setter sliderButton
+	 */
 	public function set sliderButton(value:HorSliderButton):Void 
 	{
 		_sliderButton = value;
 	}
 	
+	/**
+	 * getter increaseButton
+	 */
 	public function get increaseButton():IncreaseButton 
 	{
 		return _increaseButton;
 	}
 	
+	/**
+	 * setter increaseButton
+	 */
 	public function set increaseButton(value:IncreaseButton):Void 
 	{
 		_increaseButton = value;
 	}
 	
+	/**
+	 * getter decreaseButton
+	 */
 	public function get decreaseButton():DecreaseButton 
 	{
 		return _decreaseButton;
 	}
 	
+	/**
+	 * setter decreaseButton
+	 */
 	public function set decreaseButton(value:DecreaseButton):Void 
 	{
 		_decreaseButton = value;
 	}
 	
+	/**
+	 * getter sliderBar
+	 */
 	public function get sliderBar():MovieClip 
 	{
 		return _sliderBar;
 	}
 	
+	/**
+	 * setter sliderBar
+	 */
 	public function set sliderBar(value:MovieClip):Void 
 	{
 		_sliderBar = value;
 	}
 	
+	/**
+	 * getter spriteMap
+	 */
 	public function get spriteMap():SpriteMap 
 	{
 		return _spriteMap;
 	}
 	
+	/**
+	 * setter spriteMap
+	 */
 	public function set spriteMap(value:SpriteMap):Void 
 	{
 		_spriteMap = value;
 	}
 	
+	/**
+	 * getter mLabel
+	 */
 	public function get mLabel():TextField 
 	{
 		return _mLabel;
 	}
 	
+	/**
+	 * setter mLabel
+	 */
 	public function set mLabel(value:TextField):Void 
 	{
 		_mLabel = value;

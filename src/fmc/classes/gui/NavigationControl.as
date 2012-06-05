@@ -324,162 +324,288 @@ class gui.NavigationControl extends AbstractConfigurable
 	}
 	
 	/** Getters and setters **/
+	/**
+	 * getter northButton
+	 */
 	public function get northButton():MoveExtentButton{
 		return _northButton;
 	}
+	/**
+	 * setter northButton
+	 */
 	public function set northButton(value:MoveExtentButton):Void {
 		_northButton = value;
 	}
+	/**
+	 * getter westButton
+	 */
 	public function get westButton():MoveExtentButton {
 		return _westButton;
 	}
+	/**
+	 * setter westButton
+	 */
 	public function set westButton(value:MoveExtentButton):Void{
 		_westButton = value;
 	}
+	/**
+	 * getter southButton
+	 */
 	public function get southButton():MoveExtentButton{
 		return _southButton;
 	}
+	/**
+	 * setter southButton
+	 */
 	public function set southButton(value:MoveExtentButton):Void {
 		_southButton = value;
 	}
+	/**
+	 * getter eastButton
+	 */
 	public function get eastButton():MoveExtentButton {
 		return _eastButton;
 	}
+	/**
+	 * setter eastButton
+	 */
 	public function set eastButton(value:MoveExtentButton):Void {
 		_eastButton = value;
 	}
+	/**
+	 * getter map
+	 */
 	public function get map():Map 
 	{
 		return _map;
 	}
+	/**
+	 * setter map
+	 */
 	public function set map(value:Map):Void 
 	{
 		_map = value;
 	}
+	/**
+	 * getter mcloader
+	 */
 	public function get mcloader():MovieClipLoader 
 	{
 		return _mcloader;
 	}
+	/**
+	 * setter mcloader
+	 */
 	public function set mcloader(value:MovieClipLoader):Void 
 	{
 		_mcloader = value;
 	}
+	/**
+	 * getter spriteMap
+	 */
 	public function get spriteMap():SpriteMap 
 	{
 		return _spriteMap;
 	}
+	/**
+	 * setter spriteMap
+	 */
 	public function set spriteMap(value:SpriteMap):Void 
 	{
 		_spriteMap = value;
 	}
+	/**
+	 * getter neCorner
+	 */
 	public function get neCorner():MovieClip 
 	{
 		return _neCorner;
 	}
+	/**
+	 * setter neCorner
+	 */
 	public function set neCorner(value:MovieClip):Void 
 	{
 		_neCorner = value;
 	}
+	/**
+	 * getter seCorner
+	 */
 	public function get seCorner():MovieClip 
 	{
 		return _seCorner;
 	}
+	/**
+	 * setter seCorner
+	 */
 	public function set seCorner(value:MovieClip):Void 
 	{
 		_seCorner = value;
 	}
+	/**
+	 * getter swCorner
+	 */
 	public function get swCorner():MovieClip 
 	{
 		return _swCorner;
 	}
+	/**
+	 * setter swCorner
+	 */
 	public function set swCorner(value:MovieClip):Void 
 	{
 		_swCorner = value;
 	}
+	/**
+	 * getter nwCorner
+	 */
 	public function get nwCorner():MovieClip 
 	{
 		return _nwCorner;
 	}
+	/**
+	 * setter nwCorner
+	 */
 	public function set nwCorner(value:MovieClip):Void 
 	{
 		_nwCorner = value;
 	}
+	/**
+	 * getter mid
+	 */
 	public function get mid():MovieClip 
 	{
 		return _mid;
 	}
+	/**
+	 * setter mid
+	 */
 	public function set mid(value:MovieClip):Void 
 	{
 		_mid = value;
 	}
+	/**
+	 * getter zoomer
+	 */
 	public function get zoomer():ZoomerV 
 	{
 		return _zoomer;
 	}
+	/**
+	 * setter zoomer
+	 */
 	public function set zoomer(value:ZoomerV):Void 
 	{
 		_zoomer = value;
 	}
+	/**
+	 * getter firstTime
+	 */
 	public function get firstTime():Boolean 
 	{
 		return _firstTime;
 	}
+	/**
+	 * setter firstTime
+	 */
 	public function set firstTime(value:Boolean):Void 
 	{
 		_firstTime = value;
 	}
+	/**
+	 * getter zoomerBackground
+	 */
 	public function get zoomerBackground():MovieClip 
 	{
 		return _zoomerBackground;
 	}
+	/**
+	 * setter zoomerBackground
+	 */
 	public function set zoomerBackground(value:MovieClip):Void 
 	{
 		_zoomerBackground = value;
 	}
+	/**
+	 * getter zoomerBackgroundBottom
+	 */
 	public function get zoomerBackgroundBottom():MovieClip 
 	{
 		return _zoomerBackgroundBottom;
 	}
+	/**
+	 * setter zoomerBackgroundBottom
+	 */
 	public function set zoomerBackgroundBottom(value:MovieClip):Void 
 	{
 		_zoomerBackgroundBottom = value;
 	}
+	/**
+	 * getter zoomerOffset
+	 */
 	public function get zoomerOffset():Number 
 	{
 		return _zoomerOffset;
 	}
+	/**
+	 * setter zoomerOffset
+	 */
 	public function set zoomerOffset(value:Number):Void 
 	{
 		_zoomerOffset = value;
 	}
+	/**
+	 * getter zoomerBackgroundOffset
+	 */
 	public function get zoomerBackgroundOffset():Number 
 	{
 		return _zoomerBackgroundOffset;
 	}
+	/**
+	 * setter zoomerBackgroundOffset
+	 */
 	public function set zoomerBackgroundOffset(value:Number):Void 
 	{
 		_zoomerBackgroundOffset = value;
 	}
+	/**
+	 * getter buttonFull
+	 */
 	public function get buttonFull():ButtonFull 
 	{
 		return _buttonFull;
 	}
+	/**
+	 * setter buttonFull
+	 */
 	public function set buttonFull(value:ButtonFull):Void 
 	{
 		_buttonFull = value;
 	}
+	/**
+	 * getter showFullExtent
+	 */
 	public function get showFullExtent():Boolean 
 	{
 		return _showFullExtent;
 	}
+	/**
+	 * setter showFullExtent
+	 */
 	public function set showFullExtent(value:Boolean):Void 
 	{
 		_showFullExtent = value;
 	}
+	/**
+	 * getter showZoomerButtons
+	 */
 	public function get showZoomerButtons():Boolean 
 	{
 		return _showZoomerButtons;
 	}
+	/**
+	 * setter showZoomerButtons
+	 */
 	public function set showZoomerButtons(value:Boolean):Void 
 	{
 		_showZoomerButtons = value;

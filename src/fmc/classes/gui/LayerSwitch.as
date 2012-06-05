@@ -31,6 +31,9 @@
 
 import coregui.GradientButton;
 
+/**
+ * LayerSwitch, switches between layers
+ */
 class gui.LayerSwitch extends GradientButton {    
     private var layers1:Array = null;
     private var layers2:Array = null;
@@ -41,7 +44,9 @@ class gui.LayerSwitch extends GradientButton {
    	private var next : Number = 1;
 
 	var intervalID : Number;
-
+	/**
+	 * init
+	 */
 	function init(){
 		super.init();
         _global.flamingo.addListener(this, "flamingo", this);
@@ -56,7 +61,11 @@ class gui.LayerSwitch extends GradientButton {
 		next = 2;
 	}
     
-    
+    /**
+     * set Attribute
+     * @param	name
+     * @param	value
+     */
     function setAttribute(name:String, value:String):Void {
         if (name == "layers1") {
         	layerNames1 = value;
@@ -66,7 +75,9 @@ class gui.LayerSwitch extends GradientButton {
         }
     }
     
- 
+	/**
+	 * on Press
+	 */
     function onPress():Void{
     	changeVisibility();	
     	if(next == 1){
@@ -91,7 +102,9 @@ class gui.LayerSwitch extends GradientButton {
     	} 
     	
     }
-    
+    /**
+     * switch layers
+     */
     function swizch():Void {
 		if (isAllOutOfScale(layers1) || isAllOutOfScale(layers2)){
 			disabled = true;
@@ -100,7 +113,9 @@ class gui.LayerSwitch extends GradientButton {
 		}
 		draw();
     }
-    
+    /**
+     * change Visibility
+     */
     function changeVisibility(){
         disabled = true;
         if (layers1 == null) {
@@ -191,7 +206,9 @@ class gui.LayerSwitch extends GradientButton {
    		}
    		_global.setTimeout(updateLayers(), 1000);
     }
-    
+    /**
+     * update Layers
+     */
     function updateLayers(){
 		for (var j:Number = 0; j < layers1.length; j++) { 
 			_global.flamingo.getComponent(layers1[j].id).update();
@@ -222,7 +239,11 @@ class gui.LayerSwitch extends GradientButton {
     	return allOutOfScale;
     }
 
-    
+    /**
+     * on Update Complete
+     * @param	layer
+     * @param	updateTime
+     */
 	function onUpdateComplete(layer:MovieClip, updateTime:Number):Void {
         //_global.flamingo.tracer("LayerSwitch on UpdateComplete " + layer);
         swizch();

@@ -154,7 +154,7 @@ dynamic class gui.tools.ToolGroup extends AbstractPositionable
 	 */	
 	/**
 	* Configurates a component by setting a xml.
-	* @attr xml:Object Xml or string representation of a xml.
+	* @param xml:Object Xml or string representation of a xml.
 	*/
 	function setConfig(xml:Object) {
 		if (typeof (xml) == "string") {
@@ -211,6 +211,10 @@ dynamic class gui.tools.ToolGroup extends AbstractPositionable
 			}
 		}
 	}
+	/**
+	 * activateDefaultToolAfterLoad
+	 * @param	val
+	 */
 	function activateDefaultToolAfterLoad(val:Boolean):Void {
 		for (var i = 0; i < this.listento.length; i++) {
 			_global.flamingo.getComponent(this.listento[i]).activateDefaultTool(val);
@@ -256,11 +260,15 @@ dynamic class gui.tools.ToolGroup extends AbstractPositionable
 	 */
 	/**
 	 * Add a tool to this group
+	 * @param	tool
 	 */
 	function addTool(tool:AbstractTool):Void {
 		this.tools.push(tool);
 	}
-	
+	/**
+	 * Add an old tool to this group
+	 * @param	tool
+	 */
 	function addOldTool(tool):Void {
 		this.oldTools.push(tool);
 	}
@@ -416,109 +424,156 @@ dynamic class gui.tools.ToolGroup extends AbstractPositionable
 	}	
 	
 	/*********************** Getters and Setters ***********************/	
+	/**
+	 * get tools 
+	 */
 	public function get tools():Array 
 	{
 		return _tools;
 	}
-	
+	/**
+	 * setter tools
+	 */
 	public function set tools(value:Array):Void 
 	{
 		_tools = value;
 	}
-		
+	/**
+	 * getter tool
+	 */	
 	public function get tool():String 
 	{
 		return _tool;
 	}
-	
+	/**
+	 * setter tool
+	 */
 	public function set tool(value:String):Void 
 	{
 		_tool = value;
 	}
-	
+	/**
+	 * getter defaulttool
+	 */
 	public function get defaulttool():String 
 	{
 		return _defaulttool;
 	}
-	
+	/**
+	 * setter defaulttool
+	 */
 	public function set defaulttool(value:String):Void 
 	{
 		_defaulttool = value;
 	}
-	
+	/**
+	 * getter identifying
+	 */
 	public function get identifying():Boolean 
 	{
 		return _identifying;
 	}
-	
+	/**
+	 * setter identifying
+	 */
 	public function set identifying(value:Boolean):Void 
 	{
 		_identifying = value;
 	}
-	
+	/**
+	 * getter updating
+	 */
 	public function get updating():Boolean 
 	{
 		return _updating;
 	}
-	
+	/**
+	 * setter updating
+	 */
 	public function set updating(value:Boolean):Void 
 	{
 		_updating = value;
 	}
-	
+	/**
+	 * getter lFlamingo
+	 */
 	public function get lFlamingo():Object 
 	{
 		return _lFlamingo;
 	}
-	
+	/**
+	 * setter lFlamingo
+	 */
 	public function set lFlamingo(value:Object):Void 
 	{
 		_lFlamingo = value;
 	}
-	
+	/**
+	 * getter lParent
+	 */
 	public function get lParent():Object 
 	{
 		return _lParent;
 	}
-	
+	/**
+	 * setter lParent
+	 */
 	public function set lParent(value:Object):Void 
 	{
 		_lParent = value;
 	}
-	
+	/**
+	 * getter lMap
+	 */
 	public function get lMap():Object 
 	{
 		return _lMap;
 	}
-	
+	/**
+	 * setter lMap
+	 */
 	public function set lMap(value:Object):Void 
 	{
 		_lMap = value;
 	}
-	
+	/**
+	 * getter version
+	 */
 	public function get version():String 
 	{
 		return _version;
 	}
-	
+	/**
+	 * setter version
+	 */
 	public function set version(value:String):Void 
 	{
 		_version = value;
 	}
-	
+	/**
+	 * getter defaultXML
+	 */
 	public function get defaultXML():String 
 	{
 		return _defaultXML;
 	}
-	
+	/**
+	 * setter defaultXML
+	 */
 	public function set defaultXML(value:String):Void 
 	{
 		_defaultXML = value;
 	}
+	/**
+	 * getter oldTools
+	 */
 	public function get oldTools():Array 
 	{
 		return _oldTools;
 	}
+	/**
+	 * setter oldTools
+	 */
 	public function set oldTools(value:Array):Void 
 	{
 		_oldTools = value;

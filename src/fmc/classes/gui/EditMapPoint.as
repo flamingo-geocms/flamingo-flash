@@ -19,6 +19,9 @@ import gismodel.GeometryProperty;
 import tools.Logger;
 import mx.controls.Label;
 
+/**
+ * EditMapPoint
+ */
 class gui.EditMapPoint extends EditMapGeometry {
     private var m_pixel:Pixel = null;
 	private var mPointGraphic:MovieClip = null;
@@ -34,16 +37,24 @@ class gui.EditMapPoint extends EditMapGeometry {
 	private var pointText:String = null;
 	
 	public var log:Logger=null;
-	    
-    function onLoad():Void { // This method is a stub. It is necessary though, because of the "super" bug in Flash.
+	/**
+	 * This method is a stub. It is necessary though, because of the "super" bug in Flash.
+	 */    
+    function onLoad():Void { 
       	super.onLoad();    
 		this.log = new Logger("gui.EditMapPoint",_global.flamingo.getLogLevel(),_global.flamingo.getScreenLogLevel());
     }
-    
+    /**
+     * set Size
+     * @param	width
+     * @param	height
+     */
    function setSize(width:Number, height:Number):Void { // This method is a stub. It is necessary though, because of the "super" bug in Flash.
         super.setSize(width, height);
     }
-    
+    /**
+     * reset Pixels
+     */
     function resetPixels():Void{
     	var point:Point = Point(_geometry);
         m_pixel=point2Pixel(point);
@@ -52,7 +63,9 @@ class gui.EditMapPoint extends EditMapGeometry {
     private function addChildGeometries():Void {
     	//do nothing for point
     }
-	
+	/**
+	 * do Draw Clean
+	 */
 	function doDrawClean():Void {
 		if (mPointGraphic != null) {
 			with (this.mPointGraphic) {
@@ -74,7 +87,9 @@ class gui.EditMapPoint extends EditMapGeometry {
 		return flashValue;
 		//return geometryProperty.getFlashValue(val);
 	}
-	
+	/**
+	 * do Draw
+	 */
 	function doDraw():Void {
 		if (editable) {
 			//*** strokeColor, strokeOpacity and fillColor are set by:

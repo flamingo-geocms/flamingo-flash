@@ -19,19 +19,28 @@ import gismodel.Layer;
 import gismodel.GeometryProperty;
 import tools.Logger;
 
+/**
+ * EditMapMultiPolygon
+ */
 class gui.EditMapMultiPolygon extends EditMapGeometry {
 
 	private var intersectionPixel:Pixel;
 	private var drawFillPattern:Boolean;
 	private var log:Logger=null;
-    
-    function onLoad():Void { // This method is a stub. It is necessary though, because of the "super" bug in Flash.
+    /**
+     * This method is a stub. It is necessary though, because of the "super" bug in Flash.
+     */
+    function onLoad():Void { 
         super.onLoad();
 		this.log = new Logger("gui.EditMapMultiPolygon",_global.flamingo.getLogLevel(),_global.flamingo.getScreenLogLevel());
 		log.debug("onload is called");
 		drawFillPattern = false;
     }
-    
+    /**
+     * set Size
+     * @param	width
+     * @param	height
+     */
     function setSize(width:Number, height:Number):Void { // This method is a stub. It is necessary though, because of the "super" bug in Flash.
         super.setSize(width, height);
     }
@@ -41,7 +50,9 @@ class gui.EditMapMultiPolygon extends EditMapGeometry {
 		var val:String = feature.getValueWithPropType(propType);
 		return geometryProperty.getFlashValue(val);
 	}
-	
+	/**
+	 * do Draw
+	 */
     function doDraw():Void {
 		var multiPolygon:MultiPolygon = MultiPolygon(_geometry);
 		if (editable) {

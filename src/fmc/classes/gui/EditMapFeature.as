@@ -14,11 +14,16 @@ import tools.Logger;
 
 import gismodel.Feature;
 
+/**
+ * EditMapFeature
+ */
 class gui.EditMapFeature extends GeometryPane implements StateEventListener {
     
     private var feature:Feature = null; // Set by init object.
 	private var log:Logger=null;
-    
+    /**
+     * on Load
+     */
     function onLoad():Void {
         super.onLoad(); 
         this.log = new Logger("gui.EditMapFeature",_global.flamingo.getLogLevel(),_global.flamingo.getScreenLogLevel());
@@ -31,17 +36,26 @@ class gui.EditMapFeature extends GeometryPane implements StateEventListener {
         }
         editMapGeometries[0].addChildGeometries();
     }
-    
+    /**
+     * remove
+     */
     function remove():Void { // This method is an alternative to the default MovieClip.removeMovieClip. Also unsubscribes as event listener. The event method MovieClip.onUnload cannot be used, because it works buggy.
 		gis.removeEventListener(this, "GIS", StateEvent.CHANGE, "activeFeature");
         feature.removeEventListener(this, "Feature", StateEvent.CHANGE, "values");
         this.removeMovieClip(); // Keyword "this" is necessary here, because of the global function removeMovieClip.
     }
-    
+    /**
+     * set Size
+     * @param	width
+     * @param	height
+     */
     function setSize(width:Number, height:Number):Void { // This method is a stub. It is necessary though, because of the "super" bug in Flash.
         super.setSize(width, height);
     }
-    
+    /**
+     * on State Event
+     * @param	stateEvent
+     */
     function onStateEvent(stateEvent:StateEvent):Void {
         var sourceClassName:String = stateEvent.getSourceClassName();
         var actionType:Number = stateEvent.getActionType();
@@ -58,11 +72,16 @@ class gui.EditMapFeature extends GeometryPane implements StateEventListener {
             editMapGeometry.setLabelText(feature.getLabelText());
         }
     }
-    
+    /**
+     * get Feature
+     * @return
+     */
     function getFeature():Feature {
         return feature;
     }
-    
+    /**
+     * on Press
+     */
     function onPress():Void {
 		
         if (gis.getActiveFeature() == feature) {

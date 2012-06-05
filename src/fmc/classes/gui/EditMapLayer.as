@@ -11,6 +11,9 @@ import gismodel.Layer;
 import gismodel.Feature;
 import tools.Logger;
 
+/**
+ * EditMapLayer
+ */
 class gui.EditMapLayer extends MovieClip implements StateEventListener {
     
     private var gis:GIS = null; // Set by init object.
@@ -23,14 +26,18 @@ class gui.EditMapLayer extends MovieClip implements StateEventListener {
     private var stateEventDispatcher:StateEventDispatcher;
     
 	private var log:Logger=null;
-	
+	/**
+	 * onLoad
+	 */
     function onLoad():Void {
 		this.log = new Logger("gui.EditMapLayer",_global.flamingo.getLogLevel(),_global.flamingo.getScreenLogLevel());
         editMapFeatures = new Array();
         addEditMapFeatures(layer.getFeatures());
         layer.addEventListener(this, "Layer", StateEvent.ADD_REMOVE, "features");
     }
-    
+    /**
+     * remove
+     */
     function remove():Void { // This method is an alternative to the default MovieClip.removeMovieClip. Also unsubscribes as event listener. The event method MovieClip.onUnload cannot be used, because it works buggy.
         layer.removeEventListener(this, "Layer", StateEvent.ADD_REMOVE, "features");
         
@@ -39,7 +46,11 @@ class gui.EditMapLayer extends MovieClip implements StateEventListener {
         }
         this.removeMovieClip(); // Keyword "this" is necessary here, because of the global function removeMovieClip.
     }
-    
+    /**
+     * set Size
+     * @param	width
+     * @param	height
+     */
     function setSize(width:Number, height:Number):Void {
         this.width = width;
         this.height = height;
@@ -48,7 +59,10 @@ class gui.EditMapLayer extends MovieClip implements StateEventListener {
             EditMapFeature(editMapFeatures[i]).setSize(width, height);
         }
     }
-    
+    /**
+     * on State Event
+     * @param	stateEvent
+     */
     function onStateEvent(stateEvent:StateEvent):Void {
         var sourceClassName:String = stateEvent.getSourceClassName();
         var actionType:Number = stateEvent.getActionType();
@@ -60,7 +74,10 @@ class gui.EditMapLayer extends MovieClip implements StateEventListener {
             removeEditMapFeatures(removedFeatures);
         }
     }
-    
+    /**
+     * get Layer
+     * @return
+     */
     function getLayer():Layer {
         return layer;
     }

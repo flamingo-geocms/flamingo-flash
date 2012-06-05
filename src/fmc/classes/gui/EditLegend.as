@@ -64,13 +64,20 @@ import gismodel.Layer;
 import core.AbstractComponent;
 import tools.Logger;
 
+/**
+ * EditLegend
+ */
 class gui.EditLegend extends AbstractComponent implements StateEventListener {
     
     private var gis:GIS = null;
     private var editLegendLayers:Array = null;
     private var legendHeight:Number = 25;
     private var buttonBarProperties:Object = new Object(); //associative array
-	
+	/**
+	 * set attribute
+	 * @param	name
+	 * @param	value
+	 */
 	function setAttribute(name:String, value:String):Void {
 		if(name == "expandable"){
 			buttonBarProperties["expandable"] = (value.toLowerCase() == "true" ? true : false);
@@ -124,7 +131,9 @@ class gui.EditLegend extends AbstractComponent implements StateEventListener {
 		  	buttonBarProperties["backgroundborderopacity"] = Number(value);
         }
 	}
-	
+	/**
+	 * init edit legend
+	 */
     function init():Void {
 		if (!_global.flamingo.isLoaded(listento[0],true)) {
 			_global.flamingo.loadCompQueue.executeAfterLoad(listento[0], this, init);
@@ -154,13 +163,18 @@ class gui.EditLegend extends AbstractComponent implements StateEventListener {
             addEditLegendLayer(layer);
         }
     }
-    
+    /**
+     * layout
+     */
     function layout():Void {
         for (var i:String in editLegendLayers) {
             EditLegendLayer(editLegendLayers[i]).setSize(__width, legendHeight);
         }
     }
-    
+    /**
+     * event handler state
+     * @param	stateEvent
+     */
     function onStateEvent(stateEvent:StateEvent):Void {
         var sourceClassName:String = stateEvent.getSourceClassName();
         var actionType:Number = stateEvent.getActionType();

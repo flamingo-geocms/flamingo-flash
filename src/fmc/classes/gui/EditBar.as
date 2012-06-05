@@ -46,10 +46,15 @@ import event.ActionEventListener;
 import gismodel.GIS;
 import core.AbstractContainer;
 
+/**
+ * EditBar
+ */
 class gui.EditBar extends AbstractContainer implements ActionEventListener {
     
     private var gis:GIS = null;
-    
+    /**
+     * init the edit bar
+     */
     function init():Void {
 		
         gis = _global.flamingo.getComponent(listento[0]).getGIS();
@@ -59,7 +64,10 @@ class gui.EditBar extends AbstractContainer implements ActionEventListener {
             _global.flamingo.getComponent(ids[i]).setActionEventListener(this);
         }
     }
-    
+    /**
+     * action event handler
+     * @param	actionEvent
+     */
     function onActionEvent(actionEvent:ActionEvent):Void {
 		var sourceClassName:String = actionEvent.getSourceClassName();
         var actionType:Number = actionEvent.getActionType();

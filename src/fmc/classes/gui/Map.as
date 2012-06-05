@@ -365,7 +365,7 @@ class gui.Map extends AbstractPositionable implements PersistableComponent{
 	
 	/**
 	* Configurates a component by setting a xml.
-	* @attr xml:Object Xml or string representation of a xml.
+	* @param xml:Object Xml or string representation of a xml.
 	*/
 	public function setConfig(xml:Object) {
 		if (typeof (xml) == "string") {
@@ -2601,6 +2601,10 @@ class gui.Map extends AbstractPositionable implements PersistableComponent{
 			_global.flamingo.addListener (listener, componentId, this);
 		}
 	}
+	/**
+	 * activate Default Tool
+	 * @param	act
+	 */
 	public function activateDefaultTool(act:Boolean) {
 		useDefaultTool = act;
 		if (act) {
@@ -2614,49 +2618,79 @@ class gui.Map extends AbstractPositionable implements PersistableComponent{
 		}		
 	}
 	/*********************** Getters and Setters ***********************/
+	/**
+	 * getter mBG
+	 */
 	public function get mBG():MovieClip {
 		return _mBG;
 	}
-	
+	/**
+	 * setter mBG
+	 */
 	public function set mBG(value:MovieClip):Void {
 		_mBG = value;
 	}
-	
+	/**
+	 * getter mLayers
+	 */
 	public function get mLayers():MovieClip {
 		return _mLayers;
 	}
-	
+	/**
+	 * setter mLayers
+	 */
 	public function set mLayers(value:MovieClip):Void {
 		_mLayers = value;
 	}
+	/**
+	 * getter defaultTool
+	 */
 	public function get defaultTool():ToolDefault 
 	{
 		return _defaultTool;
 	}
+	/**
+	 * setter defaultTool
+	 */
 	public function set defaultTool(value:ToolDefault):Void 
 	{
 		_defaultTool = value;
 	}
+	/**
+	 * getter useDefaultTool
+	 */
 	public function get useDefaultTool():Boolean 
 	{
 		return _useDefaultTool;
 	}
+	/**
+	 * setter useDefaultTool
+	 */
 	public function set useDefaultTool(value:Boolean):Void 
 	{
 		_useDefaultTool = value;
 	}
-	
+	/**
+	 * setter Maptipdelay
+	 */
 	public function setMaptipdelay(value:Number) {
 		this.maptipdelay = value;
 	}
+	/**
+	 * getter Maptipdelay
+	 */
 	public function getMaptipdelay():Number {
 		return this.maptipdelay;
 	}
-	
+	/**
+	 * getter Resolutions
+	 */
 	public function getResolutions():Array {
 		return this.resolutions;
 	}
-	
+	/**
+	 * setter Resolutions
+	 */
 	public function setResolutions(newRes:Array):Void {
 		this.resolutions = newRes;
 		if (newRes != null) {			
