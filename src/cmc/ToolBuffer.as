@@ -83,13 +83,13 @@ flamingo.addListener(lFlamingo, "flamingo", this);
 //--------------------------------------------------
 init();
 //--------------------------------------------------
-/** @tag <fmc:ToolBuffer>  
+/** @tag <cmc:ToolBuffer>  
 * This tag defines a tool for buffering features in a map. 
 * This tool works only with an ArcIMS mapservices.
 * @hierarchy childnode of <fmc:ToolGroup> 
 * @example 
 *	 <fmc:ToolGroup>
-*		 <fmc:ToolBuffer id="buffer" mapServiceId="samenleving" >
+*		 <cmc:ToolBuffer id="buffer" mapServiceId="samenleving" >
 *			<layer id="gemeente" label="gemeente" fillcolor="0,255,255" filltransparency=".3" boundarycolor="0,0,0" boundarywidth="1" />
 *			</layer>
 *		</fmc:ToolBuffer>

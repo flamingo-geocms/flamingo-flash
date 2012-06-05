@@ -48,17 +48,17 @@ lFlamingo.onSetLanguage = function(lang:String) {
 flamingo.addListener(lFlamingo, "flamingo", this);
 //------------------------
 init();
-/** @tag <fmc:TextArea>  
+/** @tag <cmc:TextArea>  
 * This tag defines a textarea. Use standard string and style tags for configuring the text. The string tag has to have id="text".
 * Use CDATA tags <![CDATA[...]]> to configure html text and avoid interferance with the config xml. See example.
-* @hierarchy childnode of <flamingo> or a container component. e.g. <fmc:Window>
+* @hierarchy childnode of <flamingo> or a container component. e.g. <cmc:Window>
 * @example
 * <fmc:TextArea left="10" top="10" width="100" height="20">
 * <string id="text">
 * <nl>een nederlandse tekst</nl>
 * <en>an english text</en>
 * </string>
-* </fmc:TextArea>
+* </cmc:TextArea>
 */
 
 /**

@@ -80,7 +80,7 @@ lMap.onMouseUp = function(map:MovieClip, xmouse:Number, ymouse:Number, coord:Obj
 //--------------------------------------------------
 init();
 //--------------------------------------------------
-/** @tag <fmc:ToolHotlink>  
+/** @tag <cmc:ToolHotlink>  
 * This tag defines a tool for hotlinking the map.
 * The positioning of the tool is relative to the position of toolGroup.
 * @hierarchy childnode of <fmc:ToolGroup>

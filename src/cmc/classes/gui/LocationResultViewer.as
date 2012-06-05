@@ -18,16 +18,16 @@
 * highlight functionality see the LocationFinder Component.
 **/
 
-/** @tag <fmc:LocationResultViewer> 
+/** @tag <cmc:LocationResultViewer> 
 * This tag defines a locationresultviewer instance. ...
 * @class gui.LocationResultViewer extends AbstractComponent
 * @hierarchy child node of Flamingo or a container component 
 * @example
-* <fmc:Window top="100" left="100" width="300" height="300">
-    <fmc:LocationResultViewer id="locationresults" top="top" left ="5" width="100%" height="100%" visible="false" >
+* <cmc:Window top="100" left="100" width="300" height="300">
+    <cmc:LocationResultViewer id="locationresults" top="top" left ="5" width="100%" height="100%" visible="false" >
      	<style id='a' font-family='verdana' font-size='13px' color='#0033cc' display='block' font-weight='normal'/> 
-    </fmc:LocationResultViewer> 
-  </fmc:Window> 
+    </cmc:LocationResultViewer> 
+  </cmc:Window> 
 */
 
 

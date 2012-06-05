@@ -55,9 +55,9 @@ lFlamingo.onConfigComplete = function() {
 };
 flamingo.addListener(lFlamingo, "flamingo", this);
 init();
-/** @tag <fmc:Image>  
+/** @tag <cmc:Image>  
 * This tag defines a image component.
-* @hierarchy childnode of <flamingo> or a container component. e.g. <fmc:Window>
+* @hierarchy childnode of <flamingo> or a container component. e.g. <cmc:Window>
 * @attr vstretch (defaultvalue = "true") True or false. Stretches the image vertical to the available space.
 * @attr hstretch (defaultvalue = "true") True or false. Stretches the image horizontal to the available space.
 * @attr mask (defaultvalue = "false") True or false. 

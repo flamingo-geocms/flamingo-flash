@@ -13,20 +13,20 @@
 */
 
 
-/** @tag <fmc:BitmapClone> 
+/** @tag <cmc:BitmapClone> 
 * This tag defines a bitmap clone. The bitmap clone must be registered as listener to the component of which a visual copy is desired. 
 * The component to be cloned must not have any content that is loaded from another domain than the domain where Flamingo runs. 
 * If it does, the bitmap clone will remain a white box. This behavior is due to the sandbox security model of the Flash player
 * @class gui.BitmapClone extends AbstractComponent
 * @hierarchy child node of Flamingo or a container component.
 * @example
-    <fmc:PrintTemplate id="printTemplate1" name="verticaal A4" dpi="200" format="A4" orientation="portrait"
+    <cmc:PrintTemplate id="printTemplate1" name="verticaal A4" dpi="200" format="A4" orientation="portrait"
 		listento="printMonitor1" maps="printMap1">
 		...
-		<fmc:BitmapClone name="legenda" width="30%" height="25%" listento="legend" refreshrate="2500"/>
-		<fmc:BitmapClone name="identify resultaten" width="40%" height="30%" right="right" listento="identify" refreshrate="2500"/>
+		<cmc:BitmapClone name="legenda" width="30%" height="25%" listento="legend" refreshrate="2500"/>
+		<cmc:BitmapClone name="identify resultaten" width="40%" height="30%" right="right" listento="identify" refreshrate="2500"/>
 		...
-	</fmc:PrintTemplate>
+	</cmc:PrintTemplate>
 * @attr refreshrate	((default value: 7000) Time in milliseconds at which rate the visual copy be refreshed.
 */
 

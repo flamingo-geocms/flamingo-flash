@@ -16,12 +16,12 @@
  * 
  */
  
-/** @tag <fmc:QueryComponent>
+/** @tag <cmc:QueryComponent>
  * This tag defines a query component instance. 
  * @class gui.QueryComponent extends core.AbstractComponent
  * @attr startupindex (defaultvalue = "0") The index of the Accordion component that is open after startup (0 is the upper)
  * @example
- * <fmc:QueryComponent id="queryComponent" left="10" right="right -10" top="20" height="400" listento="map" startupindex="0">
+ * <cmc:QueryComponent id="queryComponent" left="10" right="right -10" top="20" height="400" listento="map" startupindex="0">
  * <string id="buttonLabel" nl="Zoeken" />
  * <string id="clearButtonLabel" nl="Wissen" />
  * <string id="selectFieldLabel" nl="Selecteer een veld ..." />
@@ -30,7 +30,7 @@
  * <string id="selectServiceLabel" nl="Selecteer onderwerp" />
  * <string id="selectServiceBlank" nl="Selecteer zoekingang ..." />
  * <string id="selectServiceCaption" nl="Waarvoor geldt" />
- * </fmc:QueryComponent>
+ * </cmc:QueryComponent>
  */
 /** 
  * @tag <ServiceDescription>
@@ -39,7 +39,7 @@
  * feature types, relations between feature types and the search fields that can be queried.
  * 
  * @class coremodel.search.ServiceDescription extends core.AbstractComposite
- * @hierarchy child node of <fmc:QueryComponent>
+ * @hierarchy child node of <cmc:QueryComponent>
  * 
  * @attr srs	The spatial reference system to use.
  * @attr label	The label to display in the interface for this service.

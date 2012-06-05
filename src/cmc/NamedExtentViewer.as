@@ -64,11 +64,11 @@ flamingo.addListener(lParent, flamingo.getParent(this), this);
 //-----------------------------------------------------------------
 init();
 //-----------------------------------
-/** @tag <fmc:NamedExtentViewer>  
+/** @tag <cmc:NamedExtentViewer>  
 * This tag defines an NamedExtentViewer. It listens to just one map.
-* @hierarchy childnode of <flamingo> or a container component. e.g. <fmc:Window>
+* @hierarchy childnode of <flamingo> or a container component. e.g. <cmc:Window>
 * @example
-* <fmc:NamedExtentViewer  xcenter="50%"  width="400" height="50" bottom="95" listento="themap" />
+* <cmc:NamedExtentViewer  xcenter="50%"  width="400" height="50" bottom="95" listento="themap" />
 */
 
 /**

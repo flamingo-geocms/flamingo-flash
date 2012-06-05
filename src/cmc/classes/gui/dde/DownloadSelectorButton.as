@@ -15,11 +15,11 @@ import tools.Logger;
 * @configstring tooltip tooltiptext of the button
 */
 
-/** @tag <fmc:DownloadSelectorButton>  
+/** @tag <cmc:DownloadSelectorButton>  
 * This tag defines a button for opening the DownloadSelector component. the button listens to the window of the
 * DownloadSelector ("downloadSelectorWindow")
 * @hierarchy childnode of <flamingo>
-* @example  <fmc:DownloadSelectorButton right="500" top="6" listento="downloadSelectorWindow">
+* @example  <cmc:DownloadSelectorButton right="500" top="6" listento="downloadSelectorWindow">
 */
 
 class gui.dde.DownloadSelectorButton extends AbstractComponent {

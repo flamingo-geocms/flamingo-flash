@@ -17,7 +17,7 @@
 */
 
 
-/** @tag <fmc:PrintTemplate> 
+/** @tag <cmc:PrintTemplate> 
 * This tag defines a print template. A print template is a container and as such can hold child components, for example a map. 
 * Configuration of the child components is as usual in Flamingo. 
 * The legend component and the map component can both be configured in two ways now: direct and indirect. 
@@ -32,17 +32,17 @@
 * @class gui.PrintTemplate extends gui.ScalableContainer
 * @hierarchy child node of Print. 
 * @example
-	<fmc:Print id="print" width="100%" height="100%" visible="false"  borderwidth="0" listento="map">
+	<cmc:Print id="print" width="100%" height="100%" visible="false"  borderwidth="0" listento="map">
 		...
-		<fmc:PrintTemplate id="printTemplate1" name="verticaal A4" dpi="144" format="A4" orientation="portrait"
+		<cmc:PrintTemplate id="printTemplate1" name="verticaal A4" dpi="144" format="A4" orientation="portrait"
 			listento="printMonitor1" maps="printMap1">
 			<fmc:Map id="printMap1" name="kaartbeeld" width="100%" height="100%" movequality="HIGH" configobject="map"/>
 			<fmc:EditMap id="editMap2" name="redlining"  width="100%" height="100%"  listento="gis,printMap1" editable="false"/>
-			<fmc:BitmapClone name="legenda" width="30%" height="25%" listento="legend" refreshrate="2500"/>
-			<fmc:BitmapClone name="identify resultaten" width="40%" height="30%" right="right" listento="identify" refreshrate="2500"/>
-			<fmc:PrintLabel name="identifylabel" top="0" width="40%" right="right"  text="Identify resultaten" fontfamily="arial" fontsize="18"/>
-		</fmc:PrintTemplate>
-	</fmc:Print>	
+			<cmc:BitmapClone name="legenda" width="30%" height="25%" listento="legend" refreshrate="2500"/>
+			<cmc:BitmapClone name="identify resultaten" width="40%" height="30%" right="right" listento="identify" refreshrate="2500"/>
+			<cmc:PrintLabel name="identifylabel" top="0" width="40%" right="right"  text="Identify resultaten" fontfamily="arial" fontsize="18"/>
+		</cmc:PrintTemplate>
+	</cmc:Print>	
 * @attr dpi (default value = "72", max value = "144") Resolution in which the template is intended to be sent to the printer. In dots per inch. 
 * Raising the resolution will improve the print quality but it may also show more a more detailed map than one might expect.
 * @attr format ("A3", "A4", no default value) Paper format to which the template is intended to be printed.

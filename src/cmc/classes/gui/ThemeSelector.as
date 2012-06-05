@@ -16,29 +16,29 @@
 * @configstring label Label text for the combobox.
 */
 
-/** @tag <fmc:ThemeSelector> 
+/** @tag <cmc:ThemeSelector> 
 * This tag defines a themeSelector instance. ...
 * @class gui.ThemeSelector extends AbstractContainer
 * @hierarchy child node of Flamingo 
 * @example
-       <fmc:ThemeSelector id="themeselector"   left="right -230"   top="top" width="230"  borderwidth="0" listlength="8"
+       <cmc:ThemeSelector id="themeselector"   left="right -230"   top="top" width="230"  borderwidth="0" listlength="8"
             listento="map" persistentlayerids="risicokaart.39,risicokaart.10,risicokaart.9,risicokaart.4,risicokaart.5,risicokaart.38,risicokaart.3,risicokaart.12,
             risicokaart.2,risicokaart.0,risicokaart.14,risicokaart.maptipsgevstoffen,risicokaart.Bedrijven,risicokaart.Dissolve_provincies,risicokaart.Outline_nederland">
-            <fmc:Theme  name="default"  layerids="risicokaart.risico_installatie_10-6,risicokaart.risico_inrichting_10-6,risicokaart.risico_installatie_10-5,.....">
+            <cmc:Theme  name="default"  layerids="risicokaart.risico_installatie_10-6,risicokaart.risico_inrichting_10-6,risicokaart.risico_installatie_10-5,.....">
                 <string id="label" en="Choose a theme..." nl="Kies een thema...."/>
-            </fmc:Theme>
-            <fmc:Theme  name="none" > 
+            </cmc:Theme>
+            <cmc:Theme  name="none" > 
                 <string id="label" en="Show none" nl="Niets tonen"/>
-            </fmc:Theme>
-            <fmc:Theme name="all" > 
+            </cmc:Theme>
+            <cmc:Theme name="all" > 
                 <string id="label" en="Show all" nl="Alles tonen"/>
-            </fmc:Theme>   
-            <fmc:Theme name="veiligheidsafstanden" layerids="risicokaart.risico_installatie_10-6,risicokaart.risico_inrichting_10-6,....">
+            </cmc:Theme>   
+            <cmc:Theme name="veiligheidsafstanden" layerids="risicokaart.risico_installatie_10-6,risicokaart.risico_inrichting_10-6,....">
                 <string id="label" nl="Veiligheidsafstanden" en="Risks and effects"
                     de="Risiken und Auswirkungen" fr="Risques et conséquences"/> 
-            </fmc:Theme>
+            </cmc:Theme>
 			....
-		</fmc:ThemeSelector>
+		</cmc:ThemeSelector>
 * @attr persistentlayerids A coma seperated list of layer ids that is not influenced by the selection of a theme. If not configuerd all layers 
 * that are not included in a Theme will act as a persistentlayer.
 * These are for instance topographical baselayers that should always be visible.   

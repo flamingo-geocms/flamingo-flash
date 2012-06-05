@@ -13,45 +13,45 @@
 * @configstring grouplabel Label text for the choices in the groupcombobox.
 */
 
-/** @tag <fmc:URL> 
+/** @tag <cmc:URL> 
 * This tag defines an url instance. When the url should also contain the map extent or the current theme as parameter
 * the url (or the urlselector in which this url is used) should listen to the map component.
 * @class gui.URL extends AbstractComponent 
 * @hierarchy child node of URLSelector or Flamingo or a Container component
 * @example (use of URL in an URLSelector Component)
-* <fmc:UrlSelector left="10" top="20" right="right -10" height="50"  borderalpha="0" listento="map">
+* <cmc:UrlSelector left="10" top="20" right="right -10" height="50"  borderalpha="0" listento="map">
      <string id="groupsellabel" nl="Selecteer een thema..."/>
      <string id="urlsellabel" nl="Kies een atlas..."/>
-     <fmc:URL url="http://..." group="algemeen"  target="_blank">
+     <cmc:URL url="http://..." group="algemeen"  target="_blank">
       	<string id="grouplabel" nl="Algemeen"/>	
       	<string id="label" nl="Kaart en luchtfoto"/>	
-     </fmc:URL>
-     <fmc:URL   url="http://...." group="economie_werk" listento="map" target="_blank">
+     </cmc:URL>
+     <cmc:URL   url="http://...." group="economie_werk" listento="map" target="_blank">
       	<string id="grouplabel" nl="Economie en werk"/>	
       	<string id="label" nl="Bedrijventerreinen"/>	
-     </fmc:URL>
+     </cmc:URL>
      .....
-   </fmc:URLSelector> 
+   </cmc:URLSelector> 
 * @example (use of URL in an Window Component)
   ...
-  <fmc:LinkButton left="560" bottom="bottom +5" listento="linkWindow">
+  <cmc:LinkButton left="560" bottom="bottom +5" listento="linkWindow">
     <string id="tooltip" en="open/ close the link window" nl="open/sluit link"/>
-  </fmc:LinkButton> 
+  </cmc:LinkButton> 
   ....
-   <fmc:Window id="linkWindow" top="120" left="590" width="500" height="70" visible="false" skin="g"
+   <cmc:Window id="linkWindow" top="120" left="590" width="500" height="70" visible="false" skin="g"
     canresize="true" canclose="false">
     <string id="title" en="Copy/paste link" nl="Link kopiëren/plakken"/>
-        <fmc:URL id="risurl"  width="95%" height="95%" showaslink="true" listento="map" visible="false">
+        <cmc:URL id="risurl"  width="95%" height="95%" showaslink="true" listento="map" visible="false">
           <style id="a" font-family="arial,verdana" font-size="12px" color="#0033cc" display="block" font-weight="normal" text-decoration="underline"/>
-        </fmc:URL>
-  </fmc:Window>
+        </cmc:URL>
+  </cmc:Window>
 * @example (use of URL with a persistency service)
-  <fmc:URL id="url"  width="95%" height="95%" showaslink="false" listento="map" persistencyservice="http://.../persistency-service/" appid="apo">\
+  <cmc:URL id="url"  width="95%" height="95%" showaslink="false" listento="map" persistencyservice="http://.../persistency-service/" appid="apo">\
 	<string id="buttonlabel" nl="Genereer link"/>
 	<string id="linkidentifierlabel" nl="Code"/>
 	<string id="linkidentifierhelp" nl="Vul optioneel een code in, toegestane karakters zijn A-Z, a-z, 0-9, - en _"/>
 	<string id="linkidentifiererror" nl="De gegeven code bestaat al"/>
-  </fmc:URL>
+  </cmc:URL>
    
 * @attr url no default Defines the url to open in the browser when selecting an url instance from the combobox 
 * in the URLSelector.

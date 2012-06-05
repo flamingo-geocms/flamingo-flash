@@ -13,22 +13,22 @@
 * @configstring label Label text for the label in the ExtentSelector radiobutton.
 */
 
-/** @tag <fmc:Extent> 
+/** @tag <cmc:Extent> 
 * This tag defines an extent instance. 
 * @class gui.Extent 
 * @hierarchy child node of ExtentSelector 
 * @example
-   <fmc:ExtentSelector  id="extentselector"   left="0" top="210" width="200" listento="map">
-    <fmc:Extent  id="fullExtent" extent="full">
+   <cmc:ExtentSelector  id="extentselector"   left="0" top="210" width="200" listento="map">
+    <cmc:Extent  id="fullExtent" extent="full">
       <string id="label" nl="Zoeken binnen gehele bestand" />
-    </fmc:Extent>
-    <fmc:Extent id="currentExtent" extent="current">
+    </cmc:Extent>
+    <cmc:Extent id="currentExtent" extent="current">
       <string id="label" nl="Zoeken binnen kaartbeeld"/>
-    </fmc:Extent>
-    <fmc:Extent id="nedExtent" extent="13562,306839;13562,875000;278026,875000;278026,306839">
+    </cmc:Extent>
+    <cmc:Extent id="nedExtent" extent="13562,306839;13562,875000;278026,875000;278026,306839">
       <string id="label" nl="Zoeken binnen Nederland"/>
-     </fmc:Extent> 
-  </fmc:ExtentSelector>
+     </cmc:Extent> 
+  </cmc:ExtentSelector>
 * @attr extString A string that defines the extent Reconized values: full, current, 
 *                 string of comma seprated coördinate pairs seperated by a semi-colon. 
  */

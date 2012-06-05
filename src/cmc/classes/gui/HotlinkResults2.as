@@ -10,17 +10,17 @@
 * @file flamingo/cmc/classes/gui/Hotlink.as (sourcefile)
 */
 
-/** @tag <fmc:HotlinkResults2>
+/** @tag <cmc:HotlinkResults2>
 * @class gui.HotlinkResults2 extends AbstractComponent
 * @hierarchy childnode of Flamingo or a container component.
 * @example
 	<FLAMINGO>
 		...
-		<fmc:HotlinkResults2 maxresults="3" id="hotlink" left="0" top="0" width="30%" height="100%" listento="map">
+		<cmc:HotlinkResults2 maxresults="3" id="hotlink" left="0" top="0" width="30%" height="100%" listento="map">
 			<hotlink name="link" listento="layer1.gemeenten_2006" href="http://localhost/[id]" maxresulst="1"/>
 			<hotlink name="link1" listento="layer1" href="http://localhost/[id]" maxresulst="1"/>
 			<hotlink name="link2" listento="layer1.gemeenten_2006" href="http://localhost/[id]" maxresulst="1"/>
-		</fmc:HotlinkResults2>	
+		</cmc:HotlinkResults2>	
 		...
 	</FLAMINGO>
 * @attr listento the listento object on which a getFeatureInfo is done (identify). Usualy a fmc:Map
@@ -29,7 +29,7 @@
 * The browser is deciding what is done with the target param. Default '_blank' wil open in a new window/tabblad. If you set maxresults > 1 all results
 * will be opened in the same window/tab. So only 1 (the last one)result wil be opend even if there are more found.
 */
-/** @tag <fmc:Hotlink>
+/** @tag <cmc:Hotlink>
 * See Hotlink component.
 */
 import gui.*;

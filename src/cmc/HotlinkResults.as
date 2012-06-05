@@ -67,14 +67,14 @@ lMap.onError = function(map:MovieClip, maplayer:MovieClip, type:String, error:St
 };
 //---------------------------------------
 init();
-/** @tag <tpc:HotlinkResults>  
+/** @tag <cmc:HotlinkResults>  
 * This tag defines an url showing hotlink results. This components listens to maps.
-* @hierarchy childnode of <flamingo> or a container component. e.g. <fmc:Window>
+* @hierarchy childnode of <flamingo> or a container component. e.g. <cmc:Window>
 * @example 
-* <fmc:HotlinkResults id="hotlink" left="10" top="10" width="30%" height="100%" listento="map"/> 
+* <cmc:HotlinkResults id="hotlink" left="10" top="10" width="30%" height="100%" listento="map"/> 
 *   <url name="Historie weg" id="verkeersintensiteiten.3" href="[HIS_WEG]" />
 *	<url name="Historie weg" id="verkeersintensiteiten.3" href="[DET_WEG]" />
-* </fmc:HotlinkResults>
+* </cmc:HotlinkResults>
 * @attr id  layerid, same as in the mxd.
 */
 /** @tag <url>  

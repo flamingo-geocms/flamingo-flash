@@ -115,15 +115,15 @@ lFlamingo.onSetLanguage = function( lang:String ) {
 flamingo.addListener(lFlamingo, "flamingo", this);
 //----------------
 init();
-/** @tag <fmc:Legend>  
+/** @tag <cmc:Legend>  
 * This tag defines a legend. The legend (tag) itself listens to a map. 
 * Items (tags) listen to maplayers. And with a dot notation sublayers can be configured. See example.
 * the groups open attribute can also be set from the url example(http://www.bla.nl/flamingo?groupsopen=group1,group2 or 
 * http://www.bla.nl/flamingo?groupsclosed=all)
-* @hierarchy childnode of <flamingo> or a container component. e.g. <fmc:Window>
+* @hierarchy childnode of <flamingo> or a container component. e.g. <cmc:Window>
 * @example 
-<fmc:Window left="10" top="10" width="200" height="200" canresize="true" title="identify" visible="true" skin="g">
-<fmc:Legend width="100%" height="100%" symbolpath="assets"  listento="map">
+<cmc:Window left="10" top="10" width="200" height="200" canresize="true" title="identify" visible="true" skin="g">
+<cmc:Legend width="100%" height="100%" symbolpath="assets"  listento="map">
 <item label="Worldmap"  listento="OG3" canhide="true"  /> 
 <group label="Layers" open="false">
 <item label="Coastlines"  listento="OG3.Coastlines" canhide="true"/>
@@ -142,8 +142,8 @@ init();
 <item label="Airports"  listento="OG3.Airports" canhide="true" /> 
 <item label="Ocean features"  listento="OG3.Ocean features" canhide="true" /> 
 </group>
-</fmc:Legend>
-</fmc:Window>
+</cmc:Legend>
+</cmc:Window>
 * @attr shadowsymbols (defaultvalue = "false") True or false. True: a dropshadow will be applied to symbols.
 * @attr updatedelay (defaultvalue = "1000") Time in milliseconds (1000 = 1 second) between (un)checking a item and performing an layerupdate.
 * @attr skin (defaultvalue = "") Skin. Available skins: "", "f1", "f2" 
@@ -304,7 +304,7 @@ function parseCustomAttr(xml:Object){
 }
 /** @tag <group>  
 * This tag defines a group. A group can contain 1 or more 'group', 'item', 'hr' or 'text' tags.
-* @hierarchy childnode of <fmc:Legend> or <group> 
+* @hierarchy childnode of <cmc:Legend> or <group> 
 * @example
 <group label="Layers" open="false">
  <string id="label" en="Layers" nl="Lagen"/>
@@ -322,7 +322,7 @@ function parseCustomAttr(xml:Object){
 /** @tag <item>  
 * This tag defines an item. An item listens to 1 or more maplayers and responds on their state. An item can contain 1 or more symbols.
 * If an item is invisible, the symbols are hidden. When an item is out of scale, the out of scale string is visible.
-* @hierarchy childnode of <fmc:Legend> or <group> 
+* @hierarchy childnode of <cmc:Legend> or <group> 
 * @example
 <item label="Coastlines"  listento="OG3.Coastlines" canhide="true">
  <string id="label" en="Coastlines" nl="Kust"/>
@@ -374,7 +374,7 @@ function parseCustomAttr(xml:Object){
 //
 /** @tag <hr>  
 * This tag defines a horizontal ruler. 
-* @hierarchy childnode of <fmc:Legend> or <group> or <item>
+* @hierarchy childnode of <cmc:Legend> or <group> or <item>
 * @example
 <hr/>
 * @attr dx (defaultvalue = "0") Extra x-offset for this ruler.
@@ -383,7 +383,7 @@ function parseCustomAttr(xml:Object){
 //
 /** @tag <text>  
 * This tag defines a text. With a standard string tag (id="text") you can add (HTML) content to the text. See example.
-* @hierarchy childnode of <fmc:Legend> or <group> or <item>
+* @hierarchy childnode of <cmc:Legend> or <group> or <item>
 * @example
 <text>
     <string id="text">

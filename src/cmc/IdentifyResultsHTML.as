@@ -378,13 +378,13 @@ function show() {
 		parent = flamingo.getParent(parent);
 	}
 }
-/** @tag <fmc:IdentifyResultsHTML>  
+/** @tag <cmc:IdentifyResultsHTML>  
 * This tag defines a window for showing identify results. It listens to maps. Use standard string and style tags for configuring the text.
 * The id's of the string tags are the id's of the the maplayer followed by a "." and completed with the layer id. See example.
 * Use CDATA tags to avoid interferance with the config xml. See example.
-* @hierarchy childnode of <flamingo> or a container component. e.g. <fmc:Window>
+* @hierarchy childnode of <flamingo> or a container component. e.g. <cmc:Window>
 * @example
-* <fmc:IdentifyResultsHTML  width="30%" height="100%" right="right" listento="map" >
+* <cmc:IdentifyResultsHTML  width="30%" height="100%" right="right" listento="map" >
 *        <style id=".bold" font-family="verdana" font-size="18px" color="#333333" display="block" font-weight="bold"/>
 *        <style id=".normal" font-family="verdana" font-size="11px" color="#333333" display="block" font-weight="normal"/>
 *        <style id=".uitleg" font-family="verdana" font-size="11px" color="#0033cc" display="block" font-weight="normal" font-style="italic"/>
@@ -408,15 +408,15 @@ function show() {
 *             
 *           </nl>
 *         </string>
-* </fmc:IdentifyResultsHTML>
+* </cmc:IdentifyResultsHTML>
 * @example 
 * Example of an identify configuration in which a asfunction is called getHtmlText with
 * an url to a server component (in this case a jsp page) that returns html text to the viewer.
 * The html text will be shown in a TextArea component (attr htmlfield). This component might be within 
 * a Window component (attr htmlwindow) that opens when the html text is loaded. 
-* <fmc:Window skin="g" top="60" right="right -100" width="400" height="300" bottom="-70"
+* <cmc:Window skin="g" top="60" right="right -100" width="400" height="300" bottom="-70"
 *        canresize="true" canclose="true" title="Identify results" visible="false">
-*        <fmc:IdentifyResultsHTML id="identify" width="100%" height="100%" listento="map" htmlwindow="htmlwindow" clobfield="clobfield">
+*        <cmc:IdentifyResultsHTML id="identify" width="100%" height="100%" listento="map" htmlwindow="htmlwindow" clobfield="clobfield">
 *			...
 *            <string id="cultuurhistorie.monumenten" stripdatabase="true">
 *                <en>
@@ -431,12 +431,12 @@ function show() {
 *					]]>
 *                </en>
 *            </string>
-*         </fmc:IdentifyResultsHTML>
+*         </cmc:IdentifyResultsHTML>
 *</fmc:Window>
-*<fmc:Window id="htmlwindow" skin="g" top="100" right="right -50" width="400" height="300" bottom="-70"
+*<cmc:Window id="htmlwindow" skin="g" top="100" right="right -50" width="400" height="300" bottom="-70"
 *        canresize="true" canclose="true" title="Toelichting" visible="false">
 *	<fmc:Textarea id="htmlfield" width="100%" height="100%"/>
-*</fmc:Window>
+*</cmc:Window>
 * @attr stripdatabase  (defaultvalue = "true") true or false. False: the whole database fieldname will be used and have to be put between square brackets. True: the fieldname will be stripped until the last '.'
 * @attr denystrangers  (defaultvalue = "true") true or false. True: only configured layerid's will be shown. False: not configured layerid's will be shown in a default way.
 * @attr wordwrap  (defaultvalue = "true") True or false.

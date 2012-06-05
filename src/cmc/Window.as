@@ -77,13 +77,13 @@ flamingo.addListener(lFlamingo, "flamingo", this);
 //---------------------------------------
 init();
 //---------------------------------------
-/** @tag <fmc:Window>  
+/** @tag <cmc:Window>  
 * This tag defines a window.
 * The components in the window are positioned relative to window.
 * A width of 100% means the same width as the window.
-* @hierarchy childnode of <flamingo> or a container component. e.g. <fmc:Window>
+* @hierarchy childnode of <flamingo> or a container component. e.g. <cmc:Window>
 * @example
-* <fmc:Window top="100" left="100" width="300" bottom="bottom" canresize="true" canclose="true" title="Identify results">
+* <cmc:Window top="100" left="100" width="300" bottom="bottom" canresize="true" canclose="true" title="Identify results">
 *    <string id="tooltip_close"  en="close" nl="sluiten"/>
 *    <style id=".title" font-family="verdana" font-size="13px" color="#666666" display="block" font-weight="normal"/>
 *    <style id=".titlefocus" font-family="verdana" font-size="13px" color="#666666" display="block" font-weight="bold"/>
@@ -91,8 +91,8 @@ init();
 *    <cursor id="sizewe"   url="fmc/CursorsWindow.swf"  linkageid="sizewe" />
 *    <cursor id="sizenesw" url="fmc/CursorsWindow.swf"  linkageid="sizenesw" />
 *    <cursor id="sizenwse" url="fmc/CursorsWindow.swf"  linkageid="sizenwse" />
-*    <fmc:IdentifyResults width="100%" height="100%" listento="map"/>
-* </fmc:Window>
+*    <cmc:IdentifyResults width="100%" height="100%" listento="map"/>
+* </cmc:Window>
 * @attr title  Title of the window. With a String tag you can add multilanguage support.
 * @attr canclose  (defaultvalue = "false") True or false. If set to true a close button will appear.
 * @attr canresize  (defaultvalue = "false") True or false. If set to true the window can resized by dragging the borders.

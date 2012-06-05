@@ -54,10 +54,10 @@ lFlamingo.onConfigComplete = function() {
 flamingo.addListener(lFlamingo, flamingo, this);
 //---------------------------------------
 init();
-/** @tag <fmc:Logo>  
+/** @tag <cmc:Logo>  
 * This tag defines the flamingo logo.
 * @hierarchy childnode of <flamingo>
-* @example <fmc:Logo id="logo"/> 
+* @example <cmc:Logo id="logo"/> 
 */
 
 /**

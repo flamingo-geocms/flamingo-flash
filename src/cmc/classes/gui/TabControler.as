@@ -12,27 +12,27 @@
 * @file flamingo/cmc/TabControler.swf (compiled component, needed for publication on internet)
 */
 
-/** @tag <fmc:TabControler> 
+/** @tag <cmc:TabControler> 
 * This tag defines a tabControler.
 * @class gui.TabControler extends AbstractContainer
 * @hierarchy child node of Flamingo 
 * @example
-* <fmc:TabControler left="left" width="300" top="top" bottom="bottom" borderalpha="0" startuptab="1">
-  		<fmc:Tab width="100%" height="100%">
+* <cmc:TabControler left="left" width="300" top="top" bottom="bottom" borderalpha="0" startuptab="1">
+  		<cmc:Tab width="100%" height="100%">
    			<string id="buttonlabel" nl="Kaartlagen"/>
-   			<fmc:Legend id="kaartlagen" left="20" top="20"  right="right -5" bottom="bottom" listento="map" visible="false"/>
-  		</fmc:Tab>
-   		<fmc:Tab  width="100%" height="100%">
+   			<cmc:Legend id="kaartlagen" left="20" top="20"  right="right -5" bottom="bottom" listento="map" visible="false"/>
+  		</cmc:Tab>
+   		<cmc:Tab  width="100%" height="100%">
    			<string id="buttonlabel" nl="Legenda"/>
-    		<fmc:Legend id="legenda"  left="20" top="20"  right="right -5" bottom="bottom" listento="map" visible="false"/>
-   		</fmc:Tab>
-   		<fmc:Tab  width="100%" height="100%">
+    		<cmc:Legend id="legenda"  left="20" top="20"  right="right -5" bottom="bottom" listento="map" visible="false"/>
+   		</cmc:Tab>
+   		<cmc:Tab  width="100%" height="100%">
     		<string id="buttonlabel" nl="Resultaten"/>
-    		<fmc:IdentifyResultsHTML id="identifyResults" left = "5" top="5"  right="right -5" bottom="bottom -5" listento="map" borderalpha="0" wordwrap="false">
+    		<cmc:IdentifyResultsHTML id="identifyResults" left = "5" top="5"  right="right -5" bottom="bottom -5" listento="map" borderalpha="0" wordwrap="false">
 				...
-    		</fmc:IdentifyResultsHTML>
-   		</fmc:Tab>
- 	</fmc:TabControler>
+    		</cmc:IdentifyResultsHTML>
+   		</cmc:Tab>
+ 	</cmc:TabControler>
  * @attr startuptab default:0 The tab number(0 is the first tab, 1 is the second tab etc.) of the tab that should be opened at startup 
  **/
 

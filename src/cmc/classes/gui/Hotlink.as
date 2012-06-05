@@ -8,16 +8,16 @@
 * @file flamingo/cmc/classes/gui/Hotlink.as (sourcefile)
 */
 
-/** @tag <fmc:Hotlink>
+/** @tag <cmc:Hotlink>
 * @class gui.Hotlink extends AbstractComponent
 * @hierarchy childnode of HotlinkResults2
 * @example
 	<FLAMINGO>
 		...
-		<fmc:HotlinkResults2 ...
+		<cmc:HotlinkResults2 ...
 			<hotlink name="link" listento="layer1.gemeenten_2006" href="http://localhost/[id]" maxresulst="1"/>			
 			....
-		</fmc:HotlinkResults2>	
+		</cmc:HotlinkResults2>	
 		...
 	</FLAMINGO>
 * @attr listento the listento object on which a getFeatureInfo is done (identify). Can be <flamingoLayerId>.<layerId> or <flamingoLayerId>

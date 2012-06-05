@@ -11,27 +11,27 @@
 * @configstring buttonlabel Label text used for Tab title.
 */
 
-/** @tag <fmc:Tab> 
+/** @tag <cmc:Tab> 
 * This tag defines a tab instance. 
 * @class gui.Tab 
 * @hierarchy child node of TabControler 
 * @example
-*  <fmc:TabControler left="left" width="300" top="top" bottom="bottom">
-  		<fmc:Tab width="100%" height="100%">
+*  <cmc:TabControler left="left" width="300" top="top" bottom="bottom">
+  		<cmc:Tab width="100%" height="100%">
    			<string id="buttonlabel" nl="Kaartlagen"/>
-   			<fmc:Legend id="kaartlagen" left="20" top="20"  right="right -5" bottom="bottom" listento="map" visible="false"/>
-  		</fmc:Tab>
-   		<fmc:Tab  width="100%" height="100%">
+   			<cmc:Legend id="kaartlagen" left="20" top="20"  right="right -5" bottom="bottom" listento="map" visible="false"/>
+  		</cmc:Tab>
+   		<cmc:Tab  width="100%" height="100%">
    			<string id="buttonlabel" nl="Legenda"/>
-    		<fmc:Legend id="legenda"  left="20" top="20"  right="right -5" bottom="bottom" listento="map" visible="false"/>
-   		</fmc:Tab>
-   		<fmc:Tab  width="100%" height="100%">
+    		<cmc:Legend id="legenda"  left="20" top="20"  right="right -5" bottom="bottom" listento="map" visible="false"/>
+   		</cmc:Tab>
+   		<cmc:Tab  width="100%" height="100%">
     		<string id="buttonlabel" nl="Resultaten"/>
-    		<fmc:IdentifyResultsHTML id="identifyResults" left = "5" top="5"  right="right -5" bottom="bottom -5" listento="map" borderalpha="0" wordwrap="false">
+    		<cmc:IdentifyResultsHTML id="identifyResults" left = "5" top="5"  right="right -5" bottom="bottom -5" listento="map" borderalpha="0" wordwrap="false">
 				...
-    		</fmc:IdentifyResultsHTML>
-   		</fmc:Tab>
- 	</fmc:TabControler>
+    		</cmc:IdentifyResultsHTML>
+   		</cmc:Tab>
+ 	</cmc:TabControler>
 * @attr buttonwidth defines the width of the Tab button. By default the width is defined 
 * by the width of the TabControler and the number of Tab's within the TabControler. Default
 * width = width of TabControler / number of Tab's. If not for all Tab's a buttonwidth is configured. 

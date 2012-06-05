@@ -15,7 +15,7 @@
 * @file flamingo/cmc/EditProperties.swf (compiled component, needed for publication on internet)
 */
 
-/** @tag <fmc:EditProperties>
+/** @tag <cmc:EditProperties>
 * This tag defines an edit properties component instance. The edit properties component must be registered as a listener to an edit map. 
 * Actually, the edit properties component listens to the feature model underneath the edit map. 
 * An edit properties component should be placed in a window so that the active feature event of the feature model can make it pop-up. 
@@ -24,10 +24,10 @@
 * @hierarchy childnode of Flamingo or a container component.
 * @example 
 <[!CDATA[
-  <fmc:Window id="editPropertiesWindow">
-     <fmc:EditProperties id="editProperties" top="0" left="0" right="right" bottom="bottom" visible="false" listento="editMap" okbutton="true">
+  <cmc:Window id="editPropertiesWindow">
+     <cmc:EditProperties id="editProperties" top="0" left="0" right="right" bottom="bottom" visible="false" listento="editMap" okbutton="true">
      	<string id="okbuttonlabel" en="OK" nl="OK"/> 
-     </fmc:EditProperties>
+     </cmc:EditProperties>
   </fmc:Window>
 ]]>
  * * @attr okbutton (defaultvalue = "false") boolean for showing or hiding okbutton  

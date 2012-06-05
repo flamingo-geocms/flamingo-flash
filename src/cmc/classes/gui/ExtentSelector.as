@@ -14,22 +14,22 @@
 * @file flamingo/cmc/ExtentSelector.swf (compiled component, needed for publication on internet)
 */
 
-/** @tag <fmc:ExtentSelector> 
+/** @tag <cmc:ExtentSelector> 
 * This tag defines an extentSelector instance. ...
 * @class gui.ExtentSelector 
 * @hierarchy child node of Flamingo 
 * @example
-   <fmc:ExtentSelector  id="extentselector"   left="0" top="210" width="200" listento="map">
-    <fmc:Extent  id="fullExtent" extent="full">
+   <cmc:ExtentSelector  id="extentselector"   left="0" top="210" width="200" listento="map">
+    <cmc:Extent  id="fullExtent" extent="full">
       <string id="label" nl="Zoeken binnen gehele bestand" />
-    </fmc:Extent>
-    <fmc:Extent id="currentExtent" extent="current">
+    </cmc:Extent>
+    <cmc:Extent id="currentExtent" extent="current">
       <string id="label" nl="Zoeken binnen kaartbeeld"/>
-    </fmc:Extent>
-    <fmc:Extent id="nedExtent" extent="13562,306839;13562,875000;278026,875000;278026,306839">
+    </cmc:Extent>
+    <cmc:Extent id="nedExtent" extent="13562,306839;13562,875000;278026,875000;278026,306839">
       <string id="label" nl="Zoeken binnen Nederland"/>
-     </fmc:Extent> 
-  </fmc:ExtentSelector>
+     </cmc:Extent> 
+  </cmc:ExtentSelector>
 * @attr	default This is the id of an Extent that has to be selected at startup. By default the first Extent is selected. 
 */
 import gui.Tab;

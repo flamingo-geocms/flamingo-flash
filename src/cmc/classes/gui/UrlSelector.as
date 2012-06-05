@@ -17,24 +17,24 @@
 * @configstring groupsellabel Label text for the "first choice" in the group combobox.
 */
 
-/** @tag <fmc:URLSelector> 
+/** @tag <cmc:URLSelector> 
 * This tag defines an urlSelector instance. ...
 * @class gui.URLSelector extends AbstractContainer
 * @hierarchy child node of Flamingo 
 * @example
-* <fmc:UrlSelector left="10" top="20" right="right -10" height="50"  borderalpha="0">
+* <cmc:UrlSelector left="10" top="20" right="right -10" height="50"  borderalpha="0">
      <string id="groupsellabel" nl="Selecteer een thema..."/>
      <string id="urlsellabel" nl="Kies een atlas..."/>
-     <fmc:URL   url="http://..." group="algemeen" listento="map" target="_blank">
+     <cmc:URL   url="http://..." group="algemeen" listento="map" target="_blank">
       	<string id="grouplabel" nl="Algemeen"/>	
       	<string id="label" nl="Kaart en luchtfoto"/>	
-     </fmc:URL>
-     <fmc:URL   url="http://...." group="economie_werk" listento="map" target="_blank">
+     </cmc:URL>
+     <cmc:URL   url="http://...." group="economie_werk" listento="map" target="_blank">
       	<string id="grouplabel" nl="Economie en werk"/>	
       	<string id="label" nl="Bedrijventerreinen"/>	
-     </fmc:URL>
+     </cmc:URL>
      .....
-   </fmc:URLSelector> 
+   </cmc:URLSelector> 
 * @attr listlength The length of the combobox lists.
 */
 

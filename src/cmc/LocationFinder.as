@@ -152,11 +152,11 @@ flamingo.addListener(lFlamingo, "flamingo", this);
 
 //---------------------------------------
 init();
-/** @tag <fmc:LocationFinder>  
+/** @tag <cmc:LocationFinder>  
 * This tag defines a locationfinder. This component listens to 1 or more maps.
-* @hierarchy childnode of <flamingo> or a container component. e.g. <fmc:Window>
+* @hierarchy childnode of <flamingo> or a container component. e.g. <cmc:Window>
 * @example
-<fmc:LocationFinder include="config/lf-data.xml"
+<cmc:LocationFinder include="config/lf-data.xml"
  id="locationfinder"  width="200" right="50%" top="5" bottom="bottom"  listento="map" >
 <LOCATIONS  id="gemeente" >
 <string id="label"  nl="Zoek een gemeente" en="Search a gemeente" />
@@ -283,7 +283,7 @@ function loadXML(file:String) {
 }
 /** @tag <locations>  
 * This tag defines a source for locations. Locations can point to a server or you can define your own list with 'location' tags.
-* @hierarchy childnode of <fmc:LocationFinder>  or <flamingo> in case of an external file
+* @hierarchy childnode of <cmc:LocationFinder>  or <flamingo> in case of an external file
 * @example
 <flamingo>
 <LOCATIONS  id="plaats"  server="www.myserver.com" service="mymapservice" layerid="searchlayer" searchfield="searchfield"  

@@ -38,21 +38,21 @@ flamingo.addListener(lFlamingo, "flamingo", this);
 
 //----------------
 init();
-/** @tag <fmc:TabControl>  
+/** @tag <cmc:TabControl>  
 * This tag defines a tabcontrol with two tabpages. The component must be defined at the same level as the two tabcontrols for example if the
 * two tabpages are set in a container then the tabControl must also be set in the same container. It is also important to define the TabControl component
 * after the two tabpages are defined.
 *
-* @hierarchy childnode of <flamingo> or a container component. e.g. <fmc:Window>
+* @hierarchy childnode of <flamingo> or a container component. e.g. <cmc:Window>
 * @example
 * <fmc:Container left="mapright +21" top="maptop" right="right -21">	
-*	<fmc:Legend id="legend">
+*	<cmc:Legend id="legend">
 *			....................................
-*	</fmc:Legend>
-*	<fmc:Legend id="legend_s" >
+*	</cmc:Legend>
+*	<cmc:Legend id="legend_s" >
 *			.......................
-*	</fmc:Legend>
-*	<fmc:TabControl top="top -31" tab1Id="legend" tab2Id="legend_s">
+*	</cmc:Legend>
+*	<cmc:TabControl top="top -31" tab1Id="legend" tab2Id="legend_s">
 *		<string id="tab1Label">
 *			<nl><![CDATA[<font color="#000000" fontFamily ="Verdana"><b>Onderwerp</b></font>]]></nl>
 *			<en><![CDATA[<font color="#6666CC" fontFamily ="Verdana"><b>Subjects</b></font>]]></en>
@@ -61,7 +61,7 @@ init();
 *			<nl><![CDATA[<font color="#6666CC" fontFamily ="Verdana"><b>Legenda</b></font>]]></nl>
 *			<en><![CDATA[<font color="#6666CC" fontFamily ="Verdana"><b>Legend</b></font>]]></en>
 *		</string>
-*	</fmc:TabControl>
+*	</cmc:TabControl>
 *	</fmc:Container>
 *
 * @attr tab1Id Id of the first tabpage's component

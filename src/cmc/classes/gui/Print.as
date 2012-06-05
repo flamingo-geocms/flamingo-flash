@@ -29,7 +29,7 @@
 * @configstring choseTemplate Text shown in the template comboBox.
 */
 
-/** @tag <fmc:Print> 
+/** @tag <cmc:Print> 
 * This tag defines a print component instance. Print extends AbstractContainer and as such can hold child components. 
 * Every print component should hold one "legend container" and one or more print templates. 
 * The "legend container" holds the several legend components to control the maps within the templates. 
@@ -42,31 +42,31 @@
 * @attr scales (optional) default: "500000,250000,100000,50000,20000,10000,5000,2000" comma seperated scale list.
 * @attr defaulttemplate (optional) no default id of the defaultTemplate (is shown in the combobox when print window becomes visible).
 * @example
-	<fmc:Window id="printWindow" top="60" left="60" width="585" height="680" visible="false" skin="g"
+	<cmc:Window id="printWindow" top="60" left="60" width="585" height="680" visible="false" skin="g"
         canresize="true" canclose="true">
         <string id="title" en="Print Settings and Preview" nl="Printinstellingen en printvoorbeeld"/>
-        <fmc:Print id="print" width="100%" height="100%" visible="false"  borderwidth="0" listento="map" defaulttemplate="printTemplate1">
+        <cmc:Print id="print" width="100%" height="100%" visible="false"  borderwidth="0" listento="map" defaulttemplate="printTemplate1">
 			<string id="previewSize" en="Preview at Original Size" nl="Printvoorbeeld op ware grootte"/>
             <string id="toPrinter" en="Send to Printer" nl="Afdrukken"/>
             <string id="choseTemplate" en="--Chose Template--" nl="-- Kies Template --"/>
             <fmc:BaseContainer left="220" right="right" top="35" height="100">
-                <fmc:Legend id="printLegend0" top = " 0" width="100%" height="100%" listento="printMap0"  configobject="legend" />
+                <cmc:Legend id="printLegend0" top = " 0" width="100%" height="100%" listento="printMap0"  configobject="legend" />
             </fmc:BaseContainer>
             <fmc:BaseContainer left="130" top="183" borderwidth="0">
                 <fmc:MonitorLayer id="printMonitor1" listento="printMap1">
                     <style id=".text" font-family="courier" font-size="12px" color="#666666" display="block" font-weight="normal"/>
                 </fmc:MonitorLayer>
             </fmc:BaseContainer>
-            <fmc:PrintTemplate id="printTemplate1" name="verticaal A4" dpi="200" format="A4" orientation="portrait"
+            <cmc:PrintTemplate id="printTemplate1" name="verticaal A4" dpi="200" format="A4" orientation="portrait"
                 listento="printMonitor1" maps="printMap1">
                 <fmc:Map id="printMap1" name="kaartbeeld" width="100%" height="100%" movequality="HIGH" configobject="map"/>
                 <fmc:EditMap id="editMap2" name="redlining"  width="100%" height="100%"  listento="gis,printMap1" editable="false"/>
-                <fmc:BitmapClone name="legenda" width="30%" height="25%" listento="legend" refreshrate="2500"/>
-                <fmc:BitmapClone name="identify resultaten" width="40%" height="30%" right="right" listento="identify" refreshrate="2500"/>
-                <fmc:PrintLabel name="identifylabel" top="0" width="40%" right="right"  text="Identify resultaten" fontfamily="arial" fontsize="18"/>
-            </fmc:PrintTemplate>
-		</fmc:Print>
-	</fmc:Window>	
+                <cmc:BitmapClone name="legenda" width="30%" height="25%" listento="legend" refreshrate="2500"/>
+                <cmc:BitmapClone name="identify resultaten" width="40%" height="30%" right="right" listento="identify" refreshrate="2500"/>
+                <cmc:PrintLabel name="identifylabel" top="0" width="40%" right="right"  text="Identify resultaten" fontfamily="arial" fontsize="18"/>
+            </cmc:PrintTemplate>
+		</cmc:Print>
+	</cmc:Window>	
 */
 
 import gui.*;

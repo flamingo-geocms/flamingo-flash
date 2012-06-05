@@ -139,11 +139,11 @@ function show() {
 		parent = flamingo.getParent(parent);
 	}
 }
-/** @tag <fmc:IdentifyResults>  
+/** @tag <cmc:IdentifyResults>  
 * This tag defines a window for showing identify results. This components listens to maps.
-* @hierarchy childnode of <flamingo> or a container component. e.g. <fmc:Window>
+* @hierarchy childnode of <flamingo> or a container component. e.g. <cmc:Window>
 * @example 
-* <fmc:IdentifyResults left="10" top="10" width="30%" height="100%" listento="map"/> 
+* <cmc:IdentifyResults left="10" top="10" width="30%" height="100%" listento="map"/> 
 * @attr stripdatabase  (defaultvalue = "true") true or false. False: the whole database fieldname will be shown. True: the fieldname will be stripped until the last '.'
 * @attr skin  (defaultvalue = "") Skin. No skins available at this moment.
 * @attr showonidentify  (defaultvalue = "true") If the component and all parents should be made visible on the onIdentify event.

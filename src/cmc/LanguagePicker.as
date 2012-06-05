@@ -68,10 +68,10 @@ function init() {
 	flamingo.raiseEvent(this, "onInit", this);
 }
 
-/** @tag <fmc:LanguagePicker>  
+/** @tag <cmc:LanguagePicker>  
 * This tag defines a language picker. 
-* @hierarchy childnode of <flamingo> or a container component. e.g. <fmc:Window>
-* @example <fmc:LanguagePicker left="10" top="10"  />
+* @hierarchy childnode of <flamingo> or a container component. e.g. <cmc:Window>
+* @example <cmc:LanguagePicker left="10" top="10"  />
 */
 function setConfig(xml:XML) {
 	// parse all default attributes, such as left,right etc.

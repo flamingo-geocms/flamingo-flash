@@ -48,34 +48,34 @@
 * @configstring closeButtonLabel Button label for the button that closes the DownloadSelector
 */
 
-/** @tag <fmc:DownloadSelector>   
+/** @tag <cmc:DownloadSelector>   
 * This tag defines the presence of a downloadselector. The downloadselector must be registered as a listener to the map, and to the legend. 
 * @class gui.dde.DownloadSelector extends AbstractComponent
-* @hierarchy childnode of a container component. e.g. <fmc:Window> 
+* @hierarchy childnode of a container component. e.g. <cmc:Window> 
 * @example
-	<fmc:Window id="downloadSelectorWindow" skin="g" top="100" left="100" width="500" height="500" canresize="true" canclose="true" visible="false">
+	<cmc:Window id="downloadSelectorWindow" skin="g" top="100" left="100" width="500" height="500" canresize="true" canclose="true" visible="false">
 		<string id="title" en="Download Selector" nl="Downloadkiezer"/>
-		<fmc:DownloadSelector id="downloadSelector" top="10" left="10" right="right -10" bottom="bottom -10" listento="map,legend" ddeservleturl="http://idgisvv.xs4all.nl/DDEDownload/flamingo" debug="false">
-	</fmc:Window>
+		<cmc:DownloadSelector id="downloadSelector" top="10" left="10" right="right -10" bottom="bottom -10" listento="map,legend" ddeservleturl="http://idgisvv.xs4all.nl/DDEDownload/flamingo" debug="false">
+	</cmc:Window>
 * @attr ddeservleturl url of the ddeservlet
 * @attr debug sets debugging on or off (true/false). Debugging is usefull when checking the 
 * configuration of ddeLayers in the ddeservlet configuration file.
 */
 	
-/** @tag <fmc:crs> 
+/** @tag <cmc:crs> 
 * This tag defines an(output)coödinatesystem. 
-* @hierarchy childnode of <fmc:DownloadSelector> 
+* @hierarchy childnode of <cmc:DownloadSelector> 
 * @example
-	<fmc:crs label="Lat/Long" data="LL84"/>
-    <fmc:crs label="Rijksdriehoek" data="EPSG:28992"/>
-    <fmc:crs label="Belgie Lambert 72" data="EPSG:31370"/>
+	<cmc:crs label="Lat/Long" data="LL84"/>
+    <cmc:crs label="Rijksdriehoek" data="EPSG:28992"/>
+    <cmc:crs label="Belgie Lambert 72" data="EPSG:31370"/>
 * @attr label a name shown to the user
 * @attr data value used in the url 
 */
 
-/** @tag <fmc:outputFormat>
+/** @tag <cmc:outputFormat>
 * This tag defines a dde download format.
-* @hierarchy childnode of <fmc:DownloadSelector> 
+* @hierarchy childnode of <cmc:DownloadSelector> 
 * @example
 	<fmc:outputFormat label="gif" data="2gif.fme"/>
 	<fmc:outputFormat label="Shapefile" data="2shp.fme"/>
@@ -83,12 +83,12 @@
 * @attr data value used in the url 	
 */
 
-/** @tag <fmc:inArea>
+/** @tag <cmc:inArea>
 * This tag defines an area for downloading from dde.
-* @hierarchy childnode of <fmc:DownloadSelector> 
+* @hierarchy childnode of <cmc:DownloadSelector> 
 * @example
-	  <fmc:inArea label="Goes" coords="38244+388821+56760+388821+56760+397307+38244+397307+38244+388821"/>
-	  <fmc:inArea label="Hulst" coords="55018+362197+74859+362197+74859+380617+55018+380617+55018+362197"/>* @attr label a name shown to the user
+	  <cmc:inArea label="Goes" coords="38244+388821+56760+388821+56760+397307+38244+397307+38244+388821"/>
+	  <cmc:inArea label="Hulst" coords="55018+362197+74859+362197+74859+380617+55018+380617+55018+362197"/>* @attr label a name shown to the user
 * @attr label a name shown to the user
 * @attr data value used in the url, an coördinate string of x and y values seperated by a + sign	
 */	

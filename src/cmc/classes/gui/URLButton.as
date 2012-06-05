@@ -12,17 +12,17 @@
 * @configstring tooltip Tooltip text for the button.
 */
 
-/** @tag <fmc:URLButton> 
+/** @tag <cmc:URLButton> 
 * This tag defines an urlButton instance. 
 * @class gui.URLButton extends GradientButton
 * @hierarchy childnode of Flamingo or a container component.
 * @example
-    <fmc:URLButton url="experturl" left="right -240" width = "140" height = "20" top= "10" listento="map,experturl">
+    <cmc:URLButton url="experturl" left="right -240" width = "140" height = "20" top= "10" listento="map,experturl">
         <string id="label" nl="Open uitgebreide viewer"/>
         <string id="tooltip" nl="Open uitgebreide viewer in nieuw browser venster"/>
-    </fmc:URLButton>
+    </cmc:URLButton>
 	..
-	<fmc:URL id="experturl" url="http://tapserver.test.local/loket/html/atlas.html?type=standard&atlas=roo" target="_self"/>    
+	<cmc:URL id="experturl" url="http://tapserver.test.local/loket/html/atlas.html?type=standard&atlas=roo" target="_self"/>    
      ..
 * @attr listento, The URLButton component should listen to a map 	
 * @attr url, The id of the correspondig URL Component 

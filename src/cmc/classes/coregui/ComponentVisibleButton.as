@@ -13,7 +13,7 @@
 * @file flamingo/cmc/RemoveFeatureButton.swf (compiled component, needed for publication on internet)
 */
 
-/** @tag <fmc:PrintButton>
+/** @tag <cmc:PrintButton>
 * This tag defines a component visible button instance for the Print Component. 
 * A component visible button listens to the component of which it controls the visibility. 
 * If that component extends AbstractComponent and it is placed in a window, then the component visible button controls the window's visibility, too. 
@@ -23,14 +23,14 @@
 * @example
 	<Flamingo>
 		...
-		<fmc:PrintButton left="570" top="5" listento="print">
+		<cmc:PrintButton left="570" top="5" listento="print">
         	<string id="tooltip" en="open/ close the print window" nl="printvenster openen/ sluiten"/>
-    	</fmc:PrintButton>
+    	</cmc:PrintButton>
 		...
 	</Flamingo>	
 */
 
-/** @tag <fmc:RemoveFeatureButton>
+/** @tag <cmc:RemoveFeatureButton>
 * This tag defines a remove feature button instance (i.e. a component visible button instance for the Confirmation Component) 
 * The remove feature button must be registered as a listener to a confirmation component. 
 * As a component visible button, a click on it makes the confirmation component pop-up. 

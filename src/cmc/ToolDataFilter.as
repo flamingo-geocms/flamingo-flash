@@ -95,17 +95,17 @@ flamingo.addListener(lFlamingo, "flamingo", this);
 //--------------------------------------------------
 init();
 //--------------------------------------------------
-/** @tag <fmc:ToolDataFilter>  
+/** @tag <cmc:ToolDataFilter>  
 * This tag defines a tool that filters the data from the layer according to specific attributes. When the tool is clicked a window is shown where the attributes can be selected, after that the map is refreshed. 
 * This tool works only with an ArcIMS mapservices.
 * @hierarchy childnode of <fmc:ToolGroup> 
 * @example 
 *	 <fmc:ToolGroup>
-*		<fmc:ToolDataFilter id="datafilter" mapServiceId="samenleving" bufferToolid="buffer">
+*		<cmc:ToolDataFilter id="datafilter" mapServiceId="samenleving" bufferToolid="buffer">
 *			 <layer id="basisscholen" label="basisscholen">
 *				 <field id="gemeente" label="gemeente" operations="=" includeValues="../config/PZH_gemeenten.xml"/>
 *			 </layer>
-*		 </fmc:ToolDataFilter>
+*		 </cmc:ToolDataFilter>
 *	</fmc:ToolGroup>
 *
 * @attr zoomscroll (defaultvalue "true")  Enables (zoomscroll="true") or disables (zoomscroll="false") zooming with the scrollwheel.

@@ -13,7 +13,7 @@
 * @file RemoteEventDispatcher.swf (compiled Map, needed for publication on internet)
 */
 
-/** @tag <fmc:RemoteEventDispatcher>  
+/** @tag <cmc:RemoteEventDispatcher>  
 * This tag defines a remoteEventDispatche.
 * @attr id unique identifier for the component
 */

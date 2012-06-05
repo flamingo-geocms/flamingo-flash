@@ -210,9 +210,9 @@ lFlamingo.onSetLanguage = function(mc:MovieClip, lang:String) {
 flamingo.addListener(lFlamingo, "flamingo", this);
 //----------------
 init();
-/** @tag <fmc:Debugger>  
+/** @tag <cmc:Debugger>  
 * This tag defines a debugger. It listens to 1 or more ArcIMSLayers and/or OGWMSLayers.
-* @hierarchy childnode of <flamingo> or a container component. e.g. <fmc:Window>
+* @hierarchy childnode of <flamingo> or a container component. e.g. <cmc:Window>
 */
 function init():Void {
 	if (flamingo == undefined) {

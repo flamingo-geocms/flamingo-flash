@@ -13,7 +13,7 @@
 * @file flamingo/cmc/Authentication.swf (compiled component, needed for publication on internet)
 */
 
-/** @tag <fmc:Authentication>  
+/** @tag <cmc:Authentication>  
 * This tag defines an authentication component instance. 
 * Authentication has one Resource child node, and zero or more Role child nodes. 
 * These configuration tags are not used by the authentication component itself. 
@@ -25,32 +25,32 @@
 * @hierarchy childnode of Flamingo or a container component.
 * @example
 <Flamingo>
-	<fmc:Authentication id="authentication" left="right -210" right="right" top="0" bottom="40" visible="false"/>
+	<cmc:Authentication id="authentication" left="right -210" right="right" top="0" bottom="40" visible="false"/>
 </Flamingo>
 */
 
-/** @tag <fmc:Resource> 
+/** @tag <cmc:Resource> 
 * This tag defines a protected resource. A protected resource is a service on a server, 
 * which requires http authentication before it can be accessed.
 * @hierarchy childnode of Authentication.
 * @example
-	<fmc:Authentication>
+	<cmc:Authentication>
 		<fmc:Resource name="deegree" url="http://berkel:8080/deegree"/>
 		...
-	</fmc:Authentication>
+	</cmc:Authentication>
 * @attr name Name that identifies the protected resource on the server. The resource name is not used within the Flamingo framework.
 * @attr url	URL to the protected resource. Navigating to this location with a web browser should result in a login screen.
 */
 
 
-/** @tag <fmc:Role>
+/** @tag <cmc:Role>
 * This tag defines an authorization role. An authorization role is a role a user may be given by the server. 
 * Configuring a Role does not guarantee the role to the current user. The server decides about that.
 * @hierarchy childnode of Authentication.
 * @example
-	<fmc:Authentication>
+	<cmc:Authentication>
 		...
-        <fmc:Role name="XDF56YZ" flux="admins"/>
+        <cmc:Role name="XDF56YZ" flux="admins"/>
 	</fmc:Authentication>
 * @attr name Name that identifies the role within the Flamingo framework. 
 * It is advisable to obfuscate the role name, as it will appear in the web browser's navigation bar and could easily be substituted there.
