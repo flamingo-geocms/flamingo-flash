@@ -17,7 +17,7 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 -----------------------------------------------------------------------------*/
-/** @component IdentifyResults
+/** @component cmc:IdentifyResults
 * This component shows the response of an identify. It just shows the raw data the application get's from the server.
 * Simple and quick. If you want to present the data in a custom way, use IdentfyResultsHtml instead.
 * @file IdentifyResults.fla (sourcefile)

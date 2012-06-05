@@ -4,7 +4,7 @@
 * IDgis bv
  -----------------------------------------------------------------------------*/
 
-/** @component PrintTemplate 
+/** @component cmc:PrintTemplate 
 * A container that holds and positions a number of components, with the intension to send them to a printer. 
 * As a container it can hold any type of Flamingo component.
 * With the print component a user can change the make-up of a template and preview it. Please refer to the Print component.

@@ -3,7 +3,7 @@
 * Author: Linda Vels.
 * IDgis bv
  -----------------------------------------------------------------------------*/
-/** @component URL
+/** @component cmc:URL
 * An URL defines a url that can be opened from within flamingo. 
 * A URL can be set by selecting an url from the URLSelector Component. 
 * @file flamingo/cmc/classes/flamingo/gui/URL.as  (sourcefile)

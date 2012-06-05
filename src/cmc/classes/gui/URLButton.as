@@ -3,7 +3,7 @@
 * Author:  Linda Vels.
 * IDgis bv
  -----------------------------------------------------------------------------*/
-/** @component URLButton
+/** @component cmc:URLButton
 * The URLButton Component is a google like button that opens a link.
 * @file flamingo/cmc/classes/flamingo/gui/URLButton.as  (sourcefile)
 * @file flamingo/cmc/URLButton.fla (sourcefile)

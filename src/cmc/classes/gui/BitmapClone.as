@@ -3,7 +3,7 @@
 * Author: Michiel J. van Heek.
 * IDgis bv
  -----------------------------------------------------------------------------*/
-/** @component BitmapClone
+/** @component cmc:BitmapClone
 * A component that shows a visual copy of another component, but without the functionality of that component. 
 * A bitmap clone is especially useful for showing components on a print template which are actually too complex or in need of heavy configuration, 
 * such as  identify results or legends.

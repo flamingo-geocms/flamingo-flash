@@ -3,7 +3,7 @@
 * Author: Linda Vels.
 * IDgis bv
  -----------------------------------------------------------------------------*/
-/** @component Extent
+/** @component cmc:Extent
 * An Extent defines an extent of a map, this can be f.i. the full extent or the current extent.
 * An Extent can be set by selecting an extent from the ExtenSelector Component. 
 * The ExtentSelector can be used in combination with a locationFinder component.

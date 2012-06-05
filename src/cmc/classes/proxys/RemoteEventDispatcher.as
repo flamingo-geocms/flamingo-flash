@@ -5,7 +5,7 @@
  -----------------------------------------------------------------------------*/
 
 
-/** @component RemoteEventDispatcher
+/** @component cmc:RemoteEventDispatcher
 * The RemoteEventDispatcher component receives events via ExternalInterface and sends thes events to the flamingo raiseEvent method. instance of the flamingo viewer.
 * This component is used to enable the communicatiion between flamingo components in different Flash instances.
 * @file RemoteEventDispatcher.as  (sourcefile)

@@ -4,7 +4,7 @@
 * IDgis bv
  -----------------------------------------------------------------------------*/
  
- /** @component TabControler
+ /** @component cmc:TabControler
 * A component that can hold a number of Tab pages. This component replaces the old TabControl component
 * This component had a limitation of maximal 2 Tabs. 
 * @file flamingo/cmc/classes/flamingo/gui/TabControler.as  (sourcefile)

@@ -4,7 +4,7 @@
 * IDgis bv
  -----------------------------------------------------------------------------*/
  
-/** @component PrintLabel 
+/** @component cmc:PrintLabel 
 * A component that shows a text in a certain layout, within a print template.
 * A user can change the text by clicking on it. 
 * The text "[scale]" is substituted for the current scale of the corresponding map.

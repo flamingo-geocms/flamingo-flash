@@ -4,7 +4,7 @@
 * IDgis bv
  -----------------------------------------------------------------------------*/
 
-/** @component MapProxy
+/** @component cmc:MapProxy
 * The MapProxy is a proxy for a Map component which is located in a different instance of the flamingo viewer.
 * All public methods of the Map component are implemented 
 * @file MapProxy.as  (sourcefile)

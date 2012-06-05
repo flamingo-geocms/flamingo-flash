@@ -4,7 +4,7 @@
 * Realworld Systems BV
 * email: Abeer.Mahdi@realworld-systems.com
 * -----------------------------------------------------------------------------*/
-/** @component ToolBuffer
+/** @component cmc:ToolBuffer
 * Tool for buffering objects in a map.
 * @file ToolBuffer.fla (sourcefile)
 * @file ToolBuffer.swf (compiled component, needed for publication on internet)

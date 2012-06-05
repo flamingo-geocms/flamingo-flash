@@ -4,7 +4,7 @@
 * Realworld Systems BV
 * email: Abeer.Mahdi@realworld-systems.com
  -----------------------------------------------------------------------------*/
-/** @component TabControl
+/** @component cmc:TabControl
 * This component will show a tabcontrol with two tabpages
 * @file TabControl.as (sourcefile)
 * @file TabControl.fla (sourcefile)

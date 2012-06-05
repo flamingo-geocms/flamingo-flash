@@ -4,7 +4,7 @@
 * IDgis bv
  -----------------------------------------------------------------------------*/
  
-/** @component DownloadSelector
+/** @component cmc:DownloadSelector
 * This component is shown in the Window component of Flamingo and offers an user 
 * interface for configuring and sending an url to download a DDE layer to the client.  
 * @file flamingo/cmc/classes/gui/dde/DownloadSelector.as  (sourcefile)

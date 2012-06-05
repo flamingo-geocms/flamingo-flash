@@ -4,7 +4,7 @@
 * IDgis bv
  -----------------------------------------------------------------------------*/
 
-/** @component Print 
+/** @component cmc:Print 
 * A user interface component intended to prepair a map and/or other components to be sent to a printer. 
 * A set of components to print is called a template. Please refer to the PrintTemplate component.
 *

@@ -6,7 +6,7 @@
  -----------------------------------------------------------------------------*/
 
 
-/** @component EditProperties
+/** @component cmc:EditProperties
 * Edit properties component. A component that shows the properties of the active feature in the feature model, and their values. 
 * As a single line or multi line text inputs, or as drop down lists. The user can change the values for properties that are not immutable.
 * Changing values in the edit properties component means changing them in the feature model at the same time. Please refer to the GIS component.

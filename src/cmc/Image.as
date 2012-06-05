@@ -17,7 +17,7 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 -----------------------------------------------------------------------------*/
-/** @component Image
+/** @component cmc:Image
 * Image component for loading png's, jpg's or swf's.
 * Supported arguments: url   eg. flamingo.swf?config=mymap.xml&amp;image1.url=homer.png
 * @file Image.fla (sourcefile)

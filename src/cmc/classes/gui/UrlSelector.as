@@ -4,7 +4,7 @@
 * IDgis bv
  -----------------------------------------------------------------------------*/
 
-/** @component URLSelector
+/** @component cmc:URLSelector
 * A combobox component that gives you the possibility to select an url theme (defined by an URL component). 
 * An URL defines a url that can be opened from within flamingo. When for the URL components the group attribute
 * is filled a second comboBox will be drawn above the URLSelector combobox. By selecting a group the choices 

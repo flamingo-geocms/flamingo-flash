@@ -26,7 +26,7 @@ Modified by: roybraam@b3partners.nl
 Change: Added WFS search.
 
 */
-/** @component LocationFinder
+/** @component cmc:LocationFinder
 * Component for searching for and zooming to places, areas etc.
 * Supported arguments: find (comma seperated list of locationid and location)  eg. flamingo.swf?config=mymap.xml&amp;locationfinder.find=places,hometown
 * @file LocationFinder.fla (sourcefile)

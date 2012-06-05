@@ -17,7 +17,7 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 -----------------------------------------------------------------------------*/
-/** @component Logo
+/** @component cmc:Logo
 * The flamingo mapcomponents logo which is shown during the loading of a configuration.
 * @file Logo.fla (sourcefile)
 * @file Logo.swf (compiled component, needed for publication on internet)

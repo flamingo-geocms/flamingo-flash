@@ -17,7 +17,7 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 -----------------------------------------------------------------------------*/
-/** @component LanguagePicker
+/** @component cmc:LanguagePicker
 * Component for changing languages to nl, en, de and fr.
 * @file LanguagePicker.fla (sourcefile)
 * @file LanguagePicker.swf (compiled component, needed for publication on internet)

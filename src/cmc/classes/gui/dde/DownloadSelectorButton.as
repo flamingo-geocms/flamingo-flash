@@ -6,7 +6,7 @@ import tools.Logger;
 * IDgis bv
  -----------------------------------------------------------------------------*/
  
-/** @component DownloadSelectorButton
+/** @component cmc:DownloadSelectorButton
 * A button to open the DownloadSelector component
 * @file DownloadSelectorButton.as  (sourcefile)
 * @file DownloadSelectorButton.fla (sourcefile)

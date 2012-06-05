@@ -4,7 +4,7 @@
 * IDgis bv
  -----------------------------------------------------------------------------*/
 
-/** @component ExtentSelector
+/** @component cmc:ExtentSelector
 * A radiobuttons component that gives you the possibility to select an extent (defined by an Extent component). 
 * An Extent defines an extent of a map, this can be f.i. the full extent or the current extent.  
 * The ExtentSelector can be used in combination with a locationFinder component.

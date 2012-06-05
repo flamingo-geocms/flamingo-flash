@@ -1,4 +1,4 @@
-/** @component QueryComponent
+/** @component cmc:QueryComponent
  * Component for searching in WFS and generic XML datasources, and formatting the search results. This
  * component is typically used in combination with the LocationResultViewer component, which displays the
  * results.

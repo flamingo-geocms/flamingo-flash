@@ -3,7 +3,7 @@
 * Author: Roy Braam
 * B3partners bv
  -----------------------------------------------------------------------------*/
- /** @component Hotlink
+ /** @component cmc:Hotlink
 * A component that opens a web page when a getFeatureInfo is done.
 * @file flamingo/cmc/classes/gui/Hotlink.as (sourcefile)
 */

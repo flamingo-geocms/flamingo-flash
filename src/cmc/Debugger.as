@@ -17,7 +17,7 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 -----------------------------------------------------------------------------*/
-/** @component Debugger
+/** @component cmc:Debugger
 * Debugger for debugging ArcIMSlayers and OGWMSLayers. 
 * It shows the requestes and responses that go up and down the server.
 * @file Debugger.fla (sourcefile)

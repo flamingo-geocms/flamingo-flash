@@ -4,7 +4,7 @@
 * IDgis bv
  -----------------------------------------------------------------------------*/
 
-/** @component ThemeSelector
+/** @component cmc:ThemeSelector
 * A combobox component that gives you the possibility to select a theme (defined by a Theme component). 
 * A Theme defines a group of layers that can be switched on without having to check the boxes in the legend. 
 * All other layers will be switched off except the ones listed in the persitentlayerids attribute. 

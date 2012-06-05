@@ -3,7 +3,7 @@
 * Author: Linda Vels.
 * IDgis bv
  -----------------------------------------------------------------------------*/
-/** @component Tab
+/** @component cmc:Tab
 * A Tab defines a Tab page in the TabControler.
 * @file flamingo/cmc/classes/flamingo/gui/Tab.as  (sourcefile)
 * @file flamingo/cmc/Tab.fla (sourcefile)

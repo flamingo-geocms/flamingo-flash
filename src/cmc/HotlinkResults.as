@@ -4,7 +4,7 @@
 * Realworld Systems B.V. - Abeer.Mahdi@Realworld-systems.com
 * Documentation and comments updated at 7-10-2009 - Eric Richters, Realworld Systems B.V.
  -----------------------------------------------------------------------------*/
-/** @component HotlinkResults
+/** @component cmc:HotlinkResults
 * This component shows the response of an hotlink. It just shows the url data the application get's from the server in a new webbrowser window.
 * Simple and quick. 
 * @file HotLinkResults.as (sourcefile)

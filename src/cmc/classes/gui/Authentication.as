@@ -4,7 +4,7 @@
 * IDgis bv
  -----------------------------------------------------------------------------*/
 
-/** @component Authentication 
+/** @component cmc:Authentication 
 * A component that tells other Flamingo components which authorization roles the current authenticated user has. 
 * One component that uses the authentication component is the feature model. It does so to decide which layers 
 * should be kept away for the current user. Please refer to the GIS component.

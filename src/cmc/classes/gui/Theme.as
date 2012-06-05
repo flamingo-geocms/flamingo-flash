@@ -3,7 +3,7 @@
 * Author: Linda Vels.
 * IDgis bv
  -----------------------------------------------------------------------------*/
-/** @component Theme
+/** @component cmc:Theme
 * A Theme defines a group of layers that can be switched on without having to check the boxes in the legend.
 * A Theme can be set by selecting a theme from the ThemeSelector Component. 
 * A theme can also be set in the url (http://www.bla.nl?thema=all).  

@@ -4,7 +4,7 @@
 * IDgis bv
  -----------------------------------------------------------------------------*/
  
-/** @component LocationResultViewer
+/** @component cmc:LocationResultViewer
 * A component that shows locationfinder results in a htmlTextArea or as movieclips with TextFields with RollOver 
 * functionality (highlight locations in a highlightlayer component). By default the LocationFinder results are 
 * shown just under the comboboxes widthin the LocationFinder Component, with this LocationResultViewer 

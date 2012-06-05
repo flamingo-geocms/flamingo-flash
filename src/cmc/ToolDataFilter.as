@@ -4,7 +4,7 @@
 * Realworld Systems BV
 * email: Abeer.Mahdi@realworld-systems.com
 -----------------------------------------------------------------------------*/
-/** @component ToolDataFilter
+/** @component cmc:ToolDataFilter
 * Tool for filtering features in a map.
 * @file ToolDataFilter.as (sourcefile)
 * @file ToolDataFilter.fla (sourcefile)

@@ -4,7 +4,7 @@
 * IDgis bv
  -----------------------------------------------------------------------------*/
 
-/** @component ComponentVisibleButton
+/** @component cmc:ComponentVisibleButton
 * A button intended to toggle the visibility of a certain component.
 * @file flamingo/cmc/classes/coregui/ComponentVisibleButton.as  (sourcefile)
 * @file flamingo/cmc/PrintButton.fla  (sourcefile)

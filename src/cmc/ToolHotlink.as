@@ -3,7 +3,7 @@
 * Author: Abeer Mahdi
 * Realworld Systems BV - Abeer.Mahdi@Realworld-systems.com
  -----------------------------------------------------------------------------*/
-/** @component HotlinkResults
+/** @component cmc:HotlinkResults
 * This component shows the response of an hotlink. It just shows the url data the application get's from the server in a new webbrouwser.
 * Simple and quick. 
 * @file ToolHotlink.as (sourcefile)
