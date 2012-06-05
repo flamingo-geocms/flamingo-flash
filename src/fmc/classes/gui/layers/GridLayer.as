@@ -17,7 +17,7 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 -----------------------------------------------------------------------------*/
-/** @component <fmc:LayerGrid>
+/** @component fmc:LayerGrid
 * A grid layer. With this component a grid can be shown on the map
 * @file flamingo/fmc/classes/gui/layers/GridLayer.as (sourcefile)
 * @file flamingo/fmc/classes/gui/layers/AbstractLayer.as (sourcefile)

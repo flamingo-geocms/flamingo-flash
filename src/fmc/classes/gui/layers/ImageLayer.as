@@ -20,7 +20,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 import gui.layers.AbstractLayer;
 import gui.Map;
 import tools.Logger;
-/** @component <fmc:LayerImage>
+/** @component fmc:LayerImage
 * A image layer. With this component a image can be shown in the map
 * @file flamingo/fmc/classes/gui/layers/ImageLayer.as (sourcefile)
 * @file flamingo/fmc/classes/gui/layers/AbstractLayer.as (sourcefile)
