@@ -25,7 +25,7 @@ class groenloket.AbstractComponent extends MovieClip {
     var __width:Number = null;
     var __height:Number = null;
     
-    /** @component {Component}
+    /** @component tpc:AbstractComponent
     * Abstract superclass for all components.
     * @file AbstractComponent.as (sourcefile)
     */

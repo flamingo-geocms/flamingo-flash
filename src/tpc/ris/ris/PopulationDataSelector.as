@@ -4,7 +4,7 @@
 * IDgis bv
  -----------------------------------------------------------------------------*/
  
-/** @component PopulationDataSelector
+/** @component tpc:PopulationDataSelector
 * This component is shown in the Window component of Flamingo and offers an user 
 * interface for querying population data.  
 * @file flamingo/fmc/classes/flamingo/gui/populationdata/PopulationDataSelector.as  (sourcefile)
