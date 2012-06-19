@@ -76,5 +76,17 @@ class geometrymodel.LinearRing extends LineString {
 			points[i].translatePos(x, y);
 		}
 	}
+	
+	/**
+     * getPoints make sure it are >=4 points
+     * @return
+     */
+    function getPoints():Array {
+        var returnPoints:Array = super.getPoints();
+		while (returnPoints.length < 4) {
+			returnPoints.push(Point(returnPoints[0]).clone());
+		}
+		return returnPoints;
+    }
     
 }
