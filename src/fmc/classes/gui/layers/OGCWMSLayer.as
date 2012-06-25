@@ -870,7 +870,7 @@ class gui.layers.OGCWMSLayer extends AbstractLayer{
 			}
 		}
 		var querylayerstring = _getLayerlist(query_layers, "identify");
-		var nrlayersqueried = querylayerstring.split(",").length;
+		var totalquery = querylayerstring.split(",").length;
 		if (querylayerstring.length<=0) {
 			return;
 		}
@@ -901,7 +901,12 @@ class gui.layers.OGCWMSLayer extends AbstractLayer{
 						delete features[layer];
 					}
 				}
-				_global.flamingo.raiseEvent(thisObj, "onIdentifyData", thisObj, features, obj, nrlayersqueried, nrlayersqueried);
+				var nrlayersqueried = totalquery;
+				if(thisObj.identPerLayer){
+					nrlayersqueried = totalquery - thisObj.identsSent;
+				}
+				
+				_global.flamingo.raiseEvent(thisObj, "onIdentifyData", thisObj, features, obj, nrlayersqueried, totalquery);
 				if(thisObj.identPerLayer){
 					if(thisObj.identsSent == 0){
 						_global.flamingo.raiseEvent(thisObj, "onIdentifyComplete", thisObj, identifytime);
