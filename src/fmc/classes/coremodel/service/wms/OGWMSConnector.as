@@ -491,9 +491,15 @@ dynamic class coremodel.service.wms.OGWMSConnector {
 		var features:Object = new Object();
 		var xOutput:XMLNode = xml.firstChild;
 		var nlayers:Number = xOutput.childNodes.length;
-		for (var ilayer:Number = 0; ilayer<nlayers; ilayer++) {
+		for (var ilayer:Number = 0; ilayer < nlayers; ilayer++) {
+			
 			var xlayer:XMLNode = xOutput.childNodes[ilayer];
-			var layer:String = xlayer.nodeName.substr(0, xlayer.nodeName.length-"_layer".length);
+			var layer:String = xlayer.nodeName.substr(0, xlayer.nodeName.length - "_layer".length);
+			//if returned layer ==1 and query layers == 1 change the layer name if needed.
+			if (nlayers == 1 && queryLayers.split(",").length == 1) {
+				var newLayerName = queryLayers.split(",")[0];
+				layer = newLayerName;
+			}			
 			if (features[layer] == undefined) {
 				features[layer] = new Array();
 			}
