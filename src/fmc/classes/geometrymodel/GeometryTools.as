@@ -8,6 +8,7 @@ import geometrymodel.*;
 
 import tools.XMLTools;
 import tools.Utils;
+import tools.Logger;
 /**
  * geometrymodel.GeometryTools
  */
@@ -40,42 +41,80 @@ class geometrymodel.GeometryTools {
      * @return
      */
     static function getEnvelopeFromGeometryNode(geometryNode:XMLNode):Envelope {
-    	var minX:Number;
+		var minX:Number;
     	var maxX:Number;
     	var minY:Number;
     	var maxY:Number;
     	var coords:Array;
     	var preFix:String = geometryNode.getPrefixForNamespace("http://www.opengis.net/gml");
 		var coordNodes:Array = XMLTools.getElementsByTagName(preFix +":posList", geometryNode);
-		for(var i:Number = 0;i<coordNodes.length;i++){
-			var coordsStr:String =  Utils.trim(XMLNode(coordNodes[i]).firstChild.nodeValue)
-    		coords = coordsStr.split(" ");
-    		if(i==0){
-	    		minX = coords[0];
-	    		minY = coords[1];
-	    		maxX = minX;
-	    		maxY = minY;
-    		} 
-    		for(var j:Number = 2;j<coords.length;j++){
-    			//even coords ==> X coordinates
-    			if(((j & 1) == 0)){
-    				if(coords[j] > maxX){
-    					maxX = 	coords[j];
-    				} 
-    				if(coords[j] < minX){
-    					minX = coords[j];
-    				}
-    			} else {
-    				if(coords[j] > maxY){
-    					maxY = 	coords[j];
-    				} 
-    				if(coords[j] < minY){
-    					minY = coords[j];
-    				}
-    			
-    			}
-    		}
-    	}
+		if (coordNodes != null && coordNodes.length > 0) {				
+			for(var i:Number = 0;i<coordNodes.length;i++){
+				var coordsStr:String =  Utils.trim(XMLNode(coordNodes[i]).firstChild.nodeValue)
+				coords = coordsStr.split(" ");
+				if(i==0){
+					minX = coords[0];
+					minY = coords[1];
+					maxX = minX;
+					maxY = minY;
+				} 
+				for(var j:Number = 2;j<coords.length;j++){
+					//even coords ==> X coordinates
+					if(((j & 1) == 0)){
+						if(coords[j] > maxX){
+							maxX = 	coords[j];
+						} 
+						if(coords[j] < minX){
+							minX = coords[j];
+						}
+					} else {
+						if(coords[j] > maxY){
+							maxY = 	coords[j];
+						} 
+						if(coords[j] < minY){
+							minY = coords[j];
+						}
+					
+					}
+				}
+			}
+		}else {
+			//if the nodes are coordinates.
+			coordNodes = XMLTools.getElementsByTagName(preFix +":coordinates", geometryNode);
+			if (coordNodes != null || coordNodes.length > 0) {	
+				for(var i:Number = 0;i<coordNodes.length;i++){
+					var coordsStr:String =  Utils.trim(XMLNode(coordNodes[i]).firstChild.nodeValue)
+					coords = coordsStr.split(" ");
+					if (i == 0) {
+						var firstCoord:Array = coords[0].split(",");
+						minX = firstCoord[0];
+						minY = firstCoord[1];
+						maxX = minX;
+						maxY = minY;
+					} 
+					for(var j:Number = 0;j<coords.length;j++){
+						//even coords ==> X coordinates
+						var coord:Array = coords[j].split(",");
+						var x = Number(coord[0]);
+						var y = Number(coord[1]);
+						/*Logger.console("x: " + x);
+						Logger.console("y: " + y);*/
+						if(x > maxX){
+							maxX = 	x;
+						} 
+						if(x < minX){
+							minX = x;
+						}
+						if(y > maxY){
+							maxY = 	y;
+						} 
+						if(y < minY){
+							minY = y;
+						}
+					}
+				}				
+			}
+		}		
     	return new Envelope(minX,minY,maxX,maxY);
     }
     

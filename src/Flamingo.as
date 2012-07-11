@@ -65,7 +65,7 @@ import display.spriteloader.SpriteMapFactory;
 import core.loading.LoadComponentQueue;
 
 class Flamingo {
-	private var version:String = "4.0_r2868";
+	private var version:String = "4.0_r2910";
 	//reference to main movie from which this class is loaded
 	//at the main movie the components are loaded at 'moviedepth'--  ;moviedepth starts by 10000
 	//at the main movie a cursor movie is loaded at depth 50005
@@ -2782,6 +2782,8 @@ class Flamingo {
 			//if obj is a AbstractPositionable only add the id;
 			if (obj instanceof AbstractPositionable) {
 				return AbstractPositionable(obj).id;
+			}else if (obj instanceof XML || obj instanceof XMLNode){
+				new_obj = obj.toString();
 			}else {						
 				for (var attr in obj) {
 					if (new_obj == undefined) {

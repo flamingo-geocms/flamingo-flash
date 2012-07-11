@@ -13,6 +13,7 @@ import mx.xpath.XPathAPI;
 import coremodel.service.*;
 import geometrymodel.GeometryParser;
 import geometrymodel.GeometryTools;
+import tools.Logger;
 
 /**
  * coremodel.service.wfs.WFSFeature
@@ -64,7 +65,8 @@ class coremodel.service.wfs.WFSFeature extends ServiceFeature {
 		            	||property.getType() == preFix + ":MultiGeometryPropertyType"
 		            	||property.getType() == preFix + ":MultiPolygonPropertyType "
 		            	||property.getType() == preFix + ":MultiLineStringPropertyType"
-		            	||property.getType() == preFix + ":MultiPointPropertyType") {
+		            	||property.getType() == preFix + ":MultiPointPropertyType"
+						||property.getType() == preFix + ":MultiCurvePropertyType") {
 							
                 		if(!contextObject.parseGeometry){
                 			//keep xmlNode as value
@@ -86,7 +88,7 @@ class coremodel.service.wfs.WFSFeature extends ServiceFeature {
             }
             if(contextObject.parseEnvelope){
 	            var envNode:XMLNode = XPathAPI.selectSingleNode(xmlNode, "/" + serviceLayer.getName() + "/" + preFix + ":boundedBy");
-	        	if(envNode!=null){
+	        	if (envNode != null) {				
 	        		this.envelope = Envelope(GeometryParser.parseGeometry(envNode.firstChild));
 	        	} else {
 	        		if(!contextObject.parsegeometry){

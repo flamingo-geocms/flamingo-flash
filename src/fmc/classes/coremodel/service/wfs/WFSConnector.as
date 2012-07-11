@@ -14,6 +14,7 @@ import gismodel.Property;
 import gismodel.Feature;
 import geometrymodel.*;
 import tools.XMLTools;
+import tools.Logger;
 
 /**
  * coremodel.service.wfs.WFSConnector
