@@ -85,7 +85,12 @@ class coremodel.service.wfs.FeatureType extends ServiceLayer {
             	||property.getType() == preFix + ":MultiPolygonPropertyType "
             	||property.getType() == preFix + ":MultiLineStringPropertyType"
             	||property.getType() == preFix + ":MultiPointPropertyType"
-				||property.getType() == preFix + ":MultiCurvePropertyType") {
+				||property.getType() == preFix + ":MultiCurvePropertyType"
+				||property.getType() == preFix + ":SurfacePropertyType"
+            	||property.getType() == preFix + ":PolygonPropertyType "
+            	||property.getType() == preFix + ":LineStringPropertyType"
+            	||property.getType() == preFix + ":PointPropertyType"
+				||property.getType() == preFix + ":CurvePropertyType") {
                 geometryProperties.push(property);
             }
         }

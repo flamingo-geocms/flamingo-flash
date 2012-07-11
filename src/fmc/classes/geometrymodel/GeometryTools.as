@@ -48,7 +48,7 @@ class geometrymodel.GeometryTools {
     	var coords:Array;
     	var preFix:String = geometryNode.getPrefixForNamespace("http://www.opengis.net/gml");
 		var coordNodes:Array = XMLTools.getElementsByTagName(preFix +":posList", geometryNode);
-		if (coordNodes != null && coordNodes.length > 0) {				
+		if (coordNodes != null && coordNodes.length > 0) {
 			for(var i:Number = 0;i<coordNodes.length;i++){
 				var coordsStr:String =  Utils.trim(XMLNode(coordNodes[i]).firstChild.nodeValue)
 				coords = coordsStr.split(" ");
@@ -80,10 +80,10 @@ class geometrymodel.GeometryTools {
 			}
 		}else {
 			//if the nodes are coordinates.
-			coordNodes = XMLTools.getElementsByTagName(preFix +":coordinates", geometryNode);
-			if (coordNodes != null || coordNodes.length > 0) {	
+			coordNodes = XMLTools.getElementsByTagName(preFix +":coordinates", geometryNode);			
+			if (coordNodes != null && coordNodes.length > 0) {			
 				for(var i:Number = 0;i<coordNodes.length;i++){
-					var coordsStr:String =  Utils.trim(XMLNode(coordNodes[i]).firstChild.nodeValue)
+					var coordsStr:String =  Utils.trim(XMLNode(coordNodes[i]).firstChild.nodeValue);
 					coords = coordsStr.split(" ");
 					if (i == 0) {
 						var firstCoord:Array = coords[0].split(",");
@@ -97,8 +97,6 @@ class geometrymodel.GeometryTools {
 						var coord:Array = coords[j].split(",");
 						var x = Number(coord[0]);
 						var y = Number(coord[1]);
-						/*Logger.console("x: " + x);
-						Logger.console("y: " + y);*/
 						if(x > maxX){
 							maxX = 	x;
 						} 
@@ -113,6 +111,12 @@ class geometrymodel.GeometryTools {
 						}
 					}
 				}				
+			}else {				
+				coordNodes = XMLTools.getElementsByTagName(preFix +":pos", geometryNode);
+				var coordsStr:String =  Utils.trim(XMLNode(coordNodes[0]).firstChild.nodeValue);
+				coords = coordsStr.split(" ");
+				minX = maxX = Number(coords[0]);
+				minY = maxY = Number(coords[1]);
 			}
 		}		
     	return new Envelope(minX,minY,maxX,maxY);
