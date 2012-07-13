@@ -959,6 +959,12 @@ class gui.layers.TilingLayer extends AbstractLayer{
         //_global.flamingo.tracer("load tile = " + tile.getTileId() );               
     }
 	/**
+	 * Return the last map requests
+	 */
+	public function getLastGetMapRequest():HttpRequest {
+		return getLastRequests();
+	}
+	/**
 	 * 
 	 */
 	public function getLastRequests() {
