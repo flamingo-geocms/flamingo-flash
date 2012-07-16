@@ -1,4 +1,4 @@
-/*-----------------------------------------------------------------------------
+﻿/*-----------------------------------------------------------------------------
 * This file is part of Flamingo MapComponents.
 * Author: Michiel J. van Heek.
 * IDgis bv
@@ -53,6 +53,7 @@
 */
 
 import gui.*;
+import tools.Logger;
 
 class gui.PrintTemplate extends ScalableContainer {
     

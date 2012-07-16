@@ -428,39 +428,33 @@ class gui.Print extends AbstractContainer {
 				printArea["yMin"] = - yMargin;    
 				printArea["xMax"] = xMargin + (currentPrintTemplate.__width);
 				printArea["yMax"] = yMargin + (currentPrintTemplate.__height);
-
-				// first draw the printPage to a bitmap data (transparancy will remain)
-				// fill a new MovieClip with this bitmap and print this MovieClip to the printer
-				// with printAsBitMap = false;
 				
 				//TODO: with a matrix you can rotate and translate in such a way that a lanscape image can be printed in portrait and vv 
 				//var myMatrix:Matrix = new Matrix();
 				//myMatrix.rotate(Math.PI/2);
 				//myMatrix.translate(-(width/2 - height/2), (width/2 - height/2))
 				
-				var bitmap:BitmapData = new BitmapData(2880, 2880, false, 0xffffff);
-				bitmap.draw(printPage);
-				var tmp:MovieClip = _root.createEmptyMovieClip("rasterPage", _root.getNextHighestDepth());
-				tmp.beginBitmapFill(bitmap);
-				
-				tmp.moveTo(-xMargin, -yMargin);
-				tmp.lineTo(2880, -yMargin);
-				tmp.lineTo(2880, 2880);
-				tmp.lineTo(-xMargin, 2880);
-				tmp.lineTo(-xMargin, -yMargin);
-				tmp._x = -tmp._width;
-				tmp._xscale =(1/dpiFactor) * 100;
-				tmp._yscale =(1/dpiFactor) * 100;
-				tmp.endFill();
-
-				if (printJob.addPage(tmp, printArea, {printAsBitmap: false})) {
+				printPage.beginFill(0x00FFFFFF);
+				printPage.moveTo(-xMargin, -yMargin);
+				printPage.lineTo(2880, -yMargin);
+				printPage.lineTo(2880, 2880);
+				printPage.lineTo(-xMargin, 2880);
+				printPage.lineTo(-xMargin, -yMargin);
+				var prevX = printPage._x;
+				printPage._x = -printPage._width;
+				printPage._xscale =(1/dpiFactor) * 100;
+				printPage._yscale =(1/dpiFactor) * 100;
+				printPage.endFill();
+				if (printJob.addPage(printPage, printArea, {printAsBitmap: true})) {
 					printJob.send();
 				}
+				printPage._x = prevX;
             
             setPreviewScale(PrintTemplate(currentPrintTemplate));
             
         }
         delete printJob;
+		//currentPrintTemplate.show();
     }
     
     function setPreviewScale(pt:PrintTemplate):Void {

@@ -238,7 +238,7 @@ class gui.layers.OGCWMSLayer extends AbstractLayer{
 		}	
 		
 		//get extra information about mapserver and the layers                                                                 
-		if (url == undefined and getcapabilitiesurl == undefined) {
+		if (url == undefined && getcapabilitiesurl == undefined) {
 			return;
 		}
 		var thisObj:OGCWMSLayer = this;
@@ -640,7 +640,7 @@ class gui.layers.OGCWMSLayer extends AbstractLayer{
 		var w = map.__width;
 		var h = map.__height;
 		cachemovie.extent = new Object();
-		if (this.fullextent != undefined and this.limitedtofullextent) {
+		if (this.fullextent != undefined && this.limitedtofullextent) {
 			cachemovie.extent.minx = Math.max(extent.minx, this.fullextent.minx);
 			cachemovie.extent.miny = Math.max(extent.miny, this.fullextent.miny);
 			cachemovie.extent.maxx = Math.min(extent.maxx, this.fullextent.maxx);
@@ -696,26 +696,29 @@ class gui.layers.OGCWMSLayer extends AbstractLayer{
 			};
 			cachemovie.mHolder.onLoad=listener.onLoadInit = function(mc:MovieClip) {
 				var correctedExtent=thisObj.map.copyExtent(thisObj.extent);
+				
 				thisObj.map.correctExtent(correctedExtent);
 				thisObj._stoptimeout();
 				var newTime:Date = new Date();
 				var loadtime = (newTime.getTime()-thisObj.starttime.getTime())/1000;
 				thisObj.updateCache(cachemovie);
 				var currentFiltersFingerprint:String = "";
-				if (thisObj.map.fadesteps>0) {
-					var step = (100/thisObj.map.fadesteps)+1;
+				if (thisObj.map.fadesteps > 0) {
+					var step = (100 / thisObj.map.fadesteps) + 1;
 					thisObj.container.onEnterFrame = function() {
-						cachemovie._alpha = cachemovie._alpha+step;
+						cachemovie._alpha = cachemovie._alpha + step;
 						if (cachemovie._alpha>=100) {
 							delete thisObj.container.onEnterFrame;
 							thisObj.flamingo.raiseEvent(thisObj, "onUpdateComplete", thisObj, requesttime, loadtime, mc.getBytesTotal());
 							thisObj.updating = false;
 							thisObj._clearCache();
-							if ((!thisObj.map.isEqualExtent(correctedExtent) and !thisObj.map.isEqualExtent(thisObj.extent)) || thisObj._getVisLayers() != thisObj.vislayers ||
+							
+							if ((!thisObj.map.isEqualExtent(correctedExtent) && !thisObj.map.isEqualExtent(thisObj.extent)) || thisObj._getVisLayers() != thisObj.vislayers ||
 								("|" + currentFiltersFingerprint + "|") !=  ("|" + thisObj.lastFiltersFingerprint + "|")) {
 								//_global.flamingo.tracer("re-update, fadesteps>0");
 								this.update();
 							}
+							
 						}
 					};
 				} else {
@@ -723,7 +726,7 @@ class gui.layers.OGCWMSLayer extends AbstractLayer{
 					_global.flamingo.raiseEvent(thisObj, "onUpdateComplete", thisObj, requesttime, loadtime, mc.getBytesTotal());
 					thisObj.updating = false;
 					thisObj._clearCache();
-					if (((!thisObj.map.isEqualExtent(correctedExtent)) and (!thisObj.map.isEqualExtent(thisObj.extent))) || thisObj._getVisLayers() != thisObj.vislayers ||
+					if (((!thisObj.map.isEqualExtent(correctedExtent)) && (!thisObj.map.isEqualExtent(thisObj.extent))) || thisObj._getVisLayers() != thisObj.vislayers ||
 						("|" + currentFiltersFingerprint + "|") !=  ("|" + thisObj.lastFiltersFingerprint + "|")) {
 						//_global.flamingo.tracer("re-update, fadesteps<=0");
 						thisObj.update();
@@ -858,7 +861,7 @@ class gui.layers.OGCWMSLayer extends AbstractLayer{
 	*/
 	function identify(extent:Object) {
 		var thisObj:OGCWMSLayer = this;
-		if (url == undefined and getfeatureinfourl == undefined) {
+		if (url == undefined && getfeatureinfourl == undefined) {
 			return;
 		}
 		if (!_visible || !visible) {
@@ -1008,7 +1011,7 @@ class gui.layers.OGCWMSLayer extends AbstractLayer{
 		if (!this.canmaptip) {
 			return;
 		}
-		if (url == undefined and getfeatureinfourl == undefined) {
+		if (url == undefined && getfeatureinfourl == undefined) {
 			return;
 		}
 		if (!_visible || !visible) {
@@ -1121,7 +1124,7 @@ class gui.layers.OGCWMSLayer extends AbstractLayer{
 		if (list.toUpperCase() == "#ALL#") {
 			var a = new Object();
 			for (var id in layers) {
-				if (layers[id].visible and layers[id].queryable) {
+				if (layers[id].visible && layers[id].queryable) {
 					a[id] = "";
 				}
 			}
