@@ -961,7 +961,7 @@ class gui.layers.TilingLayer extends AbstractLayer{
 	/**
 	 * Return the last map requests
 	 */
-	public function getLastGetMapRequest():HttpRequest {
+	public function getLastGetMapRequest() {
 		return getLastRequests();
 	}
 	/**
