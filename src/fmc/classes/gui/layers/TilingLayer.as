@@ -196,6 +196,7 @@ class gui.layers.TilingLayer extends AbstractLayer{
         newTiles =new Array();
         tilesToProcess = 0;
         intervalId = 0;
+		this._name = id;
 		init();
 
     }
@@ -458,7 +459,6 @@ class gui.layers.TilingLayer extends AbstractLayer{
         if (map == undefined) {
           map = this.map
         }
-        super.update(map);   
 
         if (isWithinScaleRange()) {
 			this._visible = this.visible;
@@ -474,6 +474,7 @@ class gui.layers.TilingLayer extends AbstractLayer{
             return;
         }
 
+        super.update(map);   
         var extent=this.map.getMapExtent();
 
         var mapResUpd = map.getScale(extent);
@@ -706,13 +707,11 @@ class gui.layers.TilingLayer extends AbstractLayer{
     }
     
     private function registerProgressMonitor (): Void {
-    	
     	// Bail out if a progress monitor is already running:
     	if (this.intervalId > 0) {
     		return;
     	}
-    	
-    	this.intervalId = setInterval (this, "checkLoadProgress");
+    	this.intervalId = setInterval (this, "checkLoadProgress",500);
     }
     
     private function clearProgressMonitor (): Void {
@@ -728,7 +727,7 @@ class gui.layers.TilingLayer extends AbstractLayer{
      * @param	extent the extent for which the tiles must be loaded
      * @param	zoomLevel the zoomlevel
      */
-    function loadNewTiles(extent:Object,zoomLevel:Number){  
+    function loadNewTiles(extent:Object, zoomLevel:Number) {  
         this.newTiles = createNewTiles(extent,zoomLevel);
         log.debug("number of new tiles created: "+newTiles.length);
         //_global.flamingo.tracer("layer = " + this + " newTiles.length = " + newTiles.length);
@@ -930,7 +929,7 @@ class gui.layers.TilingLayer extends AbstractLayer{
     /*
      * This function loads the image and creates the movieclips
      */
-    private function loadTiles(){   
+    private function loadTiles() {   
         var tile:Tile=Tile(this.newTiles.pop());    
                         
         var mcTile= this.tileStage.createEmptyMovieClip(tile.getTileId()+"("+this.currentZoomLevel+")",this.tileDepth++);
@@ -1050,7 +1049,6 @@ class gui.layers.TilingLayer extends AbstractLayer{
             _global.flamingo.raiseEvent(this, "onUpdateComplete", this, 0, 0, 0);
             removeAllButZoomLevel(this.currentZoomLevel);
         }           
-        
     }
         
     /*DEBUG functions:*/    
