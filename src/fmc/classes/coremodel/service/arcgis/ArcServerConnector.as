@@ -503,7 +503,7 @@ class coremodel.service.arcgis.ArcServerConnector{
                 str += "<Visible>" + layers[i].visible + "</Visible>\n<ShowLabels>true</ShowLabels>\n";
                 
 				if (layers[i].definitionQuery != undefined) {
-					str += "<DefinitionExpression>"+ layers[i].definitionQuery + "</DefinitionExpression>";
+					str += "<DefinitionExpression><![CDATA["+ layers[i].definitionQuery + "]]></DefinitionExpression>";
 				}
                 // Include query info:
                 if(layers[i].query != undefined) {
@@ -519,7 +519,7 @@ class coremodel.service.arcgis.ArcServerConnector{
                     
                     if(layers[i].query != undefined && layers[i].query != "") {
                         var q:String = layers[i].query.toString();
-                        str +="<DefinitionExpression>"+q+"</DefinitionExpression>\n";               
+                        str +="<DefinitionExpression><![CDATA["+q+"]]></DefinitionExpression>\n";               
                     }
                 }
                 
@@ -776,7 +776,7 @@ class coremodel.service.arcgis.ArcServerConnector{
 			str +="<LayerDescription>\n<LayerID>"+layerid+"</LayerID>\n";
 			if(query != undefined &&query != "") 
 			{
-				str +="<DefinitionExpression>"+query+"</DefinitionExpression>\n";				
+				str +="<DefinitionExpression><![CDATA["+query+"]]></DefinitionExpression>\n";				
 			}
 			if(!includeGeometry){
 				str +="<LayerResultOptions>\n";

@@ -8,12 +8,12 @@
 	<tstamp>
 		<format property="date" pattern="dd/MM/yyyy hh:mm aa"/>
 	</tstamp>
-	<property name="version" value="4.0_r2919"/>
+	<property name="version" value="4.1_r2944"/>
 	<property name="build" location="build"/>
 	<property name="dist" location="${build}/dist"/>
 	<property name="srcDir" location="src"/>
 	<property name="examplesDir" location="examples"/>
-	<property name="flashPath" location="C:/Program Files (x86)/Adobe/Adobe Flash CS3"/>
+	<property name="flashPath" location="D:/Program Files (x86)/Adobe/Adobe Flash CS3"/>
 	<!--property name="flashPath" location="D:/Program Files (x86)/Adobe/Adobe Flash CS3"/-->
 	
 	<!-- settings for docs -->	
