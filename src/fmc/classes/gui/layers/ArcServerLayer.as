@@ -119,7 +119,7 @@ class gui.layers.ArcServerLayer extends AbstractLayer{
 	var maptipids:String;
 	var hidelegendids:String;
 	var showlegendids:String;
-	var visibleids:String;
+	var visibleids_private:String;
 	var hiddenids:String;
 	var outputtype:String = "png24";
 	var alpha:Number = 100;
@@ -246,11 +246,11 @@ class gui.layers.ArcServerLayer extends AbstractLayer{
 			if (thisObj.showlegendids.toUpperCase() == "#ALL#") {
 				thisObj.setLayerProperty("#ALL#", "legend", true);
 			}
-			if (thisObj.visibleids.toUpperCase() == "#ALL#") {
-				thisObj.setLayerProperty("#ALL#", "visible", true);
+			if (thisObj.hiddenids != undefined && thisObj.hiddenids!=null) {
+				thisObj.setLayerProperty(thisObj.hiddenids, "visible", false);
 			}
-			if (thisObj.hiddenids.toUpperCase() == "#ALL#") {
-				thisObj.setLayerProperty("#ALL#", "visible", false);
+			if (thisObj.visibleids != undefined && thisObj.visibleids!=null) {
+				thisObj.setLayerProperty(thisObj.visibleids, "visible", true);
 			}
 			if (thisObj.identifyids.toUpperCase() == "#ALL#") {
 				thisObj.setLayerProperty("#ALL#", "identify", true);
@@ -1115,7 +1115,7 @@ class gui.layers.ArcServerLayer extends AbstractLayer{
 	* @example mylayer.setLayerProperty("39,BRZO","visible",true)
 	* mylayer.setLayerProperty("#ALL#","identify",false)
 	*/
-	function setLayerProperty(ids:String, field:String, value:Object) {
+	function setLayerProperty(ids:String, field:String, value:Object) {		
 		if (ids.toUpperCase() == "#ALL#") {
 			for (var id in layers) {
 				layers[id][field] = value;
@@ -1224,7 +1224,7 @@ class gui.layers.ArcServerLayer extends AbstractLayer{
 	* @param id:String [optional] A layerid. If omitted the entire maplayer will be effected.
 	*/
 	function setVisible(vis:Boolean, id:String) {
-		if ( id != undefined && id.length > 0 ) {			
+		if ( id != undefined && id.length > 0 ) {
 			this.setLayerProperty(id, "visible", vis);
 		}
 		super.setVisible(vis);
@@ -1813,9 +1813,6 @@ class gui.layers.ArcServerLayer extends AbstractLayer{
 			newQuery = newQuery.split(">").join("&gt;");			
 			for (var i = 0 ; i < layerIds.length; i++) {				
 				var layerId = layerIds[i];
-				Logger.console("Set query for layer: " + layerId);
-				Logger.console("Query: " + query);
-				Logger.console("Query: " + spatialQuery);
 				if (this.layers[layerId] == undefined) {
 					this.layers[layerId] = new Object();
 				}
@@ -1859,6 +1856,14 @@ class gui.layers.ArcServerLayer extends AbstractLayer{
 	
 	public function setDefinitionQuery(definitionQuery:String,id:Int):Void {
 		this.layers[id].definitionQuery = definitionQuery;
+	}
+	
+	public function set visibleids(vis) {		
+		this.visibleids_private = vis;
+	}
+	
+	public function get visibleids() {		
+		return this.visibleids_private;
 	}
 
 }
