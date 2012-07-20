@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<FLAMINGO xmlns:fmc="fmc" id="flamingo" lang="nl" languages="en,nl" tooltipdelay="300" commtojava="true" preloadtitle="Prototypemap" useexternalinterface="true">
+<FLAMINGO xmlns:fmc="fmc" xmlns:cmc="cmc" id="flamingo" lang="nl" languages="en,nl" tooltipdelay="300" commtojava="true" preloadtitle="Prototypemap" useexternalinterface="true">
 	<style id=".tooltip" font-family="arial, sans-serif" font-size="11" color="#880000" display="block"/>
 	<fmc:Container left="0" top="0" height="100%" width="60%">
 		<fmc:MonitorLayer id="monitorl" left="37%" top="50%" width="50%" listento="map">
@@ -36,7 +36,7 @@
 		</fmc:Map>
 	</fmc:Container>
 	<fmc:Container left="60%" width="40%" height="100%" top="0%" backgroundcolor="#FFFFFF">		
-		<fmc:LocationFinder id="locationfinder" listento="map" left="0%" top="0%" width="90%" height="100%">
+		<cmc:LocationFinder id="locationfinder" listento="map" left="0%" top="0%" width="90%" height="100%">
 			<string id="label" nl="zoek..." en="search..." de="suche..." fr="recherche..." />
 			<string id="busy" nl="zoeken..." en="searching..." de="suchen..." fr="rechercher..." />
 			<string id="nohit" nl="Geen gegevens gevonden..." en="No data found..." de="Keine Daten gefunden..." fr="Pas de données trouvées..." />
@@ -46,11 +46,11 @@
 				server="http://afnemers.ruimtelijkeplannen.nl/afnemers/services" 
 				type="WFS" serverVersion="1.1.0" srs="EPSG:28992"  
 				layerid="app:Bestemmingsplangebied"  searchfield="app:naamOverheid"  
-				outputfields="app:naamOverheid,app:identificatie,app:naam" matchcase="false">
+				outputfields="app:naamOverheid,app:identificatie,app:naam" matchcase="false" preprocess="toupper">
 				<string id="output" nl="[app:naamOverheid]: [app:naam]" />
 				<string id="label" nl="Zoek op RO-online naam overheid" />
 				<string id="hint" nl="Type een (deel van de) naam overheid  in het tekstvak hierboven..." />
 			</LOCATIONS>
-		</fmc:LocationFinder>
+		</cmc:LocationFinder>
 	</fmc:Container>
 </FLAMINGO>
