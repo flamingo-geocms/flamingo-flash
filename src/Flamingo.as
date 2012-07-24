@@ -65,7 +65,7 @@ import display.spriteloader.SpriteMapFactory;
 import core.loading.LoadComponentQueue;
 
 class Flamingo {
-	private var version:String = "4.1_r2944";
+	private var version:String = "4.1_r2962";
 	//reference to main movie from which this class is loaded
 	//at the main movie the components are loaded at 'moviedepth'--  ;moviedepth starts by 10000
 	//at the main movie a cursor movie is loaded at depth 50005
@@ -3418,6 +3418,7 @@ class Flamingo {
 		if (comp == undefined) {
 			return null;
 		}
+		var returnValue = null;
 		if (id.toLowerCase() == "flamingo") {
 			
 			if (this[method] == undefined) {
@@ -3427,14 +3428,14 @@ class Flamingo {
 			if (typeof (r) == "movieclip") {
 				r = this.getId(r);
 			}
-			return r;
+			returnValue= r;
 		} else if (comp instanceof AbstractPositionable) {
 			var func = comp[method];
 			if (func == undefined) {
 				return null;
 			}
-			var r = func.apply(comp, arguments);
-			return r;
+			var r = func.apply(comp, arguments);						
+			returnValue= r;
 		} else{
 			var func = eval(comp + "." + method);
 			if (func == undefined) {
@@ -3443,10 +3444,11 @@ class Flamingo {
 			var r = func.apply(eval(comp), arguments);
 			if (typeof (r) == "movieclip") {
 				r = this.getId(r);
-			}
-			
-			return r;
+			}			
+			returnValue= r;
 		}
+		return this.objects2Javascript(returnValue);
+		
 	}
 	//events	
 	/**
