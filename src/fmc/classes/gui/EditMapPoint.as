@@ -186,7 +186,7 @@ class gui.EditMapPoint extends EditMapGeometry {
 
         if (label == null) {
             label = Label(attachMovie("Label", "mLabel", labelDepth, {autoSize: "center"}));
-			label._x -=(label.width / 2);
+			//label._x -=(label.width / 2);
         }
         if (type == ACTIVE) {
             label.setStyle("fontWeight", "bold");
@@ -194,6 +194,11 @@ class gui.EditMapPoint extends EditMapGeometry {
             label.setStyle("fontWeight", "none");
         }
         label.text = labelText;
+		
+		var point:Point = Point(_geometry);
+		var pixel:Pixel = point2Pixel(point);
+		label._x = pixel.getX() - (label.width / 2);
+        label._y = pixel.getY();
     }
     
     private function doDrawEditable():Void {
