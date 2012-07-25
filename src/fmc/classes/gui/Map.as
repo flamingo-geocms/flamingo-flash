@@ -693,7 +693,14 @@ class gui.Map extends AbstractPositionable implements PersistableComponent{
 				} else if (thisObj.nrOfServiceLayers==0){
 					themeSelector.setCurrentTheme();
 				} 				
+			};
+			lLayer.onHide = function(layer:MovieClip) {
+				thisObj.flamingo.raiseEvent(this, "onHideLayer", this, layer);
 			};			
+			lLayer.onShow = function(layer:MovieClip) {
+				thisObj.flamingo.raiseEvent(this, "onShowLayer", this, layer);
+			};
+			
 			flamingo.addListener(lLayer, layerid, this);
 			
 			flamingo.loadComponent(xml, mc, layerid);
