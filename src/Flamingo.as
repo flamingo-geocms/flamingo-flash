@@ -65,7 +65,7 @@ import display.spriteloader.SpriteMapFactory;
 import core.loading.LoadComponentQueue;
 
 class Flamingo {
-	private var version:String = "4.1_r3141";
+	private var version:String = "4.1_r3146";
 	//reference to main movie from which this class is loaded
 	//at the main movie the components are loaded at 'moviedepth'--  ;moviedepth starts by 10000
 	//at the main movie a cursor movie is loaded at depth 50005
@@ -2652,7 +2652,7 @@ class Flamingo {
 	* @see removeListener
 	* @see addListener
 	*/
-	public function raiseEvent(comp:Object, event:String) {
+	public function raiseEvent(comp:Object, event:String) {		
 		var id:String = this.getId(comp);				
 		//Logger.console("RaiseEvent: " + event+" id: "+id+" component: "+this.components[id]);
 		//remove first element (=comp) from arguments array 
@@ -2671,20 +2671,20 @@ class Flamingo {
 			var allowedByEvent:Boolean= false;
 			var lowerId=id.toLowerCase();
 			var lowerEvent="."+event.toLowerCase();
-			var lowerIdEvent=lowerId+lowerEvent;
-			if (this.allowExternalInterface!=null){
+			var lowerIdEvent = lowerId + lowerEvent;							
+			if (this.allowExternalInterface != null) {
 				//if no deny is set all are denied accept the allowed;
 				if (this.denyExternalInterface==null){
 					fire=false;
 				}
-				for (var i:Number=0; i < this.allowExternalInterface.length; i++){
-					if (this.allowExternalInterface[i].toLowerCase()==lowerId){
+				for (var i:Number = 0; i < this.allowExternalInterface.length; i++) {					
+					if (this.allowExternalInterface[i].toLowerCase() == lowerId) {
 						fire=true;
 					}
-					if (this.allowExternalInterface[i].toLowerCase()==lowerIdEvent){
+					if (this.allowExternalInterface[i].toLowerCase() == lowerIdEvent) {
 						fire=true;
 						allowedByEvent=true;
-					}else if (this.allowExternalInterface[i].toLowerCase()==lowerEvent){
+					}else if (this.allowExternalInterface[i].toLowerCase() == lowerEvent) {
 						fire=true;
 						allowedByEvent=true;						
 					}
