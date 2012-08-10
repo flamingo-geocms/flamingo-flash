@@ -359,6 +359,7 @@ class gismodel.GIS extends AbstractComponent {
         }
         layers.push(layer);
         stateEventDispatcher.dispatchEvent(new AddRemoveEvent(this, "GIS", "layers", new Array(layer), null));
+		_global.flamingo.raiseEvent(this, "onAddLayer", this,layer.getName());
     }
 	
 	/**
@@ -829,6 +830,24 @@ class gismodel.GIS extends AbstractComponent {
 				}
 			}
 		}
+	}
+	/**
+	 * Remove the layer with name == layerName. All features are also removed.
+	 * @param	layerName the name of the layer that needs to be removed
+	 */
+	function removeLayer(layerName) {
+		var layer:Layer = null;
+		var newLayers = new Array();
+		for (var i:String in layers) {
+			layer = Layer(layers[i]);			
+			if (layer.getName() == layerName) {
+				layer.removeFeatures(layer.getFeatures(), false);				
+				_global.flamingo.raiseEvent(this, "onRemoveLayer", this,layerName);
+			}else {
+				newLayers.push(layer);
+			}
+		}
+		this.layers = newLayers;		
 	}
 	/**
 	 * raiseFeatureRemoved
