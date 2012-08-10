@@ -889,5 +889,17 @@ class gismodel.GIS extends AbstractComponent {
 	*onGetFeatures is raised when a getFeatures click is done with the getFeature button.
 	*envelopeObject: the extent of the click.
 	*/
-	function onGetFeatures(envelopeObject){}
+	function onGetFeatures(envelopeObject) { }
+	/**
+	 * raised when layer is removed
+	 * @param	gis the gis object on which the layer is added
+	 * @param	layerName the name of the layer that is added
+	 */
+	function onRemoveLayer(gis, layerName) { }
+	/**
+	 * Raised when layer is added
+	 * @param	gis the gis object on which the layer is added
+	 * @param	layerName the name of the layer that is added
+	 */
+	function onAddLayer(gis,layerName){}
 }
