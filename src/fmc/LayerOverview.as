@@ -119,6 +119,8 @@ init();
  * This tag defines an overview layer
  */
 function init():Void {
+	//disable defaultTool.
+	flamingo.getParent(this).activateDefaultTool(false);
 	if (flamingo == undefined) {
 		var t:TextField = this.createTextField("readme", 0, 0, 0, 550, 400);
 		t.html = true;

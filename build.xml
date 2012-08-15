@@ -8,7 +8,7 @@
 	<tstamp>
 		<format property="date" pattern="dd/MM/yyyy hh:mm aa"/>
 	</tstamp>
-	<property name="version" value="4.1_r2963"/>
+	<property name="version" value="4.2_beta_r3201"/>
 	<property name="build" location="build"/>
 	<property name="dist" location="${build}/dist"/>
 	<property name="srcDir" location="src"/>
@@ -18,7 +18,7 @@
 	
 	<!-- settings for docs -->	
 	<property name="perlPath" value="perl"/>
-	<property name="naturalDocsPath" location="F:/tools/NaturalDocs/NaturalDocs"/>
+	<property name="naturalDocsPath" location="C:/tools/NaturalDocs 1.52"/>
 	<property name="naturalDocsProjectPath" location="NaturalDocsProj"/>
 	<property name="CDGPath" location="CDGProj"/>
 	<property name="docDir" location="doc"/>
