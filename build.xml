@@ -8,7 +8,7 @@
 	<tstamp>
 		<format property="date" pattern="dd/MM/yyyy hh:mm aa"/>
 	</tstamp>
-	<property name="version" value="4.2_beta_r3201"/>
+	<property name="version" value="4.2_beta_r3245"/>
 	<property name="build" location="build"/>
 	<property name="dist" location="${build}/dist"/>
 	<property name="srcDir" location="src"/>

@@ -582,11 +582,14 @@ class gui.layers.OGCWMSLayer extends AbstractLayer{
 			this.container._visible = false;
 			return;
 		}
-		//only one request will be fired at once                                                                                    
-		/*xxx Why? The latest update must be done, not the first!
-		 * if (this.updating) {
+		/**
+		 * only one request will be fired at once, otherwise some unpredictable things will happen.
+		 * If after the updating event the layer must update, see the lConn.onGetMap >> cachemovie.mHolder.onLoad
+		 * part of the code. After updating, there is a check if something is changed. Yes? Update again.
+		 */
+		if (this.updating) {
 			return;
-		}*/
+		}
 		if (this.url == undefined) {
 			return;
 		}
@@ -712,7 +715,7 @@ class gui.layers.OGCWMSLayer extends AbstractLayer{
 							thisObj.flamingo.raiseEvent(thisObj, "onUpdateComplete", thisObj, requesttime, loadtime, mc.getBytesTotal());
 							thisObj.updating = false;
 							thisObj._clearCache();
-							
+							//if something is changed in the mean time, update again
 							if ((!thisObj.map.isEqualExtent(correctedExtent) && !thisObj.map.isEqualExtent(thisObj.extent)) || thisObj._getVisLayers() != thisObj.vislayers ||
 								("|" + currentFiltersFingerprint + "|") !=  ("|" + thisObj.lastFiltersFingerprint + "|")) {
 								//_global.flamingo.tracer("re-update, fadesteps>0");
