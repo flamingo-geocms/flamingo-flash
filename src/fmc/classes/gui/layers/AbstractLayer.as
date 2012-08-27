@@ -162,11 +162,11 @@ class gui.layers.AbstractLayer extends AbstractConfigurable{
     function setVisible(visible) {
         //log.debug("visible = " + visible + " setVisible,caller = " + Utils.getFunctionName(arguments.caller));
         var oldVisible: Boolean = this.visible;
+		this.visible = visible;
+        this._visible = visible;
         if (oldVisible != visible) {
         	_global.flamingo.raiseEvent (this, visible ? "onShow" : "onHide", this);
         }
-		this.visible = visible;
-        this._visible = visible;
 		if (visible) {
 			updateCaches();
 		}
