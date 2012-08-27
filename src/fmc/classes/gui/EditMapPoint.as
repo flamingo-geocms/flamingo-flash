@@ -175,7 +175,7 @@ class gui.EditMapPoint extends EditMapGeometry {
 		}
 	}
     
-    private function setLabel():Void {
+    private function setLabel():Void {		
         if (labelText == null) {
             if (label != null) {
                 label.removeMovieClip();
@@ -197,8 +197,8 @@ class gui.EditMapPoint extends EditMapGeometry {
 		
 		var point:Point = Point(_geometry);
 		var pixel:Pixel = point2Pixel(point);
-		label._x = pixel.getX() - (label.width / 2);
-        label._y = pixel.getY();
+		label._x = 0 - (label.width / 2);
+        label._y = 0;
     }
     
     private function doDrawEditable():Void {
