@@ -112,7 +112,7 @@ class gui.layers.OGCWMSLayer extends AbstractLayer{
 	var maxscale:Number;
 	var retryonerror:Number = 1;
 	var timeout:Number = 10;
-	var attributes:Object = new Object();
+	var attributes:Object ;
 	var limitedtofullextent:Boolean = false;
 	var showerrors:Boolean = false;
 	var showmaptip:Boolean;
@@ -161,6 +161,7 @@ class gui.layers.OGCWMSLayer extends AbstractLayer{
 	 */
 	public function OGCWMSLayer(id:String, container:MovieClip, map:Map) {
 		super (id, container, map);		
+		this.attributes = new Object();
 		caches = new Object();
 		layers = new Object();
 		init();		
