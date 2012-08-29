@@ -937,13 +937,14 @@ class gui.layers.OGCWMSLayer extends AbstractLayer{
 		args.X = String(Math.round(rect.x+(rect.width/2)));
 		args.Y = String(Math.round(rect.y+(rect.height/2)));
 		args.FEATURE_COUNT = String(feature_count);
-		args = handleSLDarg(args);
+		args = handleSLDarg(args);		
+		_global.flamingo.raiseEvent(thisObj, "onIdentify", thisObj, this.identifyextent);
 		if(identPerLayer){
-			identifyPerLayer(args,lConn);
+			identifyPerLayer(args,lConn,this.identifyextent,querylayerstring);
 		} else {
 			args.LAYERS = getLayersString();
 			args.QUERY_LAYERS = querylayerstring;
-			sendIdentifyRequest(args,lConn);
+			sendIdentifyRequest(args,lConn,this.identifyextent);
 		}	
 	}
 	/**
@@ -951,14 +952,13 @@ class gui.layers.OGCWMSLayer extends AbstractLayer{
 	 * @param	args
 	 * @param	lConn
 	 */
-	function identifyPerLayer(args:Object,lConn:Object) {
-			var querylayerstring = _getLayerlist(query_layers, "identify");
+	function identifyPerLayer(args:Object,lConn:Object,requestExtent,querylayerstring:String) {
 			var qlayers:Array = querylayerstring.split(",");
 			for (var i:Number=0; i<qlayers.length;i++){
 				args.LAYERS = qlayers[i];
 				args.QUERY_LAYERS = qlayers[i];
 				
-				sendIdentifyRequest(args,lConn);
+				sendIdentifyRequest(args,lConn,requestExtent);
 			}
 	}
 
@@ -967,15 +967,14 @@ class gui.layers.OGCWMSLayer extends AbstractLayer{
 	 * @param	args
 	 * @param	lConn
 	 */
-	function sendIdentifyRequest(args:Object, lConn:Object) {
+	function sendIdentifyRequest(args:Object, lConn:Object,requestExtent) {
 		var thisObj:OGCWMSLayer = this;
 		var cogwms:OGWMSConnector = new OGWMSConnector();
 		cogwms.addListener(lConn);
-		_global.flamingo.raiseEvent(thisObj, "onIdentify", thisObj, thisObj.identifyextent);
 		if (getfeatureinfourl != undefined) {
-			var reqid = cogwms.getFeatureInfo(getfeatureinfourl, args, this.map.copyExtent(this.identifyextent));
+			var reqid = cogwms.getFeatureInfo(getfeatureinfourl, args, this.map.copyExtent(requestExtent));
 		} else {
-			var reqid = cogwms.getFeatureInfo(url, args, this.map.copyExtent(this.identifyextent));
+			var reqid = cogwms.getFeatureInfo(url, args, this.map.copyExtent(requestExtent));
 		}
 		this.starttime = new Date();
 	}
@@ -1037,6 +1036,14 @@ class gui.layers.OGCWMSLayer extends AbstractLayer{
 		}
 		this.showmaptip = true;
 		var lConn:Object = new Object();
+		/*lConn.onResponse = function(connector:OGWMSConnector) {
+			thisObj.identsSent--; 
+			_global.flamingo.raiseEvent(thisObj, "onResponse", thisObj, "identify", connector);
+		};
+		lConn.onRequest = function(connector:OGWMSConnector) {
+			thisObj.identsSent++; 
+			_global.flamingo.raiseEvent(thisObj, "onRequest", thisObj, "identify", connector);
+		};*/
 		lConn.onGetFeatureInfo = function(features:Object, obj:Object, requestid:String) {
 			if (thisObj.showmaptip) {
 				if (thisObj.map.isEqualExtent(thisObj.maptipextent, obj)) {
@@ -1066,7 +1073,7 @@ class gui.layers.OGCWMSLayer extends AbstractLayer{
 							combinedMaptip+=maptip;
 						}
 					}
-					_global.flamingo.raiseEvent(thisObj, "onMaptipMarkedUpData", thisObj, combinedMaptip);				
+					_global.flamingo.raiseEvent(thisObj, "onMaptipMarkedUpData", thisObj, combinedMaptip);
 				}
 			}
 		};
@@ -1074,8 +1081,6 @@ class gui.layers.OGCWMSLayer extends AbstractLayer{
 		args.BBOX = this.extent2String(map.getMapExtent());
 		args.WIDTH = Math.ceil(map.__width);
 		args.HEIGHT = Math.ceil(map.__height);
-		args.LAYERS = maptiplayerstring;
-		args.QUERY_LAYERS = maptiplayerstring;
 		args.INFO_FORMAT = this.info_format;
 		args.FORMAT = this.format;
 		args.EXCEPTIONS = this.exceptions;
@@ -1087,15 +1092,15 @@ class gui.layers.OGCWMSLayer extends AbstractLayer{
 		for (var attr in this.attributes) {
 			args[attr.toUpperCase()] = this.attributes[attr];
 		}
-		var cogwms:OGWMSConnector = new OGWMSConnector();
-		cogwms.addListener(lConn);
-		if (getfeatureinfourl != undefined) {
-			var reqid = cogwms.getFeatureInfo(getfeatureinfourl, args, this.map.copyExtent(this.maptipextent));
-		} else {
-			var reqid = cogwms.getFeatureInfo(url, args, this.map.copyExtent(this.maptipextent));
+		if(identPerLayer){
+			identifyPerLayer(args,lConn,this.maptipextent,maptiplayerstring);
+		} else {			
+			args.LAYERS = maptiplayerstring;
+			args.QUERY_LAYERS = maptiplayerstring;
+			sendIdentifyRequest(args,lConn,this.maptipextent);
 		}
 	}
-	
+		
 	function extent2String(ext:Object):String {
 		return (ext.minx+","+ext.miny+","+ext.maxx+","+ext.maxy);
 	}
