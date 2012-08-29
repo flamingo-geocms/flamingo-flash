@@ -78,8 +78,9 @@ class gui.layers.AbstractLayer extends AbstractConfigurable{
 	 * Passes a configured attribute for this component.
 	 * @param name name of the attribute
 	 * @param value value of the attribute
+	 * @return the attibute is added true/false
 	 */
-    function setAttribute(name:String, value:String):Void {
+    function setAttribute(name:String, value:String):Boolean {
         var lowerName=name.toLowerCase();
         if (lowerName==SERVICEURL_ATTRNAME){
             this.serviceUrl=value;
@@ -96,7 +97,10 @@ class gui.layers.AbstractLayer extends AbstractConfigurable{
             else {
                 this.grayscale = false;
             }
-        }
+        }else {
+			return false;
+		}
+		return true;
     }
         
     /*********************** Getters and Setters ***********************/

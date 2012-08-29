@@ -112,7 +112,7 @@ class gui.layers.OGCWMSLayer extends AbstractLayer{
 	var maxscale:Number;
 	var retryonerror:Number = 1;
 	var timeout:Number = 10;
-	var attributes:Object;
+	var attributes:Object = new Object();
 	var limitedtofullextent:Boolean = false;
 	var showerrors:Boolean = false;
 	var showmaptip:Boolean;
@@ -306,7 +306,10 @@ class gui.layers.OGCWMSLayer extends AbstractLayer{
 	 * @see AbstractLayer#setAttribute
 	 */
 	function setAttribute(name:String, val:String):Void {
-		super.setAttribute(name, val);
+		var added = super.setAttribute(name, val);
+		if (added) {
+			return;
+		}			
         switch (name.toLowerCase()) {
 			case "retryonerror" :
 				this.retryonerror = Number(val);
