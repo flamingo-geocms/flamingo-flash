@@ -85,6 +85,7 @@ import gui.layers.AbstractLayer;
 * @attr featurelimit  (defaultvalue = "1") Number of features that will return after an identify.
 * @attr query  The 'where' clause in the getImage and getFeatures request.
 * @attr maptip Configuration string for a maptip. Fieldnames between square brackets will be replaced  with their actual values. For multi-language support use a standard string tag with id='maptip'.
+* @attr initService (default="true") if set to false the service won't do a getCap request to init the service. If set to false all parameters must be filled, and no #ALL# can be used.
 */
 /**
  * ESRI ArcGis server layer
@@ -141,6 +142,7 @@ class gui.layers.ArcServerLayer extends AbstractLayer{
 	var extent:Object;
 	var nrlayersqueried:Number;
 	var layerliststring:String;
+	var initService:Boolean = true;
 	var dataframe:String;
 	var esriArcServerVersion:String;
 	
@@ -263,15 +265,22 @@ class gui.layers.ArcServerLayer extends AbstractLayer{
 			thisObj.flamingo.raiseEvent(thisObj, "onGetServiceInfo", thisObj);
 			thisObj.initialized = true;
 		};
-		var conn:ArcServerConnector = new ArcServerConnector(server);
-		conn.addListener(lConn);
-		conn.dataframe = dataframe;
-		conn.esriArcServerVersion = esriArcServerVersion;
+		if (this.initService == true){
+			var conn:ArcServerConnector = new ArcServerConnector(server);
+			conn.addListener(lConn);
+			conn.dataframe = dataframe;
+			conn.esriArcServerVersion = esriArcServerVersion;
 
-		if (servlet.length>0) {
-			conn.servlet = servlet;
+			if (servlet.length>0) {
+				conn.servlet = servlet;
+			}			
+			conn.getServiceInfo(mapservice);
+		}else {
+			setLayersQueryAbleFeatureclass(this.maptipids,true);
+			setLayersQueryAbleFeatureclass(this.identifyids,true);
+			initialized = true;		
+			update();	
 		}
-		conn.getServiceInfo(mapservice);
 		
 	}
 	/**
@@ -375,6 +384,10 @@ class gui.layers.ArcServerLayer extends AbstractLayer{
 			break;
 		case "visibleids" :
 			setLayerProperty(val, "visible", true);
+			var ids = this.flamingo.asArray(val);
+			for (var i = 0; i < ids.length; i++) {
+				setLayerProperty(ids[i], "id", ids[i]);
+			}			
 			this.visibleids = val;
 			break;
 		case "hiddenids" :
@@ -389,6 +402,13 @@ class gui.layers.ArcServerLayer extends AbstractLayer{
 			setLayerProperty(val, "forceidentify", true);
 			this.forceidentifyids = val;
 			break;
+		case "initservice" :			
+			if (val.toLowerCase() == "false") {
+				this.initService  = false;
+			}else {
+				this.initService  = true;
+			}
+			break;			
 		case "maptipids" :
 			this.setMaptipLayers(val);			
 			break;
@@ -498,6 +518,11 @@ class gui.layers.ArcServerLayer extends AbstractLayer{
 	* Shows a layer.
 	*/
 	function show():Void {
+		if (!this.visible && !this.initService) {
+			for (var l in layers) {
+				layers[l].visible = true;
+			}
+		}
 		visible = true;
 		updateCaches();
 		update();
@@ -1107,6 +1132,23 @@ class gui.layers.ArcServerLayer extends AbstractLayer{
 			break;
 		}
 	}
+	/**
+	 * setLayersQueryAbleFeatureclass
+	 * @param	ids the ids 	
+	 * @param	val the value
+	 */
+	function setLayersQueryAbleFeatureclass(ids:String,val:Boolean){
+		var a_ids = this.flamingo.asArray(ids);
+		for (var i = 0; i<a_ids.length; i++) {
+			var id = a_ids[i];
+			if (layers[id] == undefined) {
+				layers[id] = new Object();
+			}
+			layers[id].queryable=val;
+			layers[id].type='featureclass';
+		}
+	}
+
 	/** 
 	* Changes the layers collection.
 	* @param ids:String Comma seperated string of affected layerids. If keyword "#ALL#" is used, all layers will be affected.
