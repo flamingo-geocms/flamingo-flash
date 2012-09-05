@@ -1,9 +1,9 @@
 ----------- Tools --------------
 Things you need for building Flamingo-mc:
 - Adobe Flash 
-- Ant
+- Ant (http://ant.apache.org/bindownload.cgi
 For documentation:
-- Natural docs & Perl
+- Natural docs (http://www.naturaldocs.org/download.html) & Perl (http://www.perl.org/get.html)
 For sprite:
 - Install image magic on your pc http://www.imagemagick.org/
 
