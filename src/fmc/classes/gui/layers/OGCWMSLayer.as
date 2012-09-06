@@ -1587,6 +1587,12 @@ class gui.layers.OGCWMSLayer extends AbstractLayer{
 		}
 	}
 	
+	function removeAttribute(attribute:String):Void {
+		if (this.attributes[attribute] != null) {
+			delete this.attributes[attribute];
+		}
+	}
+	
 	/**
 	* Gets the url of a service
 	* @return the url
