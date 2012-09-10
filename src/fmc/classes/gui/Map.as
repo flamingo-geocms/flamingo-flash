@@ -246,12 +246,10 @@ class gui.Map extends AbstractPositionable implements PersistableComponent{
 		//TODO Still needed? Expensive....
 		var lMouse:Object = new Object();
 		lMouse.onMouseWheel = function(delta, target) {
-			if (thisObj.hit) {
-				var coord = thisObj.point2Coordinate({x:thisObj.container._xmouse, y:thisObj.container._ymouse});
-				thisObj.flamingo.raiseEvent(thisObj, "onMouseWheel", thisObj, delta, thisObj.container._xmouse, thisObj.container._ymouse, coord);
-			}
+			thisObj.mouseWheelUsed(delta)
 		};
 		Mouse.addListener(lMouse);
+		
 		//
 		//------------------------------------------
 		// step2: Movies
@@ -362,7 +360,18 @@ class gui.Map extends AbstractPositionable implements PersistableComponent{
 		flamingo.raiseEvent(this, "onInit", this);
 		defaultTool.setActive(true);	
 	}
-	
+	/**
+	 * Called when Tom's mousewheel is used
+	 * @param	delta
+	 */
+	public function mouseWheelUsed(delta) {
+		Logger.console("FlamMap.mouseWheelUsed: " + delta);
+		Logger.console("FlamMap.hit?: " + this.hit);
+		if (this.hit) {
+			var coord = this.point2Coordinate({x:this.container._xmouse, y:this.container._ymouse});
+			_global.flamingo.raiseEvent(this, "onMouseWheel", this, delta, this.container._xmouse, this.container._ymouse, coord);
+		}
+	}
 	/**
 	* Configurates a component by setting a xml.
 	* @param xml:Object Xml or string representation of a xml.
