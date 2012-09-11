@@ -365,8 +365,6 @@ class gui.Map extends AbstractPositionable implements PersistableComponent{
 	 * @param	delta
 	 */
 	public function mouseWheelUsed(delta) {
-		Logger.console("FlamMap.mouseWheelUsed: " + delta);
-		Logger.console("FlamMap.hit?: " + this.hit);
 		if (this.hit) {
 			var coord = this.point2Coordinate({x:this.container._xmouse, y:this.container._ymouse});
 			_global.flamingo.raiseEvent(this, "onMouseWheel", this, delta, this.container._xmouse, this.container._ymouse, coord);
