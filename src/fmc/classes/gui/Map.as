@@ -1319,7 +1319,6 @@ class gui.Map extends AbstractPositionable implements PersistableComponent{
 	/**
 	* Moves or zooms the map to a given coordinate. With or without animation.
 	* @param coord:Object [optional] Coordinate, an object with x and y. If undefined the map will zoom in the center of the current mapextent.
-	* @param percentage:Number [optional] Percentage, 100 means 100% of the current mapextent, Number smaller than 100 means zooming out. Number greater than 100 means zooming in.
 	* @param updatedelay:Number [optional] Delay in milliseconds. If updatedelay is undefined or -1 there will be no onUpdate event.  
 	* @param movetime:Number [optional] Total time of move-animation. If movetime is 0, there wil be no animation. The Extent is set immediately. If movetime is undefined, the default movetime of the map will be used.  
 	*/
