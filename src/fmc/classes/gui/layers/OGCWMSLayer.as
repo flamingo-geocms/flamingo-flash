@@ -1099,7 +1099,7 @@ class gui.layers.OGCWMSLayer extends AbstractLayer{
 		if(identPerLayer){
 			identifyPerLayer(args,lConn,this.maptipextent,maptiplayerstring);
 		} else {			
-			args.LAYERS = maptiplayerstring;
+			args.LAYERS = getLayersString();
 			args.QUERY_LAYERS = maptiplayerstring;
 			sendIdentifyRequest(args,lConn,this.maptipextent);
 		}
