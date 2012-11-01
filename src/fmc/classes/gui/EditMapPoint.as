@@ -196,9 +196,18 @@ class gui.EditMapPoint extends EditMapGeometry {
         label.text = labelText;
 		
 		var point:Point = Point(_geometry);
-		var pixel:Pixel = point2Pixel(point);
-		label._x = 0 - (label.width / 2);
-        label._y = 0;
+		
+		/*bah.... If the point movieclip is started from 0,0 then use the pixel calc. Otherwise
+		the movieclip is at the correct position and the label can be placed relative to the movieclip location
+		*/
+		if (this._x == 0 && this._y == 0) {			
+			var pixel:Pixel = point2Pixel(point);
+			label._x = pixel.getX() - (label.width / 2);		
+			label._y = pixel.getY();
+		}else {
+			label._x = 0 - (label.width / 2);
+			label._y = 0;
+		}
     }
     
     private function doDrawEditable():Void {
