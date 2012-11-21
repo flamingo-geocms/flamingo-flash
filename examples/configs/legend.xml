@@ -49,7 +49,7 @@
 		<!--legend-->
 		<fmc:Legend id="legend" groupdy="0" groupdx="5" itemdy="0" itemdx="0" hrdx="15" hrdy="0" symboldx="0" symboldy="0" outofscale="test" listento="map" height="100%">
 			<ITEM canhide="true" label="public kaartenbalie" symbolposition="left" listento="layer2">				
-				<symbol label="Gemeentegrens"  url="symbol.swf" outline_dash_2="#b4b4b4"  />	
+				<symbol label="Gemeentegrens"  url="assets/Symbol.swf" outline_dash_2="#b4b4b4"  />	
 			</ITEM>
 			<ITEM canhide="true" label="OSM" listento="layer1">			
 			</ITEM>

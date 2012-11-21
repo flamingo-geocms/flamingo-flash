@@ -27,6 +27,8 @@
 				</layer>
 			</fmc:LayerArcServer>
 			<fmc:LayerArcServer id="b0" timeout="30" showerrors="true"  visibleids="0" esriArcServerVersion="9.3" dataframe="layers" name="0" server="http://gisopenbaar.toverijs3.nl" mapservice="VenB/vergunningen_bekendmakingen"></fmc:LayerArcServer>
+			<!--fmc:LayerArcServer id="b29" timeout="30" showerrors="true"  visibleids="0" esriArcServerVersion="9.3" dataframe="layers" name="0" server="http://ags.prvgld.nl" mapservice="WegenVerkeerVervoer/WegenVerkeerVervoer"></fmc:LayerArcServer-->
+			<fmc:LayerArcServer xmlns:fmc="fmc" id="38" timeout="30" retryonerror="1" ratio="1" initService="true" visibleids="60,61,62,63,64,65,66,67,68,69,70" hiddenids="#ALL#" identifyids="61" type="ArcGIS" name="0" server="http://ags.prvgld.nl" mapservice="WegenVerkeerVervoer/WegenVerkeerVervoer" esriArcServerVersion="9.3" dataframe="layers"></fmc:LayerArcServer>
 		</fmc:Map>
 	</fmc:Container>
 </FLAMINGO>
