@@ -25,6 +25,7 @@ class coremodel.service.wfs.FeatureType extends ServiceLayer {
 	 * @param	contextObject
 	 */
     function FeatureType(rootNode:XMLNode, contextObject:Object) {
+		Logger.console("Featuretype!");		
 		xmlSchema = new XMLSchema(rootNode);
 		namespacePrefix = xmlSchema.getTargetNamespacePrefix(); 
 		//_global.flamingo.tracer("FeatureType namespacePrefix==" + namespacePrefix);
@@ -38,8 +39,20 @@ class coremodel.service.wfs.FeatureType extends ServiceLayer {
 		if (ftNamespacePrefix!=undefined){
 			xpathExpression+=ftNamespacePrefix + ":";
 		}
-		xpathExpression+="element[@name=\""+contextObject.featureTypeName+"\"]";
-        var firstElementNode:XMLNode = XPathAPI.selectSingleNode(rootNode, xpathExpression);
+		xpathExpression += "element";
+		/*try to get the element
+		 * 1) try with full featurename
+		 * 2) try without prefix
+		 * 3) try without name, but get the first
+		 */		
+        var firstElementNode:XMLNode = XPathAPI.selectSingleNode(rootNode, xpathExpression+"[@name=\""+contextObject.featureTypeName+"\"]");
+		if (firstElementNode == null && contextObject.featureTypeName.indexOf(":") > 0) {
+			var withoutPrefix = contextObject.featureTypeName.split(":")[1];
+			firstElementNode = XPathAPI.selectSingleNode(rootNode, xpathExpression+"[@name=\""+withoutPrefix+"\"]");
+		}
+		if (firstElementNode == null) {
+			firstElementNode = XPathAPI.selectSingleNode(rootNode, xpathExpression);
+		}
 		if (firstElementNode == null) {
             _global.flamingo.tracer("Exception in coremodel.FeatureType.<<init>>: The featuretype schema cannot be parsed.\n" + rootNode);
             return;
@@ -50,6 +63,7 @@ class coremodel.service.wfs.FeatureType extends ServiceLayer {
             return;
         }
         name = namespacePrefix + ":" + name;        
+		Logger.console("Name: "+name);
 		var complexTypeNode:XMLNode
 		//if complexType is in element.
 		if (firstElementNode.firstChild.localName == "complexType") {
@@ -79,21 +93,21 @@ class coremodel.service.wfs.FeatureType extends ServiceLayer {
         var property:WFSProperty = null;
         serviceProperties = new Array();
         geometryProperties = new Array();		
-        for (var i:Number = 0; i < propertyNodes.length; i++) {
+		for (var i:Number = 0; i < propertyNodes.length; i++) {
         	//_global.flamingo.tracer("FeatureType property.getType()" + property.getType());
             property = new WFSProperty(XMLNode(propertyNodes[i]), namespacePrefix);
-            serviceProperties.push(property);
+			serviceProperties.push(property);
             //TODO: include more possible types
             var preFix:String = XMLNode(propertyNodes[i]).getPrefixForNamespace("http://www.opengis.net/gml");
-            if (property.getType() == preFix + ":GeometryPropertyType" 
+			if (property.getType() == preFix + ":GeometryPropertyType" 
             	|| property.getType() == preFix + ":MultiSurfacePropertyType"
             	||property.getType() == preFix + ":MultiGeometryPropertyType"
-            	||property.getType() == preFix + ":MultiPolygonPropertyType "
+            	||property.getType() == preFix + ":MultiPolygonPropertyType"
             	||property.getType() == preFix + ":MultiLineStringPropertyType"
             	||property.getType() == preFix + ":MultiPointPropertyType"
 				||property.getType() == preFix + ":MultiCurvePropertyType"
 				||property.getType() == preFix + ":SurfacePropertyType"
-            	||property.getType() == preFix + ":PolygonPropertyType "
+            	||property.getType() == preFix + ":PolygonPropertyType"
             	||property.getType() == preFix + ":LineStringPropertyType"
             	||property.getType() == preFix + ":PointPropertyType"
 				||property.getType() == preFix + ":CurvePropertyType") {
