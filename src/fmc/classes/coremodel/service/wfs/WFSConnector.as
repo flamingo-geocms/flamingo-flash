@@ -59,6 +59,7 @@ class coremodel.service.wfs.WFSConnector extends ServiceConnector {
         requestString += "    xmlns:app=\"http://www.deegree.org/app\">\n";
         requestString += "    <wfs:TypeName>" + featureTypeName + "</wfs:TypeName>\n";
         requestString += "</wfs:DescribeFeatureType>\n";
+		contextObject.featureTypeName = featureTypeName;
         request(url, requestString, processDescribeFeatureType, null, actionEventListener, contextObject);
     }
     /**
