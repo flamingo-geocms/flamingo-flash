@@ -19,33 +19,25 @@ class geometrymodel.GeometryParser {
 	 * @param	geometryNode
 	 * @return
 	 */
-    static function parseGeometry(geometryNode:XMLNode):Geometry {		
-        if ((geometryNode.nodeName != "gml:Point") && (geometryNode.nodeName != "gml:LinearRing")
+    static function parseGeometry(geometryNode:XMLNode):Geometry {
+		while (geometryNode != null && geometryNode!=undefined) {
+			if ((geometryNode.nodeName != "gml:Point") && (geometryNode.nodeName != "gml:LinearRing")
                                                    && (geometryNode.nodeName != "gml:LineString")
                                                    && (geometryNode.nodeName != "gml:LineStringSegment")
                                                    && (geometryNode.nodeName != "gml:Polygon")
                                                    && (geometryNode.nodeName != "gml:PolygonPatch")
-                                                   && (geometryNode.nodeName != "gml:Envelope")) {
-            geometryNode = geometryNode.firstChild;
-        }		
-        if ((geometryNode.nodeName != "gml:Point") && (geometryNode.nodeName != "gml:LinearRing")
-                                                   && (geometryNode.nodeName != "gml:LineString")
-                                                   && (geometryNode.nodeName != "gml:LineStringSegment")
-                                                   && (geometryNode.nodeName != "gml:Polygon")
-                                                   && (geometryNode.nodeName != "gml:PolygonPatch")
-													&& (geometryNode.nodeName != "gml:Envelope")) {
-            geometryNode = geometryNode.firstChild;
-        }
-        if ((geometryNode.nodeName != "gml:Point") && (geometryNode.nodeName != "gml:LinearRing")
-                                                   && (geometryNode.nodeName != "gml:LineString")
-                                                   && (geometryNode.nodeName != "gml:LineStringSegment")
-                                                   && (geometryNode.nodeName != "gml:Polygon")
-                                                   && (geometryNode.nodeName != "gml:PolygonPatch")
-												   && (geometryNode.nodeName != "gml:Envelope")) {
+                                                   && (geometryNode.nodeName != "gml:Envelope")
+												   && (geometryNode.nodeName != "gml:Box")) {
+				geometryNode = geometryNode.firstChild;
+			}else {
+				break;
+			}
+		}
+        if (geometryNode == null){
             _global.flamingo.tracer("Exception in GeometryParser.parseGeometry()");
             return null;
         }	
-
+		
         var outerBoundaryNode:XMLNode = null;
         var linearRingNode:XMLNode = null;
         var coordinatePairsString:String = null;
@@ -156,7 +148,26 @@ class geometrymodel.GeometryParser {
         	var lowerCorner:Array = XMLTools.getStringValue("gml:lowerCorner", geometryNode).split(" ");
         	var upperCorner:Array = XMLTools.getStringValue("gml:upperCorner", geometryNode).split(" ");
 			geometry = new Envelope(lowerCorner[0],lowerCorner[1],upperCorner[0],upperCorner[1]);
-        }
+        } else if (geometryNode.nodeName == "gml:Box") {
+			coordinatePairsString = XMLTools.getStringValue("gml:coordinates", geometryNode);			
+			if (coordinatePairsString != null) {
+				coordinatesNode = XMLTools.getChild("gml:coordinates", geometryNode);
+				cs = XMLTools.getStringValue("cs", coordinatesNode);
+				ts = XMLTools.getStringValue("ts", coordinatesNode);
+				if (cs==undefined)
+					cs=",";
+				if (ts==undefined)
+					ts=" ";
+                coordinatePairs = coordinatePairsString.split(ts);
+				coordinates = coordinatePairs[0].split(cs);
+				coordinates.push(coordinatePairs[1].split(cs)[0]);
+				coordinates.push(coordinatePairs[1].split(cs)[1]);
+            } else {
+                coordinatePairsString = XMLTools.getStringValue("gml:posList", geometryNode);
+                coordinates = coordinatePairsString.split(" ");
+            }			
+			geometry = new Envelope(coordinates[0],coordinates[1],coordinates[2],coordinates[3]);
+		}
         return geometry;
     }
 	/**

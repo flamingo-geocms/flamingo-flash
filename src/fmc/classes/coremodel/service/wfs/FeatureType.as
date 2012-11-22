@@ -25,7 +25,6 @@ class coremodel.service.wfs.FeatureType extends ServiceLayer {
 	 * @param	contextObject
 	 */
     function FeatureType(rootNode:XMLNode, contextObject:Object) {
-		Logger.console("Featuretype!");		
 		xmlSchema = new XMLSchema(rootNode);
 		namespacePrefix = xmlSchema.getTargetNamespacePrefix(); 
 		//_global.flamingo.tracer("FeatureType namespacePrefix==" + namespacePrefix);
@@ -63,7 +62,6 @@ class coremodel.service.wfs.FeatureType extends ServiceLayer {
             return;
         }
         name = namespacePrefix + ":" + name;        
-		Logger.console("Name: "+name);
 		var complexTypeNode:XMLNode
 		//if complexType is in element.
 		if (firstElementNode.firstChild.localName == "complexType") {
