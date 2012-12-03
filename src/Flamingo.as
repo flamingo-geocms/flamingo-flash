@@ -2758,7 +2758,7 @@ class Flamingo {
 			
 			var argumentsToFire = arguments;
 			//fire in the hole with a small timeout so the calling function can be finished.
-			setTimeout(function() {
+			_global.setTimeout(function() {
 				ExternalInterface.call("dispatchEventJS",event_to_fire, argumentsToFire);
 				argumentsToFire.unshift(flamingo_event_to_fire);
 				ExternalInterface.call.apply(null, argumentsToFire);
