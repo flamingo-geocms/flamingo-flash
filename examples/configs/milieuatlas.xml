@@ -33,7 +33,7 @@
 						fullextent="1000,300000,290000,627000"
 						-->
 		<fmc:LayerOverview listento="map" followfactor="500"/>
-		<fmc:LayerOGWMS id="OSM_ov" alpha="100" url="http://osm.kaartenbalie.nl/wms/mapserver-scale" srs="EPSG:28992" layers="#ALL#" showerrors="true">
+		<fmc:LayerOGWMS id="OSM_ov" alpha="100" url="http://osm.kaartenbalie.nl/wms/mapserver" srs="EPSG:28992" layers="#ALL#" showerrors="true">
 			</fmc:LayerOGWMS>
 		<!--<fmc:LayerImage	imageurl="assets/nederland.swf" 
 											extent="1000,300000,290000,627000" 
@@ -156,7 +156,7 @@
 			<!--
 				De ondergrond kaarten
 			-->
-			<fmc:LayerOGWMS id="OSM" alpha="60" url="http://osm.kaartenbalie.nl/wms/mapserver-scale" srs="EPSG:28992" layers="#ALL#" showerrors="true">
+			<fmc:LayerOGWMS id="OSM" alpha="60" url="http://osm.kaartenbalie.nl/wms/mapserver" srs="EPSG:28992" layers="#ALL#" showerrors="true">
 
 			</fmc:LayerOGWMS>
 		</fmc:Map>

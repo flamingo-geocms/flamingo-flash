@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<FLAMINGO xmlns:fmc="fmc" id="flamingo" lang="nl" languages="en,nl" tooltipdelay="300" commtojava="true" preloadtitle="Prototypemap" useexternalinterface="true" loglevel="debug">
+<FLAMINGO xmlns:cmc="cmc" xmlns:fmc="fmc" id="flamingo" lang="nl" languages="en,nl" tooltipdelay="300" commtojava="true" preloadtitle="Prototypemap" useexternalinterface="true" loglevel="debug">
 	<style id=".tooltip" font-family="arial, sans-serif" font-size="11" color="#880000" display="block"/>
 	<fmc:Container id="pipo" left="0" top="0" height="100%" width="75%">
 		<fmc:MonitorLayer id="monitorl" left="37%" top="50%" width="50%" listento="map">
@@ -34,14 +34,14 @@
 			</fmc:ToolMeasure>
 			<fmc:ToolSuperPan skin="f2" left="295">
 			</fmc:ToolSuperPan>
-			<fmc:ToolDataFilter id="tool_dataFilter" left="330" top="-1" mapServiceId="avo" legendId="legend">
+			<cmc:ToolDataFilter id="tool_dataFilter" left="330" top="-1" mapServiceId="avo" legendId="legend">
 		
 				<layer id="rec_camping" label="Camping" legendLabel="avo.rec_camping">
 					<field id="AREA_V" label="Oppervlakte (ha.)" operations="=,&lt;,&gt;" includeValues="../configs/rec_oppervlakte.xml"/>
 				</layer>
 				
 				<string id="tooltip" en="Filter: first select a layer with the {F}-symbol" nl="Filteren: kies eerst een kaartlaag met het {F}-symbool" du="Selektieren"/>
-			</fmc:ToolDataFilter>	
+			</cmc:ToolDataFilter>	
 		</fmc:ToolGroup>
 	
 		<fmc:Coordinates listento="map" left="80%" top="95%" decimals="6">
@@ -49,26 +49,25 @@
 			<string id="xy" nl="X: [x]     Y: [y]"/>
 		</fmc:Coordinates>
 		<fmc:BorderNavigation listento="map" top="0%" width="100%" height="100%" skin="f1"/>
-		<fmc:Map id="map" left="0" top="0%" height="100%" width="100%" bottom="bottom" visible="true" fullextent="160000,457560,287864,543013"  extent="160000,457560,287864,543013" resolutions="156543.033928,78271.5169639999,39135.7584820001,19567.8792409999,9783.93962049996,4891.96981024998,2445.98490512499,1222.99245256249,611.49622628138,305.748113140558,152.874056570411,76.4370282850732,38.2185141425366,19.1092570712683,9.55462853563415,4.77731426794937,2.38865713397468,1.19432856685505" extenthistory="10">
+		<fmc:Map id="map" left="0" top="0%" height="100%" width="100%" bottom="bottom" visible="true" fullextent="160000,457560,287864,543013"  extent="160000,457560,287864,543013" resolutions="3440.64,1720.32,860.16,430.08,215.04,107.52,53.76,26.88,13.44,6.72,3.36,1.68,0.84" extenthistory="10">
 			<fmc:LayerIdentifyIcon id="identifyicon"/>
 			<fmc:LayerArcIMS id="avo"  name="atlasoverijssel" timeout="50" server="gisopenbaar.toverijs3.nl" servlet="GeoJuli2008/ims" mapservice="atlasoverijssel" visible="true" hiddenids="" visibleids="rec_camping" identifyall="true" identifyids="" maptipids="" legend="false" hidelegendids="" backgroundcolor="#fbfbfb" transcolor="#fbfbfb" alpha="85" fullextent="160000,457560,287864,543013" identifydistance="20" maptipdistance="20">
 
 			</fmc:LayerArcIMS>
 
-			<fmc:TilingLayer id="metacarta" serviceurl="http://geoserver.nl/tiles/tilecache.aspx/1.0.0/ipolufo2009/" resolutions="3276,1092,364,122,40.5,13.5,4.5,1.5,0.5,0.16666666669999999" serviceenvelope="0,300000,300000,620000">
-				<TilingParam name="USERID">0cc72c2d32d2f0b9fde2ad09521a4de0ipolufo</TilingParam>
+			<fmc:TilingLayer id="metacarta" serviceurl="http://geodata.nationaalgeoregister.nl/tiles/service/tms/1.0.0/brtachtergrondkaart@EPSG:28992@png8/" resolutions="3440.64,1720.32,860.16,430.08,215.04,107.52,53.76,26.88,13.44,6.72,3.36,1.68,0.84" extension="png" serviceenvelope="-285401.92,22598.08,595401.92,903401.92">
 			</fmc:TilingLayer>
 		</fmc:Map>
 	</fmc:Container>
 	<fmc:Container left="77%" top="0" height="100%" width="23%">
 		<!--legend-->
-		<fmc:Legend id="legend" groupdy="0" groupdx="5" itemdy="0" itemdx="0" hrdx="15" hrdy="0" symboldx="0" symboldy="0" outofscale="test" listento="map" height="100%">
+		<cmc:Legend id="legend" groupdy="0" groupdx="5" itemdy="0" itemdx="0" hrdx="15" hrdy="0" symboldx="0" symboldy="0" outofscale="test" listento="map" height="100%">
 			<ITEM canhide="true" label="rec_camping" symbolposition="left" listento="avo">			
 			</ITEM>	
 
 			<ITEM canhide="true" label="metacarta" symbolposition="left" listento="metacarta">			
 			</ITEM>	
 
-		</fmc:Legend>
+		</cmc:Legend>
 	</fmc:Container>
 </FLAMINGO>

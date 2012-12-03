@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<FLAMINGO xmlns:fmc="fmc" id="flamingo" lang="nl" languages="en,nl" tooltipdelay="300" commtojava="true" preloadtitle="Prototypemap" useexternalinterface="true">
+<FLAMINGO xmlns:cmc="cmc" xmlns:fmc="fmc" id="flamingo" lang="nl" languages="en,nl" tooltipdelay="300" commtojava="true" preloadtitle="Prototypemap" useexternalinterface="true">
 	<style id=".tooltip" font-family="arial, sans-serif" font-size="11" color="#880000" display="block"/>
 	<fmc:Container id="containerMap" left="0" top="0" height="100%" width="75%" borderwidth="1">
 		<fmc:MonitorLayer id="monitorl" left="37%" top="50%" width="50%" listento="map">
@@ -28,12 +28,12 @@
 		</fmc:GIS>
 		<fmc:Map id="map" left="0" top="0%" height="100%" width="100%" bottom="bottom" visible="true" extent="12000,304000,280000,620000">
 			<fmc:LayerIdentifyIcon id="identifyicon"/>
-			<fmc:LayerOGWMS id="layer1" url="http://osm.kaartenbalie.nl/wms/mapserver-scale" srs="EPSG:28992" layers="#ALL#" showerrors="true">
+			<fmc:LayerOGWMS id="layer1" url="http://osm.kaartenbalie.nl/wms/mapserver" srs="EPSG:28992" layers="#ALL#" showerrors="true">
 				</fmc:LayerOGWMS>
 		</fmc:Map>
 	</fmc:Container>
 	<fmc:Container id="containerRight" left="77%" width="25%" height="25%" top="10%" backgroundcolor="#FFFFFF">
-		<fmc:EditInfoPanel id="editInfoPanel" left="0%" top="0" listento="editMap" nrdigits="2"/>
+		<cmc:EditInfoPanel id="editInfoPanel" left="0%" top="0" listento="editMap" nrdigits="2"/>
 		<fmc:EditLegend id="editLegend" left="0%" top="200" listento="editMap" expandable="true" popwindow="true"/>
 	</fmc:Container>
 </FLAMINGO>

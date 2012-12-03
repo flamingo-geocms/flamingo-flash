@@ -21,19 +21,17 @@
 			
 		</fmc:Coordinates>
 		<fmc:BorderNavigation listento="map" top="0%" width="100%" height="100%" skin="f1"/>		
-		<fmc:Map id="map" left="0" top="0%" height="100%" width="100%" bottom="bottom" visible="true" extent="12000,304000,280000,620000" fullextent="12000,304000,280000,620000" zoomscalefactor="3" minscale="0.16666666669999999" extenthistory="10">
+		<fmc:Map id="map" left="0" top="0%" height="100%" width="100%" bottom="bottom" visible="true" extent="12000,304000,280000,620000" fullextent="12000,304000,280000,620000" extenthistory="10" resolutions="3440.64,1720.32,860.16,430.08,215.04,107.52,53.76,26.88,13.44,6.72,3.36,1.68,0.84">
 			<fmc:LayerIdentifyIcon id="identifyicon"/>
 			<fmc:LayerGrid visible="true" id="grid" gridwidth="10000" gridheight="10000"/>
-				<fmc:LayerImage visible="true" id="imageLayer" imageurl="../images/limburg2010.swf" extent="168000,307000,214000,421000" listento="map"/>
-				<fmc:LayerOGWMS visible="true" id="layer2" url="http://public-wms.kaartenbalie.nl/wms/nederland?Styles=" srs="EPSG:28992" query_layers="gemeenten_2006" layers="plannen,gemeenten_2006,buurten_2006,wijken_2006,water,wegen,basis" showerrors="true"/>
+				<fmc:LayerImage visible="true" id="imageLayer" imageurl="../images/limburg2010.swf" extent="168000,307000,214000,421000" listento="map"/>				
 				<!--fmc:LayerArcIMS id="esri" identifyall="true" server="http://groningen.esrinl.com" mapservice="SNN" hiddenids="3,ongevallena,ongevallen,telpunten,telpuntena,nwb_frgrdr,intensiteit_capaciteit,intensiteit_01_05,intensiteit_04_05" visibleids=""/-->
 				<fmc:LayerArcServer id="carnavalskaart" server="atlas.brabant.nl" dataframe="layers" visible="true" mapservice="carnavalskaart" identifyall="true" identifyids="0" maptipids="0" hiddenids="4,7,8" esriArcServerVersion="9.3"><layer id="0" maptipfields="CARNAVALSNAAM"><string id="maptip" nl="[CARNAVALSNAAM]" en="Municipality [GEMEENTE]" de="Gemeinde [GEMEENTE]" fr="Commune [GEMEENTE]"/></layer></fmc:LayerArcServer>				
-				<fmc:LayerOGWMS id="layer1" url="http://osm.kaartenbalie.nl/wms/mapserver-scale" srs="EPSG:28992" layers="#ALL#" showerrors="true" visible="true">
+				<fmc:LayerOGWMS id="layer1" url="http://osm.kaartenbalie.nl/wms/mapserver" srs="EPSG:28992" layers="#ALL#" showerrors="true" visible="true">
 				</fmc:LayerOGWMS>
 				<fmc:LayerOGWMS id="layer3" url="http://afnemers.ruimtelijkeplannen.nl/afnemers/services?Styles=" srs="EPSG:28992" query_layers="#ALL#" layers="#ALL#" showerrors="true" visible="true"/>
 					
-			<fmc:TilingLayer id="metacarta" serviceurl="http://geoserver.nl/tiles/tilecache.aspx/1.0.0/ipolufo2009/" resolutions="3276,1092,364,122,40.5,13.5,4.5,1.5,0.5,0.16666666669999999" serviceenvelope="0,300000,300000,620000">
-				<TilingParam name="USERID">0cc72c2d32d2f0b9fde2ad09521a4de0ipolufo</TilingParam>
+			<fmc:TilingLayer id="metacarta" serviceurl="http://geodata.nationaalgeoregister.nl/tiles/service/tms/1.0.0/brtachtergrondkaart@EPSG:28992@png8/" resolutions="3440.64,1720.32,860.16,430.08,215.04,107.52,53.76,26.88,13.44,6.72,3.36,1.68,0.84" extension="png" serviceenvelope="-285401.92,22598.08,595401.92,903401.92">
 			</fmc:TilingLayer>
 		</fmc:Map>
 	</fmc:Container>	

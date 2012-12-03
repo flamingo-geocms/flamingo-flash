@@ -6,20 +6,20 @@
     Description:
         Configuration of the flamingo viewer.
 -->
-<FLAMINGO xmlns:fmc="fmc" id="flamingo" lang="nl" languages="en,nl" tooltipdelay="300" commtojava="true" preloadtitle="Prototypemap" useexternalinterface="true">
+<FLAMINGO xmlns:cmc="cmc" xmlns:fmc="fmc" id="flamingo" lang="nl" languages="en,nl" tooltipdelay="300" commtojava="true" preloadtitle="Prototypemap" useexternalinterface="true">
 	<style id=".tooltip" font-family="arial, sans-serif" font-size="11" color="#880000" display="block"/>
 		
 		
-	<!--fmc:Window id="editPropertiesWindow" skin="f1" top="50" right="right -20" width="250" height="400" canresize="true" canclose="true" visible="false">
+	<!--cmc:Window id="editPropertiesWindow" skin="f1" top="50" right="right -20" width="250" height="400" canresize="true" canclose="true" visible="false">
 		<string id="title" en="Layout and properties" nl="Opmaak en eigenschappen"/>
 		  <style id=".title" font-family="verdana" font-size="13px" color="#ffffff" display="block" font-weight="bold"/>
 		  <style id=".titlefocus" font-family="verdana" font-size="13px" color="#ffffff" display="block" font-weight="bold" /-->
 			<!--fmc:EditGeometryBar left="50" top="0" id="editGeometryBar" listento="editMap" backgroundalpha="0" borderalpha="0"/-->
-		<!--fmc:EditProperties id="editProperties" top="0" left="5" right="right" bottom="bottom" visible="false" listento="editMap" okbutton="true" applybutton="true">
+		<!--cmc:EditProperties id="editProperties" top="0" left="5" right="right" bottom="bottom" visible="false" listento="editMap" okbutton="true" applybutton="true">
 			<string id="okbuttonlabel" en="OK" nl="OK" de="OK" fr="OK"/> 
 			<string id="applybuttonlabel" en="Apply" nl="Toepassen" /> 
-		</fmc:EditProperties>
-	</fmc:Window-->
+		</cmc:EditProperties>
+	</cmc:Window-->
 	
 	
 	<fmc:Container left="0" top="0" height="100%" width="75%">
@@ -48,12 +48,12 @@
 		</fmc:GIS>
 		<fmc:Map id="map" left="0" top="0%" height="100%" width="100%" bottom="bottom" visible="true" extent="12000,304000,280000,620000">
 			<fmc:LayerIdentifyIcon id="identifyicon"/>
-			<fmc:LayerOGWMS id="layer1" url="http://osm.kaartenbalie.nl/wms/mapserver-scale" srs="EPSG:28992" layers="#ALL#" showerrors="true">
+			<fmc:LayerOGWMS id="layer1" url="http://osm.kaartenbalie.nl/wms/mapserver" srs="EPSG:28992" layers="#ALL#" showerrors="true">
 				</fmc:LayerOGWMS>
 		</fmc:Map>
 	</fmc:Container>
 	<fmc:Container left="77%" width="25%" height="25%" top="10%" backgroundcolor="#FFFFFF">
-		<fmc:EditInfoPanel id="editInfoPanel" left="0%" top="0" listento="editMap" nrdigits="2"/>
+		<cmc:EditInfoPanel id="editInfoPanel" left="0%" top="0" listento="editMap" nrdigits="2"/>
 		<fmc:EditLegend id="editLegend" left="0%" top="200" listento="editMap" expandable="true" popwindow="true"/>
 	</fmc:Container>
 </FLAMINGO>

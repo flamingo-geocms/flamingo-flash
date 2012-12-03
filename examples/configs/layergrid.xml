@@ -22,7 +22,7 @@
 		<fmc:Map id="map" left="0" top="0%" height="100%" width="100%" bottom="bottom" visible="true" extent="12000,304000,280000,620000">
 			<fmc:LayerGrid id="grid" gridwidth="10000" gridheight="10000"/>
 			<fmc:LayerIdentifyIcon id="identifyicon"/>
-			<fmc:LayerOGWMS id="layer1" url="http://osm.kaartenbalie.nl/wms/mapserver-scale" srs="EPSG:28992" layers="#ALL#" showerrors="true">
+			<fmc:LayerOGWMS id="layer1" url="http://osm.kaartenbalie.nl/wms/mapserver" srs="EPSG:28992" layers="#ALL#" showerrors="true">
 				</fmc:LayerOGWMS>
 		</fmc:Map>
 	</fmc:Container>	

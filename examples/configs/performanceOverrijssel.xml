@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<FLAMINGO xmlns:fmc="fmc" id="flamingo" lang="nl" languages="en,nl" tooltipdelay="300" commtojava="true" preloadtitle="Prototypemap" useexternalinterface="true">
+<FLAMINGO xmlns:cmc="cmc" xmlns:fmc="fmc" id="flamingo" lang="nl" languages="en,nl" tooltipdelay="300" commtojava="true" preloadtitle="Prototypemap" useexternalinterface="true">
 	<style id=".tooltip" font-family="arial, sans-serif" font-size="11" color="#880000" display="block"/>
 	<fmc:Container left="0" top="0" height="100%" width="75%">
 		<fmc:MonitorLayer id="monitorl" left="37%" top="50%" width="50%" listento="map">
@@ -644,8 +644,8 @@
 	</fmc:Container>
 	<fmc:Container left="75%" top="0" height="100%" width="25%">
 		<!--legend-->
-		<fmc:Legend id="legend" skin="f2" symbolpath="../atlasoverijssel/images" shadowsymbols="false" groupdy="0" groupdx="5" itemdy="0" itemdx="0" hrdx="15" hrdy="0" symboldx="0" symboldy="0" outofscale="test" listento="map" height="100%">
-			<!-- <fmc:Legend-ov  id="legend" skin="f3" symbolpath="../atlasoverijssel/images" shadowsymbols="false" left="752" top="185" bottom="top +737" width="238" groupdy="0" groupdx="5" itemdy="0" itemdx="0" hrdx="15" hrdy="0" symboldx="0" symboldy="0" outofscale="test" listento="map" > -->
+		<cmc:Legend id="legend" skin="f2" symbolpath="../atlasoverijssel/images" shadowsymbols="false" groupdy="0" groupdx="5" itemdy="0" itemdx="0" hrdx="15" hrdy="0" symboldx="0" symboldy="0" outofscale="test" listento="map" height="100%">
+			<!-- <cmc:Legend-ov  id="legend" skin="f3" symbolpath="../atlasoverijssel/images" shadowsymbols="false" left="752" top="185" bottom="top +737" width="238" groupdy="0" groupdx="5" itemdy="0" itemdx="0" hrdx="15" hrdy="0" symboldx="0" symboldy="0" outofscale="test" listento="map" > -->
 			<!-- <string id="outofscale" nl="buiten schaalbereik;&lt;br&gt;zoom naar deze laag..." en="Outside range;&lt;br&gt;zoom to layer" de="Auerhalb des Mastabsbereichs;&lt;br&gt;vergrern" fr="Hors chelle..." /> -->
 			<string id="outofscale" nl="zoom in om zichtbaar te maken..." en="Outside range;&lt;br&gt;zoom to layer" de="Auerhalb des Mastabsbereichs;&lt;br&gt;vergrern" fr="Hors chelle..."/>
 			<style id=".group" font-family="verdana" font-size="10px" color="#808080" display="block" font-weight="bold"/>
@@ -863,6 +863,6 @@
 			</ITEM>
 			<ITEM dy="5" canhide="true" label="Kulturhus initiatief {F} {B}" open="true" listento="avo2.kulturhus_mfa">
         </ITEM>
-		</fmc:Legend>
+		</cmc:Legend>
 	</fmc:Container>
 </FLAMINGO>

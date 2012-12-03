@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<FLAMINGO xmlns:fmc="fmc" id="flamingo" lang="nl" languages="en,nl" tooltipdelay="300" commtojava="true" preloadtitle="Prototypemap" useexternalinterface="true">
+<FLAMINGO xmlns:cmc="cmc" xmlns:fmc="fmc" id="flamingo" lang="nl" languages="en,nl" tooltipdelay="300" commtojava="true" preloadtitle="Prototypemap" useexternalinterface="true">
 	<style id=".tooltip" font-family="arial, sans-serif" font-size="11" color="#880000" display="block"/>
 	<fmc:Container left="0" top="0" height="100%" width="75%">
 		<fmc:MonitorLayer id="monitorl" left="37%" top="50%" width="50%" listento="map">
@@ -62,17 +62,17 @@
         </fmc:GIS>		
         <fmc:Map id="map" left="0" top="0%" height="100%" width="100%" bottom="bottom" visible="true" extent="12000,304000,280000,620000">
 			<fmc:LayerIdentifyIcon id="identifyicon"/>
-			<fmc:LayerOGWMS id="layer1" url="http://osm.kaartenbalie.nl/wms/mapserver-scale" srs="EPSG:28992" layers="#ALL#" showerrors="true">
+			<fmc:LayerOGWMS id="layer1" url="http://osm.kaartenbalie.nl/wms/mapserver" srs="EPSG:28992" layers="#ALL#" showerrors="true">
 				</fmc:LayerOGWMS>
 		</fmc:Map>
 	</fmc:Container>
 	<fmc:Container left="77%" width="25%" height="25%" top="10%" backgroundcolor="#FFFFFF">
 		<fmc:EditLegend id="editLegend" left="0%" top="0" listento="editMap" expandable="true" popwindow="true"/>
 		<fmc:Container width="100%" bottom="bottom" top="200" borderwidth="1">
-			<fmc:EditProperties id="editProperties" top="0" left="5" right="right" bottom="bottom" visible="false" bordercolor="#ffffff" listento="editMap" okbutton="true" applybutton="false">
+			<cmc:EditProperties id="editProperties" top="0" left="5" right="right" bottom="bottom" visible="false" bordercolor="#ffffff" listento="editMap" okbutton="true" applybutton="false">
 				<string id="okbuttonlabel" en="OK" nl="OK"/>
 				<string id="applybuttonlabel" en="Apply" nl="Apply"/>
-			</fmc:EditProperties>
+			</cmc:EditProperties>
 		</fmc:Container>    
 	</fmc:Container>
 </FLAMINGO>

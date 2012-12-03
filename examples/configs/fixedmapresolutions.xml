@@ -20,7 +20,7 @@
 		<fmc:BorderNavigation listento="map" top="0%" width="100%" height="100%" skin="f1"/>
 		<fmc:Map id="map" left="0" top="0%" height="100%" width="100%" bottom="bottom" visible="true" extent="150000,431520,298480,580000" resolutions="158.750317500635,145.521124375582,132.291931250529,119.062738125476,105.833545000423,92.6043518753704,79.3751587503175,66.1459656252646,52.9167725002117,39.6875793751588,26.4583862501058,21.1667090000847,17.1979510625688,13.2291931250529,9.26043518753704,6.61459656252646,3.96875793751588,2.64583862501058,1.32291931250529,0.264583862501058,0.132291931250529" minscale="0.00000134110450744629">
 			<fmc:LayerIdentifyIcon id="identifyicon"/>
-			<fmc:LayerOGWMS id="layer2" url="http://osm.kaartenbalie.nl/wms/mapserver-scale" srs="EPSG:28992" layers="#ALL#" showerrors="true">			
+			<fmc:LayerOGWMS id="layer2" url="http://osm.kaartenbalie.nl/wms/mapserver" srs="EPSG:28992" layers="#ALL#" showerrors="true">			
 			</fmc:LayerOGWMS>
 		</fmc:Map>
 	</fmc:Container>	

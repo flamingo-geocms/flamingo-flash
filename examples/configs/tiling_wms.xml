@@ -20,13 +20,14 @@
 		<fmc:BorderNavigation listento="map" top="0%" width="100%" height="100%" skin="f1"/>
 		<fmc:Map id="map" left="0" top="0%" height="100%" width="100%" bottom="bottom" visible="true" extent="12000,304000,280000,620000" zoomscalefactor="2" minscale="0.0023543834686279297">
 			<fmc:LayerIdentifyIcon id="identifyicon"/>				
-			<fmc:TilingLayer id="publickb" serviceurl="http://public-wms.kaartenbalie.nl/wms/nederland" resolutions="1234.375,617.1875,308.59375,154.296875,77.1484375,38.57421875,19.287109375,9.6435546875,4.82177734375,2.410888671875,1.2054443359375,0.60272216796875,0.301361083984375,0.1506805419921875,0.07534027099609375,0.037670135498046875,0.018835067749023438,0.0094175338745117188,0.0047087669372558594,0.0023543834686279297" serviceenvelope="12000,304000,280000,620000" type="wmsc">
-				<TilingParam name="Layers">basis,wegen,water</TilingParam>
+			<fmc:TilingLayer id="publickb" serviceurl="http://osm.kaartenbalie.nl/wms/mapserver" resolutions="1234.375,617.1875,308.59375,154.296875,77.1484375,38.57421875,19.287109375,9.6435546875,4.82177734375,2.410888671875,1.2054443359375,0.60272216796875,0.301361083984375,0.1506805419921875,0.07534027099609375,0.037670135498046875,0.018835067749023438,0.0094175338745117188,0.0047087669372558594,0.0023543834686279297" serviceenvelope="12000,304000,280000,620000" type="wmsc">
+				<TilingParam name="Layers">OpenStreetMap</TilingParam>
 				<TilingParam name="SERVICE">WMS</TilingParam>
 				<TilingParam name="VERSION">1.1.1</TilingParam>
 				<TilingParam name="REQUEST">GetMap</TilingParam>
 				<TilingParam name="STYLES"> </TilingParam>
 				<TilingParam name="SRS">EPSG:28992</TilingParam>
+				<TilingParam name="FORMAT">PNG</TilingParam>
 			</fmc:TilingLayer>
 		</fmc:Map>
 	</fmc:Container>	

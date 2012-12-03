@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<FLAMINGO xmlns:fmc="fmc" id="flamingo" lang="nl" languages="en,nl" tooltipdelay="300" commtojava="true" preloadtitle="Prototypemap" useexternalinterface="true">
+<FLAMINGO xmlns:cmc="cmc" xmlns:fmc="fmc" id="flamingo" lang="nl" languages="en,nl" tooltipdelay="300" commtojava="true" preloadtitle="Prototypemap" useexternalinterface="true">
 	<style id=".tooltip" font-family="arial, sans-serif" font-size="11" color="#880000" display="block"/>
 	<fmc:Container left="0" top="0" height="100%" width="100%">
 		<fmc:MonitorLayer id="monitorl" left="37%" top="50%" width="50%" listento="map">
@@ -20,28 +20,18 @@
 		<fmc:BorderNavigation listento="map" top="0%" width="100%" height="100%" skin="f1"/>
 		<fmc:Map id="map" left="0" top="0%" height="100%" width="100%" bottom="bottom" visible="true" extent="12000,304000,280000,620000">
 			<fmc:LayerIdentifyIcon id="identifyicon"/>
-			<fmc:LayerOGWMS id="layer2" url="http://public-wms.kaartenbalie.nl/wms/nederland?Styles=" srs="EPSG:28992" query_layers="gemeenten_2006" layers="gemeenten_2006" showerrors="true" visible="true"/>
-			<fmc:LayerOGWMS id="vm" url="http://x5.b3p.nl/cgi-bin/mapserv542?map=/srv/maps/verkeersmonitor.map" 
-			srs="EPSG:28992" 
-			layers="telpunten_motorvoertuig_punt" 
-			query_layers="telpunten_motorvoertuig_punt" 
-			showerrors="true" 
-			initservice="true"
-			visible="false" 
-visible_layers="telpunten_motorvoertuig_punt">
-			</fmc:LayerOGWMS>
 				<fmc:LayerArcIMS id="avo2"  name="atlasoverijssel" timeout="50" server="gisopenbaar.toverijs3.nl" servlet="GeoJuli2008/ims" mapservice="atlasoverijssel" visible="false" hiddenids="" visibleids="lf_knelpt,regio_tvoost,biro2010" identifyall="true" identifyids="kanoroute,mtbroute,law_knelpt,lf_knelpt,regio_tvoost,biro2010"  legend="false" hidelegendids="" backgroundcolor="#fbfbfb" transcolor="#fbfbfb" alpha="85" fullextent="160000,457560,287864,543013" identifydistance="20" maptipdistance="20">
 		</fmc:LayerArcIMS>	
 		<fmc:LayerArcIMS id="avo"  name="atlasoverijssel" timeout="50" server="gisopenbaar.toverijs3.nl" servlet="GeoJuli2008/ims" mapservice="atlasoverijssel" visible="true" hiddenids="" visibleids="kanoroute,mtbroute,law_knelpt" identifyall="true" identifyids="kanoroute,mtbroute,law_knelpt,lf_knelpt,regio_tvoost,biro2010"  legend="false" hidelegendids="" backgroundcolor="#fbfbfb" transcolor="#fbfbfb" alpha="85" fullextent="160000,457560,287864,543013" identifydistance="20" maptipdistance="20">
 		</fmc:LayerArcIMS>
-			<fmc:LayerOGWMS id="layer1" url="http://osm.kaartenbalie.nl/wms/mapserver-scale" srs="EPSG:28992" layers="#ALL#" showerrors="true" >
+			<fmc:LayerOGWMS id="layer1" url="http://osm.kaartenbalie.nl/wms/mapserver" srs="EPSG:28992" layers="#ALL#" showerrors="true" >
 				</fmc:LayerOGWMS>
 		</fmc:Map>
-		<fmc:Window visible="false" top="100" left="100" width="300" bottom="bottom" canresize="true" canclose="true" title="Identify results">
+		<cmc:Window visible="false" top="100" left="100" width="300" bottom="bottom" canresize="true" canclose="true" title="Identify results">
 			<string id="tooltip_close" en="close" nl="sluiten"/>
 			<style id=".title" font-family="verdana" font-size="13px" color="#666666" display="block" font-weight="normal"/>
 			<style id=".titlefocus" font-family="verdana" font-size="13px" color="#666666" display="block" font-weight="bold"/>
-			<fmc:IdentifyResults width="100%" height="100%" listento="map"/>
-		</fmc:Window>
+			<cmc:IdentifyResults width="100%" height="100%" listento="map"/>
+		</cmc:Window>
 	</fmc:Container>
 </FLAMINGO>

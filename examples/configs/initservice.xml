@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<FLAMINGO xmlns:fmc="fmc" id="flamingo" lang="nl" languages="en,nl" tooltipdelay="300" commtojava="true" preloadtitle="Prototypemap" useexternalinterface="true">
+<FLAMINGO xmlns:cmc="cmc" xmlns:fmc="fmc" id="flamingo" lang="nl" languages="en,nl" tooltipdelay="300" commtojava="true" preloadtitle="Prototypemap" useexternalinterface="true">
 	<style id=".tooltip" font-family="arial, sans-serif" font-size="11" color="#880000" display="block"/>
 	<fmc:Container left="0" top="0" height="100%" width="75%">
 		<fmc:MonitorLayer id="monitorl" left="37%" top="50%" width="50%" listento="map">
@@ -20,7 +20,7 @@
 		<fmc:BorderNavigation listento="map" top="0%" width="100%" height="100%" skin="f1"/>		
 		<fmc:Map id="map" left="0" top="0%" height="100%" width="100%" bottom="bottom" visible="true" extent="12000,304000,280000,620000">
 			<fmc:LayerIdentifyIcon id="identifyicon"/>
-			<fmc:LayerOGWMS id="layer1" url="http://public-wms.kaartenbalie.nl/wms/nederland?Styles=" srs="EPSG:28992" query_layers="gemeenten_2006" layers="gemeenten_2006,basis,wegen,water" showerrors="true" visible="true" initservice="false"/>			
+			<fmc:LayerOGWMS id="layer1" url="http://osm.kaartenbalie.nl/wms/mapserver" srs="EPSG:28992" layers="OpenStreetMap" showerrors="true" visible="true" initservice="false"/>			
 				<fmc:LayerArcIMS id="esri" identifyall="true" server="http://groningen.esrinl.com" mapservice="SNN" initservice="false"
 hiddenids="3,ongevallena,ongevallen,telpunten,telpuntena,nwb_frgrdr,intensiteit_capaciteit,intensiteit_01_05,intensiteit_04_05"
 visibleids="tdkcopyright"
@@ -28,11 +28,11 @@ visibleids="tdkcopyright"
 		</fmc:Map>
 	</fmc:Container>
 	<fmc:Container left="77%" width="25%" height="90%" top="10%" backgroundcolor="#FFFFFF">
-			<fmc:Legend width="100%" height="100%" listento="map">
+			<cmc:Legend width="100%" height="100%" listento="map">
 					<item label="service"  listento="esri" canhide="true"/>  					
 					<item label="ongevallena"  listento="esri.ongevallena" canhide="true"/>  
 					<item label="tdkcopyright"  listento="esri.tdkcopyright" canhide="true"/>  
-			</fmc:Legend>
+			</cmc:Legend>
 		<!--fmc:EditInfoPanel id="editInfoPanel" left="0%" top="0%" listento="editMap" nrdigits="2"/-->
 	</fmc:Container>
 </FLAMINGO>

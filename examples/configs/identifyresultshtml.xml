@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<FLAMINGO id="flamingo" xmlns:fmc="fmc" xmlns:tpc="tpc" lang="nl" languages="nl" tooltipdelay="200" maxwidth="100%" maxheight="100%" borderwidth="0" useexternalinterface="true">
+<FLAMINGO id="flamingo" xmlns:cmc="cmc" xmlns:fmc="fmc" xmlns:tpc="tpc" lang="nl" languages="nl" tooltipdelay="200" maxwidth="100%" maxheight="100%" borderwidth="0" useexternalinterface="true">
 	<!-- printwindow -->
 
 	
@@ -9,9 +9,9 @@
 		<fmc:ToolPan left="60" clickdelay="0" pandelay="0" skin="f1"/>
 		<fmc:ToolIdentify id="tid" left="90" clickdelay="0" pandelay="0" skin="f1"/>
 		<fmc:ToolMeasure left="120" units=" m" magicnumber="1" decimals="0" skin="f1"/>
-		<fmc:PrintButton left="155" top="2" listento="print" visible="true">
+		<cmc:PrintButton left="155" top="2" listento="print" visible="true">
 			<string id="tooltip" nl="printvenster openen/ sluiten" en="open/ close the print window" de="Schritt weiter" fr="Suivant"/>
-		</fmc:PrintButton>
+		</cmc:PrintButton>
 	</fmc:ToolGroup>
 	<!--button properties-->
 	<fmc:ButtonPrev right="438" top="2" listento="map"/>
@@ -49,10 +49,10 @@
 	</fmc:Container>
 
 	<!--HTML identify window-->
-	<fmc:Window title="info" visible="false" canclose="true" canresize="true" defocusalpha="50" width="25%" height="45%" left="1%" top="55%">
+	<cmc:Window title="info" visible="false" canclose="true" canresize="true" defocusalpha="50" width="25%" height="45%" left="1%" top="55%">
 		<string id="title" nl="Informatie" en="Information"/>
 		<fmc:Container width="100%" height="100%" backgroundcolor="#FFFFCC" alpha="85">
-			<fmc:IdentifyResultsHTML id="info" width="100%" height="100%" left="left" listento="map">
+			<cmc:IdentifyResultsHTML id="info" width="100%" height="100%" left="left" listento="map">
 				<style id=".bold" font-family="verdana" font-size="12px" color="#333333" display="block" font-weight="bold"/>
 				<style id=".normal" font-family="verdana" font-size="10px" color="#333333" display="block" font-weight="normal"/>
 				<style id=".url" font-family="verdana" font-size="10px" color="#0033cc" display="block" font-weight="normal"/> 
@@ -68,9 +68,9 @@
 							</textformat> 
 						</span>]]></nl>
 				</string>
-			</fmc:IdentifyResultsHTML>
+			</cmc:IdentifyResultsHTML>
 		</fmc:Container>
-	</fmc:Window>
+	</cmc:Window>
 	<!--scalebar properties-->
 	<fmc:Scalebar left="right -190" top="bottom -20" width="150" magicnumber="1" units=" m" listento="map">
 		<style id=".label" font-family="verdana" font-size="10px" color="#555555" display="block" font-weight="normal"/>

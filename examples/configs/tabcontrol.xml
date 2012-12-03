@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<FLAMINGO xmlns:fmc="fmc" id="flamingo" lang="nl" languages="en,nl" tooltipdelay="300" commtojava="true" preloadtitle="Prototypemap" useexternalinterface="true">
+<FLAMINGO xmlns:cmc="cmc" xmlns:fmc="fmc" id="flamingo" lang="nl" languages="en,nl" tooltipdelay="300" commtojava="true" preloadtitle="Prototypemap" useexternalinterface="true">
 	<style id=".tooltip" font-family="arial, sans-serif" font-size="11" color="#880000" display="block"/>
 	<fmc:Container left="0" backgroundcolor="#333333" top="0" height="100%" width="25%">
-		<fmc:TabControler left="left" width="100%" top="top" bottom="bottom" borderalpha="0">	
-			<fmc:Tab width="100%" height="100%" borderalpha="0">
+		<cmc:TabControler left="left" width="100%" top="top" bottom="bottom" borderalpha="0">	
+			<cmc:Tab width="100%" height="100%" borderalpha="0">
 				<string id="buttonlabel" nl="Rode tab"/>
 				<fmc:Container id="c_legend_background" left="left" right="right" top="top" bottom="bottom" backgroundcolor="#FF0000"/>							
-			</fmc:Tab>
-			<fmc:Tab  width="100%" height="100%" borderalpha="0">
+			</cmc:Tab>
+			<cmc:Tab  width="100%" height="100%" borderalpha="0">
 				<string id="buttonlabel" nl="Blauwe tab"/>
 				<fmc:Container id="c_legend_background2" left="left" right="right" top="top" bottom="bottom" backgroundcolor="#0000FF"/>	
-			</fmc:Tab>											
-		</fmc:TabControler>
+			</cmc:Tab>											
+		</cmc:TabControler>
 	</fmc:Container>
 	<fmc:Container left="25%" top="0" height="100%" width="75%">
 		<fmc:MonitorLayer id="monitorl" left="37%" top="50%" width="50%" listento="map">

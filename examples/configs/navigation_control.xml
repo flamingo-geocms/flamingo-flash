@@ -14,10 +14,9 @@
 			<fmc:ToolIdentify left="120" skin="f2"/>
 		</fmc:ToolGroup>
 		<fmc:NavigationControl id="navcontroller" top="50" left="20" height="300" listento="map" showfullextent="true" zoomeroffset="5" zoomerbackgroundoffset="-5" />
-		<fmc:Map id="map" left="0" top="0%" height="100%" width="100%" bottom="bottom" visible="true" extent="12000,304000,280000,620000" fullextent="12000,304000,280000,620000" zoomscalefactor="3" minscale="0.16666666669999999" extenthistory="10">
+		<fmc:Map id="map" left="0" top="0%" height="100%" width="100%" bottom="bottom" visible="true" extent="12000,304000,280000,620000" fullextent="12000,304000,280000,620000" extenthistory="10" resolutions="3440.64,1720.32,860.16,430.08,215.04,107.52,53.76,26.88,13.44,6.72,3.36,1.68,0.84">
 			<fmc:LayerIdentifyIcon id="identifyicon"/>
-			<fmc:TilingLayer id="metacarta" serviceurl="http://geoserver.nl/tiles/tilecache.aspx/1.0.0/ipolufo2009/" resolutions="3276,1092,364,122,40.5,13.5,4.5,1.5,0.5,0.16666666669999999" serviceenvelope="0,300000,300000,620000">
-				<TilingParam name="USERID">0cc72c2d32d2f0b9fde2ad09521a4de0ipolufo</TilingParam>
+			<fmc:TilingLayer id="metacarta" serviceurl="http://geodata.nationaalgeoregister.nl/tiles/service/tms/1.0.0/brtachtergrondkaart@EPSG:28992@png8/" resolutions="3440.64,1720.32,860.16,430.08,215.04,107.52,53.76,26.88,13.44,6.72,3.36,1.68,0.84" extension="png" serviceenvelope="-285401.92,22598.08,595401.92,903401.92">
 			</fmc:TilingLayer>
 		</fmc:Map>
 	</fmc:Container>	

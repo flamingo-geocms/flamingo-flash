@@ -21,7 +21,7 @@
 		<fmc:Map id="map" left="0" top="0%" height="100%" width="100%" bottom="bottom" visible="true" extent="12000,304000,280000,620000">
 			<fmc:LayerIdentifyIcon id="identifyicon"/>
 			<fmc:LayerOGWMS id="layer1" url="http://public-wms.kaartenbalie.nl/wms/nederland?Styles=" srs="EPSG:28992" query_layers="gemeenten_2006" layers="gemeenten_2006,basis,wegen,water" showerrors="true" visible="true"/>
-			<fmc:LayerOGWMS id="layer2" url="http://osm.kaartenbalie.nl/wms/mapserver-scale" srs="EPSG:28992" layers="#ALL#" showerrors="true">
+			<fmc:LayerOGWMS id="layer2" url="http://osm.kaartenbalie.nl/wms/mapserver" srs="EPSG:28992" layers="#ALL#" showerrors="true">
 			</fmc:LayerOGWMS>
 		</fmc:Map>
 		<fmc:Window width="30%" height="100%" visible="false" backgroundcolor="#ffffff" id="window1">			

@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<FLAMINGO xmlns:fmc="fmc" id="flamingo" lang="en" languages="en,nl" tooltipdelay="300" commtojava="true" preloadtitle="Prototypemap" useexternalinterface="true">
+<FLAMINGO xmlns:cmc="cmc" xmlns:fmc="fmc" id="flamingo" lang="en" languages="en,nl" tooltipdelay="300" commtojava="true" preloadtitle="Prototypemap" useexternalinterface="true">
 	<!--html informatie-->
-	<fmc:Window id="window_info_html" width="400" height="400" top="55" left="185" visible="false" canclose="true" canresize="true" skin="g" defocusalpha="75">
+	<cmc:Window id="window_info_html" width="400" height="400" top="55" left="185" visible="false" canclose="true" canresize="true" skin="g" defocusalpha="75">
 		<string id="title" nl="informatie" en="identify" de="Informationen" fr="information" />
-		<fmc:IdentifyResultsHTML id="info_html" width="100%" height="100%" listento="map"/>		
-	</fmc:Window>	
+		<cmc:IdentifyResultsHTML id="info_html" width="100%" height="100%" listento="map"/>		
+	</cmc:Window>	
 	<!--Here the definition of the print window start -->
-	<fmc:Window id="printWindow" skin="g" top="60" left="185" width="490" height="600" visible="false" canresize="true" canclose="true">
+	<cmc:Window id="printWindow" skin="g" top="60" left="185" width="490" height="600" visible="false" canresize="true" canclose="true">
 		<string id="title" en="Print Settings and Preview" nl="Printinstellingen en printvoorbeeld" de="" fr=""/>
 		
-		<fmc:Print id="print" left="left 10" top="top 10" width="100%" height="100%" visible="false" borderwidth="0" listento="map,printWindow">
+		<cmc:Print id="print" left="left 10" top="top 10" width="100%" height="100%" visible="false" borderwidth="0" listento="map,printWindow">
 			<string id="resetIdentify" en="Reset Identify" nl="Identify herstellen" de="" fr=""/>
 			<string id="previewSize" en="Preview at Original Size" nl="Printvoorbeeld op ware grootte" de="" fr=""/>
 			<string id="toPrinter" en="Send to Printer" nl="Afdrukken" de="" fr=""/>
@@ -32,50 +32,50 @@
 			</fmc:ToolGroup>
 			
 			<!-- Monitor for print preview, the preview is live. If the printwindow is still open and you zoom the map the preview will also update  -->
-			<fmc:BaseContainer left="130" top="183" borderwidth="0">				
+			<cmc:BaseContainer left="130" top="183" borderwidth="0">				
 				<fmc:MonitorLayer id="printMonitor1" listento="printMap1">
 					<style id=".text" font-family="courier" font-size="12px" color="#666666" display="block" font-weight="normal"/>
 				</fmc:MonitorLayer>				
 				<fmc:MonitorLayer id="printMonitor3" listento="printMap3">
 					<style id=".text" font-family="courier" font-size="12px" color="#666666" display="block" font-weight="normal"/>
 				</fmc:MonitorLayer>
-			</fmc:BaseContainer>
+			</cmc:BaseContainer>
 		
 			<!--Definition of A4 landscape with the maps="printMap1" -->
-			<fmc:PrintTemplate id="printTemplate1" name="A4 landscape" dpi="300" format="A4" orientation="landscape" listento="printMonitor1" maps="printMap1">
+			<cmc:PrintTemplate id="printTemplate1" name="A4 landscape" dpi="300" format="A4" orientation="landscape" listento="printMonitor1" maps="printMap1">
 				<fmc:Map id="printMap1" configobject="map" name="map" left="left" width="77%" height="100%" movequality="HIGH" visible="false"/>
-				<fmc:Image name="Legend A4 template" left="77%" vstretch="false" hstretch="false" url="../images/A4_liggend_flamingo_demo.png"/>
-				<fmc:BitmapClone name="legend" left="79%" width="25%" height="80%" top="11%" listento="legend" refreshrate="2500"/>
-				<fmc:BitmapClone name="identify" width="40%" height="20%" left="left" visible="false" listento="info_html" refreshrate="2500"/>				
-				<fmc:PrintLabel name="title" left="79%" top="5%" text="Title of Map" font-family="arial,verdana" fontsize="10"/>
-				<fmc:PrintLabel name="copyright text" left="79%" top="93%" text="Some text like copyright" font-family="arial,verdana" fontsize="6"/>
-				<fmc:PrintLabel name="source text" left="79%" top="94%" text="Source: Kaartenbalie / Flamingo" font-family="arial,verdana" fontsize="6"/>
+				<cmc:Image name="Legend A4 template" left="77%" vstretch="false" hstretch="false" url="../images/A4_liggend_flamingo_demo.png"/>
+				<cmc:BitmapClone name="legend" left="79%" width="25%" height="80%" top="11%" listento="legend" refreshrate="2500"/>
+				<cmc:BitmapClone name="identify" width="40%" height="20%" left="left" visible="false" listento="info_html" refreshrate="2500"/>				
+				<cmc:PrintLabel name="title" left="79%" top="5%" text="Title of Map" font-family="arial,verdana" fontsize="10"/>
+				<cmc:PrintLabel name="copyright text" left="79%" top="93%" text="Some text like copyright" font-family="arial,verdana" fontsize="6"/>
+				<cmc:PrintLabel name="source text" left="79%" top="94%" text="Source: Kaartenbalie / Flamingo" font-family="arial,verdana" fontsize="6"/>
 				<fmc:Scalebar name="scalebar" left="80%" top="98%" width="200" listento="printMap1" units=" m">
 						<style id=".label" font-family="verdana" font-size="10px" color="#555555" display="block" font-weight="normal"/>
 						<style id=".units" font-family="verdana" font-size="10px" color="#555555" display="block" font-weight="normal"/>
 				</fmc:Scalebar>	
-				<fmc:PrintLabel name="scale"  left="79%" top="95.5%" listento="printMap1"  text="Scale: [scale]   " font-family="arial,verdana" fontsize="6"/>
-				<fmc:PrintLabel name="printdate" left="86%" top="95.5%"  text="Date: [curdate]    " font-family="arial,verdana" fontcolor="#171717" fontsize="6"/>
-			</fmc:PrintTemplate>
+				<cmc:PrintLabel name="scale"  left="79%" top="95.5%" listento="printMap1"  text="Scale: [scale]   " font-family="arial,verdana" fontsize="6"/>
+				<cmc:PrintLabel name="printdate" left="86%" top="95.5%"  text="Date: [curdate]    " font-family="arial,verdana" fontcolor="#171717" fontsize="6"/>
+			</cmc:PrintTemplate>
 			
 			<!--Definition of A3 landscape with the maps="printMap1" -->
-			<fmc:PrintTemplate id="printTemplate3" name="A3 landscape" dpi="300" format="A3" orientation="landscape" listento="printMonitor3" maps="printMap3">
+			<cmc:PrintTemplate id="printTemplate3" name="A3 landscape" dpi="300" format="A3" orientation="landscape" listento="printMonitor3" maps="printMap3">
 				<fmc:Map id="printMap3" configobject="map" name="map" left="left" width="77%" height="100%" movequality="HIGH" visible="false"/>
-				<fmc:Image name="Legend A3 template" left="77%" vstretch="false" hstretch="false" url="../images/A3_liggend_flamingo_demo.png"/>
-				<fmc:BitmapClone name="legend" left="79%" width="25%" height="80%" top="12.5%" listento="legend" refreshrate="2500"/>
-				<fmc:BitmapClone name="identify" width="40%" height="20%" left="left" visible="false" listento="info_html" refreshrate="2500"/>
-				<fmc:PrintLabel name="title" left="79%" top="8%" text="Title of Map" font-family="arial,verdana" fontsize="12"/>
-				<fmc:PrintLabel name="copyright text" left="80%" top="93%" text="Some text like copyright" font-family="arial,verdana" fontsize="7"/>
-				<fmc:PrintLabel name="source text" left="80%" top="94%" text="Source: Kaartenbalie / Flamingo" font-family="arial,verdana" fontsize="7"/>
+				<cmc:Image name="Legend A3 template" left="77%" vstretch="false" hstretch="false" url="../images/A3_liggend_flamingo_demo.png"/>
+				<cmc:BitmapClone name="legend" left="79%" width="25%" height="80%" top="12.5%" listento="legend" refreshrate="2500"/>
+				<cmc:BitmapClone name="identify" width="40%" height="20%" left="left" visible="false" listento="info_html" refreshrate="2500"/>
+				<cmc:PrintLabel name="title" left="79%" top="8%" text="Title of Map" font-family="arial,verdana" fontsize="12"/>
+				<cmc:PrintLabel name="copyright text" left="80%" top="93%" text="Some text like copyright" font-family="arial,verdana" fontsize="7"/>
+				<cmc:PrintLabel name="source text" left="80%" top="94%" text="Source: Kaartenbalie / Flamingo" font-family="arial,verdana" fontsize="7"/>
 				<fmc:Scalebar name="scalebar" left="80%" top="98%" width="300" listento="printMap1" units=" m">
 						<style id=".label" font-family="verdana" font-size="10px" color="#555555" display="block" font-weight="normal"/>
 						<style id=".units" font-family="verdana" font-size="10px" color="#555555" display="block" font-weight="normal"/>
 				</fmc:Scalebar>
-				<fmc:PrintLabel name="scale"  left="80%" top="95.5%" listento="printMap3"  text="Scale: [scale]   " font-family="arial,verdana" fontsize="7"/>
-				<fmc:PrintLabel name="printdate" left="87%" top="95.5%"  text="Date: [curdate]    " font-family="arial,verdana" fontcolor="#171717" fontsize="7"/>				
-			</fmc:PrintTemplate>
-		</fmc:Print>	
-	</fmc:Window>
+				<cmc:PrintLabel name="scale"  left="80%" top="95.5%" listento="printMap3"  text="Scale: [scale]   " font-family="arial,verdana" fontsize="7"/>
+				<cmc:PrintLabel name="printdate" left="87%" top="95.5%"  text="Date: [curdate]    " font-family="arial,verdana" fontcolor="#171717" fontsize="7"/>				
+			</cmc:PrintTemplate>
+		</cmc:Print>	
+	</cmc:Window>
 		
 	<fmc:Container left="0" top="0" height="100%" width="100%">
 		<fmc:MonitorLayer id="monitorl" left="37%" top="50%" width="50%" listento="map">
@@ -87,9 +87,9 @@
 			<fmc:ToolZoomout left="30" skin="f2"/>
 			<fmc:ToolPan left="60" skin="f2"/>
 			<!-- The printbutton that open the printwindow -->
-			<fmc:PrintButton left="90" listento="print">
+			<cmc:PrintButton left="90" listento="print">
 				<string id="tooltip" nl="printvenster openen/ sluiten" en="open/ close the print window" de="Schritt weiter" fr="Suivant" />
-			</fmc:PrintButton>
+			</cmc:PrintButton>
 		</fmc:ToolGroup>
 		<fmc:Coordinates listento="map" left="80%" top="95%" decimals="6">
 			<style id=".xy" font-family="arial, sans-serif" font-size="11"/>
@@ -97,17 +97,16 @@
 		</fmc:Coordinates>
 		<fmc:BorderNavigation listento="map" top="0%" width="100%" height="100%" skin="f1"/>
 		<fmc:Map id="map" left="0" top="0%" height="100%" width="100%" bottom="bottom" visible="true" extent="12000,304000,280000,620000">
-			<fmc:LayerIdentifyIcon id="identifyicon"/>
-			<fmc:LayerOGWMS id="layer1" url="http://public-wms.kaartenbalie.nl/wms/nederland?Styles=" srs="EPSG:28992" query_layers="gemeenten_2006" layers="gemeenten_2006,basis,wegen,water" showerrors="true" visible="true"/>
-			<fmc:LayerOGWMS id="layer2" url="http://osm.kaartenbalie.nl/wms/mapserver-scale" srs="EPSG:28992" layers="#ALL#" showerrors="true">
+			<fmc:LayerIdentifyIcon id="identifyicon"/>			
+			<fmc:LayerOGWMS id="layer2" url="http://osm.kaartenbalie.nl/wms/mapserver" srs="EPSG:28992" layers="#ALL#" showerrors="true">
 			</fmc:LayerOGWMS>
 		</fmc:Map>
 	</fmc:Container>	
-	<fmc:Window id="drawWindow" title="Legenda" visible="true" canclose="false" backgroundcolor="#FFFFFF" skin="g" canresize="true" defocusalpha="100" width="250" height="600" left="right -270" top="45"> 
+	<cmc:Window id="drawWindow" title="Legenda" visible="true" canclose="false" backgroundcolor="#FFFFFF" skin="g" canresize="true" defocusalpha="100" width="250" height="600" left="right -270" top="45"> 
 	<fmc:Container width="100%" height="100%" backgroundcolor="#FFFFFF">
-		<fmc:Legend id="legend" top="0" left="0" height="100%" width="100%" listento="map">			
+		<cmc:Legend id="legend" top="0" left="0" height="100%" width="100%" listento="map">			
 		<symbol label=""  symbolurl="../images/fake_legend.png" />
-		</fmc:Legend>						
+		</cmc:Legend>						
 	</fmc:Container>	
-	</fmc:Window> 	
+	</cmc:Window> 	
 </FLAMINGO>
