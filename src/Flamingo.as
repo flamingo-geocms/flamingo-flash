@@ -208,8 +208,6 @@ class Flamingo {
 		this.init();
 	}
 	private function init() {
-		
-		
 		this.mFlamingo.strings = new Object();
 		this.mFlamingo.cursors = new Object();
 		this.mFlamingo.guides = new Object();
@@ -3417,9 +3415,13 @@ class Flamingo {
 		}
 		arguments.shift();	
 		var comp = this.components[id].target;
+		//don't call on mkid but on the actual movieclip
+		if(comp._name == "mKid"){
+			comp = comp._parent;
+		}
 		if (this.components[id] instanceof AbstractPositionable) {
 			comp = this.components[id];
-		}
+			}
 		if (comp == undefined) {
 			return null;
 		}
