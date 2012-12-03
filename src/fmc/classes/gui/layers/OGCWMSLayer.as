@@ -723,7 +723,7 @@ class gui.layers.OGCWMSLayer extends AbstractLayer{
 							if ((!thisObj.map.isEqualExtent(correctedExtent) && !thisObj.map.isEqualExtent(thisObj.extent)) || thisObj._getVisLayers() != thisObj.vislayers ||
 								("|" + currentFiltersFingerprint + "|") !=  ("|" + thisObj.lastFiltersFingerprint + "|")) {
 								//_global.flamingo.tracer("re-update, fadesteps>0");
-								this.update();
+								thisObj.update();
 							}
 							
 						}
