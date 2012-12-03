@@ -356,9 +356,9 @@ class gui.Map extends AbstractPositionable implements PersistableComponent{
 		//delete xmls;
 		//remove xml from repository
 		//flamingo.deleteXML(this);
-		this._visible = this.visible;
-		flamingo.raiseEvent(this, "onInit", this);
+		this._visible = this.visible;		
 		defaultTool.setActive(true);	
+		flamingo.raiseEvent(this, "onInit", this);
 	}
 	/**
 	 * Called when Tom's mousewheel is used

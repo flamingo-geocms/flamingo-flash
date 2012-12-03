@@ -65,7 +65,7 @@ import display.spriteloader.SpriteMapFactory;
 import core.loading.LoadComponentQueue;
 
 class Flamingo {
-	private var version:String = "4.2_r3540";
+	private var version:String = "4.2_r3554";
 	//reference to main movie from which this class is loaded
 	//at the main movie the components are loaded at 'moviedepth'--  ;moviedepth starts by 10000
 	//at the main movie a cursor movie is loaded at depth 50005
@@ -2652,7 +2652,7 @@ class Flamingo {
 	* @see removeListener
 	* @see addListener
 	*/
-	public function raiseEvent(comp:Object, event:String) {		
+	public function raiseEvent(comp:Object, event:String) {				
 		var id:String = this.getId(comp);				
 		//Logger.console("RaiseEvent: " + event+" id: "+id+" component: "+this.components[id]);
 		//remove first element (=comp) from arguments array 
@@ -2665,6 +2665,7 @@ class Flamingo {
 		//all events of other components will be fires to the outer world if useexternalinterface = true
 		var fire:Boolean = this.useexternalinterface;		
 		//check if the allowExternalInterface and denyExternalInterface
+		//Logger.console("Comp: " + id + " event: " + event);
 		if (this.useexternalinterface){
 			//if the call is allowed by a setting of the id+.+event then it is allowed if the
 			//deny is set for only the id. Otherwise the deny overwrites the allow
@@ -2743,22 +2744,26 @@ class Flamingo {
 			}
 			//Logger.console("****Arg lenght: "+arguments.length+" dispatche event: ", event_to_fire, arguments );
 			
-			ExternalInterface.call("dispatchEventJS",event_to_fire, arguments);
+			
 			//function can't start with number
 			if (!isNaN(prefix)){
 				return;				
 			}
-			
-			event_to_fire = prefix + "_" + event_to_fire;
+			var flamingo_event_to_fire = prefix + "_" + event_to_fire;
 			
 			if (this.flamingoid.length>0) {
-				event_to_fire = this.flamingoid+"_"+event_to_fire;
+				flamingo_event_to_fire = this.flamingoid+"_"+flamingo_event_to_fire;
 			}
 			//put back the altered eventname                                      
-			arguments.unshift(event_to_fire);
-			//fire in the hole
-			ExternalInterface.call.apply(null, arguments);
-			delete arguments;
+			
+			var argumentsToFire = arguments;
+			//fire in the hole with a small timeout so the calling function can be finished.
+			setTimeout(function() {
+				ExternalInterface.call("dispatchEventJS",event_to_fire, argumentsToFire);
+				argumentsToFire.unshift(flamingo_event_to_fire);
+				ExternalInterface.call.apply(null, argumentsToFire);
+				delete argumentsToFire;
+			}, 1 );
 		}
 	}
 	private function traceObj(obj:Object) {
