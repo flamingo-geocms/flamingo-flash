@@ -602,6 +602,9 @@ class gui.EditMap extends AbstractComponent implements StateEventListener, core.
             }
          }
 	}
+	public function setLayerVisibility(name:String, vis:Boolean):Void {
+		gis.getLayer(name).setVisible(vis);
+	}
 	/**
 	 * Gets the active feature as a object (see Feature.toObject() for details of the object)
 	 */
