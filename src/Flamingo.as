@@ -65,7 +65,7 @@ import display.spriteloader.SpriteMapFactory;
 import core.loading.LoadComponentQueue;
 
 class Flamingo {
-	private var version:String = "4.2_r3558";
+	private var version:String = "4.2_r3566";
 	//reference to main movie from which this class is loaded
 	//at the main movie the components are loaded at 'moviedepth'--  ;moviedepth starts by 10000
 	//at the main movie a cursor movie is loaded at depth 50005
@@ -1133,6 +1133,8 @@ class Flamingo {
 							parentmc = parentmc._parent;
 						}
 					}
+					
+					this.raiseEvent(this.components[targetid], "onFinished", targetid);
 					this.raiseEvent(this, "onLoadComponent", this.components[targetid]);	
 					
 				}	
@@ -1300,6 +1302,7 @@ class Flamingo {
 				lMc.parent = thisObj.components[id].parent;
 				//lMc._parent =  thisObj.components[id].parent;
 			}
+			thisObj.raiseEvent(thisObj.components[id], "onFinished",id);
 			thisObj.raiseEvent(thisObj, "onLoadComponent", lMc);
 			thisObj.doneLoading();
 			//thisObj.isloadingcomponent = false;
@@ -2756,12 +2759,12 @@ class Flamingo {
 			
 			var argumentsToFire = arguments;
 			//fire in the hole with a small timeout so the calling function can be finished.
-			_global.setTimeout(function() {
-				ExternalInterface.call("dispatchEventJS",event_to_fire, argumentsToFire);
-				argumentsToFire.unshift(flamingo_event_to_fire);
-				ExternalInterface.call.apply(null, argumentsToFire);
-				delete argumentsToFire;
-			}, 1 );
+			
+			ExternalInterface.call("dispatchEventJS",event_to_fire, argumentsToFire);
+			argumentsToFire.unshift(flamingo_event_to_fire);
+			ExternalInterface.call.apply(null, argumentsToFire);
+			delete argumentsToFire;
+			
 		}
 	}
 	private function traceObj(obj:Object) {
