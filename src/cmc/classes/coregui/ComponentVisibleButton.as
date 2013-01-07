@@ -57,11 +57,11 @@ class coregui.ComponentVisibleButton extends BaseButton {
     private var component:MovieClip = null;
     
 	function onLoad():Void { // This method is a stub. It is necessary though, because of the "super" bug in Flash.
-        this._visible=false;        		
+		this._visible=false;        		
 		super.onLoad();
 	
 		//For what ever reason the super.init() call in the init() function below does not do it's job therefore this workaround.
-		super.init();
+		init();
 	}	
 	
     function init():Void {
@@ -70,7 +70,7 @@ class coregui.ComponentVisibleButton extends BaseButton {
         this._visible=true;
     }
     
-    function onPress():Void {
+    function onPress():Void {		
         gotoAndStop(3);
         if (component.setVisible == undefined) {
             component._visible = !component._visible;

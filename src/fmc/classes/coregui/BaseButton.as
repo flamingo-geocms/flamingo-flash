@@ -1,4 +1,4 @@
-/*-----------------------------------------------------------------------------
+﻿/*-----------------------------------------------------------------------------
 * This file is part of Flamingo MapComponents.
 * Author: Michiel J. van Heek.
 * IDgis bv
@@ -32,6 +32,7 @@ import coregui.*;
 import event.ActionEvent;
 import event.ActionEventListener;
 import core.AbstractComponent;
+import tools.Logger;
 
 /** 
 * A base class for a button with default behaviour
