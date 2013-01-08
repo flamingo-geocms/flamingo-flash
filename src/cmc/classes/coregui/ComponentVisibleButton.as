@@ -72,6 +72,9 @@ class coregui.ComponentVisibleButton extends BaseButton {
     
     function onPress():Void {		
         gotoAndStop(3);
+		if (component == undefined) {
+			component = _global.flamingo.getComponent(listento[0]);
+		}
         if (component.setVisible == undefined) {
             component._visible = !component._visible;
         } else {
