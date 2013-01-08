@@ -182,29 +182,31 @@ class core.AbstractComponent extends MovieClip {
 	function cleanupWait():Void {
 		clearInterval(this.cleanupWaitIntervalId);
 		if (initAdapters.length > 0) {
-			Logger.console("Cleanup waiting components: "+this.id+ " is still waiting for " + initAdapters.length + " component(s):");
+			//Logger.console("Cleanup waiting components: "+this.id+ " is still waiting for " + initAdapters.length + " component(s):");
+			//clean up waiting components
 			for (var i:String in initAdapters) {
 				var initAdapter:InitAdapter = InitAdapter(initAdapters[i]);
 				if (initAdapter!=null){
 					//check if the listento of this init adapter is still waiting.
 					var listenTo:String = initAdapter.getWaitFor();
 					var listentoComp = _global.flamingo.getComponent(listenTo)
+					//if listento is not found or has no waiting state, force .on
 					if (listentoComp == null || 
 						(listentoComp instanceof AbstractComponent 
 							&& AbstractComponent(listentoComp).getInitAdapters().length == 0)) {
 						if (listentoComp == null) {
-							Logger.console("     - " + initAdapter.getWaitFor() +" (Component is empty and not found. Make sure the component with id: '" + initAdapter.getWaitFor() + "' exists)" );
+							Logger.console("!!!! " + initAdapter.getWaitFor() +" (The Component in the 'listento' of '"+this.id+"' is not found. Make sure the component with id: '" + initAdapter.getWaitFor() + "' exists)" );
 						}else{
-							Logger.console("     - "+initAdapter.getWaitFor() +" (Component is not waiting for another component. Reason unknown, Force finish)");
+							Logger.console("!!!! " + initAdapter.getWaitFor() +" (Component is not waiting for another component. Reason unknown, Force finish)");
 						}
 						initAdapter.onInit();
-					}else {
+					}/*else {
 						var cId = "";
 						if (listentoComp instanceof AbstractComponent) {
 							cId = AbstractComponent(listentoComp).id;
 						}
 						Logger.console("     - "+cId+" (But component is still waiting for other objects to finish, wait longer....)");				
-					}
+					}*/
 				}
 			}
 		}
