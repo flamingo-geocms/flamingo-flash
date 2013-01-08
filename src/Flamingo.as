@@ -65,7 +65,7 @@ import display.spriteloader.SpriteMapFactory;
 import core.loading.LoadComponentQueue;
 
 class Flamingo {
-	private var version:String = "4.2_r3566";
+	private var version:String = "4.2_r3594";
 	//reference to main movie from which this class is loaded
 	//at the main movie the components are loaded at 'moviedepth'--  ;moviedepth starts by 10000
 	//at the main movie a cursor movie is loaded at depth 50005
@@ -880,6 +880,7 @@ class Flamingo {
 				return;
 			}
 		}
+		
 		var target = this.components[targetid].target;
 		//Logger.console("Load component with target id: "+targetid);
 		if (target == undefined) {
@@ -1177,7 +1178,7 @@ class Flamingo {
 					}
 		
 					parentmc = parentmc._parent;
-				}					
+				}
 				this.loadComponent_source(url, targetid, mc);
 			}
 			//get custom language, style and cursor definitions

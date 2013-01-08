@@ -7,8 +7,9 @@ import core.InitAdapter;
 
 /*-----------------------------------------------------------------------------
 * This file is part of Flamingo MapComponents.
-* Author: Michiel J. van Heek.
-* IDgis bv
+* Author: Michiel J. van Heek(IDgis bv)
+*         Roy Braam (B3Partners bv)
+* 
  -----------------------------------------------------------------------------*/
 
  /**
@@ -55,6 +56,8 @@ class core.AbstractComponent extends MovieClip {
 	private var intervalId:Number= null;
 	
 	private var _id:String;
+	
+	private var cleanupWaitIntervalId:Number;
 		
     /** @component fmc:AbstractComponent
     * Abstract superclass for all components.
@@ -158,7 +161,7 @@ class core.AbstractComponent extends MovieClip {
     * Waits for the "listento" components to init before going to the afterLoad() method.
     */
     function wait():Void {
-        initAdapters = new Array();
+        initAdapters = new Array();		
 		stillLoading = false;
 		
 		/*var flamComp = _global.flamingo.getRawComponent(id);		
@@ -169,12 +172,50 @@ class core.AbstractComponent extends MovieClip {
 		}*/
         if (listento != null) {
 			addInitAdapters(listento);
-		}		
+			this.cleanupWaitIntervalId = setInterval(this, "cleanupWait", 5000);
+		}				
         if (initAdapters.length == 0 && !stillLoading) {
             afterLoad();
         }
     }
-   /**
+	
+	function cleanupWait():Void {
+		clearInterval(this.cleanupWaitIntervalId);
+		if (initAdapters.length > 0) {
+			Logger.console("Cleanup waiting components: "+this.id+ " is still waiting for " + initAdapters.length + " component(s):");
+			for (var i:String in initAdapters) {
+				var initAdapter:InitAdapter = InitAdapter(initAdapters[i]);
+				if (initAdapter!=null){
+					//check if the listento of this init adapter is still waiting.
+					var listenTo:String = initAdapter.getWaitFor();
+					var listentoComp = _global.flamingo.getComponent(listenTo)
+					if (listentoComp == null || 
+						(listentoComp instanceof AbstractComponent 
+							&& AbstractComponent(listentoComp).getInitAdapters().length == 0)) {
+						if (listentoComp == null) {
+							Logger.console("     - " + initAdapter.getWaitFor() +" (Component is empty and not found. Make sure the component with id: '" + initAdapter.getWaitFor() + "' exists)" );
+						}else{
+							Logger.console("     - "+initAdapter.getWaitFor() +" (Component is not waiting for another component. Reason unknown, Force finish)");
+						}
+						initAdapter.onInit();
+					}else {
+						var cId = "";
+						if (listentoComp instanceof AbstractComponent) {
+							cId = AbstractComponent(listentoComp).id;
+						}
+						Logger.console("     - "+cId+" (But component is still waiting for other objects to finish, wait longer....)");				
+					}
+				}
+			}
+		}
+		if (initAdapters.length == 0 && !stillLoading) {
+			afterLoad();		
+		}else if (initAdapters.length != 0) {
+			this.cleanupWaitIntervalId = setInterval(this, "cleanupWait", 2000);
+		}		
+	}
+	
+	/**
     * onLoadComponent
     * @param	mc
     */
@@ -201,7 +242,7 @@ class core.AbstractComponent extends MovieClip {
         for (var i:String in ids2WaitFor) {
             component = _global.flamingo.getComponent(ids2WaitFor[i]);
             if ((component == null) || ((component instanceof AbstractComponent) && (!component.isInited()))) {
-                initAdapter = new InitAdapter(this);
+                initAdapter = new InitAdapter(this,ids2WaitFor[i]);
                 initAdapters.push(initAdapter);
                 //_global.flamingo.tracer(this + " wait for " + ids2WaitFor[i] + " i = " + i);
                 _global.flamingo.addListener(initAdapter, ids2WaitFor[i], this);
@@ -221,7 +262,7 @@ class core.AbstractComponent extends MovieClip {
                 _global.flamingo.removeListener(initAdapter, listento[i], this);
                 
                 if (initAdapters.length == 0 && !stillLoading) {
-                    afterLoad();
+					afterLoad();
                 }
                 return;
             }
@@ -233,6 +274,8 @@ class core.AbstractComponent extends MovieClip {
     * This will raise the onInit event.
     */
     function afterLoad():Void {
+		//waiting is done, stop the cleanup process.
+		clearInterval(this.cleanupWaitIntervalId);
         //addComposites after dependencies are loaded
         addComposites();
 
@@ -467,5 +510,8 @@ class core.AbstractComponent extends MovieClip {
 	 */
 	public function get type():String {
 		return getComponentName();
+	}
+	public function getInitAdapters():Array {
+		return this.initAdapters;	
 	}
 }
