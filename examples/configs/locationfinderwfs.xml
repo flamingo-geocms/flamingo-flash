@@ -19,63 +19,53 @@
 			<string id="xy" nl="X: [x]     Y: [y]"/>
 		</fmc:Coordinates>
 		<!--/fmc:Container-->
-		<fmc:BorderNavigation listento="map" top="0%" width="100%" height="100%" skin="f1"/>		
+		<fmc:BorderNavigation listento="map" top="0%" width="100%" height="100%" skin="f1"/>
 		<fmc:Map id="map" left="0" top="0%" height="100%" width="100%" bottom="bottom" visible="true" extent="12000,304000,280000,620000">
 			<fmc:LayerIdentifyIcon id="identifyicon"/>
-				<fmc:LayerOGWMS id="layer3" url="http://afnemers.ruimtelijkeplannen.nl/afnemers/services?Styles=" srs="EPSG:28992" layers="PCP:Plangebied" showerrors="true" visible="true"/>				
+			<fmc:LayerOGWMS id="layer3" url="http://afnemers.ruimtelijkeplannen.nl/afnemers/services?Styles=" srs="EPSG:28992" layers="PCP:Plangebied" showerrors="true" visible="true"/>
 		</fmc:Map>
 	</fmc:Container>
-	<fmc:Container left="60%" width="40%" height="100%" top="0%" backgroundcolor="#FFFFFF">		
+	<fmc:Container left="60%" width="40%" height="100%" top="0%" backgroundcolor="#FFFFFF">
 		<cmc:LocationFinder id="locationfinder" listento="map" left="0%" top="0%" width="90%" height="100%">
-			<string id="label" nl="zoek..." en="search..." de="suche..." fr="recherche..." />
-			<string id="busy" nl="zoeken..." en="searching..." de="suchen..." fr="rechercher..." />
-			<string id="nohit" nl="Geen gegevens gevonden..." en="No data found..." de="Keine Daten gefunden..." fr="Pas de données trouvées..." />
-			<string id="prev" nl="vorige   " en="previous   " de="zurück   " fr="précédent   " />
-			<string id="next" nl="volgende" en="next" de="weiter" fr="suivant" />
-			<LOCATIONS id="ro_onlineplan0"
-				server="http://afnemers.ruimtelijkeplannen.nl/afnemers/services" 
-				type="WFS" serverVersion="1.1.0" srs="EPSG:28992"  
-				layerid="Plangebied"  searchfield="naamOverheid"  
-				outputfields="naamOverheid,identificatie,naam" matchcase="false" preprocess="toupper">
-				<string id="output" nl="[app:naamOverheid]: [app:naam]" />
-				<string id="label" nl="Zoek op RO-online naam overheid" />
-				<string id="hint" nl="Type een (deel van de) naam overheid  in het tekstvak hierboven..." />
+			<string id="label" nl="zoek..." en="search..." de="suche..." fr="recherche..."/>
+			<string id="busy" nl="zoeken..." en="searching..." de="suchen..." fr="rechercher..."/>
+			<string id="nohit" nl="Geen gegevens gevonden..." en="No data found..." de="Keine Daten gefunden..." fr="Pas de données trouvées..."/>
+			<string id="prev" nl="vorige   " en="previous   " de="zurück   " fr="précédent   "/>
+			<string id="next" nl="volgende" en="next" de="weiter" fr="suivant"/>
+			<LOCATIONS id="ro_onlineplan0" server="http://afnemers.ruimtelijkeplannen.nl/afnemers/services" type="WFS" serverVersion="1.1.0" srs="EPSG:28992" layerid="Plangebied" searchfield="naamOverheid" outputfields="naamOverheid,identificatie,naam" matchcase="false" preprocess="toupper">
+				<string id="output" nl="[app:naamOverheid]: [app:naam]"/>
+				<string id="label" nl="Zoek op RO-online naam overheid"/>
+				<string id="hint" nl="Type een (deel van de) naam overheid  in het tekstvak hierboven..."/>
 			</LOCATIONS>
-			<LOCATIONS id="geoserver_cbs"
-				server="http://flamingo4.b3p.nl/geoserver/ows" 
-				type="WFS" serverVersion="1.0.0" srs="EPSG:28992"  
-				layerid="Flamingo:gemeentes"  searchfield="gm_naam"  
-				matchcase="false">
-				<string id="output" nl="[Flamingo:gm_naam] ([Flamingo:gm_code])" />
-				<string id="label" nl="Zoek op CBS gemeente in Geoserver WFS 1.0" />
-				<string id="hint" nl="Type een gemeente in" />
+			<LOCATIONS id="geoserver_cbs" server="http://flamingo4.b3p.nl/geoserver/ows" type="WFS" serverVersion="1.0.0" srs="EPSG:28992" layerid="Flamingo:gemeentes" searchfield="gm_naam" matchcase="false">
+				<string id="output" nl="[Flamingo:gm_naam] ([Flamingo:gm_code])"/>
+				<string id="label" nl="Zoek op CBS gemeente in Geoserver WFS 1.0"/>
+				<string id="hint" nl="Type een gemeente in"/>
 			</LOCATIONS>
-			<LOCATIONS id="geoserver_cbs"
-				server="http://flamingo4.b3p.nl/geoserver/ows" 
-				type="WFS" serverVersion="1.1.0" srs="EPSG:28992"  
-				layerid="Flamingo:gemeentes"  searchfield="gm_naam"  
-				matchcase="false">
-				<string id="output" nl="[Flamingo:gm_naam] ([Flamingo:gm_code])" />
-				<string id="label" nl="Zoek op CBS gemeente in Geoserver WFS 1.1.0" />
-				<string id="hint" nl="Type een gemeente in" />
+			<LOCATIONS id="geoserver_cbs" server="http://flamingo4.b3p.nl/geoserver/ows" type="WFS" serverVersion="1.1.0" srs="EPSG:28992" layerid="Flamingo:gemeentes" searchfield="gm_naam" matchcase="false">
+				<string id="output" nl="[Flamingo:gm_naam] ([Flamingo:gm_code])"/>
+				<string id="label" nl="Zoek op CBS gemeente in Geoserver WFS 1.1.0"/>
+				<string id="hint" nl="Type een gemeente in"/>
 			</LOCATIONS>
-			<LOCATIONS id="drente_gem"
-				server="http://www.drenthe.info/geoserver/wfs" 
-				type="WFS" serverVersion="1.0.0" srs="EPSG:28992"  
-				outputfields="geo:GEMEENTE" layerid="GBI.AB_HIST_GEMEENTEGRENS_V"  searchfield="geo:GEMEENTE"  
-				matchcase="false">
-				<string id="output" nl="[geo:GEMEENTE]" />
-				<string id="label" nl="Zoek op CBS gemeente in Drente GeoServer WFS 1.0.0" />
-				<string id="hint" nl="Type een gemeente in" />
+			<LOCATIONS id="drente_gem" server="http://www.drenthe.info/geoserver/wfs" type="WFS" serverVersion="1.0.0" srs="EPSG:28992" outputfields="geo:GEMEENTE" layerid="GBI.AB_HIST_GEMEENTEGRENS_V" searchfield="geo:GEMEENTE" matchcase="false">
+				<string id="output" nl="[geo:GEMEENTE]"/>
+				<string id="label" nl="Zoek op CBS gemeente in Drente GeoServer WFS 1.0.0"/>
+				<string id="hint" nl="Type een gemeente in"/>
 			</LOCATIONS>
-			<LOCATIONS id="drente_gem"
-				server="http://www.drenthe.info/geoserver/wfs" 
-				type="WFS" serverVersion="1.1.0" srs="EPSG:28992"  
-				outputfields="geo:GEMEENTE" layerid="GBI.AB_HIST_GEMEENTEGRENS_V"  searchfield="geo:GEMEENTE"  
-				matchcase="false">
-				<string id="output" nl="[geo:GEMEENTE]" />
-				<string id="label" nl="Zoek op CBS gemeente in Drente GeoServer WFS 1.1.0" />
-				<string id="hint" nl="Type een gemeente in" />
+			<LOCATIONS id="drente_gem" server="http://www.drenthe.info/geoserver/wfs" type="WFS" serverVersion="1.1.0" srs="EPSG:28992" outputfields="geo:GEMEENTE" layerid="GBI.AB_HIST_GEMEENTEGRENS_V" searchfield="geo:GEMEENTE" matchcase="false">
+				<string id="output" nl="[geo:GEMEENTE]"/>
+				<string id="label" nl="Zoek op CBS gemeente in Drente GeoServer WFS 1.1.0"/>
+				<string id="hint" nl="Type een gemeente in"/>
+			</LOCATIONS>
+			<LOCATIONS id="richard1" server="http://www.drenthe.info/geoserver/wfs" type="WFS" serverVersion="1.0.0" srs="EPSG:28992" outputfields="geo:OMSCHRIJVING,geo:SHAPE" layerid="EXT.TDN_GEMEENTEGRENZEN_V" searchfield="geo:OMSCHRIJVING" matchcase="false">
+				<string id="output" nl="[geo:OMSCHRIJVING]"/>
+				<string id="label" nl="Zoek een gemeente"/>
+				<string id="hint" nl="Type een gemeente in"/>
+			</LOCATIONS>
+			<LOCATIONS id="richard2" server="http://www.drenthe.info/geoserver/wfs" type="WFS" serverVersion="1.0.0" srs="EPSG:28992" outputfields="geo:GEMEENTE" layerid="GBI.AB_HIST_GEMEENTEGRENS_V" searchfield="geo:GEMEENTE" matchcase="false">
+				<string id="output" nl="[geo:GEMEENTE]"/>
+				<string id="label" nl="Zoek op CBS gemeente in Drente GeoServer WFS 1.0.0"/>
+				<string id="hint" nl="Type een gemeente in"/>
 			</LOCATIONS>
 		</cmc:LocationFinder>
 	</fmc:Container>
