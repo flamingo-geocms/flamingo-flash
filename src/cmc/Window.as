@@ -63,6 +63,7 @@ var defocusalpha = 100;
 var minimized:Boolean = false;
 var thisObj = this;
 var skin = "";
+var backgroundcolor = null;
 //---------------------------------------
 var lFlamingo:Object = new Object();
 lFlamingo.onSetLanguage = function(lang:String) {
@@ -100,6 +101,7 @@ init();
 * @attr showresizebutton (defaultvalue = "true") True or false. If set to true a resizebutton in the lowerrightcorner is shown.
 * @attr skin (defaultvalue = "") Skin. Available skins: "", "f1", f2", "g"
 * @attr clear  (defaultvalue = "true") True or false. True: all existing components will be removed from the window.
+* @attr backgroundcolor (default none/transparent) if set the background color is set. Be aware that some skinks add a background image that is not transparent and covers the given backgroundcolor of the movieclip
 */
 function init() {
 	if (flamingo == undefined) {
@@ -199,6 +201,13 @@ function setConfig(xml:Object) {
 				canclose = true;
 			} else {
 				canclose = false;
+			}
+			break;
+		case "backgroundcolor" :
+			if (val.charAt(0) == "#") {
+				backgroundcolor = Number("0x"+val.substring(1, val.length));
+			} else {
+				backgroundcolor = Number(val);
 			}
 			break;
 		default :
@@ -314,7 +323,10 @@ function removeComponent(id:String) {
 function drawWindow() {
 	_visible = visible;
 	var mcw:MovieClip = this.mWindow;
-	var mc:MovieClip = mcw.attachMovie(skin+"_background", "mBackground", 18);
+	var mc:MovieClip = mcw.attachMovie(skin + "_background", "mBackground", 18);
+	if(this.backgroundcolor!=null){
+		mc.opaqueBackground = this.backgroundcolor;
+	}
 	mc.useHandCursor = false;
 	mc.onPress = function() {
 	};
