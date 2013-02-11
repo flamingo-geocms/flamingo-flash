@@ -506,24 +506,27 @@ dynamic class coremodel.service.wms.OGWMSConnector {
 			var nfeatures:Number = xlayer.childNodes.length;
 			for (var ifeature:Number = 0; ifeature<nfeatures; ifeature++) {
 				var xfeature:XMLNode = xlayer.childNodes[ifeature];
-				var feature:Object = new Object();
-				var nfields:Number = xfeature.childNodes.length;
-				for (var ifield:Number = 0; ifield<nfields; ifield++) {
-					var xfield:XMLNode = xfeature.childNodes[ifield];
-					switch (xfield.nodeName.toLowerCase()) {
-					case "gml:boundedby" :
-						break;
-					default :
-						var fieldname:String = xfield.nodeName;
-						var fieldvalue:String = xfield.firstChild.nodeValue;
-						if (fieldvalue == undefined) {
-							fieldvalue = "";
+				//skip if gml:name is added.
+				if (xfeature.nodeName.toLowerCase() != "gml:name") {				
+					var feature:Object = new Object();
+					var nfields:Number = xfeature.childNodes.length;
+					for (var ifield:Number = 0; ifield<nfields; ifield++) {
+						var xfield:XMLNode = xfeature.childNodes[ifield];
+						switch (xfield.nodeName.toLowerCase()) {
+						case "gml:boundedby" :
+							break;
+						default :
+							var fieldname:String = xfield.nodeName;
+							var fieldvalue:String = xfield.firstChild.nodeValue;
+							if (fieldvalue == undefined) {
+								fieldvalue = "";
+							}
+							feature[fieldname] = fieldvalue;
+							break;
 						}
-						feature[fieldname] = fieldvalue;
-						break;
 					}
+					features[layer].push(feature);
 				}
-				features[layer].push(feature);
 			}
 		}
 		this.events.broadcastMessage("onGetFeatureInfo", features, obj, reqid);
