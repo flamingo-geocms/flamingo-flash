@@ -24,7 +24,7 @@
 				<layer id="watschap_ned_polygon" maptipfields="TYPE,NAAM" maptip="[TYPE]: [NAAM]"/>
 
 			</fmc:LayerArcIMS>
-			<fmc:LayerOGWMS id="vm" url="http://x5.b3p.nl/cgi-bin/mapserv542?map=/srv/maps/verkeersmonitor.map" 
+			<fmc:LayerOGWMS id="vm" url="http://x13.b3p.nl/cgi-bin/mapserv?map=/srv/maps/verkeersmonitor_prod.map" 
 			srs="EPSG:28992" 
 			layers="telpunten_motorvoertuig_punt" 
 			query_layers="telpunten_motorvoertuig_punt" 
