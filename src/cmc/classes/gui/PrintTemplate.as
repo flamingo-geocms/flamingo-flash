@@ -179,9 +179,9 @@ class gui.PrintTemplate extends ScalableContainer {
 				_global.flamingo.addListener(mapListener, map, this);
 				//thisObj.moveToExtent(thisObj.configObj.getCurrentExtent(), 0, 0);
 				mapConfigLoaded = true;
-			} else {
-				showMap();
-			}		
+			}
+			//always sync layers and map with current settings. Maybe it's changed after the config is given.
+			showMap();
 
 		} else {		
 			removeLayerListeners();
