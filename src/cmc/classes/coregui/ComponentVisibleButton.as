@@ -50,7 +50,7 @@
 
 
 
-import coregui.*;
+import coregui.BaseButton;
 import tools.Logger;
 class coregui.ComponentVisibleButton extends BaseButton {
     
