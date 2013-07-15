@@ -88,6 +88,10 @@
 * @attr version the version of the wfs service
 * @attr srsname the name of the srs (EPSG:28992)
 * @attr editable true if this layer is editable
+* @attr measureunit (default = null) the string that is added to the measured value. When null the unit is calculated automaticly
+* @attr measuredecimals (default = null) the number of decimals shown when measuring. When null the decimals is choosen automaticly
+* @attr measuremagicnumber (default = null) the divider for the measured value. If null its choosen automaticly
+* @attr measureds (default = ".") the decimal seperator.
 */
 
 /** @tag <fmc:Property>

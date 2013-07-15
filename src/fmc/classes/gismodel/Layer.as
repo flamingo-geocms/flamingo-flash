@@ -38,6 +38,10 @@ class gismodel.Layer extends AbstractComposite implements ActionEventListener {
     private var transaction:Transaction = null;
     private var serverReady:Boolean = false;
     private var showMeasures:Boolean = false;
+	private var measureUnit:String = null;
+	private var measureDecimals:Number = null;
+	private var measureMagicnumber:Number = null;
+	private var measureDs:String = ".";
 	private var editable:Boolean = false;
     
     private var stateEventDispatcher:StateEventDispatcher = null;
@@ -84,13 +88,37 @@ class gismodel.Layer extends AbstractComposite implements ActionEventListener {
             } else {
             	showMeasures = false;
             }       
-		} else if (name== "loadfeaturesonstart"){
+		}else if (name == "measureunit") {
+			if (value.toLowerCase() == "null") {
+				measureUnit = null;
+			}else {
+				measureUnit = value;
+			}	
+		}else if (name == "measuredecimals") {	
+			if (value.toLowerCase() == "null") {
+				measureDecimals = null;
+			}else {
+				measureDecimals = Number(value);
+			}
+		}else if (name == "measuremagicnumber") {	
+			if (value.toLowerCase() == "null") {
+				measureMagicnumber = null;
+			}else {
+				measureMagicnumber = Number(value);
+			}
+		}else if (name == "measureds") {			
+			if (value.toLowerCase() == "null") {
+				measureDs = null;
+			}else {
+				measureDs = value;
+			}
+		}else if (name== "loadfeaturesonstart"){
 			if (value.toLowerCase() == "true") {
                 loadFeaturesOnStart = true;
             } else {
                 loadFeaturesOnStart = false;
             }
-        } else if (name == "wfsurl") {
+		}else if (name == "wfsurl") {
             serviceConnector = ServiceConnector.getInstance(value);
         } else if (name == "featuretypename") {
             if (serviceConnector == null) {
@@ -669,6 +697,19 @@ class gismodel.Layer extends AbstractComposite implements ActionEventListener {
     function showMeasure():Boolean{
     	return showMeasures;
     }
+	
+	function getMeasureUnit():String {
+		return measureUnit;
+	}
+	function getMeasureDecimals():Number {
+		return measureDecimals;
+	}
+	function getMeasureMagicnumber():Number {
+		return measureMagicnumber;
+	}
+	function getMeasureDs():String {
+		return measureDs;
+	}
 	/**
 	 * getEditable
 	 * @return

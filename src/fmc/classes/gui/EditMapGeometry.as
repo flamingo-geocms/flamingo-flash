@@ -51,6 +51,11 @@ class gui.EditMapGeometry extends GeometryPane implements GeometryListener {
     private var label:Label = null;
     
     private var showMeasures:Boolean = false; // Set by init object.
+	private var measureUnit:String = null;// Set by init object.
+	private var measureDecimals:Number = null;// Set by init object.
+	private var measureMagicnumber:Number = null;// Set by init object.
+	private var measureDs:String = null;// Set by init object.
+	
     private var measureLabel:Label = null;
     
     /**
@@ -246,32 +251,63 @@ class gui.EditMapGeometry extends GeometryPane implements GeometryListener {
     }
     
      private function setMeasureLabel():Void {
+		var isArea = false;			
         var measureString:String = "";
-	        if (_geometry instanceof Polygon||_geometry instanceof Circle){
-	        	var area:Number;
-	        	if (_geometry instanceof Polygon){
-	        		area = Math.abs(Polygon(_geometry).getArea());
-	        	} else {
-	        		area = Math.abs(Circle(_geometry).getArea());
-	        	}
-	    	if (area > 1000000){
-	    		measureString = Math.round(area/10000)/100 + " km2";
-	    	}
-	    	//else if (area > 10000 && area <= 10000000){
-				//measureString = Math.round(area/100)/100 + " ha";	
-	    	//} 
-	    	else {
-	   			measureString = Math.round(area) + " m2";
-	    	}
-       } else if (_geometry instanceof LineString && _geometry.getParent()==null){
-       		var length:Number = LineString(_geometry).getLength();
-        	if (length > 1000){
-        		measureString = Math.round(length/10)/100 + " km";
-        	} else {
-       			measureString = Math.round(length) + " m";
-        	}
-       } 
-       measureLabel.text = "";
+		
+		if (_geometry instanceof Polygon || _geometry instanceof Circle) {
+			isArea = true;
+		}
+		var value:Number;
+		if (isArea) {
+			if (_geometry instanceof Polygon){
+				value = Math.abs(Polygon(_geometry).getArea());
+			} else {
+				value = Math.abs(Circle(_geometry).getArea());
+			}
+		}else {
+			value = LineString(_geometry).getLength();
+		}
+		//make measureString with configured values
+		if (measureUnit != null || measureMagicnumber != null  || measureDecimals !=null) {
+			if (measureDecimals == null) {
+				measureDecimals = 2;
+			}if (measureUnit == null) {
+				measureUnit = "m"; 
+			}if (measureMagicnumber == null) {
+				measureMagicnumber = 1;
+			}
+			if (isArea) {
+				value = value / (measureMagicnumber*measureMagicnumber);
+			}else{
+				value = value / measureMagicnumber;
+			}
+			var:Number dec = Math.pow(10, Number(measureDecimals));
+			value = Math.round(value * dec) / dec;
+			measureString = value + " " + measureUnit;
+			if (isArea) {
+				measureString + "2"; 
+			}
+		//choose the measureString
+		}else {
+			if (isArea) {
+				if (value > 1000000){
+					measureString = Math.round(value/10000)/100 + " km2";
+				}
+				//else if (area > 10000 && area <= 10000000){
+					//measureString = Math.round(area/100)/100 + " ha";	
+				//} 
+				else {
+					measureString = Math.round(value) + " m2";
+				}
+			}else {
+				if (value > 1000){
+					measureString = Math.round(value/10)/100 + " km";
+				} else {
+					measureString = Math.round(value) + " m";
+				}
+			}
+		}	   
+        measureLabel.text = "";
   		if(measureString != ""  ){
   			if (measureLabel == null) {
             	measureLabel = Label(attachMovie("Label", "mLabel2", 12000, {autoSize: "center", html: true}));

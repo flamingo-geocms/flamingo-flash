@@ -29,8 +29,13 @@ class gui.GeometryPane extends MovieClip {
     private var height:Number = -1; // Set by init object.
     private var editMapGeometries:Array = null;
 	private var log:Logger=null;
-	private var showMeasures:Boolean= false; // Set by init object.
-    private var editable:Boolean = true; //Set by init object.
+	private var showMeasures:Boolean = false; // Set by init object.
+	private var measureUnit:String = null;// Set by init object.
+	private var measureDecimals:Number = null;// Set by init object.
+	private var measureMagicnumber:Number = null;// Set by init object.
+	private var measureDs:String = null;// Set by init object.
+	
+	private var editable:Boolean = true; //Set by init object.
 	/**
 	 * on Load
 	 */
@@ -67,6 +72,11 @@ class gui.GeometryPane extends MovieClip {
 		initObject["editable"] = editable;
 		initObject["alwaysDrawPoints"] = gis.getAlwaysDrawPoints();
 		initObject["showMeasures"] = showMeasures;
+		initObject["measureUnit"] = measureUnit;
+		initObject["measureDecimals"] = measureDecimals;
+		initObject["measureMagicnumber"] = measureMagicnumber;
+		initObject["measureDs"] = measureDs;
+		
 		if (geometry instanceof Point) {
             editMapGeometries.push(this.attachMovie("EditMapPoint", "mEditMapPoint" + depth, depth, initObject));
         } else if (geometry instanceof LineString) {

@@ -57,6 +57,7 @@ import display.spriteloader.SpriteSettings;
 * @attr magicnumber (defaultvalue "1") A number by which the distance is divided, in order to support multiple measure-units.
 * @attr zoomscroll (defaultvalue "true")  Enables (zoomscroll="true") or disables (zoomscroll="false") zooming with the scrollwheel.
 * @attr enabled (defaultvalue="true") True or false.
+* @attr ds (defaultvalue=".") The seperator for decimal values.
 */
 /**
  * Tool for measuring a single distance on a map.
@@ -70,6 +71,7 @@ class gui.tools.ToolMeasure extends AbstractTool{
 	var decimals:Number = 0;
 	var magicnumber:Number = 1;
 	var skin:String = "_toolmeasure";
+	var ds = ".";
 	
 	/**
 	 * Constructor for ToolMeasure.
@@ -118,7 +120,10 @@ class gui.tools.ToolMeasure extends AbstractTool{
 					d = Math.round(d*thisObj.decimals)/thisObj.decimals;
 				}
 				//flamingo.showTooltip(d+unit, map, 0);
-				map.showTooltip(d+thisObj.unit, 0);
+				var dString:String = "" + d;
+				dString = dString.split(".").join(thisObj.ds);
+				dString += thisObj.unit;
+				map.showTooltip(dString, 0);
 				
 			};
 			thisObj.lMap.onMouseUp = function(map:MovieClip, xmouse:Number, ymouse:Number, coord:Object) {
@@ -172,6 +177,9 @@ class gui.tools.ToolMeasure extends AbstractTool{
 				break;
 			case "decimals" :
 				decimals = Math.pow(10, Number(val));
+				break;
+			case "ds" :
+				ds = val;
 				break;
 			case "zoomscroll" :
 				if (val.toLowerCase() == "true") {
