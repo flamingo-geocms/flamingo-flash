@@ -664,6 +664,7 @@ class Flamingo {
 	* @attr tooltipbordercolor  (defaultvalue "#CCCCCC") Color of a border arround a tooltip in a hexadecimal notation. e.g. color="#00ff33" 
 	* @attr tooltipcolor  (defaultvalue "#FFFFFF") Color of the background of a tooltip in a hexadecimal notation. e.g. color="#00ff33" 
 	* @attr tooltipshadow (defaultvalue "true") True or false. 
+	* @attr sprite (default "assets/img/sprite.png") Absolute or relative (from flamingo.swf) path to sprite image.
 	* @attr callbacktype (defaultvalue "id") The names of the events are composed as follows: [componenttype]_[eventname] e.g. Map_onMouseMove  However if callbacktype = "id" , names of events are composed as follows: [componentid]_[eventname] e.g. myMap_onMouseMove
 	* @attr allowstrangers (defaultvalue "false") True or false.  False: only components with id's already loaded will load. True: all components load.   For the first configuration allowstrangers is always true. 
 	* @attr loglevel (default: ERROR). The log level that is used by all classes that use the logger. All log messages with this loglevel or higher wil be logged in the flash_log (possible values: DEBUG,INFO,WARN,ERROR,CRITICAL)
@@ -769,6 +770,9 @@ class Flamingo {
 					} else {
 						this.tooltipshadow = false;
 					}
+					break;
+				case "sprite" :
+					this.setSprite(val);
 					break;
 				case "useexternalinterface" :
 					if (val.toLowerCase() == "true") {
