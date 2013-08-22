@@ -8,17 +8,17 @@
 	<tstamp>
 		<format property="date" pattern="dd/MM/yyyy hh:mm aa"/>
 	</tstamp>
-	<property name="version" value="4.2_r3627"/>
+	<property name="version" value="4.2.1_2013-8-22"/>
 	<property name="build" location="build"/>
 	<property name="dist" location="${build}/dist"/>
 	<property name="srcDir" location="src"/>
 	<property name="examplesDir" location="examples"/>
-	<property name="flashPath" location="D:/Program Files (x86)/Adobe/Adobe Flash CS3"/>
+	<property name="flashPath" location="C:/Program Files/Adobe/Adobe Flash CS3"/>
 	<!--property name="flashPath" location="D:/Program Files (x86)/Adobe/Adobe Flash CS3"/-->
 	
 	<!-- settings for docs -->	
 	<property name="perlPath" value="perl"/>
-	<property name="naturalDocsPath" location="C:/tools/NaturalDocs 1.52"/>
+	<property name="naturalDocsPath" location="C:/tools/NaturalDocs"/>
 	<property name="naturalDocsProjectPath" location="NaturalDocsProj"/>
 	<property name="CDGPath" location="CDGProj"/>
 	<property name="docDir" location="doc"/>

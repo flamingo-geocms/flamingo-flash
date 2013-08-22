@@ -65,7 +65,7 @@ import display.spriteloader.SpriteMapFactory;
 import core.loading.LoadComponentQueue;
 
 class Flamingo {
-	private var version:String = "4.2.1_2013-07-15";
+	private var version:String = "4.3_2013-08-22";
 	//reference to main movie from which this class is loaded
 	//at the main movie the components are loaded at 'moviedepth'--  ;moviedepth starts by 10000
 	//at the main movie a cursor movie is loaded at depth 50005
@@ -157,11 +157,7 @@ class Flamingo {
 		this.rooturl = a_url.join("/");
 		//sprite factory
 		spriteMapFactory = SpriteMapFactory.getInstance();
-		var toolSpritesUrl:String = (correctUrl( "assets/img/sprite.png"));
-		
-		//let the factory provide you with a new spritemap by calling obtainSpriteMap() on it with a url
-		//if you call obtainSpriteMap anywhere else with the same image url, it won't spoil bandwith requests and will only load it once..
-	    this.spriteMap = spriteMapFactory.obtainSpriteMap(toolSpritesUrl);
+		this.setSprite("assets/img/sprite.png");
 		
 		// make it possible to communicate from a html page with flamingo through the callFlamingo function
 		//ExternalInterface.addCallback("call", this, callMethod);
@@ -3868,7 +3864,16 @@ class Flamingo {
 	public function setScreenLogLevel(screenLogLevel:Number):Void{
 		this.screenLogLevel=screenLogLevel;
 	}
-	
+	/**
+	 * Set sprite
+	 * @param the url to the sprite. absolute or relative (from flamingo.swf)
+	 */
+	public function setSprite(spriteUrl){
+		var toolSpritesUrl:String = (this.correctUrl(spriteUrl));			
+		//let the factory provide you with a new spritemap by calling obtainSpriteMap() on it with a url
+		//if you call obtainSpriteMap anywhere else with the same image url, it won't spoil bandwith requests and will only load it once..
+		this.spriteMap = spriteMapFactory.obtainSpriteMap(toolSpritesUrl);
+	}
 	/** 
 	 * static func to enable default entry point for mtasc compilation.
 	 * ( use mtasc 2009 forked version  (by google person) that enables mtasc to compile > 32KB code limit.
