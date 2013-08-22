@@ -96,7 +96,7 @@ class gui.SliderHor extends AbstractPositionable{
 		init();
 		
 				//build buttons
-		spriteMap = flamingo.spriteMapFactory.obtainSpriteMap(flamingo.correctUrl( "assets/img/sprite.png"));
+		spriteMap = flamingo.spriteMap;
 		
 		
 		sliderBar = this.container.createEmptyMovieClip("sliderBar", this.container.getNextHighestDepth());

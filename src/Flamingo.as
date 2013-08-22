@@ -3872,11 +3872,11 @@ class Flamingo {
 	 * Set sprite
 	 * @param the url to the sprite. absolute or relative (from flamingo.swf)
 	 */
-	public function setSprite(spriteUrl){
-		var toolSpritesUrl:String = (this.correctUrl(spriteUrl));			
+	public function setSprite(spriteUrl) {
+		var toolSpritesUrl:String = (this.correctUrl(spriteUrl));	
 		//let the factory provide you with a new spritemap by calling obtainSpriteMap() on it with a url
 		//if you call obtainSpriteMap anywhere else with the same image url, it won't spoil bandwith requests and will only load it once..
-		this.spriteMap = spriteMapFactory.obtainSpriteMap(toolSpritesUrl);
+		this.spriteMap = this.spriteMapFactory.obtainSpriteMap(toolSpritesUrl);
 	}
 	/** 
 	 * static func to enable default entry point for mtasc compilation.

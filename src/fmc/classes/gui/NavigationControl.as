@@ -93,7 +93,7 @@ class gui.NavigationControl extends AbstractConfigurable
 	 */
 	public function NavigationControl(id,container) {		
 		super(id, container);	
-		spriteMap = flamingo.spriteMapFactory.obtainSpriteMap(flamingo.correctUrl( "assets/img/sprite.png"));
+		spriteMap = flamingo.spriteMap;
 		this.mcloader = new MovieClipLoader();
 		this.firstTime = true;
 		this.zoomerOffset = 7;
